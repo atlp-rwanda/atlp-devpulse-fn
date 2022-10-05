@@ -29,11 +29,13 @@ npm run dev
 
 - `npm run lint` is used to format and check for linting errors files
 - `npm run coverage` is used to run tests and generate coverage reports
-- `npm run build` is used to build the production ready version of the projects. Used during deployment
+- `npm run build` is used to build the production ready version of the projects. 
+Used during deployment
 
 ## Technologies
 
-To successfully navigate the codebase of the project, you will need undertanding of the following technologies that are being used to develop this application:
+To successfully navigate the codebase of the project, you will need undertanding 
+of the following technologies that are being used to develop this application:
 
 - Reactjs
 - Typescript
