@@ -41,4 +41,5 @@ To successfully navigate the codebase of the project, you will need undertanding
 
 ## Links:
 
-- [Figma design file](https://www.figma.com/file/KtrfuLRfGmEAsZsDb3nuxK/ATLP-UI-V2-(Copy)?node-id=58%3A98)
+- [Figma](https://www.figma.com/file/KtrfuLRfGmEAsZsDb3nuxK/ATLP-UI-V2-(Copy)?node-id=58%3A98)
+## Links:
