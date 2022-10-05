@@ -39,7 +39,3 @@ To successfully navigate the codebase of the project, you will need undertanding
 - Typescript
 - Tailwindcss
 
-## Links:
-
-- [Figma](https://www.figma.com/file/KtrfuLRfGmEAsZsDb3nuxK/ATLP-UI-V2-(Copy)?node-id=58%3A98)
-## Links:
