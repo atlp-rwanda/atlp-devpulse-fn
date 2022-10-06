@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkatlp_devpulse_fn=self.webpackChunkatlp_devpulse_fn||[]).push([[465],{465:function(e,n,l){l.r(n);l(791);var s=l(33),u=l(184);n.default=function(){return(0,u.jsx)(s.VK,{children:(0,u.jsx)("div",{children:(0,u.jsx)("h1",{children:"App"})})})}}}]);
+//# sourceMappingURL=465.165ce511.chunk.js.map
