@@ -10,7 +10,7 @@ function App() {
 
   return (
     <Router>
-    <div>App</div>
+    <div><h1>App</h1></div>
     </Router>
   )
 }
