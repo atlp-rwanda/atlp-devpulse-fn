@@ -1,25 +1,31 @@
+version: 2.1
 jobs:
   build:
     docker:
-      - image: cimg/<language>:<version TAG>
-        auth:
-          username: mydockerhub-user
-          password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
+      - image: node:11.10.1
+
+    working_directory: ~/repo
+
     steps:
       - checkout
-      - run: npm
-  test:
-    docker:
-      - image: cimg/<language>:<version TAG>
-        auth:
-          username: mydockerhub-user
-          password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
-    steps:
-      - checkout
-      - run: npm
-workflows:
-  version: 2
-  build_and_test:
-    jobs:
-      - build
-      - test
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+
+      - run: npm install
+
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+
+      # run tests!
+      - run: npm test
+
+      - run: npm build
+
+      # - run: yarn netlify:deploy
