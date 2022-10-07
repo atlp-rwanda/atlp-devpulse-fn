@@ -16,7 +16,7 @@ const Counter = (props: any) => {
 
   return (
     <div>
-      <h1>HAVING FUN WITH REDUX</h1>
+      <h1>SIMPLE REDUX FUNCTIONALITY</h1>
       <button onClick={Add}>+</button>
       <p>{value}</p>
       <button onClick={Subtract}>-</button>
