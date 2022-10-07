@@ -3,21 +3,9 @@ import { INCREMENT, DECREMENT } from "..";
 import { toast } from "react-toastify";
 
 export const increment = () => async (dispatch: any) => {
-  try {
-    dispatch(creator(INCREMENT, null));
-  } catch (error) {
-    if (error) {
-      return toast.error("error");
-    }
-  }
+  dispatch(creator(INCREMENT, null));
 };
 
 export const decrement = () => async (dispatch: any) => {
-  try {
-    dispatch(creator(DECREMENT, null));
-  } catch (error) {
-    if (error) {
-      return toast.error("error");
-    }
-  }
+  dispatch(creator(DECREMENT, null));
 };
