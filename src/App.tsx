@@ -1,18 +1,14 @@
-import React from 'react'
-import {
-	BrowserRouter as Router,
-	Routes,
-	Route,
-	Link
-} from 'react-router-dom';
+import React from "react";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+
+const Redux = React.lazy(() => import("./components/Counter/Counter"));
 
 function App() {
-
   return (
-    <Router>
-    <div><h1>App</h1></div>
-    </Router>
-  )
+    <Routes>
+      <Route path="/" element={<Redux />} />
+    </Routes>
+  );
 }
 
-export default App
+export default App;
