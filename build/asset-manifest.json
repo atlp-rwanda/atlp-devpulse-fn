@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.js": "/atlp-rwanda/atlp-devpulse-fn/static/js/main.4219844f.js",
+    "static/js/465.165ce511.chunk.js": "/atlp-rwanda/atlp-devpulse-fn/static/js/465.165ce511.chunk.js",
+    "static/js/33.3564632b.chunk.js": "/atlp-rwanda/atlp-devpulse-fn/static/js/33.3564632b.chunk.js",
+    "index.html": "/atlp-rwanda/atlp-devpulse-fn/index.html",
+    "main.4219844f.js.map": "/atlp-rwanda/atlp-devpulse-fn/static/js/main.4219844f.js.map",
+    "465.165ce511.chunk.js.map": "/atlp-rwanda/atlp-devpulse-fn/static/js/465.165ce511.chunk.js.map",
+    "33.3564632b.chunk.js.map": "/atlp-rwanda/atlp-devpulse-fn/static/js/33.3564632b.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/js/main.4219844f.js"
+  ]
+}
