@@ -5,14 +5,15 @@ import {
 	Route,
 	Link
 } from 'react-router-dom';
+import TestTailwind from "./components/TestTailwind";
+import './index.css'
 
 function App() {
-
   return (
     <Router>
-    <div>App</div>
+      <TestTailwind />
     </Router>
-  )
+  );
 }
 
 export default App

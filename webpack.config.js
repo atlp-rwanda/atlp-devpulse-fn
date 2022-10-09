@@ -1,11 +1,11 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const path = require('path');
-// const dotenv = require('dotenv');
+const dotenv = require('dotenv');
 const webpack = require('webpack');
 
 module.exports = () => {
-//   dotenv.config();
+  dotenv.config();
 
   const prod = process.env.NODE_ENV === 'production';
 

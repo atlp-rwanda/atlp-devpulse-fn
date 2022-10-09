@@ -1,10 +1,9 @@
-import React from 'react';
-import * as ReactDOMClient from 'react-dom/client';
-const App = React.lazy(() => import('./App'));
+import React from "react";
+import * as ReactDOMClient from "react-dom/client";
+import "./index.css";
 
-const container = document.getElementById('app')!;
+const App = React.lazy(() => import("./App"));
 
-const root = ReactDOMClient.createRoot(container).render(
+const container = document.getElementById("app")!;
 
-        <App />
-);
+const root = ReactDOMClient.createRoot(container).render(<App />);
