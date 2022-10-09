@@ -4,8 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "webpack server"
+    "start": "echo \"Error: no test specified\" && exit 1",
+    "dev": "webpack server",
+    "test": "react-scripts test --watchAll=false",
+    "build": "react-scripts build"
   },
   "repository": {
     "type": "git",
@@ -46,6 +48,21 @@
     "dotenv": "^16.0.3",
     "mini-css-extract-plugin": "^2.6.1",
     "react-router-dom": "^6.4.2",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^13.4.0",
+    "react-scripts": "^5.0.1",
     "typescript": "^4.8.4"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }

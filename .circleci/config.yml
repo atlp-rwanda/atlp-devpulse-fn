@@ -1,0 +1,34 @@
+version: 2
+jobs: 
+  build: 
+    working_directory: ~/repo
+    docker:
+      - image: circleci/node:12.13.0
+    steps:
+      - checkout
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+      - run:
+          name: Install dependencies
+          command: npm install
+  
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+      - run:    
+          name: Run tests
+          command: npm test
+      - run:
+          name: Generate coverage report
+          command: npm run build
+      - store_artifacts: # Save tests results as artifacts
+          path: test-results.xml
+          prefix: tests
+      - store_artifacts: # Save coverage reports as artifacts
+          path: coverage
+          prefix: coverage
