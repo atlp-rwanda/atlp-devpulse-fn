@@ -11,6 +11,6 @@ export const apiAxios = axios.create({
     response => response,
     error => {
       if (error.response.status === 401) {
-        window.location.href = '/';
+        window.location.href = '/Login';
       }
     });
