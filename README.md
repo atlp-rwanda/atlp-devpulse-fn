@@ -1,5 +1,7 @@
 # atlp-devpulse-fn
 
+[![Maintainability](https://api.codeclimate.com/v1/badges/2c2cd9c0f847fcbba7a9/maintainability)](https://codeclimate.com/github/atlp-rwanda/atlp-devpulse-fn/maintainability)
+
 
 ## Introduction
 
