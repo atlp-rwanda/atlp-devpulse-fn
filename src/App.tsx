@@ -6,6 +6,7 @@ import {
 	Link
 } from 'react-router-dom';
 import TestTailwind from "./components/TestTailwind";
+import Trainee from './containers/pages/AddTrainee';
 import './index.css'
 
 // function App() {
@@ -23,6 +24,7 @@ function App() {
     <Routes>
       <Route path="/test_redux" element={<Counter />} />
       <Route path="/test_tailwind" element={<TestTailwind />} />
+      <Route path="/Trainee" element={<Trainee/>} />
     </Routes>
   );
 }
