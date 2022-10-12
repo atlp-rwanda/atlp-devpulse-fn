@@ -1,0 +1,16 @@
+[
+  {
+    "firstName": "Arthur",
+    "lastName": "Junior",
+    "gender": "Male",
+    "email": "arthur@gmail.com",
+    "cohort": "cohort 1"
+  },
+  {
+    "firstName": "Iturushimbabazi",
+    "lastName": "Gilbert",
+    "gender": "Male",
+    "email": "gilbert@gmail.com",
+    "cohort": "cohort 1"
+  }
+]
