@@ -4,3 +4,4 @@ coverage
 .vscode
 dist
 buildcoverage
+package-lock.json
