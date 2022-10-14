@@ -13,7 +13,7 @@ function App() {
     <Routes>
       <Route path="/test_redux" element={<Counter />} />
       <Route path="/test_tailwind" element={<TestTailwind />} />
-      <Route path="/cycle" element={<ApplicationCycle />} />
+      <Route path="/cycles" element={<ApplicationCycle />} />
     </Routes>
   );
 }

@@ -17,3 +17,16 @@ th,
 tr:nth-child(even) {
   background-color: #f0f0f0;
 }
+
+.add-button {
+  height: 40px;
+  border-radius: 5px;
+  margin: 10px;
+  background: #333;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  padding: 0 10px 0 5px;
+  margin-top: 40px;
+  margin-left: 230px;
+}
