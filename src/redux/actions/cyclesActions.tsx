@@ -1,6 +1,15 @@
 import creator from "./creator";
-import { GET_CYCLES, CREATE_CYCLES, UPDATE_CYCLE, DELETE_CYCLE } from "..";
+import {
+  GET_CYCLES,
+  CREATE_CYCLES,
+  UPDATE_CYCLE,
+  DELETE_CYCLE,
+  CREATE_CYCLE_ERROR,
+  UPDATE_CYCLE_ERROR,
+  DELETE_CYCLE_ERROR,
+} from "..";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 export const getAllCycles = () => async (dispatch: any) => {
   try {
@@ -33,7 +42,7 @@ export const createCycle =
   ({ name, startDate, endDate }: any) =>
   async (dispatch: any) => {
     try {
-      const datas = await axios({
+      await axios({
         url: "http://localhost:4000/",
         method: "post",
         data: {
@@ -42,6 +51,8 @@ export const createCycle =
             createApplicationCycle(input: $input) {
                 id
                 name
+                startDate
+                endDate
             }
         }`,
           variables: {
@@ -52,13 +63,28 @@ export const createCycle =
             },
           },
         },
-      });
-      const response = await datas.data.data.createApplicationCycle;
-      dispatch(creator(CREATE_CYCLES, response));
+      })
+        .then((response) => {
+          if (response.data.data !== null) {
+            console.log(response.data.data.createApplicationCycle);
+
+            dispatch(
+              creator(CREATE_CYCLES, response.data.data.createApplicationCycle)
+            );
+          }
+          if (response.data.data == null) {
+            const err = response.data.errors[0].message;
+            // toast.error(err);
+            dispatch(creator(CREATE_CYCLE_ERROR, err));
+          }
+        })
+        .catch((error) => {
+          dispatch(creator(CREATE_CYCLE_ERROR, error));
+        });
     } catch (error) {
-      if (error) {
-        return console.log(error);
-      }
+      console.log(error);
+
+      return dispatch(creator(CREATE_CYCLE_ERROR, error));
     }
   };
 
@@ -66,7 +92,7 @@ export const updateApplicationCycle =
   ({ updateApplicationCycleId, name, startDate, endDate, id }: any) =>
   async (dispatch: any) => {
     try {
-      const datas = await axios({
+      await axios({
         url: "http://localhost:4000/",
         method: "post",
         data: {
@@ -91,10 +117,21 @@ export const updateApplicationCycle =
             },
           },
         },
-      });
-
-      const response = await datas.data.data.updateApplicationCycle;
-      dispatch(creator(DELETE_CYCLE, response));
+      })
+        .then((response) => {
+          if (response.data.data !== null) {
+            dispatch(
+              creator(UPDATE_CYCLE, response.data.data.updateApplicationCycle)
+            );
+          }
+          if (response.data.data == null) {
+            const err = response.data.errors[0].message;
+            dispatch(creator(UPDATE_CYCLE_ERROR, err));
+          }
+        })
+        .catch((error) => {
+          dispatch(creator(UPDATE_CYCLE_ERROR, error));
+        });
     } catch (error) {
       if (error) {
         return console.log(error);
@@ -111,7 +148,7 @@ export const deleteApplicationCycle =
         method: "post",
         data: {
           query: `
-            mutation Mutation($deleteApplicationCycleId: ID!) {
+            mutation deleteCycle($deleteApplicationCycleId: ID!) {
             deleteApplicationCycle(id: $deleteApplicationCycleId) {
                 id
                 name
@@ -121,10 +158,21 @@ export const deleteApplicationCycle =
             deleteApplicationCycleId,
           },
         },
-      });
-
-      const response = await datas.data.data.deleteApplicationCycle;
-      dispatch(creator(UPDATE_CYCLE, response));
+      })
+        .then((response) => {
+          if (response.data.data !== null) {
+            dispatch(
+              creator(DELETE_CYCLE, response.data.data.deleteApplicationCycle)
+            );
+          }
+          if (response.data.data == null) {
+            const err = response.data.errors[0].message;
+            dispatch(creator(DELETE_CYCLE_ERROR, err));
+          }
+        })
+        .catch((error) => {
+          dispatch(creator(DELETE_CYCLE_ERROR, error));
+        });
     } catch (error) {
       if (error) {
         return console.log(error);
