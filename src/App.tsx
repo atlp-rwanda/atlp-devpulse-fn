@@ -6,7 +6,7 @@ import {
 	Link
 } from 'react-router-dom';
 import TestTailwind from "./components/TestTailwind";
-import Trainee from './containers/pages/AddTrainee';
+import Trainee from './containers/pages/Trainee';
 import './index.css'
 
 // function App() {

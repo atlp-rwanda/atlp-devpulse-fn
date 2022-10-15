@@ -1,16 +1,16 @@
 [
   {
-    "firstName": "Arthur",
-    "lastName": "Junior",
+    "firstname": "Arthur",
+    "lastname": "Junior",
     "gender": "Male",
     "email": "arthur@gmail.com",
-    "cohort": "cohort 1"
+    "cycle": "cohort 1"
   },
   {
-    "firstName": "Arthur",
-    "lastName": "Junior",
+    "firstname": "Iturushimbabazi",
+    "lastname": "Gilbert",
     "gender": "Male",
-    "email": "arthur@gmail.com",
-    "cohort": "cohort 1"
+    "email": "gilbert@gmail.com",
+    "cycle": "cohort 1"
   }
 ]

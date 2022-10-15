@@ -1,2 +1,4 @@
 export const INCREMENT = "INCREMENT";
 export const DECREMENT = "DECREMENT";
+export const GET_TRAINEE = "GET_TRAINEE";
+export const CREATE_TRAINEES = "CREATE_TRAINEES";
