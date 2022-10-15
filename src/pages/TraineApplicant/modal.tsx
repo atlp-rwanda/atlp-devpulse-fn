@@ -4,7 +4,7 @@ import {  toast } from 'react-toastify';
   import 'react-toastify/dist/ReactToastify.css';
 import {
 createTrainee
-} from "../../../redux/actions/TraineeAction";
+} from "../../redux/actions/TraineeAction";
 import { connect } from "react-redux";
 function model(props: any) {
 

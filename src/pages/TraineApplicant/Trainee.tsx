@@ -1,16 +1,17 @@
 /* eslint-disable */
 import React, {useState,useEffect } from 'react';
 import { HiDotsVertical } from "react-icons/hi";
-import *as icons from "react-icons/ai";
-import pagination from '../../../components/pagination';
+import * as icons from "react-icons/ai";
+import { AiOutlinePlus} from "react-icons/ai";
+import pagination from '../../components/pagination';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import {getAllTraineess,} from "../../../redux/actions/TraineeAction";
+import { getAllTraineess } from '../../redux/actions/TraineeAction';
 import { connect } from "react-redux";
 import Modal from './modal';
-import Sidebar from "../../../components/sidebar/sidebar"
-import { softdeletetraine,deletetraine,fetchtraine} from '../../../redux/actions/deletetraine';
-import { useAppDispatch } from '../../../hooks/hooks';
+import Sidebar from '../../components/sidebar/sidebar';
+import { softdeletetraine,deletetraine,fetchtraine} from '../../redux/actions/deletetraine';
+import { useAppDispatch } from '../../hooks/hooks';
 
 
 const AddTrainee = (props: any) => {

@@ -1,18 +1,13 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import TestTailwind from "./components/TestTailwind";
-import Trainee from './containers/pages/TraineApplicant/Trainee';
-import './index.css'
-import  Sidebar  from './components/sidebar/sidebar';
-import Table from './containers/pages/Table';
+import './index.css';
+import Sidebar from './components/sidebar/sidebar';
 import NavBar from "./components/sidebar/navHeader";
-// function App() {
-//   return (
-//     <Router>
-//       <TestTailwind />
-//     </Router>
-// import React from "react";
-// import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import Trainee from './pages/TraineApplicant/Trainee';
+import FilterTrainee from './pages/FilterTeainee/FilterTrainee';
+import './index.css';
+import Table from './pages/Table';
 import "./index.css";
 
 const Counter = React.lazy(() => import("./components/Counter/Counter"));
@@ -31,10 +26,8 @@ function App() {
       <Route path="/table" element={<Table />} />
       <Route path="/cycles" element={<ApplicationCycle />} />
       <Route path="/trash" element={<Trash />} />
-      <Route path="/nav-bar" element={< NavBar/>} />
-
-
-     
+      <Route path="/nav-bar" element={< NavBar />} />
+      <Route path="/filter_trainee" element={<FilterTrainee />} />
     </Routes>
   );
 }
