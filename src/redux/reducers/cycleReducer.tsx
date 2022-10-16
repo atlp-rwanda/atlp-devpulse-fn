@@ -16,7 +16,6 @@ const initialState = {
 };
 
 export default (state = initialState, { type, payload }: any) => {
-  console.log(state, "paload ,,,,,,,,");
   switch (type) {
     case GET_CYCLES:
       return {

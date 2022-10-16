@@ -66,8 +66,6 @@ export const createCycle =
       })
         .then((response) => {
           if (response.data.data !== null) {
-            console.log(response.data.data.createApplicationCycle);
-
             dispatch(
               creator(CREATE_CYCLES, response.data.data.createApplicationCycle)
             );
@@ -105,6 +103,7 @@ export const updateApplicationCycle =
                 id
                 name
                 startDate
+                endDate
                 }
             }`,
           variables: {
