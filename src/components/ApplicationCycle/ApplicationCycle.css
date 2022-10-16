@@ -1,19 +1,83 @@
+body {
+  background-color: #f9f9fb;
+}
+.container {
+  margin: 100px auto;
+  width: 70%;
+}
+.body {
+  background-color: #fff;
+  padding: 20px;
+  width: 100%;
+  margin: 10px auto;
+  height: fit-content;
+  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.06), 0px 1px 3px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
 table {
   font-family: arial, sans-serif;
   border-collapse: collapse;
-  width: 70%;
-  margin: 20px auto;
+  width: 100%;
+  margin: 10px auto;
   border-radius: 15px;
-  border: 1px solid #f0f0f0;
+  border: 1px solid #fff;
 }
 
+tr,
+th {
+  border-bottom: 1px solid #fff;
+}
+thead th {
+  border-bottom: 2px solid rgb(168, 168, 168);
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  height: 50px;
+}
 td,
 th {
-  text-align: left;
+  text-align: right;
   padding: 8px;
 }
 
 th,
 tr:nth-child(even) {
-  background-color: #f0f0f0;
+  background-color: #f9fafb;
+}
+
+.add-button {
+  height: 40px;
+  border-radius: 5px;
+  background: #173b3f;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  padding: 0 10px 0 5px;
+}
+.create-cycle-form {
+  border-radius: 5px;
+  width: max-content;
+  height: fit-content;
+  margin: auto;
+  padding: 5px 10px 10px;
+  background: #f0f0f0;
+}
+.create-cycle-form input {
+  border: 1px solid #333;
+  height: 40px;
+  width: 250px;
+  display: block;
+  border-radius: 5px;
+  margin: 10px auto;
+  text-indent: 1ch;
+}
+.create-cycle-form button {
+  border: 1px solid #333;
+  height: 40px;
+  width: 100px;
+  display: block;
+  border-radius: 5px;
+  margin: 10px auto;
+  background: #173b3f;
+  color: #fff;
 }
