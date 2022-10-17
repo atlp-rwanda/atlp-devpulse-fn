@@ -1,0 +1,34 @@
+{
+    "allTrainnees": [
+        {
+            "firstName": "Ange",
+            "lastName": "Doe",
+            "email": "johnn@gmail.com",
+            "status": "passed"
+        },
+        {
+            "firstName": "Bagabo",
+            "lastName": "Doe",
+            "email": "bagabo@gmail.com",
+            "status": "failed"
+        },
+        {
+            "firstName": "Aston",
+            "lastName": "Martin",
+            "email": "jaston@gmail.com",
+            "status": ""
+        },
+        {
+            "firstName": "Bruce",
+            "lastName": "Junic",
+            "email": "bruce@gmail.com",
+            "status": "failed"
+        },
+        {
+            "firstName": "John",
+            "lastName": "doe",
+            "email": "johnn@gmail.com",
+            "status": "religated"
+        }
+    ]
+}
