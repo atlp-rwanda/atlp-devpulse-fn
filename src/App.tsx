@@ -6,7 +6,15 @@ import {
 	Link
 } from 'react-router-dom';
 import TestTailwind from "./components/TestTailwind";
+import TrainneeDetails from './pages/TrainneeDetails';
+import TrainneeDetailsB from './pages/TrainneDetailsB';
 import './index.css'
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faEnvelope, faKey } from '@fortawesome/free-solid-svg-icons';
+
+library.add(faEnvelope, faKey );
+
+// ...
 
 // function App() {
 //   return (
@@ -23,6 +31,8 @@ function App() {
     <Routes>
       <Route path="/test_redux" element={<Counter />} />
       <Route path="/test_tailwind" element={<TestTailwind />} />
+      <Route path='/trainee-details' element={<TrainneeDetails />}/>
+      <Route path='/traineeb-details' element={<TrainneeDetailsB />}/>
     </Routes>
   );
 }
