@@ -5,6 +5,8 @@ import grade from '../../dummyData/Trainee.json';
 import { HiDotsVertical } from "react-icons/hi";
 import { AiOutlinePlus,AiOutlineClose} from "react-icons/ai";
 import Pagination from "../../components/Pagination";
+import { ToastContainer, toast } from 'react-toastify';
+  import 'react-toastify/dist/ReactToastify.css';
 import {
 getAllTraineess,
 createTrainee
@@ -13,7 +15,7 @@ import { connect } from "react-redux";
 
 
 const AddTrainee = (props: any) => {
-  
+  // const succeed = () => toast("SUCCEED");
   const [addNewTraineeModel, setAddNewTraineeModel] = useState(false);
   // const dumData=grade;
   const removeModel = () => {
@@ -32,14 +34,18 @@ const [email, setEmail] = useState("");
 
 const createNewTrainee = () => {
   const data = {
-    firstName: firstname,
-    lastName: lastname,
+    firstname: firstname,
+    lastname: lastname,
     email: email,
   };
-
-  props.createTrainee(data);
-  console.log("yolla",data)
+   
+  if(props.createTrainee(data)){
+  // console.log("yolla",data)
   setAddNewTraineeModel(false);
+  toast.success("succeed")
+  }else{
+  toast.error("error")
+  }
 };
 
 
@@ -53,7 +59,7 @@ const trainees = alltrainees.data;
 // console.log("hello",trainees)
   return (
     <>
-    
+      <ToastContainer />
       {/* =========================== Start:: addnewtraineeModel  =============================== */}
       <div className={`h-screen w-screen z-20 bg-black bg-opacity-30 backdrop-blur-sm absolute flex items-center justify-center  px-4 ${
           addNewTraineeModel === true ? 'block' : 'hidden'
@@ -165,7 +171,7 @@ const trainees = alltrainees.data;
         <div className="flex flex-row">
           <div className="w-full">
             <div>
-              <div className="bg-light-bg dark:bg-dark-frame-bg  min-h-screen overflow-y-auto overflow-x-hidden">
+              <div className="bg-light-bg dark:bg-dark-frame-bg  min-h-screen overflow-y-hidden overflow-x-hidden">
                 <div className="flex items-left px-7 lg:px-64 pt-24">
                   <div className="flex px-5 py-2 pb-8 w-fit">
                      <button 
@@ -173,7 +179,9 @@ const trainees = alltrainees.data;
                     className="flex bg-primary rounded-md py-2 px-4 text-white font-medium cursor-pointer">
                     <AiOutlinePlus className="mt-1 mr-1 font-bold"/>  Trainee
                     </button>
-                    
+                    <div>
+      
+      </div>
                       {/* <Button>
 <AiOutlinePlus className="mt-1 mr-1 font-bold"/>  Trainee
 
@@ -256,7 +264,7 @@ const trainees = alltrainees.data;
                                       <div className="flex  items-center">
                                         <div className="">
                                           <p className="text-gray-900 items-center dark:text-white whitespace-no-wrap">
-                                            {values.cycle}
+                                            {values.cohort}
                                            
                                           </p>
                                         

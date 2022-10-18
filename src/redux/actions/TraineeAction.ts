@@ -17,7 +17,6 @@ export const getAllTraineess = () => async (dispatch: any) => {
             firstname
           }
         }
-          
       `,
       },
     });
@@ -33,7 +32,7 @@ export const getAllTraineess = () => async (dispatch: any) => {
 };
 
 export const createTrainee =
-  ({ firstName, lastName, email }: any) =>
+  ({ firstname, lastname, email }: any) =>
   async (dispatch: any) => {
     try {
       const datas = await axios({
@@ -44,14 +43,14 @@ export const createTrainee =
           mutation Mutation($input: newTraineeApplicantInput) {
             createNewTraineeApplicant(input: $input) {
               email
-              firstName
-              lastName
+              firstname
+              lastname
             }
           }`,
           variables: {
             input: {
-              firstName,
-              lastName,
+              firstname,
+              lastname,
               email,
             },
           },
