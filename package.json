@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "echo \"Error: no test specified\" && exit 1",
+    "start": "webpack server",
     "dev": "webpack server",
     "test": "react-scripts test --watchAll=false",
     "build": "webpack build"
@@ -64,6 +64,9 @@
     "@hookform/resolvers": "^0.1.0",
     "@mui/material": "^5.10.11",
     "@mui/x-date-pickers": "^5.0.6",
+    "@fortawesome/fontawesome-svg-core": "^6.2.0",
+    "@fortawesome/free-solid-svg-icons": "^6.2.0",
+    "@fortawesome/react-fontawesome": "^0.2.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@types/react-i18next": "^8.1.0",

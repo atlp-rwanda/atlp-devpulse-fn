@@ -120,7 +120,6 @@ const TrainneeDetails = (props: any) => {
                 <MdOutlineCancel className="float-left m-1" />
                 Reject
               </button>
-
             </div>
           </div>
         </div>

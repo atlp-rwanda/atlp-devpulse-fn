@@ -17,6 +17,21 @@ import CreateScoreType from "./pages/FilterTeainee/createScoreType";
 import ScoreTypesActions from "./pages/FilterTeainee/ ScoreTypesActions";
 import "./index.css";
 import ImportTraineeDetailsFromGoogleSheet from "./pages/importAndSaveManyTraineesFromGoogleSheet/importAndSaveManyTraineesFromGoogleSheet";
+import './index.css'
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faEnvelope, faKey } from '@fortawesome/free-solid-svg-icons';
+
+library.add(faEnvelope, faKey );
+
+// ...
+
+// function App() {
+//   return (
+//     <Router>
+//       <TestTailwind />
+//     </Router>
+// import React from "react";
+// import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
 const Counter = React.lazy(() => import("./components/Counter/Counter"));
 import Trash from './pages/Trash/Trash'
@@ -41,6 +56,8 @@ function App() {
       <Route path="/" element={<Trainee />} />
       <Route path="/filter_trainee-applicants/:id" element={<CreateScoreType />} />
       <Route path="/admins/" element={<ScoreTypesActions />} />
+      <Route path='/trainee-details' element={<TrainneeDetails />}/>
+      <Route path='/traineeb-details' element={<TrainneeDetailsB />}/>
     </Routes>
   );
 }
