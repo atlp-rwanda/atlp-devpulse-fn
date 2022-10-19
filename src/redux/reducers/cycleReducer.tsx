@@ -40,12 +40,14 @@ export default (state = initialState, { type, payload }: any) => {
 
     case UPDATE_CYCLE:
       return {
+        ...state,
         isLoading: false,
-        data: payload,
+        data: [...state.data],
       };
 
     case UPDATE_CYCLE_ERROR:
       return {
+        ...state,
         isLoading: false,
         errors: payload,
       };
@@ -53,12 +55,14 @@ export default (state = initialState, { type, payload }: any) => {
     case DELETE_CYCLE:
       const deletedData = state.data.filter(({ id }) => id !== payload);
       return {
+        ...state,
         isLoading: false,
-        data: deletedData,
+        data: [...state.data, deletedData],
       };
 
     case DELETE_CYCLE_ERROR:
       return {
+        ...state,
         isLoading: false,
         errors: payload,
       };

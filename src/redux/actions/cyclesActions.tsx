@@ -66,13 +66,14 @@ export const createCycle =
       })
         .then((response) => {
           if (response.data.data !== null) {
+            toast.success("Cycle successfully created.");
             dispatch(
               creator(CREATE_CYCLES, response.data.data.createApplicationCycle)
             );
-          }
-          if (response.data.data == null) {
+          } else {
             const err = response.data.errors[0].message;
-            // toast.error(err);
+
+            toast.error(err);
             dispatch(creator(CREATE_CYCLE_ERROR, err));
           }
         })
@@ -119,12 +120,14 @@ export const updateApplicationCycle =
       })
         .then((response) => {
           if (response.data.data !== null) {
+            toast.success("Cycle successfully updated.");
             dispatch(
               creator(UPDATE_CYCLE, response.data.data.updateApplicationCycle)
             );
-          }
-          if (response.data.data == null) {
+          } else {
             const err = response.data.errors[0].message;
+
+            toast.error(err);
             dispatch(creator(UPDATE_CYCLE_ERROR, err));
           }
         })
@@ -160,12 +163,14 @@ export const deleteApplicationCycle =
       })
         .then((response) => {
           if (response.data.data !== null) {
+            toast.success("Cycle successfully deleted.");
             dispatch(
               creator(DELETE_CYCLE, response.data.data.deleteApplicationCycle)
             );
           }
           if (response.data.data == null) {
             const err = response.data.errors[0].message;
+            toast.success(err);
             dispatch(creator(DELETE_CYCLE_ERROR, err));
           }
         })
