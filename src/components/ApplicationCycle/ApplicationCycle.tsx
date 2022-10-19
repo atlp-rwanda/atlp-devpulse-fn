@@ -8,18 +8,19 @@ import {
 } from "../../redux/actions/cyclesActions";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { connect } from "react-redux";
 import * as BsIcons from "react-icons/bs";
+import * as AiIcons from "react-icons/ai";
 import "./ApplicationCycle.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const Axios = (props: any) => {
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -43,12 +44,7 @@ const Axios = (props: any) => {
   const [openUpdateModal, setOpenUpdateModel] = useState(false);
   const [openCreateModal, setOpenCreateModal] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
-
-  const [showCycleActions, setShowCycleActions] = useState<any>({
-    0: false,
-    1: false,
-    2: false,
-  });
+  const [activeCycle, setActiveCycle] = useState<number | undefined>(undefined);
 
   const [deleteApplicationCycle] = useMutation(DELETE_CYCLE);
   const [deleteCycleId, setDeleteCycleId] = useState("");
@@ -63,21 +59,23 @@ const Axios = (props: any) => {
     setOpenDeleteModal(false);
   };
 
-  const handleOpenUpdateModal = (e: any, i: number) => {
-    const cycle = cycles[i];
+  const handleOpenUpdateModal = (e: any) => {
+    const cycle = cycles[activeCycle!];
     setOpenUpdateModel(true);
     setUpdateName(cycle.name);
     setUpdateStartDate(cycle.startDate);
     setUpdateEndDate(cycle.endDate);
 
-    setUpdateCycleId(e.target.id);
+    setUpdateCycleId(cycle.id);
+    setAnchorEl(null);
   };
   const handleOpenCreateCycle = () => {
     setOpenCreateModal(true);
   };
   const handleOpenDeleteCycle = (e: any) => {
-    setDeleteCycleId(e.target.id);
+    setDeleteCycleId(cycles[activeCycle!].id);
     setOpenDeleteModal(true);
+    setAnchorEl(null);
   };
 
   useEffect(() => {
@@ -95,7 +93,6 @@ const Axios = (props: any) => {
 
     props.createCycle(data);
     setOpenCreateModal(false);
-    window.location.reload();
   };
 
   const updateCycle = (e: any) => {
@@ -108,10 +105,11 @@ const Axios = (props: any) => {
       endDate: updateEndDate,
       id: updateCycleId,
     };
-
     props.updateApplicationCycle(data);
     setOpenUpdateModel(false);
-    window.location.reload();
+    setTimeout(() => {
+      window.location.reload();
+    }, 3000);
   };
   const deleteCycle = (e: any) => {
     e.preventDefault();
@@ -121,7 +119,9 @@ const Axios = (props: any) => {
     };
     props.deleteApplicationCycle(data);
     setOpenDeleteModal(false);
-    window.location.reload();
+    setTimeout(() => {
+      window.location.reload();
+    }, 3000);
   };
 
   return (
@@ -129,7 +129,7 @@ const Axios = (props: any) => {
       <div className="container">
         <button className="add-button" onClick={() => handleOpenCreateCycle()}>
           <BsIcons.BsPlusLg style={{ margin: "0 5px" }} />
-          <span>Cycle</span>
+          <span>New Cycle</span>
         </button>
         <div className="body">
           <table>
@@ -138,7 +138,6 @@ const Axios = (props: any) => {
                 <th>Name</th>
                 <th>Start date</th>
                 <th>Start date</th>
-                <th></th>
               </tr>
             </thead>
             <tbody>
@@ -147,63 +146,55 @@ const Axios = (props: any) => {
                   <tr key={values.name}>
                     <td>{values.name}</td>
                     <td>{values.startDate}</td>
-                    <td>{values.endDate} </td>
-                    <td style={{}}>
-                      <span>
-                        <Button
-                          id="basic-button"
-                          aria-controls={open ? "basic-menu" : undefined}
-                          aria-haspopup="true"
-                          aria-expanded={open ? "true" : undefined}
-                          onClick={handleClick}
-                        >
-                          <BsIcons.BsThreeDotsVertical
-                            onClick={() => {
-                              console.log(showCycleActions);
-                              setShowCycleActions({
-                                ...showCycleActions,
-                                [i]: !showCycleActions[i],
-                              });
-                            }}
-                            style={{
-                              color: "#000",
-                              fontSize: "20px",
-                            }}
-                          />{" "}
-                        </Button>
-                      </span>
-                      {showCycleActions[i] && (
-                        <div>
-                          <Menu
-                            id="basic-menu"
-                            anchorEl={anchorEl}
-                            open={open}
-                            onClose={handleClose}
-                            MenuListProps={{
-                              "aria-labelledby": "basic-button",
-                            }}
-                          >
-                            <MenuItem
-                              id={values.id}
-                              onClick={handleOpenDeleteCycle}
-                            >
-                              Delete
-                            </MenuItem>
-                            <MenuItem
-                              id={values.id}
-                              onClick={(e) => {
-                                handleOpenUpdateModal(e, i);
-                              }}
-                            >
-                              Edit
-                            </MenuItem>
-                          </Menu>
-                        </div>
-                      )}
+                    <td
+                      style={{
+                        display: "flex",
+                        flexWrap: "nowrap",
+                        width: "100%",
+                      }}
+                    >
+                      {values.endDate}
+
+                      <div
+                        style={{
+                          marginLeft: "5px",
+                        }}
+                      >
+                        <BsIcons.BsThreeDotsVertical
+                          onClick={(event) => {
+                            setActiveCycle(i);
+                            setAnchorEl(
+                              event.currentTarget as unknown as HTMLElement
+                            );
+                          }}
+                          style={{
+                            color: "#000",
+                            fontSize: "20px",
+                          }}
+                        />
+                      </div>
                     </td>
                   </tr>
                 );
               })}
+              <Menu
+                id="basic-menu"
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleClose}
+                MenuListProps={{
+                  "aria-labelledby": "basic-button",
+                }}
+              >
+                <MenuItem onClick={handleOpenDeleteCycle}>Delete</MenuItem>
+                <MenuItem
+                  onClick={(e) => {
+                    handleOpenUpdateModal(e);
+                  }}
+                >
+                  Edit
+                </MenuItem>
+              </Menu>
             </tbody>
           </table>
 
@@ -213,20 +204,24 @@ const Axios = (props: any) => {
             aria-labelledby="parent-modal-title"
             aria-describedby="parent-modal-description"
           >
-            <Box
-              sx={{
-                position: "absolute",
-                top: "50%",
-                left: "50%",
-                transform: "translate(-50%, -50%)",
-                border: "none",
-              }}
-            >
+            <Box className="create-box">
               <form
                 action=""
                 onSubmit={createNewCycle}
                 className="create-cycle-form"
               >
+                <h1>Add new cycle</h1>
+                <AiIcons.AiOutlineClose
+                  style={{
+                    position: "absolute",
+                    top: "20px",
+                    right: "20px",
+                    fontSize: "35px",
+                    cursor: "pointer",
+                  }}
+                  onClick={handleCloseCreateModel}
+                />
+                <hr style={{ marginBottom: "40px" }} />
                 <input
                   type="text"
                   name="name"
@@ -235,6 +230,7 @@ const Axios = (props: any) => {
                   onChange={(e) => {
                     setName(e.target.value);
                   }}
+                  className="w-24 mt-3 bg-lime cursor-pointer text-xl self-center py-1 rounded"
                 />
                 <input
                   type="date"
@@ -243,6 +239,7 @@ const Axios = (props: any) => {
                   onChange={(e) => {
                     setStartDate(e.target.value);
                   }}
+                  className="w-24 mt-3 bg-lime cursor-pointer text-xl self-center py-1 rounded"
                 />
                 <input
                   type="date"
@@ -251,6 +248,7 @@ const Axios = (props: any) => {
                   onChange={(e) => {
                     setEndDate(e.target.value);
                   }}
+                  className="w-24 mt-3 bg-lime cursor-pointer text-xl self-center py-1 rounded"
                 />
                 <button type="submit">Save</button>
               </form>
@@ -305,17 +303,21 @@ const Axios = (props: any) => {
                     textAlign: "center",
                   }}
                 >
-                  <h1
+                  <AiIcons.AiFillExclamationCircle
                     style={{
-                      textAlign: "center",
-                      fontSize: "25px",
-                      fontWeight: "bold",
-                      margin: "20px 0",
+                      fontSize: "40px",
+                      width: "40px",
+                      margin: "20px auto",
+                    }}
+                  />
+                  <p
+                    style={{
+                      width: "60%",
+                      margin: "auto",
                     }}
                   >
-                    Alert!
-                  </h1>
-                  <p>Do you want to delete this cycle?</p>
+                    Are you sure you want to delete this cycle?
+                  </p>
                 </div>
                 <div
                   style={{
@@ -331,13 +333,12 @@ const Axios = (props: any) => {
                       display: "block",
                       borderRadius: "5px",
                       margin: "10px auto",
-                      border: "1px solid #333",
-                      background: "#f1f1f1",
-                      color: "#000",
+                      background: "#940000",
+                      color: "#fff",
                     }}
-                    onClick={handleCloseDeleteModal}
+                    onClick={deleteCycle}
                   >
-                    Cancel
+                    Delete
                   </button>
                   <button
                     style={{
@@ -346,12 +347,12 @@ const Axios = (props: any) => {
                       display: "block",
                       borderRadius: "5px",
                       margin: "10px auto",
-                      background: "#940000",
+                      background: "#ABB8C3",
                       color: "#fff",
                     }}
-                    onClick={deleteCycle}
+                    onClick={handleCloseDeleteModal}
                   >
-                    Delete
+                    Cancel
                   </button>
                 </div>
               </div>
@@ -365,39 +366,27 @@ const Axios = (props: any) => {
               aria-labelledby="parent-modal-title"
               aria-describedby="parent-modal-description"
             >
-              <Box
-                sx={{
-                  position: "absolute",
-                  top: "50%",
-                  left: "50%",
-                  transform: "translate(-50%, -50%)",
-                  border: "none",
-                }}
-              >
+              <Box className="create-box">
                 <form
                   action=""
                   onSubmit={updateCycle}
-                  style={{
-                    borderRadius: "5px",
-                    width: "max-content",
-                    height: "fit-content",
-                    margin: "auto",
-                    padding: "5px 10px 10px",
-                    background: "#f0f0f0",
-                  }}
+                  className="create-cycle-form"
                 >
+                  <h1>Update new cycle</h1>
+                  <AiIcons.AiOutlineClose
+                    style={{
+                      position: "absolute",
+                      top: "20px",
+                      right: "20px",
+                      fontSize: "35px",
+                      cursor: "pointer",
+                    }}
+                    onClick={handleCloseUpdateModal}
+                  />
+                  <hr style={{ marginBottom: "40px" }} />
                   <input
                     type="text"
                     name="name"
-                    style={{
-                      border: "1px solid #333",
-                      height: "40px",
-                      width: "250px",
-                      display: "block",
-                      borderRadius: "5px",
-                      margin: "10px auto",
-                      textIndent: "1ch",
-                    }}
                     placeholder="Cycle name"
                     value={updateName}
                     onChange={(e) => {
@@ -407,15 +396,6 @@ const Axios = (props: any) => {
                   <input
                     type="date"
                     name="start date"
-                    style={{
-                      border: "1px solid #333",
-                      height: "40px",
-                      width: "250px",
-                      display: "block",
-                      borderRadius: "5px",
-                      margin: "10px auto",
-                      textIndent: "1ch",
-                    }}
                     value={updateStartDate}
                     onChange={(e) => {
                       setUpdateStartDate(e.target.value);
@@ -424,15 +404,6 @@ const Axios = (props: any) => {
                   <input
                     type="date"
                     name="end date"
-                    style={{
-                      border: "1px solid #333",
-                      height: "40px",
-                      width: "250px",
-                      display: "block",
-                      borderRadius: "5px",
-                      margin: "10px auto",
-                      textIndent: "1ch",
-                    }}
                     value={updateEndDate}
                     onChange={(e) => {
                       setUpdateEndDate(e.target.value);
@@ -478,7 +449,7 @@ const Axios = (props: any) => {
                   </div>
                 </form>
               </Box>
-            </Modal>{" "}
+            </Modal>
             <ToastContainer theme="colored" />
           </div>
         </div>
