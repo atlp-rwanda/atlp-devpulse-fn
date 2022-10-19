@@ -1,14 +1,21 @@
 {
   "files": {
-    "main.js": "/atlp-rwanda/atlp-devpulse-fn/static/js/main.4219844f.js",
-    "static/js/465.165ce511.chunk.js": "/atlp-rwanda/atlp-devpulse-fn/static/js/465.165ce511.chunk.js",
-    "static/js/33.3564632b.chunk.js": "/atlp-rwanda/atlp-devpulse-fn/static/js/33.3564632b.chunk.js",
+    "main.css": "/atlp-rwanda/atlp-devpulse-fn/static/css/main.ca1ace7c.css",
+    "main.js": "/atlp-rwanda/atlp-devpulse-fn/static/js/main.e8f2a104.js",
+    "static/js/876.9e8178e2.chunk.js": "/atlp-rwanda/atlp-devpulse-fn/static/js/876.9e8178e2.chunk.js",
+    "static/js/667.444bb885.chunk.js": "/atlp-rwanda/atlp-devpulse-fn/static/js/667.444bb885.chunk.js",
+    "static/css/651.bf37f2e4.chunk.css": "/atlp-rwanda/atlp-devpulse-fn/static/css/651.bf37f2e4.chunk.css",
+    "static/js/651.b47254fa.chunk.js": "/atlp-rwanda/atlp-devpulse-fn/static/js/651.b47254fa.chunk.js",
     "index.html": "/atlp-rwanda/atlp-devpulse-fn/index.html",
-    "main.4219844f.js.map": "/atlp-rwanda/atlp-devpulse-fn/static/js/main.4219844f.js.map",
-    "465.165ce511.chunk.js.map": "/atlp-rwanda/atlp-devpulse-fn/static/js/465.165ce511.chunk.js.map",
-    "33.3564632b.chunk.js.map": "/atlp-rwanda/atlp-devpulse-fn/static/js/33.3564632b.chunk.js.map"
+    "main.ca1ace7c.css.map": "/atlp-rwanda/atlp-devpulse-fn/static/css/main.ca1ace7c.css.map",
+    "main.e8f2a104.js.map": "/atlp-rwanda/atlp-devpulse-fn/static/js/main.e8f2a104.js.map",
+    "876.9e8178e2.chunk.js.map": "/atlp-rwanda/atlp-devpulse-fn/static/js/876.9e8178e2.chunk.js.map",
+    "667.444bb885.chunk.js.map": "/atlp-rwanda/atlp-devpulse-fn/static/js/667.444bb885.chunk.js.map",
+    "651.bf37f2e4.chunk.css.map": "/atlp-rwanda/atlp-devpulse-fn/static/css/651.bf37f2e4.chunk.css.map",
+    "651.b47254fa.chunk.js.map": "/atlp-rwanda/atlp-devpulse-fn/static/js/651.b47254fa.chunk.js.map"
   },
   "entrypoints": [
-    "static/js/main.4219844f.js"
+    "static/css/main.ca1ace7c.css",
+    "static/js/main.e8f2a104.js"
   ]
 }
