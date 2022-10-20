@@ -16,13 +16,16 @@ const TrainneeDetails = () => {
   return (
     <>
       <div className="h-screen m-0">
-        <div className="block  ">
-          <div className="max-w-md mx-5 bg-white rounded-xl shadow-md overflow-hidden md:max-w-xl mb-6">
-            <div className="md:flex">
+        <div className="block lg:ml-[30%]  ">
+          <div className="max-w-md mx-5 bg-white rounded-xl shadow-md overflow-hidden md:max-w-xl mb-6 lg:flex ">
+            <div className="md:flex ">
+              
+
               <h2 className="font-bold m-5 md:m-3  ">
               <BsFillPersonLinesFill className="float-left m-1" />
                 Applicant Information</h2>
-              <div className=" m-5 md:shrink-0">
+              
+              <div className=" m-5 md:shrink-0 lg:mt-20 lg:ml-[-45%]">
                 <h3>FirstName</h3>
                 <p className="text-gray-500 text-sm">John</p>
                 <h3>Country</h3>
@@ -33,7 +36,7 @@ const TrainneeDetails = () => {
                 <p className="text-gray-500 text-sm">+250781664001</p>
               </div>
             </div>
-            <div className="m-5 md:ml-2">
+            <div className="m-5 md:ml-2 lg:mt-20">
               <h3>LastName</h3>
               <p className="text-gray-500 text-sm">John</p>
               <h3>City</h3>
@@ -44,13 +47,13 @@ const TrainneeDetails = () => {
               <p className="text-gray-500 text-sm">07/07/1990</p>
             </div>
           </div>
-          <div className=" max-w-md mx-5 bg-white rounded-xl shadow-md overflow-hidden md:max-w-xl mb-6">
+          <div className=" max-w-md mx-5 bg-white rounded-xl shadow-md overflow-hidden md:max-w-xl mb-6 lg:flex">
             <div>
               <h2 className="top-5 m-5  font-medium">
                 <BsFillPersonLinesFill className="float-left m-1" />
                 Application Information
               </h2>
-              <div className="ml-12">
+              <div className="ml-12 lg:my-14">
                 <h3>Application Phase</h3>
                 <p className="text-gray-500 text-sm">Initial Phase</p>
                 <h3 className="mt-5">Program</h3>
@@ -58,7 +61,7 @@ const TrainneeDetails = () => {
               </div>
             </div>
             <div>
-            <div className="mt-8 ml-12">
+            <div className="mt-8 ml-12 lg:mt-24">
               <h3>Application Date</h3>
                 <p className="text-gray-500 text-sm">Initial Phase</p>
                 <h3 className="mt-5">Expected program start date</h3>
@@ -66,12 +69,12 @@ const TrainneeDetails = () => {
               </div>
             </div>
           </div>
-          <div className=" max-w-md mx-5 bg-white rounded-xl shadow-md overflow-hidden md:max-w-xl mb-6">
+          <div className=" max-w-md mx-5 bg-white rounded-xl shadow-md overflow-hidden md:max-w-xl mb-6 lg:h-[30%]">
             <h2 className="font-bold top-5 ml-5 mt-5 ">
               <AiFillSetting className="float-left m-1 " />
               Actions
             </h2>
-            <div className="grid sm:grid-rows-4 gap-3 w-[50%] ml-4">
+            <div className="grid sm:grid-rows-4 gap-3 w-[50%] ml-4 lg:grid-cols-4 lg:w-[100%]">
               <button className="bg-[#10292C] hover:bg-[#1f544cef] text-white font-bold py-2 px-4 rounded ">
                 <FcApproval className="float-left m-1" />
                 Approve
@@ -98,7 +101,7 @@ const TrainneeDetails = () => {
                 <BsEnvelope className="float-left m-1" />
                 Email
               </button>
-              <button className="bg-[#DC5454] hover:text-red-500 hover:bg-[#1f544cef] text-white font-bold py-2 px-2 rounded ">
+              <button className="bg-[#DC5454] hover:text-red-500 hover:bg-[#1f544cef] text-white font-bold py-2 px-2 rounded lg:px-0 ">
                 <MdOutlineCancel className="float-left m-1" />
                 Reject
               </button>

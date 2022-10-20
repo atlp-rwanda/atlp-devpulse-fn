@@ -21,12 +21,12 @@ const TrainneeDetails = () => {
       body:JSON.stringify({
        
         query:`
-        query AllTrainees($input: pagination) {
-          allTrainees(input: $input) {
-            lastName
-            firstName
-            _id
+        query GetAllTrainees {
+          getAllTrainees {
+            id
             email
+            lastname
+            firstname
           }
         }
         `,
@@ -34,7 +34,7 @@ const TrainneeDetails = () => {
       })
     }).then(res => res.json())
        .then(data =>{
-         console.log(data.data.allTrainees)
+         console.log(data.data.getAllTrainees)
        })
   }
 
