@@ -8,7 +8,7 @@ import {
 import TestTailwind from "./components/TestTailwind";
 import Trainee from './containers/pages/TraineApplicant/Trainee';
 import './index.css'
-
+import  Sidebar  from './components/sidebar/sidebar';
 // function App() {
 //   return (
 //     <Router>
@@ -25,6 +25,7 @@ function App() {
       <Route path="/test_redux" element={<Counter />} />
       <Route path="/test_tailwind" element={<TestTailwind />} />
       <Route path="/Trainee" element={<Trainee/>} />
+      <Route path="/sidebar" element={<Sidebar/>} />
     </Routes>
   );
 }

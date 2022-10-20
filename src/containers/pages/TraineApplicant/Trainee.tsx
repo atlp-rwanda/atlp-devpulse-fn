@@ -10,6 +10,9 @@ getAllTraineess,
 } from "../../../redux/actions/TraineeAction";
 import { connect } from "react-redux";
 import Modal from './modal';
+import Sidebar from '../../../components/sidebar/sidebar';
+
+
 const AddTrainee = (props: any) => {
   const [addNewTraineeModel, setAddNewTraineeModel] = useState(false);
 function open(){
@@ -56,7 +59,7 @@ const {
       <Modal/>
       </div>
       {/* =========================== End:: addnewtraineeModel =============================== */}
-      <div className="flex flex-col h-screen">
+      <div className="flex flex-col h-screen absolute w-[100%]">
         <div className="flex flex-row">
           <div className="w-full">
             <div>
@@ -238,6 +241,7 @@ const {
         </div>
       
       </div>
+      <Sidebar/>
     </>
   );
 };
