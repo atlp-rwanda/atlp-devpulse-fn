@@ -19,8 +19,8 @@ function open(){
 // LIST ALL TRAINEE
   const { alltrainees } = props;
 const [page, setPage] = useState(0);
-const [itemsPerPage, setiIemsPerPage] = useState(100);
-const [All, setAll] = useState(false);
+const [itemsPerPage, setiIemsPerPage] = useState(0);
+const [All, setAll] = useState(true);
   const input = {
     page: page,
     itemsPerPage: itemsPerPage,
@@ -184,7 +184,8 @@ const {
                 page === 1 && 'disabled'
               }`}
             >
-              &larr;
+              {/* &larr; */}
+              Prev
             </button>
             <button
               onClick={() => setPaging(1)}
@@ -223,7 +224,8 @@ const {
                 page === totalPages && 'disabled'
               }`}
             >
-              &rarr;
+              {/* &rarr; */}
+              Next
             </button>
           </div>
                 </div>
