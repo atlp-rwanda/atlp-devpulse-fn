@@ -45,7 +45,7 @@ const {
   setPaging,
   totalPages,
 } = pagination({
-  contentPerPage: 3,
+  contentPerPage: 10,
   count: trainees.length,
 });
   return (
@@ -179,7 +179,7 @@ const {
                     </div>
                   </div>
                  {/* //pagination */}
-            <div className="flex absolute items-center justify-center gap-1 top-[580px] left-[650px] mb-0">
+                 <div className="flex relative items-center justify-center gap-1  mb-10 left-[100px]">
             <button
               onClick={prevPage}
               data-testid="prev"

@@ -9,6 +9,7 @@ import TestTailwind from "./components/TestTailwind";
 import Trainee from './containers/pages/TraineApplicant/Trainee';
 import './index.css'
 import  Sidebar  from './components/sidebar/sidebar';
+import Table from './containers/pages/Table';
 // function App() {
 //   return (
 //     <Router>
@@ -26,6 +27,7 @@ function App() {
       <Route path="/test_tailwind" element={<TestTailwind />} />
       <Route path="/Trainee" element={<Trainee/>} />
       <Route path="/sidebar" element={<Sidebar/>} />
+      <Route path="/table" element={<Table/>} />
     </Routes>
   );
 }
