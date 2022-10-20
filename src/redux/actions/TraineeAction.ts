@@ -1,28 +1,39 @@
 import creator from "./creator";
 import { GET_TRAINEE, CREATE_TRAINEES} from "..";
 import axios from "axios";
-
-export const getAllTraineess = () => async (dispatch: any) => {
+export const getAllTraineess = ({ page,itemsPerPage,  All }:any) => async (dispatch: any) => {
   try {
     const datas = await axios({
       url: "http://localhost:4000/",
       method: "post",
       data: {
         query: `
-        query GetAllTrainees {
-          getAllTrainees {
-            id
-            email
-            lastname
-            firstname
+        query AllTraineesAttribute($input: pagination) {
+          allTraineesAttribute(input: $input) {
+            gender
+            cohort
+            trainee_id {
+              lastName
+              firstName
+              email
+              delete_at
+              _id
+            }
           }
         }
-      `,
+      `,  variables: {
+        input: {
+          page,
+          itemsPerPage,
+          All,
+        },
+      },
+
       },
     });
     // console.log("result",datas);
-    const trainee = await datas.data.data.getAllTrainees;
-    // console.log( trainee)
+    const trainee = await datas.data.data.allTraineesAttribute;
+    console.log( trainee)
     dispatch(creator(GET_TRAINEE, trainee));
   } catch (error) {
     if (error) {
@@ -32,7 +43,7 @@ export const getAllTraineess = () => async (dispatch: any) => {
 };
 
 export const createTrainee =
-  ({ firstname, lastname, email }: any) =>
+  ({ firstName, lastName, email }: any) =>
   async (dispatch: any) => {
     try {
       const datas = await axios({
@@ -42,15 +53,15 @@ export const createTrainee =
           query: `
           mutation Mutation($input: newTraineeApplicantInput) {
             createNewTraineeApplicant(input: $input) {
+              lastName
+              firstName
               email
-              firstname
-              lastname
             }
           }`,
           variables: {
             input: {
-              firstname,
-              lastname,
+              firstName,
+              lastName,
               email,
             },
           },

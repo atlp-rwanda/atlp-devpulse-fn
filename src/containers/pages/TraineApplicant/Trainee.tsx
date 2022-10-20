@@ -1,170 +1,59 @@
 /* eslint-disable */
 import React, {useState,useEffect } from 'react';
-import grade from '../../dummyData/Trainee.json';
-// import Button from "../../components/Button";
 import { HiDotsVertical } from "react-icons/hi";
-import { AiOutlinePlus,AiOutlineClose} from "react-icons/ai";
-import Pagination from "../../components/Pagination";
+import { AiOutlinePlus} from "react-icons/ai";
+import pagination from '../../../components/pagination';
 import { ToastContainer, toast } from 'react-toastify';
   import 'react-toastify/dist/ReactToastify.css';
 import {
 getAllTraineess,
-createTrainee
-} from "../../redux/actions/TraineeAction";
+} from "../../../redux/actions/TraineeAction";
 import { connect } from "react-redux";
-
-
+import Modal from './modal';
 const AddTrainee = (props: any) => {
-  // const succeed = () => toast("SUCCEED");
   const [addNewTraineeModel, setAddNewTraineeModel] = useState(false);
-  // const dumData=grade;
-  const removeModel = () => {
-    let newState = !addNewTraineeModel
-    setAddNewTraineeModel(newState);
-  };
 function open(){
   setAddNewTraineeModel(true);
 }
 
-// CREATE TRAINEE
-
-const [firstname, setFirstname] = useState("");
-const [lastname, setLastname] = useState("");
-const [email, setEmail] = useState("");
-
-const createNewTrainee = () => {
-  const data = {
-    firstname: firstname,
-    lastname: lastname,
-    email: email,
-  };
-   
-  if(props.createTrainee(data)){
-  // console.log("yolla",data)
-  setAddNewTraineeModel(false);
-  toast.success("succeed")
-  }else{
-  toast.error("error")
-  }
-};
-
-
 // LIST ALL TRAINEE
   const { alltrainees } = props;
+const [page, setPage] = useState(0);
+const [itemsPerPage, setiIemsPerPage] = useState(100);
+const [All, setAll] = useState(false);
+  const input = {
+    page: page,
+    itemsPerPage: itemsPerPage,
+    All: All,
+  };
 useEffect(() => {
-  props.getAllTraineess();
+  props.getAllTraineess(input);
 }, []);
 const trainees = alltrainees.data;
-// const trainees = grade;
-// console.log("hello",trainees)
+
+//pagination 
+const {
+  firstContentIndex,
+  lastContentIndex,
+  nextPage,
+  prevPage,
+  paging,
+  gaps,
+  setPaging,
+  totalPages,
+} = pagination({
+  contentPerPage: 3,
+  count: trainees.length,
+});
   return (
     <>
       <ToastContainer />
-      {/* =========================== Start:: addnewtraineeModel  =============================== */}
-      <div className={`h-screen w-screen z-20 bg-black bg-opacity-30 backdrop-blur-sm absolute flex items-center justify-center  px-4 ${
-          addNewTraineeModel === true ? 'block' : 'hidden'
-        }`}
-  >
-           
-        <div className="bg-white dark:bg-dark-bg w-full sm:w-3/4  xl:w-4/12 rounded-lg p-4 pb-8">
-          <div className="card-title w-full flex  flex-wrap justify-center items-center  ">
-          
-            <h3 className="font-bold text-sm dark:text-white text-center w-11/12 ">
-              <AiOutlineClose className="float-right text-3xl cursor-pointer" onClick={()=>removeModel()}/>
-              
-              
-              {('New Trainee')}
-             
-            </h3>
-            <hr className=" bg-primary border-b my-3 w-full" />
-          </div>
-          <div className="card-body">
-             <section className=" py-3 px-8"
-          >
-              <div className="input my-3 h-9 ">
-                <div className="grouped-input flex items-center h-full w-full rounded-md">
-                  <input
-                    type="text"
-                    name="gpa"
-                    className=" dark:bg-dark-tertiary border border-primary rounded outline-none px-5 font-sans text-xs py-2 w-full pt-4"
-                    placeholder={('FirstName')}
-                    value={firstname}
-                    onChange={(e) => {
-                      setFirstname(e.target.value);
-                    }}
-                  />
-                </div>
-              </div>
-              <div className="input my-3 h-9 ">
-                <div className="grouped-input flex items-center h-full w-full rounded-md">
-                  <input
-                    type="text"
-                    name="definition"
-                    className=" dark:bg-dark-tertiary border border-primary py-2 rounded outline-none px-5 font-sans text-xs w-full pt-4"
-                    placeholder={('LastName')}
-                    value={lastname}
-                    onChange={(e) => {
-                      setLastname(e.target.value);
-                    }}
-                  />
-                </div>
-              </div>
-              <div className="input my-3 h-9 ">
-                <div className="grouped-input flex items-center h-full w-full rounded-md">
-                  <input
-                    type="text"
-                    name="grade"
-                    className=" dark:bg-dark-tertiary border border-primary py-2 rounded outline-none px-5 font-sans text-xs w-full pt-4"
-                    placeholder={('Email')}
-                    value={email}
-                    onChange={(e) => {
-                      setEmail(e.target.value);
-                    }}
-                  />
-                </div>
-              </div>
-              <div className="input my-3 h-9 ">
-                <div className="grouped-input flex items-center h-full w-full rounded-md">
-                <select className="dark:bg-dark-tertiary border border-primary py-2 rounded outline-none px-5 font-sans text-xs w-full pt-4">
-                   <option className="text-white">Select gender</option>
-          <option>Male</option>
-          <option>Female</option>
-          <option>Other</option>
-        </select>
-                 
-                </div>
-              </div>
-
-             
-
-              <div className="input my-3 h-9 ">
-                <div className="grouped-input flex items-center h-full w-full rounded-md">
-                  {/* <input
-                    type="text"
-                    name="grade"
-                    className=" dark:bg-dark-tertiary border border-primary py-2 rounded outline-none px-5 font-sans text-xs w-full"
-                    placeholder={('Cohort')}
-                  /> */}
-                   <select className="dark:bg-dark-tertiary border border-primary py-2 rounded outline-none px-5 font-sans text-xs w-full pt-4 ">
-                   <option className="text-white">Select  cycle</option>
-          <option>1</option>
-          <option>2</option>
-          <option>3</option>
-        </select>
-        
-                </div>
-        
-               
-              </div>
-
-              <button   
-                 className="flex bg-primary rounded-md py-2 px-4 text-white font-medium cursor-pointer m-auto"
-              onClick={ createNewTrainee}>save</button>
-              
-              
-            </section>
-          </div>
-        </div>
+      {/* =========================== Start:: addnewtraineeModel =============================== */}
+             <div className={`h-screen w-screen z-20 bg-black bg-opacity-30 backdrop-blur-sm absolute flex items-center justify-center  px-4 ${
+        addNewTraineeModel === true ? 'block' : 'hidden'
+      }`}
+>
+      <Modal/>
       </div>
       {/* =========================== End:: addnewtraineeModel =============================== */}
       <div className="flex flex-col h-screen">
@@ -182,11 +71,6 @@ const trainees = alltrainees.data;
                     <div>
       
       </div>
-                      {/* <Button>
-<AiOutlinePlus className="mt-1 mr-1 font-bold"/>  Trainee
-
-
-                    </Button> */}
                   </div>
                 </div>
                 <div className="px-3 md:px-8">
@@ -220,7 +104,12 @@ const trainees = alltrainees.data;
                               </tr>
                             </thead>
                             <tbody>
-                            {trainees?.map((values: any, i: number) => {
+                     
+                            {trainees.slice(
+                              firstContentIndex,
+                              lastContentIndex,
+                            )
+                              ?.map((values: any, i: number) => {
                                 return (
                                   <tr 
                                   >
@@ -228,7 +117,7 @@ const trainees = alltrainees.data;
                                       <div className="flex">
                                         <div className="">
                                           <p className="text-gray-900 float-left dark:text-white whitespace-no-wrap">
-                                            {values.firstname}
+                                            {values.trainee_id.firstName}
                                           </p>
                                         </div>
                                       </div>
@@ -237,7 +126,7 @@ const trainees = alltrainees.data;
                                       <div className="flex items-center">
                                         <div className="">
                                           <p className="text-gray-900 text-center dark:text-white whitespace-no-wrap">
-                                            {values.lastname}
+                                            {values.trainee_id.lastName}
                                           </p>
                                         </div>
                                       </div>
@@ -255,7 +144,7 @@ const trainees = alltrainees.data;
                                       <div className="flex items-center">
                                         <div className="">
                                           <p className="text-gray-900 dark:text-white whitespace-no-wrap">
-                                            {values.email}
+                                            {values.trainee_id.email}
                                           </p>
                                         </div>
                                       </div>
@@ -286,7 +175,57 @@ const trainees = alltrainees.data;
                       </div>
                     </div>
                   </div>
-                  <Pagination/>
+                 {/* //pagination */}
+            <div className="flex absolute items-center justify-center gap-1 top-[580px] left-[650px] mb-0">
+            <button
+              onClick={prevPage}
+              data-testid="prev"
+              className={`page py-2 px-3 ml-0 leading-tight text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white ${
+                page === 1 && 'disabled'
+              }`}
+            >
+              &larr;
+            </button>
+            <button
+              onClick={() => setPaging(1)}
+              data-testid="page1"
+              className={`page py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white ${
+                page === 1 && 'disabled'
+              }`}
+            >
+              1
+            </button>
+            {gaps.paginationGroup.map((el) => (
+              <button
+                onClick={() => setPaging(el)}
+                data-testid="page2"
+                key={el}
+                className={`page py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white ${
+                  page === el ? 'active' : ''
+                }`}
+              >
+                {el}
+              </button>
+            ))}
+            <button
+              onClick={() => setPaging(totalPages)}
+              data-testid="page3"
+              className={`page py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white ${
+                page === totalPages && 'disabled'
+              }`}
+            >
+              {totalPages}
+            </button>
+            <button
+              onClick={nextPage}
+              data-testid="next"
+              className={`page py-2 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white ${
+                page === totalPages && 'disabled'
+              }`}
+            >
+              &rarr;
+            </button>
+          </div>
                 </div>
                
               </div>
@@ -309,5 +248,4 @@ const mapState = ({ trainee }: any) => ({
 
 export default connect(mapState, {
   getAllTraineess,
-  createTrainee
 })(AddTrainee);
