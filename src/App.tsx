@@ -7,7 +7,7 @@ import {
 } from 'react-router-dom';
 import TestTailwind from "./components/TestTailwind";
 import './index.css'
-
+import  Sidebar  from './components/sidebar/sidebar';
 // function App() {
 //   return (
 //     <Router>
@@ -23,6 +23,7 @@ function App() {
     <Routes>
       <Route path="/test_redux" element={<Counter />} />
       <Route path="/test_tailwind" element={<TestTailwind />} />
+      <Route path="/sidebar" element={<Sidebar/>} />
     </Routes>
   );
 }
