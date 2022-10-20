@@ -16,11 +16,13 @@ const TrainneeDetails = () => {
   return (
     <>
       <div className="h-screen m-0">
-        <div className="block ml-[30%] ">
-          <div className=" box-border bg-white h-80 w-[70%] flex mb-3 mt-20 rounded  drop-shadow-lg">
-            <div className="float-left ml-10">
-              <h2 className="font-bold mt-5">Applicant Information</h2>
-              <div className="mt-10 ml-7">
+        <div className="block  ">
+          <div className="max-w-md mx-5 bg-white rounded-xl shadow-md overflow-hidden md:max-w-xl mb-6">
+            <div className="md:flex">
+              <h2 className="font-bold m-5 md:m-3  ">
+              <BsFillPersonLinesFill className="float-left m-1" />
+                Applicant Information</h2>
+              <div className=" m-5 md:shrink-0">
                 <h3>FirstName</h3>
                 <p className="text-gray-500 text-sm">John</p>
                 <h3>Country</h3>
@@ -31,7 +33,7 @@ const TrainneeDetails = () => {
                 <p className="text-gray-500 text-sm">+250781664001</p>
               </div>
             </div>
-            <div className="mt-20 float-right  ml-36">
+            <div className="m-5 md:ml-2">
               <h3>LastName</h3>
               <p className="text-gray-500 text-sm">John</p>
               <h3>City</h3>
@@ -42,13 +44,13 @@ const TrainneeDetails = () => {
               <p className="text-gray-500 text-sm">07/07/1990</p>
             </div>
           </div>
-          <div className=" box-border bg-white h-60 w-[70%] flex  mb-3 rounded drop-shadow-lg">
+          <div className=" max-w-md mx-5 bg-white rounded-xl shadow-md overflow-hidden md:max-w-xl mb-6">
             <div>
               <h2 className="top-5 m-5  font-medium">
                 <BsFillPersonLinesFill className="float-left m-1" />
                 Application Information
               </h2>
-              <div className="ml-16">
+              <div className="ml-12">
                 <h3>Application Phase</h3>
                 <p className="text-gray-500 text-sm">Initial Phase</p>
                 <h3 className="mt-5">Program</h3>
@@ -56,7 +58,7 @@ const TrainneeDetails = () => {
               </div>
             </div>
             <div>
-            <div className="mt-16 ml-12">
+            <div className="mt-8 ml-12">
               <h3>Application Date</h3>
                 <p className="text-gray-500 text-sm">Initial Phase</p>
                 <h3 className="mt-5">Expected program start date</h3>
@@ -64,19 +66,19 @@ const TrainneeDetails = () => {
               </div>
             </div>
           </div>
-          <div className=" box-border bg-white h-40 w-[70%] flex mb-3 rounded drop-shadow-lg">
+          <div className=" max-w-md mx-5 bg-white rounded-xl shadow-md overflow-hidden md:max-w-xl mb-6">
             <h2 className="font-bold top-5 ml-5 mt-5 ">
               <AiFillSetting className="float-left m-1 " />
               Actions
             </h2>
-            <div className="">
-              <button className="bg-[#10292C] hover:bg-[#1f544cef] text-white font-bold py-2 px-4 rounded mt-20 mr-5">
+            <div className="grid sm:grid-rows-4 gap-3 w-[50%] ml-4">
+              <button className="bg-[#10292C] hover:bg-[#1f544cef] text-white font-bold py-2 px-4 rounded ">
                 <FcApproval className="float-left m-1" />
                 Approve
               </button>
               
               {/* <div className=""> */}
-              <button onClick={e=>handleDropDown(open)} className="bg-[#10292C] hover:bg-[#1f544cef] text-white font-bold py-2 px-4 rounded mr-16">
+              <button onClick={e=>handleDropDown(open)} className="bg-[#10292C] hover:bg-[#1f544cef] text-white font-bold py-2 px-4 rounded">
                 <TiExportOutline className="float-left m-1" />
                 Export
                 <AiFillCaretDown className="float-right m-1" />
@@ -92,7 +94,7 @@ const TrainneeDetails = () => {
                 </button>
                 {/* </div> */}
           
-              <button className=" bg-[#10292C] hover:bg-[#1f544cef] text-white font-bold py-2 px-4 rounded mr-8 ">
+              <button className=" bg-[#10292C] hover:bg-[#1f544cef] text-white font-bold py-2 px-4 rounded  ">
                 <BsEnvelope className="float-left m-1" />
                 Email
               </button>

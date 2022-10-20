@@ -6,6 +6,7 @@ import { AiFillSetting, AiFillCaretDown } from "react-icons/ai";
 import { MdOutlineCancel } from "react-icons/md";
 import { BsFillPersonLinesFill } from "react-icons/bs";
 
+
 const TrainneeDetails = () => {
 
   const [open, setOpen] = useState<boolean>(false);
@@ -13,16 +14,30 @@ const TrainneeDetails = () => {
     setOpen(!state)
   }
   console.log(open)
-  const componentDidMount= async()=>{
-      const url = 'http://localhost:5000/'
-      const response = await fetch(url)
-      const data = await response.json()
-      console.log(data)
-
+  const getTraine = ()=>{
+    fetch('http://localhost:5000',{
+      method:'POST',
+      headers: {"Content-type": "application/json"},
+      body:JSON.stringify({
+       
+        query:`
+        query AllTrainees($input: pagination) {
+          allTrainees(input: $input) {
+            lastName
+            firstName
+            _id
+            email
+          }
+        }
+        `,
+      
+      })
+    }).then(res => res.json())
+       .then(data =>{
+         console.log(data.data.allTrainees)
+       })
   }
-  componentDidMount();
 
-  
   return (
     <>
       <div className="h-screen m-0 bg-[#374151]">
@@ -80,7 +95,7 @@ const TrainneeDetails = () => {
               Actions
             </h2>
             <div className="">
-              <button className="bg-[#56C870] hover:bg-[#1f544cef] text-white font-bold py-2 px-4 rounded mt-20 mr-5">
+              <button onClick={getTraine} className="bg-[#56C870] hover:bg-[#1f544cef] text-white font-bold py-2 px-4 rounded mt-20 mr-5">
                 <FcApproval className="float-left m-1" />
                 Approve
               </button>
