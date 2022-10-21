@@ -3,12 +3,12 @@ module.exports = {
   theme: {
     extend: {
       screens: {
-        sm: '320px',
-        md: '540px',
-        lg: '768px',
-        xl: '1440px',
-        min:'375',
-        
+        sm: "320px",
+        md: "540px",
+        lg: "768px",
+        xl: "1440px",
+        min: "375",
+
         sm: "375px",
         md: { max: "820px" },
         lg: "976px",
@@ -19,19 +19,19 @@ module.exports = {
         secondary: "#D8DCE3",
       },
       colors: {
-        primary: '#173B3F',
-        secondary: '#F9F9FB',
-        tertiary: '#F3F4F6',
-        'light-bg': '#F9F9FB',
-        'light-text': '#111827',
-        'header-text': '#173B3F',
-        'dark-text-fill': '#F3F4F6',
-        'dark-bg': '#1F2A37',
-        'dark-frame-bg': '#262E3D',
-        'dark-tertiary': '#374151',
-        'divider-bg': '#E5E7EB',
-        'dark-45': '#00000073',
-        'border-dark': '#5f5b5b80',
+        primary: "#173B3F",
+        secondary: "#F9F9FB",
+        tertiary: "#F3F4F6",
+        "light-bg": "#F9F9FB",
+        "light-text": "#111827",
+        "header-text": "#173B3F",
+        "dark-text-fill": "#F3F4F6",
+        "dark-bg": "#1F2A37",
+        "dark-frame-bg": "#262E3D",
+        "dark-tertiary": "#374151",
+        "divider-bg": "#E5E7EB",
+        "dark-45": "#00000073",
+        "border-dark": "#5f5b5b80",
         md: "768px",
         lg: "976px",
         xl: "1440px",
@@ -49,20 +49,18 @@ module.exports = {
         black: "#000000",
       },
       fontSize: {
-        fb: '14px'
+        fb: "14px",
       },
       borderRadius: {
-        "bt-rd": "8px"
+        "bt-rd": "8px",
       },
       padding: {
-        '5px': '5.5px',
-        '4px': '4.5px',
+        "5px": "5.5px",
+        "4px": "4.5px",
       },
       margin: {
-        '5px': '5.5px'
-      }
-
-
+        "5px": "5.5px",
+      },
     },
     plugins: [],
   },
