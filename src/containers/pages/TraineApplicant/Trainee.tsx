@@ -77,12 +77,12 @@ const {
                   </div>
                 </div>
                 <div className="px-3 md:px-8">
-                  <div className="bg-white dark:bg-dark-bg shadow-lg px-5 py-8 rounded-md w-[100%] mx-auto lg:w-[80%] lg:ml-60 mb-10">
+                  <div className="bg-white  dark:bg-dark-bg shadow-lg px-5 py-8 rounded-md w-[100%] mx-auto lg:w-[80%] lg:ml-60 mb-10">
                     <div>
                       <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
-                        <div className="inline-block w-full lg:min-w-full shadow rounded-lg overflow-hidden">
+                        <div className="inline-block w-full h-[55vh] lg:min-w-full shadow rounded-lg overflow-y-scroll">
                           <table className="min-w-full leading-normal">
-                            <thead className=" w-full px-32">
+                            <thead className=" w-full px-32 sticky top-0">
                               <tr>
                                 <th className="p-6 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
                                   {('firstname')}
@@ -106,7 +106,7 @@ const {
                                 </th>
                               </tr>
                             </thead>
-                            <tbody>
+                            <tbody className='overflow-y-auto'>
                      
                             {trainees.slice(
                               firstContentIndex,
@@ -179,7 +179,7 @@ const {
                     </div>
                   </div>
                  {/* //pagination */}
-                 <div className="flex relative items-center justify-center gap-1  mb-10 left-[100px]">
+                 <div className="flex relative items-center justify-center gap-1  mb-10 lg:left-[100px]">
             <button
               onClick={prevPage}
               data-testid="prev"
