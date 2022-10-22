@@ -1,6 +1,6 @@
 import React from "react";
 
-import { sidebarItems2, sidebarItems1, sidebarItems3 } from "./sidebarItems";
+import { sidebarItems2, sidebarItems1, sidebarItems3 } from "./Items";
 
 const Sidebar = () => {
   return (
