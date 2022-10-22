@@ -8,7 +8,7 @@ import {
 import { connect } from "react-redux";
 import "react-toastify/dist/ReactToastify.css";
 import { useTable, usePagination } from "react-table";
-import Sidebar from "../../components/sidebar/sidebar";
+import Sidebar from "../../components/sidebar/Sidebar";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Menu from "@mui/material/Menu";
