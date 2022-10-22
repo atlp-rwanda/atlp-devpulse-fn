@@ -5,7 +5,7 @@ import "./index.css";
 
 const Counter = React.lazy(() => import("./components/Counter/Counter"));
 const ApplicationCycle = React.lazy(
-  () => import("./components/ApplicationCycle/ApplicationCycle")
+  () => import("./pages/ApplicationCycle/ApplicationCycle")
 );
 
 function App() {

@@ -39,6 +39,14 @@ export default (state = initialState, { type, payload }: any) => {
       };
 
     case UPDATE_CYCLE:
+      const id = payload.id;
+      const newState: any = state.data;
+      const id1 = newState.findIndex((val: any) => {
+        return val.id === id;
+      });
+
+      newState[id1] = payload;
+
       return {
         ...state,
         isLoading: false,
