@@ -15,6 +15,7 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import * as BsIcons from "react-icons/bs";
 import * as AiIcons from "react-icons/ai";
+import "./ApplicationCycle.css";
 
 const ApplicationCycle = (props: any) => {
   const { allCycles, errors } = props;
@@ -185,10 +186,12 @@ const ApplicationCycle = (props: any) => {
   return (
     <>
       <div style={{ display: "flex" }}>
-        <Sidebar />
-        <div className="relative min-h-[50vh] w-[84rem]">
-          <div className="absolute w-[100%] bottom-0 pb-10">
-            <div className="w-[70%] min-h-[70vh] m-auto  bg-[#fff] p-[10px] shadow-md rounded-[10px] relative pb-[80px]">
+        <div className="md:hidden">
+          <Sidebar />
+        </div>
+        <div className="relative min-h-[50vh] w-[84rem] md:w-[100rem]">
+          <div className="absolute table table-fixed w-[100%] bottom-0 pb-10 md:relative">
+            <div className="w-[70%] min-h-[70vh] m-auto  bg-[#fff] p-[10px] shadow-md rounded-[10px] relative pb-[80px]  overflow-x-auto	md:w-[90%]">
               <button
                 className="h-[40px] rounded-[5px] bg-[#173b3f] text-white flex items-center p-0 pl-[5px] pr-[10px]"
                 onClick={() => handleOpenCreateCycle()}
@@ -241,10 +244,10 @@ const ApplicationCycle = (props: any) => {
                   })}
                 </tbody>
               </table>
-              <div className="block mx-auto my-0 w-[100%] absolute bottom-0">
+              <div className="block mx-auto my-0 w-[100%] absolute bottom-0 overflow-x-auto">
                 <div className="w-[100%] flex items-center justify-center my-[30px]  mx-auto">
-                  <span className="mx-[10px]">
-                    Displaying page <strong>{pageIndex + 1}</strong> out of{" "}
+                  <span className="mx-[10px] md:hidden">
+                    Page <strong>{pageIndex + 1}</strong> of{" "}
                     <strong>{pageOptions.length}</strong>{" "}
                   </span>
                   <button
@@ -261,7 +264,7 @@ const ApplicationCycle = (props: any) => {
                   >
                     <AiIcons.AiOutlineLeft />
                   </button>{" "}
-                  <span className="flex flex-wrap">
+                  <span className="flex flex-wrap md:hidden" id="pages">
                     {pageOptions?.map((pageOption: any) => {
                       return (
                         <div>
