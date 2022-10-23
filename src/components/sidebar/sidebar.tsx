@@ -2,7 +2,7 @@ import React from "react";
 
 import { sidebarItems2, sidebarItems1, sidebarItems3 } from "./sidebarItems";
 
-const Sidebar = () => {
+const sidebar = () => {
   return (
     <div className="min-h-screen w-64 block pb-10 pt-1 bg-slate-50 relative font-sans">
       <div className="mb-5 border-b border-[#979797]">
@@ -68,4 +68,4 @@ const Sidebar = () => {
   );
 };
 
-export default Sidebar;
+export default sidebar;
