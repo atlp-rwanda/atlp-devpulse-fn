@@ -1,46 +1,48 @@
 import creator from "./creator";
-import { GET_TRAINEE, CREATE_TRAINEES} from "..";
+import { GET_TRAINEE, CREATE_TRAINEES } from "..";
 import axios from "axios";
-export const getAllTraineess = ({ page,itemsPerPage,  All }:any) => async (dispatch: any) => {
-  try {
-    const datas = await axios({
-      url: "http://localhost:4000/",
-      method: "post",
-      data: {
-        query: `
-        query AllTraineesAttribute($input: pagination) {
-          allTraineesAttribute(input: $input) {
+export const getAllTraineess =
+  ({ page, itemsPerPage, All }: any) =>
+  async (dispatch: any) => {
+    try {
+      const datas = await axios({
+        url: "http://localhost:4000/",
+        method: "post",
+        data: {
+          query: `
+        query allTraineesAttribute($input: pagination) {
+          allTraineesDetails(input: $input) {
             gender
-            cohort
+            cycle
             trainee_id {
-              lastName
-              firstName
+              lastname
+              firstname
               email
               delete_at
               _id
             }
           }
         }
-      `,  variables: {
-        input: {
-          page,
-          itemsPerPage,
-          All,
+      `,
+          variables: {
+            input: {
+              page,
+              itemsPerPage,
+              All,
+            },
+          },
         },
-      },
-
-      },
-    });
-    // console.log("result",datas);
-    const trainee = await datas.data.data.allTraineesAttribute;
-    console.log( trainee)
-    dispatch(creator(GET_TRAINEE, trainee));
-  } catch (error) {
-    if (error) {
-      return console.log(error);
+      });
+      // console.log("result",datas);
+      const trainee = await datas.data.data.allTraineesAttribute;
+      console.log(trainee);
+      dispatch(creator(GET_TRAINEE, trainee));
+    } catch (error) {
+      if (error) {
+        return console.log(error);
+      }
     }
-  }
-};
+  };
 
 export const createTrainee =
   ({ firstName, lastName, email }: any) =>
@@ -68,7 +70,7 @@ export const createTrainee =
         },
       });
       const response = await datas.data.data.createNewTraineeApplicant;
-       console.log(response)
+      console.log(response);
       dispatch(creator(CREATE_TRAINEES, response));
     } catch (error) {
       if (error) {
