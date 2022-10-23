@@ -8,7 +8,6 @@ import {
 import { connect } from "react-redux";
 import "react-toastify/dist/ReactToastify.css";
 import { useTable, usePagination } from "react-table";
-import Sidebar from "../../components/sidebar/sidebar";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Menu from "@mui/material/Menu";
@@ -185,9 +184,7 @@ const ApplicationCycle = (props: any) => {
   return (
     <>
       <div style={{ display: "flex" }}>
-        <div className="md:hidden">
-          <Sidebar />
-        </div>
+        <div className="md:hidden"></div>
         <div className="relative min-h-[50vh] w-[84rem] md:w-[100rem]">
           <div className="absolute table table-fixed w-[100%] bottom-0 pb-10 md:relative">
             <div className="w-[70%] min-h-[70vh] m-auto  bg-[#fff] p-[10px] shadow-md rounded-[10px] relative pb-[80px]  overflow-x-auto	md:w-[90%]">
