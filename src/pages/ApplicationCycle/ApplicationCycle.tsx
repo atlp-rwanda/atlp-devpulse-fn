@@ -15,7 +15,6 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import * as BsIcons from "react-icons/bs";
 import * as AiIcons from "react-icons/ai";
-import "./ApplicationCycle.css";
 
 const ApplicationCycle = (props: any) => {
   const { allCycles, errors } = props;
