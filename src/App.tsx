@@ -24,13 +24,10 @@ function App() {
     <Routes>
       <Route path="/test_redux" element={<Counter />} />
       <Route path="/test_tailwind" element={<TestTailwind />} />
-<<<<<<< HEAD
       <Route path="/Trainee" element={<Trainee/>} />
       <Route path="/sidebar" element={<Sidebar/>} />
       <Route path="/table" element={<Table/>} />
-=======
       <Route path="/cycles" element={<ApplicationCycle />} />
->>>>>>> develop
     </Routes>
   );
 }
