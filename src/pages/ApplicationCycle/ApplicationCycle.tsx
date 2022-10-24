@@ -15,6 +15,7 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import * as BsIcons from "react-icons/bs";
 import * as AiIcons from "react-icons/ai";
+import * as IoIcons from "react-icons/io5";
 
 const ApplicationCycle = (props: any) => {
   const { allCycles, errors } = props;
@@ -93,6 +94,10 @@ const ApplicationCycle = (props: any) => {
 
     props.createCycle(data);
     setOpenCreateModal(false);
+
+    setTimeout(() => {
+      window.location.reload();
+    }, 3000);
   };
 
   const updateCycle = (e: any) => {
@@ -184,7 +189,7 @@ const ApplicationCycle = (props: any) => {
 
   return (
     <>
-      <div style={{ display: "flex", backgroundColor: "#F9F9FB" }}>
+      <div className="flex bg-[#F9F9FB]">
         <div className="md:hidden">
           <Sidebar />
         </div>
@@ -197,7 +202,7 @@ const ApplicationCycle = (props: any) => {
               <BsIcons.BsPlusLg className="mx-[5px]" />
               <span>Cycle</span>
             </button>
-            <div className="relative w-[100%] min-h-[70vh] m-auto  bg-[#fff] p-[10px] shadow-md rounded-[10px] relative pb-[80px]  overflow-x-auto	md:w-[100%]">
+            <div className=" w-[100%] min-h-[70vh] m-auto  bg-[#fff] p-[10px] shadow-md rounded-[10px] relative pb-[80px]  overflow-x-auto	md:w-[100%]">
               <table
                 {...getTableProps()}
                 className="border-collapse w-[100%] my-[10px] mx-auto rounded-[15px] whitespace-nowrap "
@@ -244,56 +249,63 @@ const ApplicationCycle = (props: any) => {
                 </tbody>
               </table>
               <div className="block mx-auto my-0 w-[100%] absolute bottom-0 overflow-x-auto">
-                <div className="w-[100%] flex items-center justify-center my-[30px]  mx-auto">
-                  <span className="mx-[10px] md:hidden">
-                    Page <strong>{pageIndex + 1}</strong> of{" "}
-                    <strong>{pageOptions.length}</strong>{" "}
+                <div className="w-[100%] flex items-center justify-center my-[30px]  mx-auto md:block md:mx-auto">
+                  <span className="flex items-center md:justify-center md:mt-[10px]">
+                    {" "}
+                    <button
+                      className="my-0 mx-[5px] px-[5px] py-0 text-[#333] h-[35px] border-solid border-[1px]  border-[#a8a8a8]  disabled:bg-[#E7E7E7] disabled:text-[#a8a8a8]"
+                      onClick={() => gotoPage(0)}
+                      disabled={!canPreviousPage}
+                    >
+                      <AiIcons.AiOutlineDoubleLeft />
+                    </button>
+                    <button
+                      className=" border-solid border-[1px]  border-[#a8a8a8] py-0 px-[5px] text-[#333] rounded-tl-[5px] h-[35px] disabled:bg-[#E7E7E7] disabled:text-[#a8a8a8] "
+                      onClick={() => previousPage()}
+                      disabled={!canPreviousPage}
+                    >
+                      <AiIcons.AiOutlineLeft />
+                    </button>
+                    <span className="flex flex-wrap md:hidden " id="pages">
+                      {pageOptions?.map((pageOption: any, i: number) => {
+                        console.log("pageOption", pageOption);
+
+                        return (
+                          <div>
+                            <button
+                              className={`border-solid border-[1px] mx-[1px]  border-[#a8a8a8] w-[30px] h-[35px] active:bg-[#333] active:text-[#fff] ${
+                                pageIndex === i && "bg-[#173b3fcd] text-[#fff]"
+                              }`}
+                              onClick={(e: any) => {
+                                const pageNumber = e.target.innerText;
+                                gotoPage(pageNumber - 1);
+                              }}
+                            >
+                              {pageOption + 1}
+                            </button>
+                          </div>
+                        );
+                      })}
+                    </span>
+                    <button
+                      className=" border-solid border-[1px]  border-[#a8a8a8] py-0 px-[5px] text-[#333] rounded-tr-[5px] h-[35px]  disabled:bg-[#E7E7E7] disabled:text-[#a8a8a8]"
+                      onClick={() => nextPage()}
+                      disabled={!canNextPage}
+                    >
+                      <AiIcons.AiOutlineRight />
+                    </button>
+                    <button
+                      className="my-0 mx-[5px] px-[5px] py-0 text-[#333] h-[35px] border-solid border-[1px]  border-[#a8a8a8]  disabled:bg-[#E7E7E7] disabled:text-[#a8a8a8]"
+                      onClick={() => gotoPage(pageCount - 1)}
+                      disabled={!canNextPage}
+                    >
+                      <AiIcons.AiOutlineDoubleRight />
+                    </button>
+                  </span>{" "}
+                  <span className="mx-[10px] md:block md:text-center">
+                    Page <strong>{pageIndex + 1}</strong> of
+                    <strong>{pageOptions.length}</strong>
                   </span>
-                  <button
-                    className="my-0 mx-[5px] px-[5px] py-0 text-[#333] h-[35px] border-solid border-[1px]  border-[#a8a8a8]"
-                    onClick={() => gotoPage(0)}
-                    disabled={!canPreviousPage}
-                  >
-                    <AiIcons.AiOutlineDoubleLeft />
-                  </button>{" "}
-                  <button
-                    className=" border-solid border-[1px]  border-[#a8a8a8] py-0 px-[5px] text-[#333] rounded-tl-[5px] h-[35px]"
-                    onClick={() => previousPage()}
-                    disabled={!canPreviousPage}
-                  >
-                    <AiIcons.AiOutlineLeft />
-                  </button>{" "}
-                  <span className="flex flex-wrap md:hidden" id="pages">
-                    {pageOptions?.map((pageOption: any) => {
-                      return (
-                        <div>
-                          <button
-                            className=" border-solid border-[1px]  border-[#a8a8a8] w-[30px] h-[35px]"
-                            onClick={(e: any) => {
-                              const pageNumber = e.target.innerText;
-                              gotoPage(pageNumber - 1);
-                            }}
-                          >
-                            {pageOption + 1}
-                          </button>
-                        </div>
-                      );
-                    })}
-                  </span>
-                  <button
-                    className=" border-solid border-[1px]  border-[#a8a8a8] py-0 px-[5px] text-[#333] rounded-tr-[5px] h-[35px]"
-                    onClick={() => nextPage()}
-                    disabled={!canNextPage}
-                  >
-                    <AiIcons.AiOutlineRight />
-                  </button>{" "}
-                  <button
-                    className="my-0 mx-[5px] px-[5px] py-0 text-[#333] h-[35px] border-solid border-[1px]  border-[#a8a8a8]"
-                    onClick={() => gotoPage(pageCount - 1)}
-                    disabled={!canNextPage}
-                  >
-                    <AiIcons.AiOutlineDoubleRight />
-                  </button>
                 </div>
               </div>
             </div>
@@ -308,13 +320,17 @@ const ApplicationCycle = (props: any) => {
             "aria-labelledby": "basic-button",
           }}
         >
-          <MenuItem onClick={handleOpenDeleteCycle}>Delete</MenuItem>
           <MenuItem
             onClick={(e) => {
               handleOpenUpdateModal(e);
             }}
           >
+            <BsIcons.BsPencilFill className="mr-[5px]" />
             Edit
+          </MenuItem>
+          <MenuItem onClick={handleOpenDeleteCycle}>
+            <BsIcons.BsFillTrashFill className="mr-[5px]" />
+            Delete
           </MenuItem>
         </Menu>
         <Modal
@@ -323,16 +339,16 @@ const ApplicationCycle = (props: any) => {
           aria-labelledby="parent-modal-title"
           aria-describedby="parent-modal-description"
         >
-          <Box className="absolute w-[100%] top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
+          <Box className="absolute w-[50%] top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] md:w-[90%]">
             <form
               action=""
               onSubmit={createNewCycle}
-              className=" relative rounded-[5px] w-[50%] h-[455px] m-auto p-[10px] pt-[5px] bg-[#f0f0f0]"
+              className=" relative w-[100%] rounded-[5px] h-[455px] m-auto p-[10px] pt-[5px] bg-[#f0f0f0] "
             >
               <h1 className="text-center font-bold text-[24px] m-[20px]">
                 Add new cycle
               </h1>
-              <AiIcons.AiOutlineClose
+              <IoIcons.IoClose
                 className="absolute top-[20px] right-[20px] text-[35px] cursor-pointer"
                 onClick={handleCloseCreateModel}
               />
@@ -345,7 +361,7 @@ const ApplicationCycle = (props: any) => {
                 onChange={(e) => {
                   setName(e.target.value);
                 }}
-                className="w-24 mt-3 bg-lime cursor-pointer text-xl self-center py-1 rounded-[5px] h-[50px] my-[20px] mx-auto w-[80%] block border-[2px] border-[#a8a8a8]  px-[10px]"
+                className=" mt-3 bg-lime cursor-pointer text-[18px] self-center py-1 rounded-[5px] h-[50px] my-[20px] mx-auto w-[80%] block border-[2px] border-[#a8a8a8]  px-[10px] md:w-[90%]"
               />
               <input
                 type="date"
@@ -354,7 +370,7 @@ const ApplicationCycle = (props: any) => {
                 onChange={(e) => {
                   setStartDate(e.target.value);
                 }}
-                className="w-24 mt-3 bg-lime cursor-pointer text-xl self-center py-1 rounded-[5px] h-[50px] my-[20px] mx-auto w-[80%] block border-[2px] border-[#a8a8a8]  px-[10px]"
+                className=" mt-3 bg-lime cursor-pointer text-[18px] self-center py-1 rounded-[5px] h-[50px] my-[20px] mx-auto w-[80%] block border-[2px] border-[#a8a8a8]  px-[10px] md:w-[90%]"
               />
               <input
                 type="date"
@@ -363,7 +379,7 @@ const ApplicationCycle = (props: any) => {
                 onChange={(e) => {
                   setEndDate(e.target.value);
                 }}
-                className="w-24 mt-3 bg-lime cursor-pointer text-xl self-center py-1 rounded-[5px] h-[50px] my-[20px] mx-auto w-[80%] block border-[2px] border-[#a8a8a8]  px-[10px]"
+                className=" mt-3 bg-lime cursor-pointer text-[18px] self-center py-1 rounded-[5px] h-[50px] my-[20px] mx-auto w-[80%] block border-[2px] border-[#a8a8a8]  px-[10px] md:w-[90%]"
               />
               <button
                 type="submit"
@@ -384,7 +400,7 @@ const ApplicationCycle = (props: any) => {
             <div className="block w-[300px] h-[200px] bg-[#f0f0f0] rounded-[5px]">
               <div className="text-center">
                 <AiIcons.AiFillExclamationCircle className="w-[40px] my-[20px] mx-auto text-[40px]" />
-                <p className="w-[60%] m-auto">
+                <p className="w-[60%] m-auto font-bold">
                   Are you sure you want to delete this cycle?
                 </p>
               </div>
@@ -411,16 +427,16 @@ const ApplicationCycle = (props: any) => {
           aria-labelledby="parent-modal-title"
           aria-describedby="parent-modal-description"
         >
-          <Box className="absolute w-[100%] top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
+          <Box className="absolute w-[50%] top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] md:w-[90%]">
             <form
               action=""
               onSubmit={updateCycle}
-              className="relative rounded-[5px] w-[50%] h-[455px] m-auto p-[10px] pt-[5px] bg-[#f0f0f0]"
+              className="relative rounded-[5px] w-[100%] h-[455px] m-auto p-[10px] pt-[5px] bg-[#f0f0f0] "
             >
               <h1 className="text-center font-bold text-[24px] m-[20px]">
                 Update cycle
               </h1>
-              <AiIcons.AiOutlineClose
+              <IoIcons.IoClose
                 style={{
                   position: "absolute",
                   top: "20px",
@@ -439,7 +455,7 @@ const ApplicationCycle = (props: any) => {
                 onChange={(e) => {
                   setUpdateName(e.target.value);
                 }}
-                className="w-24 mt-3 bg-lime cursor-pointer text-xl self-center py-1 rounded-[5px] h-[50px] my-[20px] mx-auto w-[80%] block border-[2px] border-[#a8a8a8]  px-[10px]"
+                className=" mt-3 bg-lime cursor-pointer text-[18px] self-center py-1 rounded-[5px] h-[50px] my-[20px] mx-auto w-[80%] block border-[2px] border-[#a8a8a8]  px-[10px] md:w-[90%]"
               />
               <input
                 type="date"
@@ -448,7 +464,7 @@ const ApplicationCycle = (props: any) => {
                 onChange={(e) => {
                   setUpdateStartDate(e.target.value);
                 }}
-                className="w-24 mt-3 bg-lime cursor-pointer text-xl self-center py-1 rounded-[5px] h-[50px] my-[20px] mx-auto w-[80%] block border-[2px] border-[#a8a8a8]  px-[10px]"
+                className=" mt-3 bg-lime cursor-pointer text-[18px] self-center py-1 rounded-[5px] h-[50px] my-[20px] mx-auto w-[80%] block border-[2px] border-[#a8a8a8]  px-[10px] md:w-[90%]"
               />
               <input
                 type="date"
@@ -457,20 +473,14 @@ const ApplicationCycle = (props: any) => {
                 onChange={(e) => {
                   setUpdateEndDate(e.target.value);
                 }}
-                className="w-24 mt-3 bg-lime cursor-pointer text-xl self-center py-1 rounded-[5px] h-[50px] my-[20px] mx-auto w-[80%] block border-[2px] border-[#a8a8a8]  px-[10px]"
+                className=" mt-3 bg-lime cursor-pointer text-[18px] self-center py-1 rounded-[5px] h-[50px] my-[20px] mx-auto w-[80%] block border-[2px] border-[#a8a8a8]  px-[10px] md:w-[90%]"
               />
               <div className="flex flex-wrap w-[300px] m-auto">
-                <button
-                  className="text-[#000] border-[2px] border-[#a8a8a8] h-[40px] w-[100px] block rounded-[5px] my-[10px] mx-[auto] bg-[#f1f1f1]"
-                  onClick={handleCloseUpdateModal}
-                >
-                  Cancel
-                </button>
                 <button
                   className="text-white border-[1px] border-[#a8a8a8] h-[40px] w-[100px] block rounded-[5px] my-[10px] mx-[auto] bg-[#173b3f]"
                   type="submit"
                 >
-                  Update
+                  Save
                 </button>
               </div>
             </form>
