@@ -4,7 +4,7 @@ import { sidebarItems2, sidebarItems1, sidebarItems3 } from "./sidebarItems";
 
 const sidebar = () => {
   return (
-    <div className="min-h-screen w-64 block pb-10 pt-1 bg-slate-50 relative font-sans">
+    <div className=" bg-[#fff] min-h-screen w-64 block pb-10 pt-1relative font-sans">
       <div className="mb-5 border-b border-[#979797]">
         <ul className="pl-4 block mt-6">
           {sidebarItems1.map((items, index) => {

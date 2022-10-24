@@ -127,11 +127,11 @@ const ApplicationCycle = (props: any) => {
       accessor: "name",
     },
     {
-      Header: "Start date",
+      Header: "Starting date",
       accessor: "startDate",
     },
     {
-      Header: "End date",
+      Header: "Closing date",
       accessor: "endDate",
     },
     {
@@ -184,20 +184,20 @@ const ApplicationCycle = (props: any) => {
 
   return (
     <>
-      <div style={{ display: "flex" }}>
+      <div style={{ display: "flex", backgroundColor: "#F9F9FB" }}>
         <div className="md:hidden">
           <Sidebar />
         </div>
         <div className="relative min-h-[50vh] w-[84rem] md:w-[100rem]">
-          <div className="absolute table table-fixed w-[100%] bottom-0 pb-10 md:relative">
-            <div className="w-[70%] min-h-[70vh] m-auto  bg-[#fff] p-[10px] shadow-md rounded-[10px] relative pb-[80px]  overflow-x-auto	md:w-[90%]">
-              <button
-                className="h-[40px] rounded-[5px] bg-[#173b3f] text-white flex items-center p-0 pl-[5px] pr-[10px]"
-                onClick={() => handleOpenCreateCycle()}
-              >
-                <BsIcons.BsPlusLg className="mx-[5px]" />
-                <span>New Cycle</span>
-              </button>
+          <div className="absolute table table-fixed w-[100%] top-[20%] pb-10 md:relative px-[10%] md:px-[10px]">
+            <button
+              className="h-[40px] rounded-[5px] bg-[#173b3f] text-white flex items-center p-0 pl-[5px] pr-[10px] mb-[20px]"
+              onClick={() => handleOpenCreateCycle()}
+            >
+              <BsIcons.BsPlusLg className="mx-[5px]" />
+              <span>Cycle</span>
+            </button>
+            <div className="relative w-[100%] min-h-[70vh] m-auto  bg-[#fff] p-[10px] shadow-md rounded-[10px] relative pb-[80px]  overflow-x-auto	md:w-[100%]">
               <table
                 {...getTableProps()}
                 className="border-collapse w-[100%] my-[10px] mx-auto rounded-[15px] whitespace-nowrap "
@@ -232,7 +232,7 @@ const ApplicationCycle = (props: any) => {
                           return (
                             <td
                               {...cell.getCellProps()}
-                              className="pl-[30px] text-left w-[150px] overflow-scroll p-[8px] last:w-[2px] last:pl-[0px]"
+                              className="pl-[30px] text-left max-w-[150px] overflow-x-auto p-[8px] last:w-[2px] last:pl-[0px]"
                             >
                               {cell.render("Cell")}
                             </td>
