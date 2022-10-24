@@ -1,5 +1,7 @@
 import React from "react";
-
+// import logo from "../../assets/logo.svg"
+// import * as logo from '../../assets/logo.svg';
+// const logo: string = require("../../assets/logo.svg").default;
 import { sidebarItems2, sidebarItems1,sidebarItems3 } from "./sidebarItems";
 
 const sidebar = ()=>{
