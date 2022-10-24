@@ -16,7 +16,7 @@ import { AiOutlinePlus,AiOutlineClose} from "react-icons/ai";
 interface TableData {
   data: [any];
   columns: any;
-  title: string?;
+  title: string;
   
 }
 
@@ -83,7 +83,7 @@ function DataTable({ data, columns, title }: TableData) {
 {headerGroups.map((headerGroup) => (
 
               
-              <tr className= {...headerGroup.getHeaderGroupProps()}>
+              <tr className= {headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map((column) => (
 
 
