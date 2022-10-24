@@ -1,12 +1,16 @@
 module.exports = {
-  content: ['./src/**/*.{ts,tsx}', './index.html'],
+  content: ["./src/**/*.{ts,tsx}", "./index.html"],
   theme: {
     extend: {
       screens: {
-        sm: '375px',
-        md: '768px',
-        lg: '976px',
-        xl: '1440px',
+        sm: "375px",
+        md: { max: "820px" },
+        lg: "976px",
+        xl: "1440px",
+      },
+      colors: {
+        primary: "#1F2A37",
+        secondary: "#D8DCE3",
       },
       colors: {
         primary: '#173B3F',
