@@ -8,16 +8,14 @@ export const getAllTraineess = ({ page,itemsPerPage,  All }:any) => async (dispa
       method: "post",
       data: {
         query: `
-        query AllTraineesAttribute($input: pagination) {
-          allTraineesAttribute(input: $input) {
+        query AllTraineesDetails($input: pagination) {
+          allTraineesDetails(input: $input) {
             gender
             cohort
             trainee_id {
               lastName
               firstName
               email
-              delete_at
-              _id
             }
           }
         }
@@ -32,7 +30,7 @@ export const getAllTraineess = ({ page,itemsPerPage,  All }:any) => async (dispa
       },
     });
     // console.log("result",datas);
-    const trainee = await datas.data.data.allTraineesAttribute;
+    const trainee = await datas.data.data.allTraineesDetails;
     console.log( trainee)
     dispatch(creator(GET_TRAINEE, trainee));
   } catch (error) {
@@ -51,7 +49,7 @@ export const createTrainee =
         method: "post",
         data: {
           query: `
-          mutation Mutation($input: newTraineeApplicantInput) {
+          mutation CreateNewTraineeApplicant($input: newTraineeApplicantInput) {
             createNewTraineeApplicant(input: $input) {
               lastName
               firstName
@@ -76,3 +74,6 @@ export const createTrainee =
       }
     }
   };
+
+
+  // query AllTraineesDetails($input: pagination) { allTraineesDetails(input: $input) { trainee_id { lastname firstname _id email } gender cohort } } 
