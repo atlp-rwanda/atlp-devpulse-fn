@@ -1,18 +1,92 @@
-import React, { useState } from "react";
-import { FaCaretDown } from "react-icons/fa";
+import React, { useState, useEffect } from "react";
+// import { FaCaretDown } from "react-icons/fa";
 import { AiOutlineSearch, AiOutlineClose } from "react-icons/ai";
 import Dropdown from "../../components/Dropdown/Dropdown";
 import Threedots from "../../components/Dropdown/Threedots";
 import Select from "react-select";
-import SearchBar from "../../components/Searchbar/SearchBar";
-import TraineeData from "../../../Trainees.json";
+// import SearchBar from "../../components/Searchbar/SearchBar";
+// import TraineeData from "../../../Trainees.json";
+import Sidebar from "../../components/sidebar/sidebar";
+import { getAllFilteredTraineess } from "../../redux/actions/filterTraineeActions";
+import { connect } from "react-redux";
+import pagination from "../../components/pagination"
 
 
 
 
-const FilterTrainee = () => {
+const FilterTrainee = (props: any) => {
     const [select, setSelect] = useState<string>("");
-    console.log("TRAAAAAINEEEEEEEEE", TraineeData.allTrainnees)
+    // console.log("TRAAAAAINEEEEEEEEE", TraineeData.allTrainnees)
+
+    // All trainees in DB
+    const { allfilteredTrainees } = props;
+    const [page, setPage] = useState(0);
+    const [itemsPerPage, setiIemsPerPage] = useState(0);
+    const [All, setAll] = useState(true);
+    const [filterAttribute, setFilterAttribute] = useState("");
+    const [enteredWord, setEnteredWord] = useState("");
+    const [filteredData, setFilteredData] = useState<any[]>([]);
+    let filterOptions;
+
+    const traineeList = allfilteredTrainees.data
+    console.log("afer useffect", traineeList)
+
+    filterOptions = {
+        page: page,
+        itemsPerPage: itemsPerPage,
+        All: All,
+        wordEntered: enteredWord,
+        filterAttribute: filterAttribute
+    };
+
+    const handleFilter = (e) => {
+        e.preventDefault();
+        const searchWord = e.target.value
+        setEnteredWord(searchWord)
+        // const newFilter = traineeList.filter((value) => {
+        //     return (
+        //         value.trainee_id.firstname.toLowerCase().includes(searchWord.toLowerCase()) ||
+        //         value.trainee_id.lastname.toLowerCase().includes(searchWord.toLowerCase()) ||
+        //         value.trainee_id.email.toLowerCase().includes(searchWord.toLowerCase()) ||
+        //         value.Address.toLowerCase().includes(searchWord.toLowerCase())
+        //     )
+        // })
+
+        filterOptions = {
+            page: page,
+            itemsPerPage: itemsPerPage,
+            All: All,
+            wordEntered: searchWord,
+            filterAttribute: filterAttribute
+        };
+
+        props.getAllFilteredTraineess(filterOptions)
+
+        if (searchWord === "") {
+            setFilteredData([])
+        } else {
+            setFilteredData(traineeList)
+        }
+        console.log("searchWord", searchWord, filteredData)
+    }
+
+    const clearInpunt = () => {
+        setFilteredData([]);
+        setEnteredWord("")
+    }
+    
+
+    // Paginating all trainees
+    const {
+        firstContentIndex,
+        lastContentIndex,
+        nextPage,
+        prevPage,
+        paging,
+        gaps,
+        setPaging,
+        totalPages
+    } = pagination({ contentPerPage: 10, count: traineeList.length })
 
     const customTheme = (theme) => {
         return {
@@ -26,37 +100,22 @@ const FilterTrainee = () => {
         }
     }
 
-    const allData = TraineeData?.allTrainnees
-    const [filteredData, setFilteredData] = useState<any[]>([])
-    const [wordEntered, setWordEntered] = useState("")
+    useEffect(() => {
+        props.getAllFilteredTraineess(filterOptions)
+    }, [])
 
-    const handleFilter = (e) => {
-        e.preventDefault();
-        const searchWord = e.target.value
-        setWordEntered(searchWord)
-        const newFilter = allData.filter((value) => {
-            return (
-                value.firstName.toLowerCase().includes(searchWord.toLowerCase()) ||
-                value.lastName.toLowerCase().includes(searchWord.toLowerCase()) ||
-                value.email.toLowerCase().includes(searchWord.toLowerCase()) ||
-                value.status.toLowerCase().includes(searchWord.toLowerCase())
-            )
-        })
-        if (searchWord === "") {
-            setFilteredData([])
-        } else {
-            setFilteredData(newFilter)
-        }
-    }
+    // showing the filtered data
+    // const allData = TraineeData?.allTrainnees
+    
+    // const [wordEntered, setWordEntered] = useState("")
 
-    const clearInpunt = () => {
-        setFilteredData([]);
-        setWordEntered("")
-    }
-    console.log("HELLOOOOOO", filteredData)
+    // console.log("HELLOOOOOO", filteredData)
     return (
-        <>
-            <div className="ml-64 mr-1 mt-28 ">
+        <div className="flex flex-row">
+            <div className="">
+                <Sidebar />
+            </div>
+            <div className="ml-24 mr-1 mt-36">
                 <div className="">
                     {/* <button className="flex items-center border bg-row-gray border-solid border-bdr pl-8 pr-4 py-2 rounded-bt-rd">
                         <span className="">
@@ -92,10 +151,10 @@ const FilterTrainee = () => {
 
                             </svg>
                         </span>
-                        <input onChange={handleFilter} className="block bg-row-gray w-50 border border-bdr rounded-bt-rd mt-2 py-2 pl-9 pr-4 focus:outline-none sm:text-sm" value={wordEntered} placeholder="Search" type="text" name="search" />
+                        <input onChange={handleFilter} className="block bg-row-gray w-50 border border-bdr rounded-bt-rd mt-2 py-2 pl-9 pr-4 focus:outline-none sm:text-sm" value={enteredWord} placeholder="Search" type="text" name="search" />
                     </div>
 
-                    <button className="bg-button-color text-ltb text-fb font-medium ml-80 mt-2 pl-3 pr-3 py-1 rounded-bt-rd">
+                    <button className="bg-button-color text-ltb text-fb font-medium ml-72 mt-2 pl-3 pr-3 py-1 rounded-bt-rd">
                         ADD INTERVIEWER
                     </button>
                     <button className="bg-button-color text-ltb text-fb font-medium ml-8 mt-2 pl-3 pr-3 py-1 rounded-bt-rd">
@@ -106,7 +165,7 @@ const FilterTrainee = () => {
                     </button>
                 </div>
 
-                <div className="overflow-x-auto relative my-6 mr-36 shadow-md sm:rounded-lg">
+                <div className="overflow-x-auto relative my-6 shadow-md sm:rounded-lg">
                     <table className="w-full text-sm text-left text-black-text">
                         <thead className="text-black-text bg-row-gray">
                             <tr className="border-b border-bdr">
@@ -133,8 +192,8 @@ const FilterTrainee = () => {
                         </thead>
                         <tbody>
                             {
-                                filteredData.length === 0 ? (
-                                    allData.map((value: any, key: any) => {
+                                filteredData.length === 0 && enteredWord === "" ? (
+                                    traineeList.map((value: any, key: any) => {
                                         return (
                                             <tr className="odd:bg-white even:bg-row-gray hover:bg-gray-50">
                                                 <td className="p-4 w-4">
@@ -145,10 +204,10 @@ const FilterTrainee = () => {
                                                     </div>
                                                 </td>
                                                 <th scope="row" className="text-fb py-1 px-6 font-normal text-black-text whitespace-nowrap">
-                                                    {value.firstName + " " + value.lastName}
+                                                    {value.trainee_id.firstname + " " + value.trainee_id.lastname}
                                                 </th>
                                                 <td className="text-fb py-1 px-6 font-normal text-black-text">
-                                                    {value.email}
+                                                    {value.trainee_id.email}
                                                 </td>
                                                 <td className="py-1 px-6">
                                                     <select id="status" className="border bg-row-gray border-solid border-bdr shadow-sm px-4 py-4px rounded-bt-rd focus:outline-none sm:text-sm">
@@ -164,6 +223,8 @@ const FilterTrainee = () => {
                                             </tr>
                                         )
                                     })
+                                ) : filteredData.length === 0 ? (
+                                    <tr><td className="m-auto bg-gray"><div>No data </div></td></tr>
                                 ) : (
                                     filteredData.map((value: any, key: any) => {
                                         return (
@@ -176,10 +237,10 @@ const FilterTrainee = () => {
                                                     </div>
                                                 </td>
                                                 <th scope="row" className="text-fb py-1 px-6 font-normal text-black-text whitespace-nowrap">
-                                                    {value.firstName + " " + value.lastName}
+                                                    {value.trainee_id.firstname + " " + value.trainee_id.lastname}
                                                 </th>
                                                 <td className="text-fb py-1 px-6 font-normal text-black-text">
-                                                    {value.email}
+                                                    {value.trainee_id.email}
                                                 </td>
                                                 <td className="py-1 px-6">
                                                     <select id="status" className="border bg-row-gray border-solid border-bdr shadow-sm px-4 py-4px rounded-bt-rd focus:outline-none sm:text-sm">
@@ -257,8 +318,14 @@ const FilterTrainee = () => {
                     </nav>
                 </div>
             </div>
-        </>
+        </div>
     )
 }
 
-export default FilterTrainee
+const mapState = ({ filterTrainee }: any) => ({
+    allfilteredTrainees: filterTrainee
+})
+
+export default connect(mapState, {
+    getAllFilteredTraineess: getAllFilteredTraineess
+})(FilterTrainee)
