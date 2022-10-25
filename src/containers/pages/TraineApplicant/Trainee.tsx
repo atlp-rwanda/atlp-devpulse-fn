@@ -50,6 +50,7 @@ const {
 });
   return (
     <>
+    
       <ToastContainer />
       {/* =========================== Start:: addnewtraineeModel =============================== */}
              <div className={`h-screen w-screen z-20 bg-black bg-opacity-30 backdrop-blur-sm absolute flex items-center justify-center  px-4 ${
@@ -59,7 +60,7 @@ const {
       <Modal/>
       </div>
       {/* =========================== End:: addnewtraineeModel =============================== */}
-      <div className="flex flex-col h-screen absolute w-[100%]">
+      <div className="flex flex-col  h-screen absolute w-[100%]">
         <div className="flex flex-row">
           <div className="w-full">
             <div>
@@ -239,10 +240,7 @@ const {
            
           </div>
         </div>
-      
       </div>
-    
-
 
       <Sidebar></Sidebar>
     </>
