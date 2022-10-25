@@ -1,25 +1,23 @@
 {
   "files": {
-    "main.css": "/atlp-rwanda/atlp-devpulse-fn/static/css/main.3c3b889b.css",
-    "main.js": "/atlp-rwanda/atlp-devpulse-fn/static/js/main.68ae2221.js",
-    "static/js/159.bfeda1d8.chunk.js": "/atlp-rwanda/atlp-devpulse-fn/static/js/159.bfeda1d8.chunk.js",
-    "static/js/667.b2dc0f82.chunk.js": "/atlp-rwanda/atlp-devpulse-fn/static/js/667.b2dc0f82.chunk.js",
-    "static/js/84.60aefe3b.chunk.js": "/atlp-rwanda/atlp-devpulse-fn/static/js/84.60aefe3b.chunk.js",
-    "static/js/939.8c2c7a8d.chunk.js": "/atlp-rwanda/atlp-devpulse-fn/static/js/939.8c2c7a8d.chunk.js",
-    "static/css/381.646bf804.chunk.css": "/atlp-rwanda/atlp-devpulse-fn/static/css/381.646bf804.chunk.css",
-    "static/js/381.75f54e36.chunk.js": "/atlp-rwanda/atlp-devpulse-fn/static/js/381.75f54e36.chunk.js",
+    "main.css": "/atlp-rwanda/atlp-devpulse-fn/static/css/main.f063f8fe.css",
+    "main.js": "/atlp-rwanda/atlp-devpulse-fn/static/js/main.9a454d50.js",
+    "static/js/876.18ab489e.chunk.js": "/atlp-rwanda/atlp-devpulse-fn/static/js/876.18ab489e.chunk.js",
+    "static/js/667.444bb885.chunk.js": "/atlp-rwanda/atlp-devpulse-fn/static/js/667.444bb885.chunk.js",
+    "static/js/738.a05dcf9d.chunk.js": "/atlp-rwanda/atlp-devpulse-fn/static/js/738.a05dcf9d.chunk.js",
+    "static/css/566.7e2a3335.chunk.css": "/atlp-rwanda/atlp-devpulse-fn/static/css/566.7e2a3335.chunk.css",
+    "static/js/566.f5d55387.chunk.js": "/atlp-rwanda/atlp-devpulse-fn/static/js/566.f5d55387.chunk.js",
     "index.html": "/atlp-rwanda/atlp-devpulse-fn/index.html",
-    "main.3c3b889b.css.map": "/atlp-rwanda/atlp-devpulse-fn/static/css/main.3c3b889b.css.map",
-    "main.68ae2221.js.map": "/atlp-rwanda/atlp-devpulse-fn/static/js/main.68ae2221.js.map",
-    "159.bfeda1d8.chunk.js.map": "/atlp-rwanda/atlp-devpulse-fn/static/js/159.bfeda1d8.chunk.js.map",
-    "667.b2dc0f82.chunk.js.map": "/atlp-rwanda/atlp-devpulse-fn/static/js/667.b2dc0f82.chunk.js.map",
-    "84.60aefe3b.chunk.js.map": "/atlp-rwanda/atlp-devpulse-fn/static/js/84.60aefe3b.chunk.js.map",
-    "939.8c2c7a8d.chunk.js.map": "/atlp-rwanda/atlp-devpulse-fn/static/js/939.8c2c7a8d.chunk.js.map",
-    "381.646bf804.chunk.css.map": "/atlp-rwanda/atlp-devpulse-fn/static/css/381.646bf804.chunk.css.map",
-    "381.75f54e36.chunk.js.map": "/atlp-rwanda/atlp-devpulse-fn/static/js/381.75f54e36.chunk.js.map"
+    "main.f063f8fe.css.map": "/atlp-rwanda/atlp-devpulse-fn/static/css/main.f063f8fe.css.map",
+    "main.9a454d50.js.map": "/atlp-rwanda/atlp-devpulse-fn/static/js/main.9a454d50.js.map",
+    "876.18ab489e.chunk.js.map": "/atlp-rwanda/atlp-devpulse-fn/static/js/876.18ab489e.chunk.js.map",
+    "667.444bb885.chunk.js.map": "/atlp-rwanda/atlp-devpulse-fn/static/js/667.444bb885.chunk.js.map",
+    "738.a05dcf9d.chunk.js.map": "/atlp-rwanda/atlp-devpulse-fn/static/js/738.a05dcf9d.chunk.js.map",
+    "566.7e2a3335.chunk.css.map": "/atlp-rwanda/atlp-devpulse-fn/static/css/566.7e2a3335.chunk.css.map",
+    "566.f5d55387.chunk.js.map": "/atlp-rwanda/atlp-devpulse-fn/static/js/566.f5d55387.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.3c3b889b.css",
-    "static/js/main.68ae2221.js"
+    "static/css/main.f063f8fe.css",
+    "static/js/main.9a454d50.js"
   ]
 }
