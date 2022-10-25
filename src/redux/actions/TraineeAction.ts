@@ -74,6 +74,3 @@ export const createTrainee =
       }
     }
   };
-
-
-  // query AllTraineesDetails($input: pagination) { allTraineesDetails(input: $input) { trainee_id { lastname firstname _id email } gender cohort } } 

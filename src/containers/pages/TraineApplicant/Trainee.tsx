@@ -10,7 +10,7 @@ getAllTraineess,
 } from "../../../redux/actions/TraineeAction";
 import { connect } from "react-redux";
 import Modal from './modal';
-import Sidebar from '../../../components/sidebar/sidebar';
+import Sidebar from "../../../components/sidebar/sidebar"
 
 
 const AddTrainee = (props: any) => {
@@ -241,8 +241,12 @@ const {
         </div>
       
       </div>
-      <Sidebar/>
+    
+
+
+      <Sidebar></Sidebar>
     </>
+    
   );
 };
 

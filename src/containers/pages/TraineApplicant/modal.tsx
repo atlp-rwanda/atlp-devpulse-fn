@@ -50,8 +50,6 @@ const createNewTrainee = () => {
     toast.success("succeed")
   setAddNewTraineeModel(false);
   location.reload();
-  }else{
-  toast.error("error")
   }
 };
 
