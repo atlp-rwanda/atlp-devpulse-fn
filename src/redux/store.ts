@@ -13,4 +13,5 @@ const store = createStore(
   composeWithDevTools(compose(applyMiddleware(...middleware)))
 );
 initStateWithPrevTab(store);
+export type AppDispatch = typeof store.dispatch
 export default store;
