@@ -38,6 +38,9 @@ const validation = () =>{
   }
 }
 
+function reload(){
+  location.reload()
+}
 
 const createNewTrainee = () => {
   const data = {
@@ -47,9 +50,9 @@ const createNewTrainee = () => {
   };
    
   if(props.createTrainee(data)){
-    toast.success("succeed")
-  setAddNewTraineeModel(false);
-  location.reload();
+  //   toast.success("succeed")
+  // setAddNewTraineeModel(false);
+  setTimeout(reload, 2000)
   }
 };
 
