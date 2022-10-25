@@ -56,6 +56,7 @@ export const createTrainee =
               lastName
               firstName
               email
+              _id
             }
           }`,
           variables: {
