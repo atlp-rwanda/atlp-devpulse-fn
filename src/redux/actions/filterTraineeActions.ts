@@ -12,32 +12,33 @@ export const getAllFilteredTraineess = ({ page,itemsPerPage,  All, wordEntered, 
       data: {
         query: `
         query FilterTraineesDetails($input: filterOptions) {
-            filterTraineesDetails(input: $input) {
-              gender
-              birth_date
-              trainee_id {
-                lastname
-                firstname
-                _id
-                email
-              }
-              education_level
-              isEmployed
-              Address
-              phone
-              field_of_study
-              province
-              district
-              sector
-              cohort
-              haveLaptop
-              Hackerrank_score
-              isStudent
-              english_score
-              interview_decision
-              past_andela_programs
+          filterTraineesDetails(input: $input) {
+            trainee_id {
+              lastName
+              firstName
+              _id
+              email
             }
+            gender
+            birth_date
+            Address
+            phone
+            field_of_study
+            education_level
+            province
+            district
+            sector
+            cohort
+            isEmployed
+            haveLaptop
+            isStudent
+            Hackerrank_score
+            english_score
+            interview_decision
+            past_andela_programs
+            _id
           }
+        }
       `,  variables: {
         input: {
           page,
