@@ -1,3 +1,4 @@
+
 import React, {useState, useEffect} from "react";
 import { BsEnvelope } from "react-icons/bs";
 import { TiExportOutline } from "react-icons/ti";
@@ -25,14 +26,39 @@ const [All, setAll] = useState(true);
   props.getAllTraineess(input);
   },[])
 
-  const Trainn = trainnes.data
-  console.log(Trainn)
+  const trainn = trainnes.data
+  console.log(trainn)
 
   const [open, setOpen] = useState<boolean>(false);
   const handleDropDown = (state : boolean)=>{
     setOpen(!state)
   }
   console.log(open)
+
+
+  // const getTraine = ()=>{
+  //   fetch('http://localhost:5000',{
+  //     method:'POST',
+  //     headers: {"Content-type": "application/json"},
+  //     body:JSON.stringify({
+       
+  //       query:`
+  //       query GetAllTrainees {
+  //         getAllTrainees {
+  //           id
+  //           email
+  //           lastname
+  //           firstname
+  //         }
+  //       }
+  //       `,
+      
+  //     })
+  //   }).then(res => res.json())
+  //      .then(data =>{
+  //        console.log(data.data.getAllTrainees)
+  //      })
+  // }
   
   return (
     <>
@@ -134,6 +160,5 @@ const mapState=({trainee}: any)=>{
  }
  
  export default connect(mapState,{
-  getAllTraineess
+   getAllTraineess
  })(TrainneeDetails)
-
