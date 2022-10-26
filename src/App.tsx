@@ -22,6 +22,12 @@ import './index.css'
 const Counter = React.lazy(() => import("./components/Counter/Counter"));
 import Trash from './pages/Trash/Trash'
 import ApplicationCycle  from './pages/ApplicationCycle/ApplicationCycle'
+import './index.css'
+
+
+// const Counter = React.lazy(() => import("./components/Counter/Counter"));
+// const TrainneeDetailsB = React.lazy(()=> import("./pages/TrainneDetailsB"))
+// const TrainneeDetails =React.lazy(()=>import('./pages/TrainneeDetails'))
 
 function App() {
   return (
@@ -44,6 +50,11 @@ function App() {
       <Route path="/admins/" element={<ScoreTypesActions />} />
       <Route path='/trainee-details' element={<TrainneeDetails />}/>
       <Route path='/traineeb-details' element={<TrainneeDetailsB />}/>
+      {/* <Route path="/test_redux" element={<Counter />} /> */}
+      <Route path="/test_tailwind" element={<TestTailwind />} />
+      {/* <Route path='/trainee-details' element={<TrainneeDetails />}/> */}
+      <Route path='/traineeb-details' element={<TrainneeDetailsB />}/>
+      <Route path="/sidebar" element={<Sidebar/>} />
     </Routes>
   );
 }

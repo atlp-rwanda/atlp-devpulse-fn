@@ -98,6 +98,7 @@
     "react-select": "^5.5.6",
     "react-table": "^7.8.0",
     "react-toastify": "^9.0.8",
+    "redux": "^4.2.0",
     "redux-devtools-extension": "^2.13.9",
     "redux-state-sync": "^3.1.4",
     "redux-thunk": "^2.4.1",
