@@ -1,5 +1,5 @@
 import creator from "./creator";
-import { GET_TRAINEE, CREATE_TRAINEES } from "..";
+import { GET_TRAINEE, CREATE_TRAINEES } from "../";
 import axios from "axios";
 export const getAllTraineess =
   ({ page, itemsPerPage, All }: any) =>
@@ -11,12 +11,12 @@ export const getAllTraineess =
         data: {
           query: `
         query allTraineesAttribute($input: pagination) {
-          allTraineesDetails(input: $input) {
+          allTraineesAttribute(input: $input) {
             gender
             cycle
             trainee_id {
-              lastname
-              firstname
+              lastName
+              firstName
               email
               delete_at
               _id
@@ -45,7 +45,7 @@ export const getAllTraineess =
   };
 
 export const createTrainee =
-  ({ firstName, lastName, email }: any) =>
+  ({ firstName, lastName, email, cycle }: any) =>
   async (dispatch: any) => {
     try {
       const datas = await axios({
@@ -65,6 +65,7 @@ export const createTrainee =
               firstName,
               lastName,
               email,
+              cycle,
             },
           },
         },
