@@ -9,6 +9,7 @@
     "test": "react-scripts test --watchAll=false",
     "build": "react-scripts build"
   },
+
   "repository": {
     "type": "git",
     "url": "git+https://github.com/atlp-rwanda/atlp-devpulse-fn.git"
@@ -88,6 +89,7 @@
     "ts-jest": "^29.0.3",
     "typescript": "^4.8.4"
   },
+  
   "browserslist": {
     "production": [
       ">0.2%",

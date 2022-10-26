@@ -50,9 +50,12 @@ const createNewTrainee = () => {
   };
    
   if(props.createTrainee(data)){
+    setFirstname("");
+    setLastname("");
+    setEmail("");
   //   toast.success("succeed")
-  // setAddNewTraineeModel(false);
-  setTimeout(reload, 2000)
+  setAddNewTraineeModel(false);
+  setTimeout(reload, 3000)
   }
 };
 

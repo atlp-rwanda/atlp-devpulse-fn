@@ -2,6 +2,7 @@ import creator from "./creator";
 import { GET_TRAINEE, CREATE_TRAINEES,  CREATE_CYCLE_ERROR} from "..";
 import { toast } from "react-toastify";
 import axios from "axios";
+
 export const getAllTraineess = ({ page,itemsPerPage,  All }:any) => async (dispatch: any) => {
   try {
     const datas = await axios({
