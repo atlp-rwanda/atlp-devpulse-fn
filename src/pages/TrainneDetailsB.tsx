@@ -5,39 +5,35 @@ import { FcApproval } from "react-icons/fc";
 import { AiFillSetting, AiFillCaretDown } from "react-icons/ai";
 import { MdOutlineCancel } from "react-icons/md";
 import { BsFillPersonLinesFill } from "react-icons/bs";
+import { getAllTraineess } from "../redux/actions/trainnee";
+import { connect } from "react-redux";
 
 
-const TrainneeDetails = () => {
+const TrainneeDetails = (props: any) => {
+  const {trainnes} = props;
+
+  const [page, setPage] = useState(0);
+const [itemsPerPage, setiIemsPerPage] = useState(0);
+const [All, setAll] = useState(true);
+  const input = {
+    page: page,
+    itemsPerPage: itemsPerPage,
+    All: All,
+  };
+
+  useEffect(()=>{
+  props.getAllTraineess(input);
+  },[])
+
+  const Trainn = trainnes.data
+  console.log(Trainn)
 
   const [open, setOpen] = useState<boolean>(false);
   const handleDropDown = (state : boolean)=>{
     setOpen(!state)
   }
   console.log(open)
-  const getTraine = ()=>{
-    fetch('http://localhost:5000',{
-      method:'POST',
-      headers: {"Content-type": "application/json"},
-      body:JSON.stringify({
-       
-        query:`
-        query GetAllTrainees {
-          getAllTrainees {
-            id
-            email
-            lastname
-            firstname
-          }
-        }
-        `,
-      
-      })
-    }).then(res => res.json())
-       .then(data =>{
-         console.log(data.data.getAllTrainees)
-       })
-  }
-
+  
   return (
     <>
       <div className="h-screen m-0 bg-[#374151]">
@@ -95,7 +91,7 @@ const TrainneeDetails = () => {
               Actions
             </h2>
             <div className="">
-              <button onClick={getTraine} className="bg-[#56C870] hover:bg-[#1f544cef] text-white font-bold py-2 px-4 rounded mt-20 mr-5">
+              <button  className="bg-[#56C870] hover:bg-[#1f544cef] text-white font-bold py-2 px-4 rounded mt-20 mr-5">
                 <FcApproval className="float-left m-1" />
                 Approve
               </button>
@@ -133,4 +129,11 @@ const TrainneeDetails = () => {
   );
 };
 
-export default TrainneeDetails;
+const mapState=({trainee}: any)=>{
+  trainnes: trainee
+ }
+ 
+ export default connect(mapState,{
+  getAllTraineess
+ })(TrainneeDetails)
+

@@ -1,4 +1,4 @@
-import { createStore, applyMiddleware, compose } from "redux";
+import {createStore, applyMiddleware, compose } from "redux";
 import thunk from "redux-thunk";
 import {
   createStateSyncMiddleware,
@@ -13,4 +13,5 @@ const store = createStore(
   composeWithDevTools(compose(applyMiddleware(...middleware)))
 );
 initStateWithPrevTab(store);
+export type AppDispatch = typeof store.dispatch
 export default store;
