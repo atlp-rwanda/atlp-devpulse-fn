@@ -5,8 +5,6 @@ import { connect } from "react-redux";
 const Counter = (props: any) => {
   const { value } = props;
 
-  console.log(props);
-
   const Add = () => {
     props.increment();
   };
