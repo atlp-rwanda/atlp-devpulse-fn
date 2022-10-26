@@ -1,5 +1,7 @@
 export const INCREMENT = "INCREMENT";
 export const DECREMENT = "DECREMENT";
+export const GET_TRAINEE = "GET_TRAINEE";
+export const CREATE_TRAINEES = "CREATE_TRAINEES";
 export const GET_CYCLES = "GET_CYCLES";
 export const CREATE_CYCLES = "CREATE_CYCLES";
 export const UPDATE_CYCLE = "UPDATE_CYCLE";
