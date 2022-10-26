@@ -21,7 +21,7 @@ import './index.css'
 
 const Counter = React.lazy(() => import("./components/Counter/Counter"));
 import Trash from './pages/Trash/Trash'
-import ApplicationCycle  from './pages/ApplicationCycle/ApplicationCycle'
+import ApplicationCycle  from './pages/ApplicationCycle/ApplicationCycle';
 import './index.css'
 
 
@@ -52,7 +52,7 @@ function App() {
       <Route path='/traineeb-details' element={<TrainneeDetailsB />}/>
       {/* <Route path="/test_redux" element={<Counter />} /> */}
       <Route path="/test_tailwind" element={<TestTailwind />} />
-      {/* <Route path='/trainee-details' element={<TrainneeDetails />}/> */}
+      <Route path='/trainee-details' element={<TrainneeDetails />}/>
       <Route path='/traineeb-details' element={<TrainneeDetailsB />}/>
       <Route path="/sidebar" element={<Sidebar/>} />
     </Routes>
