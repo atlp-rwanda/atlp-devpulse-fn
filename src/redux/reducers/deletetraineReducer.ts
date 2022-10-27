@@ -1,4 +1,5 @@
-import { Action, DeleteActionType,softAction,softDeleteActionType } from '../actiontypes/deleteactiontype';
+import { Action, DeleteActionType,softAction,softDeleteActionType,fetchact,fetchtrainesss } from '../actiontypes/deleteactiontype';
+
 
 interface State {
     success: boolean;
@@ -14,6 +15,12 @@ const initialState ={
     message: null,
 }
 const softinitialState ={
+    loading: false,
+    success: false,
+    error: null,
+    message: null,
+}
+const traineState ={
     loading: false,
     success: false,
     error: null,
@@ -65,6 +72,26 @@ export const softdeletetraineReducer = (state: State = softinitialState, action:
                 error: action.error,
                
             }
+        default: 
+            return state;
+    }
+}
+export const traineReducer = (state: State = traineState, action: fetchact):State => {
+    switch(action.type) {
+
+        case fetchtrainesss.fetchtraines_success:
+            console.log(action.data)
+            return {
+                ...state,
+                message:action.data,
+            }
+         case fetchtrainesss.fetchtraines_fail:
+            console.log(action.error)
+            return {
+                ...state,
+                message:action.error,
+            }
+ 
         default: 
             return state;
     }

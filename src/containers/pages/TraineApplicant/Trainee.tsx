@@ -4,50 +4,69 @@ import { HiDotsVertical } from "react-icons/hi";
 import { AiOutlinePlus} from "react-icons/ai";
 import pagination from '../../../components/pagination';
 import { ToastContainer, toast } from 'react-toastify';
-  import 'react-toastify/dist/ReactToastify.css';
-import {
-getAllTraineess,
-} from "../../../redux/actions/TraineeAction";
+import 'react-toastify/dist/ReactToastify.css';
+import {getAllTraineess,} from "../../../redux/actions/TraineeAction";
 import { connect } from "react-redux";
 import Modal from './modal';
 import Sidebar from "../../../components/sidebar/sidebar"
+import { softdeletetraine,deletetraine,fetchtraine} from '../../../redux/actions/deletetraine';
+import { useAppDispatch } from '../../../hooks/hooks';
 
 
 const AddTrainee = (props: any) => {
   const [addNewTraineeModel, setAddNewTraineeModel] = useState(false);
-function open(){
-  setAddNewTraineeModel(true);
-}
+    function open(){
+      setAddNewTraineeModel(true);
+    }
 
-// LIST ALL TRAINEE
-  const { alltrainees } = props;
-const [page, setPage] = useState(0);
-const [itemsPerPage, setiIemsPerPage] = useState(0);
-const [All, setAll] = useState(true);
-  const input = {
-    page: page,
-    itemsPerPage: itemsPerPage,
-    All: All,
-  };
-useEffect(() => {
-  props.getAllTraineess(input);
-}, []);
-const trainees = alltrainees.data;
+    // LIST ALL TRAINEE
+    const { alltrainees ,delettraine,softdeletettraine,traines} = props;
+    const dispatch = useAppDispatch();
+    const [page, setPage] = useState(0);
+    const [itemsPerPage, setiIemsPerPage] = useState(0);
+    const [All, setAll] = useState(true);
+    const input = {
+        page: page,
+        itemsPerPage: itemsPerPage,
+        All: All,
+      };
+    useEffect(() => {
+      props.getAllTraineess(input);
+    }, []);
+    const trainees = alltrainees.data;
+    const traine=traines.message;
+    useEffect(() => {
+      dispatch(fetchtraine())
+    },[delettraine,softdeletettraine]);
+    const [moredrop, setmoredrop] = useState('');
+    const onSubmitHandler =  (userid:any) => {
+      if (!moredrop)  setmoredrop(userid);
+      if(moredrop)setmoredrop('');
+    }
+    const onSubmitHandle = async (userId:any) => {
+      await dispatch(deletetraine(userId));
+      setmoredrop('');
+    }
+    const onSubmitHandlesoft = async (userId:any) => {
+      await dispatch(softdeletetraine(userId));
+      setmoredrop('');
+    }
+    console.log(props)
 
-//pagination 
-const {
-  firstContentIndex,
-  lastContentIndex,
-  nextPage,
-  prevPage,
-  paging,
-  gaps,
-  setPaging,
-  totalPages,
-} = pagination({
-  contentPerPage: 10,
-  count: trainees.length,
-});
+    //pagination 
+    const {
+      firstContentIndex,
+      lastContentIndex,
+      nextPage,
+      prevPage,
+      paging,
+      gaps,
+      setPaging,
+      totalPages,
+    } = pagination({
+      contentPerPage: 10,
+      count: traine?.length,
+    });
   return (
     <>
     
@@ -93,86 +112,101 @@ const {
                                   {('lastname')}
                                 </th>
 
-                                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
+                                {/* <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
                                   {('gender')}
-                                </th>
+                                </th> */}
                                 <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
                                   {('email')}
                                 </th>
-                                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
+                                {/* <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
                                   {('cycle')}
-                                </th>
+                                </th> */}
                                 <th className="border-b-2 sm:text-center border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
                                   {('action')}
                                 </th>
                               </tr>
                             </thead>
                             <tbody className='overflow-y-auto'>
-                     
-                            {trainees.slice(
+                              {props.traines?.message?.slice(
                               firstContentIndex,
                               lastContentIndex,
-                            )
-                              ?.map((values: any, i: number) => {
-                                return (
-                                  <tr 
-                                  >
+                            )?.map((item:any) => 
+                                 (
+                                item.delete_at ==false?(
+                                  <tr>
                                     <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
-                                      <div className="flex">
-                                        <div className="">
-                                          <p className="text-gray-900 float-left dark:text-white whitespace-no-wrap">
-                                            {values.trainee_id.firstName}
-                                          </p>
-                                        </div>
-                                      </div>
-                                    </td>
-                                    <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
-                                      <div className="flex items-center">
+                                      <div className="flex sm:justify-center items-center">
                                         <div className="">
                                           <p className="text-gray-900 text-center dark:text-white whitespace-no-wrap">
-                                            {values.trainee_id.lastName}
+                                            {item.firstName}
                                           </p>
                                         </div>
                                       </div>
                                     </td>
                                     <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
-                                      <div className="flex items-center">
+                                      <div className="flex sm:justify-center items-center">
+                                        <div className="">
+                                          <p className="text-gray-900 text-center dark:text-white whitespace-no-wrap">
+                                            {item.lastName}
+                                          </p>
+                                        </div>
+                                      </div>
+                                    </td>
+                                    {/* <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
+                                      <div className="flex sm:justify-center items-center">
                                         <div className="">
                                           <p className="text-gray-900 items-center dark:text-white whitespace-no-wrap">
-                                            {values.gender}
+                                            {item.gender ? (item.gender):('male')}
                                           </p>
                                         </div>
                                       </div>
-                                    </td>
+                                    </td> */}
                                     <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
-                                      <div className="flex items-center">
-                                        <div className="">
-                                          <p className="text-gray-900 dark:text-white whitespace-no-wrap">
-                                            {values.trainee_id.email}
-                                          </p>
-                                        </div>
-                                      </div>
-                                    </td>
-                                    <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
-                                      <div className="flex  items-center">
+                                      <div className="flex sm:justify-center items-center">
                                         <div className="">
                                           <p className="text-gray-900 items-center dark:text-white whitespace-no-wrap">
-                                            {values.cohort}
+                                            {item.email}
+                                          </p>
+                                        </div>
+                                      </div>
+                                    </td>
+                                    {/* <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
+                                      <div className="flex sm:justify-center items-center">
+                                        <div className="">
+                                          <p className="text-gray-900 items-center dark:text-white whitespace-no-wrap">
+                                            {item.cohort}
+                                            {item.cohort ? (item.cohort ):('cohort 1')}
+
                                            
                                           </p>
                                         
                                         </div>
-        
-                                      </div>
-                                    </td>
-                                    <td className="border-b border-gray-200 dark:border-dark-tertiary text-sm">
-                                      <div className="flex">
-                                        <HiDotsVertical  className=" text-black text-3xl ml-6 font-size-6 cursor-pointer"/>
-                                      </div>
+                                          </div>
+                                      </td> */}
+                                      <td>
+                                        <div>
+                                        <HiDotsVertical  className=" text-black text-3xl ml-6 font-size-6 cursor-pointer" onClick={(e:any)=>{e.preventDefault();onSubmitHandler(item.id)}}/>
+                                        <div className={`${moredrop === item.id   ?'block' : 'hidden'} absolute  bg-white text-base z-50 list-none divide-y divide-gray-100 rounded shadow my-4`} id="dropdown">
+                                            <ul className="py-1" aria-labelledby="dropdown">
+                                              <li>
+                                                <div  className="text-sm hover:bg-gray-100 text-gray-700 block px-4 py-2" onClick={(e:any)=>{e.preventDefault(); onSubmitHandlesoft(item.id)}}>soft delete</div>
+                                              </li>
+                                              <li>
+                                                <div  className="text-sm hover:bg-gray-100 text-gray-700 block px-4 py-2" onClick={(e:any)=>{e.preventDefault(); onSubmitHandle(item.id)}}>harddelete</div>
+                                              </li>
+                                            
+                                            </ul>
+                                        </div>
+                                        </div>
+                                      {/* </div> */}
                                     </td>
                                   </tr>
-                                );
-                              })}
+                                ): null
+
+                              )
+                            
+                              )}
+                           
                             </tbody>
                           </table>
                         </div>
@@ -250,10 +284,16 @@ const {
 
 // export default AddTrainee;
 
-const mapState = ({ trainee }: any) => ({
-  alltrainees: trainee,
+const mapState = (state: any) => ({
+  alltrainees: state.trainee,
+  delettraine:state.deletetraine,
+  softdeletettraine:state.softdeletetraine,
+  traines:state.traine,
 });
 
 export default connect(mapState, {
   getAllTraineess,
+  deletetraine,
+  softdeletetraine,
+  fetchtraine
 })(AddTrainee);
