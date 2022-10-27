@@ -76,6 +76,9 @@ module.exports = () => {
       new HtmlWebpackPlugin({
         template: 'index.html',
       }),
+      new webpack.ProvidePlugin({
+        process: 'process/browser'
+     }),
       new MiniCssExtractPlugin(),
       new webpack.DefinePlugin({
         'process.env': JSON.stringify(process.env),
