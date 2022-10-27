@@ -202,7 +202,7 @@ const ApplicationCycle = (props: any) => {
               <BsIcons.BsPlusLg className="mx-[5px]" />
               <span>Cycle</span>
             </button>
-            <div className=" w-[100%] min-h-[70vh] m-auto  bg-[#fff] p-[10px] shadow-md rounded-[10px] pb-[80px]  overflow-x-auto	md:w-[100%]">
+            <div className=" w-[100%] min-h-[70vh] m-auto  bg-[#fff] p-[10px] shadow-md rounded-[10px] relative pb-[80px]  overflow-x-auto	md:w-[100%]">
               <table
                 {...getTableProps()}
                 className="border-collapse w-[100%] my-[10px] mx-auto rounded-[15px] whitespace-nowrap "
@@ -211,8 +211,8 @@ const ApplicationCycle = (props: any) => {
                   {headerGroups.map((headerGroup: any, index: number) => (
                     <tr
                       {...headerGroup.getHeaderGroupProps()}
-                      className="border-solid border-[1px] border-white even:bg-[#eef1f1]"  
-                      key={index}        
+                      className="border-solid border-[1px] border-white even:bg-[#eef1f1]"
+                      key={index}
                     >
                       {headerGroup.headers.map((column: any, index: number) => (
                         <th
@@ -250,8 +250,7 @@ const ApplicationCycle = (props: any) => {
                   })}
                 </tbody>
               </table>
-            </div>
-            <div className="block mx-auto my-0 w-[100%] bottom-0 overflow-x-auto">
+              <div className="block mx-auto my-0 w-[100%] absolute bottom-0 overflow-x-auto">
                 <div className="w-[100%] flex items-center justify-center my-[30px]  mx-auto md:block md:mx-auto">
                   <span className="flex items-center md:justify-center md:mt-[10px]">
                     {" "}
@@ -311,6 +310,7 @@ const ApplicationCycle = (props: any) => {
                   </span>
                 </div>
               </div>
+            </div>
           </div>
         </div>
         <Menu
