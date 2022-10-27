@@ -5,20 +5,10 @@ import Trainee from "./containers/pages/TraineApplicant/Trainee";
 import "./index.css";
 import Sidebar from "./components/sidebar/sidebar";
 import Table from "./containers/pages/Table";
-// function App() {
-//   return (
-//     <Router>
-//       <TestTailwind />
-//     </Router>
-// import React from "react";
-// import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import Trash from "./pages/Trash/Trash";
+import ApplicationCycle from "./pages/ApplicationCycle/ApplicationCycle";
+import Counter from "./components/Counter/Counter";
 import "./index.css";
-
-const Counter = React.lazy(() => import("./components/Counter/Counter"));
-const ApplicationCycle = React.lazy(
-  () => import("./pages/ApplicationCycle/ApplicationCycle")
-);
-const Trash = React.lazy(() => import("./pages/Trash/Trash"));
 
 function App() {
   return (

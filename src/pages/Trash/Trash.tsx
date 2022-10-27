@@ -135,7 +135,7 @@ const Trash = (props: any) => {
                   <input
                     type="search"
                     placeholder="Search"
-                    className="px-2 pl-7 py-1 border border-[#999999] rounded-[5px]"
+                    className="px-2 py-1 border border-[#999999] rounded-[5px]"
                   />
                 </div>
               </div>
