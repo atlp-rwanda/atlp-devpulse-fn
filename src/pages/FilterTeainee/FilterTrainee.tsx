@@ -87,14 +87,14 @@ const FilterTrainee = (props: any) => {
                 ...theme.colors,
                 text: 'light-gray',
                 primary25: "#E5E7EB",
-                primary: 'gray'
+                primary: 'cgray'
             }
         }
     }
 
 
     return (
-        <div className="flex flex-row">
+        <div className="flex flex-row bg-[#F9F9FB]">
             <div className="">
                 <Sidebar />
             </div>
@@ -107,14 +107,29 @@ const FilterTrainee = (props: any) => {
                         <span className="pl-8 text-button-color"><FaCaretDown /></span>
                     </button> */}
                     <Select
-                        className="test sm:text-sm border bg-gray border-solid border-bdr w-40 rounded-bt-rd"
+                        className="test sm:text-sm border bg-cgray border-solid border-bdr w-40 rounded-bt-rd"
                         options={[
-                            { value: "gender", label: "Gender" },
-                            { value: "fistName", label: "First Name" },
+                            { value: "_id", label: "Trainee ID" },
+                            { value: "firstName", label: "First Name" },
                             { value: "lastName", label: "Last Name" },
-                            { value: "birth_date", label: "Birth date" },
-                            { value: "education_level", label: "Education level" },
-                            { value: "isEmployed", label: "Employment" },
+                            { value: "email", label: "Email" },
+                            { value: "gender", label: "Gender" },
+                            { value: "birth_date", label: "Birth Date" },
+                            { value: "Address", label: "Address" },
+                            { value: "phone", label: "Phone Number" },
+                            { value: "field_of_study", label: "Field of Study" },
+                            { value: "education_level", label: "Education Level" },
+                            { value: "province", label: "Province" },
+                            { value: "district", label: "District" },
+                            { value: "sector", label: "Sector" },
+                            { value: "cohort", label: "Cohort" },
+                            { value: "isEmployed", label: "Employment Status" },
+                            { value: "haveLaptop", label: "Laptop Availability" },
+                            { value: "isStudent", label: "Student" },
+                            { value: "Hackerrank_score", label: "Hackerrank Score" },
+                            { value: "english_score", label: "English Score" },
+                            { value: "interview_decision", label: "Interview Decision" },
+                            { value: "past_andela_programs", label: "Attended Andela Programs" },
                             { value: "", label: "Select by" },
                         ]}
                         defaultValue={{ value: '', label: 'Select by' }}
@@ -144,7 +159,7 @@ const FilterTrainee = (props: any) => {
                     <button className="bg-button-color text-ltb text-fb font-medium ml-8 mt-2 pl-3 pr-3 py-1 rounded-bt-rd">
                         EXPORT TO
                     </button>
-                    <button className="bg-gray text-button-color text-fb font-medium ml-8 mt-2 pl-3 pr-3 py-1 rounded-bt-rd">
+                    <button className="bg-cgray text-button-color text-fb font-medium ml-8 mt-2 pl-3 pr-3 py-1 rounded-bt-rd">
                         BULK EMAIL
                     </button>
                 </div>
@@ -155,7 +170,7 @@ const FilterTrainee = (props: any) => {
                             <tr className="border-b border-bdr">
                                 <th scope="col" className="p-4">
                                     <div className="flex items-center">
-                                        <input id="checkbox-all-search" type="checkbox" className="w-4 h-4 text-black-text bg-gray rounded border-gray-300 focus:ring-gray dark:focus:ring-cg dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                        <input id="checkbox-all-search" type="checkbox" className="w-4 h-4 text-black-text bg-cgray rounded border-gray-300 focus:ring-gray dark:focus:ring-cg dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                                         {/* <label for="checkbox-all-search" className="sr-only">checkbox</label> */}
                                         <label className="sr-only">checkbox</label>
                                     </div>
@@ -221,7 +236,7 @@ const FilterTrainee = (props: any) => {
                         </tbody>
                     </table>
                     <nav className="flex justify-between items-center pt-16 pb-10" aria-label="Table navigation">
-                        <span className="pl-6 text-sm font-normal text-gray-500 dark:text-gray">Showing <span className="font-semibold text-gray-900">1-10</span> of <span className="font-semibold text-gray-900 ">1000</span></span>
+                        <span className="pl-6 text-sm font-normal text-gray-500 dark:text-cgray">Showing <span className="font-semibold text-gray-900">1-10</span> of <span className="font-semibold text-gray-900 ">1000</span></span>
                         <ul className="pr-6 inline-flex items-center -space-x-px">
                             <li>
                                 <a href="#" className="block py-2 px-3 ml-0 leading-tight text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700">

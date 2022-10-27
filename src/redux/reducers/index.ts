@@ -9,6 +9,8 @@ import restoretraineReducer from "./RestoreReducer"
 import filterTraineeReducer from "./filterTraineeReducer";
 import { combineReducers } from "redux";
 import traineeReducer from "./traineeReducer";
+import cycleReducer from "./cycleReducer";
+
 const allReducers = combineReducers({
   counter: counterReducer,
   deletetraine: deletetraineReducer,
@@ -21,6 +23,7 @@ const allReducers = combineReducers({
   trainee: traineeReducer ,
   traine:traineReducer,
   filterTrainee: filterTraineeReducer,
+  cycles: cycleReducer
 });
 
 export default allReducers;
