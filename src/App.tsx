@@ -2,7 +2,6 @@ import React from "react";
 import { HashRouter as Router, Routes, Route, Link } from "react-router-dom";
 import TestTailwind from "./components/TestTailwind";
 import TrainneeDetails from "./pages/TrainneeDetails";
-import TrainneeDetailsB from "./pages/TrainneDetailsB";
 import "./index.css";
 import Sidebar from "./components/sidebar/sidebar";
 import "./index.css";
@@ -25,16 +24,15 @@ import ApplicationCycle  from './pages/ApplicationCycle/ApplicationCycle';
 import './index.css'
 
 
-// const Counter = React.lazy(() => import("./components/Counter/Counter"));
-// const TrainneeDetailsB = React.lazy(()=> import("./pages/TrainneDetailsB"))
-// const TrainneeDetails =React.lazy(()=>import('./pages/TrainneeDetails'))
+
+
+
 
 function App() {
   return (
     <Routes>
       <Route path="/test_tailwind" element={<TestTailwind />} />
       <Route path="/trainee-applicant-details/:traineeId" element={<TrainneeDetails />} />
-      <Route path="/traineeb-details" element={<TrainneeDetailsB />} />
       <Route path="/sidebar" element={<Sidebar />} />
       <Route path="/Trainee-applicants" element={<Trainee />} />
       <Route path="/sidebar" element={<Sidebar />} />
@@ -49,11 +47,9 @@ function App() {
       <Route path="/filter_trainee-applicants/:id" element={<CreateScoreType />} />
       <Route path="/admins/" element={<ScoreTypesActions />} />
       <Route path='/trainee-details' element={<TrainneeDetails />}/>
-      <Route path='/traineeb-details' element={<TrainneeDetailsB />}/>
       {/* <Route path="/test_redux" element={<Counter />} /> */}
       <Route path="/test_tailwind" element={<TestTailwind />} />
       <Route path='/trainee-details' element={<TrainneeDetails />}/>
-      <Route path='/traineeb-details' element={<TrainneeDetailsB />}/>
       <Route path="/sidebar" element={<Sidebar/>} />
     </Routes>
   );
