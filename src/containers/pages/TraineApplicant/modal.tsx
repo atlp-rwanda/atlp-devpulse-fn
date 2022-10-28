@@ -1,5 +1,5 @@
 import React, {useState } from 'react';
-import { AiOutlineClose} from "react-icons/ai";
+import * as icons from "react-icons/ai";
 import {  toast } from 'react-toastify';
   import 'react-toastify/dist/ReactToastify.css';
 import {
@@ -67,7 +67,7 @@ const createNewTrainee = () => {
         <div className="card-title w-full flex  flex-wrap justify-center items-center  ">
         
           <h3 className="font-bold text-sm dark:text-white text-center w-11/12 ">
-            <AiOutlineClose className="float-right text-3xl cursor-pointer" onClick={()=>removeModel()}/>
+            <icons.AiOutlineClose className="float-right text-3xl cursor-pointer" onClick={()=>removeModel()}/>
             
             
             {('New Trainee')}

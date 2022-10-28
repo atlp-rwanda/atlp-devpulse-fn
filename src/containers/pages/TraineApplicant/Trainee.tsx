@@ -1,7 +1,7 @@
 /* eslint-disable */
 import React, {useState,useEffect } from 'react';
 import { HiDotsVertical } from "react-icons/hi";
-import { AiOutlinePlus} from "react-icons/ai";
+import *as icons from "react-icons/ai";
 import pagination from '../../../components/pagination';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -89,7 +89,7 @@ const AddTrainee = (props: any) => {
                      <button 
                     onClick={open} 
                     className="flex bg-primary rounded-md py-2 px-4 text-white font-medium cursor-pointer">
-                    <AiOutlinePlus className="mt-1 mr-1 font-bold"/>  Trainee
+                    <icons.AiOutlinePlus className="mt-1 mr-1 font-bold"/>  Trainee
                     </button>
                     <div>
       

@@ -1,10 +1,11 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import TestTailwind from "./components/TestTailwind";
-import Trainee from "./containers/pages/TraineApplicant/Trainee";
-import "./index.css";
-import Sidebar from "./components/sidebar/sidebar";
-import Table from "./containers/pages/Table";
+import Trainee from './containers/pages/TraineApplicant/Trainee';
+import './index.css'
+import  Sidebar  from './components/sidebar/sidebar';
+import Table from './containers/pages/Table';
+import NavBar from "./components/sidebar/navHeader";
 // function App() {
 //   return (
 //     <Router>
@@ -30,6 +31,10 @@ function App() {
       <Route path="/table" element={<Table />} />
       <Route path="/cycles" element={<ApplicationCycle />} />
       <Route path="/trash" element={<Trash />} />
+      <Route path="/nav-bar" element={< NavBar/>} />
+
+
+     
     </Routes>
   );
 }
