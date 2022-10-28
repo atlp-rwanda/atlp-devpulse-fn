@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
 
 const Threedots = () => {
     const [showOptions, setShowOptions] = useState(false);
@@ -7,24 +9,43 @@ const Threedots = () => {
         setShowOptions(!showOptions)
     }
 
+    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
+    const open = Boolean(anchorEl);
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
     return (
-        <div className="relative inline-block text-left">
+        <div className="inline-block text-left">
             <div>
                 <button type="button" onClick={handleClick} className="flex items-center">
-                    <BsThreeDotsVertical className="text-dots h-5" viewBox="0 0 12 12"/>
+                    <BsThreeDotsVertical
+                        onClick={(event) => {
+                            setAnchorEl(event.currentTarget as unknown as HTMLElement);
+                        }}
+                        className="text-dots h-5"
+                        viewBox="0 0 13 13" />
                 </button>
             </div>
-            {showOptions && (
-                <div className="absolute z-10 mt-2 w-32 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" >
-                    <div className="" role="none">
-                        <a href="#" className="text-button-color hover:bg-bdr block px-4 py-2 text-sm" role="menuitem" id="menu-item-0">Email</a>
-                        <a href="#" className="text-button-color hover:bg-bdr block px-4 py-2 text-sm" role="menuitem" id="menu-item-1">View</a>
-                        <a href="#" className="text-button-color hover:bg-bdr block px-4 py-2 text-sm" role="menuitem" id="menu-item-2">Export</a>
-                        <a href="#" className="text-button-color hover:bg-bdr block px-4 py-2 text-sm" role="menuitem" id="menu-item-2">Delete</a>
-                        <a href="#" className="text-button-color hover:bg-bdr block px-4 py-2 text-sm" role="menuitem" id="menu-item-2">Permanent Delete</a>
-                    </div>
-                </div>
-            )}
+            {/* {showOptions && ( */}
+                <Menu
+                    id="basic-menu"
+                    anchorEl={anchorEl}
+                    open={open}
+                    onClose={handleClose}
+                    MenuListProps={{
+                        "aria-labelledby": "basic-button",
+                    }}
+                >
+                    <a href="#" ><MenuItem>Email</MenuItem></a>
+                    <a href="#" className="text-button-color hover:bg-bdr text-sm"><MenuItem>View</MenuItem></a>
+                    <a href="#" className="text-button-color hover:bg-bdr text-sm"><MenuItem>Export</MenuItem></a>
+                    <a href="#" className="text-button-color hover:bg-bdr text-sm"><MenuItem>Delete</MenuItem></a>
+                    <a href="#" className="text-button-color hover:bg-bdr text-sm"><MenuItem><ul><li>Permanent </li><li>Delete</li></ul></MenuItem></a>
+
+                </Menu>
+            {/* )} */}
 
         </div>
     )

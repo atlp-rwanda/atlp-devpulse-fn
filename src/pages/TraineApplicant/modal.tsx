@@ -63,7 +63,7 @@ const createNewTrainee = () => {
 
   return (
     <>
-      <div className="bg-white dark:bg-dark-bg w-full sm:w-3/4  xl:w-4/12 rounded-lg p-4 pb-8">
+      <div className="bg-white dark:bg-dark-bg w-full sm:w-[50%] xl:w-4/12 rounded-lg p-4 pb-8">
         <div className="card-title w-full flex  flex-wrap justify-center items-center  ">
         
           <h3 className="font-bold text-sm dark:text-white text-center w-11/12 ">

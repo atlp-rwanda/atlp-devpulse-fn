@@ -1,86 +1,24 @@
-import React, { useState, useEffect } from "react";
-// import { FaCaretDown } from "react-icons/fa";
-import { AiOutlineSearch, AiOutlineClose } from "react-icons/ai";
-// import Dropdown from "../../components/Dropdown/Dropdown";
-import Threedots from "../../components/Dropdown/Threedots";
-import Select from "react-select";
-import Sidebar from "../../components/sidebar/sidebar";
-import { getAllFilteredTraineess } from "../../redux/actions/filterTraineeActions";
+import React, { useEffect, useState, useMemo } from "react";
 import { connect } from "react-redux";
-import pagination from "../../components/pagination"
+import { useTable, usePagination, useRowSelect } from "react-table";
+import Sidebar from "../../components/sidebar/sidebar";
+import * as AiIcons from "react-icons/ai";
+import CheckBox from "../../components/CkeckBox";
+
+
+import Select from "react-select";
+import Threedots from "../../components/Dropdown/Threedots";
+import { getAllFilteredTraineess } from "../../redux/actions/filterTraineeActions";
 
 
 const FilterTrainee = (props: any) => {
-    // const [select, setSelect] = useState<string>("");
 
-    // All trainees in DB
-    const { allfilteredTrainees } = props;
-    const [page, setPage] = useState(0);
-    const [itemsPerPage, setiIemsPerPage] = useState(0);
-    const [All, setAll] = useState(true);
+
     const [filterAttribute, setFilterAttribute] = useState("");
     const [enteredWord, setEnteredWord] = useState("");
-    // const [filteredData, setFilteredData] = useState<any[]>([]);
-    let filterOptions;
-    // let newFilterOptions;
-    let traineeList;
+    const [All, setAll] = useState(true);
 
-    traineeList = allfilteredTrainees.data
-    console.log("afer useffect1", traineeList)
-
-    filterOptions = {
-        page: page,
-        itemsPerPage: itemsPerPage,
-        All: All,
-        wordEntered: enteredWord,
-        filterAttribute: filterAttribute
-    };
-
-    console.log("checking2", filterOptions, typeof filterAttribute)
-
-    // const handleFilter = (e) => {
-    //     e.preventDefault();
-    //     const searchWord = e.target.value
-    //     setEnteredWord(searchWord)
-
-    //     filterOptions = {
-    //         page: page,
-    //         itemsPerPage: itemsPerPage,
-    //         All: All,
-    //         wordEntered: searchWord,
-    //         filterAttribute: filterAttribute
-    //     };
-
-    //     if (searchWord === "") {
-    //         setFilteredData([])
-    //     } else {
-    //         setFilteredData(traineeList)
-    //     }
-    //     console.log("searchWord", searchWord, filteredData)
-    // }
-
-    useEffect(() => {
-        props.getAllFilteredTraineess(filterOptions)
-    }, [enteredWord, filterAttribute])
-
-    const clearInpunt = () => {
-        setEnteredWord("")
-    }
-
-
-    // Paginating all trainees
-    // const {
-    //     firstContentIndex,
-    //     lastContentIndex,
-    //     nextPage,
-    //     prevPage,
-    //     paging,
-    //     gaps,
-    //     setPaging,
-    //     totalPages
-    // } = pagination({ contentPerPage: 10, count: traineeList.length })
-
-    const customTheme = (theme) => {
+    const customTheme = (theme: any) => {
         return {
             ...theme,
             colors: {
@@ -92,191 +30,325 @@ const FilterTrainee = (props: any) => {
         }
     }
 
+    const clearInpunt = () => {
+        setEnteredWord("")
+    }
 
-    return (
-        <div className="flex flex-row bg-[#F9F9FB]">
-            <div className="">
-                <Sidebar />
-            </div>
-            <div className="ml-24 mr-1 mt-36">
-                <div className="">
-                    {/* <button className="flex items-center border bg-row-gray border-solid border-bdr pl-8 pr-4 py-2 rounded-bt-rd">
-                        <span className="">
-                            <h4 className="text-gray sm:text-sm">Search by</h4>
-                        </span>
-                        <span className="pl-8 text-button-color"><FaCaretDown /></span>
-                    </button> */}
-                    <Select
-                        className="test sm:text-sm border bg-cgray border-solid border-bdr w-40 rounded-bt-rd"
-                        options={[
-                            { value: "_id", label: "Trainee ID" },
-                            { value: "firstName", label: "First Name" },
-                            { value: "lastName", label: "Last Name" },
-                            { value: "email", label: "Email" },
-                            { value: "gender", label: "Gender" },
-                            { value: "birth_date", label: "Birth Date" },
-                            { value: "Address", label: "Address" },
-                            { value: "phone", label: "Phone Number" },
-                            { value: "field_of_study", label: "Field of Study" },
-                            { value: "education_level", label: "Education Level" },
-                            { value: "province", label: "Province" },
-                            { value: "district", label: "District" },
-                            { value: "sector", label: "Sector" },
-                            { value: "cohort", label: "Cohort" },
-                            { value: "isEmployed", label: "Employment Status" },
-                            { value: "haveLaptop", label: "Laptop Availability" },
-                            { value: "isStudent", label: "Student" },
-                            { value: "Hackerrank_score", label: "Hackerrank Score" },
-                            { value: "english_score", label: "English Score" },
-                            { value: "interview_decision", label: "Interview Decision" },
-                            { value: "past_andela_programs", label: "Attended Andela Programs" },
-                            { value: "", label: "Select by" },
-                        ]}
-                        defaultValue={{ value: '', label: 'Select by' }}
-                        onChange={(e) => setFilterAttribute(`${e?.value}`)}
-                        theme={customTheme}
-                    />
-                </div>
-                <div className="flex items-center">
-                    {/* <SearchBar placeholder="Search" data={TraineeData}/> */}
-                    <div className=" searchInputs relative block ">
-                        <span className="absolute inset-y-0 left-0 flex items-center pl-2">
-                            <svg className="h-5 w-5 fill-slate-300 text-cg cursor-pointer" onClick={clearInpunt} viewBox="-6 -6 20 20">
-                                {enteredWord === "" ? (
-                                    <AiOutlineSearch />
-                                ) : (
-                                    <AiOutlineClose />
-                                )}
+    // All trainees in DB
+    const { allfilteredTrainees } = props;
 
-                            </svg>
-                        </span>
-                        <input onChange={(e) => setEnteredWord(e.target.value)} className="block bg-row-gray w-50 border border-bdr rounded-bt-rd mt-2 py-2 pl-9 pr-4 focus:outline-none sm:text-sm" value={enteredWord} placeholder="Search" type="text" name="search" />
+
+    const traineeList = allfilteredTrainees.data
+    console.log("afer useffect1", traineeList)
+    console.log(props)
+
+    const [pageIdx, setPageIdx] = useState(1);
+    const [itemsPerPage] = useState(10);
+
+    useEffect(() => {
+        const data = {
+            page: pageIdx,
+            itemsPerPage: 10,
+            All,
+            wordEntered: enteredWord,
+            filterAttribute
+        };
+        console.log(" dATA SENT", data)
+        props.getAllFilteredTraineess(data)
+    }, [enteredWord, filterAttribute]);
+
+    const COLS = [
+        {
+            Header: "Name",
+            accessor: "",
+            Cell: ({ row }: any) => {
+                return (
+
+                    <div>
+                        {row.original.trainee_id.firstName + " " + row.original.trainee_id.lastName}
                     </div>
+                )
+            },
+        },
+        {
+            Header: "Email",
+            accessor: "trainee_id.email",
+        },
+        {
+            Header: "Status",
+            accessor: "",
+            Cell: ({ row }: any) => {
+                return (
+                    <select defaultValue={""} id="status" className="border bg-row-gray border-solid border-bdr shadow-sm px-4 py-4px rounded-bt-rd focus:outline-none sm:text-sm">
+                        <option value="" >Select value</option>
+                        <option value="passed">Passed</option>
+                        <option value="failed">Failed</option>
+                        <option value="religated">Religated</option>
+                    </select>
+                );
+            },
+        },
 
-                    <button className="bg-button-color text-ltb text-fb font-medium ml-72 mt-2 pl-3 pr-3 py-1 rounded-bt-rd">
-                        ADD INTERVIEWER
-                    </button>
-                    <button className="bg-button-color text-ltb text-fb font-medium ml-8 mt-2 pl-3 pr-3 py-1 rounded-bt-rd">
-                        EXPORT TO
-                    </button>
-                    <button className="bg-cgray text-button-color text-fb font-medium ml-8 mt-2 pl-3 pr-3 py-1 rounded-bt-rd">
-                        BULK EMAIL
-                    </button>
+        {
+            Header: "Actions",
+            accessor: "",
+            Cell: ({ row }: any) => {
+
+                return (
+                    <Threedots />
+                );
+            },
+        },
+    ];
+    console.log("pageIdx", pageIdx)
+
+    const columns = useMemo(() => COLS, []);
+
+    const {
+        getTableProps,
+        getTableBodyProps,
+        headerGroups,
+        page,
+        nextPage,
+        previousPage,
+        canNextPage,
+        canPreviousPage,
+        pageOptions,
+        gotoPage,
+        pageCount,
+        setPageSize,
+        state,
+        prepareRow,
+        rows,
+        selectedFlatRows,
+    }: any = useTable(
+        {
+            columns,
+            data: traineeList,
+        },
+        usePagination,
+        useRowSelect,
+        (hooks: any) => {
+            hooks.visibleColumns.push((columns: any) => {
+                return [
+                    {
+                        id: "selection",
+                        Header: ({ getToggleAllRowsSelectedProps }: any) => (
+                            <CheckBox {...getToggleAllRowsSelectedProps()} />
+                        ),
+                        Cell: ({ row }: any) => (
+                            <CheckBox {...row.getToggleRowSelectedProps()} />
+                        ),
+                    },
+                    ...columns,
+                ];
+            });
+        }
+    );
+    const { pageIndex, pageSize } = state;
+    return (
+        <>
+            <div className="flex bg-[#F9F9FB]">
+                <div className="md:hidden">
+                    <Sidebar />
                 </div>
+                <div className="min-h-[50vh] w-[84rem] block mt-10 md:w-[100rem] md:mt-0">
+                    <div className=" table table-fixed mt-[5rem] w-[100%] top-[20%] md:top-[10%] pb-10 md:relative px-[10%] md:px-[10px]">
+                        <div className="">
+                            <Select
+                                className="test sm:text-sm border bg-cgray border-solid border-bdr w-40 rounded-bt-rd"
+                                options={[
+                                    { value: "_id", label: "Trainee ID" },
+                                    { value: "firstName", label: "First Name" },
+                                    { value: "lastName", label: "Last Name" },
+                                    { value: "email", label: "Email" },
+                                    { value: "gender", label: "Gender" },
+                                    { value: "birth_date", label: "Birth Date" },
+                                    { value: "Address", label: "Address" },
+                                    { value: "phone", label: "Phone Number" },
+                                    { value: "field_of_study", label: "Field of Study" },
+                                    { value: "education_level", label: "Education Level" },
+                                    { value: "province", label: "Province" },
+                                    { value: "district", label: "District" },
+                                    { value: "sector", label: "Sector" },
+                                    { value: "cohort", label: "Cohort" },
+                                    { value: "isEmployed", label: "Employment Status" },
+                                    { value: "haveLaptop", label: "Laptop Availability" },
+                                    { value: "isStudent", label: "Student" },
+                                    { value: "Hackerrank_score", label: "Hackerrank Score" },
+                                    { value: "english_score", label: "English Score" },
+                                    { value: "interview_decision", label: "Interview Decision" },
+                                    { value: "past_andela_programs", label: "Attended Andela Programs" },
+                                    { value: "", label: "Select by" },
+                                ]}
+                                defaultValue={{ value: '', label: 'Select by' }}
+                                onChange={(e) => setFilterAttribute(`${e?.value}`)}
+                                theme={customTheme}
+                            />
+                        </div>
+                        <div className="flex items-center mb-6 semi-sm:flex-wrap">
+                            <div className=" searchInputs relative block">
+                                <span className="absolute inset-y-0 left-0 flex items-center pl-2">
+                                    <svg className="h-5 w-5 fill-slate-300 text-cg cursor-pointer" onClick={clearInpunt} viewBox="-6 -6 20 20">
+                                        {enteredWord === "" ? (
+                                            <AiIcons.AiOutlineSearch />
+                                        ) : (
+                                            <AiIcons.AiOutlineClose />
+                                        )}
 
-                <div className="overflow-x-auto relative my-6 shadow-md sm:rounded-lg">
-                    <table className="w-full text-sm text-left text-black-text">
-                        <thead className="text-black-text bg-row-gray">
-                            <tr className="border-b border-bdr">
-                                <th scope="col" className="p-4">
-                                    <div className="flex items-center">
-                                        <input id="checkbox-all-search" type="checkbox" className="w-4 h-4 text-black-text bg-cgray rounded border-gray-300 focus:ring-gray dark:focus:ring-cg dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                                        {/* <label for="checkbox-all-search" className="sr-only">checkbox</label> */}
-                                        <label className="sr-only">checkbox</label>
-                                    </div>
-                                </th>
-                                <th scope="col" className="py-3 px-6">
-                                    Name
-                                </th>
-                                <th scope="col" className="py-3 px-6">
-                                    Email
-                                </th>
-                                <th scope="col" className="py-3 px-6">
-                                    Status
-                                </th>
-                                <th scope="col" className="py-3 px-10">
-                                    Action
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {
-                                traineeList.length !== 0 ? (
-                                    traineeList?.map((value: any, key: any) => {
-                                        return (
-                                            <tr key={value._id} className="odd:bg-white even:bg-row-gray hover:bg-gray-50">
-                                                <td className="p-4 w-4">
-                                                    <div className="flex items-center">
-                                                        <input id="checkbox-table-search-1" type="checkbox" className="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 focus:ring-2" />
-                                                        {/* <label for="checkbox-table-search-1" className="sr-only">checkbox</label> */}
-                                                        <label className="sr-only">checkbox</label>
-                                                    </div>
-                                                </td>
-                                                <td scope="row" className="text-fb py-1 px-6 font-normal text-black-text whitespace-nowrap">
-                                                    {value.trainee_id.firstName + " " + value.trainee_id.lastName}
-                                                </td>
-                                                <td className="text-fb py-1 px-6 font-normal text-black-text">
-                                                    {value.trainee_id.email}
-                                                </td>
-                                                <td className="py-1 px-6">
-                                                    <select defaultValue={""} id="status" className="border bg-row-gray border-solid border-bdr shadow-sm px-4 py-4px rounded-bt-rd focus:outline-none sm:text-sm">
-                                                        <option value="" >Select value</option>
-                                                        <option value="passed">Passed</option>
-                                                        <option value="failed">Failed</option>
-                                                        <option value="religated">Religated</option>
-                                                    </select>
-                                                </td>
-                                                <td className="text-fb py-1 px-10">
-                                                    <Threedots />
-                                                </td>
+                                    </svg>
+                                </span>
+                                <input onChange={(e) => setEnteredWord(e.target.value)} className="block bg-row-gray w-50 border border-bdr rounded-bt-rd mt-2 py-2 pl-9 pr-4 focus:outline-none sm:text-sm" value={enteredWord} placeholder="Search" type="text" name="search" />
+                            </div>
+                            <div className="ml-auto order-2 semi-sm:mt-2">
+                                <button className="bg-button-color text-ltb text-fb font-medium ml-8 mt-2 pl-3 pr-3 py-1 rounded-bt-rd semi-sm:ml-0">
+                                    ADD INTERVIEWER
+                                </button>
+                                <button className="bg-button-color text-ltb text-fb font-medium ml-8 mt-2 pl-3 pr-3 py-1 rounded-bt-rd semi-sm:ml-2">
+                                    EXPORT TO
+                                </button>
+                                <button className="bg-cgray text-button-color text-fb font-medium ml-8 mt-2 pl-3 pr-3 py-1 rounded-bt-rd semi-sm:ml-2">
+                                    BULK EMAIL
+                                </button>
+                            </div>
+                        </div>
+                        <div>
+                            <div className=" w-[100%] max-h-[70vh] m-auto bg-[#fff] shadow-md rounded-[10px] relative pb-[20px]  overflow-x-auto  overflow-y-scroll md:w-[100%]">
+                                <table
+                                    {...getTableProps()}
+                                    className="border-collapse w-[100%] m-auto rounded-[15px] whitespace-nowrap"
+                                >
+                                    <thead className=" w-full px-32 sticky top-0">
+                                        {headerGroups.map((headerGroup: any, index: number) => (
+                                            <tr
+                                                key={index}
+                                                {...headerGroup.getHeaderGroupProps()}
+                                                className="border-solid border-[1px] border-white even:bg-[#eef1f1] first:w-[20px]"
+                                            >
+                                                {headerGroup.headers.map(
+                                                    (column: any, index: number) => (
+                                                        <th
+                                                            key={index}
+                                                            {...column.getHeaderProps}
+                                                            className="border-solid pl-[30px] h-[50px] text-left bg-[#eef1f1]  first:rounded-tl-[10px] last:rounded-tr-[10px] border-b-[2px] border-[#c5c5c5] py-6 last:pl-[0px] w-[150px] last:w-[20px] first:w-[20px]  "
+                                                        >
+                                                            {column.render("Header")}
+                                                        </th>
+                                                    )
+                                                )}
                                             </tr>
-                                        )
-                                    })
-                                ) : (
-                                    <tr>
-                                        <td></td><td></td>
-                                        <td className="float-right text-fb p-3 font-normal text-stone-500">No data </td>
-                                        <td></td><td></td>
-                                    </tr>
-                                )
+                                        ))}
+                                    </thead>
+                                    <tbody {...getTableBodyProps()}>
+                                    {console.log("page", page)}
+                                    {console.log("trainleist", traineeList)}
+                                        {
+                                            traineeList.length !== 0 ? (
+                                                page.map((row: any) => {
+                                                    prepareRow(row);
+                                                    return (
+                                                        <tr
+                                                            {...row.getRowProps()}
+                                                            key={row.original.id}
+                                                            className="even:bg-[#eef1f1] border-b border-gray-200"
+                                                        >
+                                                            {row.cells.map((cell: any) => {
+                                                                return (
+                                                                    <td
+                                                                        {...cell.getCellProps()}
+                                                                        className="pl-[30px] text-left max-w-[150px] overflow-x-auto p-4 last:w-[2px] last:pl-[0px]"
+                                                                    >
+                                                                        {cell.render("Cell")}
+                                                                    </td>
+                                                                );
+                                                            })}
+                                                        </tr>
+                                                    );
+                                                })
+                                            ) : (
+                                                <tr>
+                                                    <td></td><td></td>
+                                                    <td className="float-right text-fb p-5 font-normal text-stone-500">No data </td>
+                                                    <td></td><td></td>
+                                                </tr>
+                                            )
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
 
-                            }
-                            
+                        <div className="block mx-auto my-0 w-[100%]  bottom-0 overflow-x-auto">
+                            <div className="w-[100%] flex items-center justify-center my-[30px]  mx-auto md:block md:mx-auto">
+                                <span className="flex items-center md:justify-center md:mt-[10px]">
+                                    {" "}
+                                    <button
+                                        className="my-0 mx-[5px] px-[5px] py-0 text-[#333] h-[38px] border-solid border-[1px]  border-[#a8a8a8]  disabled:bg-[#E7E7E7] disabled:text-[#a8a8a8]"
+                                        onClick={() => gotoPage(0)}
+                                        disabled={!canPreviousPage}
+                                    >
+                                        <AiIcons.AiOutlineDoubleLeft />
+                                    </button>
 
-                        </tbody>
-                    </table>
-                    <nav className="flex justify-between items-center pt-16 pb-10" aria-label="Table navigation">
-                        <span className="pl-6 text-sm font-normal text-gray-500 dark:text-cgray">Showing <span className="font-semibold text-gray-900">1-10</span> of <span className="font-semibold text-gray-900 ">1000</span></span>
-                        <ul className="pr-6 inline-flex items-center -space-x-px">
-                            <li>
-                                <a href="#" className="block py-2 px-3 ml-0 leading-tight text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700">
-                                    <span className="sr-only">Previous</span>
-                                    <svg className="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clipRule="evenodd"></path></svg>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" className="py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700">1</a>
-                            </li>
-                            <li>
-                                <a href="#" className="py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700">2</a>
-                            </li>
-                            <li>
-                                <a href="#" aria-current="page" className="z-10 py-2 px-3 leading-tight text-blue-600 bg-blue-50 border border-blue-300 hover:bg-blue-100 hover:text-blue-700 dark:bg-gray-700 ">3</a>
-                            </li>
-                            <li>
-                                <a href="#" className="py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700">...</a>
-                            </li>
-                            <li>
-                                <a href="#" className="py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700">100</a>
-                            </li>
-                            <li>
-                                <a href="#" className="block py-2 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700">
-                                    <span className="sr-only">Next</span>
-                                    <svg className="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
-                                </a>
-                            </li>
-                        </ul>
-                    </nav>
+                                    <button
+                                        className=" border-solid border-[1px]  border-[#a8a8a8] py-0 px-[10px] text-[#333] rounded-l-[5px] h-[38px] disabled:bg-[#E7E7E7] disabled:text-[#a8a8a8] "
+                                        onClick={() => previousPage()}
+                                        disabled={!canPreviousPage}
+                                    >
+                                        <AiIcons.AiOutlineLeft />
+                                    </button>
+                                    <span className="flex flex-wrap md:hidden " id="pages">
+                                        {pageOptions?.map((pageOption: any, i: number) => {
+                                            return (
+                                                <div>
+                                                    <button
+                                                        className={`border-solid border-[1px] mx-[2px]  border-[#a8a8a8] bg-[#fff] w-[35px] h-[38px]  active:bg-[#333] active:text-[#fff]-500 ${pageIndex === i && "bg-[#eef1f1]"
+                                                            }`}
+                                                        onClick={(e: any) => {
+                                                            const pageNumber = e.target.innerText;
+                                                            gotoPage(pageNumber - 1);
+                                                            setPageIdx(pageNumber)
+                                                        }}
+                                                    >
+                                                        {pageOption + 1}
+                                                    </button>
+                                                </div>
+                                            );
+                                        })}
+                                    </span>
+                                    <button
+                                        className=" border-solid border-[1px]  border-[#a8a8a8] py-0 px-[10px] text-[#333] rounded-r-[5px] h-[38px]  disabled:bg-[#E7E7E7] disabled:text-[#a8a8a8]"
+                                        onClick={() => nextPage()}
+                                        disabled={!canNextPage}
+                                    >
+                                        <AiIcons.AiOutlineRight />
+                                    </button>
+                                    <button
+                                        className="my-0 mx-[5px] px-[5px] py-0 text-[#333] h-[38px] border-solid border-[1px]  border-[#a8a8a8]  disabled:bg-[#E7E7E7] disabled:text-[#a8a8a8]"
+                                        onClick={() => gotoPage(pageCount - 1)}
+                                        disabled={!canNextPage}
+                                    >
+                                        <AiIcons.AiOutlineDoubleRight />
+                                    </button>
+                                </span>{" "}
+                                <span className="flex ml-3 md:justify-center  text-center md:mt-3 md:ml-0">
+                                    Page <strong>{pageIndex + 1} </strong>of{" "}
+                                    <strong>{pageOptions.length}</strong>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    )
-}
+        </>
+    );
+};
 
 const mapState = ({ filterTrainee }: any) => ({
     allfilteredTrainees: filterTrainee
-})
+});
 
 export default connect(mapState, {
     getAllFilteredTraineess: getAllFilteredTraineess
 })(FilterTrainee)
+
