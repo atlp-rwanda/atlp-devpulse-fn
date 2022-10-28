@@ -2,6 +2,7 @@ import axios from './axiosconfig';
 import { Dispatch } from 'redux';
 import { DeleteActionType, Action,softDeleteActionType,softAction,fetchact,fetchtrainesss } from '../actiontypes/deleteactiontype';
 
+
 export const deletetraine = (traineId: string) => {
     
     return async (dispatch:Dispatch<Action>) => {
