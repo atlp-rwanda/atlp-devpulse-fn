@@ -1,16 +1,17 @@
 /* eslint-disable */
-import React, {useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { HiDotsVertical } from "react-icons/hi";
-import *as icons from "react-icons/ai";
-import pagination from '../../../components/pagination';
+import * as icons from "react-icons/ai";
+import { AiOutlinePlus} from "react-icons/ai";
+import pagination from '../../components/pagination';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import {getAllTraineess,} from "../../../redux/actions/TraineeAction";
+import { getAllTraineess } from '../../redux/actions/TraineeAction';
 import { connect } from "react-redux";
 import Modal from './modal';
-import Sidebar from "../../../components/sidebar/sidebar"
-import { softdeletetraine,deletetraine,fetchtraine} from '../../../redux/actions/deletetraine';
-import { useAppDispatch } from '../../../hooks/hooks';
+import Sidebar from '../../components/sidebar/sidebar';
+import { softdeletetraine,deletetraine,fetchtraine} from '../../redux/actions/deletetraine';
+import { useAppDispatch } from '../../hooks/hooks';
 
 
 const AddTrainee = (props: any) => {
@@ -69,14 +70,13 @@ const AddTrainee = (props: any) => {
     });
   return (
     <>
-    
+
       <ToastContainer />
       {/* =========================== Start:: addnewtraineeModel =============================== */}
-             <div className={`h-screen w-screen z-20 bg-black bg-opacity-30 backdrop-blur-sm absolute flex items-center justify-center  px-4 ${
-        addNewTraineeModel === true ? 'block' : 'hidden'
-      }`}
->
-      <Modal/>
+      <div className={`h-screen w-screen z-20 bg-black bg-opacity-30 backdrop-blur-sm absolute flex items-center justify-center  px-4 ${addNewTraineeModel === true ? 'block' : 'hidden'
+        }`}
+      >
+        <Modal />
       </div>
       {/* =========================== End:: addnewtraineeModel =============================== */}
       <div className="flex flex-col  h-screen absolute w-[100%]">
@@ -92,8 +92,8 @@ const AddTrainee = (props: any) => {
                     <icons.AiOutlinePlus className="mt-1 mr-1 font-bold"/>  Trainee
                     </button>
                     <div>
-      
-      </div>
+
+                    </div>
                   </div>
                 </div>
                 <div className="px-3 md:px-8">
@@ -213,72 +213,67 @@ const AddTrainee = (props: any) => {
                       </div>
                     </div>
                   </div>
-                 {/* //pagination */}
-                 <div className="flex relative items-center justify-center gap-1  mb-10 lg:left-[100px]">
-            <button
-              onClick={prevPage}
-              data-testid="prev"
-              className={`page py-2 px-3 ml-0 leading-tight text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white ${
-                page === 1 && 'disabled'
-              }`}
-            >
-              {/* &larr; */}
-              Prev
-            </button>
-            <button
-              onClick={() => setPaging(1)}
-              data-testid="page1"
-              className={`page py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white ${
-                page === 1 && 'disabled'
-              }`}
-            >
-              1
-            </button>
-            {gaps.paginationGroup.map((el) => (
-              <button
-                onClick={() => setPaging(el)}
-                data-testid="page2"
-                key={el}
-                className={`page py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white ${
-                  page === el ? 'active' : ''
-                }`}
-              >
-                {el}
-              </button>
-            ))}
-            <button
-              onClick={() => setPaging(totalPages)}
-              data-testid="page3"
-              className={`page py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white ${
-                page === totalPages && 'disabled'
-              }`}
-            >
-              {totalPages}
-            </button>
-            <button
-              onClick={nextPage}
-              data-testid="next"
-              className={`page py-2 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white ${
-                page === totalPages && 'disabled'
-              }`}
-            >
-              {/* &rarr; */}
-              Next
-            </button>
-          </div>
+                  {/* //pagination */}
+                  <div className="flex relative items-center justify-center gap-1  mb-10 lg:left-[100px]">
+                    <button
+                      onClick={prevPage}
+                      data-testid="prev"
+                      className={`page py-2 px-3 ml-0 leading-tight text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white ${page === 1 && 'disabled'
+                        }`}
+                    >
+                      {/* &larr; */}
+                      Prev
+                    </button>
+                    <button
+                      onClick={() => setPaging(1)}
+                      data-testid="page1"
+                      className={`page py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white ${page === 1 && 'disabled'
+                        }`}
+                    >
+                      1
+                    </button>
+                    {gaps.paginationGroup.map((el) => (
+                      <button
+                        onClick={() => setPaging(el)}
+                        data-testid="page2"
+                        key={el}
+                        className={`page py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white ${page === el ? 'active' : ''
+                          }`}
+                      >
+                        {el}
+                      </button>
+                    ))}
+                    <button
+                      onClick={() => setPaging(totalPages)}
+                      data-testid="page3"
+                      className={`page py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white ${page === totalPages && 'disabled'
+                        }`}
+                    >
+                      {totalPages}
+                    </button>
+                    <button
+                      onClick={nextPage}
+                      data-testid="next"
+                      className={`page py-2 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white ${page === totalPages && 'disabled'
+                        }`}
+                    >
+                      {/* &rarr; */}
+                      Next
+                    </button>
+                  </div>
                 </div>
-               
+
               </div>
-              
+
             </div>
-           
+
           </div>
         </div>
       </div>
 
       <Sidebar></Sidebar>
     </>
-    
+
   );
 };
 

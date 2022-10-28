@@ -208,15 +208,17 @@ const ApplicationCycle = (props: any) => {
                 className="border-collapse w-[100%] my-[10px] mx-auto rounded-[15px] whitespace-nowrap "
               >
                 <thead className="h-[50px]">
-                  {headerGroups.map((headerGroup: any) => (
+                  {headerGroups.map((headerGroup: any, index: number) => (
                     <tr
                       {...headerGroup.getHeaderGroupProps()}
                       className="border-solid border-[1px] border-white even:bg-[#eef1f1]"
+                      key={index}
                     >
-                      {headerGroup.headers.map((column: any) => (
+                      {headerGroup.headers.map((column: any, index: number) => (
                         <th
                           {...column.getHeaderProps}
                           className="border-solid pl-[30px] h-[50px] text-left bg-[#eef1f1] first:rounded-tl-[10px] last:rounded-tr-[10px] last:pl-[0px] border-b-[2px] border-[rgb(168, 168, 168)]   last:pl-[0px] w-[150px] last:w-[20px]"
+                          key={index}
                         >
                           {column.render("Header")}
                         </th>

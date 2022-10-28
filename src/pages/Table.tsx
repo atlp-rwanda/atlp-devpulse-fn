@@ -1,6 +1,6 @@
 import React from 'react'
-import DataTable from "../../components/TableData";
-import traineeData from "../../dummyData/Trainee.json";
+import DataTable from "../components/TableData";
+import traineeData from "../dummyData/Trainee.json";
 import { HiDotsVertical } from "react-icons/hi";
 
 function Table() {
