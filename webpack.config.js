@@ -28,9 +28,6 @@ module.exports = () => {
         process: "process/browser",
         stream: "stream-browserify"
       },
-      alias: {
-       process: "process/browser"
-     },
     },
     module: {
       rules: [
@@ -57,16 +54,9 @@ module.exports = () => {
       new HtmlWebpackPlugin({
         template: 'index.html',
       }),
-      new webpack.ProvidePlugin({
-        process: 'process/browser'
-     }),
       new MiniCssExtractPlugin(),
       new webpack.DefinePlugin({
         'process.env': JSON.stringify(process.env),
-        BACKEND_URL: JSON.stringify(process.env.BACKEND_URL),
-      }),
-            new webpack.ProvidePlugin({
-       process: 'process/browser',
       }),
       new webpack.ProvidePlugin({
         process: 'process/browser',
