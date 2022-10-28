@@ -1,12 +1,13 @@
 import creator from "./creator";
-import axios from "axios";
+import axios from 'axios'
 import { FETCH_TRAINEE } from "..";
 
-export  const getAllTraineess = ({ page,itemsPerPage,  All }:any) => async (dispatch: any) => {
-   await fetch('http://localhost:4000',{
-      method:'POST',
-      headers: {"Content-type": "application/json"},
-      body:JSON.stringify({
+export const getAllTraineess = ({ page,itemsPerPage,  All }:any) => async (dispatch: any) => {
+  try {
+    const datas = await axios({
+      url: "http://localhost:4000/",
+      method: "post",
+      data: {
         query: `
         query AllTraineesDetails($input: pagination) {
           allTraineesDetails(input: $input) {
@@ -26,17 +27,19 @@ export  const getAllTraineess = ({ page,itemsPerPage,  All }:any) => async (disp
           All,
         },
       },
-      })
-  
-}).then(res => res.json())
-.then(data =>{
-  const trainee = data.data.allTraineesDetails;
-  console.log(trainee)
-  dispatch(creator(FETCH_TRAINEE, trainee));
-})
-}
 
-
+      },
+    })
+    // console.log("result",datas);
+    const trainee = await datas.data.data.allTraineesDetails;
+    console.log( trainee)
+    dispatch(creator(FETCH_TRAINEE, trainee));
+  } catch (error) {
+    if (error) {
+      return console.log(error);
+    }
+  }
+};
 
 
 // try {

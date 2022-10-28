@@ -6,7 +6,7 @@ import { FcApproval } from "react-icons/fc";
 import { AiFillSetting, AiFillCaretDown } from "react-icons/ai";
 import { MdOutlineCancel } from "react-icons/md";
 import { BsFillPersonLinesFill } from "react-icons/bs";
-import { getAllTraineess } from "../redux/actions/trainnee";
+import { getAllTraineess } from "./../redux/actions/trainnee";
 import { connect } from "react-redux";
 
 
@@ -156,7 +156,7 @@ const [All, setAll] = useState(true);
 };
 
 const mapState=({trainee}: any)=>{
-  trainnes: trainee
+  return { trainnes: trainee.trainnes}
  }
  
  export default connect(mapState,{
