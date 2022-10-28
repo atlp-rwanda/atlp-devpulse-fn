@@ -6,8 +6,8 @@ import { HiDotsVertical } from "react-icons/hi";
 function Table() {
 
     const columns = [
-        {Header:"FIRST NAME",accessor:"firstName"},
-        {Header:"LAST NAME",accessor:"lastName"},
+        {Header:"FIRST NAME",accessor:"firstname"},
+        {Header:"LAST NAME",accessor:"lastname"},
         {Header:"Email",accessor:"email"},
         {Header:"Gender",accessor:"gender"},
         {Header:"cycle",accessor:"cycle"},
