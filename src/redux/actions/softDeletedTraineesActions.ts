@@ -31,8 +31,6 @@ export const getAllSoftDeletedTrainees =
       })
         .then((response) => {
           if (response.data.data !== null) {
-            toast.success("Fetched all deleted trainees successfuly.");
-
             dispatch(
               creator(
                 GET_SOFT_DELETED_TRAINEES,
@@ -49,9 +47,6 @@ export const getAllSoftDeletedTrainees =
         .catch((error) => {
           dispatch(creator(GET_SOFT_DELETED_TRAINEES_ERROR, error));
         });
-
-      // const softDeletedTrainees = await datas.data.data.allSoftDeletedTrainees;
-      // dispatch(creator(GET_SOFT_DELETED_TRAINEES_ERROR, softDeletedTrainees));
     } catch (error) {
       if (error) {
         return console.log(error);
