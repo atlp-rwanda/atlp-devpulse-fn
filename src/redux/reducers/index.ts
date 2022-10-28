@@ -3,6 +3,7 @@ import deletetraineReducer from "./deletetraineReducer";
 import { softdeletetraineReducer } from "./deletetraineReducer";
 import cycleReducer from "./cycleReducer";
 import softDeletedTraineeReducer from "./softDeletedTraineesReducer";
+import clearTrashReducer from "./clearTrashReducer";
 // import addtraineReducer from "./traineeReducer";
 // import { viewtraineReducer } from "./traineeReducer";
 import { combineReducers } from "redux";
@@ -16,6 +17,7 @@ const allReducers = combineReducers({
   // viewtrainee:viewtraineReducer,
   // addtrainee:addtraineReducer,
   trainee: traineeReducer,
+  clearTrash: clearTrashReducer
 });
 
 export default allReducers;

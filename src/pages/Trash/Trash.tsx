@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { getAllSoftDeletedTrainees } from "../../redux/actions/softDeletedTraineesActions";
+import { clearTrash } from "../../redux/actions/clearTrash";
 import { connect } from "react-redux";
 import { useTable, usePagination, useRowSelect } from "react-table";
 import Sidebar from "../../components/sidebar/sidebar";
@@ -9,9 +10,10 @@ import * as IoIcons from "react-icons/io";
 import CheckBox from "../../components/CkeckBox";
 
 const Trash = (props: any) => {
-  const { allTrainees } = props;
+  const { allTrainees, clearTrashMessage} = props;
   const [pageIdx] = useState(1);
   const [itemsPerPage] = useState(100);
+  // const [trainee, setTrainee] =useState([]);
 
   useEffect(() => {
     const data = {
@@ -21,8 +23,9 @@ const Trash = (props: any) => {
 
     props.getAllSoftDeletedTrainees(data);
   }, []);
-
-  const trainees = allTrainees.data;
+  
+  // setTrainee(allTrainees.data)
+  let trainees = allTrainees.data;
 
   const COLS = [
     {
@@ -105,6 +108,17 @@ const Trash = (props: any) => {
   // const selected = {
   //   selectedFlatRows: selectedFlatRows.map((row: any) => row.original),
   // };
+console.log("Clear message", clearTrashMessage.data)
+  const emptyRecyleBin = async ()=>{
+    props.clearTrash();
+    // setTrainee(clearTrashMessage.data);
+    setTimeout(reloadScreen, 1500)
+}
+
+const reloadScreen =()=>{
+  window.location.reload()
+}
+console.log("data", trainees)
 
   return (
     <>
@@ -116,7 +130,7 @@ const Trash = (props: any) => {
           <div className=" table table-fixed w-[100%] top-[20%] md:top-[10%] pb-10 md:relative px-[10%] md:px-[10px]">
             <div className="flex justify-between align-center mb-5 relative md:block">
               <div className="absolute bottom-0 right-0 md:relative md:mb-3">
-                <button className="px-3 rounded-[5px] bg-[#173b3f] text-white flex items-center">
+                <button onClick={emptyRecyleBin} className="px-3 rounded-[5px] bg-[#173b3f] text-white flex items-center">
                   Empty trash
                 </button>
               </div>
@@ -259,8 +273,9 @@ const Trash = (props: any) => {
   );
 };
 
-const mapState = ({ softDeletedTrainees }: any) => ({
+const mapState = ({ softDeletedTrainees, clearTrash }: any) => ({
   allTrainees: softDeletedTrainees,
+  clearTrashMessage: clearTrash
 });
 
-export default connect(mapState, { getAllSoftDeletedTrainees })(Trash);
+export default connect(mapState, { getAllSoftDeletedTrainees, clearTrash })(Trash);
