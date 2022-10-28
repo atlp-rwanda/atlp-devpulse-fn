@@ -1,16 +1,17 @@
-import { FETCH_TRAINEE } from "..";
+import { GET_ONE_TRAINEES_ALL_DETAILS } from "..";
 
 const initialState = {
-  isLoading: true,
-  errors: null,
+  loading: false,
+  error: null,
   data: [],
 };
+
 export default (state = initialState, { type, payload }: any) => {
   switch (type) {
-    case FETCH_TRAINEE:
+    case GET_ONE_TRAINEES_ALL_DETAILS:
       return {
         ...state,
-        isLoading: false,
+        loading: false,
         data: payload,
       };
     default:
