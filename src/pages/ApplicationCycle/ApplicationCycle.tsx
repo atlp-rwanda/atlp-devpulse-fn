@@ -16,6 +16,7 @@ import MenuItem from "@mui/material/MenuItem";
 import * as BsIcons from "react-icons/bs";
 import * as AiIcons from "react-icons/ai";
 import * as IoIcons from "react-icons/io5";
+import NavBar from "../../components/sidebar/navHeader";
 
 const ApplicationCycle = (props: any) => {
   const { allCycles, errors } = props;
@@ -189,11 +190,11 @@ const ApplicationCycle = (props: any) => {
 
   return (
     <>
-      <div className="flex bg-[#F9F9FB]">
-        <div className="md:hidden">
-          <Sidebar />
+      <div className="flex-row flex-nowrap bg-[#F9F9FB]">
+        <div className="grow">
+          <NavBar />
         </div>
-        <div className="relative min-h-[50vh] w-[84rem] md:w-[100rem]">
+        <div className="relative min-h-[50vh] w-[100%] md:w-[100%]">
           <div className="absolute table table-fixed w-[100%] top-[20%] pb-10 md:relative px-[10%] md:px-[10px]">
             <button
               className="h-[40px] rounded-[5px] bg-[#173b3f] text-white flex items-center p-0 pl-[5px] pr-[10px] mb-[20px]"

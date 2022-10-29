@@ -10,10 +10,11 @@ import * as IoIcons from "react-icons/io";
 import CheckBox from "../../components/CkeckBox";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
+import NavBar from "../../components/sidebar/navHeader";
 
 const Trash = (props: any) => {
-  console.log(props)
-  const { allTrainees,restore } = props;
+  console.log(props);
+  const { allTrainees, restore } = props;
   const [pageIdx] = useState(1);
   const [itemsPerPage] = useState(100);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -33,20 +34,18 @@ const Trash = (props: any) => {
 
     props.getAllSoftDeletedTrainees(data);
   }, [restore]);
-  const [moredrop, setmoredrop] = useState('');
+  const [moredrop, setmoredrop] = useState("");
   const trainees = allTrainees.data;
-  const onSubmitHandler =  (e: any) => {
+  const onSubmitHandler = (e: any) => {
     const traine = trainees[activeCycle!];
-    settraineid(traine._id)
-    props.restoretraine(traine._id)
+    settraineid(traine._id);
+    props.restoretraine(traine._id);
     setAnchorEl(null);
-
-  }
-  const onSubmitHandle = async (userId:any) => {
-    setmoredrop('');
-  }
-  console.log(moredrop)
-  
+  };
+  const onSubmitHandle = async (userId: any) => {
+    setmoredrop("");
+  };
+  console.log(moredrop);
 
   const COLS = [
     {
@@ -65,21 +64,18 @@ const Trash = (props: any) => {
       Header: "Actions",
       accessor: "",
       Cell: ({ row }: any) => {
-
         return (
           <div>
             <BsIcons.BsThreeDotsVertical
-            onClick={(event) => {
-              setActiveCycle(row.id);
-              setAnchorEl(event.currentTarget as unknown as HTMLElement);
-            }}
+              onClick={(event) => {
+                setActiveCycle(row.id);
+                setAnchorEl(event.currentTarget as unknown as HTMLElement);
+              }}
               style={{
                 color: "#000",
                 fontSize: "20px",
               }}
             />
-            
-            
           </div>
         );
       },
@@ -132,12 +128,16 @@ const Trash = (props: any) => {
   const { pageIndex, pageSize } = state;
   return (
     <>
+      <div className="w-64 ">
+        <NavBar />
+        {/* <Sidebar /> */}
+      </div>
       <div className="flex bg-[#F9F9FB]">
-        <div className="md:hidden">
+        {/* <div className="">
           <Sidebar />
-        </div>
-        <div className="min-h-[50vh] w-[84rem] block mt-10 md:w-[100rem] md:mt-0">
-          <div className=" table table-fixed w-[100%] top-[20%] md:top-[10%] pb-10 md:relative px-[10%] md:px-[10px]">
+        </div> */}
+        <div className="min-h-[50vh] w-[100%] block  md:w-[100rem] md:mt-0  pl-[16rem] pt-[80px] md:pl-0">
+          <div className=" w-[100%] top-[20%] md:top-[10%] md:relative px-[10%] md:px-[10px]">
             <div className="flex justify-between align-center mb-5 relative md:block">
               <div className="absolute bottom-0 right-0 md:relative md:mb-3">
                 <button className="px-3 rounded-[5px] bg-[#173b3f] text-white flex items-center">
@@ -218,26 +218,23 @@ const Trash = (props: any) => {
               </div>{" "}
             </div>
             <Menu
-          id="basic-menu"
-          anchorEl={anchorEl}
-          open={open}
-          onClose={handleClose}
-          MenuListProps={{
-            "aria-labelledby": "basic-button",
-          }}
-        >
-          <MenuItem
-            onClick={(e) => {
-              onSubmitHandler(e);
-            }}
-          >
-            <BsIcons.BsPencilFill className="mr-[5px]" />
-            Restore
-          </MenuItem>
-        
-        </Menu>
-
-
+              id="basic-menu"
+              anchorEl={anchorEl}
+              open={open}
+              onClose={handleClose}
+              MenuListProps={{
+                "aria-labelledby": "basic-button",
+              }}
+            >
+              <MenuItem
+                onClick={(e) => {
+                  onSubmitHandler(e);
+                }}
+              >
+                <BsIcons.BsPencilFill className="mr-[5px]" />
+                Restore
+              </MenuItem>
+            </Menu>
 
             <div className="block mx-auto my-0 w-[100%]  bottom-0 overflow-x-auto">
               <div className="w-[100%] flex items-center justify-center my-[30px]  mx-auto md:block md:mx-auto">
@@ -250,7 +247,6 @@ const Trash = (props: any) => {
                   >
                     <AiIcons.AiOutlineDoubleLeft />
                   </button>
-                  
                   <button
                     className=" border-solid border-[1px]  border-[#a8a8a8] py-0 px-[10px] text-[#333] rounded-l-[5px] h-[38px] disabled:bg-[#E7E7E7] disabled:text-[#a8a8a8] "
                     onClick={() => previousPage()}
@@ -305,9 +301,11 @@ const Trash = (props: any) => {
   );
 };
 
-const mapState = (state :any) => ({
+const mapState = (state: any) => ({
   allTrainees: state.softDeletedTrainees,
-  restore:state.restore
+  restore: state.restore,
 });
 
-export default connect(mapState, { getAllSoftDeletedTrainees ,restoretraine})(Trash);
+export default connect(mapState, { getAllSoftDeletedTrainees, restoretraine })(
+  Trash
+);

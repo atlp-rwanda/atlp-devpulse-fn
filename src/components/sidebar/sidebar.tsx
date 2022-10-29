@@ -1,54 +1,75 @@
 import React from "react";
-import { sidebarItems2, sidebarItems1,sidebarItems3 } from "./sidebarItems";
+import { sidebarItems2, sidebarItems1, sidebarItems3 } from "./sidebarItems";
 
-const sidebar = ()=>{
-    return (
-        <>
-       
-        <div className="min-h-screen w-64 block pb-10 pt-1 bg-slate-50 relative font-sans md:w-50 sm:w-50 ">
-            <div className="mb-2 border-b border-[#979797]">
-                <ul className=" min:mt-0 pl-4 block mt-2">
-                {sidebarItems1.map((items, index) => {
-                    return (
-                    <li key={index} className="sm:text-xs min:text-xl lg:justify-content-start align-items-center text-[#173B3F] text-base">
-                        <a href={items.path} className="p-1 flex align-items-center leading-3 cursor-pointer font-semibold hover:font-bold">
-                        <label className="mr-3 p-1">{items.icon}</label>
-                        <label className="p-1">{items.title} </label>
-                        </a>
-                    </li>
-                    );
-                })}
-                </ul>
-            </div>
-            <div className="mb-3 overflow-y-scroll">
-                <ul className="pl-4 block mt-2 md:mt-0">
-                {sidebarItems2.map((items, index) => {
-                    return (
-                    <li key={index} className="sm:text-xs min:text-xl lg:justify-content-start  align-items-center text-[#173B3F] text-base">
-                        <a href={items.path} className="p-1 flex align-items-center leading-3 cursor-pointer font-semibold hover:font-bold">
-                        <label className="mr-3 p-1">{items.icon}</label>
-                        <label className="p-1">{items.title} </label>
-                        </a>
-                    </li>
-                    );
-                })}
-                </ul>
-            </div>
-            <div className="absolute inset-x-0 bottom-2  mb-20">
-                <ul className="px-20 flex justify-content-center">
-                {sidebarItems3.map((items, index) => {
-                    return (
-                    <li key={index} className="sm:text-xs min:text-xl lg:flex justify-content-center mb-1 align-items-center text-[#173B3F] ml-2">
-                        <a href={items.path} className="p-1 flex align-items-center leading-5 cursor-pointer text-base">
-                        <label className="mr-3 p-1">{items.icon}</label>
-                        </a>
-                    </li>
-                    );
-                })}
-                </ul>
-            </div>
+const sidebar = () => {
+  return (
+    <>
+      <div className="min-h-screen overflow-y-scroll mt-[70px] w-[16rem] grow z-10 fixed bg-white font-sans border-r border-[#979797] ">
+        <div className="mb-2 border-b border-[#979797]">
+          <ul className=" min:mt-0 pl-4 block mt-2">
+            {sidebarItems1.map((items, index) => {
+              return (
+                <li
+                  key={index}
+                  className=" min:text-xl lg:justify-content-start align-items-center text-[#173B3F] text-base"
+                >
+                  <a
+                    href={items.path}
+                    className="p-1 flex align-items-center leading-3 cursor-pointer font-semibold hover:font-bold"
+                  >
+                    <label className="mr-3 p-1">{items.icon}</label>
+                    <label className="p-1">{items.title} </label>
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
         </div>
-        </>
-      );
-}
-export default sidebar
+        <div className="mb-3 overflow-y-scroll">
+          <ul className="pl-4 block mt-2 md:mt-0">
+            {sidebarItems2.map((items, index) => {
+              return (
+                <li
+                  key={index}
+                  className=" align-items-center text-[#173B3F] text-base"
+                >
+                  <a
+                    href={items.path}
+                    className="p-1 flex align-items-center leading-3 cursor-pointer font-semibold hover:font-bold"
+                  >
+                    <label className="mr-3 p-1">{items.icon}</label>
+                    <label className="p-1">{items.title} </label>
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+        <div className="absolute inset-x-0 bottom-2 mt-auto  mb-20">
+          <ul className="px-20 flex justify-content-center">
+            {sidebarItems3.map((items, index) => {
+              return (
+                <li
+                  key={index}
+                  className=" justify-content-center mb-1 align-items-center text-[#173B3F] text-lg ml-2"
+                >
+                  <a
+                    href={items.path}
+                    className="p-1 flex align-items-center leading-5 cursor-pointer"
+                  >
+                    <label className="mr-3 p-1">{items.icon}</label>
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      </div>
+    </>
+  );
+};
+export default sidebar;
+
+// height: 100%;
+// width:100%;
+// border-collapse: collapse;
