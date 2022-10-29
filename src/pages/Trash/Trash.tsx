@@ -3,7 +3,6 @@ import { getAllSoftDeletedTrainees } from "../../redux/actions/softDeletedTraine
 import { restoretraine } from "../../redux/actions/restoreDelTrainee";
 import { connect } from "react-redux";
 import { useTable, usePagination, useRowSelect } from "react-table";
-import Sidebar from "../../components/sidebar/sidebar";
 import * as BsIcons from "react-icons/bs";
 import * as AiIcons from "react-icons/ai";
 import * as IoIcons from "react-icons/io";
@@ -128,15 +127,9 @@ const Trash = (props: any) => {
   const { pageIndex, pageSize } = state;
   return (
     <>
-      <div className="w-64 ">
-        <NavBar />
-        {/* <Sidebar /> */}
-      </div>
+      <NavBar />
       <div className="flex bg-[#F9F9FB]">
-        {/* <div className="">
-          <Sidebar />
-        </div> */}
-        <div className="min-h-[50vh] w-[100%] block  md:w-[100rem] md:mt-0  pl-[16rem] pt-[80px] md:pl-0">
+        <div className="min-h-[50vh] w-[100%] block  md:w-[100%] md:mt-0  pl-[16rem] pt-[80px] md:pl-0">
           <div className=" w-[100%] top-[20%] md:top-[10%] md:relative px-[10%] md:px-[10px]">
             <div className="flex justify-between align-center mb-5 relative md:block">
               <div className="absolute bottom-0 right-0 md:relative md:mb-3">

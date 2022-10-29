@@ -4,9 +4,10 @@ import { Link } from "react-router-dom";
 import Sidebar from "./sidebar";
 
 import ProfileDropdown from "../profileDropdown";
-import { FaMoon } from "react-icons/fa";
+import { FaMoon, FaBars } from "react-icons/fa";
+import { IoClose } from "react-icons/io5";
 import * as icon from "react-icons/hi2";
-import { AiOutlineClose, AiOutlineBell } from "react-icons/ai";
+import { AiOutlineBell } from "react-icons/ai";
 const logo: string = require("../../assets/logo.svg").default;
 const profile: string = require("../../assets/avatar.png").default;
 
@@ -28,7 +29,7 @@ function NavBar() {
           handleShowProfileDropdown={handleShowProfileDropdown}
         />
       )}
-      <div className="flex items-center justify-between h-[70px] fixed z-10 top-0 border-b w-screen bg-white">
+      <div className="flex items-center justify-between h-[70px] fixed z-50 top-0 border-b w-screen bg-white">
         <div className="flex items-center">
           <span
             onClick={handleClick}
@@ -38,9 +39,9 @@ function NavBar() {
             className="hidden md:block ml-2"
           >
             {!nav ? (
-              <icon.HiBars3 className="w-7 text-9xl  " />
+              <icon.HiBars3CenterLeft className="w-7 text-9xl  " />
             ) : (
-              <AiOutlineClose className="w-7 text-9xl " />
+              <IoClose className="w-7 text-9xl " />
             )}
           </span>
           <span>

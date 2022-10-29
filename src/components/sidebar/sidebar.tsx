@@ -4,7 +4,7 @@ import { sidebarItems2, sidebarItems1, sidebarItems3 } from "./sidebarItems";
 const sidebar = () => {
   return (
     <>
-      <div className="min-h-screen overflow-y-scroll mt-[70px] w-[16rem] grow z-10 fixed bg-white font-sans border-r border-[#979797] ">
+      <div className="top-0 bottom-0 overflow-y-scroll mt-[70px] w-[16rem] grow z-10 fixed bg-white font-sans border-r border-[#979797] ">
         <div className="mb-2 border-b border-[#979797]">
           <ul className=" min:mt-0 pl-4 block mt-2">
             {sidebarItems1.map((items, index) => {
@@ -45,7 +45,7 @@ const sidebar = () => {
             })}
           </ul>
         </div>
-        <div className="absolute inset-x-0 bottom-2 mt-auto  mb-20">
+        <div className="inset-x-0 bottom-2  mt-20">
           <ul className="px-20 flex justify-content-center">
             {sidebarItems3.map((items, index) => {
               return (
@@ -69,7 +69,3 @@ const sidebar = () => {
   );
 };
 export default sidebar;
-
-// height: 100%;
-// width:100%;
-// border-collapse: collapse;
