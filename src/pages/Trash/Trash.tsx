@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { getAllSoftDeletedTrainees } from "../../redux/actions/softDeletedTraineesActions";
+import { restoretraine } from "../../redux/actions/restoreDelTrainee";
 import { clearTrash } from "../../redux/actions/clearTrash";
 import { connect } from "react-redux";
 import { useTable, usePagination, useRowSelect } from "react-table";
@@ -8,12 +9,22 @@ import * as BsIcons from "react-icons/bs";
 import * as AiIcons from "react-icons/ai";
 import * as IoIcons from "react-icons/io";
 import CheckBox from "../../components/CkeckBox";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
 
 const Trash = (props: any) => {
-  const { allTrainees, clearTrashMessage} = props;
+  console.log(props)
+  const { allTrainees,restore, clearTrashMessage} = props;
   const [pageIdx] = useState(1);
   const [itemsPerPage] = useState(100);
-  // const [trainee, setTrainee] =useState([]);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [traineid, settraineid] = useState("");
+
+  const open = Boolean(anchorEl);
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  const [activeCycle, setActiveCycle] = useState<number | undefined>(undefined);
 
   useEffect(() => {
     const data = {
@@ -22,10 +33,21 @@ const Trash = (props: any) => {
     };
 
     props.getAllSoftDeletedTrainees(data);
-  }, []);
+  }, [restore]);
+  const [moredrop, setmoredrop] = useState('');
+  const trainees = allTrainees.data;
+  const onSubmitHandler =  (e: any) => {
+    const traine = trainees[activeCycle!];
+    settraineid(traine._id)
+    props.restoretraine(traine._id)
+    setAnchorEl(null);
+
+  }
+  const onSubmitHandle = async (userId:any) => {
+    setmoredrop('');
+  }
+  console.log(moredrop)
   
-  // setTrainee(allTrainees.data)
-  let trainees = allTrainees.data;
 
   const COLS = [
     {
@@ -44,14 +66,21 @@ const Trash = (props: any) => {
       Header: "Actions",
       accessor: "",
       Cell: ({ row }: any) => {
+
         return (
           <div>
             <BsIcons.BsThreeDotsVertical
+            onClick={(event) => {
+              setActiveCycle(row.id);
+              setAnchorEl(event.currentTarget as unknown as HTMLElement);
+            }}
               style={{
                 color: "#000",
                 fontSize: "20px",
               }}
             />
+            
+            
           </div>
         );
       },
@@ -103,22 +132,14 @@ const Trash = (props: any) => {
   );
   const { pageIndex, pageSize } = state;
 
-  // const firstPageRows = rows.slice(0, 10);
-
-  // const selected = {
-  //   selectedFlatRows: selectedFlatRows.map((row: any) => row.original),
-  // };
-console.log("Clear message", clearTrashMessage.data)
-  const emptyRecyleBin = async ()=>{
-    props.clearTrash();
-    // setTrainee(clearTrashMessage.data);
-    setTimeout(reloadScreen, 1500)
+console.log("clear message", clearTrashMessage.data)
+const emptyRecyleBin =async () => {
+  props.clearTrash();
+  setTimeout(reloadScreen, 1500);
 }
-
 const reloadScreen =()=>{
-  window.location.reload()
+  window.location.reload();
 }
-console.log("data", trainees)
 
   return (
     <>
@@ -207,6 +228,27 @@ console.log("data", trainees)
                 </table>
               </div>{" "}
             </div>
+            <Menu
+          id="basic-menu"
+          anchorEl={anchorEl}
+          open={open}
+          onClose={handleClose}
+          MenuListProps={{
+            "aria-labelledby": "basic-button",
+          }}
+        >
+          <MenuItem
+            onClick={(e) => {
+              onSubmitHandler(e);
+            }}
+          >
+            <BsIcons.BsPencilFill className="mr-[5px]" />
+            Restore
+          </MenuItem>
+        
+        </Menu>
+
+
 
             <div className="block mx-auto my-0 w-[100%]  bottom-0 overflow-x-auto">
               <div className="w-[100%] flex items-center justify-center my-[30px]  mx-auto md:block md:mx-auto">
@@ -219,6 +261,7 @@ console.log("data", trainees)
                   >
                     <AiIcons.AiOutlineDoubleLeft />
                   </button>
+                  
                   <button
                     className=" border-solid border-[1px]  border-[#a8a8a8] py-0 px-[10px] text-[#333] rounded-l-[5px] h-[38px] disabled:bg-[#E7E7E7] disabled:text-[#a8a8a8] "
                     onClick={() => previousPage()}
@@ -273,9 +316,10 @@ console.log("data", trainees)
   );
 };
 
-const mapState = ({ softDeletedTrainees, clearTrash }: any) => ({
-  allTrainees: softDeletedTrainees,
+const mapState = (state :any) => ({
+  allTrainees: state.softDeletedTrainees,
+  restore:state.restore,
   clearTrashMessage: clearTrash
 });
 
-export default connect(mapState, { getAllSoftDeletedTrainees, clearTrash })(Trash);
+export default connect(mapState, { getAllSoftDeletedTrainees ,restoretraine, clearTrash})(Trash);

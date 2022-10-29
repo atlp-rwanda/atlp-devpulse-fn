@@ -19,5 +19,4 @@ const allReducers = combineReducers({
   trainee: traineeReducer,
   clearTrash: clearTrashReducer
 });
-
 export default allReducers;

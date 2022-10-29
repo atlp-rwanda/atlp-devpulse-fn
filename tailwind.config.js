@@ -3,6 +3,12 @@ module.exports = {
   theme: {
     extend: {
       screens: {
+        sm: '320px',
+        md: '540px',
+        lg: '768px',
+        xl: '1440px',
+        min:'375',
+        
         sm: "375px",
         md: { max: "820px" },
         lg: "976px",
@@ -26,7 +32,37 @@ module.exports = {
         'divider-bg': '#E5E7EB',
         'dark-45': '#00000073',
         'border-dark': '#5f5b5b80',
+        md: "768px",
+        lg: "976px",
+        xl: "1440px",
+        cgray: "#ABB8C3",
+        "light-gray": "#F9F9FB",
+        cg: "#6B7280",
+        ltb: "#F3F4F6",
+        "button-color": "#173B3F",
+        "bulk-email": "#DDE0E3",
+        "black-text": "#1F2A37",
+        "row-gray": "#F9FAFB",
+        bdr: "#E5E7EB",
+        dots: "#6B7280",
+        white: "#FFFFFF",
+        black: "#000000",
       },
+      fontSize: {
+        fb: '14px'
+      },
+      borderRadius: {
+        "bt-rd": "8px"
+      },
+      padding: {
+        '5px': '5.5px',
+        '4px': '4.5px',
+      },
+      margin: {
+        '5px': '5.5px'
+      }
+
+
     },
     plugins: [],
   },
