@@ -1,13 +1,16 @@
 import creator from "./creator";
 import { GET_ALL_FILTERED_TRAINEES } from "..";
 import axios from "axios";
+// import * as dotenv from "dotenv"; // see https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
+// dotenv.config();
 
 
 
 export const getAllFilteredTraineess = ({ page,itemsPerPage,  All, wordEntered, filterAttribute }:any) => async (dispatch: any) => {
   try {
     const datas = await axios({
-      url: process.env.BACKEND_URL,
+      url: "http://localhost:4000/",
+      // url: process.env.BACKEND_URL,
       method: "post",
       data: {
         query: `
