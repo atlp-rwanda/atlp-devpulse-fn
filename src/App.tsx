@@ -9,6 +9,7 @@ import FilterTrainee from "./pages/FilterTeainee/FilterTrainee";
 import "./index.css";
 import Table from "./pages/Table";
 import "./index.css";
+import ImportTraineeDetailsFromGoogleSheet from "./pages/importAndSaveManyTraineesFromGoogleSheet/importAndSaveManyTraineesFromGoogleSheet";
 
 const Counter = React.lazy(() => import("./components/Counter/Counter"));
 const ApplicationCycle = React.lazy(
@@ -28,6 +29,10 @@ function App() {
       <Route path="/trash" element={<Trash />} />
       <Route path="/nav-bar" element={<NavBar />} />
       <Route path="/filter_trainee" element={<FilterTrainee />} />
+      <Route
+        path="/import_trainees"
+        element={<ImportTraineeDetailsFromGoogleSheet />}
+      />
     </Routes>
   );
 }
