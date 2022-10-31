@@ -39,16 +39,16 @@ const TrainneeDetails = (props: any) => {
   return (
     <>
     <Navbar  />
-      <div className="h-screen m-0  ">
+      <div className="h-screen m-0 mt-20  ">
         <div className="block lg:ml-[30%]   ">
-          <div className="max-w-md mx-5 bg-slate-50 rounded-xl shadow-md overflow-hidden md:max-w-xl mb-6 lg:flex ">
+          <div className="max-w-md mx-5 bg-slate-50 rounded-xl shadow-md overflow-hidden md:max-w-xl mb-6 lg:flex lg:max-w-2xl ">
             <div className="md:flex  ">
               
 
-              <h2 className="font-bold m-5 md:m-3 ">
+              <h2 className="top-5 m-5  font-medium  md:m-3 ">
               <BsFillPersonLinesFill className="float-left m-1" />
                 Applicant Information</h2>
-              <div className=" m-5 md:shrink-0 lg:mt-20 lg:ml-[-45%] ">
+              <div className=" m-5 sm:mt-20 sm:ml-[-13rem] md:shrink-0  lg:ml-10 lg:mt-10  ">
              
                 <h3>FirstName</h3>
                 <p className="text-gray-500 text-sm">{traineeDetails.firstName}</p>
@@ -69,7 +69,7 @@ const TrainneeDetails = (props: any) => {
                
               </div>
             </div>
-            <div className="m-5 md:ml-2 lg:mt-20">
+            <div className="m-5 sm:ml-[25rem] md:ml-2 lg:mt-20 lg:ml-[5rem]">
               <h3>LastName</h3>
               <p className="text-gray-500 text-sm">John</p>
               <h3>Province</h3>
@@ -89,7 +89,7 @@ const TrainneeDetails = (props: any) => {
              
             </div>
           </div>
-          <div className=" max-w-md mx-5 bg-slate-50 rounded-xl shadow-md overflow-hidden md:max-w-xl mb-6 lg:flex">
+          <div className=" max-w-md mx-5 bg-slate-50 rounded-xl shadow-md overflow-hidden md:max-w-xl mb-6 lg:flex lg:max-w-2xl">
             <div>
               <h2 className="top-5 m-5  font-medium">
                 <BsFillPersonLinesFill className="float-left m-1" />
@@ -111,7 +111,7 @@ const TrainneeDetails = (props: any) => {
               </div>
             </div>
           </div>
-          <div className=" max-w-md mx-5 bg-slate-50 rounded-xl shadow-md overflow-hidden md:max-w-xl   ">
+          <div className=" max-w-md mx-5 bg-slate-50 rounded-xl shadow-md overflow-hidden md:max-w-xl  lg:max-w-2xl  ">
             <h2 className="font-bold top-5 ml-5 mt-5 ">
               <AiFillSetting className="float-left m-1 " />
               Actions
