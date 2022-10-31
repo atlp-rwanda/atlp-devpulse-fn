@@ -7,6 +7,7 @@ import { MdOutlineCancel } from "react-icons/md";
 import { BsFillPersonLinesFill } from "react-icons/bs";
 import { getOneTraineeAllDetails } from "../redux/actions/trainnee";
 import { connect } from "react-redux";
+import NavSidbar from "./../components/sidebar/navHeader"
 
 
 const TrainneeDetails = (props: any) => {
@@ -34,9 +35,10 @@ const TrainneeDetails = (props: any) => {
 
   return (
     <>
-      <div className="h-screen m-0 bg-[#374151]">
-        <div className="block ml-[30%] ">
-          <div className=" box-border bg-[rgb(31,42,55)] h-80 w-[70%] flex mb-3 mt-20 rounded  drop-shadow-lg">
+    < NavSidbar/>
+      <div className="h-screen mt-[-6%] bg-[#374151]">
+        <div className="block ml-[20%]  mt-20">
+          <div className=" box-border bg-[rgb(31,42,55)] h-80 w-[70%] flex mb-3 mt-[6%] rounded  drop-shadow-lg">
             <div className="float-left ml-10 text-white">
               <h2 className="font-bold mt-5">Applicant Information</h2>
               <div className="mt-10 ml-7">

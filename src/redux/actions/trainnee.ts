@@ -5,7 +5,7 @@ import { GET_ONE_TRAINEES_ALL_DETAILS } from "..";
 export const getOneTraineeAllDetails = ({id}:any) => async (dispatch: any) => {
     try {
       const datas = await axios({
-        url:process.env.BACKEND_URL,
+        url:'http://localhost:4000',
         method: "post",
         data: {
           query: `

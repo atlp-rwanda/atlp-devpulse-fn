@@ -8,6 +8,8 @@ import { BsFillPersonLinesFill } from "react-icons/bs";
 import Sidebar from "../components/sidebar/sidebar";
 import { getOneTraineeAllDetails } from "../redux/actions/trainnee";
 import { connect } from "react-redux";
+import Navbar from './../components/sidebar/navHeader'
+
 
 
 
@@ -15,7 +17,7 @@ const TrainneeDetails = (props: any) => {
 
   const {oneTraineeDetails} = props;
 
-  const [ID, setId] = useState("6358236ac10c2ffd7ed4a328");
+  const [ID, setId] = useState("635faea910947712087bac88");
 
   const [open, setOpen] = useState<boolean>(false);
   const handleDropDown = (state : boolean)=>{
@@ -36,37 +38,55 @@ const TrainneeDetails = (props: any) => {
   
   return (
     <>
-    <Sidebar />
-      <div className="h-screen m-0 mt-[-50%] ">
+    <Navbar  />
+      <div className="h-screen m-0  ">
         <div className="block lg:ml-[30%]   ">
           <div className="max-w-md mx-5 bg-slate-50 rounded-xl shadow-md overflow-hidden md:max-w-xl mb-6 lg:flex ">
-            <div className="md:flex ">
+            <div className="md:flex  ">
               
 
               <h2 className="font-bold m-5 md:m-3 ">
               <BsFillPersonLinesFill className="float-left m-1" />
                 Applicant Information</h2>
-              
               <div className=" m-5 md:shrink-0 lg:mt-20 lg:ml-[-45%] ">
+             
                 <h3>FirstName</h3>
                 <p className="text-gray-500 text-sm">{traineeDetails.firstName}</p>
-                <h3>Country</h3>
-                <p className="text-gray-500 text-sm">{traineeDetails.country}</p>
+                <h3>Gender</h3>
+                <p className="text-gray-500 text-sm">{traineeDetails.gender}</p>
                 <h3>Address</h3>
-                <p className="text-gray-500 text-sm">{traineeDetails.address}</p>
+                <p className="text-gray-500 text-sm">{traineeDetails.Address}</p>
                 <h3>Phone Number</h3>
                 <p className="text-gray-500 text-sm">{traineeDetails.phone}</p>
+                <h3>Field of Study</h3>
+                <p className="text-gray-500 text-sm">{traineeDetails.field_of_study}</p>
+                <h3>Education Level</h3>
+                <p className="text-gray-500 text-sm">{traineeDetails.education_level}</p>
+                <h3>Cohort</h3>
+                <p className="text-gray-500 text-sm">{traineeDetails.cohort}</p>
+                <h3>Is Employed</h3>
+                <p className="text-gray-500 text-sm">{traineeDetails.isEmployed}</p>
+               
               </div>
             </div>
             <div className="m-5 md:ml-2 lg:mt-20">
               <h3>LastName</h3>
               <p className="text-gray-500 text-sm">John</p>
-              <h3>City</h3>
-              <p className="text-gray-500 text-sm">Huye</p>
-              <h3>Email Address</h3>
-              <p className="text-gray-500 text-sm">john@gmail.com</p>
+              <h3>Province</h3>
+              <p className="text-gray-500 text-sm">{traineeDetails.province}</p>
+              <h3>District</h3>
+              <p className="text-gray-500 text-sm">{traineeDetails.district}</p>
+              <h3>Sector</h3>
+              <p className="text-gray-500 text-sm">{traineeDetails.sector}</p>
+              <h3>Is Student</h3>
+              <p className="text-gray-500 text-sm">{traineeDetails.isStudent}</p>
+              <h3>Hackerrank Score</h3>
+              <p className="text-gray-500 text-sm">{traineeDetails.Hackerrank_score}</p>
+              <h3>English Score</h3>
+              <p className="text-gray-500 text-sm">{traineeDetails.english_score}</p>
               <h3>Date of Bith</h3>
-              <p className="text-gray-500 text-sm">07/07/1990</p>
+              <p className="text-gray-500 text-sm">{traineeDetails.birth_date}</p>
+             
             </div>
           </div>
           <div className=" max-w-md mx-5 bg-slate-50 rounded-xl shadow-md overflow-hidden md:max-w-xl mb-6 lg:flex">
@@ -131,6 +151,7 @@ const TrainneeDetails = (props: any) => {
             </div>
           </div>
         </div>
+      
       </div>
     </>
   );
