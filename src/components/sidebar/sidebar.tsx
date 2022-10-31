@@ -25,7 +25,7 @@ const sidebar = () => {
             })}
           </ul>
         </div>
-        <div className="mb-3 overflow-y-scroll">
+        <div className="mb-3">
           <ul className="pl-4 block mt-2 md:mt-0">
             {sidebarItems2.map((items, index) => {
               return (
