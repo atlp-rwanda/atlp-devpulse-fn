@@ -1,21 +1,19 @@
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import Sidebar from "./sidebar";
 
-import Sidebar from './sidebar';
-
-import ProfileDropdown from '../profileDropdown';
-import * as fi from "react-icons/fa";
+import ProfileDropdown from "../profileDropdown";
+import { FaMoon, FaBars } from "react-icons/fa";
+import { IoClose } from "react-icons/io5";
 import * as icon from "react-icons/hi2";
-import {AiOutlineClose,AiOutlineBell}from "react-icons/ai";
+import { AiOutlineBell } from "react-icons/ai";
 const logo: string = require("../../assets/logo.svg").default;
 const profile: string = require("../../assets/avatar.png").default;
-
 
 function NavBar() {
   const [showNotification, setShowNotification] = useState(false);
   const [showProfileDropdown, setShowprofileDropdown] = useState(false);
-
 
   const [nav, setNav] = useState(false);
 
@@ -23,68 +21,66 @@ function NavBar() {
   const handleShowNotification = () => setShowNotification(!showNotification);
   const handleShowProfileDropdown = () =>
     setShowprofileDropdown(!showProfileDropdown);
-    
 
   return (
     <>
-     
       {showProfileDropdown && (
         <ProfileDropdown
           handleShowProfileDropdown={handleShowProfileDropdown}
         />
       )}
-      <div className="w-screen h-[8vh] z-10 bg-white dark:bg-dark-bg fixed border-b test-black">
-        <div className="px-3 flex items-center w-full h-full ">
-          <div className="flex px-5 lg:hidden">
-            <div
-              onClick={handleClick}
-              onKeyDown={handleClick}
-              role="button"
-              tabIndex={0}
-            >
-
-              {!nav ? (
-                <icon.HiBars3 className="w-7 dark:text-dark-text-fill text-9xl ml-0 md:hidden" />
-              ) : (
-                <AiOutlineClose className="w-7 dark:text-dark-text-fill text-9xl md:hidden" />
-              )}
-            </div>
-          </div>
-          <div className="flex items-center h-full lg:w-full">
-            <Link to="/dashboard/super-admin" className="flex flex-row lg:px-5">
-             
-               
-              <img className="w-full cursor-pointer mr-2" src={logo} />
-              <h1 className=" sm-text-1xl mr-12 lg:text-3xl font-bold font-lexend text-primary dark:text-dark-text-fill md:test-1xl mt-2 ">
+      <div className="flex items-center justify-between h-[70px] fixed z-50 top-0 border-b w-screen bg-white">
+        <div className="flex items-center">
+          <span
+            onClick={handleClick}
+            onKeyDown={handleClick}
+            role="button"
+            tabIndex={0}
+            className="hidden md:block ml-2"
+          >
+            {!nav ? (
+              <icon.HiBars3CenterLeft className="w-7 text-9xl  " />
+            ) : (
+              <IoClose className="w-7 text-9xl " />
+            )}
+          </span>
+          <span>
+            <Link to="/dashboard/super-admin" className="flex items-center">
+              <img
+                className="  cursor-pointer mx-2 fill-[blue]"
+                src={logo}
+                style={{ fill: "#333" }}
+              />
+              <h1 className=" sm-text-1xl mr-12  font-bold font-lexend text-primary  md:hidden">
                 PULSE
               </h1>
             </Link>
-
-          </div>
-         <span className="md:ml-20 flex p-3"> <fi.FaMoon className="  sm:w-5 text-9xl mr-3  md:ml-20 lg:w-10 ml-[10%]  cursor-pointer  text-[200%] "/>
-          <AiOutlineBell
-            className=" sm:w-6 text-9xl md:ml-7 lg:mr-10 lg:w-10 cursor-pointer  dark:text-dark-text-fill text-[200%] "
-            onClick={handleShowNotification}
-          />
           </span>
-          <div onClick={handleShowProfileDropdown}>
-            
-            <img src={profile} alt="profile" className=" sm:w-6 text-9xl  lg:w-10 cursor-pointer ml-4 mr-8 text-[200%] " />
-          </div>
         </div>
-        <ul
-          className={
-            !nav
-              ? 'hidden'
-              : 'bg-white dark:bg-dark-bg cursor-pointer text-black  lg:hidden '
-          }
-        >
-        <Sidebar />
-        </ul>
-        <div className="sm:hidden md:block"><Sidebar /></div>
+        <div className="flex items-center">
+          <span className="flex items-center">
+            {" "}
+            <FaMoon className="text-[20px] cursor-pointer mx-1" />
+            <AiOutlineBell
+              className=" text-[25px] cursor-pointer    "
+              onClick={handleShowNotification}
+            />
+          </span>
+          <span onClick={handleShowProfileDropdown}>
+            <img
+              src={profile}
+              alt="profile"
+              className="w-[30px] cursor-pointer mx-2 "
+            />
+          </span>
+        </div>
       </div>
-      
-   
+      <ul className={!nav ? "hidden" : "bg-white  cursor-pointer text-black  "}>
+        <Sidebar />
+      </ul>
+      <div className="block md:hidden">
+        <Sidebar />
+      </div>
     </>
   );
 }
