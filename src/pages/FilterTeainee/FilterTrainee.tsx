@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { connect } from "react-redux";
 import { useTable, usePagination, useRowSelect } from "react-table";
-import Sidebar from "../../components/sidebar/sidebar";
+import NavBar from "../../components/sidebar/navHeader";
 import * as AiIcons from "react-icons/ai";
 import CheckBox from "../../components/CkeckBox";
 
@@ -149,10 +149,8 @@ const FilterTrainee = (props: any) => {
     return (
         <>
             <div className="flex bg-[#F9F9FB]">
-                <div className="md:hidden">
-                    <Sidebar />
-                </div>
-                <div className="min-h-[50vh] w-[84rem] block mt-10 md:w-[100rem] md:mt-0">
+                <NavBar />
+                <div className="min-h-[50vh] w-[100%] block mt-10 md:w-[100%] md:mt-0 pl-[16rem] md:pl-0">
                     <div className=" table table-fixed mt-[5rem] w-[100%] top-[20%] md:top-[10%] pb-10 md:relative px-[10%] md:px-[10px]">
                         <div className="">
                             <Select

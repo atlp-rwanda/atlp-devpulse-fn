@@ -9,7 +9,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { getAllTraineess } from "../../redux/actions/TraineeAction";
 import { connect } from "react-redux";
 import Modal from "./modal";
-import Sidebar from "../../components/sidebar/sidebar";
+import NavBar from "../../components/sidebar/navHeader";
 import {
   softdeletetraine,
   deletetraine,
@@ -87,7 +87,7 @@ const AddTrainee = (props: any) => {
         <div className="flex flex-row">
           <div className="w-full">
             <div>
-              <div className="bg-light-bg dark:bg-dark-frame-bg  min-h-screen overflow-y-hidden overflow-x-hidden">
+              <div className="bg-light-bg dark:bg-dark-frame-bg  min-h-screen overflow-y-hidden overflow-x-hidden lg:ml-[3rem]">
                 <div className="flex items-left px-7 lg:px-64 pt-24">
                   <div className="flex px-5 py-2 pb-8 w-fit">
                     <button
@@ -137,7 +137,7 @@ const AddTrainee = (props: any) => {
                                   item.delete_at == false ? (
                                     <tr>
                                       <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
-                                        <div className="flex sm:justify-center items-center">
+                                        <div className="flex">
                                           <div className="">
                                             <p className="text-gray-900 text-center dark:text-white whitespace-no-wrap">
                                               {item.firstName}
@@ -146,7 +146,7 @@ const AddTrainee = (props: any) => {
                                         </div>
                                       </td>
                                       <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
-                                        <div className="flex sm:justify-center items-center">
+                                        <div className="flex items-center">
                                           <div className="">
                                             <p className="text-gray-900 text-center dark:text-white whitespace-no-wrap">
                                               {item.lastName}
@@ -164,7 +164,7 @@ const AddTrainee = (props: any) => {
                                       </div>
                                     </td> */}
                                       <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
-                                        <div className="flex sm:justify-center items-center">
+                                        <div className="flex items-center">
                                           <div className="">
                                             <p className="text-gray-900 items-center dark:text-white whitespace-no-wrap">
                                               {item.email}
@@ -302,7 +302,7 @@ const AddTrainee = (props: any) => {
         </div>
       </div>
 
-      <Sidebar></Sidebar>
+      <NavBar />
     </>
   );
 };
