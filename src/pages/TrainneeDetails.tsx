@@ -65,6 +65,7 @@ const TrainneeDetails = (props: any) => {
     id: ID,
   };
 
+
   useEffect(() => {
     setscore_value(arr);
   }, [scoreValues]);
