@@ -28,13 +28,14 @@ const TrainneeDetails = (props: any) => {
     id: ID,
   };
 
+
   useEffect(() => {
     props.getOneTraineeAllDetails(input);
   }, []);
 
   const traineeDetails = oneTraineeDetails.data;
 
-  console.log("Trainess",traineeDetails.birth_date);
+  console.log("Trainess",traineeDetails.trainee_id);
   
   return (
     <>
@@ -51,7 +52,7 @@ const TrainneeDetails = (props: any) => {
               <div className=" m-5 sm:mt-20 sm:ml-[-13rem] md:shrink-0  lg:ml-10 lg:mt-10  ">
              
                 <h3>FirstName</h3>
-                <p className="text-gray-500 text-sm">{traineeDetails.firstName}</p>
+                {/* <p className="text-gray-500 text-sm">{traineeDetails.trainee_id}</p> */}
                 <h3>Gender</h3>
                 <p className="text-gray-500 text-sm">{traineeDetails.gender}</p>
                 <h3>Address</h3>
@@ -65,7 +66,9 @@ const TrainneeDetails = (props: any) => {
                 <h3>Cohort</h3>
                 <p className="text-gray-500 text-sm">{traineeDetails.cohort}</p>
                 <h3>Is Employed</h3>
-                <p className="text-gray-500 text-sm">{traineeDetails.isEmployed}</p>
+                <p className="text-gray-500 text-sm">{String(traineeDetails.isEmployed)}</p>
+                <h3>Email </h3>
+                <p className="text-gray-500 text-sm">{traineeDetails.email}</p>
                
               </div>
             </div>
@@ -79,7 +82,7 @@ const TrainneeDetails = (props: any) => {
               <h3>Sector</h3>
               <p className="text-gray-500 text-sm">{traineeDetails.sector}</p>
               <h3>Is Student</h3>
-              <p className="text-gray-500 text-sm">{traineeDetails.isStudent}</p>
+              <p className="text-gray-500 text-sm">{String(traineeDetails.isStudent)}</p>
               <h3>Hackerrank Score</h3>
               <p className="text-gray-500 text-sm">{traineeDetails.Hackerrank_score}</p>
               <h3>English Score</h3>
