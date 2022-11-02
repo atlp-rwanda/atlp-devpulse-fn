@@ -20,8 +20,8 @@ export const deletetraine = (traineId: string) => {
                                 deleteTrainee(id: $deleteTraineeId) {
                                     id
                                     email
-                                    firstname
-                                    lastname
+                                    firstName
+                                    lastName
                                 }
                                 }`,
                         variables: {
@@ -76,8 +76,8 @@ export const softdeletetraine = (traineId: string) => {
                                     softdeleteTrainee(input: $input) {
                                         id
                                         email
-                                        firstname
-                                        lastname
+                                        firstName
+                                        lastName
                                     }
                                     }`,
                         variables: {

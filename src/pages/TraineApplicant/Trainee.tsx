@@ -214,7 +214,7 @@ const AddTrainee = (props: any) => {
                                                     onSubmitHandlesoft(item.id);
                                                   }}
                                                 >
-                                                  soft delete
+                                                  Soft Delete
                                                 </div>
                                               </li>
                                               <li>
@@ -225,7 +225,7 @@ const AddTrainee = (props: any) => {
                                                     onSubmitHandle(item.id);
                                                   }}
                                                 >
-                                                  harddelete
+                                                  Hard Delete
                                                 </div>
                                               </li>
                                             </ul>

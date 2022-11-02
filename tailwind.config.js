@@ -7,7 +7,7 @@ module.exports = {
         md: { max: "820px" },
         lg: "976px",
         xl: "1440px",
-        // 'semi-sm': '3'
+        'semi-sm': '120px'
       },
       colors: {
         primary: "#1F2A37",

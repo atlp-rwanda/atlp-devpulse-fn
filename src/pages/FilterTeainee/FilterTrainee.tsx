@@ -10,7 +10,17 @@ import Select from "react-select";
 import Threedots from "../../components/Dropdown/Threedots";
 import { getAllFilteredTraineess } from "../../redux/actions/filterTraineeActions";
 
-
+export const customTheme = (theme: any) => {
+    return {
+        ...theme,
+        colors: {
+            ...theme.colors,
+            text: 'light-gray',
+            primary25: "#E5E7EB",
+            primary: 'cgray'
+        }
+    }
+}
 const FilterTrainee = (props: any) => {
 
 
@@ -18,17 +28,18 @@ const FilterTrainee = (props: any) => {
     const [enteredWord, setEnteredWord] = useState("");
     const [All, setAll] = useState(true);
 
-    const customTheme = (theme: any) => {
-        return {
-            ...theme,
-            colors: {
-                ...theme.colors,
-                text: 'light-gray',
-                primary25: "#E5E7EB",
-                primary: 'cgray'
-            }
-        }
-    }
+
+    // const customTheme = (theme: any) => {
+    //     return {
+    //         ...theme,
+    //         colors: {
+    //             ...theme.colors,
+    //             text: 'light-gray',
+    //             primary25: "#E5E7EB",
+    //             primary: 'cgray'
+    //         }
+    //     }
+    // }
 
     const clearInpunt = () => {
         setEnteredWord("")
@@ -201,6 +212,9 @@ const FilterTrainee = (props: any) => {
                             <div className="ml-auto order-2 semi-sm:mt-2">
                                 <button className="bg-button-color text-ltb text-fb font-medium ml-8 mt-2 pl-3 pr-3 py-1 rounded-bt-rd semi-sm:ml-0">
                                     ADD INTERVIEWER
+                                </button>
+                                <button className="bg-button-color text-ltb text-fb font-medium ml-8 mt-2 pl-3 pr-3 py-1 rounded-bt-rd semi-sm:ml-2">
+                                    IMPORT FROM
                                 </button>
                                 <button className="bg-button-color text-ltb text-fb font-medium ml-8 mt-2 pl-3 pr-3 py-1 rounded-bt-rd semi-sm:ml-2">
                                     EXPORT TO
