@@ -154,15 +154,7 @@ const AddTrainee = (props: any) => {
                                           </div>
                                         </div>
                                       </td>
-                                      {/* <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
-                                      <div className="flex sm:justify-center items-center">
-                                        <div className="">
-                                          <p className="text-gray-900 items-center dark:text-white whitespace-no-wrap">
-                                            {item.gender ? (item.gender):('male')}
-                                          </p>
-                                        </div>
-                                      </div>
-                                    </td> */}
+                                  
                                       <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
                                         <div className="flex items-center">
                                           <div className="">
@@ -172,19 +164,7 @@ const AddTrainee = (props: any) => {
                                           </div>
                                         </div>
                                       </td>
-                                      {/* <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
-                                      <div className="flex sm:justify-center items-center">
-                                        <div className="">
-                                          <p className="text-gray-900 items-center dark:text-white whitespace-no-wrap">
-                                            {item.cohort}
-                                            {item.cohort ? (item.cohort ):('cohort 1')}
-
-                                           
-                                          </p>
-                                        
-                                        </div>
-                                          </div>
-                                      </td> */}
+                          
                                       <td>
                                         <div>
                                           <HiDotsVertical
