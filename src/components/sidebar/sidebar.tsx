@@ -1,5 +1,10 @@
-import React from "react";
+import React  from "react";
+
+import { NavLink } from "react-router-dom";
 import { sidebarItems2, sidebarItems1, sidebarItems3 } from "./sidebarItems";
+import { BrowserRouter } from 'react-router-dom';
+import {BrowserRouter as Router, Link} from 'react-router-dom';
+
 
 const sidebar = () => {
   return (
@@ -9,17 +14,20 @@ const sidebar = () => {
           <ul className=" min:mt-0 pl-4 block mt-2">
             {sidebarItems1.map((items, index) => {
               return (
-                <li
+                
+                 <li
                   key={index}
-                  className=" min:text-xl lg:justify-content-start align-items-center text-[#173B3F] text-base"
+                  className=" min:text-xl lg:justify-content-start align-items-center text-[#173B3F]  text-base"
                 >
-                  <a
-                    href={items.path}
-                    className="p-1 flex align-items-center leading-3 cursor-pointer font-semibold hover:font-bold"
+                  <Link 
+                    to={items.path}
+                    className="is-active focus:text-green-600  p-1 flex align-items-center leading-3 cursor-pointer font-semibold hover:font-bold  " 
+                    
                   >
+                    
                     <label className="mr-3 p-1">{items.icon}</label>
-                    <label className="p-1">{items.title} </label>
-                  </a>
+                    <label className="p-1  ">{items.title} </label>
+                  </Link>
                 </li>
               );
             })}

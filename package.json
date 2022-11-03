@@ -8,6 +8,7 @@
     "dev": "webpack server",
     "test": "react-scripts test --watchAll=false",
     "build": "react-scripts build"
+    
   },
   "repository": {
     "type": "git",
@@ -72,14 +73,15 @@
     "jest-environment-jsdom": "^29.1.2",
     "jquery": "^3.6.1",
     "mini-css-extract-plugin": "^2.6.1",
+    "next-link": "^2.0.0",
     "popper.js": "^1.16.1",
     "react-i18next": "^12.0.0",
     "react-icons": "^4.6.0",
     "react-redux": "^8.0.4",
     "react-router-dom": "^6.4.2",
     "react-scripts": "^5.0.1",
-    "react-table": "^7.8.0",
     "react-select": "^5.5.6",
+    "react-table": "^7.8.0",
     "react-toastify": "^9.0.8",
     "redux-devtools-extension": "^2.13.9",
     "redux-state-sync": "^3.1.4",
