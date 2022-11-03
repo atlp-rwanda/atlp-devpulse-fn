@@ -57,7 +57,7 @@ function NavBar() {
             </Link>
           </span>
         </div>
-        <div className="flex items-center">
+        <div className="flex items-center mr-4">
           <span className="flex items-center">
             {" "}
             <FaMoon className="text-[20px] cursor-pointer mx-1" />

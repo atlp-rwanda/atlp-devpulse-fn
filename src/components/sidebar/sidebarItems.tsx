@@ -23,7 +23,7 @@ export const sidebarItems1 = [
     title: "Domains",
   },
   {
-    path: "/trainees",
+    path: "/trainee",
     icon: <Icon icon="ic:round-people"></Icon>,
     title: "Trainees",
   },

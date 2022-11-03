@@ -9,6 +9,8 @@ import Sidebar from "../components/sidebar/sidebar";
 import { getOneTraineeAllDetails } from "../redux/actions/trainnee";
 import { connect } from "react-redux";
 import Navbar from './../components/sidebar/navHeader'
+import { stringify } from "ts-jest";
+import { dividerClasses } from "@mui/material";
 
 
 
@@ -28,14 +30,17 @@ const TrainneeDetails = (props: any) => {
     id: ID,
   };
 
-
   useEffect(() => {
     props.getOneTraineeAllDetails(input);
   }, []);
 
   const traineeDetails = oneTraineeDetails.data;
+  console.log('traineeDetails', traineeDetails)
 
-  console.log("Trainess",traineeDetails.trainee_id);
+
+
+  
+
   
   return (
     <>
@@ -49,13 +54,32 @@ const TrainneeDetails = (props: any) => {
               <h2 className="top-5 m-5  font-medium  md:m-3 ">
               <BsFillPersonLinesFill className="float-left m-1" />
                 Applicant Information</h2>
-              <div className=" m-5 sm:mt-20 sm:ml-[-13rem] md:shrink-0  lg:ml-10 lg:mt-10  ">
+          {/* {
+             traineeDetails.data.map(post=>{
+               return(
+                 <div key={post.id}>
+                   <h3>{post.gender}</h3>
+                   {
+                    post.trainee_id && post.trainee_id.map(data=>(
+                       <div key={post.id}>
+                       <h3>{data.firstName}</h3>
+                       </div>
+                     ))
+                   }
+
+                 </div>
+               )
+             })
              
-                <h3>FirstName</h3>
-                {/* <p className="text-gray-500 text-sm">{traineeDetails.trainee_id}</p> */}
+              
+          } */}
+{   traineeDetails &&           <div className=" m-5 sm:mt-20 sm:ml-[-13rem] md:shrink-0  lg:ml-10 lg:mt-10  ">
+             
+               {traineeDetails.trainee_id && <> <h3>FirstName</h3>
+                <p className="text-gray-500 text-sm">{traineeDetails.trainee_id.firstName}</p></>}
                 <h3>Gender</h3>
                 <p className="text-gray-500 text-sm">{traineeDetails.gender}</p>
-                <h3>Address</h3>
+                <h3>Address</h3> 
                 <p className="text-gray-500 text-sm">{traineeDetails.Address}</p>
                 <h3>Phone Number</h3>
                 <p className="text-gray-500 text-sm">{traineeDetails.phone}</p>
@@ -70,7 +94,7 @@ const TrainneeDetails = (props: any) => {
                 <h3>Email </h3>
                 <p className="text-gray-500 text-sm">{traineeDetails.email}</p>
                
-              </div>
+              </div>}
             </div>
             <div className="m-5 sm:ml-[25rem] md:ml-2 lg:mt-20 lg:ml-[5rem]">
               <h3>LastName</h3>
