@@ -47,6 +47,7 @@ const TrainneeDetails = (props: any) => {
     <Navbar  />
       <div className="h-screen m-0 mt-20  ">
         <div className="block lg:ml-[30%]   ">
+        {   traineeDetails &&   
           <div className="max-w-md mx-5 bg-slate-50 rounded-xl shadow-md overflow-hidden md:max-w-xl mb-6 lg:flex lg:max-w-2xl ">
             <div className="md:flex  ">
               
@@ -73,7 +74,7 @@ const TrainneeDetails = (props: any) => {
              
               
           } */}
-{   traineeDetails &&           <div className=" m-5 sm:mt-20 sm:ml-[-13rem] md:shrink-0  lg:ml-10 lg:mt-10  ">
+        <div className=" m-5 sm:mt-20 sm:ml-[-13rem] md:shrink-0  lg:ml-10 lg:mt-10  ">
              
                {traineeDetails.trainee_id && <> <h3>FirstName</h3>
                 <p className="text-gray-500 text-sm">{traineeDetails.trainee_id.firstName}</p></>}
@@ -91,14 +92,20 @@ const TrainneeDetails = (props: any) => {
                 <p className="text-gray-500 text-sm">{traineeDetails.cohort}</p>
                 <h3>Is Employed</h3>
                 <p className="text-gray-500 text-sm">{String(traineeDetails.isEmployed)}</p>
+                {traineeDetails.trainee_id && <>
                 <h3>Email </h3>
-                <p className="text-gray-500 text-sm">{traineeDetails.email}</p>
+                <p className="text-gray-500 text-sm">{traineeDetails.trainee_id.email}</p>
+                
+                </>}
                
-              </div>}
+              </div>
             </div>
             <div className="m-5 sm:ml-[25rem] md:ml-2 lg:mt-20 lg:ml-[5rem]">
+              {traineeDetails.trainee_id && <>
+              
               <h3>LastName</h3>
-              <p className="text-gray-500 text-sm">John</p>
+              <p className="text-gray-500 text-sm">{traineeDetails.trainee_id.lastName}</p>
+              </>}
               <h3>Province</h3>
               <p className="text-gray-500 text-sm">{traineeDetails.province}</p>
               <h3>District</h3>
@@ -115,7 +122,7 @@ const TrainneeDetails = (props: any) => {
               <p className="text-gray-500 text-sm">{traineeDetails.birth_date}</p>
              
             </div>
-          </div>
+          </div>}
           <div className=" max-w-md mx-5 bg-slate-50 rounded-xl shadow-md overflow-hidden md:max-w-xl mb-6 lg:flex lg:max-w-2xl">
             <div>
               <h2 className="top-5 m-5  font-medium">

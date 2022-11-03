@@ -19,9 +19,12 @@ function Table() {
               className={
                 ' items-center' + (traineeData?.length > 0 ? ' flex' : ' hidden')
               }
+ 
             >
              
-              <HiDotsVertical  className=" text-black text-3xl ml-6 font-size-6 cursor-pointer"/>
+              <HiDotsVertical onClick={() => {
+                console.log(traineeData)
+              }}  className=" text-black text-3xl ml-6 font-size-6 cursor-pointer"/>
               </div>
               )}
       ];

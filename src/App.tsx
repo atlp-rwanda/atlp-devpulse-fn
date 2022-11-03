@@ -34,7 +34,7 @@ function App() {
       <Route path='/trainee-details' element={<TrainneeDetails />}/>
       <Route path='/traineeb-details' element={<TrainneeDetailsB />}/>
       <Route path="/sidebar" element={<Sidebar/>} />
-      {/* <Route path="/Trainee" element={<Trainee />} /> */}
+      <Route path="/Trainee" element={<Trainee />} />
       <Route path="/sidebar" element={<Sidebar />} />
       <Route path="/table" element={<Table />} />
       <Route path="/cycles" element={<ApplicationCycle />} />

@@ -19,7 +19,7 @@ import { useAppDispatch } from "../../hooks/hooks";
 
 const AddTrainee = (props: any) => {
   const [addNewTraineeModel, setAddNewTraineeModel] = useState(false);
-  function open() {
+const Open=() =>{
     setAddNewTraineeModel(true);
   }
 
@@ -38,6 +38,8 @@ const AddTrainee = (props: any) => {
     props.getAllTraineess(input);
   }, []);
   const trainees = alltrainees.data;
+
+
   const traine = traines.message;
   useEffect(() => {
     dispatch(fetchtraine());
@@ -71,6 +73,9 @@ const AddTrainee = (props: any) => {
     contentPerPage: 10,
     count: traine?.length,
   });
+
+// console.log("Here",props.traines)
+
   return (
     <>
       <ToastContainer />
@@ -91,7 +96,7 @@ const AddTrainee = (props: any) => {
                 <div className="flex items-left px-7 lg:px-64 pt-24">
                   <div className="flex px-5 py-2 pb-8 w-fit">
                     <button
-                      onClick={open}
+                      onClick={Open}
                       className="flex bg-primary rounded-md py-2 px-4 text-white font-medium cursor-pointer"
                     >
                       <icons.AiOutlinePlus className="mt-1 mr-1 font-bold" />{" "}
@@ -131,7 +136,7 @@ const AddTrainee = (props: any) => {
                               </tr>
                             </thead>
                             <tbody className="overflow-y-auto">
-                              {props.traines?.message
+                              {props?.traines?.message
                                 ?.slice(firstContentIndex, lastContentIndex)
                                 ?.map((item: any) =>
                                   item.delete_at == false ? (
@@ -139,8 +144,10 @@ const AddTrainee = (props: any) => {
                                       <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
                                         <div className="flex">
                                           <div className="">
+                                            
                                             <p className="text-gray-900 text-center dark:text-white whitespace-no-wrap">
                                               {item.firstName}
+                                              
                                             </p>
                                           </div>
                                         </div>
