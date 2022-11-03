@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { HiDotsVertical } from "react-icons/hi";
 import * as icons from "react-icons/ai";
 import { AiOutlinePlus } from "react-icons/ai";
+import {BrowserRouter as Router, Link} from 'react-router-dom';
 import pagination from "../../components/pagination";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -99,6 +100,20 @@ const AddTrainee = (props: any) => {
                     </button>
                     <div></div>
                   </div>
+                 
+ 
+                  
+                  <Link to="/filter_trainee">
+                  <button className="flex bg-primary rounded-md py-2 mt-2 px-4 text-white font-medium cursor-pointer">
+                  <icons.AiOutlineSearch   className="mt-1 mr-1 font-bold" />{" "}
+                          Search
+                      </button>
+                  </Link>
+                  
+               
+                    
+                   
+                
                 </div>
                 <div className="px-3 md:px-8">
                   <div className="bg-white  dark:bg-dark-bg shadow-lg px-5 py-8 rounded-md w-[100%] mx-auto lg:w-[80%] lg:ml-60 mb-10">

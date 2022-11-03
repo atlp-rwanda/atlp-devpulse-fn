@@ -23,7 +23,7 @@ export const sidebarItems1 = [
     title: "Domains",
   },
   {
-    path: "/trainee",
+    path: "/Trainee",
     icon: <Icon icon="ic:round-people"></Icon>,
     title: "Trainees",
   },
@@ -48,9 +48,14 @@ export const sidebarItems1 = [
     title: "Coordinators",
   },
   {
-    path: "/cohorts",
+    path: "/cohort",
     icon: <Icon icon="fa6-solid:graduation-cap"></Icon>,
     title: "Cohorts",
+  },
+  {
+    path: "/cycles",
+    icon: <Icon icon="game-icons:cycle"></Icon>,
+    title: "Application Cycles",
   },
   {
     path: "/updatedRatings",
@@ -76,6 +81,11 @@ export const sidebarItems1 = [
     path: "/calendar",
     icon: <Icon icon="ant-design:calendar-filled"></Icon>,
     title: "Calendar",
+  },
+  {
+    path: "/Trash",
+    icon: <Icon icon="fa-solid:trash"></Icon>,
+    title: "Trash",
   },
 ];
 
