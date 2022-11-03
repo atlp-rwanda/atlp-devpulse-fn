@@ -8,7 +8,6 @@ import {
 import { connect } from "react-redux";
 import "react-toastify/dist/ReactToastify.css";
 import { useTable, usePagination } from "react-table";
-import Sidebar from "../../components/sidebar/sidebar";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Menu from "@mui/material/Menu";
@@ -191,7 +190,7 @@ const ApplicationCycle = (props: any) => {
   return (
     <>
       <NavBar />
-      <div className="flex bg-[#F9F9FB]">
+      <div className="flex bg-[#F9F9FB] min-h-[100vh]">
         <div className="min-h-[50vh] w-[100%] block mt-10 md:w-[100%] md:mt-0 pl-[16rem]  pt-[80px] md:pl-0">
           <div className=" table table-fixed w-[100%] top-[20%] md:top-[10%] pb-10 md:relative px-[10%] md:px-[10px]">
             <button

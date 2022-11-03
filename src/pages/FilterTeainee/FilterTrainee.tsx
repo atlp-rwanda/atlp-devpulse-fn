@@ -4,32 +4,27 @@ import { useTable, usePagination, useRowSelect } from "react-table";
 import NavBar from "../../components/sidebar/navHeader";
 import * as AiIcons from "react-icons/ai";
 import CheckBox from "../../components/CkeckBox";
-
-
 import Select from "react-select";
 import Threedots from "../../components/Dropdown/Threedots";
 import { getAllFilteredTraineess } from "../../redux/actions/filterTraineeActions";
 
-
+export const customTheme = (theme: any) => {
+    return {
+        ...theme,
+        colors: {
+            ...theme.colors,
+            text: 'light-gray',
+            primary25: "#E5E7EB",
+            primary: 'cgray'
+        }
+    }
+}
 const FilterTrainee = (props: any) => {
 
 
     const [filterAttribute, setFilterAttribute] = useState("");
     const [enteredWord, setEnteredWord] = useState("");
     const [All, setAll] = useState(true);
-
-    const customTheme = (theme: any) => {
-        return {
-            ...theme,
-            colors: {
-                ...theme.colors,
-                text: 'light-gray',
-                primary25: "#E5E7EB",
-                primary: 'cgray'
-            }
-        }
-    }
-
     const clearInpunt = () => {
         setEnteredWord("")
     }
@@ -44,6 +39,11 @@ const FilterTrainee = (props: any) => {
 
     const [pageIdx, setPageIdx] = useState(1);
     const [itemsPerPage] = useState(10);
+
+    const nonNullTrainee = traineeList.filter((value) => {
+        return value !== null
+    })
+
 
     useEffect(() => {
         const data = {
@@ -103,6 +103,8 @@ const FilterTrainee = (props: any) => {
     console.log("pageIdx", pageIdx)
 
     const columns = useMemo(() => COLS, []);
+    const data = useMemo(() => nonNullTrainee, [allfilteredTrainees])
+
 
     const {
         getTableProps,
@@ -124,7 +126,7 @@ const FilterTrainee = (props: any) => {
     }: any = useTable(
         {
             columns,
-            data: traineeList,
+            data,
         },
         usePagination,
         useRowSelect,
@@ -148,7 +150,7 @@ const FilterTrainee = (props: any) => {
     const { pageIndex, pageSize } = state;
     return (
         <>
-            <div className="flex bg-[#F9F9FB]">
+            <div className="flex bg-[#F9F9FB] min-h-[100vh]">
                 <NavBar />
                 <div className="min-h-[50vh] w-[100%] block mt-10 md:w-[100%] md:mt-0 pl-[16rem] md:pl-0">
                     <div className=" table table-fixed mt-[5rem] w-[100%] top-[20%] md:top-[10%] pb-10 md:relative px-[10%] md:px-[10px]">
@@ -198,9 +200,13 @@ const FilterTrainee = (props: any) => {
                                 </span>
                                 <input onChange={(e) => setEnteredWord(e.target.value)} className="block bg-row-gray w-50 border border-bdr rounded-bt-rd mt-2 py-2 pl-9 pr-4 focus:outline-none sm:text-sm" value={enteredWord} placeholder="Search" type="text" name="search" />
                             </div>
-                            <div className="ml-auto order-2 semi-sm:mt-2">
+
+                            <div className="mx-auto order-2 semi-sm:mt-2 lg:mr-0 block semi-md:mr-0">
                                 <button className="bg-button-color text-ltb text-fb font-medium ml-8 mt-2 pl-3 pr-3 py-1 rounded-bt-rd semi-sm:ml-0">
                                     ADD INTERVIEWER
+                                </button>
+                                <button className="bg-button-color text-ltb text-fb font-medium ml-8 mt-2 pl-3 pr-3 py-1 rounded-bt-rd semi-sm:ml-2">
+                                    IMPORT FROM
                                 </button>
                                 <button className="bg-button-color text-ltb text-fb font-medium ml-8 mt-2 pl-3 pr-3 py-1 rounded-bt-rd semi-sm:ml-2">
                                     EXPORT TO
@@ -241,7 +247,7 @@ const FilterTrainee = (props: any) => {
                                     {console.log("page", page)}
                                     {console.log("trainleist", traineeList)}
                                         {
-                                            traineeList.length !== 0 ? (
+                                            nonNullTrainee.length !== 0 ? (
                                                 page.map((row: any) => {
                                                     prepareRow(row);
                                                     return (
