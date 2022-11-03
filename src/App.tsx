@@ -18,18 +18,19 @@ const Trash = React.lazy(() => import("./pages/Trash/Trash"));
 
 function App() {
   return (
-    <Routes>
-      <Route path="/test_redux" element={<Counter />} />
-      <Route path="/test_tailwind" element={<TestTailwind />} />
-      <Route path="/Trainee" element={<Trainee />} />
-      <Route path="/sidebar" element={<Sidebar />} />
-      <Route path="/table" element={<Table />} />
-      <Route path="/cycles" element={<ApplicationCycle />} />
-      <Route path="/trash" element={<Trash />} />
-      <Route path="/nav-bar" element={<NavBar />} />
-      <Route path="/filter_trainee" element={<FilterTrainee />} />
-    </Routes>
-  );
+		<Routes>
+			<Route path="/" element={<Trainee/>} />
+			<Route path="/test_redux" element={<Counter />} />
+			<Route path="/test_tailwind" element={<TestTailwind />} />
+			<Route path="/Trainee" element={<Trainee />} />
+			<Route path="/sidebar" element={<Sidebar />} />
+			<Route path="/table" element={<Table />} />
+			<Route path="/cycles" element={<ApplicationCycle />} />
+			<Route path="/trash" element={<Trash />} />
+			<Route path="/nav-bar" element={<NavBar />} />
+			<Route path="/filter_trainee" element={<FilterTrainee />} />
+		</Routes>
+	);
 }
 
 export default App;
