@@ -35,6 +35,9 @@ function App() {
       <Route path="/trainee-applicant-details/:traineeId" element={<TrainneeDetails />} />
       <Route path="/sidebar" element={<Sidebar />} />
       <Route path="/Trainee-applicants" element={<Trainee />} />
+      <Route path='/trainee-details' element={<TrainneeDetails />}/>
+      <Route path="/sidebar" element={<Sidebar/>} />
+      <Route path="/Trainee" element={<Trainee />} />
       <Route path="/sidebar" element={<Sidebar />} />
       <Route path="/table" element={<Table />} />
       <Route path="/cycles" element={<ApplicationCycle />} />

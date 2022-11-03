@@ -59,6 +59,8 @@ const AddTrainee = (props: any) => {
   }, []);
 
   const cycle = cycles.data;
+  const trainees = alltrainees.data;
+
 
   const traine = traines.message;
   useEffect(() => {
