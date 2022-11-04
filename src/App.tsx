@@ -54,6 +54,11 @@ function App() {
       <Route path="/test_tailwind" element={<TestTailwind />} />
       <Route path='/trainee-details' element={<TrainneeDetails />}/>
       <Route path="/sidebar" element={<Sidebar/>} />
+      <Route path="/filter_trainee" element={<FilterTrainee />} />
+      <Route path="/trainees/:traineeId/edit" element={< UpdateTraine/>} />
+
+
+     
     </Routes>
   );
 }
