@@ -8,7 +8,6 @@
     "dev": "webpack server",
     "test": "react-scripts test --watchAll=false",
     "build": "react-scripts build"
-    
   },
   "repository": {
     "type": "git",
@@ -61,6 +60,7 @@
     "@heroicons/react": "^2.0.12",
     "@hookform/resolvers": "^0.1.0",
     "@mui/material": "^5.10.11",
+    "@mui/x-date-pickers": "^5.0.6",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@types/react-router": "^5.1.19",
@@ -68,11 +68,13 @@
     "axios": "^1.1.2",
     "bootstrap": "^5.2.2",
     "date-fns": "^2.29.3",
+    "dayjs": "^1.11.6",
     "dotenv": "^16.0.3",
     "jest": "^29.1.2",
     "jest-environment-jsdom": "^29.1.2",
     "jquery": "^3.6.1",
     "mini-css-extract-plugin": "^2.6.1",
+    "moment": "^2.29.4",
     "next-link": "^2.0.0",
     "popper.js": "^1.16.1",
     "react-i18next": "^12.0.0",
