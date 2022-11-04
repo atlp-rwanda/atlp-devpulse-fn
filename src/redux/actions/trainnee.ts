@@ -5,37 +5,37 @@ import { GET_ONE_TRAINEES_ALL_DETAILS } from "..";
 export const getOneTraineeAllDetails = ({id}:any) => async (dispatch: any) => {
     try {
       const datas = await axios({
-        url:'http://localhost:4000',
+        url:'http://localhost:4000/',
         method: "post",
         data: {
           query: `
-            query GetOneTraineeAllDetails($input: one) {
-              getOneTraineeAllDetails(input: $input) {
-                gender
-                birth_date
-                Address
-                phone
-                field_of_study
-                education_level
-                province
-                district
-                sector
-                cohort
-                isEmployed
-                haveLaptop
-                isStudent
-                Hackerrank_score
-                english_score
-                interview_decision
-                past_andela_programs
+          query GetOneTraineeAllDetails($input: one) {
+            getOneTraineeAllDetails(input: $input) {
+              gender
+              birth_date
+              Address
+              phone
+              field_of_study
+              education_level
+              province
+              district
+              sector
+              isEmployed
+              haveLaptop
+              isStudent
+              Hackerrank_score
+              english_score
+              interview_decision
+              past_andela_programs
+              _id
+              trainee_id {
+                lastName
+                firstName
                 _id
-                trainee_id {
-                  lastName
-                  firstName
-                  _id
-                  email
-                }
+                email
               }
+             
+            }
           }
         `,variables: {
           input: {

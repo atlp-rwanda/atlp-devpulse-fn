@@ -13,7 +13,6 @@ export const getAllTraineess = ({ page,itemsPerPage,  All }:any) => async (dispa
         query AllTraineesDetails($input: pagination) {
           allTraineesDetails(input: $input) {
             gender
-            cohort
             trainee_id {
               lastName
               firstName

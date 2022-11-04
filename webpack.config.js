@@ -17,6 +17,7 @@ module.exports = () => {
       historyApiFallback: true,
       port: 3000,
       compress: true,
+      allowedHosts: ['all'],
     },
     resolve: {
       fallback: {
