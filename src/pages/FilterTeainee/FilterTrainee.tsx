@@ -6,6 +6,7 @@ import * as AiIcons from "react-icons/ai";
 import CheckBox from "../../components/CkeckBox";
 import Select from "react-select";
 import Threedots from "../../components/Dropdown/Threedots";
+import { FaCaretDown } from "react-icons/fa";
 import { getAllFilteredTraineess } from "../../redux/actions/filterTraineeActions";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
@@ -360,8 +361,9 @@ const FilterTrainee = (props: any) => {
                             <div className="relative block">
                                 <button onClick={(event) => {
                                     setAnchorEl(event.currentTarget as unknown as HTMLElement);
-                                }} className="mb-4 py-2 px-9 w-50 rounded-bt-rd bg-button-color text-ltb text-fb font-medium">
-                                    CHOOSE COLUMN
+                                }} className="flex items-center mb-4 py-2 px-7 w-50 rounded-bt-rd border bg-row-gray border-solid border-bdr shadow-sm text-button-color text-fb font-medium">
+                                    <h4>CHOOSE COLUMN</h4>
+                                    <span className="pl-3"><FaCaretDown /></span>
                                 </button>
                             </div>
                             <Menu
