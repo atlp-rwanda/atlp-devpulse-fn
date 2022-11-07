@@ -100,7 +100,8 @@ const FilterTrainee = (props: any) => {
                 return (
 
                     <div>
-                        {row.original.trainee_id.firstName + " " + row.original.trainee_id.lastName}
+                        <span>{row.original.trainee_id.firstName} </span>
+                        <span className="semi-md-col:hidden">{row.original.trainee_id.lastName}</span>
                     </div>
                 )
             },
@@ -238,7 +239,7 @@ const FilterTrainee = (props: any) => {
     const data = useMemo(() => nonDeletedTrainee, [allfilteredTrainees])
     const initialState = {
         hiddenColumns: [
-            'Deleted', 'gender', 'birth_date', 'phone', 'field_of_study', 'education_level',
+            'trainee_id.firstName','Deleted', 'gender', 'birth_date', 'phone', 'field_of_study', 'education_level',
             'province', 'district', 'sector', 'Employment', 'Has Laptop', 'Student', 'Hackerrank_score',
             'english_score', 'interview_decision', 'past_andela_programs', 'Address'
         ]
