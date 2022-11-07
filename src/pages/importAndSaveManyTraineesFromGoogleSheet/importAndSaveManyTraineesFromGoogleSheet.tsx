@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import Select from "react-select";
 import { loadDataIntoDb } from "../../redux/actions/PerformLoadDataAction";
@@ -7,7 +7,7 @@ import { useAppDispatch, useAppSelector } from "../../redux/app/hook";
 const ImportTraineeDetailsFromGoogleSheet = () => {
   // console.log("Hello it's hodal");
   const failedStatusMessage = useAppSelector((reduxStore: any) => {
-    console.log(reduxStore.loadData.error);
+    // console.log(reduxStore.loadData.error);
     return reduxStore.loadData.error;
   });
 
@@ -16,11 +16,18 @@ const ImportTraineeDetailsFromGoogleSheet = () => {
   });
 
   const errMessageArr = failedStatusMessage.split(",");
+
+  const createObjectFromArray = (arr: any) => {
+    const obj = {};
+    arr.forEach((elem: any) => {
+      obj[`${elem}`] = "";
+    });
+    return obj;
+  };
   const namingConventionArrays: any[] = [];
-  for (let i = 0; i <= errMessageArr.length - 2; i++) {
+  for (let i = 0; i < errMessageArr.length; i++) {
     namingConventionArrays.push(errMessageArr[i]);
   }
-
   const dispatch = useAppDispatch();
   const [urlInput, setUrlInput] = useState("");
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -34,8 +41,9 @@ const ImportTraineeDetailsFromGoogleSheet = () => {
     const Id_goolge_sheet = url_arr[5];
     dispatch(loadDataIntoDb(Id_goolge_sheet));
   };
-
-  const options = [
+ 
+                   {
+                     /* const options = [
     { value: "firstName", label: "firstName" },
     { value: "lastName", label: "lastName" },
     { value: "email", label: "email" },
@@ -56,9 +64,57 @@ const ImportTraineeDetailsFromGoogleSheet = () => {
     { value: "past_andela_programs", label: "past_andela_programs" },
     { value: "Address", label: "Address" },
     { value: "sector", label: "sector" },
-    { value: "haveLaptop", label: "haveLaptop" },
-  ];
+    { value: "haveLaptop", label: "haveLaptop" }, */
+                   }
+                   {
+                     /* ]; */
+                   }
 
+  const [formData, setFormData] = React.useState({});
+  useEffect(() => {
+    setFormData(createObjectFromArray(errMessageArr));
+  }, [failedStatusMessage]);
+
+  function handleChangeSelect(event: any) {
+    const { name, value } = event.target;
+    setFormData((prevFormData) => {
+      return {
+        ...prevFormData,
+        [name]: value,
+      };
+    });
+  }
+
+  //  {
+  //   genders: 'Male',
+  //   birth_date: '2/2/20392',
+  //   phones: '7341113456',
+  //   field_of_studies: 'MEE',
+  //   education_level: 'A0',
+  //   province: 'Kigali city',
+  //   district: 'muhanga2',
+  //   sector: '2sdf',
+  //   Address: 'kn299',
+  //   haveLaptop: 'NO',
+  //   cohort: 'Cohot25',
+  //   isEmployement: 'yes',
+  //   isStudent: 'No',
+  //   Hackerrank_score: '60',
+  //   english_score: '30',
+  //   interviewing: '22',
+  //   interview_decision: 'Pass',
+  //   past_andela_programs: "din't attempt",
+  //   firstName: 'the masters',
+  //   lastName: 'Learner',
+  //   email: 'hod32@gmail.co'
+  // },
+
+  const flipObjectKeys = (data:any) =>
+    Object.fromEntries(
+      Object.entries(data).map(([key, value]) => [value, key])
+    );
+
+  console.log(flipObjectKeys(formData));
   return (
     <div className="ml-[1rem] mr-[1rem]  h-full p-[9rem] flex justify-center flex-col items-center bg-[#aaa] pb-[20rem]">
       <form className="w-[80%] h-1/2 ml-[50rem] border-[#c5c5c5] mr-[50rem] bg-slate-50 p-[2rem]  shadow-2xl shadow-blue-100 hover:shadow-indigo-100/40 ">
@@ -96,26 +152,7 @@ const ImportTraineeDetailsFromGoogleSheet = () => {
       </form>
       {failedStatusMessage && (
         <div>
-          <div className="p-3 my-2 bg-gray-400">
-            <span className="text-xl text-red-800">
-              ERROR WHILE IMPORTING!{" "}
-            </span>
-            {"==> "}
-            <span className="text-[#6c1313] text-lg">{errMessageArr[1]}</span>
-            <span className="text-lg"> is not same as </span>{" "}
-            <span className="bg-button-color text-gray-100 p-3 underline text-lg">
-              {errMessageArr[3]}
-            </span>{" "}
-            <span className="text-button-color text-lg">in Database</span>
-          </div>
-          <div className="p-3 my-2 bg-gray-400 text-button-color  text-lg">
-            Naming convention{" "}
-            <span className=" bg-button-color text-gray-100 underline p-3  text-lg">
-              which you should follow
-            </span>{" "}
-            in your google sheet column name of heading:
-          </div>
-          <div className="bg-[#6c1313] py-4 my-5 ">
+          <div className="bg-[#6c1313] py-4 my-5 w-full">
             {namingConventionArrays.map((message, index) => {
               return (
                 <div
@@ -124,7 +161,34 @@ const ImportTraineeDetailsFromGoogleSheet = () => {
                 >
                   {message}
                   <div>
-                    <Select options={options} />
+                    <select
+                      // options={options}
+                      onChange={handleChangeSelect}
+                      name={message}
+                    >
+                    <option value="">--select--</option>
+                    <option value="firstName">firstName</option>
+                    <option value="lastName">lastName</option>
+                    <option value="email">email</option>
+                    <option value="gender">gender</option>
+                    <option value="birth_date">birth_date</option>
+                    <option value="phone">phone</option>
+                    <option value="field_of_study">field_of_study</option>
+                    <option value="education_level">education_level</option>
+                    <option value="province">province</option>
+                    <option value="district">district</option>
+                    <option value="cohort">cohort</option>
+                    <option value="isEmployed">isEmployed</option>
+                    <option value="isStudent">isStudent</option>
+                    <option value="Hackerrank_score">Hackerrank_score</option>
+                    <option value="english_scor">english_scor</option>
+                    <option value="interview">interview</option>
+                    <option value="interview_decision">interview_decision</option>
+                    <option value="past_andela_programs">past_andela_programs</option>
+                    <option value="Address">Address</option>
+                    <option value="sector">sector</option>
+                    <option value="haveLaptop">haveLaptop</option>
+                    </select>
                   </div>
                 </div>
               );
