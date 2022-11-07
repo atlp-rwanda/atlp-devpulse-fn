@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { HiDotsVertical } from "react-icons/hi";
 import * as icons from "react-icons/ai";
 import { AiOutlinePlus } from "react-icons/ai";
+import {BrowserRouter as Router, Link} from 'react-router-dom';
 import pagination from "../../components/pagination";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -104,6 +105,21 @@ const Open=() =>{
                     </button>
                     <div></div>
                   </div>
+                 
+ 
+                  
+                  <Link to="/filter_trainee">
+                  <button className="flex bg-primary rounded-md py-2 mt-2 px-4 text-white font-medium cursor-pointer">
+                  <icons.AiOutlineSearch   className="mt-1 mr-1 font-bold" />{" "}
+                          Search
+                      </button>
+                  </Link>
+                 
+                  
+               
+                    
+                   
+                
                 </div>
                 <div className="px-3 md:px-8">
                   <div className="bg-white  dark:bg-dark-bg shadow-lg px-5 py-8 rounded-md w-[100%] mx-auto lg:w-[80%] lg:ml-60 mb-10">
@@ -161,15 +177,7 @@ const Open=() =>{
                                           </div>
                                         </div>
                                       </td>
-                                      {/* <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
-                                      <div className="flex sm:justify-center items-center">
-                                        <div className="">
-                                          <p className="text-gray-900 items-center dark:text-white whitespace-no-wrap">
-                                            {item.gender ? (item.gender):('male')}
-                                          </p>
-                                        </div>
-                                      </div>
-                                    </td> */}
+                                  
                                       <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
                                         <div className="flex items-center">
                                           <div className="">
@@ -179,19 +187,7 @@ const Open=() =>{
                                           </div>
                                         </div>
                                       </td>
-                                      {/* <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
-                                      <div className="flex sm:justify-center items-center">
-                                        <div className="">
-                                          <p className="text-gray-900 items-center dark:text-white whitespace-no-wrap">
-                                            {item.cohort}
-                                            {item.cohort ? (item.cohort ):('cohort 1')}
-
-                                           
-                                          </p>
-                                        
-                                        </div>
-                                          </div>
-                                      </td> */}
+                          
                                       <td>
                                         <div>
                                           <HiDotsVertical
@@ -221,7 +217,7 @@ const Open=() =>{
                                                     onSubmitHandlesoft(item.id);
                                                   }}
                                                 >
-                                                  soft delete
+                                                  Soft Delete
                                                 </div>
                                               </li>
                                               <li>
@@ -232,7 +228,7 @@ const Open=() =>{
                                                     onSubmitHandle(item.id);
                                                   }}
                                                 >
-                                                  harddelete
+                                                  Hard Delete
                                                 </div>
                                               </li>
                                             </ul>

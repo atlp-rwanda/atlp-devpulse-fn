@@ -12,6 +12,7 @@ import traineeReducer from "./traineeReducer";
 import traineesReducer from "./traineeReduces"
 
 
+import clearTrashReducer from "./clearTrashReducer";
 
 const allReducers = combineReducers({
   counter: counterReducer,
@@ -23,6 +24,7 @@ const allReducers = combineReducers({
   cycles: cycleReducer,
   softDeletedTrainees: softDeletedTraineeReducer,
   restore:restoretraineReducer,
+  clearTrash: clearTrashReducer,
   // viewtrainee:viewtraineReducer,
   // addtrainee:addtraineReducer,
   trainee: traineeReducer ,

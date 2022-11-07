@@ -14,7 +14,7 @@ import { toast } from "react-toastify";
 export const getAllCycles = () => async (dispatch: any) => {
   try {
     const datas = await axios({
-      url: "http://localhost:4000/",
+      url: process.env.BACKEND_URL,
       method: "post",
       data: {
         query: `
@@ -43,7 +43,7 @@ export const createCycle =
   async (dispatch: any) => {
     try {
       await axios({
-        url: "http://localhost:4000/",
+        url: process.env.BACKEND_URL,
         method: "post",
         data: {
           query: `
@@ -92,7 +92,7 @@ export const updateApplicationCycle =
   async (dispatch: any) => {
     try {
       await axios({
-        url: "http://localhost:4000/",
+        url: process.env.BACKEND_URL,
         method: "post",
         data: {
           query: `
@@ -146,7 +146,7 @@ export const deleteApplicationCycle =
   async (dispatch: any) => {
     try {
       const datas = await axios({
-        url: "http://localhost:4000/",
+        url: process.env.BACKEND_URL,
         method: "post",
         data: {
           query: `
