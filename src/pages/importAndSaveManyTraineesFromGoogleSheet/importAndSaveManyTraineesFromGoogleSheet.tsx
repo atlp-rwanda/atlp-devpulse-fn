@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import Select from "react-select";
-import { loadDataIntoDb } from "../../redux/actions/PerformLoadDataAction";
+import { loadDataIntoDb, resendMappedDataIntoDb } from "../../redux/actions/PerformLoadDataAction";
 import { useAppDispatch, useAppSelector } from "../../redux/app/hook";
 
 const ImportTraineeDetailsFromGoogleSheet = () => {
@@ -85,6 +85,23 @@ const ImportTraineeDetailsFromGoogleSheet = () => {
     });
   }
 
+    const flipObjectKeys = (data: any) =>
+      Object.fromEntries(
+        Object.entries(data).map(([key, value]) => [value, key])
+      );
+    // console.log(flipObjectKeys(formData));
+  ;
+    function handleSubmitToResend(event:any) {
+      event.preventDefault();
+       const url_arr = urlInput.split("/");
+       const Id_goolge_sheet = url_arr[5];
+
+      dispatch(
+        resendMappedDataIntoDb(flipObjectKeys(formData), Id_goolge_sheet)
+      );
+      // console.log(formData);
+    }
+
   //  {
   //   genders: 'Male',
   //   birth_date: '2/2/20392',
@@ -109,12 +126,6 @@ const ImportTraineeDetailsFromGoogleSheet = () => {
   //   email: 'hod32@gmail.co'
   // },
 
-  const flipObjectKeys = (data:any) =>
-    Object.fromEntries(
-      Object.entries(data).map(([key, value]) => [value, key])
-    );
-
-  console.log(flipObjectKeys(formData));
   return (
     <div className="ml-[1rem] mr-[1rem]  h-full p-[9rem] flex justify-center flex-col items-center bg-[#aaa] pb-[20rem]">
       <form className="w-[80%] h-1/2 ml-[50rem] border-[#c5c5c5] mr-[50rem] bg-slate-50 p-[2rem]  shadow-2xl shadow-blue-100 hover:shadow-indigo-100/40 ">
@@ -152,7 +163,10 @@ const ImportTraineeDetailsFromGoogleSheet = () => {
       </form>
       {failedStatusMessage && (
         <div>
-          <div className="bg-[#6c1313] py-4 my-5 w-full">
+          <form
+            onSubmit={handleSubmitToResend}
+            className="bg-[#6c1313] py-4 my-5 w-full"
+          >
             {namingConventionArrays.map((message, index) => {
               return (
                 <div
@@ -166,34 +180,39 @@ const ImportTraineeDetailsFromGoogleSheet = () => {
                       onChange={handleChangeSelect}
                       name={message}
                     >
-                    <option value="">--select--</option>
-                    <option value="firstName">firstName</option>
-                    <option value="lastName">lastName</option>
-                    <option value="email">email</option>
-                    <option value="gender">gender</option>
-                    <option value="birth_date">birth_date</option>
-                    <option value="phone">phone</option>
-                    <option value="field_of_study">field_of_study</option>
-                    <option value="education_level">education_level</option>
-                    <option value="province">province</option>
-                    <option value="district">district</option>
-                    <option value="cohort">cohort</option>
-                    <option value="isEmployed">isEmployed</option>
-                    <option value="isStudent">isStudent</option>
-                    <option value="Hackerrank_score">Hackerrank_score</option>
-                    <option value="english_scor">english_scor</option>
-                    <option value="interview">interview</option>
-                    <option value="interview_decision">interview_decision</option>
-                    <option value="past_andela_programs">past_andela_programs</option>
-                    <option value="Address">Address</option>
-                    <option value="sector">sector</option>
-                    <option value="haveLaptop">haveLaptop</option>
+                      <option value="">--select--</option>
+                      <option value="firstName">firstName</option>
+                      <option value="lastName">lastName</option>
+                      <option value="email">email</option>
+                      <option value="gender">gender</option>
+                      <option value="birth_date">birth_date</option>
+                      <option value="phone">phone</option>
+                      <option value="field_of_study">field_of_study</option>
+                      <option value="education_level">education_level</option>
+                      <option value="province">province</option>
+                      <option value="district">district</option>
+                      <option value="cohort">cohort</option>
+                      <option value="isEmployed">isEmployed</option>
+                      <option value="isStudent">isStudent</option>
+                      <option value="Hackerrank_score">Hackerrank_score</option>
+                      <option value="english_score">english_score</option>
+                      <option value="interview">interview</option>
+                      <option value="interview_decision">
+                        interview_decision
+                      </option>
+                      <option value="past_andela_programs">
+                        past_andela_programs
+                      </option>
+                      <option value="Address">Address</option>
+                      <option value="sector">sector</option>
+                      <option value="haveLaptop">haveLaptop</option>
                     </select>
                   </div>
                 </div>
               );
             })}
-          </div>
+            <button type="submit">Resend your query</button>
+          </form>
         </div>
       )}
 
