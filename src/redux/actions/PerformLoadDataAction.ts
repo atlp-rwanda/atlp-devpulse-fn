@@ -11,7 +11,7 @@ const columns = {
   email: "",
   gender: "",
   birth_date: "",
-  Adress: "",
+  Address: "",
   phone: "",
   field_of_study: "",
   education_level: "",
@@ -30,6 +30,7 @@ const columns = {
 };
 
 export const loadDataIntoDb = (googleSheetId: string) => {
+  // console.log(googleSheetId)
   return async (dispatch: any) => {
     dispatch(load_data_request());
     const result = await axios({
@@ -45,7 +46,7 @@ export const loadDataIntoDb = (googleSheetId: string) => {
       },
     });
 
-    // on success
+    // // on success
     if (result.data.data) {
       console.log(result.data.data.loadAllTrainees);
       dispatch(load_data_success(result.data.data.loadAllTrainees));
@@ -69,28 +70,27 @@ export const resendMappedDataIntoDb = (dataObjectMapped: any, id:any) => {
   console.log(resultObj);
   return async (dispatch: any) => {
     // dispatch(load_data_request());
-    const result = await axios({
-      url: "http://localhost:4000/",
-      method: "post",
-      data: {
-        query: `mutation($columnData: columnsInputSubmitted!) {
+
+   try {
+     const result = await axios({
+       url: "http://localhost:4000/",
+       method: "post",
+       data: {
+         query: `mutation($columnData: columnsInputSubmitted!) {
   reSendDataIntoDb(columnData: $columnData)
 }`,
-        variables: {
-          columnData: resultObj,
-        },
-      },
-    });
+         variables: {
+           columnData: resultObj,
+         },
+       },
+     });
 
-    // on success
-    if (result.data.data) {
-      console.log(result.data.data.reSendDataIntoDb);
-    }
-
-    // // on errors
-    // else {
-    //   console.log(result.data.errors[0].message);
-    //   dispatch(load_data_fail(result.data.errors[0].message));
-    // }
+     // on success
+     if (result.data.data) {
+       console.log(result.data.data.reSendDataIntoDb);
+     }
+   } catch (error) {
+    console.log(error);
+   }
   };
 };
