@@ -18,17 +18,22 @@ export const getAllFilteredTraineess = ({ page,itemsPerPage,  All, wordEntered, 
               firstName
               _id
               email
+              delete_at
+              cycle_id {
+                id
+                name
+                startDate
+                endDate
+              }
             }
             gender
             birth_date
-            Address
             phone
             field_of_study
             education_level
             province
             district
             sector
-            cohort
             isEmployed
             haveLaptop
             isStudent
@@ -37,6 +42,7 @@ export const getAllFilteredTraineess = ({ page,itemsPerPage,  All, wordEntered, 
             interview_decision
             past_andela_programs
             _id
+            Address
           }
         }
       `,  variables: {
