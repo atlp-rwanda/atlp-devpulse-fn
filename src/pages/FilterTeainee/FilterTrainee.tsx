@@ -8,13 +8,13 @@ import * as AiIcons from "react-icons/ai";
 import CheckBox from "../../components/CkeckBox";
 import Select from "react-select";
 import Threedots from "../../components/Dropdown/Threedots";
-import { FaCaretDown } from "react-icons/fa";
 import { getAllFilteredTraineess } from "../../redux/actions/filterTraineeActions";
 import {getAlltraineeapplicants} from "../../redux/actions/filterTraineeActions"
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { useTheme } from "../../hooks/darkmode";
 import { Link } from "react-router-dom";
+import{FaCaretDown} from "react-icons/fa"
 import {
   DOTS,
   useCustomPagination,
