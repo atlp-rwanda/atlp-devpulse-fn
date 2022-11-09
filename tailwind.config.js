@@ -10,7 +10,8 @@ module.exports = {
         lg: "976px",
         xl: "1440px",
         'semi-sm': '120px',
-        'semi-md': '721px'
+        'semi-md': '721px',
+        'semi-md-col':  { max: "721px" }
       },
       colors: {
         primary: "#1F2A37",

@@ -3,12 +3,12 @@ import React, { useState, useEffect } from "react";
 import { HiDotsVertical } from "react-icons/hi";
 import * as icons from "react-icons/ai";
 import { AiOutlinePlus } from "react-icons/ai";
-import {BrowserRouter as Router, Link} from 'react-router-dom';
+import { BrowserRouter as Router, Link } from "react-router-dom";
 import pagination from "../../components/pagination";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { getAllTraineess } from "../../redux/actions/TraineeAction";
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import Modal from "./modal";
 import NavBar from "../../components/sidebar/navHeader";
 import {
@@ -17,6 +17,7 @@ import {
   fetchtraine,
 } from "../../redux/actions/deletetraine";
 import { useAppDispatch } from "../../hooks/hooks";
+import { getAllCycles } from "../../redux/actions/cyclesActions";
 
 const AddTrainee = (props: any) => {
   const [addNewTraineeModel, setAddNewTraineeModel] = useState(false);
@@ -37,6 +38,7 @@ const Open=() =>{
   };
   useEffect(() => {
     props.getAllTraineess(input);
+    props.getAllCycles();
   }, []);
   const trainees = alltrainees.data;
 
@@ -58,6 +60,7 @@ const Open=() =>{
     await dispatch(softdeletetraine(userId));
     setmoredrop("");
   };
+
   console.log(props);
 
   //pagination
@@ -86,7 +89,7 @@ const Open=() =>{
           addNewTraineeModel === true ? "block" : "hidden"
         }`}
       >
-        <Modal />
+        <Modal cycles={props.cycles.data} />
       </div>
       {/* =========================== End:: addnewtraineeModel =============================== */}
       <div className="flex flex-col  h-screen absolute w-[100%]">
@@ -105,21 +108,13 @@ const Open=() =>{
                     </button>
                     <div></div>
                   </div>
-                 
- 
-                  
+
                   <Link to="/filter_trainee">
-                  <button className="flex bg-primary rounded-md py-2 mt-2 px-4 text-white font-medium cursor-pointer">
-                  <icons.AiOutlineSearch   className="mt-1 mr-1 font-bold" />{" "}
-                          Search
-                      </button>
+                    <button className="flex bg-primary rounded-md py-2 mt-2 px-4 text-white font-medium cursor-pointer">
+                      <icons.AiOutlineSearch className="mt-1 mr-1 font-bold" />{" "}
+                      Search
+                    </button>
                   </Link>
-                 
-                  
-               
-                    
-                   
-                
                 </div>
                 <div className="px-3 md:px-8">
                   <div className="bg-white  dark:bg-dark-bg shadow-lg px-5 py-8 rounded-md w-[100%] mx-auto lg:w-[80%] lg:ml-60 mb-10">
@@ -143,9 +138,11 @@ const Open=() =>{
                                 <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
                                   {"email"}
                                 </th>
-                                {/* <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
-                                  {('cycle')}
-                                </th> */}
+                                {
+                                  <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
+                                    {"cycle"}
+                                  </th>
+                                }
                                 <th className="border-b-2 sm:text-center border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
                                   {"action"}
                                 </th>
@@ -177,7 +174,7 @@ const Open=() =>{
                                           </div>
                                         </div>
                                       </td>
-                                  
+
                                       <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
                                         <div className="flex items-center">
                                           <div className="">
@@ -187,7 +184,17 @@ const Open=() =>{
                                           </div>
                                         </div>
                                       </td>
-                          
+
+                                      <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
+                                        <div className="flex items-center">
+                                          <div className="">
+                                            <p className="text-gray-900 items-center dark:text-white whitespace-no-wrap">
+                                              {item.cycle_id.name}
+                                            </p>
+                                          </div>
+                                        </div>
+                                      </td>
+
                                       <td>
                                         <div>
                                           <HiDotsVertical
@@ -317,6 +324,7 @@ const mapState = (state: any) => ({
   delettraine: state.deletetraine,
   softdeletettraine: state.softdeletetraine,
   traines: state.traine,
+  cycles: state.cycles,
 });
 
 export default connect(mapState, {
@@ -324,4 +332,5 @@ export default connect(mapState, {
   deletetraine,
   softdeletetraine,
   fetchtraine,
+  getAllCycles,
 })(AddTrainee);

@@ -13,9 +13,21 @@ export const getAllFilteredTraineess = ({ page,itemsPerPage,  All, wordEntered, 
         query: `
         query Query($input: filterOptions) {
           filterTraineesDetails(input: $input) {
+            trainee_id {
+              lastName
+              firstName
+              _id
+              email
+              delete_at
+              cycle_id {
+                id
+                name
+                startDate
+                endDate
+              }
+            }
             gender
             birth_date
-            Address
             phone
             field_of_study
             education_level
