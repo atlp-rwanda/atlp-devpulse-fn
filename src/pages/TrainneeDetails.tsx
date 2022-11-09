@@ -9,8 +9,7 @@ import Sidebar from "../components/sidebar/sidebar";
 import { getOneTraineeAllDetails } from "../redux/actions/trainnee";
 import { connect } from "react-redux";
 import Navbar from './../components/sidebar/navHeader'
-import { stringify } from "ts-jest";
-import { dividerClasses } from "@mui/material";
+
 
 
 
@@ -19,7 +18,7 @@ const TrainneeDetails = (props: any) => {
 
   const {oneTraineeDetails} = props;
 
-  const [ID, setId] = useState("635faea910947712087bac88");
+  const [ID, setId] = useState("636b68e8ae3dfddbac7dc32f");
 
   const [open, setOpen] = useState<boolean>(false);
   const handleDropDown = (state : boolean)=>{

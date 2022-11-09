@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
+import { useNavigate } from "react-router";
 
 const Threedots = () => {
     const [showOptions, setShowOptions] = useState(false);
@@ -15,6 +16,11 @@ const Threedots = () => {
     const handleClose = () => {
         setAnchorEl(null);
     };
+    const navigate = useNavigate();
+    const handleOpenDetails =()=>{
+       
+        navigate("/trainee-details")
+    }
 
     return (
         <div className="inline-block text-left">
@@ -39,7 +45,7 @@ const Threedots = () => {
                     }}
                 >
                     <a href="#" ><MenuItem>Email</MenuItem></a>
-                    <a href="#" className="text-button-color hover:bg-bdr text-sm"><MenuItem>View</MenuItem></a>
+                    <a href="#" className="text-button-color hover:bg-bdr text-sm" onClick={handleOpenDetails} ><MenuItem>View</MenuItem></a>
                     <a href="#" className="text-button-color hover:bg-bdr text-sm"><MenuItem>Export</MenuItem></a>
                     <a href="#" className="text-button-color hover:bg-bdr text-sm"><MenuItem>Delete</MenuItem></a>
                     <a href="#" className="text-button-color hover:bg-bdr text-sm"><MenuItem><ul><li>Permanent </li><li>Delete</li></ul></MenuItem></a>

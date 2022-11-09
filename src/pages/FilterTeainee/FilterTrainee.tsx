@@ -39,6 +39,11 @@ const FilterTrainee = (props: any) => {
 
     const [pageIdx, setPageIdx] = useState(1);
     const [itemsPerPage] = useState(10);
+   
+  
+
+   
+
 
     const nonNullTrainee = traineeList.filter((value) => {
         return value !== null
@@ -343,6 +348,7 @@ const FilterTrainee = (props: any) => {
                         </div>
                     </div>
                 </div>
+                {/* <button onClick={()=> oneViewDetails}>Play</button> */}
             </div>
         </>
     );

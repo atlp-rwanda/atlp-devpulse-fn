@@ -6,7 +6,7 @@ import axios from "axios";
 export const getAllTraineess = ({ page,itemsPerPage,  All }:any) => async (dispatch: any) => {
   try {
     const datas = await axios({
-      url: process.env.BACKEND_URL,
+      url: 'http://localhost:4000/',
       method: "post",
       data: {
         query: `
@@ -14,9 +14,9 @@ export const getAllTraineess = ({ page,itemsPerPage,  All }:any) => async (dispa
           allTraineesDetails(input: $input) {
             gender
             trainee_id {
-              lastName
-              firstName
               email
+              firstName
+              lastName
             }
           }
         }
