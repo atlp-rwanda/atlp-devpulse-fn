@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { HiDotsVertical } from "react-icons/hi";
 import * as icons from "react-icons/ai";
 import { AiOutlinePlus } from "react-icons/ai";
-import { BrowserRouter as Router, Link } from "react-router-dom";
+import {BrowserRouter as Router, Link, useNavigate} from 'react-router-dom';
 import pagination from "../../components/pagination";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -28,6 +28,7 @@ const Open=() =>{
   // LIST ALL TRAINEE
   const { alltrainees, delettraine, softdeletettraine, traines } = props;
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const [page, setPage] = useState(0);
   const [itemsPerPage, setiIemsPerPage] = useState(0);
   const [All, setAll] = useState(true);
@@ -216,6 +217,13 @@ const Open=() =>{
                                               className="py-1"
                                               aria-labelledby="dropdown"
                                             >
+                                              <li>
+                                                <Link to={`/trainees/${item.id}/edit`}
+                                                className="text-sm hover:bg-gray-100 text-gray-700 block px-4 py-2"
+                                                >
+                                                  Edit 
+                                                </Link>
+                                              </li>
                                               <li>
                                                 <div
                                                   className="text-sm hover:bg-gray-100 text-gray-700 block px-4 py-2"
