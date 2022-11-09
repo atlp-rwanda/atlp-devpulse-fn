@@ -73,10 +73,12 @@ const TrainneeDetails = (props: any) => {
              
               
           } */}
-        <div className=" m-5 sm:mt-20 sm:ml-[-13rem] md:shrink-0  lg:ml-10 lg:mt-10  ">
+        <div className=" m-5 sm:mt-20 sm:ml-[-12rem] md:shrink-0  lg:ml-10 lg:mt-10  ">
              
                {traineeDetails.trainee_id && <> <h3>FirstName</h3>
-                <p className="text-gray-500 text-sm">{traineeDetails.trainee_id.firstName}</p></>}
+                <p className="text-gray-500 text-sm">{traineeDetails.trainee_id.firstName}</p>
+                <p className="text-gray-500 text-sm">{traineeDetails.trainee_id._id}</p>
+                </>}
                 <h3>Gender</h3>
                 <p className="text-gray-500 text-sm">{traineeDetails.gender}</p>
                 <h3>Address</h3> 
@@ -99,7 +101,7 @@ const TrainneeDetails = (props: any) => {
                
               </div>
             </div>
-            <div className="m-5 sm:ml-[25rem] md:ml-2 lg:mt-20 lg:ml-[5rem]">
+            <div className="m-5 sm:ml-[20rem] md:ml-2 lg:mt-20 lg:ml-[5rem]">
               {traineeDetails.trainee_id && <>
               
               <h3>LastName</h3>
@@ -150,7 +152,7 @@ const TrainneeDetails = (props: any) => {
               Actions
             </h2>
             <div className=" btn ml-5 mt-[-10%] mb-3   ">
-              <button  className="btn-Aprov  bg-[#10292C] hover:bg-[#1f544cef] text-white font-bold py-2 px-4 rounded mt-20 mr-1">
+              <button  className="btn-Aprov  bg-[#10292C] hover:bg-[#1f544cef] text-white font-bold py-2 px-4 rounded mt-20 mr-4">
                 <FcApproval className="float-left m-1" />
                 Approve
               </button>

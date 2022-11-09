@@ -31,7 +31,7 @@ const TrainneeDetails = (props: any) => {
 
   const traineeDetails = oneTraineeDetails.data;
 
-  console.log("Trainess",traineeDetails.birth_date);
+  console.log("Trainess",traineeDetails);
 
   return (
     <>
@@ -60,7 +60,7 @@ const TrainneeDetails = (props: any) => {
               <h3>Email Address</h3>
               <p className="text-gray-500 text-sm">john@gmail.com</p>
               <h3>Date of Bith</h3>
-              <p className="text-gray-500 text-sm">{traineeDetails.birth_date}</p>
+              <p className="text-gray-500 text-sm"></p>
             </div>
           </div>
           <div className=" box-border bg-[#1F2A37] h-60 w-[70%] flex text-white  mb-3 rounded drop-shadow-lg">
