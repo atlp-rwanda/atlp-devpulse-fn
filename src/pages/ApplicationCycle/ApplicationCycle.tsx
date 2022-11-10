@@ -348,14 +348,16 @@ const ApplicationCycle = (props: any) => {
               onSubmit={createNewCycle}
               className=" relative w-[100%] rounded-[5px] h-[455px] m-auto p-[10px] pt-[5px] bg-[#f0f0f0] "
             >
-              <h1 className="text-center font-bold text-[24px] m-[20px]">
+              <h1 className="text-center font-bold text-[22px] m-[20px]">
                 Add new cycle
               </h1>
               <IoIcons.IoClose
                 className="absolute top-[20px] right-[20px] text-[35px] cursor-pointer"
                 onClick={handleCloseCreateModel}
               />
-              <hr style={{ marginBottom: "40px" }} />
+              <hr style={{ marginBottom: "4px" }} />
+              <div>
+              <label className="mr-3 p-14 font-bold text-[19px]">Cycle Name</label>
               <input
                 type="text"
                 name="name"
@@ -364,8 +366,11 @@ const ApplicationCycle = (props: any) => {
                 onChange={(e) => {
                   setName(e.target.value);
                 }}
-                className=" mt-3 bg-lime cursor-pointer text-[18px] self-center py-1 rounded-[5px] h-[50px] my-[20px] mx-auto w-[80%] block border-[2px] border-[#a8a8a8]  px-[10px] md:w-[90%]"
+                className=" mt-2 bg-lime cursor-pointer text-[18px] self-center py-1 rounded-[5px] h-[50px] my-[20px] mx-auto w-[80%] block border-[2px] border-[#a8a8a8]  px-[10px] md:w-[90%]"
               />
+              </div>
+              <div>
+              <label className="mr-3 p-14 font-bold text-[19px]">Start Date</label>
               <input
                 type="date"
                 name="start date"
@@ -373,8 +378,11 @@ const ApplicationCycle = (props: any) => {
                 onChange={(e) => {
                   setStartDate(e.target.value);
                 }}
-                className=" mt-3 bg-lime cursor-pointer text-[18px] self-center py-1 rounded-[5px] h-[50px] my-[20px] mx-auto w-[80%] block border-[2px] border-[#a8a8a8]  px-[10px] md:w-[90%]"
+                className=" mt-2 bg-lime cursor-pointer text-[18px] self-center py-1 rounded-[5px] h-[50px] my-[20px] mx-auto w-[80%] block border-[2px] border-[#a8a8a8]  px-[10px] md:w-[90%]"
               />
+              </div>
+              <div>
+              <label className="mr-3 p-14 font-bold text-[19px]">End Date</label>
               <input
                 type="date"
                 name="end date"
@@ -382,8 +390,10 @@ const ApplicationCycle = (props: any) => {
                 onChange={(e) => {
                   setEndDate(e.target.value);
                 }}
-                className=" mt-3 bg-lime cursor-pointer text-[18px] self-center py-1 rounded-[5px] h-[50px] my-[20px] mx-auto w-[80%] block border-[2px] border-[#a8a8a8]  px-[10px] md:w-[90%]"
+                className=" mt-2 bg-lime cursor-pointer text-[18px] self-center py-1 rounded-[5px] h-[50px] my-[20px] mx-auto w-[80%] block border-[2px] border-[#a8a8a8]  px-[10px] md:w-[90%]"
+                min={startDate}
               />
+              </div>
               <button
                 type="submit"
                 className="text-white border-[1px] border-[#a8a8a8] h-[40px] w-[100px] block rounded-[5px] my-[10px] mx-[auto] bg-[#173b3f]"
