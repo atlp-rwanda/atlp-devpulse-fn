@@ -1,44 +1,86 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { connect } from "react-redux";
 import { useTable, usePagination, useRowSelect } from "react-table";
-import Sidebar from "../../components/sidebar/sidebar";
+import NavBar from "../../components/sidebar/navHeader";
 import * as AiIcons from "react-icons/ai";
 import CheckBox from "../../components/CkeckBox";
-import { Link } from "react-router-dom";
 import Select from "react-select";
 import Threedots from "../../components/Dropdown/Threedots";
+import { FaCaretDown } from "react-icons/fa";
 import { getAllFilteredTraineess } from "../../redux/actions/filterTraineeActions";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import { Link } from "react-router-dom";
 
+export const customTheme = (theme: any) => {
+  return {
+    ...theme,
+    colors: {
+      ...theme.colors,
+      text: "light-gray",
+      primary25: "#E5E7EB",
+      primary: "cgray",
+    },
+  };
+};
 const FilterTrainee = (props: any) => {
   const [filterAttribute, setFilterAttribute] = useState("");
   const [enteredWord, setEnteredWord] = useState("");
   const [All, setAll] = useState(true);
-
-  const customTheme = (theme: any) => {
-    return {
-      ...theme,
-      colors: {
-        ...theme.colors,
-        text: "light-gray",
-        primary25: "#E5E7EB",
-        primary: "cgray",
-      },
-    };
-  };
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const clearInpunt = () => {
     setEnteredWord("");
   };
 
+  const open = Boolean(anchorEl);
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const showTaggleOptions = () => {
+    return (
+      <div>
+        <div className="flex">
+          <div className="mr-[5px]">
+            <CheckBox {...getToggleHideAllColumnsProps()} />{" "}
+          </div>
+          <div>Toggle All</div>
+        </div>
+        {allColumns.map((column) => (
+          <div key={column.id}>
+            <label>
+              <input
+                type="checkbox"
+                {...column.getToggleHiddenProps()}
+                className="mr-[5px]"
+              />
+              {column.Header}
+            </label>
+          </div>
+        ))}
+      </div>
+    );
+  };
   // All trainees in DB
   const { allfilteredTrainees } = props;
 
   const traineeList = allfilteredTrainees.data;
-  console.log("afer useffect1", traineeList);
-  console.log(props);
+  // console.log("afer useffect1", traineeList)
+  // console.log(props)
 
   const [pageIdx, setPageIdx] = useState(1);
   const [itemsPerPage] = useState(10);
+
+  const nonNullTrainee = traineeList.filter((value) => {
+    return value !== null;
+  });
+  // console.log("nonNullTrainee", nonNullTrainee)
+
+  const nonDeletedTrainee = nonNullTrainee.filter((value) => {
+    return value.trainee_id.delete_at == false;
+  });
+  // console.log("nonDeleteTrainee", nonDeletedTrainee)
 
   useEffect(() => {
     const data = {
@@ -48,7 +90,7 @@ const FilterTrainee = (props: any) => {
       wordEntered: enteredWord,
       filterAttribute,
     };
-    console.log(" dATA SENT", data);
+    // console.log(" dATA SENT", data)
     props.getAllFilteredTraineess(data);
   }, [enteredWord, filterAttribute]);
 
@@ -59,16 +101,98 @@ const FilterTrainee = (props: any) => {
       Cell: ({ row }: any) => {
         return (
           <div>
-            {row.original.trainee_id.firstName +
-              " " +
-              row.original.trainee_id.lastName}
+            <span>{row.original.trainee_id.firstName} </span>
+            <span className="semi-md-col:hidden">
+              {row.original.trainee_id.lastName}
+            </span>
           </div>
         );
       },
+      visible: false,
     },
     {
       Header: "Email",
       accessor: "trainee_id.email",
+    },
+    {
+      Header: "Deleted",
+      accessor: "",
+      Cell: ({ row }: any) => {
+        return <div>{row.original.trainee_id.delete_at.toString()}</div>;
+      },
+    },
+    {
+      Header: "Gender",
+      accessor: "gender",
+    },
+    {
+      Header: "Birth Date",
+      accessor: "birth_date",
+    },
+    {
+      Header: "Phone number",
+      accessor: "phone",
+    },
+    {
+      Header: "Field of Study",
+      accessor: "field_of_study",
+    },
+    {
+      Header: "Education Level",
+      accessor: "education_level",
+    },
+    {
+      Header: "Province",
+      accessor: "province",
+    },
+    {
+      Header: "District",
+      accessor: "district",
+    },
+    {
+      Header: "Sector",
+      accessor: "sector",
+    },
+    {
+      Header: "Employment",
+      accessor: "",
+      Cell: ({ row }: any) => {
+        return <div>{row.original.isEmployed.toString()}</div>;
+      },
+    },
+    {
+      Header: "Has Laptop",
+      accessor: "",
+      Cell: ({ row }: any) => {
+        return <div>{row.original.haveLaptop.toString()}</div>;
+      },
+    },
+    {
+      Header: "Student",
+      accessor: "",
+      Cell: ({ row }: any) => {
+        return <div>{row.original.isStudent.toString()}</div>;
+      },
+    },
+    {
+      Header: "Hackerrank Score",
+      accessor: "Hackerrank_score",
+    },
+    {
+      Header: "English Score",
+      accessor: "english_score",
+    },
+    {
+      Header: "Interview Decision",
+      accessor: "interview_decision",
+    },
+    {
+      Header: "Andela Programs",
+      accessor: "past_andela_programs",
+    },
+    {
+      Header: "Address",
+      accessor: "Address",
     },
     {
       Header: "Status",
@@ -97,9 +221,32 @@ const FilterTrainee = (props: any) => {
       },
     },
   ];
-  console.log("pageIdx", pageIdx);
+  // console.log("pageIdx", pageIdx)
 
   const columns = useMemo(() => COLS, []);
+  const data = useMemo(() => nonDeletedTrainee, [allfilteredTrainees]);
+  const initialState = {
+    hiddenColumns: [
+      "trainee_id.firstName",
+      "Deleted",
+      "gender",
+      "birth_date",
+      "phone",
+      "field_of_study",
+      "education_level",
+      "province",
+      "district",
+      "sector",
+      "Employment",
+      "Has Laptop",
+      "Student",
+      "Hackerrank_score",
+      "english_score",
+      "interview_decision",
+      "past_andela_programs",
+      "Address",
+    ],
+  };
 
   const {
     getTableProps,
@@ -118,10 +265,13 @@ const FilterTrainee = (props: any) => {
     prepareRow,
     rows,
     selectedFlatRows,
+    allColumns,
+    getToggleHideAllColumnsProps,
   }: any = useTable(
     {
       columns,
-      data: traineeList,
+      data,
+      initialState,
     },
     usePagination,
     useRowSelect,
@@ -145,11 +295,9 @@ const FilterTrainee = (props: any) => {
   const { pageIndex, pageSize } = state;
   return (
     <>
-      <div className="flex bg-[#F9F9FB]">
-        <div className="md:hidden">
-          <Sidebar />
-        </div>
-        <div className="min-h-[50vh] w-[84rem] block mt-10 md:w-[100rem] md:mt-0">
+      <div className="flex bg-[#F9F9FB] min-h-[100vh]">
+        <NavBar />
+        <div className="min-h-[50vh] w-[100%] block mt-10 md:w-[100%] md:mt-0 pl-[16rem] md:pl-0">
           <div className=" table table-fixed mt-[5rem] w-[100%] top-[20%] md:top-[10%] pb-10 md:relative px-[10%] md:px-[10px]">
             <div className="">
               <Select
@@ -210,17 +358,18 @@ const FilterTrainee = (props: any) => {
                   name="search"
                 />
               </div>
-              <div className="ml-auto order-2 semi-sm:mt-2">
+
+              <div className="mx-auto order-2 semi-sm:mt-2 lg:mr-0 block semi-md:mr-0">
                 <button className="bg-button-color text-ltb text-fb font-medium ml-8 mt-2 pl-3 pr-3 py-1 rounded-bt-rd semi-sm:ml-0">
                   ADD INTERVIEWER
                 </button>
                 <Link to="/import_trainees">
-                  <button className="bg-button-color text-ltb text-fb font-medium ml-8 mt-2 pl-3 pr-3 py-1 rounded-bt-rd semi-sm:ml-0">
-                    IMPORT
+                  <button className="bg-button-color text-ltb text-fb font-medium ml-8 mt-2 pl-3 pr-3 py-1 rounded-bt-rd semi-sm:ml-2">
+                    IMPORT FROM
                   </button>
                 </Link>
                 <button className="bg-button-color text-ltb text-fb font-medium ml-8 mt-2 pl-3 pr-3 py-1 rounded-bt-rd semi-sm:ml-2">
-                  EXPORT
+                  EXPORT TO
                 </button>
                 <button className="bg-cgray text-button-color text-fb font-medium ml-8 mt-2 pl-3 pr-3 py-1 rounded-bt-rd semi-sm:ml-2">
                   BULK EMAIL
@@ -228,6 +377,52 @@ const FilterTrainee = (props: any) => {
               </div>
             </div>
             <div>
+              <div className="relative block">
+                <button
+                  onClick={(event) => {
+                    setAnchorEl(event.currentTarget as unknown as HTMLElement);
+                  }}
+                  className="flex items-center mb-4 py-2 px-7 w-50 rounded-bt-rd border bg-row-gray border-solid border-bdr shadow-sm text-button-color text-fb font-medium"
+                >
+                  <h4>CHOOSE COLUMN</h4>
+                  <span className="pl-3">
+                    <FaCaretDown />
+                  </span>
+                </button>
+              </div>
+              <Menu
+                id="basic-menu"
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleClose}
+                MenuListProps={{
+                  "aria-labelledby": "basic-button",
+                }}
+                className="h-[23rem] mt-[8px]"
+              >
+                <MenuItem>
+                  <div className="flex">
+                    <div className="mr-[5px]">
+                      <CheckBox {...getToggleHideAllColumnsProps()} />{" "}
+                    </div>
+                    <div className="text-[#173B3F] text-base">Toggle All</div>
+                  </div>
+                </MenuItem>
+                {allColumns.map((column) => (
+                  <MenuItem>
+                    <div key={column.id}>
+                      <label className="text-[#173B3F] text-base">
+                        <input
+                          type="checkbox"
+                          {...column.getToggleHiddenProps()}
+                          className="mr-[5px]"
+                        />
+                        {column.Header}
+                      </label>
+                    </div>
+                  </MenuItem>
+                ))}
+              </Menu>
               <div className=" w-[100%] max-h-[70vh] m-auto bg-[#fff] shadow-md rounded-[10px] relative pb-[20px]  overflow-x-auto  overflow-y-scroll md:w-[100%]">
                 <table
                   {...getTableProps()}
@@ -255,9 +450,9 @@ const FilterTrainee = (props: any) => {
                     ))}
                   </thead>
                   <tbody {...getTableBodyProps()}>
-                    {console.log("page", page)}
-                    {console.log("trainleist", traineeList)}
-                    {traineeList.length !== 0 ? (
+                    {/* {console.log("page", page)} */}
+                    {/* {console.log("trainleist", traineeList)} */}
+                    {nonDeletedTrainee.length !== 0 ? (
                       page.map((row: any) => {
                         prepareRow(row);
                         return (

@@ -1,14 +1,15 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Select from "react-select";
 import {
   loadDataIntoDb,
   resendMappedDataIntoDb,
 } from "../../redux/actions/PerformLoadDataAction";
+import { load_data_request } from "../../redux/actiontypes/load_data_into_db_action";
 import { useAppDispatch, useAppSelector } from "../../redux/app/hook";
 
 const ImportTraineeDetailsFromGoogleSheet = () => {
-  // console.log("Hello it's hodal");
+  const navigate = useNavigate();
   const failedStatusMessage = useAppSelector((reduxStore: any) => {
     // console.log(reduxStore.loadData.error);
     return reduxStore.loadData.error;
@@ -60,6 +61,19 @@ const ImportTraineeDetailsFromGoogleSheet = () => {
         [name]: value,
       };
     });
+  }
+
+  if (
+    successStatusMessage ===
+    "The data mapped has been saved successfully, CONGRATS"
+  ) {
+    navigate("/filter_trainee");
+    dispatch(load_data_request());
+  }
+
+  if (successStatusMessage === "Trainees data loaded to db successfully") {
+    navigate("/filter_trainee");
+    dispatch(load_data_request());
   }
 
   const flipObjectKeys = (data: any) =>
@@ -153,7 +167,7 @@ const ImportTraineeDetailsFromGoogleSheet = () => {
                       <option value="education_level">education_level</option>
                       <option value="province">province</option>
                       <option value="district">district</option>
-                      <option value="cohort">cohort</option>
+                      <option value="cycle_id">cycle_id</option>
                       <option value="isEmployed">isEmployed</option>
                       <option value="isStudent">isStudent</option>
                       <option value="Hackerrank_score">Hackerrank_score</option>

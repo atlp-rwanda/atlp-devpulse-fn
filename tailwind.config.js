@@ -1,3 +1,5 @@
+const { green } = require("@mui/material/colors");
+
 module.exports = {
   content: ["./src/**/*.{ts,tsx}", "./index.html"],
   theme: {
@@ -7,6 +9,9 @@ module.exports = {
         md: { max: "820px" },
         lg: "976px",
         xl: "1440px",
+        'semi-sm': '120px',
+        'semi-md': '721px',
+        'semi-md-col':  { max: "721px" }
       },
       colors: {
         primary: "#1F2A37",
@@ -41,6 +46,7 @@ module.exports = {
         dots: "#6B7280",
         white: "#FFFFFF",
         black: "#000000",
+       
       },
       fontSize: {
         fb: "14px",
@@ -55,6 +61,10 @@ module.exports = {
       margin: {
         "5px": "5.5px",
       },
+    },
+    variants: {
+      backgroundColor: ['active'],
+      textColor: ['active']
     },
     plugins: [],
   },

@@ -9,6 +9,7 @@ import restoretraineReducer from "./RestoreReducer"
 import filterTraineeReducer from "./filterTraineeReducer";
 import { combineReducers } from "redux";
 import traineeReducer from "./traineeReducer";
+import clearTrashReducer from "./clearTrashReducer";
 import loadDataReducer from "./loadDataReducer";
 
 const allReducers = combineReducers({
@@ -17,7 +18,8 @@ const allReducers = combineReducers({
   softdeletetraine: softdeletetraineReducer,
   cycles: cycleReducer,
   softDeletedTrainees: softDeletedTraineeReducer,
-  restore: restoretraineReducer,
+  restore:restoretraineReducer,
+  clearTrash: clearTrashReducer,
   // viewtrainee:viewtraineReducer,
   // addtrainee:addtraineReducer,
   trainee: traineeReducer,

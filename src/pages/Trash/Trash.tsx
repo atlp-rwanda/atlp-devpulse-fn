@@ -5,19 +5,27 @@ import { connect } from "react-redux";
 import { useTable, usePagination, useRowSelect } from "react-table";
 import * as BsIcons from "react-icons/bs";
 import * as AiIcons from "react-icons/ai";
-import * as IoIcons from "react-icons/io";
 import CheckBox from "../../components/CkeckBox";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import NavBar from "../../components/sidebar/navHeader";
+import { clearTrash } from "../../redux/actions/clearTrash";
+import Select from "react-select";
+import { customTheme } from "../FilterTeainee/FilterTrainee";
+
+
 
 const Trash = (props: any) => {
   console.log(props);
-  const { allTrainees, restore } = props;
+  const { allTrainees, restore, clearTrashMessage } = props;
   const [pageIdx] = useState(1);
   const [itemsPerPage] = useState(100);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [traineid, settraineid] = useState("");
+  const [filterAttributes, setFilterAttributes] = useState("");
+  const [wordsEntered, setWordsEntered] = useState("");
+
+
 
   const open = Boolean(anchorEl);
   const handleClose = () => {
@@ -32,7 +40,7 @@ const Trash = (props: any) => {
     };
 
     props.getAllSoftDeletedTrainees(data);
-  }, [restore]);
+  }, [restore, clearTrashMessage]);
   const [moredrop, setmoredrop] = useState("");
   const trainees = allTrainees.data;
   const onSubmitHandler = (e: any) => {
@@ -125,37 +133,60 @@ const Trash = (props: any) => {
     }
   );
   const { pageIndex, pageSize } = state;
+
+  const emptyRecycleBin = async () => {
+    await props.clearTrash();
+  }
+
+  const clearInput = () => {
+    setWordsEntered("")
+  }
+
   return (
     <>
       <NavBar />
-      <div className="flex bg-[#F9F9FB]">
+      <div className="flex bg-[#F9F9FB] min-h-[100vh]" >
         <div className="min-h-[50vh] w-[100%] block  md:w-[100%] md:mt-0  pl-[16rem] pt-[80px] md:pl-0">
           <div className=" w-[100%] top-[20%] md:top-[10%] md:relative px-[10%] md:px-[10px]">
             <div className="flex justify-between align-center mb-5 relative md:block">
               <div className="absolute bottom-0 right-0 md:relative md:mb-3">
-                <button className="px-3 rounded-[5px] bg-[#173b3f] text-white flex items-center">
+                <button onClick={emptyRecycleBin} className="px-3 rounded-[5px] bg-[#173b3f] text-white flex items-center">
                   Empty trash
                 </button>
               </div>
               <div>
-                <div className="relative mb-2 w-[fit-content]">
-                  <IoIcons.IoMdArrowDropdown className="h-[1.5rem] w-[1.5rem] absolute box-border top-[50%] right-[2px] translate-y-[-50%]" />
-                  <input
-                    type="text"
-                    placeholder="Sort by"
-                    className="px-2 py-1 border border-[#999999] rounded-[5px]"
+                <div className="">
+                  <Select
+                    className="test sm:text-sm border bg-cgray border-solid border-bdr w-40 rounded-bt-rd"
+                    options={[
+                      { value: "_id", label: "Trainee ID" },
+                      { value: "firstName", label: "First Name" },
+                      { value: "lastName", label: "Last Name" },
+                      { value: "email", label: "Email" },
+                      { value: "", label: "Select by" },
+                    ]}
+                    defaultValue={{ value: '', label: 'Select by' }}
+                    onChange={(e) => setFilterAttributes(`${e?.value}`)}
+                    theme={customTheme}
                   />
                 </div>
+                <div className="flex items-center mb-6 semi-sm:flex-wrap">
+                  <div className=" searchInputs relative block">
+                    <span className="absolute inset-y-0 left-0 flex items-center pl-2">
+                      <svg className="h-5 w-5 fill-slate-300 text-cg cursor-pointer" onClick={clearInput} viewBox="-6 -6 20 20">
+                        {wordsEntered === "" ? (
+                          <AiIcons.AiOutlineSearch />
+                        ) : (
+                          <AiIcons.AiOutlineClose />
+                        )}
 
-                <div className="relative" style={{ width: "fit-content" }}>
-                  <AiIcons.AiOutlineSearch className="h-[1.5rem] w-[1.5rem] absolute box-border top-[50%] right-[2px] translate-y-[-50%]" />
-                  <input
-                    type="search"
-                    placeholder="Search"
-                    className="px-2 pl-7 py-1 border border-[#999999] rounded-[5px]"
-                  />
+                      </svg>
+                    </span>
+                    <input onChange={(e) => setWordsEntered(e.target.value)} className="block bg-row-gray w-50 border border-bdr rounded-bt-rd mt-2 py-2 pl-9 pr-4 focus:outline-none sm:text-sm" value={wordsEntered} placeholder="Search" type="text" name="search" />
+                  </div>
                 </div>
               </div>
+
             </div>
             <div>
               <div className=" w-[100%] max-h-[70vh] m-auto  bg-[#fff] shadow-md rounded-[10px] relative pb-[20px]  overflow-x-auto  overflow-y-scroll 	md:w-[100%]">
@@ -224,7 +255,7 @@ const Trash = (props: any) => {
                   onSubmitHandler(e);
                 }}
               >
-                <BsIcons.BsPencilFill className="mr-[5px]" />
+                <BsIcons.BsArrowCounterclockwise className="mr-[5px]" />
                 Restore
               </MenuItem>
             </Menu>
@@ -252,9 +283,8 @@ const Trash = (props: any) => {
                       return (
                         <div>
                           <button
-                            className={`border-solid border-[1px] mx-[2px]  border-[#a8a8a8] bg-[#fff] w-[35px] h-[38px]  active:bg-[#333] active:text-[#fff]-500 ${
-                              pageIndex === i && "bg-[#eef1f1]"
-                            }`}
+                            className={`border-solid border-[1px] mx-[2px]  border-[#a8a8a8] bg-[#fff] w-[35px] h-[38px]  active:bg-[#333] active:text-[#fff]-500 ${pageIndex === i && "bg-[#eef1f1]"
+                              }`}
                             onClick={(e: any) => {
                               const pageNumber = e.target.innerText;
                               gotoPage(pageNumber - 1);
@@ -297,8 +327,10 @@ const Trash = (props: any) => {
 const mapState = (state: any) => ({
   allTrainees: state.softDeletedTrainees,
   restore: state.restore,
+  clearTrashMessage: state.clearTrash,
+
 });
 
-export default connect(mapState, { getAllSoftDeletedTrainees, restoretraine })(
+export default connect(mapState, { getAllSoftDeletedTrainees, restoretraine, clearTrash })(
   Trash
 );

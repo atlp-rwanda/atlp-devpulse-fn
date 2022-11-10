@@ -3,8 +3,8 @@ import {
   load_data_request,
   load_data_success,
   load_data_fail,
-  resend_mapped_data_into_db,
 } from "../actiontypes/load_data_into_db_action";
+import { toast } from "react-toastify";
 
 const columns = {
   firstName: "",
@@ -19,7 +19,6 @@ const columns = {
   province: "",
   district: "",
   sector: "",
-  cohort: "",
   isEmployed: "",
   haveLaptop: "",
   isStudent: "",
@@ -28,13 +27,13 @@ const columns = {
   interview: "",
   interview_decision: "",
   past_andela_programs: "",
+  cycle_id: "",
 };
 
 export const loadDataIntoDb = (googleSheetId: string) => {
-  // console.log(googleSheetId)
   return async (dispatch: any) => {
     dispatch(load_data_request());
-    const result = await axios({
+    const resultPromise = axios({
       url: "http://localhost:4000/",
       method: "post",
       data: {
@@ -46,53 +45,63 @@ export const loadDataIntoDb = (googleSheetId: string) => {
         },
       },
     });
+    toast.promise(resultPromise, {
+      pending: "Saving the data into DB ...",
+      success: `Saved successfully 👌`,
+      error: `Not saved successfully 🤯`,
+    });
 
+    await resultPromise;
     // // on success
-    if (result.data.data) {
-      console.log(result.data.data.loadAllTrainees);
-      dispatch(load_data_success(result.data.data.loadAllTrainees));
+    if ((await resultPromise).data.data) {
+      console.log((await resultPromise).data.data.loadAllTrainees);
+      dispatch(
+        load_data_success((await resultPromise).data.data.loadAllTrainees)
+      );
     }
 
     // on errors
     else {
-      console.log(result.data.errors[0].message);
-      dispatch(load_data_fail(result.data.errors[0].message));
+      console.log((await resultPromise).data.errors[0].message);
+      dispatch(load_data_fail((await resultPromise).data.errors[0].message));
     }
   };
 };
 
-export const resendMappedDataIntoDb = (dataObjectMapped: any, id:any) => {
+export const resendMappedDataIntoDb = (dataObjectMapped: any, id: any) => {
+  console.log(dataObjectMapped);
   const resultObj = {
     ...columns,
     ...dataObjectMapped,
-    spreadsheetId:id
+    spreadsheetId: id,
   };
   console.log("in redux action");
   console.log(resultObj);
   return async (dispatch: any) => {
-    // dispatch(load_data_request());
-
-   try {
-     const result = await axios({
-       url: "http://localhost:4000/",
-       method: "post",
-       data: {
-         query: `mutation($columnData: columnsInputSubmitted!) {
+    try {
+      const resultPromise = axios({
+        url: "http://localhost:4000/",
+        method: "post",
+        data: {
+          query: `mutation($columnData: columnsInputSubmitted!) {
   reSendDataIntoDb(columnData: $columnData)
 }`,
-         variables: {
-           columnData: resultObj,
-         },
-       },
-     });
-
-     // on success
-     if (result.data.data) {
-       console.log(result.data.data.reSendDataIntoDb);
-      dispatch(load_data_success(result.data.data.reSendDataIntoDb));
-     }
-   } catch (error) {
-    console.log(error);
-   }
+          variables: {
+            columnData: resultObj,
+          },
+        },
+      });
+    toast.promise(resultPromise, {
+      pending: "Saving the data into DB ...",
+      success: `saved successfully 👌`,
+      error: `not saved successfully 🤯`,
+    });
+      // on success
+      if ((await resultPromise).data.data) {
+        dispatch(load_data_success((await resultPromise).data.data.reSendDataIntoDb));
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 };

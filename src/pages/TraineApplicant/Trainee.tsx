@@ -3,19 +3,21 @@ import React, { useState, useEffect } from "react";
 import { HiDotsVertical } from "react-icons/hi";
 import * as icons from "react-icons/ai";
 import { AiOutlinePlus } from "react-icons/ai";
+import { BrowserRouter as Router, Link } from "react-router-dom";
 import pagination from "../../components/pagination";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { getAllTraineess } from "../../redux/actions/TraineeAction";
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import Modal from "./modal";
-import Sidebar from "../../components/sidebar/sidebar";
+import NavBar from "../../components/sidebar/navHeader";
 import {
   softdeletetraine,
   deletetraine,
   fetchtraine,
 } from "../../redux/actions/deletetraine";
 import { useAppDispatch } from "../../hooks/hooks";
+import { getAllCycles } from "../../redux/actions/cyclesActions";
 
 const AddTrainee = (props: any) => {
   const [addNewTraineeModel, setAddNewTraineeModel] = useState(false);
@@ -36,11 +38,12 @@ const AddTrainee = (props: any) => {
   };
   useEffect(() => {
     props.getAllTraineess(input);
+    props.getAllCycles();
   }, []);
   const trainees = alltrainees.data;
   const traine = traines.message;
   useEffect(() => {
-    dispatch(fetchtraine());
+    dispatch(fetchtraine(input));
   }, [delettraine, softdeletettraine]);
   const [moredrop, setmoredrop] = useState("");
   const onSubmitHandler = (userid: any) => {
@@ -55,6 +58,7 @@ const AddTrainee = (props: any) => {
     await dispatch(softdeletetraine(userId));
     setmoredrop("");
   };
+
   console.log(props);
 
   //pagination
@@ -80,14 +84,14 @@ const AddTrainee = (props: any) => {
           addNewTraineeModel === true ? "block" : "hidden"
         }`}
       >
-        <Modal />
+        <Modal cycles={props.cycles.data} />
       </div>
       {/* =========================== End:: addnewtraineeModel =============================== */}
       <div className="flex flex-col  h-screen absolute w-[100%]">
         <div className="flex flex-row">
           <div className="w-full">
             <div>
-              <div className="bg-light-bg dark:bg-dark-frame-bg  min-h-screen overflow-y-hidden overflow-x-hidden">
+              <div className="bg-light-bg dark:bg-dark-frame-bg  min-h-screen overflow-y-hidden overflow-x-hidden lg:ml-[3rem]">
                 <div className="flex items-left px-7 lg:px-64 pt-24">
                   <div className="flex px-5 py-2 pb-8 w-fit">
                     <button
@@ -99,6 +103,13 @@ const AddTrainee = (props: any) => {
                     </button>
                     <div></div>
                   </div>
+
+                  <Link to="/filter_trainee">
+                    <button className="flex bg-primary rounded-md py-2 mt-2 px-4 text-white font-medium cursor-pointer">
+                      <icons.AiOutlineSearch className="mt-1 mr-1 font-bold" />{" "}
+                      Search
+                    </button>
+                  </Link>
                 </div>
                 <div className="px-3 md:px-8">
                   <div className="bg-white  dark:bg-dark-bg shadow-lg px-5 py-8 rounded-md w-[100%] mx-auto lg:w-[80%] lg:ml-60 mb-10">
@@ -122,22 +133,23 @@ const AddTrainee = (props: any) => {
                                 <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
                                   {"email"}
                                 </th>
-                                {/* <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
-                                  {('cycle')}
-                                </th> */}
+                                {
+                                  <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
+                                    {"cycle"}
+                                  </th>
+                                }
                                 <th className="border-b-2 sm:text-center border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
                                   {"action"}
                                 </th>
                               </tr>
                             </thead>
                             <tbody className="overflow-y-auto">
-                              {props.traines?.message
-                                ?.slice(firstContentIndex, lastContentIndex)
-                                ?.map((item: any) =>
+                              {props.traines.message!== null
+                              ?props.traines.message.slice(firstContentIndex, lastContentIndex).map((item: any) =>
                                   item.delete_at == false ? (
                                     <tr>
                                       <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
-                                        <div className="flex sm:justify-center items-center">
+                                        <div className="flex">
                                           <div className="">
                                             <p className="text-gray-900 text-center dark:text-white whitespace-no-wrap">
                                               {item.firstName}
@@ -146,7 +158,7 @@ const AddTrainee = (props: any) => {
                                         </div>
                                       </td>
                                       <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
-                                        <div className="flex sm:justify-center items-center">
+                                        <div className="flex items-center">
                                           <div className="">
                                             <p className="text-gray-900 text-center dark:text-white whitespace-no-wrap">
                                               {item.lastName}
@@ -154,17 +166,9 @@ const AddTrainee = (props: any) => {
                                           </div>
                                         </div>
                                       </td>
-                                      {/* <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
-                                      <div className="flex sm:justify-center items-center">
-                                        <div className="">
-                                          <p className="text-gray-900 items-center dark:text-white whitespace-no-wrap">
-                                            {item.gender ? (item.gender):('male')}
-                                          </p>
-                                        </div>
-                                      </div>
-                                    </td> */}
+
                                       <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
-                                        <div className="flex sm:justify-center items-center">
+                                        <div className="flex items-center">
                                           <div className="">
                                             <p className="text-gray-900 items-center dark:text-white whitespace-no-wrap">
                                               {item.email}
@@ -172,31 +176,29 @@ const AddTrainee = (props: any) => {
                                           </div>
                                         </div>
                                       </td>
-                                      {/* <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
-                                      <div className="flex sm:justify-center items-center">
-                                        <div className="">
-                                          <p className="text-gray-900 items-center dark:text-white whitespace-no-wrap">
-                                            {item.cohort}
-                                            {item.cohort ? (item.cohort ):('cohort 1')}
 
-                                           
-                                          </p>
-                                        
-                                        </div>
+                                      <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
+                                        <div className="flex items-center">
+                                          <div className="">
+                                            <p className="text-gray-900 items-center dark:text-white whitespace-no-wrap">
+                                              {item.cycle_id?item.cycle_id.name:'-'}
+                                            </p>
                                           </div>
-                                      </td> */}
+                                        </div>
+                                      </td>
+
                                       <td>
                                         <div>
                                           <HiDotsVertical
                                             className=" text-black text-3xl ml-6 font-size-6 cursor-pointer"
                                             onClick={(e: any) => {
                                               e.preventDefault();
-                                              onSubmitHandler(item.id);
+                                              onSubmitHandler(item._id);
                                             }}
                                           />
                                           <div
                                             className={`${
-                                              moredrop === item.id
+                                              moredrop === item._id
                                                 ? "block"
                                                 : "hidden"
                                             } absolute  bg-white text-base z-50 list-none divide-y divide-gray-100 rounded shadow my-4`}
@@ -211,10 +213,10 @@ const AddTrainee = (props: any) => {
                                                   className="text-sm hover:bg-gray-100 text-gray-700 block px-4 py-2"
                                                   onClick={(e: any) => {
                                                     e.preventDefault();
-                                                    onSubmitHandlesoft(item.id);
+                                                    onSubmitHandlesoft(item._id);
                                                   }}
                                                 >
-                                                  soft delete
+                                                  Soft Delete
                                                 </div>
                                               </li>
                                               <li>
@@ -222,10 +224,10 @@ const AddTrainee = (props: any) => {
                                                   className="text-sm hover:bg-gray-100 text-gray-700 block px-4 py-2"
                                                   onClick={(e: any) => {
                                                     e.preventDefault();
-                                                    onSubmitHandle(item.id);
+                                                    onSubmitHandle(item._id);
                                                   }}
                                                 >
-                                                  harddelete
+                                                  Hard Delete
                                                 </div>
                                               </li>
                                             </ul>
@@ -234,8 +236,8 @@ const AddTrainee = (props: any) => {
                                         {/* </div> */}
                                       </td>
                                     </tr>
-                                  ) : null
-                                )}
+                                  ) :null
+                                ):null}
                             </tbody>
                           </table>
                         </div>
@@ -275,6 +277,7 @@ const AddTrainee = (props: any) => {
                         {el}
                       </button>
                     ))}
+                    {totalPages?
                     <button
                       onClick={() => setPaging(totalPages)}
                       data-testid="page3"
@@ -283,7 +286,7 @@ const AddTrainee = (props: any) => {
                       }`}
                     >
                       {totalPages}
-                    </button>
+                    </button>:null}
                     <button
                       onClick={nextPage}
                       data-testid="next"
@@ -302,7 +305,7 @@ const AddTrainee = (props: any) => {
         </div>
       </div>
 
-      <Sidebar></Sidebar>
+      <NavBar />
     </>
   );
 };
@@ -314,6 +317,7 @@ const mapState = (state: any) => ({
   delettraine: state.deletetraine,
   softdeletettraine: state.softdeletetraine,
   traines: state.traine,
+  cycles: state.cycles,
 });
 
 export default connect(mapState, {
@@ -321,4 +325,5 @@ export default connect(mapState, {
   deletetraine,
   softdeletetraine,
   fetchtraine,
+  getAllCycles,
 })(AddTrainee);

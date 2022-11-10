@@ -1,7 +1,7 @@
 import axios from './axiosconfig';
 import { Dispatch } from 'redux';
 import { DeleteActionType, Action,softDeleteActionType,softAction,fetchact,fetchtrainesss } from '../actiontypes/deleteactiontype';
-
+import { toast } from "react-toastify";
 
 export const deletetraine = (traineId: string) => {
     
@@ -20,8 +20,8 @@ export const deletetraine = (traineId: string) => {
                                 deleteTrainee(id: $deleteTraineeId) {
                                     id
                                     email
-                                    firstname
-                                    lastname
+                                    firstName
+                                    lastName
                                 }
                                 }`,
                         variables: {
@@ -76,8 +76,8 @@ export const softdeletetraine = (traineId: string) => {
                                     softdeleteTrainee(input: $input) {
                                         id
                                         email
-                                        firstname
-                                        lastname
+                                        firstName
+                                        lastName
                                     }
                                     }`,
                         variables: {
@@ -107,20 +107,30 @@ export const softdeletetraine = (traineId: string) => {
         } catch(err:any) {dispatch({type: softDeleteActionType.softDELETE_TRAINE_FAIL,error: err.message});}
     }
 }
-export const fetchtraine = () => {
+export const fetchtraine = ({ page,itemsPerPage,  All }:any) => {
     return async (dispatch: Dispatch<fetchact>) => {
         try {
             await axios.post( '/',
                      {
-                        query: `query GetAllTrainees {
-                                getAllTrainees {
-                                    id
-                                    email
-                                    firstName
-                                    lastName
-                                    delete_at
-                                }
-                                }`,
+                        query: `query AllTrainees($input: pagination) {
+                                    allTrainees(input: $input) {
+                                        lastName
+                                        firstName
+                                        _id
+                                        email
+                                        delete_at
+                                        cycle_id {
+                                           name
+                                        }
+                                    }
+                                    }`,
+                        variables:{
+                            input: {
+                                page,
+                                itemsPerPage,
+                                All,
+                                },
+                        }
                     },
                     {
                         headers: {
@@ -129,14 +139,17 @@ export const fetchtraine = () => {
                     }
                                 )
             .then((res)=> {
-                if (res.data.data) dispatch({type: fetchtrainesss.fetchtraines_success,data:res.data.data.getAllTrainees});
+                if (res.data.data){toast.success("traines fetched successfully") ;dispatch({type: fetchtrainesss.fetchtraines_success,data:res.data.data.allTrainees})};
                 if (res.data.errors) {
                      var mess
                 res.data.errors.map((b:any)=>{ mess =b.message})
+                toast.error(mess)
                 dispatch({type: fetchtrainesss.fetchtraines_fail,error:mess});
                 }
             })
-            .catch(err=> {dispatch({type: fetchtrainesss.fetchtraines_fail,error:err})})
-        } catch(err:any) {dispatch({type: fetchtrainesss.fetchtraines_fail,error:err})}
+            .catch(err=> {
+                  toast.error(err.message)
+                  dispatch({type: fetchtrainesss.fetchtraines_fail,error:err})})
+        } catch(err:any) {toast.error(err.message);dispatch({type: fetchtrainesss.fetchtraines_fail,error:err})}
     }
 }

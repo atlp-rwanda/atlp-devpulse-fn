@@ -1,17 +1,18 @@
-import { GET_ALL_FILTERED_TRAINEES } from "..";
-
+import { BsPause } from "react-icons/bs";
+import { EMPTYING_TRASH } from "..";
 const initialState = {
-  loading: false,
-  error: null,
+  isLoading: true,
+  isLoaded: false,
+  errors: null,
   data: [],
 };
-
 export default (state = initialState, { type, payload }: any) => {
+    console.log("Payload", payload)
   switch (type) {
-    case GET_ALL_FILTERED_TRAINEES:
+    case EMPTYING_TRASH:
       return {
         ...state,
-        loading: false,
+        isLoading: false,
         data: payload,
       };
     default:
