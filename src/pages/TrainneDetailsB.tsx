@@ -1,4 +1,3 @@
-
 import React, {useState, useEffect} from "react";
 import { BsEnvelope } from "react-icons/bs";
 import { TiExportOutline } from "react-icons/ti";
@@ -6,65 +5,40 @@ import { FcApproval } from "react-icons/fc";
 import { AiFillSetting, AiFillCaretDown } from "react-icons/ai";
 import { MdOutlineCancel } from "react-icons/md";
 import { BsFillPersonLinesFill } from "react-icons/bs";
-import { getAllTraineess } from "./../redux/actions/trainnee";
+import { getOneTraineeAllDetails } from "../redux/actions/trainnee";
 import { connect } from "react-redux";
+import NavSidbar from "./../components/sidebar/navHeader"
 
 
 const TrainneeDetails = (props: any) => {
-  const {trainnes} = props;
 
-  const [page, setPage] = useState(0);
-const [itemsPerPage, setiIemsPerPage] = useState(0);
-const [All, setAll] = useState(true);
-  const input = {
-    page: page,
-    itemsPerPage: itemsPerPage,
-    All: All,
-  };
+  const {oneTraineeDetails} = props;
 
-  useEffect(()=>{
-  props.getAllTraineess(input);
-  },[])
-
-  const trainn = trainnes.data
-  console.log(trainn)
+  const [ID, setId] = useState("634d18e1d82ebebbc0491eae");
 
   const [open, setOpen] = useState<boolean>(false);
   const handleDropDown = (state : boolean)=>{
     setOpen(!state)
   }
-  console.log(open)
 
+  let input = {
+    id: ID,
+  };
 
-  // const getTraine = ()=>{
-  //   fetch('http://localhost:5000',{
-  //     method:'POST',
-  //     headers: {"Content-type": "application/json"},
-  //     body:JSON.stringify({
-       
-  //       query:`
-  //       query GetAllTrainees {
-  //         getAllTrainees {
-  //           id
-  //           email
-  //           lastname
-  //           firstname
-  //         }
-  //       }
-  //       `,
-      
-  //     })
-  //   }).then(res => res.json())
-  //      .then(data =>{
-  //        console.log(data.data.getAllTrainees)
-  //      })
-  // }
-  
+  useEffect(() => {
+    props.getOneTraineeAllDetails(input);
+  }, []);
+
+  const traineeDetails = oneTraineeDetails.data;
+
+  console.log("Trainess",traineeDetails);
+
   return (
     <>
-      <div className="h-screen m-0 bg-[#374151]">
-        <div className="block ml-[30%] ">
-          <div className=" box-border bg-[rgb(31,42,55)] h-80 w-[70%] flex mb-3 mt-20 rounded  drop-shadow-lg">
+    < NavSidbar/>
+      <div className="h-screen mt-[-6%] bg-[#374151]">
+        <div className="block ml-[20%]  mt-20">
+          <div className=" box-border bg-[rgb(31,42,55)] h-80 w-[70%] flex mb-3 mt-[6%] rounded  drop-shadow-lg">
             <div className="float-left ml-10 text-white">
               <h2 className="font-bold mt-5">Applicant Information</h2>
               <div className="mt-10 ml-7">
@@ -86,7 +60,7 @@ const [All, setAll] = useState(true);
               <h3>Email Address</h3>
               <p className="text-gray-500 text-sm">john@gmail.com</p>
               <h3>Date of Bith</h3>
-              <p className="text-gray-500 text-sm">07/07/1990</p>
+              <p className="text-gray-500 text-sm"></p>
             </div>
           </div>
           <div className=" box-border bg-[#1F2A37] h-60 w-[70%] flex text-white  mb-3 rounded drop-shadow-lg">
@@ -147,6 +121,7 @@ const [All, setAll] = useState(true);
                 <MdOutlineCancel className="float-left m-1" />
                 Reject
               </button>
+
             </div>
           </div>
         </div>
@@ -155,10 +130,12 @@ const [All, setAll] = useState(true);
   );
 };
 
-const mapState=({trainee}: any)=>{
-  return { trainnes: trainee.trainnes}
- }
- 
- export default connect(mapState,{
-   getAllTraineess
- })(TrainneeDetails)
+// export default TrainneeDetails
+
+const mapState = ({ traineeAllDetails }: any) => ({
+  oneTraineeDetails: traineeAllDetails
+})
+
+export default connect(mapState, {
+  getOneTraineeAllDetails,
+})(TrainneeDetails)

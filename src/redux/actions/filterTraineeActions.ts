@@ -7,11 +7,11 @@ import axios from "axios";
 export const getAllFilteredTraineess = ({ page,itemsPerPage,  All, wordEntered, filterAttribute }:any) => async (dispatch: any) => {
   try {
     const datas = await axios({
-      url: process.env.BACKEND_URL,
+      url: 'http://localhost:4000/',
       method: "post",
       data: {
         query: `
-        query FilterTraineesDetails($input: filterOptions) {
+        query Query($input: filterOptions) {
           filterTraineesDetails(input: $input) {
             trainee_id {
               lastName
@@ -42,7 +42,20 @@ export const getAllFilteredTraineess = ({ page,itemsPerPage,  All, wordEntered, 
             interview_decision
             past_andela_programs
             _id
-            Address
+            trainee_id {
+              lastName
+              firstName
+              _id
+              email
+              cycle_id {
+                id
+                name
+                startDate
+                endDate
+              }
+              delete_at
+            }
+          
           }
         }
       `,  variables: {

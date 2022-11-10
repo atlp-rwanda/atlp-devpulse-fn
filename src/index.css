@@ -5,3 +5,29 @@
 body{
     background: #f4f4f4;
 }
+
+@media screen and (max-width: 920px){
+  .btn{
+      display: grid;
+      grid-template-rows: repeat(4, 1fr);
+      gap: .5rem;
+  }
+  .btn-Aprov {
+      width: 250px;
+      height: 3rem;
+      margin-bottom: .5rem;
+  }
+    
+  .btn-Aprov2 {
+      width: 250px;
+      height: 3rem;
+      margin-top: -60px;
+  }
+    
+  .btn-Aprov3 {
+      width: 250px;
+      height: 3rem;
+      margin-top: -8rem;
+  }
+    
+}

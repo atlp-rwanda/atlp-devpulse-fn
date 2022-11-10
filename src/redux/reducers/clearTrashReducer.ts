@@ -7,7 +7,6 @@ const initialState = {
   data: [],
 };
 export default (state = initialState, { type, payload }: any) => {
-    console.log("Payload", payload)
   switch (type) {
     case EMPTYING_TRASH:
       return {
