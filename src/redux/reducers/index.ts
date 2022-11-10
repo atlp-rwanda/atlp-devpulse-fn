@@ -1,17 +1,29 @@
 import counterReducer from "./counterReducer";
 import deletetraineReducer from "./deletetraineReducer"
-import {softdeletetraineReducer} from "./deletetraineReducer"
+import {softdeletetraineReducer,traineReducer} from "./deletetraineReducer"
+import cycleReducer from "./cycleReducer";
+import softDeletedTraineeReducer from "./softDeletedTraineesReducer";
+import restoretraineReducer from "./RestoreReducer"
 // import addtraineReducer from "./traineeReducer";
 // import { viewtraineReducer } from "./traineeReducer";
+import filterTraineeReducer from "./filterTraineeReducer";
 import { combineReducers } from "redux";
 import traineeReducer from "./traineeReducer";
+import clearTrashReducer from "./clearTrashReducer";
+
 const allReducers = combineReducers({
   counter: counterReducer,
-  deletetraine:deletetraineReducer,
-  softdeletetraine:softdeletetraineReducer,
+  deletetraine: deletetraineReducer,
+  softdeletetraine: softdeletetraineReducer,
+  cycles: cycleReducer,
+  softDeletedTrainees: softDeletedTraineeReducer,
+  restore:restoretraineReducer,
+  clearTrash: clearTrashReducer,
   // viewtrainee:viewtraineReducer,
   // addtrainee:addtraineReducer,
   trainee: traineeReducer ,
+  traine:traineReducer,
+  filterTrainee: filterTraineeReducer,
 });
 
 export default allReducers;

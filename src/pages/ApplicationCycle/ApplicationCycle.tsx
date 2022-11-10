@@ -8,7 +8,6 @@ import {
 import { connect } from "react-redux";
 import "react-toastify/dist/ReactToastify.css";
 import { useTable, usePagination } from "react-table";
-import Sidebar from "../../components/sidebar/sidebar";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Menu from "@mui/material/Menu";
@@ -16,6 +15,7 @@ import MenuItem from "@mui/material/MenuItem";
 import * as BsIcons from "react-icons/bs";
 import * as AiIcons from "react-icons/ai";
 import * as IoIcons from "react-icons/io5";
+import NavBar from "../../components/sidebar/navHeader";
 
 const ApplicationCycle = (props: any) => {
   const { allCycles, errors } = props;
@@ -189,12 +189,10 @@ const ApplicationCycle = (props: any) => {
 
   return (
     <>
-      <div className="flex bg-[#F9F9FB]">
-        <div className="md:hidden">
-          <Sidebar />
-        </div>
-        <div className="relative min-h-[50vh] w-[84rem] md:w-[100rem]">
-          <div className="absolute table table-fixed w-[100%] top-[20%] pb-10 md:relative px-[10%] md:px-[10px]">
+      <NavBar />
+      <div className="flex bg-[#F9F9FB] min-h-[100vh]">
+        <div className="min-h-[50vh] w-[100%] block mt-10 md:w-[100%] md:mt-0 pl-[16rem]  pt-[80px] md:pl-0">
+          <div className=" table table-fixed w-[100%] top-[20%] md:top-[10%] pb-10 md:relative px-[10%] md:px-[10px]">
             <button
               className="h-[40px] rounded-[5px] bg-[#173b3f] text-white flex items-center p-0 pl-[5px] pr-[10px] mb-[20px]"
               onClick={() => handleOpenCreateCycle()}
@@ -202,111 +200,116 @@ const ApplicationCycle = (props: any) => {
               <BsIcons.BsPlusLg className="mx-[5px]" />
               <span>Cycle</span>
             </button>
-            <div className=" w-[100%] min-h-[70vh] m-auto  bg-[#fff] p-[10px] shadow-md rounded-[10px] relative pb-[80px]  overflow-x-auto	md:w-[100%]">
-              <table
-                {...getTableProps()}
-                className="border-collapse w-[100%] my-[10px] mx-auto rounded-[15px] whitespace-nowrap "
-              >
-                <thead className="h-[50px]">
-                  {headerGroups.map((headerGroup: any) => (
-                    <tr
-                      {...headerGroup.getHeaderGroupProps()}
-                      className="border-solid border-[1px] border-white even:bg-[#eef1f1]"
-                    >
-                      {headerGroup.headers.map((column: any) => (
-                        <th
-                          {...column.getHeaderProps}
-                          className="border-solid pl-[30px] h-[50px] text-left bg-[#eef1f1] first:rounded-tl-[10px] last:rounded-tr-[10px] last:pl-[0px] border-b-[2px] border-[rgb(168, 168, 168)]   last:pl-[0px] w-[150px] last:w-[20px]"
-                        >
-                          {column.render("Header")}
-                        </th>
-                      ))}
-                    </tr>
-                  ))}
-                </thead>
-                <tbody {...getTableBodyProps()}>
-                  {page.map((row: any) => {
-                    prepareRow(row);
-                    return (
+            <div>
+              <div className=" w-[100%] max-h-[70vh] m-auto  bg-[#fff] shadow-md rounded-[10px] relative pb-[20px]  overflow-x-auto  overflow-y-scroll 	md:w-[100%]">
+                <table
+                  {...getTableProps()}
+                  className="border-collapse w-[100%] m-auto rounded-[15px] whitespace-nowrap "
+                >
+                  <thead className=" w-full px-32 sticky top-0">
+                    {headerGroups.map((headerGroup: any, index: number) => (
                       <tr
-                        {...row.getRowProps()}
-                        key={row.original.id}
-                        className="even:bg-[#eef1f1]"
+                        key={index}
+                        {...headerGroup.getHeaderGroupProps()}
+                        className="border-solid border-[1px] border-white even:bg-[#eef1f1] first:w-[20px]"
                       >
-                        {row.cells.map((cell: any) => {
-                          return (
-                            <td
-                              {...cell.getCellProps()}
-                              className="pl-[30px] text-left max-w-[150px] overflow-x-auto p-[8px] last:w-[2px] last:pl-[0px]"
+                        {headerGroup.headers.map(
+                          (column: any, index: number) => (
+                            <th
+                              key={index}
+                              {...column.getHeaderProps}
+                              className="border-solid pl-[30px] h-[50px] text-left bg-[#eef1f1]  first:rounded-tl-[10px] last:rounded-tr-[10px] border-b-[2px] border-[#c5c5c5] py-6   last:pl-[0px] w-[150px] last:w-[20px]  first:w-[20px]  "
                             >
-                              {cell.render("Cell")}
-                            </td>
-                          );
-                        })}
+                              {column.render("Header")}
+                            </th>
+                          )
+                        )}
                       </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-              <div className="block mx-auto my-0 w-[100%] absolute bottom-0 overflow-x-auto">
-                <div className="w-[100%] flex items-center justify-center my-[30px]  mx-auto md:block md:mx-auto">
-                  <span className="flex items-center md:justify-center md:mt-[10px]">
-                    {" "}
-                    <button
-                      className="my-0 mx-[5px] px-[5px] py-0 text-[#333] h-[35px] border-solid border-[1px]  border-[#a8a8a8]  disabled:bg-[#E7E7E7] disabled:text-[#a8a8a8]"
-                      onClick={() => gotoPage(0)}
-                      disabled={!canPreviousPage}
-                    >
-                      <AiIcons.AiOutlineDoubleLeft />
-                    </button>
-                    <button
-                      className=" border-solid border-[1px]  border-[#a8a8a8] py-0 px-[5px] text-[#333] rounded-tl-[5px] h-[35px] disabled:bg-[#E7E7E7] disabled:text-[#a8a8a8] "
-                      onClick={() => previousPage()}
-                      disabled={!canPreviousPage}
-                    >
-                      <AiIcons.AiOutlineLeft />
-                    </button>
-                    <span className="flex flex-wrap md:hidden " id="pages">
-                      {pageOptions?.map((pageOption: any, i: number) => {
-                        console.log("pageOption", pageOption);
+                    ))}
+                  </thead>
+                  <tbody {...getTableBodyProps()}>
+                    {page.map((row: any) => {
+                      prepareRow(row);
+                      return (
+                        <tr
+                          {...row.getRowProps()}
+                          key={row.original.id}
+                          className="even:bg-[#eef1f1] border-b border-gray-200 "
+                        >
+                          {row.cells.map((cell: any) => {
+                            return (
+                              <td
+                                {...cell.getCellProps()}
+                                className="pl-[30px] text-left max-w-[150px] overflow-x-auto p-4 last:w-[2px] last:pl-[0px]"
+                              >
+                                {cell.render("Cell")}
+                              </td>
+                            );
+                          })}
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>{" "}
+            </div>
 
-                        return (
-                          <div>
-                            <button
-                              className={`border-solid border-[1px] mx-[1px]  border-[#a8a8a8] w-[30px] h-[35px] active:bg-[#333] active:text-[#fff] ${
-                                pageIndex === i && "bg-[#173b3fcd] text-[#fff]"
-                              }`}
-                              onClick={(e: any) => {
-                                const pageNumber = e.target.innerText;
-                                gotoPage(pageNumber - 1);
-                              }}
-                            >
-                              {pageOption + 1}
-                            </button>
-                          </div>
-                        );
-                      })}
-                    </span>
-                    <button
-                      className=" border-solid border-[1px]  border-[#a8a8a8] py-0 px-[5px] text-[#333] rounded-tr-[5px] h-[35px]  disabled:bg-[#E7E7E7] disabled:text-[#a8a8a8]"
-                      onClick={() => nextPage()}
-                      disabled={!canNextPage}
-                    >
-                      <AiIcons.AiOutlineRight />
-                    </button>
-                    <button
-                      className="my-0 mx-[5px] px-[5px] py-0 text-[#333] h-[35px] border-solid border-[1px]  border-[#a8a8a8]  disabled:bg-[#E7E7E7] disabled:text-[#a8a8a8]"
-                      onClick={() => gotoPage(pageCount - 1)}
-                      disabled={!canNextPage}
-                    >
-                      <AiIcons.AiOutlineDoubleRight />
-                    </button>
-                  </span>{" "}
-                  <span className="mx-[10px] md:block md:text-center">
-                    Page <strong>{pageIndex + 1}</strong> of
-                    <strong>{pageOptions.length}</strong>
+            <div className="block mx-auto my-0 w-[100%]  bottom-0 overflow-x-auto">
+              <div className="w-[100%] flex items-center justify-center my-[30px]  mx-auto md:block md:mx-auto">
+                <span className="flex items-center md:justify-center md:mt-[10px]">
+                  {" "}
+                  <button
+                    className="my-0 mx-[5px] px-[5px] py-0 text-[#333] h-[38px] border-solid border-[1px]  border-[#a8a8a8]  disabled:bg-[#E7E7E7] disabled:text-[#a8a8a8]"
+                    onClick={() => gotoPage(0)}
+                    disabled={!canPreviousPage}
+                  >
+                    <AiIcons.AiOutlineDoubleLeft />
+                  </button>
+                  <button
+                    className=" border-solid border-[1px]  border-[#a8a8a8] py-0 px-[10px] text-[#333] rounded-l-[5px] h-[38px] disabled:bg-[#E7E7E7] disabled:text-[#a8a8a8] "
+                    onClick={() => previousPage()}
+                    disabled={!canPreviousPage}
+                  >
+                    <AiIcons.AiOutlineLeft />
+                  </button>
+                  <span className="flex flex-wrap md:hidden " id="pages">
+                    {pageOptions?.map((pageOption: any, i: number) => {
+                      return (
+                        <div>
+                          <button
+                            className={`border-solid border-[1px] mx-[2px]  border-[#a8a8a8] bg-[#fff] w-[35px] h-[38px]  active:bg-[#333] active:text-[#fff]-500 ${
+                              pageIndex === i && "bg-[#eef1f1]"
+                            }`}
+                            onClick={(e: any) => {
+                              const pageNumber = e.target.innerText;
+                              gotoPage(pageNumber - 1);
+                            }}
+                          >
+                            {pageOption + 1}
+                          </button>
+                        </div>
+                      );
+                    })}
                   </span>
-                </div>
+                  <button
+                    className=" border-solid border-[1px]  border-[#a8a8a8] py-0 px-[10px] text-[#333] rounded-r-[5px] h-[38px]  disabled:bg-[#E7E7E7] disabled:text-[#a8a8a8]"
+                    onClick={() => nextPage()}
+                    disabled={!canNextPage}
+                  >
+                    <AiIcons.AiOutlineRight />
+                  </button>
+                  <button
+                    className="my-0 mx-[5px] px-[5px] py-0 text-[#333] h-[38px] border-solid border-[1px]  border-[#a8a8a8]  disabled:bg-[#E7E7E7] disabled:text-[#a8a8a8]"
+                    onClick={() => gotoPage(pageCount - 1)}
+                    disabled={!canNextPage}
+                  >
+                    <AiIcons.AiOutlineDoubleRight />
+                  </button>
+                </span>{" "}
+                <span className="flex ml-3 md:justify-center  text-center md:mt-3 md:ml-0">
+                  Page <strong>{pageIndex + 1} </strong>of{" "}
+                  <strong>{pageOptions.length}</strong>
+                </span>
               </div>
             </div>
           </div>
@@ -345,14 +348,16 @@ const ApplicationCycle = (props: any) => {
               onSubmit={createNewCycle}
               className=" relative w-[100%] rounded-[5px] h-[455px] m-auto p-[10px] pt-[5px] bg-[#f0f0f0] "
             >
-              <h1 className="text-center font-bold text-[24px] m-[20px]">
+              <h1 className="text-center font-bold text-[22px] m-[20px]">
                 Add new cycle
               </h1>
               <IoIcons.IoClose
                 className="absolute top-[20px] right-[20px] text-[35px] cursor-pointer"
                 onClick={handleCloseCreateModel}
               />
-              <hr style={{ marginBottom: "40px" }} />
+              <hr style={{ marginBottom: "4px" }} />
+              <div>
+              <label className="mr-3 p-14 font-bold text-[19px]">Cycle Name</label>
               <input
                 type="text"
                 name="name"
@@ -361,8 +366,11 @@ const ApplicationCycle = (props: any) => {
                 onChange={(e) => {
                   setName(e.target.value);
                 }}
-                className=" mt-3 bg-lime cursor-pointer text-[18px] self-center py-1 rounded-[5px] h-[50px] my-[20px] mx-auto w-[80%] block border-[2px] border-[#a8a8a8]  px-[10px] md:w-[90%]"
+                className=" mt-2 bg-lime cursor-pointer text-[18px] self-center py-1 rounded-[5px] h-[50px] my-[20px] mx-auto w-[80%] block border-[2px] border-[#a8a8a8]  px-[10px] md:w-[90%]"
               />
+              </div>
+              <div>
+              <label className="mr-3 p-14 font-bold text-[19px]">Start Date</label>
               <input
                 type="date"
                 name="start date"
@@ -370,8 +378,11 @@ const ApplicationCycle = (props: any) => {
                 onChange={(e) => {
                   setStartDate(e.target.value);
                 }}
-                className=" mt-3 bg-lime cursor-pointer text-[18px] self-center py-1 rounded-[5px] h-[50px] my-[20px] mx-auto w-[80%] block border-[2px] border-[#a8a8a8]  px-[10px] md:w-[90%]"
+                className=" mt-2 bg-lime cursor-pointer text-[18px] self-center py-1 rounded-[5px] h-[50px] my-[20px] mx-auto w-[80%] block border-[2px] border-[#a8a8a8]  px-[10px] md:w-[90%]"
               />
+              </div>
+              <div>
+              <label className="mr-3 p-14 font-bold text-[19px]">End Date</label>
               <input
                 type="date"
                 name="end date"
@@ -379,8 +390,10 @@ const ApplicationCycle = (props: any) => {
                 onChange={(e) => {
                   setEndDate(e.target.value);
                 }}
-                className=" mt-3 bg-lime cursor-pointer text-[18px] self-center py-1 rounded-[5px] h-[50px] my-[20px] mx-auto w-[80%] block border-[2px] border-[#a8a8a8]  px-[10px] md:w-[90%]"
+                className=" mt-2 bg-lime cursor-pointer text-[18px] self-center py-1 rounded-[5px] h-[50px] my-[20px] mx-auto w-[80%] block border-[2px] border-[#a8a8a8]  px-[10px] md:w-[90%]"
+                min={startDate}
               />
+              </div>
               <button
                 type="submit"
                 className="text-white border-[1px] border-[#a8a8a8] h-[40px] w-[100px] block rounded-[5px] my-[10px] mx-[auto] bg-[#173b3f]"
