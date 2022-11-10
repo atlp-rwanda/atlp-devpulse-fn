@@ -1,7 +1,10 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import Select from "react-select";
-import { loadDataIntoDb, resendMappedDataIntoDb } from "../../redux/actions/PerformLoadDataAction";
+import {
+  loadDataIntoDb,
+  resendMappedDataIntoDb,
+} from "../../redux/actions/PerformLoadDataAction";
 import { useAppDispatch, useAppSelector } from "../../redux/app/hook";
 
 const ImportTraineeDetailsFromGoogleSheet = () => {
@@ -15,7 +18,7 @@ const ImportTraineeDetailsFromGoogleSheet = () => {
     return reduxStore.loadData.message;
   });
 
-  console.log(successStatusMessage)
+  console.log(successStatusMessage);
 
   const errMessageArr = failedStatusMessage.split(",");
 
@@ -59,21 +62,18 @@ const ImportTraineeDetailsFromGoogleSheet = () => {
     });
   }
 
-    const flipObjectKeys = (data: any) =>
-      Object.fromEntries(
-        Object.entries(data).map(([key, value]) => [value, key])
-      );
-    // console.log(flipObjectKeys(formData));
-  ;
-    function handleSubmitToResend(event:any) {
-      event.preventDefault();
-       const url_arr = urlInput.split("/");
-       const Id_goolge_sheet = url_arr[5];
-
-      dispatch(
-        resendMappedDataIntoDb(flipObjectKeys(formData), Id_goolge_sheet)
-      );
-    }
+  const flipObjectKeys = (data: any) =>
+    Object.fromEntries(
+      Object.entries(data).map(([key, value]) => [value, key])
+    );
+  // console.log(flipObjectKeys(formData));
+  function handleSubmitToResend(event: any) {
+    event.preventDefault();
+    const url_arr = urlInput.split("/");
+    const Id_goolge_sheet = url_arr[5];
+    setUrlInput("");
+    dispatch(resendMappedDataIntoDb(flipObjectKeys(formData), Id_goolge_sheet));
+  }
 
   return (
     <div className="ml-[1rem] mr-[1rem]  h-full p-[9rem] flex justify-center flex-col items-center bg-[#aaa] pb-[20rem]">

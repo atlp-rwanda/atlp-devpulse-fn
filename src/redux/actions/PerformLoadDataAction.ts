@@ -89,7 +89,7 @@ export const resendMappedDataIntoDb = (dataObjectMapped: any, id:any) => {
      // on success
      if (result.data.data) {
        console.log(result.data.data.reSendDataIntoDb);
-      dispatch(resend_mapped_data_into_db(result.data.data.reSendDataIntoDb));
+      dispatch(load_data_success(result.data.data.reSendDataIntoDb));
      }
    } catch (error) {
     console.log(error);
