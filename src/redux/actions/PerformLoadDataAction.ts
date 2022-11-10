@@ -3,6 +3,7 @@ import {
   load_data_request,
   load_data_success,
   load_data_fail,
+  resend_mapped_data_into_db,
 } from "../actiontypes/load_data_into_db_action";
 
 const columns = {
@@ -88,6 +89,7 @@ export const resendMappedDataIntoDb = (dataObjectMapped: any, id:any) => {
      // on success
      if (result.data.data) {
        console.log(result.data.data.reSendDataIntoDb);
+      dispatch(resend_mapped_data_into_db(result.data.data.reSendDataIntoDb));
      }
    } catch (error) {
     console.log(error);
