@@ -46,7 +46,7 @@ export const getOneTraineeAllDetails = ({id}:any) => async (dispatch: any) => {
       });
 
       const response = await datas.data.data.getOneTraineeAllDetails;
-      console.log( response)
+      // console.log( response)
       dispatch(creator(GET_ONE_TRAINEES_ALL_DETAILS, response))
     } catch (error) {
       if (error) {

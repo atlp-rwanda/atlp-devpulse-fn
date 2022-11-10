@@ -9,6 +9,7 @@ import Sidebar from "../components/sidebar/sidebar";
 import { getOneTraineeAllDetails } from "../redux/actions/trainnee";
 import { connect } from "react-redux";
 import Navbar from './../components/sidebar/navHeader'
+import { useParams } from "react-router";
 
 
 
@@ -16,9 +17,11 @@ import Navbar from './../components/sidebar/navHeader'
 
 const TrainneeDetails = (props: any) => {
 
+  const params = useParams();
+  const [key, setKey]= useState(params.traineeId)
   const {oneTraineeDetails} = props;
 
-  const [ID, setId] = useState("636b68e8ae3dfddbac7dc32f");
+  const [ID, setId] = useState(key);
 
   const [open, setOpen] = useState<boolean>(false);
   const handleDropDown = (state : boolean)=>{
@@ -34,7 +37,7 @@ const TrainneeDetails = (props: any) => {
   }, []);
 
   const traineeDetails = oneTraineeDetails.data;
-  console.log('traineeDetails', traineeDetails)
+  // console.log('traineeDetails', traineeDetails)
 
 
 
@@ -54,30 +57,12 @@ const TrainneeDetails = (props: any) => {
               <h2 className="top-5 m-5  font-medium  md:m-3 ">
               <BsFillPersonLinesFill className="float-left m-1" />
                 Applicant Information</h2>
-          {/* {
-             traineeDetails.data.map(post=>{
-               return(
-                 <div key={post.id}>
-                   <h3>{post.gender}</h3>
-                   {
-                    post.trainee_id && post.trainee_id.map(data=>(
-                       <div key={post.id}>
-                       <h3>{data.firstName}</h3>
-                       </div>
-                     ))
-                   }
-
-                 </div>
-               )
-             })
-             
-              
-          } */}
+        
         <div className=" m-5 sm:mt-20 sm:ml-[-12rem] md:shrink-0  lg:ml-10 lg:mt-10  ">
              
                {traineeDetails.trainee_id && <> <h3>FirstName</h3>
                 <p className="text-gray-500 text-sm">{traineeDetails.trainee_id.firstName}</p>
-                <p className="text-gray-500 text-sm">{traineeDetails.trainee_id._id}</p>
+                
                 </>}
                 <h3>Gender</h3>
                 <p className="text-gray-500 text-sm">{traineeDetails.gender}</p>
@@ -146,7 +131,7 @@ const TrainneeDetails = (props: any) => {
               </div>
             </div>
           </div>
-          <div className=" max-w-md mx-5 bg-slate-50 rounded-xl shadow-md overflow-hidden md:max-w-xl  lg:max-w-2xl  ">
+          <div className=" max-w-md mx-5 bg-slate-50 rounded-xl shadow-md overflow-hidden md:max-w-xl  lg:max-w-2xl lg:mb-10 ">
             <h2 className="font-bold top-5 ml-5 mt-5 ">
               <AiFillSetting className="float-left m-1 " />
               Actions

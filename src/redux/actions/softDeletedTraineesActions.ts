@@ -8,7 +8,7 @@ export const getAllSoftDeletedTrainees =
   async (dispatch: any) => {
     try {
       await axios({
-        url: process.env.BACKEND_URL,
+        url: 'http://localhost:4000/',
         method: "post",
         data: {
           query: `

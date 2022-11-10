@@ -254,6 +254,7 @@ const FilterTrainee = (props: any) => {
                                                         <tr
                                                             {...row.getRowProps()}
                                                             key={row.original.id}
+                                                           
                                                             className="even:bg-[#eef1f1] border-b border-gray-200"
                                                         >
                                                             {row.cells.map((cell: any) => {

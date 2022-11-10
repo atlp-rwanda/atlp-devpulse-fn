@@ -11,7 +11,7 @@ import { GET_TRAINEE_TO_UPDATE } from "..";
 export const getTraineeToUpdate = (Traineid:any) => async (dispatch: any) => {
   try {
     const datas = await axios({
-      url:process.env.BACKEND_URL,
+      url:'http://localhost:4000/',
       method: "post",
       data: {
         query: `
@@ -69,7 +69,7 @@ export const getTraineeToUpdate = (Traineid:any) => async (dispatch: any) => {
 export const updateTraine = ({id,firstName,lastName}:any)=> async (dispatch: any) =>{
   try {
     const datas = await axios({
-      url:process.env.BACKEND_URL,
+      url:'http://localhost:4000/',
       method: "post",
       data: {
         query: `
@@ -120,7 +120,7 @@ export const updateTraineeAttributes = ({
 }:any)=> async (dispatch: any) =>{
   try {
     const datas = await axios({
-      url:process.env.BACKEND_URL,
+      url:'http://localhost:4000/',
       method: "post",
       data: {
         query: `

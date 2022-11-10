@@ -3,9 +3,24 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { useNavigate } from "react-router";
+import { getAllFilteredTraineess } from "./../../redux/actions/filterTraineeActions"
+import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 
 
-const Threedots = () => {
+const Threedots = (props : any) => {
+   
+    const { allfilteredTrainees } = props;
+    const traineeList = allfilteredTrainees.data
+
+    
+
+    
+ 
+
+
+
+
     const [showOptions, setShowOptions] = useState(false);
     const handleClick = () => {
         setShowOptions(!showOptions)
@@ -19,11 +34,15 @@ const Threedots = () => {
     };
     const navigate = useNavigate();
     const handleOpenDetails =()=>{
+      
        
         navigate("/trainee-details")
     }
 
+
     return (
+        <>
+        {traineeList &&
         <div className="inline-block text-left">
             <div>
                 <button type="button" onClick={handleClick} className="flex items-center">
@@ -35,7 +54,7 @@ const Threedots = () => {
                         viewBox="0 0 13 13" />
                 </button>
             </div>
-            {/* {showOptions && ( */}
+           
                 <Menu
                     id="basic-menu"
                     anchorEl={anchorEl}
@@ -46,16 +65,29 @@ const Threedots = () => {
                     }}
                 >
                     <a href="#" ><MenuItem>Email</MenuItem></a>
-                    <a href="#" className="text-button-color hover:bg-bdr text-sm" onClick={handleOpenDetails} ><MenuItem>View</MenuItem></a>
-                    <a href="#" className="text-button-color hover:bg-bdr text-sm"><MenuItem>Export</MenuItem></a>
+                    {traineeList.trainee_id && <>
+                    <Link to={`/trainee-Details/${traineeList.trainee_id._id}`}>
+                    <a href="#" className="text-button-color hover:bg-bdr text-sm" ><MenuItem>View</MenuItem></a>
+                   
+                    </Link></>}
+                    <a href="#" className="text-button-color hover:bg-bdr text-sm" onClick={handleOpenDetails} ><MenuItem>Export</MenuItem></a>
                     <a href="#" className="text-button-color hover:bg-bdr text-sm"><MenuItem>Delete</MenuItem></a>
                     <a href="#" className="text-button-color hover:bg-bdr text-sm"><MenuItem><ul><li>Permanent </li><li>Delete</li></ul></MenuItem></a>
 
                 </Menu>
-            {/* )} */}
+           
 
         </div>
+    }
+    </>
     )
 }
 
-export default Threedots;
+// export default Threedots;
+const mapState = ({ filterTrainee }: any) => ({
+    allfilteredTrainees: filterTrainee
+});
+
+export default connect(mapState, {
+    getAllFilteredTraineess: getAllFilteredTraineess
+})(Threedots)

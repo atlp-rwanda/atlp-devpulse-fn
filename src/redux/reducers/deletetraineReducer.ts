@@ -1,6 +1,4 @@
 import { Action, DeleteActionType,softAction,softDeleteActionType,fetchact,fetchtrainesss } from '../actiontypes/deleteactiontype';
-
-
 interface State {
     success: boolean;
     loading: boolean;
@@ -86,10 +84,9 @@ export const traineReducer = (state: State = traineState, action: fetchact):Stat
                 message:action.data,
             }
          case fetchtrainesss.fetchtraines_fail:
-            console.log(action.error)
             return {
                 ...state,
-                message:action.error,
+                error:action.error,
             }
  
         default: 

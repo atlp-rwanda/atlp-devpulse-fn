@@ -46,7 +46,7 @@ const Open=() =>{
 
   const traine = traines.message;
   useEffect(() => {
-    dispatch(fetchtraine());
+    dispatch(fetchtraine(input));
   }, [delettraine, softdeletettraine]);
   const [moredrop, setmoredrop] = useState("");
   const onSubmitHandler = (userid: any) => {
@@ -150,9 +150,8 @@ const Open=() =>{
                               </tr>
                             </thead>
                             <tbody className="overflow-y-auto">
-                              {props?.traines?.message
-                                ?.slice(firstContentIndex, lastContentIndex)
-                                ?.map((item: any) =>
+                              {props.traines.message!== null
+                              ?props.traines.message.slice(firstContentIndex, lastContentIndex).map((item: any) =>
                                   item.delete_at == false ? (
                                     <tr>
                                       <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
@@ -190,7 +189,7 @@ const Open=() =>{
                                         <div className="flex items-center">
                                           <div className="">
                                             <p className="text-gray-900 items-center dark:text-white whitespace-no-wrap">
-                                              {item.cycle_id.name}
+                                              {item.cycle_id?item.cycle_id.name:'-'}
                                             </p>
                                           </div>
                                         </div>
@@ -202,12 +201,12 @@ const Open=() =>{
                                             className=" text-black text-3xl ml-6 font-size-6 cursor-pointer"
                                             onClick={(e: any) => {
                                               e.preventDefault();
-                                              onSubmitHandler(item.id);
+                                              onSubmitHandler(item._id);
                                             }}
                                           />
                                           <div
                                             className={`${
-                                              moredrop === item.id
+                                              moredrop === item._id
                                                 ? "block"
                                                 : "hidden"
                                             } absolute  bg-white text-base z-50 list-none divide-y divide-gray-100 rounded shadow my-4`}
@@ -218,10 +217,17 @@ const Open=() =>{
                                               aria-labelledby="dropdown"
                                             >
                                               <li>
-                                                <Link to={`/trainees/${item.id}/edit`}
+                                                <Link to={`/trainees/${item._id}/edit`}
                                                 className="text-sm hover:bg-gray-100 text-gray-700 block px-4 py-2"
                                                 >
                                                   Edit 
+                                                </Link>
+                                              </li>
+                                              <li>
+                                                <Link to={`/trainee-details/${item._id}`}
+                                                className="text-sm hover:bg-gray-100 text-gray-700 block px-4 py-2"
+                                                >
+                                                  View
                                                 </Link>
                                               </li>
                                               <li>
@@ -229,7 +235,7 @@ const Open=() =>{
                                                   className="text-sm hover:bg-gray-100 text-gray-700 block px-4 py-2"
                                                   onClick={(e: any) => {
                                                     e.preventDefault();
-                                                    onSubmitHandlesoft(item.id);
+                                                    onSubmitHandlesoft(item._id);
                                                   }}
                                                 >
                                                   Soft Delete
@@ -240,7 +246,7 @@ const Open=() =>{
                                                   className="text-sm hover:bg-gray-100 text-gray-700 block px-4 py-2"
                                                   onClick={(e: any) => {
                                                     e.preventDefault();
-                                                    onSubmitHandle(item.id);
+                                                    onSubmitHandle(item._id);
                                                   }}
                                                 >
                                                   Hard Delete
@@ -252,8 +258,8 @@ const Open=() =>{
                                         {/* </div> */}
                                       </td>
                                     </tr>
-                                  ) : null
-                                )}
+                                  ) :null
+                                ):null}
                             </tbody>
                           </table>
                         </div>
@@ -293,6 +299,7 @@ const Open=() =>{
                         {el}
                       </button>
                     ))}
+                    {totalPages?
                     <button
                       onClick={() => setPaging(totalPages)}
                       data-testid="page3"
@@ -301,7 +308,7 @@ const Open=() =>{
                       }`}
                     >
                       {totalPages}
-                    </button>
+                    </button>:null}
                     <button
                       onClick={nextPage}
                       data-testid="next"
