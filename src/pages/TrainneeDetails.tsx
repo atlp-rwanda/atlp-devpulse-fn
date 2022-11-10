@@ -74,8 +74,8 @@ const TrainneeDetails = (props: any) => {
                 <p className="text-gray-500 text-sm">{traineeDetails.field_of_study}</p>
                 <h3>Education Level</h3>
                 <p className="text-gray-500 text-sm">{traineeDetails.education_level}</p>
-                <h3>Cohort</h3>
-                <p className="text-gray-500 text-sm">{traineeDetails.cohort}</p>
+                {/* <h3>Cohort</h3>
+                <p className="text-gray-500 text-sm">{traineeDetails.cohort}</p> */}
                 <h3>Is Employed</h3>
                 <p className="text-gray-500 text-sm">{String(traineeDetails.isEmployed)}</p>
                 {traineeDetails.trainee_id && <>
