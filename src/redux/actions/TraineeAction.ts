@@ -8,18 +8,17 @@ export const getAllTraineess =
   async (dispatch: any) => {
     try {
       const datas = await axios({
-        url: process.env.BACKEND_URL,
+        url: 'http://localhost:4000/',
         method: "post",
         data: {
           query: `
         query AllTraineesDetails($input: pagination) {
           allTraineesDetails(input: $input) {
             gender
-            cohort
             trainee_id {
-              lastName
-              firstName
               email
+              firstName
+              lastName
             }
           }
         }
@@ -49,7 +48,7 @@ export const createTrainee =
   async (dispatch: any) => {
     try {
       const datas = await axios({
-        url: process.env.BACKEND_URL,
+        url: 'http://localhost:4000/',
         method: "post",
         data: {
           query: `

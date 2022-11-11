@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { HiDotsVertical } from "react-icons/hi";
 import * as icons from "react-icons/ai";
 import { AiOutlinePlus } from "react-icons/ai";
-import { BrowserRouter as Router, Link } from "react-router-dom";
+import {BrowserRouter as Router, Link, useNavigate} from 'react-router-dom';
 import pagination from "../../components/pagination";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -21,13 +21,14 @@ import { getAllCycles } from "../../redux/actions/cyclesActions";
 
 const AddTrainee = (props: any) => {
   const [addNewTraineeModel, setAddNewTraineeModel] = useState(false);
-  function open() {
+const Open=() =>{
     setAddNewTraineeModel(true);
   }
 
   // LIST ALL TRAINEE
   const { alltrainees, delettraine, softdeletettraine, traines } = props;
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const [page, setPage] = useState(0);
   const [itemsPerPage, setiIemsPerPage] = useState(0);
   const [All, setAll] = useState(true);
@@ -41,6 +42,8 @@ const AddTrainee = (props: any) => {
     props.getAllCycles();
   }, []);
   const trainees = alltrainees.data;
+
+
   const traine = traines.message;
   useEffect(() => {
     dispatch(fetchtraine(input));
@@ -75,6 +78,9 @@ const AddTrainee = (props: any) => {
     contentPerPage: 10,
     count: traine?.length,
   });
+
+// console.log("Here",props.traines)
+
   return (
     <>
       <ToastContainer />
@@ -95,7 +101,7 @@ const AddTrainee = (props: any) => {
                 <div className="flex items-left px-7 lg:px-64 pt-24">
                   <div className="flex px-5 py-2 pb-8 w-fit">
                     <button
-                      onClick={open}
+                      onClick={Open}
                       className="flex bg-primary rounded-md py-2 px-4 text-white font-medium cursor-pointer"
                     >
                       <icons.AiOutlinePlus className="mt-1 mr-1 font-bold" />{" "}
@@ -151,8 +157,10 @@ const AddTrainee = (props: any) => {
                                       <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
                                         <div className="flex">
                                           <div className="">
+                                            
                                             <p className="text-gray-900 text-center dark:text-white whitespace-no-wrap">
                                               {item.firstName}
+                                              
                                             </p>
                                           </div>
                                         </div>
@@ -208,6 +216,20 @@ const AddTrainee = (props: any) => {
                                               className="py-1"
                                               aria-labelledby="dropdown"
                                             >
+                                              <li>
+                                                <Link to={`/trainees/${item._id}/edit`}
+                                                className="text-sm hover:bg-gray-100 text-gray-700 block px-4 py-2"
+                                                >
+                                                  Edit 
+                                                </Link>
+                                              </li>
+                                              <li>
+                                                <Link to={`/trainee-details/${item._id}`}
+                                                className="text-sm hover:bg-gray-100 text-gray-700 block px-4 py-2"
+                                                >
+                                                  View
+                                                </Link>
+                                              </li>
                                               <li>
                                                 <div
                                                   className="text-sm hover:bg-gray-100 text-gray-700 block px-4 py-2"

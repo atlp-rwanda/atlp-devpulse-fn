@@ -21,7 +21,6 @@ store = createStore(allReducers, initialState),} = {}) => {
     ),
   };
 };
-
 test("renders welcome message", async () => {
   const route = "/test_redux";
   const { getByText, asFragment } = renderWithRouter(<App />, { route,initialState:{} });
