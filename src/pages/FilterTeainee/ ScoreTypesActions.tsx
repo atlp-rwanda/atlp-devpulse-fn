@@ -15,6 +15,7 @@ import Modal from "@mui/material/Modal";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import NavBar from "../../components/sidebar/navHeader";
+import e from "express";
 
 const ScoreTypesActions = (props: any) => {
   const { scoreTypes } = props;
@@ -106,8 +107,12 @@ const ScoreTypesActions = (props: any) => {
             aria-describedby="parent-modal-description"
           >
             <Box className="absolute w-fit top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] md:w-[fit]">
-              <div className="border border-[#333] border-1 bg-[#eaeaea] rounded-[5px] p-2 w-fit mx-auto my-7">
+              <form
+                onSubmit={createScoreType}
+                className="border border-[#333] border-1 bg-[#eaeaea] rounded-[5px] p-2 w-fit mx-auto my-7"
+              >
                 <input
+                  required
                   type="text"
                   placeholder="Enter your test/exam name."
                   className="block border border-[#333] border-1 bg-[#ffffff] rounded-[5px] p-2 w-[260px] mx-auto my-3"
@@ -118,12 +123,12 @@ const ScoreTypesActions = (props: any) => {
                   }}
                 />
                 <button
-                  onClick={createScoreType}
+                  type="submit"
                   className="block text-white border border-[#333] border-1 bg-[#173b3f] rounded-[5px] p-2 w-[100px] mb-5 mx-auto"
                 >
                   SAVE
                 </button>
-              </div>
+              </form>
             </Box>
           </Modal>{" "}
           <div className="w-fit block mx-auto ">
@@ -214,17 +219,21 @@ const ScoreTypesActions = (props: any) => {
           >
             <Box className="absolute w-fit top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] md:w-[fit]">
               <form
-                action=""
-                onSubmit={updateScoreType}
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  updateScoreType();
+                }}
                 className="border border-[#333] border-1 bg-[#eaeaea] rounded-[5px] px-2 w-fit mx-auto "
               >
                 <hr style={{ marginBottom: "40px" }} />
                 <input
+                  required
                   type="text"
                   name="score_type"
                   value={score_type}
                   placeholder="Enter new score type name"
                   onChange={(e) => {
+                    e.preventDefault();
                     setscore_type(e.target.value);
                   }}
                   className="block border border-[#333] border-1 bg-[#ffffff] rounded-[5px] p-2 w-[260px] mx-auto mb-3"

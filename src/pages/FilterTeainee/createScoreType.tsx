@@ -47,8 +47,6 @@ const createScoreType = (props: any) => {
     setAnchorEl(null);
   };
 
-  console.log(usedDta, "usedDta");
-
   const handleOpenUpdateModal = () => {
     const cycle = yuret[activeCycle!];
 
@@ -85,8 +83,6 @@ const createScoreType = (props: any) => {
   };
 
   const localData = JSON.parse(localStorage.getItem(`Data${urlId}`) || "[]");
-
-  console.log(localData == "", "localData");
 
   const [isEmpty, setIsEmpty] = useState(false);
 
@@ -182,9 +178,13 @@ const createScoreType = (props: any) => {
     return values.score_type;
   });
 
-  const myArray = patto?.filter((el: any) => {
-    return agarwal.indexOf(el) >= 0;
-  });
+  const myArray = patto
+    ?.filter((el: any) => {
+      return agarwal.indexOf(el) >= 0;
+    })
+    .flat();
+
+  console.log(myArray, "myArray");
 
   const toBeReturned = sortedDta.filter(
     (values: any) =>
@@ -197,7 +197,13 @@ const createScoreType = (props: any) => {
 
   if (someAttempted) {
     dert = (
-      <div className="border border-[#333] border-1 bg-[#eaeaea] rounded-[5px] p-2 w-fit mx-auto pt-4">
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          saveData();
+        }}
+        className="border border-[#333] border-1 bg-[#eaeaea] rounded-[5px] p-2 w-fit mx-auto pt-4 h-fit"
+      >
         <select
           name="scoreType"
           id="scoreType"
@@ -209,7 +215,7 @@ const createScoreType = (props: any) => {
             setScoreName(iffd);
           }}
         >
-          <option value="">_Choose a score type_</option>
+          <option value="">Select</option>
           {toBeReturned?.map((values: any, idx: number) => (
             <option value={values.id} id={values.score_type} key={idx}>
               {values.score_type}
@@ -229,13 +235,18 @@ const createScoreType = (props: any) => {
           type="submit"
           value="SAVE"
           className="text-white border border-[#333] border-1 bg-[#173b3f] rounded-[5px] p-2 w-[100px] my-2 block mx-auto"
-          onClick={saveData}
         />
-      </div>
+      </form>
     );
   } else {
     dert = (
-      <div className="border border-[#333] border-1 bg-[#eaeaea] rounded-[5px] p-2 w-fit mx-auto pt-4 relative">
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          saveData();
+        }}
+        className="border border-[#333] border-1 bg-[#eaeaea] rounded-[5px] p-2 w-fit mx-auto pt-4 relative  h-fit"
+      >
         <select
           name="scoreType"
           id="scoreType"
@@ -247,7 +258,9 @@ const createScoreType = (props: any) => {
             setScoreName(iffd);
           }}
         >
-          <option value="">_Choose a score type_</option>
+          <option value="" className="text-[red]">
+            Select
+          </option>
           {sortedDta?.map((values: any, idx: number) => (
             <option value={values.id} id={values.score_type} key={idx}>
               {values.score_type}
@@ -260,6 +273,7 @@ const createScoreType = (props: any) => {
           placeholder="Enter the trainee's rank."
           className="block border border-[#333] border-1 bg-[#ffffff] rounded-[5px] p-2 w-[260px] mx-auto my-3"
           onChange={(e) => {
+            e.preventDefault();
             setScoreValue(e.target.value);
           }}
         />
@@ -267,9 +281,8 @@ const createScoreType = (props: any) => {
           type="submit"
           value="SAVE"
           className="text-white border border-[#333] border-1 bg-[#173b3f] rounded-[5px] p-2 w-[100px] my-2 block mx-auto "
-          onClick={saveData}
         />
-      </div>
+      </form>
     );
   }
 
@@ -278,8 +291,8 @@ const createScoreType = (props: any) => {
       <NavBar />
       <div className="flex bg-[#F9F9FB] min-h-[100vh]">
         <div className="min-h-[50vh] w-[100%] block mt-10 md:w-[100%] md:mt-0 pl-[16rem]  pt-[80px] md:pl-0">
-          <div className="flex">
-            <div className="w-[30vw] relative pl-10  ">
+          <div className="flex md:block">
+            <div className="w-[30vw] relative pl-10 md:pl-0  md:mx-auto">
               <div className="">
                 <h1>
                   <span className="text-[#1d1d1d] font-bold text-xl underline">
@@ -288,7 +301,7 @@ const createScoreType = (props: any) => {
                   </span>
                 </h1>
                 <div>
-                  <h1 className="mt-5">
+                  <h1 className="mt-3">
                     <span>Total tests:</span>{" "}
                     <span className="text-[#1d1d1d] font-bold ">
                       {sortedDta.length}
@@ -300,7 +313,7 @@ const createScoreType = (props: any) => {
                       {myArray.length}
                     </span>
                   </h1>
-                  <h1 className="my-2">
+                  <h1 className="my-0">
                     <span>Non-attempted tests:</span>{" "}
                     <span className="text-[#1d1d1d] font-bold ">
                       {sortedDta.length - myArray.length}
@@ -308,8 +321,8 @@ const createScoreType = (props: any) => {
                   </h1>
                 </div>
               </div>{" "}
-              <div className="w-fit block mx-auto">
-                <table className="block m-10">
+              <div className="w-fit block md:hidden">
+                <table className="block mt-10">
                   <thead className="border p-3">
                     <tr className="border p-3 bg-[#eef1f1] text-black">
                       <th className="border p-3">Nº</th>
@@ -321,7 +334,15 @@ const createScoreType = (props: any) => {
                       return (
                         <tr className="border p-3 bg-[#f9f9f9]" key={i}>
                           <td className="border p-3">{i + 1}</td>
-                          <td className="border p-3">{values.score_type}</td>
+                          {myArray.includes(values.score_type) ? (
+                            <td className="border p-3 bg-[#c0e2e4]">
+                              {values.score_type}
+                            </td>
+                          ) : (
+                            <td className="border p-3 bg-slate-200">
+                              {values.score_type}
+                            </td>
+                          )}
                         </tr>
                       );
                     })}
@@ -329,8 +350,8 @@ const createScoreType = (props: any) => {
                 </table>
               </div>
             </div>
-            <div className="w-[70vw] overflow-y-auto  relative">
-              <div className="w-fit block mx-auto">
+            <div className="w-[70vw] overflow-y-auto relative">
+              {/* <div className="w-fit block mx-auto">
                 <table className="block m-10">
                   <thead className="border p-3">
                     <tr className="border p-3 bg-[#173b3f] text-white">
@@ -371,12 +392,105 @@ const createScoreType = (props: any) => {
                     })}
                   </tbody>
                 </table>
+              </div> */}
+              <div className="flex items-center flex-wrap">
+                {yuret?.map((values: any, idx: number) => {
+                  return (
+                    // <div
+                    //   className="w-[250px]  h-[100px]  rounded-[7px] pt-3 text-left text-[#173b3f] bg-[#eef1f1] m-2 relative"
+                    //   style={{
+                    //     boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
+                    //   }}
+                    //   onMouseEnter={(event) => {
+                    //     console.log(idx, "ids");
+
+                    //     event.preventDefault();
+                    //     setActiveCycle(idx);
+                    //     setdeleteValueTypeId(values.id);
+                    //   }}
+                    // >
+                    //   <div className="ml-4 mt-2">
+                    //     <span className="font-bold">
+                    //       {values.score_id.score_type}:
+                    //     </span>{" "}
+                    //     <span>{values.score_value}%</span>
+                    //   </div>
+                    //   <div className="w-fit mx-auto absolute bottom-4 left-[50%] translate-x-[-50%] flex">
+                    //     <button
+                    //       className="border border-[#8d8d8d] hover:bg-[#dce1e1] border-1 rounded-[5px] w-[100px] mx-2"
+                    //       onClick={() => {
+                    //         handleOpenUpdateModal();
+                    //       }}
+                    //     >
+                    //       Edit
+                    //     </button>{" "}
+                    //     <button
+                    //       className="border border-[#8d8d8d] hover:bg-[#dce1e1] border-1 rounded-[5px] w-[100px] mx-2"
+                    //       onClick={() => {
+                    //         deleteScoreValue();
+                    //       }}
+                    //     >
+                    //       Remove
+                    //     </button>
+                    //   </div>
+                    // </div>
+                    <div
+                      className="w-[250px]  h-[100px]  rounded-[7px] pt-3 text-left text-[#173b3f] bg-[#eef1f1] m-2 relative"
+                      style={{
+                        boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
+                      }}
+                    >
+                      <div className="mt-[17px] text-center block">
+                        <div
+                          className="font-bold  width-[200px] ml-2"
+                          style={{
+                            wordWrap: "break-word",
+                            overflowX: "auto",
+                            whiteSpace: "nowrap",
+                            width: "200px",
+                          }}
+                        >
+                          {values.score_id.score_type}:
+                        </div>{" "}
+                        <div>{values.score_value}%</div>
+                      </div>
+                      <div className="absolute m-0 top-[50%] right-2 -translate-y-2/4  -translate-x-2/4">
+                        <BsIcons.BsThreeDotsVertical
+                          onClick={(event) => {
+                            setAnchorEl(
+                              event.currentTarget as unknown as HTMLElement
+                            );
+                            event.preventDefault();
+                            setActiveCycle(idx);
+                            setdeleteValueTypeId(values.id);
+                          }}
+                          style={{
+                            color: "#000",
+                            fontSize: "20px",
+                          }}
+                        />
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
+              {/* ///////////////////////////////////////////////////// */}
               {yuret.length !== sortedDta.length && (
-                <>
+                <div
+                  className="flex mt-6 py-5"
+                  style={{
+                    // boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
+                    boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 4px",
+                  }}
+                >
                   {dert}
                   {!isEmpty && (
-                    <div className="w-fit block mx-auto">
+                    <div
+                      className="w-fit mx-auto bg-[#eef1f1]"
+                      style={{
+                        boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
+                      }}
+                    >
                       <table className="block m-10">
                         <thead className="border p-3">
                           <tr className="border p-3 bg-[#173b3f] text-white">
@@ -407,7 +521,7 @@ const createScoreType = (props: any) => {
                       </button>
                     </div>
                   )}
-                </>
+                </div>
               )}{" "}
             </div>
             <Menu
@@ -441,27 +555,32 @@ const createScoreType = (props: any) => {
               aria-describedby="parent-modal-description"
             >
               <Box className="absolute w-fit top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] md:w-[fit]">
-                <div className="border border-[#333] border-1 bg-[#eaeaea] rounded-[5px] px-2 w-fit mx-auto ">
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    updateScoreType();
+                  }}
+                  className="border border-[#333] border-1 bg-[#eaeaea] rounded-[5px] px-2 w-fit mx-auto "
+                >
                   <hr style={{ marginBottom: "40px" }} />
                   <input
+                    required
                     type="text"
                     name="score_type"
                     value={score_value}
                     placeholder="Enter new score type name"
                     onChange={(e) => {
+                      e.preventDefault();
                       setscore_value(e.target.value);
                     }}
                     className="block border border-[#333] border-1 bg-[#ffffff] rounded-[5px] p-2 w-[260px] mx-auto mb-3"
                   />
                   <div className="flex flex-wrap w-[300px] m-auto">
-                    <button
-                      className="block text-white border border-[#333] border-1 bg-[#173b3f] rounded-[5px] p-2 w-[100px] mb-5 mx-auto"
-                      onClick={updateScoreType}
-                    >
+                    <button className="block text-white border border-[#333] border-1 bg-[#173b3f] rounded-[5px] p-2 w-[100px] mb-5 mx-auto">
                       SAVE
                     </button>
                   </div>
-                </div>
+                </form>
               </Box>
             </Modal>
           </div>
