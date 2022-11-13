@@ -7,6 +7,7 @@ import {
   deleteScoreType,
   updateScoreType,
 } from "../../redux/actions/scoreTypesActions";
+import { getAllScoreValues } from "../../redux/actions/scoreValueActions";
 import * as BsIcons from "react-icons/bs";
 import * as AiIcons from "react-icons/ai";
 import * as IoIcons from "react-icons/io5";
@@ -15,15 +16,35 @@ import Modal from "@mui/material/Modal";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import NavBar from "../../components/sidebar/navHeader";
-import e from "express";
+import filterTraineeReducer from "../../redux/reducers/filterTraineeReducer";
 
 const ScoreTypesActions = (props: any) => {
-  const { scoreTypes } = props;
+  const { scoreTypes, scoreValues } = props;
 
-  const sortedDta = scoreTypes.data;
+  const scoreTypesData = scoreTypes.data;
 
+  console.log(scoreValues.data, "scoreValues");
+
+  const scoreValuesArray = scoreValues.data?.map((values: any, idx: number) => {
+    return values.score_id.score_type;
+  });
+
+  const scoreTypesArray = scoreTypesData?.map((dta: any) => {
+    const filtered = scoreValuesArray?.filter((values: any) => {
+      return values == dta.score_type;
+    });
+
+    return {
+      id: dta.id,
+      name: dta.score_type,
+      nbr: filtered.length,
+    };
+  });
+
+  console.log(scoreTypesArray, "scoreValuesArray");
   useEffect(() => {
     props.getAllScoreTypes();
+    props.getAllScoreValues();
   }, []);
   const [num, setNum] = useState("");
   const [deleteScoreTypeId, setdeleteScoreTypeId] = useState("");
@@ -48,7 +69,7 @@ const ScoreTypesActions = (props: any) => {
   };
 
   const handleOpenUpdateModal = (e: any) => {
-    const cycle = sortedDta[activeCycle!];
+    const cycle = scoreTypesData[activeCycle!];
 
     console.log(cycle, "CYCLE");
 
@@ -140,7 +161,7 @@ const ScoreTypesActions = (props: any) => {
               <BsIcons.BsPlusLg className="mx-[5px]" />
               <span>Test</span>
             </button>
-            <table className="block ">
+            {/* <table className="block ">
               <thead className="border p-3">
                 <tr className="border-solid border-[1px] border-white even:bg-[#eef1f1] first:w-[20px]">
                   <th className="border-solid pl-[30px] h-[50px] text-left bg-[#eef1f1]  first:rounded-tl-[10px] last:rounded-tr-[10px] border-b-[2px] border-[#c5c5c5] py-6   last:pl-[0px] w-[150px]   first:w-[20px]  ">
@@ -149,20 +170,26 @@ const ScoreTypesActions = (props: any) => {
                   <th className="border-solid pl-[30px] h-[50px] text-left bg-[#eef1f1]  first:rounded-tl-[10px] last:rounded-tr-[10px] border-b-[2px] border-[#c5c5c5] py-6   last:pl-[0px] w-[250px]   first:w-[20px]  ">
                     Name
                   </th>
-                  <th className="border-solid pl-[30px] h-[50px] text-left bg-[#eef1f1]  first:rounded-tl-[10px] last:rounded-tr-[10px] border-b-[2px] border-[#c5c5c5] py-6   last:pl-[0px] w-[150px]   first:w-[20px]  px-5">
+                  <th className="border-solid pl-[30px] h-[50px] text-left bg-[#eef1f1]  first:rounded-tl-[10px] last:rounded-tr-[10px] border-b-[2px] border-[#c5c5c5] py-6   last:pl-[0px] w-[150px]   first:w-[20px]  ">
+                    Attendees
+                  </th>
+                  <th className="border-solid pl-[30px] h-[50px] text-left bg-[#eef1f1]  first:rounded-tl-[10px] last:rounded-tr-[10px] border-b-[2px] border-[#c5c5c5] py-6   last:pl-[0px]   first:w-[20px]  px-5">
                     Actions
                   </th>
                 </tr>
               </thead>
               <tbody>
-                {sortedDta.map((values: any, i: number) => {
+                {scoreTypesArray?.map((values: any, i: number) => {
                   return (
                     <tr className="even:bg-[#eef1f1] border-b border-gray-200 ">
                       <td className="pl-[30px] text-left max-w-[300px] overflow-x-auto p-4  last:pl-[0px]">
                         {i + 1}
                       </td>
                       <td className="pl-[30px] text-left max-w-[300px] overflow-x-auto p-4  last:pl-[0px] ">
-                        {values.score_type}
+                        {values.name}
+                      </td>
+                      <td className="text-center max-w-[300px] overflow-x-auto">
+                        {values.nbr}
                       </td>
                       <td className=" cursor-pointer pl-5">
                         <BsIcons.BsThreeDotsVertical
@@ -185,8 +212,85 @@ const ScoreTypesActions = (props: any) => {
                   );
                 })}
               </tbody>
-            </table>
+            </table> */}
           </div>{" "}
+          {scoreTypesArray?.map((values: any, i: number) => {
+            return (
+              <div
+                className="w-[80%] lg:w-[50%] h-[100px] bg-[#ffffff]  rounded-[7px] pt-3 text-[#173b3f] mx-auto my-2 relative"
+                style={{
+                  boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
+                }}
+              >
+                <div
+                  className="mt-[25px] flex content-between mr-[30px]"
+                  style={{
+                    wordWrap: "break-word",
+                    overflowX: "auto",
+                    whiteSpace: "nowrap",
+                    width: "",
+                  }}
+                >
+                  <div className="font-bold pl-10">
+                    <span className="font-normal">{i + 1}. </span> {values.name}
+                  </div>{" "}
+                  <div className="ml-5">({values.nbr} candidates)</div>
+                </div>
+                <div className="absolute m-0 top-[50%] right-2 -translate-y-2/4  -translate-x-2/4">
+                  <BsIcons.BsThreeDotsVertical
+                    onClick={(event) => {
+                      setAnchorEl(
+                        event.currentTarget as unknown as HTMLElement
+                      );
+                      event.preventDefault();
+                      setActiveCycle(i);
+                      console.log(values.id);
+                      setdeleteScoreTypeId(values.id);
+                    }}
+                    style={{
+                      color: "#000",
+                      fontSize: "20px",
+                    }}
+                  />
+                </div>
+              </div>
+            );
+          })}
+          {/* <div
+            className="w-[50%] h-[100px] bg-[#ffffff] mx-auto mt-5 rounded-[5px]"
+            style={{
+              boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
+            }}
+          ></div> */}
+          {/* <div
+            className="w-[80%] lg:w-[50%] h-[100px] bg-[#ffffff]  rounded-[7px] pt-3 text-[#173b3f] mx-auto my-2 relative"
+            style={{
+              boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
+            }}
+          >
+            <div className="mt-[25px] flex content-between ">
+              <div
+                className="font-bold pl-10"
+                style={{
+                  wordWrap: "break-word",
+                  overflowX: "auto",
+                  whiteSpace: "nowrap",
+                  width: "",
+                }}
+              >
+                <span className="font-normal">2.</span> English test
+              </div>{" "}
+              <div className="ml-5">(3 candidates)</div>
+            </div>
+            <div className="absolute m-0 top-[50%] right-2 -translate-y-2/4  -translate-x-2/4">
+              <BsIcons.BsThreeDotsVertical
+                style={{
+                  color: "#000",
+                  fontSize: "20px",
+                }}
+              />
+            </div>
+          </div> */}
           <Menu
             id="basic-menu"
             anchorEl={anchorEl}
@@ -256,6 +360,7 @@ const ScoreTypesActions = (props: any) => {
 };
 const mapState = (state: any) => ({
   scoreTypes: state.scoreTypes,
+  scoreValues: state.scoreValues,
 });
 
 export default connect(mapState, {
@@ -263,4 +368,5 @@ export default connect(mapState, {
   getAllScoreTypes,
   deleteScoreType,
   updateScoreType,
+  getAllScoreValues,
 })(ScoreTypesActions);
