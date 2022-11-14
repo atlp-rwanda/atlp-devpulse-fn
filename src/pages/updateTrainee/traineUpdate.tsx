@@ -26,6 +26,8 @@ const TraineeUpdate = (props:any) =>{
   const provinceRef =useRef<any>();
   const sectorRef = useRef<any>();
   const cycleRef = useRef<any>();
+  const eScoreRef =useRef<any>();
+  const hScoreRef =useRef<any>();
 
   const getProvinces =()=>{
     Object.keys(locations).forEach(province => {
@@ -100,6 +102,8 @@ const TraineeUpdate = (props:any) =>{
     const district = districtRef?.current?.props?.value?.value;
     const sector = sectorRef?.current?.props?.value?.value;
     const cycle = cycleRef?.current?.props?.value?.value;
+    const eScore = eScoreRef.current.value;
+    const hScore = hScoreRef.current.value;
     await getDistricts(province);
     await getSectors(province,district)
     const districtExists = Object.values(districts).includes(district);
@@ -132,6 +136,8 @@ const TraineeUpdate = (props:any) =>{
       toast.error("Field of study is required")
     }else if(formData.birthDate=== ""){
       toast.error("Date of birth is required")
+    }else if(eScore > 100 || hScore > 100){
+      toast.error("Score must no exceed 100")
     }else{
       try{
         const inputTrainee = {
@@ -480,29 +486,35 @@ const TraineeUpdate = (props:any) =>{
                     <div className="lg:flex sm:block">
                       <div className="mr-2">
                         <label className="block text-gray-600 text-sm font-bold mb-2">
-                          English score(0-5)
+                          English score
                         </label>
-                        <Select
-                          className="shadow appearance-none border rounded w-full  text-gray-600 leading-tight focus:outline-none focus:shadow-outline"
-                          options={options.scoreOptions}
-                          defaultValue={options.scoreOptions.find(({ value }) => value === traineeData.english_score)}
+                        <input
+                          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-600 leading-tight focus:outline-none focus:shadow-outline"
+                          type="number"
+                          ref={eScoreRef}
+                          name="englishScore"
+                          id="englishScore"
+                          defaultValue={traineeData.english_score}
                           onChange={(e) => setFormData({
                             ...formData,
-                            englishScore: e?.value,
+                            englishScore: e.target.value,
                           })}
-                          placeholder="Score" />
+                          placeholder="English score" />
                       </div>
                       <div className="mr-2">
                         <label className="block text-gray-600 text-sm font-bold mb-2">
-                          Hackerranck score(0-5)
+                          Hackerranck score
                         </label>
-                        <Select
-                          className="shadow appearance-none border rounded w-full  text-gray-600 leading-tight focus:outline-none focus:shadow-outline"
-                          options={options.scoreOptions}
-                          defaultValue={options.scoreOptions.find(({ value }) => value === traineeData.Hackerrank_score)}
+                        <input
+                          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-600 leading-tight focus:outline-none focus:shadow-outline"
+                          type="number"
+                          ref={hScoreRef}
+                          name="hackerrankScore"
+                          id="hackerrankScore"
+                          defaultValue={traineeData.Hackerrank_score}
                           onChange={(e) => setFormData({
                             ...formData,
-                            hackerrankScore: e?.value,
+                            hackerrankScore: e.target.value,
                           })}
                           placeholder="Score" />
                       </div>
