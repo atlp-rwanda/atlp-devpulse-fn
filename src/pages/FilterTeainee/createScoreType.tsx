@@ -156,7 +156,7 @@ const createScoreType = (props: any) => {
 
   const filteredTrainee = traineeDetail
     ?.filter((data: any) => {
-      return data._id == urlId;
+      return data?._id == urlId;
     })
     .flat();
   const [allAttempted, setallAttempted] = useState(false);
