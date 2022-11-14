@@ -198,13 +198,13 @@ const createScoreType = (props: any) => {
           e.preventDefault();
           saveData();
         }}
-        className="border border-[#333] border-1 bg-[#eaeaea] rounded-[5px] p-2 w-fit mx-auto pt-4 h-fit"
+        className="border border-[#333] border-1 bg-[#eaeaea] rounded-[5px] p-2 w-fit mx-auto pt-4 h-fit dark:bg-dark-bg "
       >
         <select
           name="scoreType"
           id="scoreType"
           value={scoreTypeId}
-          className="border border-[#333] border-1 bg-[#ffffff] rounded-[5px] p-2 w-[260px]"
+          className="border border-[#333] border-1 bg-[#ffffff] rounded-[5px] p-2 w-[260px] dark:bg-dark-tertiary dark:text-zinc-100 "
           onChange={(e) => {
             setscoreTypeId(e.target.value);
             const iffd = e.target.selectedOptions[0].text;
@@ -222,7 +222,7 @@ const createScoreType = (props: any) => {
           required
           type="text"
           placeholder="Enter the trainee's rank."
-          className="block border border-[#333] border-1 bg-[#ffffff] rounded-[5px] p-2 w-[260px] mx-auto my-3"
+          className="block border border-[#333] border-1 bg-[#ffffff] rounded-[5px] p-2 w-[260px] mx-auto my-3 dark:bg-dark-tertiary dark:text-zinc-100"
           onChange={(e) => {
             setScoreValue(e.target.value);
           }}
@@ -230,7 +230,7 @@ const createScoreType = (props: any) => {
         <input
           type="submit"
           value="SAVE"
-          className="text-white border border-[#333] border-1 bg-[#173b3f] rounded-[5px] p-2 w-[100px] my-2 block mx-auto"
+          className="text-white border border-[#333] border-1 bg-[#173b3f] rounded-[5px] p-2 w-[100px] my-2 block mx-auto dark:bg-green dark:border"
         />
       </form>
     );
@@ -241,13 +241,13 @@ const createScoreType = (props: any) => {
           e.preventDefault();
           saveData();
         }}
-        className="border border-[#333] border-1 bg-[#eaeaea] rounded-[5px] p-2 w-fit mx-auto pt-4 relative  h-fit"
+        className="border border-[#333] border-1 bg-[#eaeaea] rounded-[5px] p-2 w-fit mx-auto pt-4 h-fit dark:bg-dark-bg "
       >
         <select
           name="scoreType"
           id="scoreType"
           value={scoreTypeId}
-          className="border border-[#333] border-1 bg-[#ffffff] rounded-[5px] p-2 w-[260px]"
+          className="border border-[#333] border-1 bg-[#ffffff] rounded-[5px] p-2 w-[260px] dark:bg-dark-tertiary dark:text-zinc-100 "
           onChange={(e) => {
             setscoreTypeId(e.target.value);
             const iffd = e.target.selectedOptions[0].text;
@@ -267,16 +267,15 @@ const createScoreType = (props: any) => {
           required
           type="text"
           placeholder="Enter the trainee's rank."
-          className="block border border-[#333] border-1 bg-[#ffffff] rounded-[5px] p-2 w-[260px] mx-auto my-3"
+          className="block border border-[#333] border-1 bg-[#ffffff] rounded-[5px] p-2 w-[260px] mx-auto my-3 dark:bg-dark-tertiary dark:text-zinc-100"
           onChange={(e) => {
-            e.preventDefault();
             setScoreValue(e.target.value);
           }}
         />
         <input
           type="submit"
           value="SAVE"
-          className="text-white border border-[#333] border-1 bg-[#173b3f] rounded-[5px] p-2 w-[100px] my-2 block mx-auto "
+          className="text-white border border-[#333] border-1 bg-[#173b3f] rounded-[5px] p-2 w-[100px] my-2 block mx-auto dark:bg-green dark:border"
         />
       </form>
     );
@@ -285,27 +284,29 @@ const createScoreType = (props: any) => {
   return (
     <>
       <NavBar />
-      <div className="flex bg-[#F9F9FB] min-h-[100vh]">
+      <div className="flex bg-[#F9F9FB] min-h-[100vh] dark:bg-dark-frame-bg ">
         <div className="min-h-[50vh] w-[100%] block mt-10 md:w-[100%] md:mt-0 pl-[16rem]  pt-[80px] md:pl-0">
           <div className="flex md:block">
             <div className="w-[30vw] relative pl-10 md:pl-0 block md:w-[100%] ">
               <div className="block md:text-center md:mx-auto">
                 <div>
-                  <span className="text-[#1d1d1d] font-bold text-xl ">
+                  <span className="text-[#1d1d1d] font-bold text-xl dark:text-zinc-100 ">
                     {displayNames?.firstName} {displayNames?.lastName}'s test
                     results.
                   </span>
                 </div>
                 <div>
                   <div className="mt-3">
-                    <span>Total tests:</span>{" "}
-                    <span className="text-[#1d1d1d] font-bold ">
+                    <span className="dark:text-zinc-100 ">Total tests:</span>{" "}
+                    <span className="text-[#1d1d1d] dark:text-zinc-100   font-bold ">
                       {sortedDta.length}
                     </span>
                   </div>
                   <div>
-                    <span>Rated/attempted tests:</span>{" "}
-                    <span className="text-[#1d1d1d] font-bold">
+                    <span className="dark:text-zinc-100 ">
+                      Rated/attempted tests:
+                    </span>{" "}
+                    <span className="text-[#1d1d1d] dark:text-zinc-100  font-bold">
                       {myArray.length}{" "}
                       <span className=" w-[80px] h-[100px] bg-[#c0e2e4] text-[#c0e2e4]">
                         atte
@@ -313,8 +314,10 @@ const createScoreType = (props: any) => {
                     </span>
                   </div>
                   <div className="my-0">
-                    <span>Non-attempted tests:</span>{" "}
-                    <span className="text-[#1d1d1d] font-bold ">
+                    <span className="dark:text-zinc-100 ">
+                      Non-attempted tests:
+                    </span>{" "}
+                    <span className="text-[#1d1d1d] dark:text-zinc-100  font-bold ">
                       {sortedDta.length - myArray.length}{" "}
                       <span className=" w-[80px] h-[100px] bg-slate-200 text-slate-200">
                         atte
@@ -324,24 +327,26 @@ const createScoreType = (props: any) => {
                 </div>
               </div>{" "}
               <div className="w-fit block md:hidden">
-                <table className="block mt-10">
+                <table className="block mt-10 dark:text-zinc-100">
                   <thead className="border p-3">
-                    <tr className="border p-3 bg-[#eef1f1] text-black">
+                    <tr className="border p-3 dark:bg-dark-bg bg-[#eef1f1]">
                       <th className="border p-3">Nº</th>
-                      <th className="border p-3">NAME</th>
+                      <th className="border p-3">Name</th>
                     </tr>
                   </thead>
                   <tbody>
                     {sortedDta?.map((values: any, i: number) => {
                       return (
-                        <tr className="border p-3 bg-[#f9f9f9]" key={i}>
-                          <td className="border p-3">{i + 1}</td>
+                        <tr className="border p-3 bg-[#f9f9f9] " key={i}>
+                          <td className="border p-3 dark:bg-dark-bg">
+                            {i + 1}
+                          </td>
                           {myArray.includes(values.score_type) ? (
-                            <td className="border p-3 bg-[#c0e2e4]">
+                            <td className="border p-3 bg-[#c0e2e4] dark:text-primary">
                               {values.score_type}
                             </td>
                           ) : (
-                            <td className="border p-3 bg-slate-200">
+                            <td className="border p-3 bg-slate-200 dark:text-primary">
                               {values.score_type}
                             </td>
                           )}
@@ -355,7 +360,7 @@ const createScoreType = (props: any) => {
             <div className="w-[70vw] overflow-y-auto relative md:w-[100%]">
               {yuret.length !== sortedDta.length && (
                 <div>
-                  <h1 className="text-center underline font-bold text-[18px]">
+                  <h1 className="text-center underline font-bold text-[18px] dark:text-zinc-100">
                     Save new score for trainee applicant.
                   </h1>
                   <div
@@ -426,12 +431,12 @@ const createScoreType = (props: any) => {
                   {yuret?.map((values: any, idx: number) => {
                     return (
                       <div
-                        className="w-[250px]  h-[100px]  rounded-[7px] pt-3 text-left text-[#173b3f] bg-[#eef1f1] m-2 relative"
+                        className="w-[250px]  h-[100px]  rounded-[7px] pt-3 text-left text-[#173b3f] bg-[#eef1f1] m-2 relative dark:bg-dark-bg "
                         style={{
                           boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
                         }}
                       >
-                        <div className="mt-[17px] text-center block">
+                        <div className="mt-[17px] text-center dark:text-zinc-100 block">
                           <div
                             className="font-bold  width-[200px] ml-2"
                             style={{
@@ -455,10 +460,7 @@ const createScoreType = (props: any) => {
                               setActiveCycle(idx);
                               setdeleteValueTypeId(values.id);
                             }}
-                            style={{
-                              color: "#000",
-                              fontSize: "20px",
-                            }}
+                            className="dark:text-zinc-100 text-[20px]"
                           />
                         </div>
                       </div>
@@ -503,7 +505,7 @@ const createScoreType = (props: any) => {
                     e.preventDefault();
                     updateScoreType();
                   }}
-                  className="border border-[#333] border-1 bg-[#eaeaea] rounded-[5px] px-2 w-fit mx-auto "
+                  className="border border-[#333] border-1 bg-[#eaeaea] rounded-[5px] px-2 w-fit mx-auto dark:bg-dark-frame-bg "
                 >
                   <hr style={{ marginBottom: "40px" }} />
                   <input

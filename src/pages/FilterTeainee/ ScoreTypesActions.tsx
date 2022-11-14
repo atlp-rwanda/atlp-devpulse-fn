@@ -114,7 +114,7 @@ const ScoreTypesActions = (props: any) => {
     <>
       <NavBar />
       <div className="flex bg-[#F9F9FB] min-h-[100vh]">
-        <div className="min-h-[50vh] w-[100%] block mt-10 md:w-[100%] md:mt-0 pl-[16rem]  pt-[80px] md:pl-0">
+        <div className="min-h-[50vh] w-[100%] block mt-10 md:w-[100%] md:mt-0 pl-[16rem]  pt-[80px] md:pl-0 dark:bg-dark-frame-bg ">
           <Modal
             open={openCreateModal}
             onClose={handleCloseCreateModel}
@@ -149,7 +149,7 @@ const ScoreTypesActions = (props: any) => {
           <div className="w-fit block mx-auto sticky top-[100px] z-50">
             {" "}
             <button
-              className="h-[40px] rounded-[5px] bg-[#173b3f] text-white flex items-center p-0 pl-[5px] pr-[10px] mb-[20px]"
+              className="h-[40px] rounded-[5px] bg-[#173b3f] text-white flex items-center p-0 pl-[5px] pr-[10px] mb-[20px] dark:bg-green"
               onClick={() => handleOpenCreateCycle()}
             >
               <BsIcons.BsPlusLg className="mx-[5px]" />
@@ -159,7 +159,7 @@ const ScoreTypesActions = (props: any) => {
           {scoreTypesArray?.map((values: any, i: number) => {
             return (
               <div
-                className="w-[80%] lg:w-[50%] h-[100px] bg-[#ffffff]  rounded-[7px] pt-3 text-[#173b3f] mx-auto my-2 relative"
+                className="w-[80%] lg:w-[50%] h-[100px] bg-[#ffffff] dark:bg-dark-bg rounded-[7px] pt-3 text-[#173b3f] mx-auto my-2 relative dark:text-zinc-100 "
                 style={{
                   boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
                 }}
@@ -188,10 +188,7 @@ const ScoreTypesActions = (props: any) => {
                       setActiveCycle(i);
                       setdeleteScoreTypeId(values.id);
                     }}
-                    style={{
-                      color: "#000",
-                      fontSize: "20px",
-                    }}
+                    className="dark:text-zinc-100 text-[20px]"
                   />
                 </div>
               </div>
