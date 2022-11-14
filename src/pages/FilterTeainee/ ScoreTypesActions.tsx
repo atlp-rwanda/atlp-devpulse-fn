@@ -23,8 +23,6 @@ const ScoreTypesActions = (props: any) => {
 
   const scoreTypesData = scoreTypes.data;
 
-  console.log(scoreValues.data, "scoreValues");
-
   const scoreValuesArray = scoreValues.data?.map((values: any, idx: number) => {
     return values.score_id.score_type;
   });
@@ -41,7 +39,6 @@ const ScoreTypesActions = (props: any) => {
     };
   });
 
-  console.log(scoreTypesArray, "scoreValuesArray");
   useEffect(() => {
     props.getAllScoreTypes();
     props.getAllScoreValues();
@@ -71,8 +68,6 @@ const ScoreTypesActions = (props: any) => {
   const handleOpenUpdateModal = (e: any) => {
     const cycle = scoreTypesData[activeCycle!];
 
-    console.log(cycle, "CYCLE");
-
     setOpenUpdateModel(true);
     setscore_type(cycle.score_type);
     setupdateScoreTypeId(cycle.id);
@@ -98,7 +93,6 @@ const ScoreTypesActions = (props: any) => {
       id,
       score_type,
     };
-    console.log(data, "???????????");
     props.updateScoreType(data);
 
     setTimeout(() => {
@@ -152,7 +146,7 @@ const ScoreTypesActions = (props: any) => {
               </form>
             </Box>
           </Modal>{" "}
-          <div className="w-fit block mx-auto ">
+          <div className="w-fit block mx-auto sticky top-[100px] z-50">
             {" "}
             <button
               className="h-[40px] rounded-[5px] bg-[#173b3f] text-white flex items-center p-0 pl-[5px] pr-[10px] mb-[20px]"
@@ -161,58 +155,6 @@ const ScoreTypesActions = (props: any) => {
               <BsIcons.BsPlusLg className="mx-[5px]" />
               <span>Test</span>
             </button>
-            {/* <table className="block ">
-              <thead className="border p-3">
-                <tr className="border-solid border-[1px] border-white even:bg-[#eef1f1] first:w-[20px]">
-                  <th className="border-solid pl-[30px] h-[50px] text-left bg-[#eef1f1]  first:rounded-tl-[10px] last:rounded-tr-[10px] border-b-[2px] border-[#c5c5c5] py-6   last:pl-[0px] w-[150px]   first:w-[20px]  ">
-                    Nº
-                  </th>
-                  <th className="border-solid pl-[30px] h-[50px] text-left bg-[#eef1f1]  first:rounded-tl-[10px] last:rounded-tr-[10px] border-b-[2px] border-[#c5c5c5] py-6   last:pl-[0px] w-[250px]   first:w-[20px]  ">
-                    Name
-                  </th>
-                  <th className="border-solid pl-[30px] h-[50px] text-left bg-[#eef1f1]  first:rounded-tl-[10px] last:rounded-tr-[10px] border-b-[2px] border-[#c5c5c5] py-6   last:pl-[0px] w-[150px]   first:w-[20px]  ">
-                    Attendees
-                  </th>
-                  <th className="border-solid pl-[30px] h-[50px] text-left bg-[#eef1f1]  first:rounded-tl-[10px] last:rounded-tr-[10px] border-b-[2px] border-[#c5c5c5] py-6   last:pl-[0px]   first:w-[20px]  px-5">
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {scoreTypesArray?.map((values: any, i: number) => {
-                  return (
-                    <tr className="even:bg-[#eef1f1] border-b border-gray-200 ">
-                      <td className="pl-[30px] text-left max-w-[300px] overflow-x-auto p-4  last:pl-[0px]">
-                        {i + 1}
-                      </td>
-                      <td className="pl-[30px] text-left max-w-[300px] overflow-x-auto p-4  last:pl-[0px] ">
-                        {values.name}
-                      </td>
-                      <td className="text-center max-w-[300px] overflow-x-auto">
-                        {values.nbr}
-                      </td>
-                      <td className=" cursor-pointer pl-5">
-                        <BsIcons.BsThreeDotsVertical
-                          onClick={(event) => {
-                            setAnchorEl(
-                              event.currentTarget as unknown as HTMLElement
-                            );
-                            event.preventDefault();
-                            setActiveCycle(i);
-                            console.log(values.id);
-                            setdeleteScoreTypeId(values.id);
-                          }}
-                          style={{
-                            color: "#000",
-                            fontSize: "20px",
-                          }}
-                        />
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table> */}
           </div>{" "}
           {scoreTypesArray?.map((values: any, i: number) => {
             return (
@@ -244,7 +186,6 @@ const ScoreTypesActions = (props: any) => {
                       );
                       event.preventDefault();
                       setActiveCycle(i);
-                      console.log(values.id);
                       setdeleteScoreTypeId(values.id);
                     }}
                     style={{
@@ -256,41 +197,6 @@ const ScoreTypesActions = (props: any) => {
               </div>
             );
           })}
-          {/* <div
-            className="w-[50%] h-[100px] bg-[#ffffff] mx-auto mt-5 rounded-[5px]"
-            style={{
-              boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
-            }}
-          ></div> */}
-          {/* <div
-            className="w-[80%] lg:w-[50%] h-[100px] bg-[#ffffff]  rounded-[7px] pt-3 text-[#173b3f] mx-auto my-2 relative"
-            style={{
-              boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
-            }}
-          >
-            <div className="mt-[25px] flex content-between ">
-              <div
-                className="font-bold pl-10"
-                style={{
-                  wordWrap: "break-word",
-                  overflowX: "auto",
-                  whiteSpace: "nowrap",
-                  width: "",
-                }}
-              >
-                <span className="font-normal">2.</span> English test
-              </div>{" "}
-              <div className="ml-5">(3 candidates)</div>
-            </div>
-            <div className="absolute m-0 top-[50%] right-2 -translate-y-2/4  -translate-x-2/4">
-              <BsIcons.BsThreeDotsVertical
-                style={{
-                  color: "#000",
-                  fontSize: "20px",
-                }}
-              />
-            </div>
-          </div> */}
           <Menu
             id="basic-menu"
             anchorEl={anchorEl}

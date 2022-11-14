@@ -50,8 +50,6 @@ const createScoreType = (props: any) => {
   const handleOpenUpdateModal = () => {
     const cycle = yuret[activeCycle!];
 
-    console.log(cycle, "cycle");
-
     setOpenUpdateModel(true);
     setscore_value(cycle.score_value);
     setupdateScoreValueId(cycle.id);
@@ -183,8 +181,6 @@ const createScoreType = (props: any) => {
       return agarwal.indexOf(el) >= 0;
     })
     .flat();
-
-  console.log(myArray, "myArray");
 
   const toBeReturned = sortedDta.filter(
     (values: any) =>
@@ -410,48 +406,6 @@ const createScoreType = (props: any) => {
                   </div>
                 </div>
               )}{" "}
-              {/* <div className="w-fit block mx-auto">
-                <table className="block m-10">
-                  <thead className="border p-3">
-                    <tr className="border p-3 bg-[#173b3f] text-white">
-                      <th className="border p-3">Nº</th>
-                      <th className="border p-3">NAME</th>
-                      <th className="border p-3">VALUE</th>
-                      <th className="border p-3">ACTIONS</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {yuret?.map((values: any, idx: number) => {
-                      return (
-                        <tr className="border p-3 bg-[#f9f9f9]" key={idx}>
-                          <td className="border p-3">{idx + 1}</td>
-                          <td className="border p-3">
-                            {values.score_id.score_type}
-                          </td>
-                          <td className="border p-3">{values.score_value}</td>
-                          <td className="border p-3">
-                            {" "}
-                            <BsIcons.BsThreeDotsVertical
-                              onClick={(event) => {
-                                setAnchorEl(
-                                  event.currentTarget as unknown as HTMLElement
-                                );
-                                event.preventDefault();
-                                setActiveCycle(idx);
-                                setdeleteValueTypeId(values.id);
-                              }}
-                              style={{
-                                color: "#000",
-                                fontSize: "20px",
-                              }}
-                            />
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div> */}
               <div
                 className="mt-10"
                 style={{
@@ -471,44 +425,6 @@ const createScoreType = (props: any) => {
                 >
                   {yuret?.map((values: any, idx: number) => {
                     return (
-                      // <div
-                      //   className="w-[250px]  h-[100px]  rounded-[7px] pt-3 text-left text-[#173b3f] bg-[#eef1f1] m-2 relative"
-                      //   style={{
-                      //     boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
-                      //   }}
-                      //   onMouseEnter={(event) => {
-                      //     console.log(idx, "ids");
-
-                      //     event.preventDefault();
-                      //     setActiveCycle(idx);
-                      //     setdeleteValueTypeId(values.id);
-                      //   }}
-                      // >
-                      //   <div className="ml-4 mt-2">
-                      //     <span className="font-bold">
-                      //       {values.score_id.score_type}:
-                      //     </span>{" "}
-                      //     <span>{values.score_value}%</span>
-                      //   </div>
-                      //   <div className="w-fit mx-auto absolute bottom-4 left-[50%] translate-x-[-50%] flex">
-                      //     <button
-                      //       className="border border-[#8d8d8d] hover:bg-[#dce1e1] border-1 rounded-[5px] w-[100px] mx-2"
-                      //       onClick={() => {
-                      //         handleOpenUpdateModal();
-                      //       }}
-                      //     >
-                      //       Edit
-                      //     </button>{" "}
-                      //     <button
-                      //       className="border border-[#8d8d8d] hover:bg-[#dce1e1] border-1 rounded-[5px] w-[100px] mx-2"
-                      //       onClick={() => {
-                      //         deleteScoreValue();
-                      //       }}
-                      //     >
-                      //       Remove
-                      //     </button>
-                      //   </div>
-                      // </div>
                       <div
                         className="w-[250px]  h-[100px]  rounded-[7px] pt-3 text-left text-[#173b3f] bg-[#eef1f1] m-2 relative"
                         style={{
@@ -527,7 +443,7 @@ const createScoreType = (props: any) => {
                           >
                             {values.score_id.score_type}:
                           </div>{" "}
-                          <div>{values.score_value}%</div>
+                          <div>{values.score_value}</div>
                         </div>
                         <div className="absolute m-0 top-[50%] right-2 -translate-y-2/4  -translate-x-2/4">
                           <BsIcons.BsThreeDotsVertical
@@ -550,7 +466,6 @@ const createScoreType = (props: any) => {
                   })}
                 </div>
               </div>
-              {/* ///////////////////////////////////////////////////// */}
             </div>
             <Menu
               id="basic-menu"
