@@ -68,7 +68,6 @@
     "axios": "^1.1.2",
     "bootstrap": "^5.2.2",
     "date-fns": "^2.29.3",
-    "dayjs": "^1.11.6",
     "dotenv": "^16.0.3",
     "flowbite": "^1.5.3",
     "icons": "^1.0.0",

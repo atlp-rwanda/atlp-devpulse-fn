@@ -66,14 +66,11 @@ export const getTraineeToUpdate = (Traineid: any) => async (dispatch: any) => {
   }
 };
 
-export const updateTraine =
-  ({ id, firstName, lastName }: any) =>
-  async (dispatch: any) => {
-    try {
-      const datas = await axios({
-        url: process.env.BACKEND_URL,
-        method: "post",
-        data: {
+
+export const updateTraine = ({id,firstName,lastName,cycle_id}:any)=> async (dispatch: any) =>{
+  try {
+    const datas = await axios.post('/',
+       {
           query: `
         mutation UpdateTraineeApplicant($id: ID!, $updateInput: traineeApplicantInputUpdate) {
             updateTraineeApplicant(ID: $id, updateInput: $updateInput) {
@@ -83,16 +80,16 @@ export const updateTraine =
               email
             }
           }
-      `,
-          variables: {
-            id,
-            updateInput: {
-              firstName,
-              lastName,
-            },
-          },
-        },
-      });
+      `,variables: {
+          id,
+          updateInput: {
+            firstName,
+            lastName,
+            cycle_id
+          }
+      },
+      },
+    );
 
       const response = await datas.data.data.updateTraineeApplicant;
       dispatch(creator(UPDATE_TRAINEE, response));
