@@ -22,6 +22,10 @@ const TraineeUpdate = (props:any) =>{
   const [districts,setDistricts] = useState<any[]>([]);
   const [sectors,setSectors] = useState<any[]>([]);
   const phoneRef = useRef<any>();
+  const districtRef = useRef<any>();
+  const provinceRef =useRef<any>();
+  const sectorRef = useRef<any>();
+  const cycleRef = useRef<any>();
 
   const getProvinces =()=>{
     Object.keys(locations).forEach(province => {
@@ -29,18 +33,30 @@ const TraineeUpdate = (props:any) =>{
     });
   }
 
-  const getDistrict=(provinceName:any)=>{
-    const data = locations[provinceName];
-    districts.length = 0;
-    Object.keys(data).forEach(district =>{
-      districts.push(district)
-    })
+  const getDistricts=(provinceName:any)=>{
+    try {
+      const data = locations[provinceName];
+      districts.length = 0;
+      Object.keys(data).forEach(district =>{
+        districts.push(district)
+      })
+    } catch (error) {
+      console.log(error)
+    }
+    
   }
 
-  const getSectors = (province:any,district:any)=>{
-    const data = locations[province][district];
-    sectors.length=0;
-    Object.keys(data).forEach(sector =>sectors.push(sector))
+  const getSectors = (provinceName:any,districtName:any)=>{
+    try {
+      const data = locations[provinceName][districtName];
+      sectors.length=0;
+      Object.keys(data).forEach(sector =>{
+        sectors.push(sector)
+      })
+    } catch (error) {
+      console.log(error);
+    }
+
   }
 
   useEffect(()=>{
@@ -80,6 +96,15 @@ const TraineeUpdate = (props:any) =>{
     event.preventDefault();
     const reg = new RegExp('^((072|078|073))[0-9]{7}$', 'i');
 
+    const province = provinceRef?.current?.props?.value?.value;
+    const district = districtRef?.current?.props?.value?.value;
+    const sector = sectorRef?.current?.props?.value?.value;
+    const cycle = cycleRef?.current?.props?.value?.value;
+    await getDistricts(province);
+    await getSectors(province,district)
+    const districtExists = Object.values(districts).includes(district);
+    const sectorExists = Object.values(sectors).includes(sector);
+
     if(formData.firstname === ""){
       toast.error("Firstname is required")
     }
@@ -91,7 +116,11 @@ const TraineeUpdate = (props:any) =>{
       toast.error("Invalid phone number")
     }else if(formData.address=== ""){
       toast.error("Address is required")
-    }else if(formData.cycle=== undefined){
+    }else if(!districtExists){
+      toast.error(`Province ${province} have no district named ${district}`)
+    }else if(!sectorExists){
+      toast.error(`District ${district} have no sector named ${sector}`)
+    }else if(cycle=== ""){
       toast.error("Please Select Cycle")
     }else if(formData.sector=== ""){
       toast.error("Sector is required")
@@ -109,7 +138,7 @@ const TraineeUpdate = (props:any) =>{
           id:ID,
           firstName:formData.firstname,
           lastName:formData.lastname,
-          cycle_id:formData.cycle
+          cycle_id:cycle
         };
 
         const inputAttributes={
@@ -215,6 +244,7 @@ const TraineeUpdate = (props:any) =>{
                     <Select
                       className="shadow appearance-none border rounded w-full text-gray-600 leading-tight focus:outline-none focus:shadow-outline"
                       id="province"
+                      ref={provinceRef}
                       name="province"
                       options={
                         provinces?.map((province: any) => (
@@ -227,7 +257,7 @@ const TraineeUpdate = (props:any) =>{
                           ...formData,
                           province: e?.value,
                         });
-                        getDistrict(e?.value)
+                        getDistricts(e?.value)
                       }}
                       placeholder="Select province"/>
                   </div>
@@ -240,6 +270,7 @@ const TraineeUpdate = (props:any) =>{
                       className="shadow appearance-none border rounded w-full text-gray-600 leading-tight focus:outline-none focus:shadow-outline"
                       id="district"
                       name="district"
+                      ref={districtRef}
                       options={
                         districts?.map((district: any) => (
                           {value:`${district}`, label:`${district}`}
@@ -263,6 +294,7 @@ const TraineeUpdate = (props:any) =>{
                     <Select
                       className="shadow appearance-none border rounded w-full text-gray-600 leading-tight focus:outline-none focus:shadow-outline"
                       id="sector"
+                      ref={sectorRef}
                       options={
                         sectors?.map((sector: any) => (
                           {value:`${sector}`, label:`${sector}`}
@@ -498,6 +530,7 @@ const TraineeUpdate = (props:any) =>{
                     </label>
                     <Select
                       className="shadow appearance-none border rounded w-full  text-gray-600 leading-tight focus:outline-none focus:shadow-outline"
+                      ref={cycleRef}
                       options={
                         cycles?.map((cycle: any) => (
                           {value:`${cycle.id}`, label:`${cycle.name}`}
