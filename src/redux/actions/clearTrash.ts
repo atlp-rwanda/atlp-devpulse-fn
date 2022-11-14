@@ -1,16 +1,14 @@
 import creator from "./creator";
 import {EMPTYING_TRASH } from "..";
-import axios from "axios";
+import axios from './axiosconfig';
 import { toast } from "react-toastify";
 
 export const clearTrash =
   () =>
   async (dispatch: any) => {
     try {
-      await axios({
-        url: 'http://localhost:4000/',
-        method: "post",
-        data: {
+    await axios.post('/',
+       {
           query:
 
       `mutation EmptyRecyclebin {
@@ -21,15 +19,9 @@ export const clearTrash =
         }
       }
       `
-      // ,
-      //     variables: {
-      //       input: {
-      //         page,
-      //         itemsPerPage,
-      //       },
-      //     },
+  
         },
-      })
+      )
       
       
         .then((response) => {
@@ -43,16 +35,13 @@ export const clearTrash =
             );
           } else {
             toast.error("Error while clearing trash");
-            // dispatch(creator(GET_SOFT_DELETED_TRAINEES_ERROR, err));
           }
         })
         .catch((error) => {
-          // dispatch(creator(GET_SOFT_DELETED_TRAINEES_ERROR, error));
           console.log("Dispatch catch error", error);
         });
 
-      // const softDeletedTrainees = await datas.data.data.allSoftDeletedTrainees;
-      // dispatch(creator(GET_SOFT_DELETED_TRAINEES_ERROR, softDeletedTrainees));
+
     } catch (error) {
       if (error) {
         return console.log(error);

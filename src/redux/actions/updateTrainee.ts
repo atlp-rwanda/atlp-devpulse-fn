@@ -1,5 +1,5 @@
 import creator from "./creator";
-import axios from "axios";
+import axios from './axiosconfig';
 import { 
   GET_TRAINEE_TO_UPDATE_FAIL, 
   UPDATE_TRAINEE, 
@@ -10,11 +10,9 @@ import { GET_TRAINEE_TO_UPDATE } from "..";
 
 export const getTraineeToUpdate = (Traineid:any) => async (dispatch: any) => {
   try {
-    const datas = await axios({
-      url:'http://localhost:4000/',
-      method: "post",
-      data: {
-        query: `
+    const datas = await axios.post('/',
+       {
+          query:`
         query GetOneTraineeAllDetails($input: one) {
           getOneTraineeAllDetails(input: $input) {
             gender
@@ -54,7 +52,7 @@ export const getTraineeToUpdate = (Traineid:any) => async (dispatch: any) => {
         },
       },
       },
-    });
+    );
 
     const response = await datas.data.data.getOneTraineeAllDetails;
     return dispatch(creator(GET_TRAINEE_TO_UPDATE, response))
@@ -68,11 +66,9 @@ export const getTraineeToUpdate = (Traineid:any) => async (dispatch: any) => {
 
 export const updateTraine = ({id,firstName,lastName}:any)=> async (dispatch: any) =>{
   try {
-    const datas = await axios({
-      url:'http://localhost:4000/',
-      method: "post",
-      data: {
-        query: `
+    const datas = await axios.post('/',
+       {
+          query: `
         mutation UpdateTraineeApplicant($id: ID!, $updateInput: traineeApplicantInputUpdate) {
             updateTraineeApplicant(ID: $id, updateInput: $updateInput) {
               lastName
@@ -89,7 +85,7 @@ export const updateTraine = ({id,firstName,lastName}:any)=> async (dispatch: any
           }
       },
       },
-    });
+    );
 
     const response = await datas.data.data.updateTraineeApplicant;
     dispatch(creator(UPDATE_TRAINEE, response))
@@ -119,11 +115,9 @@ export const updateTraineeAttributes = ({
   gender
 }:any)=> async (dispatch: any) =>{
   try {
-    const datas = await axios({
-      url:'http://localhost:4000/',
-      method: "post",
-      data: {
-        query: `
+    const datas = await await axios.post('/',
+       {
+          query: `
         mutation UpdateTraineeAttribute($id: ID!, $attributeUpdateInput: traineeUpdateAttributeInput) {
           updateTraineeAttribute(ID: $id, attributeUpdateInput: $attributeUpdateInput) {
             gender
@@ -168,7 +162,7 @@ export const updateTraineeAttributes = ({
           },
       },
       },
-    });
+    );
 
     const response = await datas.data.data.updateTraineeAttribute;
     dispatch(creator(UPDATE_TRAINEE_ATTRIBUTE, response))

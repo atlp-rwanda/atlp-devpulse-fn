@@ -7,7 +7,7 @@ import axios from "axios";
 export const getAllFilteredTraineess = ({ page,itemsPerPage,  All, wordEntered, filterAttribute }:any) => async (dispatch: any) => {
   try {
     const datas = await axios({
-      url: 'http://localhost:4000/',
+      url: process.env.BACKEND_URL,
       method: "post",
       data: {
         query: `

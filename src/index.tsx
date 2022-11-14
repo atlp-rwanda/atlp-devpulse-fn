@@ -7,6 +7,7 @@ const App = React.lazy(() => import("./App"));
 
 import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
+import { ThemeContextProvider } from './hooks/darkmode';
 import store from "./redux/store";
 
 const container = document.getElementById("app")!;
@@ -14,7 +15,9 @@ const container = document.getElementById("app")!;
 const root = ReactDOMClient.createRoot(container).render(
   <Provider store={store}>
     <BrowserRouter>
-      <App />
+      <ThemeContextProvider>
+        <App />
+      </ThemeContextProvider>
       <ToastContainer theme="colored" />
     </BrowserRouter>
   </Provider>
