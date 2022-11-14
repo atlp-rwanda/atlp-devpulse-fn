@@ -164,19 +164,13 @@ const ScoreTypesActions = (props: any) => {
                   boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
                 }}
               >
-                <div
-                  className="mt-[25px] flex content-between mr-[30px]"
-                  style={{
-                    wordWrap: "break-word",
-                    overflowX: "auto",
-                    whiteSpace: "nowrap",
-                    width: "",
-                  }}
-                >
-                  <div className="font-bold pl-10">
-                    <span className="font-normal">{i + 1}. </span> {values.name}
+                <div className="mt-[25px] flex semi-md-col:block">
+                  <div className="font-normal pl-10 semi-md-col:text-center semi-md-col:pl-0">
+                    {i + 1}. {values.name}
                   </div>{" "}
-                  <div className="ml-5">({values.nbr} candidates)</div>
+                  <div className="ml-5 semi-md-col:text-center">
+                    ({values.nbr} candidates)
+                  </div>
                 </div>
                 <div className="absolute m-0 top-[50%] right-2 -translate-y-2/4  -translate-x-2/4">
                   <BsIcons.BsThreeDotsVertical
