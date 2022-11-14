@@ -1,13 +1,12 @@
 import creator from "./creator";
-import axios from "axios";
+// import axios from "axios";
+import axios from './axiosconfig';
 import { GET_ONE_TRAINEES_ALL_DETAILS } from "..";
 
 export const getOneTraineeAllDetails = ({id}:any) => async (dispatch: any) => {
     try {
-      const datas = await axios({
-        url:'http://localhost:4000/',
-        method: "post",
-        data: {
+      const datas = await axios.post('/',
+       {
           query: `
           query GetOneTraineeAllDetails($input: one) {
             getOneTraineeAllDetails(input: $input) {
@@ -43,7 +42,7 @@ export const getOneTraineeAllDetails = ({id}:any) => async (dispatch: any) => {
           },
         },
         },
-      });
+      );
 
       const response = await datas.data.data.getOneTraineeAllDetails;
       // console.log( response)

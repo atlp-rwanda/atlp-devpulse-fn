@@ -2,6 +2,7 @@ const { green } = require("@mui/material/colors");
 
 module.exports = {
   content: ["./src/**/*.{ts,tsx}", "./index.html"],
+  darkMode: 'class',
   theme: {
     extend: {
       screens: {
@@ -21,6 +22,7 @@ module.exports = {
         primary: "#173B3F",
         secondary: "#F9F9FB",
         tertiary: "#F3F4F6",
+        green:"#56C870",
         "light-bg": "#F9F9FB",
         "light-text": "#111827",
         "header-text": "#173B3F",

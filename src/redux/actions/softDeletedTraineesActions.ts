@@ -1,16 +1,16 @@
 import creator from "./creator";
 import { GET_SOFT_DELETED_TRAINEES, GET_SOFT_DELETED_TRAINEES_ERROR } from "..";
-import axios from "axios";
+// import axios from "axios";
+import axios from './axiosconfig';
+
 import { toast } from "react-toastify";
 
 export const getAllSoftDeletedTrainees =
   ({ page, itemsPerPage }: any) =>
   async (dispatch: any) => {
     try {
-      await axios({
-        url: 'http://localhost:4000/',
-        method: "post",
-        data: {
+    await axios.post('/',
+       {
           query: `
         query Query($input: pagination) {
             allSoftDeletedTrainees(input: $input) {
@@ -28,7 +28,7 @@ export const getAllSoftDeletedTrainees =
             },
           },
         },
-      })
+      )
         .then((response) => {
           if (response.data.data !== null) {
             toast.success("Fetched all deleted trainees successfuly.");

@@ -1,16 +1,16 @@
 import creator from "./creator";
 import { GET_TRAINEE, CREATE_TRAINEES, CREATE_CYCLE_ERROR } from "..";
 import { toast } from "react-toastify";
-import axios from "axios";
+// import axios from "axios";
+import axios from './axiosconfig';
+
 
 export const getAllTraineess =
   ({ page, itemsPerPage, All }: any) =>
   async (dispatch: any) => {
     try {
-      const datas = await axios({
-        url: 'http://localhost:4000/',
-        method: "post",
-        data: {
+      const datas = await axios.post('/',
+       {
           query: `
         query AllTraineesDetails($input: pagination) {
           allTraineesDetails(input: $input) {
@@ -31,7 +31,7 @@ export const getAllTraineess =
             },
           },
         },
-      });
+      );
       // console.log("result",datas);
       const trainee = await datas.data.data.allTraineesDetails;
       console.log(trainee);
@@ -47,10 +47,8 @@ export const createTrainee =
   ({ firstName, lastName, email, cycle_id }: any) =>
   async (dispatch: any) => {
     try {
-      const datas = await axios({
-        url: 'http://localhost:4000/',
-        method: "post",
-        data: {
+      const datas = await axios.post('/',
+       {
           query: `
           mutation CreateNewTraineeApplicant($input: newTraineeApplicantInput) {
             createNewTraineeApplicant(input: $input) {
@@ -69,7 +67,7 @@ export const createTrainee =
             },
           },
         },
-      })
+      )
         .then((response) => {
           if (response.data.data !== null) {
             toast.success("Successfully created.");

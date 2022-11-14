@@ -10,11 +10,8 @@ import TrainneeDetails from './pages/TrainneeDetails';
 import TrainneeDetailsB from './pages/TrainneDetailsB';
 import './index.css'
 import  Sidebar  from './components/sidebar/sidebar';
-
-
 import "./index.css";
 import "./index.css";
-// import Sidebar from "./components/sidebar/sidebar";
 import NavBar from "./components/sidebar/navHeader";
 import Trainee from "./pages/TraineApplicant/Trainee";
 import FilterTrainee from "./pages/FilterTeainee/FilterTrainee";
@@ -45,9 +42,6 @@ function App() {
       <Route path="/nav-bar" element={<NavBar />} />
       <Route path="/filter_trainee" element={<FilterTrainee />} />
       <Route path="/trainees/:traineeId/edit" element={< UpdateTraine/>} />
-
-
-     
     </Routes>
   );
 }

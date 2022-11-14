@@ -8,29 +8,32 @@ import { FaMoon, FaBars } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
 import * as icon from "react-icons/hi2";
 import { AiOutlineBell } from "react-icons/ai";
+import {useTheme } from '../../hooks/darkmode'
 const logo: string = require("../../assets/logo.svg").default;
 const profile: string = require("../../assets/avatar.png").default;
 
 function NavBar() {
   const [showNotification, setShowNotification] = useState(false);
   const [showProfileDropdown, setShowprofileDropdown] = useState(false);
-
+  const { theme, setTheme } = useTheme()
+   function handleToggleTheme() {
+    setTheme(!theme)
+  }
   const [nav, setNav] = useState(false);
-
   const handleClick = () => setNav(!nav);
   const handleShowNotification = () => setShowNotification(!showNotification);
   const handleShowProfileDropdown = () =>
     setShowprofileDropdown(!showProfileDropdown);
 
   return (
-    <>
+    <div className="flex items-center dark:bg-zinc-800 ">
       {showProfileDropdown && (
         <ProfileDropdown
           handleShowProfileDropdown={handleShowProfileDropdown}
         />
       )}
-      <div className="flex items-center justify-between h-[70px] fixed z-50 top-0 border-b w-screen bg-white">
-        <div className="flex items-center">
+      <div className={`flex items-center justify-between h-[70px] fixed z-50 top-0 border-b w-screen bg-white dark:bg-dark-bg`}>
+        <div className="flex items-center ">
           <span
             onClick={handleClick}
             onKeyDown={handleClick}
@@ -47,11 +50,11 @@ function NavBar() {
           <span>
             <Link to="/dashboard/super-admin" className="flex items-center">
               <img
-                className="  cursor-pointer mx-2 fill-[blue]"
+                className="  cursor-pointer mx-2  dark:fill-green"
                 src={logo}
-                style={{ fill: "#333" }}
+                // style={{ fill: "#333" }}
               />
-              <h1 className=" sm-text-1xl mr-12  font-bold font-lexend text-primary  md:hidden">
+              <h1 className=" sm-text-1xl mr-12  font-bold font-lexend text-primary  md:hidden dark:text-green">
                 PULSE
               </h1>
             </Link>
@@ -60,12 +63,22 @@ function NavBar() {
         <div className="flex items-center mr-4">
           <span className="flex items-center">
             {" "}
-            <FaMoon className="text-[20px] cursor-pointer mx-1" />
+            {/* <FaMoon className="text-[20px] cursor-pointer mx-1" /> */}
             <AiOutlineBell
               className=" text-[25px] cursor-pointer    "
               onClick={handleShowNotification}
             />
           </span>
+                <div
+              className={`mx-4 dark:text-zinc-100 rounded-full px-2 text-xl cursor-pointer flex items-center w-9 h-9`}
+              onClick={handleToggleTheme}
+            >
+              {theme  ? (
+                <span className='toggle-moon' onClick={handleToggleTheme}>🌙</span>
+              ) : (
+                <span className='toggle-sun' onClick={handleToggleTheme}>☀️</span>
+              )}
+            </div>
           <span onClick={handleShowProfileDropdown}>
             <img
               src={profile}
@@ -81,7 +94,7 @@ function NavBar() {
       <div className="block md:hidden">
         <Sidebar />
       </div>
-    </>
+    </div>
   );
 }
 
