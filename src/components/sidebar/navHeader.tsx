@@ -74,7 +74,7 @@ function NavBar() {
             {" "}
             {/* <FaMoon className="text-[20px] cursor-pointer mx-1" /> */}
             <AiOutlineBell
-              className=" text-[25px] cursor-pointer    "
+              className=" text-[25px] cursor-pointer  dark:text-dark-text-fill  "
               onClick={handleShowNotification}
             />
           </span>
