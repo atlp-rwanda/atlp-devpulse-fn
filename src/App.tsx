@@ -16,7 +16,6 @@ import UpdateTraine from "./pages/updateTrainee/traineUpdate";
 import CreateScoreType from "./pages/FilterTeainee/createScoreType";
 import ScoreTypesActions from "./pages/FilterTeainee/ ScoreTypesActions";
 import "./index.css";
-
 const Counter = React.lazy(() => import("./components/Counter/Counter"));
 const ApplicationCycle = React.lazy(
   () => import("./pages/ApplicationCycle/ApplicationCycle")
