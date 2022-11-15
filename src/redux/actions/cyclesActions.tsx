@@ -8,15 +8,13 @@ import {
   UPDATE_CYCLE_ERROR,
   DELETE_CYCLE_ERROR,
 } from "..";
-import axios from './axiosconfig';
+import axios from "./axiosconfig";
 import { toast } from "react-toastify";
 
 export const getAllCycles = () => async (dispatch: any) => {
   try {
-    const datas = await axios.post(
-       '/', 
-      {
-        query: `
+    const datas = await axios.post("/", {
+      query: `
         query getCycle {
           getAllApplicationCycles {
             id
@@ -26,8 +24,7 @@ export const getAllCycles = () => async (dispatch: any) => {
           }
         }
       `,
-      },
-    );
+    });
     const cycles = await datas.data.data.getAllApplicationCycles;
     dispatch(creator(GET_CYCLES, cycles));
   } catch (error) {
@@ -41,8 +38,8 @@ export const createCycle =
   ({ name, startDate, endDate }: any) =>
   async (dispatch: any) => {
     try {
-      await axios.post('/',
-       {
+      await axios
+        .post("/", {
           query: `
         mutation createApplicationCycle($input: createApplicationCycle) {
             createApplicationCycle(input: $input) {
@@ -59,8 +56,7 @@ export const createCycle =
               endDate,
             },
           },
-        },
-      )
+        })
         .then((response) => {
           if (response.data.data !== null) {
             toast.success("Cycle successfully created.");
@@ -88,8 +84,8 @@ export const updateApplicationCycle =
   ({ updateApplicationCycleId, name, startDate, endDate, id }: any) =>
   async (dispatch: any) => {
     try {
-      await axios.post('/',
-        {
+      await axios
+        .post("/", {
           query: `
           mutation upDateCycle(
             $updateApplicationCycleId: ID!
@@ -111,8 +107,7 @@ export const updateApplicationCycle =
               id,
             },
           },
-        },
-      )
+        })
         .then((response) => {
           if (response.data.data !== null) {
             toast.success("Cycle successfully updated.");
@@ -140,8 +135,8 @@ export const deleteApplicationCycle =
   ({ deleteApplicationCycleId }: any) =>
   async (dispatch: any) => {
     try {
-      const datas = await axios.post('/',
-       {
+      const datas = await axios
+        .post("/", {
           query: `
             mutation deleteCycle($deleteApplicationCycleId: ID!) {
             deleteApplicationCycle(id: $deleteApplicationCycleId) {
@@ -152,8 +147,7 @@ export const deleteApplicationCycle =
           variables: {
             deleteApplicationCycleId,
           },
-        },
-      )
+        })
         .then((response) => {
           if (response.data.data !== null) {
             toast.success("Cycle successfully deleted.");

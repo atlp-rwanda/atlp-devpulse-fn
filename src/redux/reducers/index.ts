@@ -1,9 +1,9 @@
 import counterReducer from "./counterReducer";
-import deletetraineReducer from "./deletetraineReducer"
-import {softdeletetraineReducer,traineReducer} from "./deletetraineReducer"
+import deletetraineReducer from "./deletetraineReducer";
+import { softdeletetraineReducer, traineReducer } from "./deletetraineReducer";
 import cycleReducer from "./cycleReducer";
 import softDeletedTraineeReducer from "./softDeletedTraineesReducer";
-import restoretraineReducer from "./RestoreReducer"
+import restoretraineReducer from "./RestoreReducer";
 import updateTraineeReducer from "./updateTraineeReducer";
 import getOneTraineeReducer from "./getOneTraineeReducer";
 import updateTraineeAttributesReducer from "./updateTraineeAttributesReducer";
@@ -12,30 +12,33 @@ import updateTraineeAttributesReducer from "./updateTraineeAttributesReducer";
 import filterTraineeReducer from "./filterTraineeReducer";
 import { combineReducers } from "redux";
 import traineeReducer from "./traineeReducer";
-import traineesReducer from "./traineeReduces"
-
+import traineesReducer from "./traineeReduces";
 
 import clearTrashReducer from "./clearTrashReducer";
+import scoreTypesReducers from "./scoreTypesReducers";
+import scoreValuesReducer from "./scoreValuesReducer";
 
 const allReducers = combineReducers({
   counter: counterReducer,
-  deletetraine:deletetraineReducer,
-  softdeletetraine:softdeletetraineReducer,
+  deletetraine: deletetraineReducer,
+  softdeletetraine: softdeletetraineReducer,
   traineeAllDetails: traineesReducer,
   // deletetraine: deletetraineReducer,
   // softdeletetraine: softdeletetraineReducer,
   cycles: cycleReducer,
   softDeletedTrainees: softDeletedTraineeReducer,
-  restore:restoretraineReducer,
+  restore: restoretraineReducer,
   clearTrash: clearTrashReducer,
   // viewtrainee:viewtraineReducer,
   // addtrainee:addtraineReducer,
-  trainee: traineeReducer ,
-  traine:traineReducer,
+  trainee: traineeReducer,
+  traine: traineReducer,
   filterTrainee: filterTraineeReducer,
   getOneTraineeReducer,
-  updateTrainee:updateTraineeReducer,
-  updateTraineeAttributes:updateTraineeAttributesReducer
+  updateTrainee: updateTraineeReducer,
+  updateTraineeAttributes: updateTraineeAttributesReducer,
+  scoreTypes: scoreTypesReducers,
+  scoreValues: scoreValuesReducer,
 });
 
 export default allReducers;
