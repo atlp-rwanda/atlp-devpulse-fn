@@ -7,14 +7,11 @@ import restoretraineReducer from "./RestoreReducer";
 import updateTraineeReducer from "./updateTraineeReducer";
 import getOneTraineeReducer from "./getOneTraineeReducer";
 import updateTraineeAttributesReducer from "./updateTraineeAttributesReducer";
-// import addtraineReducer from "./traineeReducer";
-// import { viewtraineReducer } from "./traineeReducer";
 import filterTraineeReducer from "./filterTraineeReducer";
 //@ts-ignore
 import { combineReducers } from "redux";
 import traineeReducer from "./traineeReducer";
 import traineesReducer from "./traineeReduces";
-
 import clearTrashReducer from "./clearTrashReducer";
 import scoreTypesReducers from "./scoreTypesReducers";
 import scoreValuesReducer from "./scoreValuesReducer";
@@ -24,14 +21,10 @@ const allReducers = combineReducers({
   deletetraine: deletetraineReducer,
   softdeletetraine: softdeletetraineReducer,
   traineeAllDetails: traineesReducer,
-  // deletetraine: deletetraineReducer,
-  // softdeletetraine: softdeletetraineReducer,
   cycles: cycleReducer,
   softDeletedTrainees: softDeletedTraineeReducer,
   restore: restoretraineReducer,
   clearTrash: clearTrashReducer,
-  // viewtrainee:viewtraineReducer,
-  // addtrainee:addtraineReducer,
   trainee: traineeReducer,
   traine: traineReducer,
   filterTrainee: filterTraineeReducer,
