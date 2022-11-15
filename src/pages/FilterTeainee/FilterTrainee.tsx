@@ -10,6 +10,7 @@ import { FaCaretDown } from "react-icons/fa";
 import { getAllFilteredTraineess } from "../../redux/actions/filterTraineeActions";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
+import { useTheme } from '../../hooks/darkmode'
 
 export const customTheme = (theme: any) => {
     return {
@@ -18,8 +19,9 @@ export const customTheme = (theme: any) => {
             ...theme.colors,
             text: 'light-gray',
             primary25: "#E5E7EB",
-            primary: 'cgray'
-        }
+            primary: 'cgray',
+            neutral0: 'white',
+        },
     }
 }
 
@@ -27,15 +29,16 @@ export const darkTheme = (theme: any) => {
     return {
         ...theme,
         colors: {
-            ...theme.colors,
-            primary25: "#293647",
+            primary25: "#404657",
             primary: 'cgray',
-        }
+            neutral0: '#293647',
+        },
     }
 }
 
 const FilterTrainee = (props: any) => {
 
+    const { theme, setTheme } = useTheme()
 
     const [filterAttribute, setFilterAttribute] = useState("");
     const [enteredWord, setEnteredWord] = useState("");
@@ -74,10 +77,7 @@ const FilterTrainee = (props: any) => {
     // All trainees in DB
     const { allfilteredTrainees } = props;
 
-
     const traineeList = allfilteredTrainees.data
-    // console.log("afer useffect1", traineeList)
-    // console.log(props)
 
     const [pageIdx, setPageIdx] = useState(1);
     const [itemsPerPage] = useState(10);
@@ -85,12 +85,10 @@ const FilterTrainee = (props: any) => {
     const nonNullTrainee = traineeList.filter((value) => {
         return value !== null
     })
-    // console.log("nonNullTrainee", nonNullTrainee)
 
     const nonDeletedTrainee = nonNullTrainee.filter((value) => {
         return value.trainee_id.delete_at == false
     })
-    // console.log("nonDeleteTrainee", nonDeletedTrainee)
 
     useEffect(() => {
         const data = {
@@ -245,13 +243,12 @@ const FilterTrainee = (props: any) => {
             },
         },
     ];
-    // console.log("pageIdx", pageIdx)
 
     const columns = useMemo(() => COLS, []);
     const data = useMemo(() => nonDeletedTrainee, [allfilteredTrainees])
     const initialState = {
         hiddenColumns: [
-            'trainee_id.firstName','Deleted', 'gender', 'birth_date', 'phone', 'field_of_study', 'education_level',
+            'trainee_id.firstName', 'Deleted', 'gender', 'birth_date', 'phone', 'field_of_study', 'education_level',
             'province', 'district', 'sector', 'Employment', 'Has Laptop', 'Student', 'Hackerrank_score',
             'english_score', 'interview_decision', 'past_andela_programs', 'Address'
         ]
@@ -269,11 +266,8 @@ const FilterTrainee = (props: any) => {
         pageOptions,
         gotoPage,
         pageCount,
-        setPageSize,
         state,
         prepareRow,
-        rows,
-        selectedFlatRows,
         allColumns,
         getToggleHideAllColumnsProps,
     }: any = useTable(
@@ -310,7 +304,7 @@ const FilterTrainee = (props: any) => {
                     <div className=" table table-fixed mt-[5rem] w-[100%] top-[20%] md:top-[10%] pb-10 md:relative px-[10%] md:px-[10px]">
                         <div className="">
                             <Select
-                                className="sm:text-sm w-40 rounded-bt-rd"
+                                className="sm:text-sm w-40 rounded-bt-rd dark:text-ltb"
                                 options={[
                                     { value: "_id", label: "Trainee ID" },
                                     { value: "firstName", label: "First Name" },
@@ -337,8 +331,7 @@ const FilterTrainee = (props: any) => {
                                 ]}
                                 defaultValue={{ value: '', label: 'Select by' }}
                                 onChange={(e) => setFilterAttribute(`${e?.value}`)}
-                                theme={darkTheme}
-                                // theme={localStorage.theme === 'dark' ? darkTheme : customTheme}
+                                theme={theme ? customTheme : darkTheme}
                             />
                         </div>
                         <div className="flex items-center mb-6 semi-sm:flex-wrap">
@@ -436,8 +429,6 @@ const FilterTrainee = (props: any) => {
                                         ))}
                                     </thead>
                                     <tbody {...getTableBodyProps()}>
-                                    {/* {console.log("page", page)} */}
-                                    {/* {console.log("trainleist", traineeList)} */}
                                         {
                                             nonDeletedTrainee.length !== 0 ? (
                                                 page.map((row: any) => {
