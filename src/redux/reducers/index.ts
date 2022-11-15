@@ -10,6 +10,7 @@ import updateTraineeAttributesReducer from "./updateTraineeAttributesReducer";
 // import addtraineReducer from "./traineeReducer";
 // import { viewtraineReducer } from "./traineeReducer";
 import filterTraineeReducer from "./filterTraineeReducer";
+//@ts-ignore
 import { combineReducers } from "redux";
 import traineeReducer from "./traineeReducer";
 import traineesReducer from "./traineeReduces";
