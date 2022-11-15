@@ -102,6 +102,12 @@ const FilterTrainee = (props: any) => {
         props.getAllFilteredTraineess(data)
     }, [enteredWord, filterAttribute]);
 
+    const [me, setMe] = useState("Keroity");
+
+    const handleMe = () => {
+      setMe("Heroiks");
+    };
+
     const COLS = [
         {
             Header: "Name",
@@ -238,7 +244,7 @@ const FilterTrainee = (props: any) => {
             Cell: ({ row }: any) => {
 
                 return (
-                    <Threedots />
+                    <Threedots useParentFx={() => handleMe()} min={row.original._id} />
                 );
             },
         },
