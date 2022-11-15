@@ -59,7 +59,9 @@ export const loadDataIntoDb = (googleSheetId: string) => {
         load_data_success((await resultPromise).data.data.loadAllTrainees)
       );
     }
+    // "Variable "$columnData" got invalid value { firstName: "", lastName: "", email: "", gender: "", birth_date: "", Address: "", phone: "phones", field_of_study: "", education_level: "", province: "provinces", district: "", sector: "sectors", isEmployed: "", haveLaptop: "", isStudent: "", Hackerrank_score: "", english_score: "", interview: "", interview_decision: "", past_andela_programs: "", cycle_id: "cohort 21", : "Wrong cycle name is provided!!!!", spreadsheetId: "1hXUavm_K5BQAOGTx9W4Z84Ttb2_ONfvk_EQZlyOnUPM" }; Field "" is not defined by type "columnsInputSubmitted"."
 
+    // "Variable "$columnData" got invalid value { firstName: "", lastName: "", email: "", gender: "", birth_date: "", Address: "", phone: "phones", field_of_study: "", education_level: "", province: "provinces", district: "", sector: "sectors", isEmployed: "", haveLaptop: "", isStudent: "", Hackerrank_score: "", english_score: "", interview: "", interview_decision: "", past_andela_programs: "", cycle_id: "cohort 1000", : "Wrong cycle name is provided!!!!" }; Field "spreadsheetId" of required type "String!" was not provided."
     // on errors
     else {
       console.log((await resultPromise).data.errors[0].message);
@@ -91,17 +93,34 @@ export const resendMappedDataIntoDb = (dataObjectMapped: any, id: any) => {
           },
         },
       });
-    toast.promise(resultPromise, {
-      pending: "Saving the data into DB ...",
-      success: `saved successfully 👌`,
-      error: `not saved successfully 🤯`,
-    });
+      toast.promise(resultPromise, {
+        pending: "Saving the data into DB ...",
+        success: `saved successfully 👌`,
+        error: `not saved successfully 🤯`,
+      });
       // on success
+      // if ((await resultPromise).data.data) {
+      //   dispatch(
+      //     load_data_success((await resultPromise).data.data.reSendDataIntoDb)
+      //   );
+      // }
+
+      // // on success
       if ((await resultPromise).data.data) {
-        dispatch(load_data_success((await resultPromise).data.data.reSendDataIntoDb));
+        console.log((await resultPromise).data.data.reSendDataIntoDb);
+        dispatch(
+          load_data_success((await resultPromise).data.data.reSendDataIntoDb)
+        );
+      }
+
+      // on errors
+      else {
+        console.log((await resultPromise).data.errors[0].message);
+        dispatch(load_data_fail((await resultPromise).data.errors[0].message));
       }
     } catch (error) {
       console.log(error);
     }
   };
 };
+// "Variable \"$columnData\" got invalid value { firstName: \"\", lastName: \"\", email: \"emails\", gender: \"\", birth_date: \"\
