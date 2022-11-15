@@ -19,7 +19,6 @@ import "./index.css";
 import Table from "./pages/Table";
 import UpdateTraine from "./pages/updateTrainee/traineUpdate";
 import "./index.css";
-
 const Counter = React.lazy(() => import("./components/Counter/Counter"));
 const ApplicationCycle = React.lazy(
   () => import("./pages/ApplicationCycle/ApplicationCycle")

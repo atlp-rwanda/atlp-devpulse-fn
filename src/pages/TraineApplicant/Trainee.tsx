@@ -102,7 +102,7 @@ const Open=() =>{
                   <div className="flex px-5 py-2 pb-8 w-fit">
                     <button
                       onClick={Open}
-                      className="flex bg-primary rounded-md py-2 px-4 text-white font-medium cursor-pointer"
+                      className="flex bg-primary dark:bg-[#56C870] rounded-md py-2 px-4 text-white font-medium cursor-pointer"
                     >
                       <icons.AiOutlinePlus className="mt-1 mr-1 font-bold" />{" "}
                       Trainee
@@ -111,7 +111,7 @@ const Open=() =>{
                   </div>
 
                   <Link to="/filter_trainee">
-                    <button className="flex bg-primary rounded-md py-2 mt-2 px-4 text-white font-medium cursor-pointer">
+                    <button className="flex bg-primary dark:bg-[#56C870] rounded-md py-2 mt-2 px-4 text-white font-medium cursor-pointer">
                       <icons.AiOutlineSearch className="mt-1 mr-1 font-bold" />{" "}
                       Search
                     </button>
@@ -198,7 +198,7 @@ const Open=() =>{
                                       <td>
                                         <div>
                                           <HiDotsVertical
-                                            className=" text-black text-3xl ml-6 font-size-6 cursor-pointer"
+                                            className=" text-black dark:text-white text-3xl ml-6 font-size-6 cursor-pointer"
                                             onClick={(e: any) => {
                                               e.preventDefault();
                                               onSubmitHandler(item._id);
@@ -209,7 +209,7 @@ const Open=() =>{
                                               moredrop === item._id
                                                 ? "block"
                                                 : "hidden"
-                                            } absolute  bg-white text-base z-50 list-none divide-y divide-gray-100 rounded shadow my-4`}
+                                            } absolute  bg-white dark:bg-dark-tertiary  dark:text-white text-base z-50 list-none divide-y divide-gray-100 rounded shadow my-4`}
                                             id="dropdown"
                                           >
                                             <ul
@@ -218,21 +218,21 @@ const Open=() =>{
                                             >
                                               <li>
                                                 <Link to={`/trainees/${item._id}/edit`}
-                                                className="text-sm hover:bg-gray-100 text-gray-700 block px-4 py-2"
+                                                className="text-sm hover:bg-gray-100 text-gray-700 dark:hover:bg-gray-500 dark:text-white  block px-4 py-2"
                                                 >
                                                   Edit 
                                                 </Link>
                                               </li>
                                               <li>
                                                 <Link to={`/trainee-details/${item._id}`}
-                                                className="text-sm hover:bg-gray-100 text-gray-700 block px-4 py-2"
+                                                className="text-sm hover:bg-gray-100 text-gray-700  dark:text-white   dark:hover:bg-gray-500 block px-4 py-2"
                                                 >
                                                   View
                                                 </Link>
                                               </li>
                                               <li>
                                                 <div
-                                                  className="text-sm hover:bg-gray-100 text-gray-700 block px-4 py-2"
+                                                  className="text-sm hover:bg-gray-100 text-gray-700  dark:hover:bg-gray-500 dark:text-white  block px-4 py-2"
                                                   onClick={(e: any) => {
                                                     e.preventDefault();
                                                     onSubmitHandlesoft(item._id);
@@ -243,7 +243,7 @@ const Open=() =>{
                                               </li>
                                               <li>
                                                 <div
-                                                  className="text-sm hover:bg-gray-100 text-gray-700 block px-4 py-2"
+                                                  className="text-sm hover:bg-gray-100 text-gray-700   dark:hover:bg-gray-500 dark:text-white  block px-4 py-2"
                                                   onClick={(e: any) => {
                                                     e.preventDefault();
                                                     onSubmitHandle(item._id);
