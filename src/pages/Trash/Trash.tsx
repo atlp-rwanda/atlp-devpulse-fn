@@ -22,9 +22,9 @@ const Trash = (props: any) => {
   const [itemsPerPage] = useState(100);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [traineid, settraineid] = useState("");
-  const [filterAttributes, setFilterAttributes] = useState("");
-  const [wordsEntered, setWordsEntered] = useState("");
-
+  const [filterAttributesUN, setFilterAttributesUN] = useState("");
+  const [wordsEnteredUN, setWordsEnteredUN] = useState("");
+  const [AllUN, setAlllUN] = useState(true)
 
 
   const open = Boolean(anchorEl);
@@ -37,12 +37,16 @@ const Trash = (props: any) => {
     const data = {
       page: pageIdx,
       itemsPerPage,
+      AllUN,
+      wordEntered: wordsEnteredUN,
+      filterAttributesUN
     };
 
     props.getAllSoftDeletedTrainees(data);
-  }, [restore, clearTrashMessage]);
+  }, [restore, clearTrashMessage, filterAttributesUN, wordsEnteredUN]);
   const [moredrop, setmoredrop] = useState("");
   const trainees = allTrainees.data;
+  console.log("all trainees", trainees)
   const onSubmitHandler = (e: any) => {
     const traine = trainees[activeCycle!];
     settraineid(traine._id);
@@ -139,7 +143,7 @@ const Trash = (props: any) => {
   }
 
   const clearInput = () => {
-    setWordsEntered("")
+    setWordsEnteredUN("")
   }
 
   return (
@@ -159,14 +163,14 @@ const Trash = (props: any) => {
                   <Select
                     className="test sm:text-sm border bg-cgray border-solid border-bdr w-40 rounded-bt-rd"
                     options={[
-                      { value: "_id", label: "Trainee ID" },
+                      // { value: "_id", label: "Trainee ID" },
                       { value: "firstName", label: "First Name" },
                       { value: "lastName", label: "Last Name" },
                       { value: "email", label: "Email" },
                       { value: "", label: "Select by" },
                     ]}
                     defaultValue={{ value: '', label: 'Select by' }}
-                    onChange={(e) => setFilterAttributes(`${e?.value}`)}
+                    onChange={(e) => setFilterAttributesUN(`${e?.value}`)}
                     theme={customTheme}
                   />
                 </div>
@@ -174,7 +178,7 @@ const Trash = (props: any) => {
                   <div className=" searchInputs relative block">
                     <span className="absolute inset-y-0 left-0 flex items-center pl-2">
                       <svg className="h-5 w-5 fill-slate-300 text-cg cursor-pointer" onClick={clearInput} viewBox="-6 -6 20 20">
-                        {wordsEntered === "" ? (
+                        {wordsEnteredUN === "" ? (
                           <AiIcons.AiOutlineSearch />
                         ) : (
                           <AiIcons.AiOutlineClose />
@@ -182,7 +186,7 @@ const Trash = (props: any) => {
 
                       </svg>
                     </span>
-                    <input onChange={(e) => setWordsEntered(e.target.value)} className="block bg-row-gray w-50 border border-bdr rounded-bt-rd mt-2 py-2 pl-9 pr-4 focus:outline-none sm:text-sm" value={wordsEntered} placeholder="Search" type="text" name="search" />
+                    <input onChange={(e) => setWordsEnteredUN(e.target.value)} className="block bg-row-gray w-50 border border-bdr rounded-bt-rd mt-2 py-2 pl-9 pr-4 focus:outline-none sm:text-sm" value={wordsEnteredUN} placeholder="Search" type="text" name="search" />
                   </div>
                 </div>
               </div>

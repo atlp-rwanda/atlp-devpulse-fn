@@ -12,13 +12,51 @@ export const getAllSoftDeletedTrainees =
       await axios
         .post("/", {
           query: `
-        query Query($input: pagination) {
-            allSoftDeletedTrainees(input: $input) {
-                lastName
-                firstName
-                _id
-                email
+        query Query($input: filterOptions) {
+          filterTraineesDetails(input: $input) {
+            trainee_id {
+              lastName
+              firstName
+              _id
+              email
+              delete_at
+              cycle_id {
+                id
+                name
+                startDate
+                endDate
+              }
             }
+            gender
+            birth_date
+            phone
+            field_of_study
+            education_level
+            province
+            district
+            sector
+            isEmployed
+            haveLaptop
+            isStudent
+            Hackerrank_score
+            english_score
+            interview_decision
+            past_andela_programs
+            _id
+            trainee_id {
+              lastName
+              firstName
+              _id
+              email
+              cycle_id {
+                id
+                name
+                startDate
+                endDate
+              }
+              delete_at
+            }
+          }
         }
       `,
           variables: {
@@ -31,11 +69,12 @@ export const getAllSoftDeletedTrainees =
         .then((response) => {
           if (response.data.data !== null) {
             toast.success("Fetched all deleted trainees successfuly.");
-            console.log(response.data.data.allSoftDeletedTrainees);
+            console.log('data',response.data.data.filterTraineesDetails);
             dispatch(
               creator(
                 GET_SOFT_DELETED_TRAINEES,
-                response.data.data.allSoftDeletedTrainees
+                response.data.data.filterTraineesDetails
+                // response.data.data.allSoftDeletedTrainees
               )
             );
           } else {
