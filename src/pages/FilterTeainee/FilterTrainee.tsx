@@ -77,16 +77,17 @@ const FilterTrainee = (props: any) => {
     // All trainees in DB
     const { allfilteredTrainees } = props;
 
-    const traineeList = allfilteredTrainees.data
+    const traineeList = allfilteredTrainees?.data
+    const handleNullTraineeList = traineeList === undefined? [] : traineeList
 
     const [pageIdx, setPageIdx] = useState(1);
     const [itemsPerPage] = useState(10);
 
-    const nonNullTrainee = traineeList.filter((value) => {
+    const nonNullTrainee = handleNullTraineeList.filter((value) => {
         return value !== null
     })
 
-    const nonDeletedTrainee = nonNullTrainee.filter((value) => {
+    const nonDeletedTrainee = nonNullTrainee?.filter((value) => {
         return value.trainee_id.delete_at == false
     })
 
@@ -396,7 +397,7 @@ const FilterTrainee = (props: any) => {
                                     </div>
                                 </MenuItem>
                                 {
-                                    allColumns.map(column => (
+                                    allColumns?.map(column => (
                                         <MenuItem>
                                             <div key={column.id}>
                                                 <label className="text-[#173B3F] text-base">
@@ -414,7 +415,7 @@ const FilterTrainee = (props: any) => {
                                     className="border-collapse w-[100%] m-auto rounded-[15px] whitespace-nowrap"
                                 >
                                     <thead className=" w-full px-32 sticky top-0">
-                                        {headerGroups.map((headerGroup: any, index: number) => (
+                                        {headerGroups?.map((headerGroup: any, index: number) => (
                                             <tr
                                                 key={index}
                                                 {...headerGroup.getHeaderGroupProps()}
@@ -436,8 +437,8 @@ const FilterTrainee = (props: any) => {
                                     </thead>
                                     <tbody {...getTableBodyProps()}>
                                         {
-                                            nonDeletedTrainee.length !== 0 ? (
-                                                page.map((row: any) => {
+                                            nonDeletedTrainee?.length !== 0 ? (
+                                                page?.map((row: any) => {
                                                     prepareRow(row);
                                                     return (
                                                         <tr
