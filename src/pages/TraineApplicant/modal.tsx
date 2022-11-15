@@ -130,15 +130,15 @@ function model(props: any) {
                   className=" dark:bg-dark-tertiary border border-primary py-2 rounded outline-none px-5 font-sans text-xs w-full pt-4"
                   onChange={(e) => setCycleId(e.target.value)}
                 >
-                  <option value="">--Please choose a cycle--</option>
+                  <option className="dark:text-white " value="">--Please choose a cycle--</option>
                   {props?.cycles?.map((cycle: any) => (
-                    <option value={cycle.id}>{cycle.name}</option>
+                    <option className="dark:text-white " value={cycle.id}>{cycle.name}</option>
                   ))}
                 </select>
               </div>
             </div>
             <button
-              className="flex bg-primary rounded-md py-2 px-4 text-white font-medium cursor-pointer m-auto"
+              className="flex bg-primary dark:bg-[#56C870] rounded-md py-2 px-4 text-white font-medium cursor-pointer m-auto"
               onClick={validation}
             >
               save
