@@ -33,71 +33,39 @@ const Threedots = (props: any) => {
     <>
       {traineeList && (
         <div className="inline-block text-left">
-          <div>
-            <button
-              type="button"
-              onClick={handleClick}
-              className="flex items-center"
-            >
-              <BsThreeDotsVertical
-                onClick={(event) => {
-                  setAnchorEl(event.currentTarget as unknown as HTMLElement);
-                }}
-                className="text-dots h-5"
-                viewBox="0 0 13 13"
-              />
-            </button>
-          </div>
+            <div>
+                <button type="button" onClick={handleClick} className="flex items-center">
+                    <BsThreeDotsVertical
+                        onClick={(event) => {
+                            setAnchorEl(event.currentTarget as unknown as HTMLElement);
+                        }}
+                        className="text-dots  dark:text-[#dbdee6] h-5"
+                        viewBox="0 0 13 13" />
+                </button>
+            </div>
+           
+                <Menu
+                    id="basic-menu"
+                    anchorEl={anchorEl}
+                    open={open}
+                    onClose={handleClose}
+                    MenuListProps={{
+                        "aria-labelledby": "basic-button",
+                    }}
+                >
+                    <a href="#" ><MenuItem>Email</MenuItem></a>
+                    {traineeList.trainee_id && <>
+                    <Link to={`/trainee-Details/${traineeList.trainee_id._id}`}>
+                    <a href="#" className="text-button-color hover:bg-bdr text-sm" ><MenuItem>View</MenuItem></a>
+                   
+                    </Link></>}
+                    <a href="#" className="text-button-color hover:bg-bdr text-sm" onClick={handleOpenDetails} ><MenuItem>Export</MenuItem></a>
+                    <a href="#" className="text-button-color hover:bg-bdr text-sm"><MenuItem>Delete</MenuItem></a>
+                    <a href="#" className="text-button-color hover:bg-bdr text-sm"><MenuItem><ul><li>Permanent </li><li>Delete</li></ul></MenuItem></a>
 
-          <Menu
-            id="basic-menu"
-            anchorEl={anchorEl}
-            open={open}
-            onClose={handleClose}
-            MenuListProps={{
-              "aria-labelledby": "basic-button",
-            }}
-          >
-            <a href="#">
-              <MenuItem>Email</MenuItem>
-            </a>
-            {traineeList.trainee_id && (
-              <>
-                <Link to={`/trainee-Details/${traineeList.trainee_id._id}`}>
-                  <a
-                    href="#"
-                    className="text-button-color hover:bg-bdr text-sm"
-                  >
-                    <MenuItem>View</MenuItem>
-                  </a>
-                </Link>
-              </>
-            )}
-            <a
-              href={`/filter_trainee/${scorePageId}`}
-              className="text-button-color hover:bg-bdr text-sm"
-            >
-              <MenuItem>Rate</MenuItem>
-            </a>
-            <a
-              href="#"
-              className="text-button-color hover:bg-bdr text-sm"
-              onClick={handleOpenDetails}
-            >
-              <MenuItem>Export</MenuItem>
-            </a>
-            <a href="#" className="text-button-color hover:bg-bdr text-sm">
-              <MenuItem>Delete</MenuItem>
-            </a>
-            <a href="#" className="text-button-color hover:bg-bdr text-sm">
-              <MenuItem>
-                <ul>
-                  <li>Permanent </li>
-                  <li>Delete</li>
-                </ul>
-              </MenuItem>
-            </a>
-          </Menu>
+                </Menu>
+           
+
         </div>
       )}
     </>
