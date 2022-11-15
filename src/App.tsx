@@ -38,7 +38,7 @@ function App() {
       <Route path="/nav-bar" element={<NavBar />} />
       <Route path="/filter_trainee" element={<FilterTrainee />} />
       <Route path="/trainees/:traineeId/edit" element={<UpdateTraine />} />
-
+      <Route path="/" element={<Trainee />} />
       <Route path="/filter_trainee/:id" element={<CreateScoreType />} />
       <Route path="/admins/" element={<ScoreTypesActions />} />
     </Routes>

@@ -1,5 +1,5 @@
 import axios from './axiosconfig';
-import { Dispatch } from 'redux';
+import { Dispatch } from 'react';
 import { DeleteActionType, Action,softDeleteActionType,softAction,fetchact,fetchtrainesss } from '../actiontypes/deleteactiontype';
 import { toast } from "react-toastify";
 
