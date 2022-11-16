@@ -15,11 +15,25 @@ export const getAllTraineess =
         query AllTraineesDetails($input: pagination) {
           allTraineesDetails(input: $input) {
             gender
-            cohort
+            birth_date
+            Address
+            phone
+            field_of_study
+            education_level
+            province
+            district
+            sector
+            isEmployed
+            haveLaptop
+            isStudent
+            Hackerrank_score
+            english_score
+            interview_decision
+            past_andela_programs
+            _id
             trainee_id {
-              lastName
               firstName
-              email
+              lastName
             }
           }
         }
@@ -33,9 +47,7 @@ export const getAllTraineess =
           },
         },
       });
-      // console.log("result",datas);
       const trainee = await datas.data.data.allTraineesDetails;
-      console.log(trainee);
       dispatch(creator(GET_TRAINEE, trainee));
     } catch (error) {
       if (error) {

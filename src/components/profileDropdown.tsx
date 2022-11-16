@@ -41,14 +41,14 @@ function ProfileDropdown({
                     to="/dashboard/profile"
                     className="font-semibold text-black-600 dark:text-black px-4 py-2 hover:bg-gray-600 hover:text-gray-200 dark:hover:bg-gray-300 dark:hover:text-gray-900"
                   >
-                    {/* {t('Profile')} */}
+                    <>{t('Profile')}</>
                   </Link>
                   <Link
                     onClick={handleShowProfileDropdown}
                     to="settings"
                     className="font-semibold text-gray-600 dark:text-black  px-4 py-2 pb-4 hover:bg-gray-600 hover:text-gray-200 dark:hover:bg-gray-300 dark:hover:text-gray-900"
                   >
-                    {/* {t('Preferences')} */}
+                    <>{t('Preferences')}</>
                   </Link>
                 </div>
               </div>
@@ -59,7 +59,7 @@ function ProfileDropdown({
             // onClick={logout}
           >
             {/* <LogoutIcon className="w-4 h-4 mt-1 cursor-pointer " /> */}
-            {/* <p className="font-boldml-1 dark:text-black  cursor-pointer">{t('Sign out')}</p> */}
+            <p className="font-boldml-1 dark:text-black  cursor-pointer"><>{t('Sign out')}</></p>
           </div>
         </div>
       </div>

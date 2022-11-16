@@ -38,7 +38,7 @@ const ImportTraineeDetailsFromGoogleSheet = () => {
   }
   const dispatch = useAppDispatch();
   const [urlInput, setUrlInput] = useState("");
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (event: any) => {
     setUrlInput(event.target.value);
   };
   const handleSubmit = (event: any) => {

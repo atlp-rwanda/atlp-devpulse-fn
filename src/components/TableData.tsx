@@ -123,7 +123,7 @@ function DataTable({ data, columns, title }: TableData) {
                   {row.cells.map((cell) => (
                     <td className="p-6 border-b border-gray-200 dark:border-dark-tertiary text-sm" {...cell.getCellProps()}>
                       {cell.render('Cell')}
-                     
+                    
                     </td>
                     
                   ))}
@@ -133,7 +133,7 @@ function DataTable({ data, columns, title }: TableData) {
             })}
           </tbody>
         </table>
-
+        
 
 
 
