@@ -59,11 +59,13 @@ const ImportTraineeDetailsFromGoogleSheet = () => {
     setFormData((prevFormData) => {
       return {
         ...prevFormData,
-        [name === "cycle_id" ? value : name]:
-          name === "cycle_id" ? name : value,
+        [name === "cycle_name" ? value : name]:
+          name === "cycle_name" ? name : value,
       };
     });
   }
+
+  // "Variable "$columnData" got invalid value { firstName: "", lastName: "", email: "", gender: "gender name", birth_date: "date of birth", Address: "", phone: "", field_of_study: "", education_level: "", province: "", district: "", sector: "", isEmployed: "", haveLaptop: "", isStudent: "", Hackerrank_score: "", english_score: "", interview: "", interview_decision: "", past_andela_programs: "", cycle_name: "", spreadsheetId: "1hXUavm_K5BQAOGTx9W4Z84Ttb2_ONfvk_EQZlyOnUPM" }; Field "cycle_id" of required type "String!" was not provided."
 
   if (
     successStatusMessage ===
@@ -101,7 +103,6 @@ const ImportTraineeDetailsFromGoogleSheet = () => {
           flipObjectKeys(newFormData),
           Id_goolge_sheet_back
         )
-        
       );
     } else {
       localStorage.setItem("formData", JSON.stringify(formData));
@@ -168,7 +169,7 @@ const ImportTraineeDetailsFromGoogleSheet = () => {
                 type="text"
                 id="text"
                 onChange={handleChangeSelect}
-                name="cycle_id"
+                name="cycle_name"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="Enter the correct cycle name!"
                 required
