@@ -9,7 +9,6 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { getAllTraineess, createTrainee } from "../../redux/actions/TraineeAction";
 import { connect, useSelector } from "react-redux";
-// import Modal from "./modal";
 import NavBar from "../../components/sidebar/navHeader";
 import {
   softdeletetraine,
