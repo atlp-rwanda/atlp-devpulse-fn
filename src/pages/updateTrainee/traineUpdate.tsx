@@ -7,18 +7,67 @@ import NavBar from "../../components/sidebar/navHeader";
 import { useParams } from "react-router";
 import options from './traineeInputs';
 import {Link} from 'react-router-dom';
+import { connect } from "react-redux";
+import { getAllCycles } from "../../redux/actions/cyclesActions";
+import { locations } from "./locations";
 
-const TraineeUpdate = () =>{
+
+const TraineeUpdate = (props:any) =>{
   const params = useParams();
   const [ID, setId] = useState(params.traineeId); 
   const dispatch = useAppDispatch()
   const traineeData = useAppSelector((state:any)=> state.getOneTraineeReducer?.data);
+  const cycles = props?.cycles?.cycles?.data;
+  const [provinces,setProvinces] = useState<any[]>([]);
+  const [districts,setDistricts] = useState<any[]>([]);
+  const [sectors,setSectors] = useState<any[]>([]);
+  const phoneRef = useRef<any>();
+  const districtRef = useRef<any>();
+  const provinceRef =useRef<any>();
+  const sectorRef = useRef<any>();
+  const cycleRef = useRef<any>();
+  const eScoreRef =useRef<any>();
+  const hScoreRef =useRef<any>();
+
+  const getProvinces =()=>{
+    Object.keys(locations).forEach(province => {
+      provinces.push(province);
+    });
+  }
+
+  const getDistricts=(provinceName:any)=>{
+    try {
+      const data = locations[provinceName];
+      districts.length = 0;
+      Object.keys(data).forEach(district =>{
+        districts.push(district)
+      })
+    } catch (error) {
+      console.log(error)
+    }
+    
+  }
+
+  const getSectors = (provinceName:any,districtName:any)=>{
+    try {
+      const data = locations[provinceName][districtName];
+      sectors.length=0;
+      Object.keys(data).forEach(sector =>{
+        sectors.push(sector)
+      })
+    } catch (error) {
+      console.log(error);
+    }
+
+  }
+
   useEffect(()=>{
     async function handleGetTrainee(){
       await dispatch(getTraineeToUpdate(ID));
     }
-    
+    props.getAllCycles()
     handleGetTrainee();
+    getProvinces();
   },[]);
 
   const initialValues =Object.keys(traineeData).length !== 0?({
@@ -38,14 +87,28 @@ const TraineeUpdate = () =>{
     isEmployed:traineeData && traineeData?.isEmployed,
     level_education:traineeData && traineeData?.education_level,
     interview_decision:traineeData && traineeData?.interview_decision,
+    cycle:traineeData && traineeData?.trainee_id?.cycle_id?.id,
     hackerrankScore:traineeData && traineeData?.Hackerrank_score,
     englishScore:traineeData && traineeData?.english_score,
   }):({});
 
   const [formData, setFormData] = useState(initialValues);
+
   const handleSubmit=async (event:any)=>{
     event.preventDefault();
-    
+    const reg = new RegExp('^((072|078|073))[0-9]{7}$', 'i');
+
+    const province = provinceRef?.current?.props?.value?.value;
+    const district = districtRef?.current?.props?.value?.value;
+    const sector = sectorRef?.current?.props?.value?.value;
+    const cycle = cycleRef?.current?.props?.value?.value;
+    const eScore = eScoreRef.current.value;
+    const hScore = hScoreRef.current.value;
+    await getDistricts(province);
+    await getSectors(province,district)
+    const districtExists = Object.values(districts).includes(district);
+    const sectorExists = Object.values(sectors).includes(sector);
+
     if(formData.firstname === ""){
       toast.error("Firstname is required")
     }
@@ -53,8 +116,16 @@ const TraineeUpdate = () =>{
       toast.error("Lastname is required")
     }else if(formData.phone=== ""){
       toast.error("Phone number is required ")
+    }else if(!reg.test(phoneRef?.current?.value)){
+      toast.error("Invalid phone number")
     }else if(formData.address=== ""){
       toast.error("Address is required")
+    }else if(!districtExists){
+      toast.error(`Province ${province} have no district named ${district}`)
+    }else if(!sectorExists){
+      toast.error(`District ${district} have no sector named ${sector}`)
+    }else if(cycle=== ""){
+      toast.error("Please Select Cycle")
     }else if(formData.sector=== ""){
       toast.error("Sector is required")
     }else if(formData.province=== ""){
@@ -65,12 +136,15 @@ const TraineeUpdate = () =>{
       toast.error("Field of study is required")
     }else if(formData.birthDate=== ""){
       toast.error("Date of birth is required")
+    }else if(eScore > 100 || hScore > 100){
+      toast.error("Score must no exceed 100")
     }else{
       try{
         const inputTrainee = {
           id:ID,
           firstName:formData.firstname,
-          lastName:formData.lastname
+          lastName:formData.lastname,
+          cycle_id:cycle
         };
 
         const inputAttributes={
@@ -104,6 +178,7 @@ const TraineeUpdate = () =>{
     }
     
   }
+
   return (
     <>
       <NavBar />
@@ -172,36 +247,72 @@ const TraineeUpdate = () =>{
                     <label className="block text-gray-600 text-sm font-bold mb-2">
                       Province
                     </label>
-                    <input
-                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-600 leading-tight focus:outline-none focus:shadow-outline"
+                    <Select
+                      className="shadow appearance-none border rounded w-full text-gray-600 leading-tight focus:outline-none focus:shadow-outline"
                       id="province"
-                      type="text"
-                      defaultValue={traineeData.province}
-                      onChange={(e) => setFormData({
-                        ...formData,
-                        province: e.target.value,
-                      })}
+                      ref={provinceRef}
                       name="province"
-                      placeholder="enter province"
-                      required />
+                      options={
+                        provinces?.map((province: any) => (
+                          {value:`${province}`, label:`${province}`}
+                        ))
+                      }
+                      defaultValue={{value:`${traineeData.province}`,label: `${traineeData.province}` }}
+                      onChange={(e) => {
+                        setFormData({
+                          ...formData,
+                          province: e?.value,
+                        });
+                        getDistricts(e?.value)
+                      }}
+                      placeholder="Select province"/>
+                  </div>
+
+                  <div className="mb-4">
+                    <label className="block text-gray-600 text-sm font-bold mb-2">
+                      District
+                    </label>
+                    <Select
+                      className="shadow appearance-none border rounded w-full text-gray-600 leading-tight focus:outline-none focus:shadow-outline"
+                      id="district"
+                      name="district"
+                      ref={districtRef}
+                      options={
+                        districts?.map((district: any) => (
+                          {value:`${district}`, label:`${district}`}
+                        ))
+                      }
+                      defaultValue={{value:`${traineeData.district}`,label: `${traineeData.district}`}}
+                      onChange={(e) => {
+                        setFormData({
+                          ...formData,
+                          district: e?.value,
+                        })
+                        getSectors(formData.province,e?.value)
+                      }}
+                      placeholder="Select district" />
                   </div>
 
                   <div className="mb-4">
                     <label className="block text-gray-600 text-sm font-bold mb-2">
                       Sector
                     </label>
-                    <input
-                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-600 leading-tight focus:outline-none focus:shadow-outline"
+                    <Select
+                      className="shadow appearance-none border rounded w-full text-gray-600 leading-tight focus:outline-none focus:shadow-outline"
                       id="sector"
-                      type="text"
-                      defaultValue={traineeData.sector}
+                      ref={sectorRef}
+                      options={
+                        sectors?.map((sector: any) => (
+                          {value:`${sector}`, label:`${sector}`}
+                        ))
+                      }
+                      defaultValue={{value:`${traineeData.sector}`,label: `${traineeData.sector}`}}
                       onChange={(e) => setFormData({
                         ...formData,
-                        sector: e.target.value,
+                        sector: e?.value,
                       })}
                       name="sector"
-                      placeholder="enter sector"
-                      required />
+                      placeholder="Select sector" />
                   </div>
 
                   <div className="mb-4">
@@ -323,6 +434,7 @@ const TraineeUpdate = () =>{
                     </label>
                     <input
                       className="shadow we appearance-none border rounded w-full py-2 px-3 text-gray-600 leading-tight focus:outline-none focus:shadow-outline"
+                      ref={phoneRef}
                       id="phone"
                       type="number"
                       name="phone"
@@ -352,30 +464,14 @@ const TraineeUpdate = () =>{
                       placeholder="enter address"
                       required />
                   </div>
-                  <div className="mb-4">
-                    <label className="block text-gray-600 text-sm font-bold mb-2">
-                      District
-                    </label>
-                    <input
-                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-600 leading-tight focus:outline-none focus:shadow-outline"
-                      id="district"
-                      type="text"
-                      name="district"
-                      defaultValue={traineeData.district}
-                      onChange={(e) => setFormData({
-                        ...formData,
-                        district: e.target.value,
-                      })}
-                      placeholder="enter district"
-                      required />
-                  </div>
+                 
                   <div className="mb-4">
                     <label className="block text-gray-600 text-sm font-bold mb-2">
                       Education Level
                     </label>
                     <Select
                       name="level_education"
-                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-600 leading-tight focus:outline-none focus:shadow-outline"
+                      className="shadow appearance-none border rounded w-full  text-gray-600 leading-tight focus:outline-none focus:shadow-outline"
                       options={options.educationOptions}
                       defaultValue={options.educationOptions.find(({ value }) => value === traineeData.education_level)}
                       onChange={(e) => setFormData({
@@ -390,29 +486,35 @@ const TraineeUpdate = () =>{
                     <div className="lg:flex sm:block">
                       <div className="mr-2">
                         <label className="block text-gray-600 text-sm font-bold mb-2">
-                          English score(0-5)
+                          English score
                         </label>
-                        <Select
-                          className="shadow appearance-none border rounded w-full py-2 px-2 text-gray-600 leading-tight focus:outline-none focus:shadow-outline"
-                          options={options.scoreOptions}
-                          defaultValue={options.scoreOptions.find(({ value }) => value === traineeData.english_score)}
+                        <input
+                          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-600 leading-tight focus:outline-none focus:shadow-outline"
+                          type="number"
+                          ref={eScoreRef}
+                          name="englishScore"
+                          id="englishScore"
+                          defaultValue={traineeData.english_score}
                           onChange={(e) => setFormData({
                             ...formData,
-                            englishScore: e?.value,
+                            englishScore: e.target.value,
                           })}
-                          placeholder="Score" />
+                          placeholder="English score" />
                       </div>
                       <div className="mr-2">
                         <label className="block text-gray-600 text-sm font-bold mb-2">
-                          Hackerranck score(0-5)
+                          Hackerranck score
                         </label>
-                        <Select
-                          className="shadow appearance-none border rounded w-full py-2 px-2 text-gray-600 leading-tight focus:outline-none focus:shadow-outline"
-                          options={options.scoreOptions}
-                          defaultValue={options.scoreOptions.find(({ value }) => value === traineeData.Hackerrank_score)}
+                        <input
+                          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-600 leading-tight focus:outline-none focus:shadow-outline"
+                          type="number"
+                          ref={hScoreRef}
+                          name="hackerrankScore"
+                          id="hackerrankScore"
+                          defaultValue={traineeData.Hackerrank_score}
                           onChange={(e) => setFormData({
                             ...formData,
-                            hackerrankScore: e?.value,
+                            hackerrankScore: e.target.value,
                           })}
                           placeholder="Score" />
                       </div>
@@ -424,7 +526,7 @@ const TraineeUpdate = () =>{
                       Interview decision
                     </label>
                     <Select
-                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-600 leading-tight focus:outline-none focus:shadow-outline"
+                      className="shadow appearance-none border rounded w-full  text-gray-600 leading-tight focus:outline-none focus:shadow-outline"
                       options={options.interviewOptions}
                       placeholder="Interview decisison"
                       defaultValue={options.interviewOptions.find(({ value }) => value === traineeData.interview_decision)}
@@ -432,6 +534,27 @@ const TraineeUpdate = () =>{
                         ...formData,
                         interview_decision: e?.value,
                       })} />
+                  </div>
+
+                  <div className="mb-4">
+                    <label className="block text-gray-600 text-sm font-bold mb-2">
+                      Application cycle
+                    </label>
+                    <Select
+                      className="shadow appearance-none border rounded w-full  text-gray-600 leading-tight focus:outline-none focus:shadow-outline"
+                      ref={cycleRef}
+                      options={
+                        cycles?.map((cycle: any) => (
+                          {value:`${cycle.id}`, label:`${cycle.name}`}
+                        ))
+                      }
+                      placeholder="Please select cycle"
+                      defaultValue={{value:`${traineeData?.trainee_id?.cycle_id?.id}`,label: `${traineeData?.trainee_id?.cycle_id?.name}` }}
+                      onChange={(e) => setFormData({
+                        ...formData,
+                        cycle: e?.value,
+                      })} />
+                      
                   </div>
 
                   <div className="mb-4">
@@ -503,7 +626,7 @@ const TraineeUpdate = () =>{
                 </div>
               </div>
               <div className="flex px-5 py-2 pb-8 w-fit">
-                <button onClick={handleSubmit} className="flex bg-gray-600 mx-2 rounded-md py-2 px-4 text-white font-medium cursor-pointer">
+                <button className="flex bg-gray-600 mx-2 rounded-md py-2 px-4 text-white font-medium cursor-pointer">
                   Update
                 </button>
                 <Link to="/Trainee" className="flex bg-gray-600 rounded-md py-2 mx-2 px-4 text-white font-medium cursor-pointer">
@@ -518,4 +641,10 @@ const TraineeUpdate = () =>{
   );
 };
 
-export default TraineeUpdate;
+const mapState = (allCycles:any) => ({
+  cycles: allCycles,
+});
+
+export default connect(mapState, {
+  getAllCycles,
+})(TraineeUpdate);

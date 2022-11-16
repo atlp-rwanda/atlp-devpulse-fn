@@ -1,5 +1,5 @@
 import axios from './axiosconfig';
-import { Dispatch } from 'redux';
+import { Dispatch } from 'react';
 import { RestoreActionType, Action  } from '../actiontypes/restoreTrainee';
 import { toast } from "react-toastify";
 

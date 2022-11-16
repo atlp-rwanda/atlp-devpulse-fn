@@ -1,12 +1,16 @@
 import creator from "./creator";
 // import axios from "axios";
-import axios from './axiosconfig';
+import axios from "./axiosconfig";
 import { GET_ONE_TRAINEES_ALL_DETAILS } from "..";
 
-export const getOneTraineeAllDetails = ({id}:any) => async (dispatch: any) => {
+export const getOneTraineeAllDetails =
+  ({ id }: any) =>
+  async (dispatch: any) => {
     try {
-      const datas = await axios.post('/',
-       {
+      const datas = await axios({
+        url: process.env.BACKEND_URL,
+        method: "post",
+        data: {
           query: `
           query GetOneTraineeAllDetails($input: one) {
             getOneTraineeAllDetails(input: $input) {
@@ -36,17 +40,18 @@ export const getOneTraineeAllDetails = ({id}:any) => async (dispatch: any) => {
              
             }
           }
-        `,variables: {
-          input: {
-            id,
+        `,
+          variables: {
+            input: {
+              id,
+            },
           },
         },
-        },
-      );
+      });
 
       const response = await datas.data.data.getOneTraineeAllDetails;
       // console.log( response)
-      dispatch(creator(GET_ONE_TRAINEES_ALL_DETAILS, response))
+      dispatch(creator(GET_ONE_TRAINEES_ALL_DETAILS, response));
     } catch (error) {
       if (error) {
         return console.log(error);

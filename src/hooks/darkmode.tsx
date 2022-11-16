@@ -15,7 +15,7 @@ const ThemeContext = createContext({} as ThemeContextData )
 export function ThemeContextProvider({ children }: ThemeContextProps) {
  const result = window.matchMedia('(prefers-color-scheme: dark)');
   console.log(result.matches);
-  const [theme, setTheme] = useState(() => localStorage.theme === 'dark')
+  const [theme, setTheme] = useState(() => localStorage.theme === 'light')
   console.log(theme,"iiiiiii")
   useEffect(() => {
     const rootElement = window.document.documentElement
