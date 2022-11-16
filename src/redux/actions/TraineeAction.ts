@@ -1,22 +1,37 @@
 import creator from "./creator";
 import { GET_TRAINEE, CREATE_TRAINEES, CREATE_CYCLE_ERROR } from "..";
 import { toast } from "react-toastify";
-// import axios from "axios";
-import axios from './axiosconfig';
-
+import axios from "axios";
 
 export const getAllTraineess =
   ({ page, itemsPerPage, All }: any) =>
   async (dispatch: any) => {
     try {
-      const datas = await axios.post('/',
-       {
+      const datas = await axios({
+        url: process.env.BACKEND_URL,
+        method: "post",
+        data: {
           query: `
         query AllTraineesDetails($input: pagination) {
           allTraineesDetails(input: $input) {
             gender
+            birth_date
+            Address
+            phone
+            field_of_study
+            education_level
+            province
+            district
+            sector
+            isEmployed
+            haveLaptop
+            isStudent
+            Hackerrank_score
+            english_score
+            interview_decision
+            past_andela_programs
+            _id
             trainee_id {
-              email
               firstName
               lastName
             }
@@ -31,10 +46,8 @@ export const getAllTraineess =
             },
           },
         },
-      );
-      // console.log("result",datas);
+      });
       const trainee = await datas.data.data.allTraineesDetails;
-      console.log(trainee);
       dispatch(creator(GET_TRAINEE, trainee));
     } catch (error) {
       if (error) {
@@ -47,8 +60,10 @@ export const createTrainee =
   ({ firstName, lastName, email, cycle_id }: any) =>
   async (dispatch: any) => {
     try {
-      const datas = await axios.post('/',
-       {
+      const datas = await axios({
+        url: process.env.BACKEND_URL,
+        method: "post",
+        data: {
           query: `
           mutation CreateNewTraineeApplicant($input: newTraineeApplicantInput) {
             createNewTraineeApplicant(input: $input) {
@@ -67,7 +82,7 @@ export const createTrainee =
             },
           },
         },
-      )
+      })
         .then((response) => {
           if (response.data.data !== null) {
             toast.success("Successfully created.");

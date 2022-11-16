@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 import Sidebar from "./sidebar";
-
+import { SunIcon } from '@heroicons/react/outline';
+import { MoonIcon } from '@heroicons/react/solid';
 import ProfileDropdown from "../profileDropdown";
 import { FaMoon, FaBars } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
@@ -11,6 +12,7 @@ import { AiOutlineBell } from "react-icons/ai";
 import {useTheme } from '../../hooks/darkmode'
 const logo: string = require("../../assets/logo.svg").default;
 const profile: string = require("../../assets/avatar.png").default;
+const LogoWhite: string = require("../../assets/logoWhite.svg").default;
 
 function NavBar() {
   const [showNotification, setShowNotification] = useState(false);
@@ -49,11 +51,18 @@ function NavBar() {
           </span>
           <span>
             <Link to="/dashboard/super-admin" className="flex items-center">
+            {theme ? (
               <img
-                className="  cursor-pointer mx-2  dark:fill-green"
+                className="cursor-pointer mx-2 fill-[blue]"
                 src={logo}
-                // style={{ fill: "#333" }}
+                style={{ fill: "#333" }}
               />
+                  ) : (
+              <img
+                className="cursor-pointer  mx-2"
+                src={LogoWhite}
+                alt="logoWhite"
+              />  )}
               <h1 className=" sm-text-1xl mr-12  font-bold font-lexend text-primary  md:hidden dark:text-green">
                 PULSE
               </h1>
@@ -65,7 +74,7 @@ function NavBar() {
             {" "}
             {/* <FaMoon className="text-[20px] cursor-pointer mx-1" /> */}
             <AiOutlineBell
-              className=" text-[25px] cursor-pointer    "
+              className=" text-[25px] cursor-pointer  dark:text-dark-text-fill  "
               onClick={handleShowNotification}
             />
           </span>
@@ -74,9 +83,9 @@ function NavBar() {
               onClick={handleToggleTheme}
             >
               {theme  ? (
-                <span className='toggle-moon' onClick={handleToggleTheme}>🌙</span>
+                 <MoonIcon className="w-8" />
               ) : (
-                <span className='toggle-sun' onClick={handleToggleTheme}>☀️</span>
+                <SunIcon className="w-8 text-dark-text-fill" />
               )}
             </div>
           <span onClick={handleShowProfileDropdown}>
