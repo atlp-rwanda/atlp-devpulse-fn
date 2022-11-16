@@ -1,5 +1,6 @@
 import creator from "./creator";
 import axios from "axios";
+
 import {
   GET_TRAINEE_TO_UPDATE_FAIL,
   UPDATE_TRAINEE,
@@ -69,9 +70,12 @@ export const getTraineeToUpdate = (Traineid: any) => async (dispatch: any) => {
 
 export const updateTraine = ({id,firstName,lastName,cycle_id}:any)=> async (dispatch: any) =>{
   try {
-    const datas = await axios.post('/',
+    const datas = await axios({
+      url: process.env.BACKEND_URL,
+      method: "post",
+      data:
        {
-          query: `
+        query: `
         mutation UpdateTraineeApplicant($id: ID!, $updateInput: traineeApplicantInputUpdate) {
             updateTraineeApplicant(ID: $id, updateInput: $updateInput) {
               lastName
@@ -89,7 +93,7 @@ export const updateTraine = ({id,firstName,lastName,cycle_id}:any)=> async (disp
           }
       },
       },
-    );
+    });
 
       const response = await datas.data.data.updateTraineeApplicant;
       dispatch(creator(UPDATE_TRAINEE, response));
