@@ -11,20 +11,18 @@ import MenuItem from "@mui/material/MenuItem";
 import NavBar from "../../components/sidebar/navHeader";
 import { clearTrash } from "../../redux/actions/clearTrash";
 import Select from "react-select";
-import { customTheme } from "../FilterTeainee/FilterTrainee";
+import { customTheme, darkTheme } from "../FilterTeainee/FilterTrainee";
+import { useTheme } from "../../hooks/darkmode";
 
 const Trash = (props: any) => {
-  console.log(props);
   const { allTrainees, restore, clearTrashMessage } = props;
-
-  console.log("allTraineesUN", allTrainees);
   const [pageIdx] = useState(1);
   const [itemsPerPage] = useState(100);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [traineid, settraineid] = useState("");
   const [filterAttribute, setFilterAttribute] = useState("");
   const [wordsEntered, setWordsEntered] = useState("");
-
+  const { theme, setTheme } = useTheme();
   const open = Boolean(anchorEl);
   const handleClose = () => {
     setAnchorEl(null);
@@ -45,14 +43,13 @@ const Trash = (props: any) => {
   const trainees = allTrainees.data;
   const onSubmitHandler = (e: any) => {
     const traine = trainees[activeCycle!];
-    settraineid(traine._id);
-    props.restoretraine(traine._id);
+    settraineid(traine.id);
+    props.restoretraine(traine.id);
     setAnchorEl(null);
   };
   const onSubmitHandle = async (userId: any) => {
     setmoredrop("");
   };
-  console.log(moredrop);
 
   const COLS = [
     {
@@ -145,14 +142,14 @@ const Trash = (props: any) => {
   return (
     <>
       <NavBar />
-      <div className="flex bg-[#F9F9FB] min-h-[100vh]">
+      <div className="flex bg-[#F9F9FB] min-h-[100vh] dark:bg-dark-bg dark:text-white">
         <div className="min-h-[50vh] w-[100%] block  md:w-[100%] md:mt-0  pl-[16rem] pt-[80px] md:pl-0">
           <div className=" w-[100%] top-[20%] md:top-[10%] md:relative px-[10%] md:px-[10px]">
             <div className="flex justify-between align-center mb-5 relative md:block">
               <div className="absolute bottom-0 right-0 md:relative md:mb-3">
                 <button
                   onClick={emptyRecycleBin}
-                  className="px-3 rounded-[5px] bg-[#173b3f] text-white flex items-center"
+                  className="px-3 rounded-[5px] dark:bg-[#56C870] bg-[#173b3f] text-white flex items-center"
                 >
                   Empty trash
                 </button>
@@ -160,7 +157,7 @@ const Trash = (props: any) => {
               <div>
                 <div className="">
                   <Select
-                    className="test sm:text-sm border bg-cgray border-solid border-bdr w-40 rounded-bt-rd"
+                    className="test sm:text-sm border bg-cgray border-solid border-bdr w-40 rounded-bt-rd dark:text-ltb"
                     options={[
                       { value: "_id", label: "Trainee ID" },
                       { value: "firstName", label: "First Name" },
@@ -174,7 +171,7 @@ const Trash = (props: any) => {
                     ]}
                     defaultValue={{ value: "", label: "Select by" }}
                     onChange={(e) => setFilterAttribute(`${e?.value}`)}
-                    theme={customTheme}
+                    theme={theme ? customTheme : darkTheme}
                   />
                 </div>
                 <div className="flex items-center mb-6 semi-sm:flex-wrap">
@@ -194,7 +191,7 @@ const Trash = (props: any) => {
                     </span>
                     <input
                       onChange={(e) => setWordsEntered(e.target.value)}
-                      className="block bg-row-gray w-50 border border-bdr rounded-bt-rd mt-2 py-2 pl-9 pr-4 focus:outline-none sm:text-sm"
+                      className="dark:text-ltb dark:bg-[#293647] dark:border-opacity-5 block bg-row-gray w-50 border border-bdr rounded-bt-rd mt-2 py-2 pl-9 pr-4 focus:outline-none sm:text-sm"
                       value={wordsEntered}
                       placeholder="Search"
                       type="text"
@@ -205,7 +202,7 @@ const Trash = (props: any) => {
               </div>
             </div>
             <div>
-              <div className=" w-[100%] max-h-[70vh] m-auto  bg-[#fff] shadow-md rounded-[10px] relative pb-[20px]  overflow-x-auto  overflow-y-scroll 	md:w-[100%]">
+              <div className=" w-[100%] dark:bg-dark-bg max-h-[70vh] m-auto  bg-[#fff] shadow-md rounded-[10px] relative pb-[20px]  overflow-x-auto  overflow-y-scroll 	md:w-[100%]">
                 <table
                   {...getTableProps()}
                   className="border-collapse w-[100%] m-auto rounded-[15px] whitespace-nowrap "
@@ -215,14 +212,14 @@ const Trash = (props: any) => {
                       <tr
                         key={index}
                         {...headerGroup.getHeaderGroupProps()}
-                        className="border-solid border-[1px] border-white even:bg-[#eef1f1] first:w-[20px]"
+                        className="border-solid border-[1px] border-white dark:border-dark-tertiary even:bg-[#eef1f1] first:w-[20px]"
                       >
                         {headerGroup.headers.map(
                           (column: any, index: number) => (
                             <th
                               key={index}
                               {...column.getHeaderProps}
-                              className="border-solid pl-[30px] h-[50px] text-left bg-[#eef1f1]  first:rounded-tl-[10px] last:rounded-tr-[10px] border-b-[2px] border-[#c5c5c5] py-6   last:pl-[0px] w-[150px] last:w-[20px]  first:w-[20px]  "
+                              className="border-solid pl-[30px] h-[50px] text-left dark:bg-dark-tertiary bg-[#eef1f1]  first:rounded-tl-[10px] last:rounded-tr-[10px] border-b-[2px] border-[#c5c5c5] dark:border-dark-tertiary py-6   last:pl-[0px] w-[150px] last:w-[20px]  first:w-[20px]  "
                             >
                               {column.render("Header")}
                             </th>
@@ -238,7 +235,8 @@ const Trash = (props: any) => {
                         <tr
                           {...row.getRowProps()}
                           key={row.original.id}
-                          className="even:bg-[#eef1f1] border-b border-gray-200 "
+                          className="border-b dark:border-dark-tertiary border-gray-200 "
+                          // className="even:bg-[#eef1f1] border-b border-gray-200 dark:border-dark-tertiary"
                         >
                           {row.cells.map((cell: any) => {
                             return (
@@ -271,7 +269,7 @@ const Trash = (props: any) => {
                   onSubmitHandler(e);
                 }}
               >
-                <BsIcons.BsArrowCounterclockwise className="mr-[5px]" />
+                <BsIcons.BsArrowCounterclockwise className="mr-[5px] " />
                 Restore
               </MenuItem>
             </Menu>
@@ -281,14 +279,14 @@ const Trash = (props: any) => {
                 <span className="flex items-center md:justify-center md:mt-[10px]">
                   {" "}
                   <button
-                    className="my-0 mx-[5px] px-[5px] py-0 text-[#333] h-[38px] border-solid border-[1px]  border-[#a8a8a8]  disabled:bg-[#E7E7E7] disabled:text-[#a8a8a8]"
+                    className="my-0 mx-[5px] px-[5px] py-0 text-[#333] h-[38px] border-solid border-[1px]  border-[#a8a8a8]  disabled:bg-[#E7E7E7] disabled:text-[#a8a8a8] dark:border-dark-tertiary dark:bg-dark-bg dark:text-white"
                     onClick={() => gotoPage(0)}
                     disabled={!canPreviousPage}
                   >
                     <AiIcons.AiOutlineDoubleLeft />
                   </button>
                   <button
-                    className=" border-solid border-[1px]  border-[#a8a8a8] py-0 px-[10px] text-[#333] rounded-l-[5px] h-[38px] disabled:bg-[#E7E7E7] disabled:text-[#a8a8a8] "
+                    className=" border-solid border-[1px]  border-[#a8a8a8] py-0 px-[10px] text-[#333] rounded-l-[5px] h-[38px] disabled:bg-[#E7E7E7] disabled:text-[#a8a8a8] dark:border-dark-tertiary dark:bg-dark-bg dark:text-white"
                     onClick={() => previousPage()}
                     disabled={!canPreviousPage}
                   >
@@ -299,7 +297,7 @@ const Trash = (props: any) => {
                       return (
                         <div>
                           <button
-                            className={`border-solid border-[1px] mx-[2px]  border-[#a8a8a8] bg-[#fff] w-[35px] h-[38px]  active:bg-[#333] active:text-[#fff]-500 ${
+                            className={`border-solid border-[1px] mx-[2px] dark:border-dark-tertiary dark:bg-dark-bg dark:text-white border-[#a8a8a8] bg-[#fff] w-[35px] h-[38px]  active:bg-[#333] active:text-[#fff]-500 ${
                               pageIndex === i && "bg-[#eef1f1]"
                             }`}
                             onClick={(e: any) => {
@@ -314,14 +312,14 @@ const Trash = (props: any) => {
                     })}
                   </span>
                   <button
-                    className=" border-solid border-[1px]  border-[#a8a8a8] py-0 px-[10px] text-[#333] rounded-r-[5px] h-[38px]  disabled:bg-[#E7E7E7] disabled:text-[#a8a8a8]"
+                    className=" border-solid border-[1px] dark:border-dark-tertiary dark:bg-dark-bg dark:text-white border-[#a8a8a8] py-0 px-[10px] text-[#333] rounded-r-[5px] h-[38px]  disabled:bg-[#E7E7E7] disabled:text-[#a8a8a8]"
                     onClick={() => nextPage()}
                     disabled={!canNextPage}
                   >
                     <AiIcons.AiOutlineRight />
                   </button>
                   <button
-                    className="my-0 mx-[5px] px-[5px] py-0 text-[#333] h-[38px] border-solid border-[1px]  border-[#a8a8a8]  disabled:bg-[#E7E7E7] disabled:text-[#a8a8a8]"
+                    className="my-0 mx-[5px] px-[5px] py-0 dark:border-dark-tertiary dark:bg-dark-bg dark:text-white text-[#333] h-[38px] border-solid border-[1px]  border-[#a8a8a8]  disabled:bg-[#E7E7E7] disabled:text-[#a8a8a8]"
                     onClick={() => gotoPage(pageCount - 1)}
                     disabled={!canNextPage}
                   >
