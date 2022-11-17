@@ -48,8 +48,6 @@ export const loadDataIntoDb = (googleSheetId: string) => {
 
     toast.promise(resultPromise, {
       pending: "Saving the data into DB ...",
-      //  success: `saved successfully 👌`,
-      //  error: `not saved successfully 🤯`,
     });
     await resultPromise;
     // // on success
@@ -92,8 +90,6 @@ export const resendMappedDataIntoDb = (dataObjectMapped: any, id: any) => {
       });
       toast.promise(resultPromise, {
         pending: "Saving the data into DB ...",
-        //  success: `saved successfully 👌`,
-        //  error: `not saved successfully 🤯`,
       });
       await resultPromise;
       if ((await resultPromise).data.data) {
