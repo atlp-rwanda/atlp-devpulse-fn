@@ -13,6 +13,7 @@ import { combineReducers } from "redux";
 import traineeReducer from "./traineeReducer";
 import traineesReducer from "./traineeReduces";
 import clearTrashReducer from "./clearTrashReducer";
+import loadDataReducer from "./loadDataReducer";
 import scoreTypesReducers from "./scoreTypesReducers";
 import scoreValuesReducer from "./scoreValuesReducer";
 
@@ -25,9 +26,12 @@ const allReducers = combineReducers({
   softDeletedTrainees: softDeletedTraineeReducer,
   restore: restoretraineReducer,
   clearTrash: clearTrashReducer,
+  // viewtrainee:viewtraineReducer,
+  // addtrainee:addtraineReducer,
   trainee: traineeReducer,
   traine: traineReducer,
   filterTrainee: filterTraineeReducer,
+  loadData: loadDataReducer,
   getOneTraineeReducer,
   updateTrainee: updateTraineeReducer,
   updateTraineeAttributes: updateTraineeAttributesReducer,

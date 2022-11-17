@@ -23,12 +23,10 @@ function Table() {
             >
              
               <HiDotsVertical onClick={() => {
-                console.log(traineeData)
               }}  className=" text-black text-3xl ml-6 font-size-6 cursor-pointer"/>
               </div>
               )}
       ];
-      console.log(traineeData,"hey")
       const data =[];
       let datum: any = [];
       if (traineeData && traineeData.length > 0) {

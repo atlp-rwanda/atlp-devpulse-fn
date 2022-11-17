@@ -9,9 +9,7 @@ const Counter = (props: any) => {
   // const useTypedDispatch: () => AppDispatch = useDispatch
   const { value ,delettraine,softdeletettraine} = props;
 
-  console.log(props);
   const [postId, setPostID] = useState<string>("");
-  console.log(delettraine.error);
   const Add = () => {
     props.increment();
   };

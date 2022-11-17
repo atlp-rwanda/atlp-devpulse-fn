@@ -16,6 +16,8 @@ import UpdateTraine from "./pages/updateTrainee/traineUpdate";
 import CreateScoreType from "./pages/FilterTeainee/createScoreType";
 import ScoreTypesActions from "./pages/FilterTeainee/ ScoreTypesActions";
 import "./index.css";
+import ImportTraineeDetailsFromGoogleSheet from "./pages/importAndSaveManyTraineesFromGoogleSheet/importAndSaveManyTraineesFromGoogleSheet";
+
 const Counter = React.lazy(() => import("./components/Counter/Counter"));
 const ApplicationCycle = React.lazy(
   () => import("./pages/ApplicationCycle/ApplicationCycle")
@@ -37,6 +39,10 @@ function App() {
       <Route path="/trash" element={<Trash />} />
       <Route path="/nav-bar" element={<NavBar />} />
       <Route path="/filter_trainee" element={<FilterTrainee />} />
+      <Route
+        path="/import_trainees"
+        element={<ImportTraineeDetailsFromGoogleSheet />}
+      />
       <Route path="/trainees/:traineeId/edit" element={<UpdateTraine />} />
       <Route path="/" element={<Trainee />} />
       <Route path="/filter_trainee/:id" element={<CreateScoreType />} />
