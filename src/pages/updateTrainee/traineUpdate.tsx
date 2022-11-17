@@ -10,9 +10,6 @@ import {Link} from 'react-router-dom';
 import { connect } from "react-redux";
 import { getAllCycles } from "../../redux/actions/cyclesActions";
 import { locations } from "./locations";
-import Select, { SelectChangeEvent } from '@mui/material/Select'
-import MenuItem from '@mui/material/MenuItem';
-
 
 const TraineeUpdate = (props:any) =>{
   const params = useParams();
@@ -181,8 +178,6 @@ const TraineeUpdate = (props:any) =>{
     }
     
   }
-
-  console.log(formData)
   return (
     <>
       <NavBar />
@@ -236,6 +231,7 @@ const TraineeUpdate = (props:any) =>{
                     <input
                       className="dark:bg-dark-tertiary shadow appearance-none  rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
                       id="birthDate"
+
                       defaultValue={ new Intl.DateTimeFormat('en-CA', { year: 'numeric', month: '2-digit', day: '2-digit'}).format(traineeData.birth_date)}
                       type="date"
                       onChange={(e) => setFormData({
