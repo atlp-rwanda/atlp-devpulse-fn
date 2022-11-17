@@ -12,21 +12,21 @@ export const getAllSoftDeletedTrainees =
       await axios
         .post("/", {
           query: `
-            query GetAllSoftDeletedTrainees($input: filterOptions) {
-              getAllSoftDeletedTrainees(input: $input) {
-                id
-                email
-                firstName
-                lastName
-                delete_at
-                cycle_id {
-                  id
-                  name
-                  startDate
-                  endDate
-                }
-              }
-            }
+            query GetAllSoftDeletedTraineesFiltered($input: filterOptions) {
+  getAllSoftDeletedTraineesFiltered(input: $input) {
+    id
+    email
+    firstName
+    lastName
+    delete_at
+    cycle_id {
+      id
+      name
+      startDate
+      endDate
+    }
+  }
+}
             `,
           variables: {
             input: {
@@ -43,7 +43,7 @@ export const getAllSoftDeletedTrainees =
             dispatch(
               creator(
                 GET_SOFT_DELETED_TRAINEES,
-                response.data.data.getAllSoftDeletedTrainees
+                response.data.data.getAllSoftDeletedTraineesFiltered
               )
             );
           } else {

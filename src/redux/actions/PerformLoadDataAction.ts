@@ -34,7 +34,7 @@ export const loadDataIntoDb = (googleSheetId: string) => {
   return async (dispatch: any) => {
     dispatch(load_data_request());
     const resultPromise = axios({
-      url: "http://localhost:4000/",
+      url: process.env.BACKEND_URL,
       method: "post",
       data: {
         query: `mutation LoadAllTrainees($spreadsheetId: String!) {
@@ -45,20 +45,21 @@ export const loadDataIntoDb = (googleSheetId: string) => {
         },
       },
     });
-  
 
+    toast.promise(resultPromise, {
+      pending: "Saving the data into DB ...",
+    });
     await resultPromise;
     // // on success
     if ((await resultPromise).data.data) {
       console.log((await resultPromise).data.data.loadAllTrainees);
-      toast.success(`Saved successfully 👌`)
+      toast.success(`Saved successfully 👌`);
       dispatch(
         load_data_success((await resultPromise).data.data.loadAllTrainees)
       );
-    }
-    else {
+    } else {
       console.log((await resultPromise).data.errors[0].message);
-      toast.error(`OOPS!!! import failed please match columns 🤯`)
+      toast.error(`OOPS!!! import failed please match columns 🤯`);
       dispatch(load_data_fail((await resultPromise).data.errors[0].message));
     }
   };
@@ -76,7 +77,7 @@ export const resendMappedDataIntoDb = (dataObjectMapped: any, id: any) => {
   return async (dispatch: any) => {
     try {
       const resultPromise = axios({
-        url: "http://localhost:4000/",
+        url: process.env.BACKEND_URL,
         method: "post",
         data: {
           query: `mutation($columnData: columnsInputSubmitted!) {
@@ -87,9 +88,12 @@ export const resendMappedDataIntoDb = (dataObjectMapped: any, id: any) => {
           },
         },
       });
-     
+      toast.promise(resultPromise, {
+        pending: "Saving the data into DB ...",
+      });
+      await resultPromise;
       if ((await resultPromise).data.data) {
-        toast.success(`Saved  import successfully 👌`)
+        toast.success(`Saved  import successfully 👌`);
         console.log((await resultPromise).data.data.reSendDataIntoDb);
         dispatch(
           load_data_success((await resultPromise).data.data.reSendDataIntoDb)
@@ -98,7 +102,7 @@ export const resendMappedDataIntoDb = (dataObjectMapped: any, id: any) => {
 
       // on errors
       else {
-        toast.error(`Not saved please match cohort name !! 🤯`)
+        toast.error(`Not saved please match cohort name !! 🤯`);
         console.log((await resultPromise).data.errors[0].message);
         dispatch(load_data_fail((await resultPromise).data.errors[0].message));
       }
