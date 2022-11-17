@@ -9,6 +9,7 @@ export enum RestoreActionType {
 interface actionPending {
     type: RestoreActionType.RESTORE_TRAINE_LOADING;
 }
+
 interface actionSuccess {
     type: RestoreActionType.RESTORE_TRAINE_SUCCESS;
     message: string;

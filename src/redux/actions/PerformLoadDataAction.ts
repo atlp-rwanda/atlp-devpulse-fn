@@ -45,22 +45,20 @@ export const loadDataIntoDb = (googleSheetId: string) => {
         },
       },
     });
-    toast.promise(resultPromise, {
-      pending: "Saving the data into DB ...",
-      success: `Saved successfully 👌`,
-      error: `Not saved successfully 🤯`,
-    });
+  
 
     await resultPromise;
     // // on success
     if ((await resultPromise).data.data) {
       console.log((await resultPromise).data.data.loadAllTrainees);
+      toast.success(`Saved successfully 👌`)
       dispatch(
         load_data_success((await resultPromise).data.data.loadAllTrainees)
       );
     }
     else {
       console.log((await resultPromise).data.errors[0].message);
+      toast.error(`OOPS!!! import failed please match columns 🤯`)
       dispatch(load_data_fail((await resultPromise).data.errors[0].message));
     }
   };
@@ -89,12 +87,9 @@ export const resendMappedDataIntoDb = (dataObjectMapped: any, id: any) => {
           },
         },
       });
-      toast.promise(resultPromise, {
-        pending: "Saving the data into DB ...",
-        success: `saved successfully 👌`,
-        error: `not saved successfully 🤯`,
-      });
+     
       if ((await resultPromise).data.data) {
+        toast.success(`Saved  import successfully 👌`)
         console.log((await resultPromise).data.data.reSendDataIntoDb);
         dispatch(
           load_data_success((await resultPromise).data.data.reSendDataIntoDb)
@@ -103,6 +98,7 @@ export const resendMappedDataIntoDb = (dataObjectMapped: any, id: any) => {
 
       // on errors
       else {
+        toast.error(`Not saved please match cohort name !! 🤯`)
         console.log((await resultPromise).data.errors[0].message);
         dispatch(load_data_fail((await resultPromise).data.errors[0].message));
       }
