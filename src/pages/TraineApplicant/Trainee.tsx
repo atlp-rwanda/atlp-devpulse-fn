@@ -24,7 +24,6 @@ const Open=() =>{
     setAddNewTraineeModel(true);
   }
   const removeModel = () => {
-    // location.reload();
     let newState = !addNewTraineeModel;
     setAddNewTraineeModel(newState);
   };
@@ -121,15 +120,13 @@ const createNewTrainee = () => {
     setFirstname("");
     setLastname("");
     setEmail("");
-    //   toast.success("succeed")
     setAddNewTraineeModel(false);
-    setTimeout(reload, 3000);
+    setTimeout(() => {
+      window.location.reload();
+    }, 3000);
   }
 };
 
-function reload() {
-  location.reload();
-}
   return (
     <>
       <ToastContainer />
