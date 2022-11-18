@@ -87,11 +87,10 @@ const TrainneeDetails = (props: any) => {
   return (
     <>
       <Navbar />
-      <div className="h-screen flex  dark:bg-dark-frame-bg ">
-        {/* <div className="min-h-[50vh] dark:bg-dark-frame-bg  w-[100%] block mt-10 md:w-[100%] md:mt-0 pl-[16rem] pt-[80px] md:pl-0"> */}
-        <div className="block w-[100%] pl-[16rem] h-max md:pl-0 mx-auto dark:bg-dark-frame-bg pb-10 mt-10  pt-[80px]">
+      <div className=" m-0 mt-16 dark:bg-[#1F2A37]   ">
+        <div className="block lg:ml-[30%]   ">
           {traineeDetails && (
-            <div className=" max-w-md bg-slate-50 dark:text-zinc-100 rounded-xl dark:bg-dark-bg shadow-md  overflow-hidden md:w-[100%] mb-6 lg:flex lg:max-w-2xl mx-auto">
+            <div className="max-w-md mx-5 p-5 bg-slate-50 rounded-xl shadow-md overflow-hidden md:max-w-xl mb-6 lg:flex lg:max-w-2xl dark:bg-[#192432] dark:text-white ">
               <div className="md:flex  ">
                 <h2 className="top-5 m-5  font-medium  md:m-3 ">
                   <BsFillPersonLinesFill className="float-left m-1" />
@@ -319,7 +318,9 @@ const TrainneeDetails = (props: any) => {
             </div>
           </div>
         </div>
-        {/* </div> */}
+        <div className="mb-25">
+          <h1>end Page</h1>
+        </div>
       </div>
     </>
   );
