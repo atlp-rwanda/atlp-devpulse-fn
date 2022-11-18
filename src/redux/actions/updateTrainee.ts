@@ -1,5 +1,5 @@
 import creator from "./creator";
-import axios from "axios";
+import axios from "./axiosconfig";
 
 import {
   GET_TRAINEE_TO_UPDATE_FAIL,
@@ -12,52 +12,50 @@ import { GET_TRAINEE_TO_UPDATE } from "..";
 
 export const getTraineeToUpdate = (Traineid: any) => async (dispatch: any) => {
   try {
-    const datas = await axios({
-      url: process.env.BACKEND_URL,
-      method: "post",
-      data: {
-        query: `
-        query GetOneTraineeAllDetails($input: one) {
-          getOneTraineeAllDetails(input: $input) {
-            gender
-            birth_date
-            Address
-            phone
-            field_of_study
-            education_level
-            province
-            district
-            sector
-            isEmployed
-            haveLaptop
-            isStudent
-            Hackerrank_score
-            english_score
-            interview_decision
-            past_andela_programs
+    const datas = await axios.post('/',
+    {
+      query: `
+      query GetOneTraineeAllDetails($input: one) {
+        getOneTraineeAllDetails(input: $input) {
+          gender
+          birth_date
+          Address
+          phone
+          field_of_study
+          education_level
+          province
+          district
+          sector
+          isEmployed
+          haveLaptop
+          isStudent
+          Hackerrank_score
+          english_score
+          interview_decision
+          past_andela_programs
+          _id
+          trainee_id {
+            lastName
+            firstName
             _id
-            trainee_id {
-              lastName
-              firstName
-              _id
-              email
-              cycle_id {
-                id
-                name
-                startDate
-                endDate
-              }
+            email
+            cycle_id {
+              id
+              name
+              startDate
+              endDate
             }
           }
         }
-        `,
-        variables: {
-          input: {
-            id: Traineid,
-          },
+      }
+      `,
+      variables: {
+        input: {
+          id: Traineid,
         },
       },
-    });
+    },
+    );
 
     const response = await datas.data.data.getOneTraineeAllDetails;
     return dispatch(creator(GET_TRAINEE_TO_UPDATE, response));
@@ -70,38 +68,35 @@ export const getTraineeToUpdate = (Traineid: any) => async (dispatch: any) => {
 
 export const updateTraine = ({id,firstName,lastName,cycle_id}:any)=> async (dispatch: any) =>{
   try {
-    const datas = await axios({
-      url: process.env.BACKEND_URL,
-      method: "post",
-      data:
-       {
-        query: `
-        mutation UpdateTraineeApplicant($id: ID!, $updateInput: traineeApplicantInputUpdate) {
-            updateTraineeApplicant(ID: $id, updateInput: $updateInput) {
-              lastName
-              firstName
-              _id
-              email
-            }
+    const datas = await axios.post('/',
+    {
+      query: `
+      mutation UpdateTraineeApplicant($id: ID!, $updateInput: traineeApplicantInputUpdate) {
+          updateTraineeApplicant(ID: $id, updateInput: $updateInput) {
+            lastName
+            firstName
+            _id
+            email
           }
-      `,variables: {
-          id,
-          updateInput: {
-            firstName,
-            lastName,
-            cycle_id
-          }
-      },
-      },
-    });
+        }
+    `,variables: {
+        id,
+        updateInput: {
+          firstName,
+          lastName,
+          cycle_id
+        }
+    },
+    },
+    );
 
-      const response = await datas.data.data.updateTraineeApplicant;
-      dispatch(creator(UPDATE_TRAINEE, response));
-    } catch (error) {
-      console.log(error);
-      return dispatch(creator(UPDATE_TRAINEE_FAIL, error));
-    }
-  };
+    const response = await datas.data.data.updateTraineeApplicant;
+    dispatch(creator(UPDATE_TRAINEE, response));
+  } catch (error) {
+    console.log(error);
+    return dispatch(creator(UPDATE_TRAINEE_FAIL, error));
+  }
+};
 
 export const updateTraineeAttributes =
   ({
@@ -125,11 +120,8 @@ export const updateTraineeAttributes =
   }: any) =>
   async (dispatch: any) => {
     try {
-      const datas = await axios({
-        url: process.env.BACKEND_URL,
-        method: "post",
-        data: {
-          query: `
+      const datas = await axios.post('/', {
+        query: `
         mutation UpdateTraineeAttribute($id: ID!, $attributeUpdateInput: traineeUpdateAttributeInput) {
           updateTraineeAttribute(ID: $id, attributeUpdateInput: $attributeUpdateInput) {
             gender
@@ -175,7 +167,7 @@ export const updateTraineeAttributes =
             },
           },
         },
-      });
+      );
 
       const response = await datas.data.data.updateTraineeAttribute;
       dispatch(creator(UPDATE_TRAINEE_ATTRIBUTE, response));
