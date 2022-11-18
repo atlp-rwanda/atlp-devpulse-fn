@@ -8,19 +8,17 @@ import * as AiIcons from "react-icons/ai";
 import CheckBox from "../../components/CkeckBox";
 import Select from "react-select";
 import Threedots from "../../components/Dropdown/Threedots";
+import { FaCaretDown } from "react-icons/fa";
 import { getAllFilteredTraineess } from "../../redux/actions/filterTraineeActions";
-import {getAlltraineeapplicants} from "../../redux/actions/filterTraineeActions"
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import { useTheme } from "../../hooks/darkmode";
+import { useTheme } from '../../hooks/darkmode'
 import { Link } from "react-router-dom";
-import{FaCaretDown} from "react-icons/fa"
 import {
   DOTS,
   useCustomPagination,
 } from "../../components/Pagination/useCustomPagination";
 import { updateTraineeStatus } from "../../redux/actions/updateStatus";
-import Pagination from "../../components/pagination2/pagination2"
 
 export const customTheme = (theme: any) => {
   return {
@@ -29,7 +27,7 @@ export const customTheme = (theme: any) => {
       ...theme.colors,
       text: "light-gray",
       primary25: "#E5E7EB",
-      primary: "#d6dfdf",
+      primary: "cgray",
       neutral0: "white",
     },
   };
@@ -40,7 +38,7 @@ export const darkTheme = (theme: any) => {
     ...theme,
     colors: {
       primary25: "#404657",
-      primary: "#d6dfdf",
+      primary: "cgray",
       neutral0: "#293647",
     },
   };
@@ -48,18 +46,11 @@ export const darkTheme = (theme: any) => {
 
 const FilterTrainee = (props: any) => {
   const { theme, setTheme } = useTheme();
-  console.log(props)
+
   const [filterAttribute, setFilterAttribute] = useState("");
   const [enteredWord, setEnteredWord] = useState("");
-  const [All, setAll] = useState(false);
+  const [All, setAll] = useState(true);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [pageData, setPageData] = useState({
-    rowData: [],
-    isLoading: false,
-    totalPages: 0,
-    totalTraineeapplicants: 0,
-  });
- const [currentPage, setCurrentPage] = useState(1);
 
   const clearInpunt = () => {
     setEnteredWord("");
@@ -95,12 +86,12 @@ const FilterTrainee = (props: any) => {
     );
   };
   // All trainees in DB
-  const { allfilteredTrainees, updateTraineeStatus ,count} = props;
+  const { allfilteredTrainees, updateTraineeStatus } = props;
   const traineeList = allfilteredTrainees?.data;
   const handleNullTraineeList = traineeList === undefined ? [] : traineeList;
 
   const [pageIdx, setPageIdx] = useState(1);
-  const [itemsPerPage,setitemsPerPage] = useState(10);
+  const [itemsPerPage] = useState(10);
 
   const nonNullTrainee = handleNullTraineeList.filter((value) => {
     return value !== null;
@@ -109,7 +100,6 @@ const FilterTrainee = (props: any) => {
   const nonDeletedTrainee = nonNullTrainee?.filter((value) => {
     return value.trainee_id.delete_at == false;
   });
- 
 
   const traineeStatusUpdate = (id: any, status: any, cycle_id: any) => {
     const input = {
@@ -121,7 +111,14 @@ const FilterTrainee = (props: any) => {
   };
 
   useEffect(() => {
-    props.getAlltraineeapplicants();
+    const data = {
+      page: pageIdx,
+      itemsPerPage: 10,
+      All,
+      wordEntered: enteredWord,
+      filterAttribute,
+    };
+    props.getAllFilteredTraineess(data);
   }, [enteredWord, filterAttribute]);
 
   const [me, setMe] = useState("Keroity");
@@ -272,30 +269,9 @@ const FilterTrainee = (props: any) => {
       },
     },
   ];
+
   const columns = useMemo(() => COLS, []);
   const data = useMemo(() => nonDeletedTrainee, [allfilteredTrainees]);
-  useEffect(() => {
-    setPageData((prevState) => ({
-      ...prevState,
-      rowData: [],
-      isLoading: true,
-    }));
-    const data23 = {
-      page: currentPage,
-      itemsPerPage: itemsPerPage,
-      All,
-      wordEntered: enteredWord,
-      filterAttribute,
-    };
-
-    props.getAllFilteredTraineess(data23);
-    setPageData((prevstate)=>({
-        ...prevstate,
-        isLoading: false,
-        rowData:data,
-        totalTraineeapplicants: count.message,
-      }));
-  }, [currentPage,enteredWord, filterAttribute,itemsPerPage]);
   const initialState = {
     hiddenColumns: [
       "trainee_id.firstName",
@@ -323,19 +299,18 @@ const FilterTrainee = (props: any) => {
     getTableProps,
     getTableBodyProps,
     headerGroups,
-    // page,
-    // nextPage,
-    // previousPage,
-    // canNextPage,
-    // canPreviousPage,
-    // pageOptions,
-    // gotoPage,
-    // pageCount,
+    page,
+    nextPage,
+    previousPage,
+    canNextPage,
+    canPreviousPage,
+    pageOptions,
+    gotoPage,
+    pageCount,
     setPageSize,
     state,
     prepareRow,
     allColumns,
-    rows,
     getToggleHideAllColumnsProps,
   }: any = useTable(
     {
@@ -343,8 +318,7 @@ const FilterTrainee = (props: any) => {
       data,
       initialState,
     },
-    // usePagination,
-   
+    usePagination,
     useRowSelect,
     (hooks: any) => {
       hooks.visibleColumns.push((columns: any) => {
@@ -365,10 +339,10 @@ const FilterTrainee = (props: any) => {
   );
   const { pageIndex, pageSize } = state;
 
-  // const paginationRange = useCustomPagination({
-  //   totalPageCount: pageCount,
-  //   currentPage: pageIndex,
-  // });
+  const paginationRange = useCustomPagination({
+    totalPageCount: pageCount,
+    currentPage: pageIndex,
+  });
 
   return (
     <>
@@ -529,7 +503,7 @@ const FilterTrainee = (props: any) => {
                   </thead>
                   <tbody {...getTableBodyProps()}>
                     {nonDeletedTrainee?.length !== 0 ? (
-                      rows?.map((row: any) => {
+                      page?.map((row: any) => {
                         prepareRow(row);
                         return (
                           <tr
@@ -565,14 +539,98 @@ const FilterTrainee = (props: any) => {
                 </table>
               </div>
             </div>
+
             <div className="py-3 flex items-center text-center justify-center pt-10">
-                <Pagination
-                  totalRows={count.message}
-                  pageChangeHandler={setCurrentPage}
-                  rowsChangeHandler={setitemsPerPage}
-                  rowsPerPage={itemsPerPage}
+              <span className="dark:text-zinc-100">
+                Jump to:{" "}
+                <input
+                  type="number"
+                  value={pageIndex + 1}
+                  onChange={(e) => {
+                    const pageNumber = e.target.value
+                      ? Number(e.target.value) - 1
+                      : 0;
+                    gotoPage(pageNumber);
+                  }}
+                  className="w-[70px] pl-2 border border-[#a8a8a8] rounded-[2px] dark:bg-dark-frame-bg"
                 />
-             
+              </span>
+              <div
+                className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between"
+                aria-label="Pagination"
+              >
+                <div
+                  className="relative z-0 inline-flex items-center ml-auto mr-auto  rounded-[2px] shadow-sm space-x-2"
+                  aria-label="Pagination"
+                >
+                  <button
+                    className="my-0 mx-[5px] px-[5px] py-0 text-[#333] h-[38px] border-solid border-[1px]  border-[#a8a8a8] dark:disabled:bg-[#485970]  disabled:bg-[#E7E7E7] disabled:text-[#a8a8a8] dark:text-zinc-100"
+                    onClick={() => gotoPage(0)}
+                    disabled={!canPreviousPage}
+                  >
+                    <AiIcons.AiOutlineDoubleLeft />
+                  </button>
+                  <button
+                    className=" border-solid border-[1px]  border-[#a8a8a8] py-0 px-[10px] text-[#333] rounded-l-[5px] h-[38px] disabled:bg-[#E7E7E7] disabled:text-[#a8a8a8] dark:text-zinc-100 dark:disabled:bg-[#485970]"
+                    onClick={() => previousPage()}
+                    disabled={!canPreviousPage}
+                  >
+                    <AiIcons.AiOutlineLeft />
+                  </button>
+                  {paginationRange?.map((pageNumber, idx) => {
+                    if (pageNumber === DOTS) {
+                      return (
+                        <div key={idx} className="dark:text-zinc-100 md:hidden">
+                          ...
+                        </div>
+                      );
+                    }
+
+                    if (pageNumber - 1 === pageIndex) {
+                      return (
+                        <button
+                          key={idx}
+                          className={`border-solid border-[1px] cursor-pointer border-[#a8a8a8] bg-[#fff] min-w-[35px] h-[38px]  active:bg-[#333] active:text-[#fff]-500 rounded-[2px] md:hidden
+                        ${pageIndex && "bg-[#d6dfdf] text-black"} 
+                        ${pageIndex === 0 && "bg-[#d6dfdf] text-black"} 
+                          `}
+                          onClick={() => gotoPage(pageNumber - 1)}
+                        >
+                          {pageNumber}
+                        </button>
+                      );
+                    }
+
+                    return (
+                      <button
+                        key={idx}
+                        className={`border-solid border-[1px]  cursor-pointer border-[#a8a8a8] bg-[#fff] min-w-[35px] h-[38px]  active:bg-[#333] active:text-[#fff]-500 rounded-[2px] md:hidden`}
+                        onClick={() => gotoPage(pageNumber - 1)}
+                      >
+                        {pageNumber}
+                      </button>
+                    );
+                  })}
+                  <button
+                    className=" border-solid border-[1px]  border-[#a8a8a8] py-0 px-[10px] text-[#333] rounded-r-[5px] h-[38px]  disabled:bg-[#E7E7E7] disabled:text-[#a8a8a8] dark:disabled:bg-[#485970] dark:text-zinc-100"
+                    onClick={() => nextPage()}
+                    disabled={!canNextPage}
+                  >
+                    <AiIcons.AiOutlineRight />
+                  </button>
+                  <button
+                    className="my-0 mx-[5px] px-[5px] py-0 text-[#333] h-[38px] border-solid border-[1px]  border-[#a8a8a8]  disabled:bg-[#E7E7E7] disabled:text-[#a8a8a8] dark:disabled:bg-[#485970] dark:text-zinc-100"
+                    onClick={() => gotoPage(pageCount - 1)}
+                    disabled={!canNextPage}
+                  >
+                    <AiIcons.AiOutlineDoubleRight />
+                  </button>
+                </div>
+              </div>{" "}
+              <span className="flex ml-3 md:justify-center dark:text-ltb text-center md:mt-3 md:ml-0">
+                Page <strong className="mx-1">{pageIndex + 1} </strong>of{" "}
+                <strong className="mx-1">{pageOptions.length}</strong>
+              </span>
             </div>
           </div>
         </div>
@@ -581,14 +639,12 @@ const FilterTrainee = (props: any) => {
   );
 };
 
-const mapState = (state: any) => ({
-  allfilteredTrainees: state.filterTrainee,
-  errors: state.filterTrainee.errors,
-  count:state.count
+const mapState = ({ filterTrainee }: any) => ({
+  allfilteredTrainees: filterTrainee,
+  errors: filterTrainee.errors,
 });
 
 export default connect(mapState, {
   getAllFilteredTraineess: getAllFilteredTraineess,
   updateTraineeStatus: updateTraineeStatus,
-  getAlltraineeapplicants:getAlltraineeapplicants,
 })(FilterTrainee);
