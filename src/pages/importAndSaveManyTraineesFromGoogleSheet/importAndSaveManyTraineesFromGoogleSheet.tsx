@@ -15,6 +15,8 @@ const ImportTraineeDetailsFromGoogleSheet = () => {
     return reduxStore.loadData.error;
   });
 
+  const splittedFailedMessage = failedStatusMessage.split(" ")[0].toLowerCase();
+
   const successStatusMessage = useAppSelector((reduxStore: any) => {
     return reduxStore.loadData.message;
   });
@@ -64,8 +66,6 @@ const ImportTraineeDetailsFromGoogleSheet = () => {
       };
     });
   }
-
-  // "Variable "$columnData" got invalid value { firstName: "", lastName: "", email: "", gender: "gender name", birth_date: "date of birth", Address: "", phone: "", field_of_study: "", education_level: "", province: "", district: "", sector: "", isEmployed: "", haveLaptop: "", isStudent: "", Hackerrank_score: "", english_score: "", interview: "", interview_decision: "", past_andela_programs: "", cycle_name: "", spreadsheetId: "1hXUavm_K5BQAOGTx9W4Z84Ttb2_ONfvk_EQZlyOnUPM" }; Field "cycle_id" of required type "String!" was not provided."
 
   if (
     successStatusMessage ===
@@ -193,8 +193,59 @@ const ImportTraineeDetailsFromGoogleSheet = () => {
           </form>
         </div>
       )}
+      {/* splittedFailedMessage */}
       {failedStatusMessage &&
-        failedStatusMessage !== "Wrong cycle name is provided!!!!" && (
+        failedStatusMessage !== "Wrong cycle name is provided!!!!" &&
+        splittedFailedMessage === "cast" && (
+          <>
+            <form className="w-[80%] mb-5 h-1/2 ml-[50rem] border-[#c5c5c5] mr-[50rem] bg-slate-50 p-[2rem]  shadow-2xl shadow-blue-100 hover:shadow-indigo-100/40 ">
+              <div className="mb-6">
+                <label
+                  htmlFor="email"
+                  className="block mb-2 text-sm font-medium text-gray-900"
+                >
+                  Enter Google sheet URL
+                </label>
+                <input
+                  value={urlInput}
+                  onChange={handleChange}
+                  type="text"
+                  id="email"
+                  className="bg-gray-50 border border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder="Please Enter google sheet url to load your data into database"
+                  required
+                />
+              </div>
+              <Link to="/filter_trainee">
+                <button
+                  type="submit"
+                  className="text-gray-300 mr-4 bg-[#6c1313]  hover:bg-[#931a1a]  focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
+                >
+                  Back to all trainees
+                </button>
+              </Link>
+
+              <button
+                onClick={handleSubmit}
+                className="text-gray-300 bg-button-color hover:bg-[#255d64] focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-60"
+              >
+                Load Data to Database
+              </button>
+            </form>
+            <div className="w-full">
+              <div className="p-5 rounded-xl bg-button-color text-3xl text-white">
+                {failedStatusMessage}
+              </div>
+              <div className="p-5 rounded-xl bg-button-color text-2xl text-white mt-5">
+                The column TYPE provided is not correct!! Please go there and
+                insert the correct data and resend the querry!!
+              </div>
+            </div>
+          </>
+        )}
+      {failedStatusMessage &&
+        failedStatusMessage !== "Wrong cycle name is provided!!!!" &&
+        splittedFailedMessage !== "cast" && (
           <div className="w-full">
             <div className="p-5 rounded-xl bg-button-color text-2xl text-white">
               The columns needs to be matched to the these fields for working!

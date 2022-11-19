@@ -59,7 +59,16 @@ export const loadDataIntoDb = (googleSheetId: string) => {
       );
     } else {
       console.log((await resultPromise).data.errors[0].message);
-      toast.error(`OOPS!!! import failed please match columns 🤯`);
+      // toast.error(`Not saved please match cohort name !! 🤯`);
+      if (
+        (await resultPromise).data.errors[0].message.split(" ")[0] === "cast"
+      ) {
+        toast.error(
+          `Not saved, Column type provided is not correct! 🤯`
+        );
+      } else {
+        toast.error(`Not saved please match column name !! 🤯`);
+      }
       dispatch(load_data_fail((await resultPromise).data.errors[0].message));
     }
   };
@@ -102,8 +111,15 @@ export const resendMappedDataIntoDb = (dataObjectMapped: any, id: any) => {
 
       // on errors
       else {
-        toast.error(`Not saved please match cohort name !! 🤯`);
-        console.log((await resultPromise).data.errors[0].message);
+      console.log((await resultPromise).data.errors[0].message);
+        // toast.error(`Not saved please match cohort name !! 🤯`);
+        if ((await resultPromise).data.errors[0].message.split(" ")[0].toLowerCase() === "cast") {
+            toast.error(`Not saved, Column type provided is not correct🤯`);
+        }
+        else {
+            toast.error(`Not saved please match cohort name !! 🤯`);
+        }
+          console.log((await resultPromise).data.errors[0].message);
         dispatch(load_data_fail((await resultPromise).data.errors[0].message));
       }
     } catch (error) {
