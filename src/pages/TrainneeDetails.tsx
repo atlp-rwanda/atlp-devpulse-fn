@@ -94,7 +94,7 @@ const TrainneeDetails = (props: any) => {
               <div className="md:flex  ">
                 <h2 className="top-5 m-5  font-medium  md:m-3 ">
                   <BsFillPersonLinesFill className="float-left m-1" />
-                  Applicant Information
+                  Trainee Applicant Information
                 </h2>
 
                 <div className=" m-5 sm:mt-20 sm:ml-[-12rem] md:shrink-0  lg:ml-10 lg:mt-10  ">

@@ -183,7 +183,7 @@ const TraineeUpdate = (props:any) =>{
       <NavBar />
       <div className="block bg-white dark:bg-dark-tertiary relative mt-10 w-[100%] py-3 min-h-[100vh]">
         <div className="block text-center text-sm font-bold text-gray-600 relative lg:left-[8rem] dark:text-white text-base lg:max-w-3xl sm:w-[100%] p-4 lg:px-4 m-4 mx-auto text-[24px]">
-          <h1 className="p-2">Update Trainee</h1>
+          <h1 className="p-2">Update Trainee-applicant</h1>
         </div>
         <form className="block bg-white dark:bg-dark-frame-bg lg:max-w-3xl sm:w-[100%] min-h-[100vh] relative lg:left-[8rem] dark:text-white lg:px-4 mb-4 text-gray-600  shadow rounded mx-auto" onSubmit={handleSubmit}>
           {Object.keys(traineeData).length === 0 ? (<p className="text-center p-20">Loading data please wait.....</p>) : (
@@ -634,7 +634,7 @@ const TraineeUpdate = (props:any) =>{
                 <button className="dark:bg-[#56C870] flex bg-gray-600 mx-2 rounded-md py-2 px-4 text-white font-medium cursor-pointer">
                   Update
                 </button>
-                <Link to="/Trainee" className="dark:bg-[#56C870] flex bg-gray-600 rounded-md py-2 mx-2 px-4 text-white font-medium cursor-pointer">
+                <Link to="/Trainee-applicants" className="dark:bg-[#56C870] flex bg-gray-600 rounded-md py-2 mx-2 px-4 text-white font-medium cursor-pointer">
                  Cancel
                 </Link>
               </div>

@@ -73,7 +73,7 @@ function model(props: any) {
               onClick={() => removeModel()}
             />
 
-            {"New Trainee"}
+            {"New Trainee-applicant"}
           </h3>
           <hr className=" bg-primary border-b my-3 w-full" />
         </div>

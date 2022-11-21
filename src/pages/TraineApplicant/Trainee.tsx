@@ -104,12 +104,12 @@ const AddTrainee = (props: any) => {
                       className="flex bg-primary dark:bg-[#56C870] rounded-md py-2 px-4 text-white font-medium cursor-pointer"
                     >
                       <icons.AiOutlinePlus className="mt-1 mr-1 font-bold" />{" "}
-                      Trainee
+                      Trainee-applicant
                     </button>
                     <div></div>
                   </div>
 
-                  <Link to="/filter_trainee">
+                  <Link to="/filter_trainee-applicants">
                     <button className="flex bg-primary dark:bg-[#56C870] rounded-md py-2 mt-2 px-4 text-white font-medium cursor-pointer">
                       <icons.AiOutlineSearch className="mt-1 mr-1 font-bold" />{" "}
                       Search
@@ -197,53 +197,51 @@ const AddTrainee = (props: any) => {
                                             </div>
                                           </td>
 
-                                          <td>
-                                            <div>
-                                              <HiDotsVertical
-                                                className=" text-black dark:text-white text-3xl ml-6 font-size-6 cursor-pointer"
-                                                onClick={(e: any) => {
-                                                  e.preventDefault();
-                                                  onSubmitHandler(item._id);
-                                                }}
-                                              />
-                                              <div
-                                                className={`${
-                                                  moredrop === item._id
-                                                    ? "block"
-                                                    : "hidden"
-                                                } absolute  bg-white dark:bg-dark-tertiary  dark:text-white text-base z-50 list-none divide-y divide-gray-100 rounded shadow my-4`}
-                                                id="dropdown"
-                                              >
-                                                <ul
-                                                  className="py-1"
-                                                  aria-labelledby="dropdown"
+                                      <td>
+                                        <div>
+                                          <HiDotsVertical
+                                            className=" text-black dark:text-white text-3xl ml-6 font-size-6 cursor-pointer"
+                                            onClick={(e: any) => {
+                                              e.preventDefault();
+                                              onSubmitHandler(item._id);
+                                            }}
+                                          />
+                                          <div
+                                            className={`${
+                                              moredrop === item._id
+                                                ? "block"
+                                                : "hidden"
+                                            } absolute  bg-white dark:bg-dark-tertiary  dark:text-white text-base z-50 list-none divide-y divide-gray-100 rounded shadow my-4`}
+                                            id="dropdown"
+                                          >
+                                            <ul
+                                              className="py-1"
+                                              aria-labelledby="dropdown"
+                                            >
+                                              <li>
+                                                <Link to={`/trainee-applicant/${item._id}/edit`}
+                                                className="text-sm hover:bg-gray-100 text-gray-700 dark:hover:bg-gray-500 dark:text-white  block px-4 py-2"
                                                 >
-                                                  <li>
-                                                    <Link
-                                                      to={`/trainees/${item._id}/edit`}
-                                                      className="text-sm hover:bg-gray-100 text-gray-700 dark:hover:bg-gray-500 dark:text-white  block px-4 py-2"
-                                                    >
-                                                      Edit
-                                                    </Link>
-                                                  </li>
-                                                  <li>
-                                                    <Link
-                                                      to={`/trainee-details/${item._id}`}
-                                                      className="text-sm hover:bg-gray-100 text-gray-700  dark:text-white   dark:hover:bg-gray-500 block px-4 py-2"
-                                                    >
-                                                      View
-                                                    </Link>
-                                                  </li>
-                                                  <li>
-                                                    <div
-                                                      className="text-sm hover:bg-gray-100 text-gray-700  dark:hover:bg-gray-500 dark:text-white  block px-4 py-2"
-                                                      onClick={(e: any) => {
-                                                        e.preventDefault();
-                                                        onSubmitHandlesoft(
-                                                          item._id
-                                                        );
-                                                      }}
-                                                    >
+                                                  Edit 
+                                                </Link>
+                                              </li>
+                                              <li>
+                                                <Link to={`/trainee-applicant-details/${item._id}`}
+                                                className="text-sm hover:bg-gray-100 text-gray-700  dark:text-white   dark:hover:bg-gray-500 block px-4 py-2"
+                                                >
+                                                  View
+                                                </Link>
+                                              </li>
+                                              <li>
+                                                <div
+                                                  className="text-sm hover:bg-gray-100 text-gray-700  dark:hover:bg-gray-500 dark:text-white  block px-4 py-2"
+                                                  onClick={(e: any) => {
+                                                    e.preventDefault();
+                                                    onSubmitHandlesoft(item._id);
+                                                  }}
+                                                >
+                                           
+       
                                                       Soft Delete
                                                     </div>
                                                   </li>

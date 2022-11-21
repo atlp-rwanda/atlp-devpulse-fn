@@ -18,36 +18,28 @@ import ScoreTypesActions from "./pages/FilterTeainee/ ScoreTypesActions";
 import "./index.css";
 import ImportTraineeDetailsFromGoogleSheet from "./pages/importAndSaveManyTraineesFromGoogleSheet/importAndSaveManyTraineesFromGoogleSheet";
 
-// const Counter = React.lazy(() => import("./components/Counter/Counter"));
-import Counter from "./components/Counter/Counter";
-// const ApplicationCycle = React.lazy(
-//   () => import("./pages/ApplicationCycle/ApplicationCycle")
-// );
-import ApplicationCycle from "./pages/ApplicationCycle/ApplicationCycle";
-// const Trash = React.lazy(() => import("./pages/Trash/Trash"));
-import Trash from "./pages/Trash/Trash";
+const Counter = React.lazy(() => import("./components/Counter/Counter"));
+import Trash from './pages/Trash/Trash'
+import ApplicationCycle  from './pages/ApplicationCycle/ApplicationCycle'
+
 function App() {
   return (
     <Routes>
-      {/* <Route path="/test_redux" element={<Counter />} /> */}
       <Route path="/test_tailwind" element={<TestTailwind />} />
-      <Route path="/trainee-details/:traineeId" element={<TrainneeDetails />} />
+      <Route path="/trainee-applicant-details/:traineeId" element={<TrainneeDetails />} />
       <Route path="/traineeb-details" element={<TrainneeDetailsB />} />
       <Route path="/sidebar" element={<Sidebar />} />
-      <Route path="/Trainee" element={<Trainee />} />
+      <Route path="/Trainee-applicants" element={<Trainee />} />
       <Route path="/sidebar" element={<Sidebar />} />
       <Route path="/table" element={<Table />} />
       <Route path="/cycles" element={<ApplicationCycle />} />
       <Route path="/trash" element={<Trash />} />
       <Route path="/nav-bar" element={<NavBar />} />
-      <Route path="/filter_trainee" element={<FilterTrainee />} />
-      <Route
-        path="/import_trainees"
-        element={<ImportTraineeDetailsFromGoogleSheet />}
-      />
-      <Route path="/trainees/:traineeId/edit" element={<UpdateTraine />} />
+      <Route path="/filter_trainee-applicants" element={<FilterTrainee />} />
+      <Route path="/import_trainee-aplicants" element={<ImportTraineeDetailsFromGoogleSheet />}/>
+      <Route path="/trainee-applicant/:traineeId/edit" element={<UpdateTraine />} />
       <Route path="/" element={<Trainee />} />
-      <Route path="/filter_trainee/:id" element={<CreateScoreType />} />
+      <Route path="/filter_trainee-applicants/:id" element={<CreateScoreType />} />
       <Route path="/admins/" element={<ScoreTypesActions />} />
     </Routes>
   );

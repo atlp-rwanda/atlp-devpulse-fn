@@ -23,9 +23,9 @@ export const sidebarItems1 = [
     title: "Domains",
   },
   {
-    path: "/Trainee",
+    path: "/Trainee-applicants",
     icon: <Icon icon="ic:round-people"></Icon>,
-    title: "Trainees-Applicant",
+    title: "Trainees-Applicants",
   },
   {
     path: "/attendance",
