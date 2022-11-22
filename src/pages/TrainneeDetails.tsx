@@ -28,6 +28,7 @@ const TrainneeDetails = (props: any) => {
   const availableScores = scoreValues.data?.filter((values: any) => {
     return values.attr_id?.trainee_id._id == urlId;
   });
+  const [changed, setChanged] = useState(false);
 
   const arr = availableScores?.map((values: any) => {
     // return values.score_value;
@@ -180,18 +181,18 @@ const TrainneeDetails = (props: any) => {
               </div>
             </div>
           )}
-          <div className="bg-slate-50 rounded-xl dark:bg-dark-bg shadow-md overflow-hidden md:w-[90%] mb-6 lg:max-w-2xl w-[90%] mx-auto">
-            <div>
-              <h2 className="top-5 m-5  font-medium dark:text-zinc-100">
+          <div className="bg-slate-50 rounded-xl dark:bg-dark-bg shadow-md overflow-hidden md:w-[90%] px-10 mb-6 lg:max-w-2xl w-[90%] mx-auto">
+            <form className="w-fit ">
+              <h2 className="top-5 m-5 ml-0 font-medium dark:text-zinc-100">
                 <BsFillPersonLinesFill className="float-left m-1 " />
                 User ratings
               </h2>
-              <div className="dark:text-zinc-100 sm:grid sm:grid-cols-2 block px-[30px] py-[10px]">
+              <div className="dark:text-zinc-100 sm:grid sm:grid-cols-2 block pl-[0px] py-[10px] mb-5">
                 {score_value?.map((values: any, idx: number) => {
                   return (
                     <div
                       key={idx}
-                      className="p-[1px] block mr-0 even:mr-[100px] mt-2"
+                      className="p-[1px] w-[150px] block mr-0 even:ml-[50px] mt-2"
                     >
                       <div>
                         <label htmlFor="">{values.test}</label>
@@ -203,6 +204,7 @@ const TrainneeDetails = (props: any) => {
                           value={score_value[idx].score_value}
                           className="block border border-[#bbbbbb] text-[#464646] border-1 bg-[#f4f4f4] rounded-[5px]  px-2  py-0 w-[60px]  dark:bg-dark-tertiary dark:text-zinc-100 "
                           onChange={(e) => {
+                            setChanged(true);
                             setscore_value((values) => {
                               const newValue = [...values];
                               newValue[idx] = {
@@ -218,13 +220,30 @@ const TrainneeDetails = (props: any) => {
                   );
                 })}
               </div>
-              <button
-                className="text-white border border-[#333] border-1 bg-[#173b3f] rounded-[5px] p-2 w-[100px] my-5 block ml-8 dark:bg-green dark:border"
-                onClick={updateManyScoreValues}
-              >
-                SAVE
-              </button>
-            </div>
+              {changed && (
+                <div className="flex items-center">
+                  <button
+                    className="text-white border border-[#333] border-1 bg-[#173b3f] rounded-[5px] p-2 w-[100px] mb-5 block dark:bg-green dark:border"
+                    onClick={() => {
+                      setChanged(false);
+                      updateManyScoreValues();
+                    }}
+                  >
+                    SAVE
+                  </button>
+                  <button
+                    type="reset"
+                    className="text-white border border-[#333] border-1 bg-[#173b3f] rounded-[5px] p-2 w-[100px] mb-5 block dark:bg-green dark:border ml-3"
+                    onClick={() => {
+                      setscore_value(arr);
+                      setChanged(false);
+                    }}
+                  >
+                    CANCEL
+                  </button>
+                </div>
+              )}
+            </form>
           </div>
           <div className=" max-w-md bg-slate-50 rounded-xl dark:bg-dark-bg shadow-md overflow-hidden md:w-[100%] mb-6 lg:flex lg:max-w-2xl dark:text-zinc-100  mx-auto">
             <div>
