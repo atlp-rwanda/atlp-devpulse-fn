@@ -7,6 +7,7 @@ import {
   UPDATE_SCORE_VALUE_ERROR,
   DELETE_SCORE_VALUE,
   DELETE_SCORE_VALUE_ERROR,
+  UPDATE_MANY_SCORE_VALUES,
 } from "..";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -133,6 +134,52 @@ export const updateScoreValue =
             toast.success("Score value successfully updated.");
             dispatch(
               creator(UPDATE_SCORE_VALUE, response.data.data.updateScoreValue)
+            );
+          } else {
+            const err = response.data.errors[0].message;
+
+            toast.error(err);
+            dispatch(creator(UPDATE_SCORE_VALUE_ERROR, err));
+          }
+        })
+        .catch((error) => {
+          dispatch(creator(UPDATE_SCORE_VALUE_ERROR, error));
+        });
+    } catch (error) {
+      if (error) {
+        return console.log(error);
+      }
+    }
+  };
+
+export const updateManyScoreValues =
+  (updateData: any) => async (dispatch: any) => {
+    try {
+      await axios({
+        url: process.env.BACKEND_URL,
+        method: "post",
+        data: {
+          query: `
+          mutation UpdateManyScoreValues($input: [updateManyScoreValue]) {
+            updateManyScoreValues(input: $input) {
+              id
+              score_value
+            }
+          }
+          `,
+          variables: {
+            input: updateData,
+          },
+        },
+      })
+        .then((response) => {
+          if (response.data.data !== null) {
+            toast.success("Score values successfully updated.");
+            dispatch(
+              creator(
+                UPDATE_MANY_SCORE_VALUES,
+                response.data.data.updateManyScoreValues
+              )
             );
           } else {
             const err = response.data.errors[0].message;
