@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { HiDotsVertical } from "react-icons/hi";
 import * as icons from "react-icons/ai";
 import { AiOutlinePlus } from "react-icons/ai";
-import {BrowserRouter as Router, Link, useNavigate} from 'react-router-dom';
+import { BrowserRouter as Router, Link, useNavigate } from "react-router-dom";
 import pagination from "../../components/pagination";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -21,9 +21,9 @@ import { getAllCycles } from "../../redux/actions/cyclesActions";
 
 const AddTrainee = (props: any) => {
   const [addNewTraineeModel, setAddNewTraineeModel] = useState(false);
-const Open=() =>{
+  const Open = () => {
     setAddNewTraineeModel(true);
-  }
+  };
 
   // LIST ALL TRAINEE
   const { alltrainees, delettraine, softdeletettraine, traines } = props;
@@ -42,7 +42,6 @@ const Open=() =>{
     props.getAllCycles();
   }, []);
   const trainees = alltrainees.data;
-
 
   const traine = traines.message;
   useEffect(() => {
@@ -79,7 +78,7 @@ const Open=() =>{
     count: traine?.length,
   });
 
-// console.log("Here",props.traines)
+  // console.log("Here",props.traines)
 
   return (
     <>
@@ -150,116 +149,126 @@ const Open=() =>{
                               </tr>
                             </thead>
                             <tbody className="overflow-y-auto">
-                              {props.traines.message!== null
-                              ?props.traines.message.slice(firstContentIndex, lastContentIndex).map((item: any) =>
-                                  item.delete_at == false ? (
-                                    <tr>
-                                      <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
-                                        <div className="flex">
-                                          <div className="">
-                                            
-                                            <p className="text-gray-900 text-center dark:text-white whitespace-no-wrap">
-                                              {item.firstName}
-                                              
-                                            </p>
-                                          </div>
-                                        </div>
-                                      </td>
-                                      <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
-                                        <div className="flex items-center">
-                                          <div className="">
-                                            <p className="text-gray-900 text-center dark:text-white whitespace-no-wrap">
-                                              {item.lastName}
-                                            </p>
-                                          </div>
-                                        </div>
-                                      </td>
+                              {props.traines.message !== null
+                                ? props.traines.message
+                                    .slice(firstContentIndex, lastContentIndex)
+                                    .reverse()
+                                    .map((item: any) =>
+                                      item?.delete_at == false ? (
+                                        <tr>
+                                          <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
+                                            <div className="flex">
+                                              <div className="">
+                                                <p className="text-gray-900 text-center dark:text-white whitespace-no-wrap">
+                                                  {item.firstName}
+                                                </p>
+                                              </div>
+                                            </div>
+                                          </td>
+                                          <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
+                                            <div className="flex items-center">
+                                              <div className="">
+                                                <p className="text-gray-900 text-center dark:text-white whitespace-no-wrap">
+                                                  {item.lastName}
+                                                </p>
+                                              </div>
+                                            </div>
+                                          </td>
 
-                                      <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
-                                        <div className="flex items-center">
-                                          <div className="">
-                                            <p className="text-gray-900 items-center dark:text-white whitespace-no-wrap">
-                                              {item.email}
-                                            </p>
-                                          </div>
-                                        </div>
-                                      </td>
+                                          <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
+                                            <div className="flex items-center">
+                                              <div className="">
+                                                <p className="text-gray-900 items-center dark:text-white whitespace-no-wrap">
+                                                  {item.email}
+                                                </p>
+                                              </div>
+                                            </div>
+                                          </td>
 
-                                      <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
-                                        <div className="flex items-center">
-                                          <div className="">
-                                            <p className="text-gray-900 items-center dark:text-white whitespace-no-wrap">
-                                              {item.cycle_id?item.cycle_id.name:'-'}
-                                            </p>
-                                          </div>
-                                        </div>
-                                      </td>
+                                          <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
+                                            <div className="flex items-center">
+                                              <div className="">
+                                                <p className="text-gray-900 items-center dark:text-white whitespace-no-wrap">
+                                                  {item.cycle_id
+                                                    ? item.cycle_id.name
+                                                    : "-"}
+                                                </p>
+                                              </div>
+                                            </div>
+                                          </td>
 
-                                      <td>
-                                        <div>
-                                          <HiDotsVertical
-                                            className=" text-black dark:text-white text-3xl ml-6 font-size-6 cursor-pointer"
-                                            onClick={(e: any) => {
-                                              e.preventDefault();
-                                              onSubmitHandler(item._id);
-                                            }}
-                                          />
-                                          <div
-                                            className={`${
-                                              moredrop === item._id
-                                                ? "block"
-                                                : "hidden"
-                                            } absolute  bg-white dark:bg-dark-tertiary  dark:text-white text-base z-50 list-none divide-y divide-gray-100 rounded shadow my-4`}
-                                            id="dropdown"
-                                          >
-                                            <ul
-                                              className="py-1"
-                                              aria-labelledby="dropdown"
-                                            >
-                                              <li>
-                                                <Link to={`/trainees/${item._id}/edit`}
-                                                className="text-sm hover:bg-gray-100 text-gray-700 dark:hover:bg-gray-500 dark:text-white  block px-4 py-2"
+                                          <td>
+                                            <div>
+                                              <HiDotsVertical
+                                                className=" text-black dark:text-white text-3xl ml-6 font-size-6 cursor-pointer"
+                                                onClick={(e: any) => {
+                                                  e.preventDefault();
+                                                  onSubmitHandler(item._id);
+                                                }}
+                                              />
+                                              <div
+                                                className={`${
+                                                  moredrop === item._id
+                                                    ? "block"
+                                                    : "hidden"
+                                                } absolute  bg-white dark:bg-dark-tertiary  dark:text-white text-base z-50 list-none divide-y divide-gray-100 rounded shadow my-4`}
+                                                id="dropdown"
+                                              >
+                                                <ul
+                                                  className="py-1"
+                                                  aria-labelledby="dropdown"
                                                 >
-                                                  Edit 
-                                                </Link>
-                                              </li>
-                                              <li>
-                                                <Link to={`/trainee-details/${item._id}`}
-                                                className="text-sm hover:bg-gray-100 text-gray-700  dark:text-white   dark:hover:bg-gray-500 block px-4 py-2"
-                                                >
-                                                  View
-                                                </Link>
-                                              </li>
-                                              <li>
-                                                <div
-                                                  className="text-sm hover:bg-gray-100 text-gray-700  dark:hover:bg-gray-500 dark:text-white  block px-4 py-2"
-                                                  onClick={(e: any) => {
-                                                    e.preventDefault();
-                                                    onSubmitHandlesoft(item._id);
-                                                  }}
-                                                >
-                                                  Soft Delete
-                                                </div>
-                                              </li>
-                                              <li>
-                                                <div
-                                                  className="text-sm hover:bg-gray-100 text-gray-700   dark:hover:bg-gray-500 dark:text-white  block px-4 py-2"
-                                                  onClick={(e: any) => {
-                                                    e.preventDefault();
-                                                    onSubmitHandle(item._id);
-                                                  }}
-                                                >
-                                                  Hard Delete
-                                                </div>
-                                              </li>
-                                            </ul>
-                                          </div>
-                                        </div>
-                                        {/* </div> */}
-                                      </td>
-                                    </tr>
-                                  ) :null
-                                ):null}
+                                                  <li>
+                                                    <Link
+                                                      to={`/trainees/${item._id}/edit`}
+                                                      className="text-sm hover:bg-gray-100 text-gray-700 dark:hover:bg-gray-500 dark:text-white  block px-4 py-2"
+                                                    >
+                                                      Edit
+                                                    </Link>
+                                                  </li>
+                                                  <li>
+                                                    <Link
+                                                      to={`/trainee-details/${item._id}`}
+                                                      className="text-sm hover:bg-gray-100 text-gray-700  dark:text-white   dark:hover:bg-gray-500 block px-4 py-2"
+                                                    >
+                                                      View
+                                                    </Link>
+                                                  </li>
+                                                  <li>
+                                                    <div
+                                                      className="text-sm hover:bg-gray-100 text-gray-700  dark:hover:bg-gray-500 dark:text-white  block px-4 py-2"
+                                                      onClick={(e: any) => {
+                                                        e.preventDefault();
+                                                        onSubmitHandlesoft(
+                                                          item._id
+                                                        );
+                                                      }}
+                                                    >
+                                                      Soft Delete
+                                                    </div>
+                                                  </li>
+                                                  <li>
+                                                    <div
+                                                      className="text-sm hover:bg-gray-100 text-gray-700   dark:hover:bg-gray-500 dark:text-white  block px-4 py-2"
+                                                      onClick={(e: any) => {
+                                                        e.preventDefault();
+                                                        onSubmitHandle(
+                                                          item._id
+                                                        );
+                                                      }}
+                                                    >
+                                                      Hard Delete
+                                                    </div>
+                                                  </li>
+                                                </ul>
+                                              </div>
+                                            </div>
+                                            {/* </div> */}
+                                          </td>
+                                        </tr>
+                                      ) : null
+                                    )
+                                : null}
                             </tbody>
                           </table>
                         </div>
@@ -299,16 +308,17 @@ const Open=() =>{
                         {el}
                       </button>
                     ))}
-                    {totalPages?
-                    <button
-                      onClick={() => setPaging(totalPages)}
-                      data-testid="page3"
-                      className={`page py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white ${
-                        page === totalPages && "disabled"
-                      }`}
-                    >
-                      {totalPages}
-                    </button>:null}
+                    {totalPages ? (
+                      <button
+                        onClick={() => setPaging(totalPages)}
+                        data-testid="page3"
+                        className={`page py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white ${
+                          page === totalPages && "disabled"
+                        }`}
+                      >
+                        {totalPages}
+                      </button>
+                    ) : null}
                     <button
                       onClick={nextPage}
                       data-testid="next"

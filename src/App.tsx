@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { HashRouter as Router, Routes, Route, Link } from "react-router-dom";
 import TestTailwind from "./components/TestTailwind";
 import TrainneeDetails from "./pages/TrainneeDetails";
 import TrainneeDetailsB from "./pages/TrainneDetailsB";
@@ -18,12 +18,14 @@ import ScoreTypesActions from "./pages/FilterTeainee/ ScoreTypesActions";
 import "./index.css";
 import ImportTraineeDetailsFromGoogleSheet from "./pages/importAndSaveManyTraineesFromGoogleSheet/importAndSaveManyTraineesFromGoogleSheet";
 
-const Counter = React.lazy(() => import("./components/Counter/Counter"));
-const ApplicationCycle = React.lazy(
-  () => import("./pages/ApplicationCycle/ApplicationCycle")
-);
-const Trash = React.lazy(() => import("./pages/Trash/Trash"));
-
+// const Counter = React.lazy(() => import("./components/Counter/Counter"));
+import Counter from "./components/Counter/Counter";
+// const ApplicationCycle = React.lazy(
+//   () => import("./pages/ApplicationCycle/ApplicationCycle")
+// );
+import ApplicationCycle from "./pages/ApplicationCycle/ApplicationCycle";
+// const Trash = React.lazy(() => import("./pages/Trash/Trash"));
+import Trash from "./pages/Trash/Trash";
 function App() {
   return (
     <Routes>
