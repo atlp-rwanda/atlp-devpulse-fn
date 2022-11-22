@@ -54,6 +54,7 @@ export const getAllFilteredTraineess =
                 endDate
               }
               delete_at
+              status
             }
           
           }

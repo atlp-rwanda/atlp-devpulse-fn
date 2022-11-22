@@ -12,8 +12,7 @@ import { GET_TRAINEE_TO_UPDATE } from "..";
 
 export const getTraineeToUpdate = (Traineid: any) => async (dispatch: any) => {
   try {
-    const datas = await axios.post('/',
-    {
+    const datas = await axios.post("/", {
       query: `
       query GetOneTraineeAllDetails($input: one) {
         getOneTraineeAllDetails(input: $input) {
@@ -54,8 +53,7 @@ export const getTraineeToUpdate = (Traineid: any) => async (dispatch: any) => {
           id: Traineid,
         },
       },
-    },
-    );
+    });
 
     const response = await datas.data.data.getOneTraineeAllDetails;
     return dispatch(creator(GET_TRAINEE_TO_UPDATE, response));
@@ -65,12 +63,12 @@ export const getTraineeToUpdate = (Traineid: any) => async (dispatch: any) => {
   }
 };
 
-
-export const updateTraine = ({id,firstName,lastName,cycle_id}:any)=> async (dispatch: any) =>{
-  try {
-    const datas = await axios.post('/',
-    {
-      query: `
+export const updateTraine =
+  ({ id, firstName, lastName, cycle_id }: any) =>
+  async (dispatch: any) => {
+    try {
+      const datas = await axios.post("/", {
+        query: `
       mutation UpdateTraineeApplicant($id: ID!, $updateInput: traineeApplicantInputUpdate) {
           updateTraineeApplicant(ID: $id, updateInput: $updateInput) {
             lastName
@@ -79,24 +77,24 @@ export const updateTraine = ({id,firstName,lastName,cycle_id}:any)=> async (disp
             email
           }
         }
-    `,variables: {
-        id,
-        updateInput: {
-          firstName,
-          lastName,
-          cycle_id
-        }
-    },
-    },
-    );
+    `,
+        variables: {
+          id,
+          updateInput: {
+            firstName,
+            lastName,
+            cycle_id,
+          },
+        },
+      });
 
-    const response = await datas.data.data.updateTraineeApplicant;
-    dispatch(creator(UPDATE_TRAINEE, response));
-  } catch (error) {
-    console.log(error);
-    return dispatch(creator(UPDATE_TRAINEE_FAIL, error));
-  }
-};
+      const response = await datas.data.data.updateTraineeApplicant;
+      dispatch(creator(UPDATE_TRAINEE, response));
+    } catch (error) {
+      console.log(error);
+      return dispatch(creator(UPDATE_TRAINEE_FAIL, error));
+    }
+  };
 
 export const updateTraineeAttributes =
   ({
@@ -120,7 +118,7 @@ export const updateTraineeAttributes =
   }: any) =>
   async (dispatch: any) => {
     try {
-      const datas = await axios.post('/', {
+      const datas = await axios.post("/", {
         query: `
         mutation UpdateTraineeAttribute($id: ID!, $attributeUpdateInput: traineeUpdateAttributeInput) {
           updateTraineeAttribute(ID: $id, attributeUpdateInput: $attributeUpdateInput) {
@@ -145,29 +143,28 @@ export const updateTraineeAttributes =
           }
         }
         `,
-          variables: {
-            id,
-            attributeUpdateInput: {
-              gender,
-              birth_date,
-              Address,
-              phone,
-              field_of_study,
-              education_level,
-              province,
-              district,
-              sector,
-              isEmployed,
-              haveLaptop,
-              isStudent,
-              Hackerrank_score,
-              english_score,
-              interview_decision,
-              past_andela_programs,
-            },
+        variables: {
+          id,
+          attributeUpdateInput: {
+            gender,
+            birth_date,
+            Address,
+            phone,
+            field_of_study,
+            education_level,
+            province,
+            district,
+            sector,
+            isEmployed,
+            haveLaptop,
+            isStudent,
+            Hackerrank_score,
+            english_score,
+            interview_decision,
+            past_andela_programs,
           },
         },
-      );
+      });
 
       const response = await datas.data.data.updateTraineeAttribute;
       dispatch(creator(UPDATE_TRAINEE_ATTRIBUTE, response));

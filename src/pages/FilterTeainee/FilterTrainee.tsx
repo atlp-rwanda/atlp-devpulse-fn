@@ -18,6 +18,7 @@ import {
   DOTS,
   useCustomPagination,
 } from "../../components/Pagination/useCustomPagination";
+import { updateTraineeStatus } from "../../redux/actions/updateStatus";
 
 export const customTheme = (theme: any) => {
   return {
@@ -85,8 +86,7 @@ const FilterTrainee = (props: any) => {
     );
   };
   // All trainees in DB
-  const { allfilteredTrainees } = props;
-
+  const { allfilteredTrainees, updateTraineeStatus } = props;
   const traineeList = allfilteredTrainees?.data;
   const handleNullTraineeList = traineeList === undefined ? [] : traineeList;
 
@@ -100,6 +100,14 @@ const FilterTrainee = (props: any) => {
   const nonDeletedTrainee = nonNullTrainee?.filter((value) => {
     return value.trainee_id.delete_at == false;
   });
+
+  const traineeStatusUpdate = (id: any, status: any) => {
+    const input = {
+      id,
+      status,
+    };
+    updateTraineeStatus(input);
+  };
 
   useEffect(() => {
     const data = {
@@ -228,16 +236,20 @@ const FilterTrainee = (props: any) => {
       Header: "Status",
       accessor: "",
       Cell: ({ row }: any) => {
+        console.log("Row status", row.original.trainee_id.status);
         return (
           <select
-            defaultValue={""}
+            defaultValue={row.original.trainee_id.status}
             id="status"
             className="dark:text-[#dbdee6] border bg-row-gray dark:bg-[#293647] border-solid border-bdr dark:border-cg dark:border-opacity-5 shadow-sm px-4 py-4px rounded-bt-rd focus:outline-none sm:text-sm"
+            onChange={(e) => {
+              traineeStatusUpdate(row.original.trainee_id._id, e.target.value);
+            }}
           >
-            <option value="">Select value</option>
+            <option value="">Not Assigned</option>
             <option value="passed">Passed</option>
             <option value="failed">Failed</option>
-            <option value="religated">Religated</option>
+            <option value="relegated">Relegated</option>
           </select>
         );
       },
@@ -630,4 +642,5 @@ const mapState = ({ filterTrainee }: any) => ({
 
 export default connect(mapState, {
   getAllFilteredTraineess: getAllFilteredTraineess,
+  updateTraineeStatus: updateTraineeStatus,
 })(FilterTrainee);
