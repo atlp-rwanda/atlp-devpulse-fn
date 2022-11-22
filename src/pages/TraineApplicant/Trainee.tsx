@@ -11,13 +11,12 @@ import { getAllTraineess } from "../../redux/actions/TraineeAction";
 import { connect, useSelector } from "react-redux";
 import Modal from "./modal";
 import NavBar from "../../components/sidebar/navHeader";
-import {
-  softdeletetraine,
-  deletetraine,
-  fetchtraine,
-} from "../../redux/actions/deletetraine";
+import {softdeletetraine,deletetraine,fetchtraine} from "../../redux/actions/deletetraine";
 import { useAppDispatch } from "../../hooks/hooks";
 import { getAllCycles } from "../../redux/actions/cyclesActions";
+import Select from "react-select";
+import { customTheme, darkTheme } from "../FilterTeainee/FilterTrainee";
+import { useTheme } from "../../hooks/darkmode";
 
 const AddTrainee = (props: any) => {
   const [addNewTraineeModel, setAddNewTraineeModel] = useState(false);
@@ -30,8 +29,10 @@ const AddTrainee = (props: any) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [page, setPage] = useState(0);
-  const [itemsPerPage, setiIemsPerPage] = useState(0);
+  const [itemsPerPage, setiIemsPerPage] = useState(10);
   const [All, setAll] = useState(true);
+  const { theme, setTheme } = useTheme();
+
   const input = {
     page: page,
     itemsPerPage: itemsPerPage,
@@ -60,6 +61,9 @@ const AddTrainee = (props: any) => {
     await dispatch(softdeletetraine(userId));
     setmoredrop("");
   };
+  const setFilterAttribute = async (id)=>{
+    setiIemsPerPage(parseInt(id))
+  }
 
   console.log(props);
 
@@ -74,11 +78,11 @@ const AddTrainee = (props: any) => {
     setPaging,
     totalPages,
   } = pagination({
-    contentPerPage: 10,
+    contentPerPage: itemsPerPage,
     count: traine?.length,
   });
 
-  // console.log("Here",props.traines)
+  console.log("Here",paging,totalPages)
 
   return (
     <>
@@ -272,6 +276,23 @@ const AddTrainee = (props: any) => {
                         </div>
                       </div>
                     </div>
+                    <div  className=" absolute flex">
+                      <label htmlFor="">rows per page</label>
+                         <Select
+                         menuPlacement="auto"
+                        className="sm:text-sm  w-13 rounded-bt-rd absolute dark:text-ltb active;"
+                        options={[
+                          { value: '10', label: "10" },
+                          { value: '50', label: "50" },
+                          { value: '100', label: "100" },
+                          { value: '500', label: "500" },
+                          { value: '1000', label: "1000" },
+                        ]}
+                        defaultValue={{ value: "", label: "10" }}
+                        onChange={(e) => setFilterAttribute(`${e?.value}`)}
+                       theme={theme ? customTheme : darkTheme}
+                   />
+                   </div>
                   </div>
                   {/* //pagination */}
                   <div className="flex relative items-center justify-center gap-1  mb-10 lg:left-[100px]">
@@ -289,7 +310,7 @@ const AddTrainee = (props: any) => {
                       onClick={() => setPaging(1)}
                       data-testid="page1"
                       className={`page py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white ${
-                        page === 1 && "disabled"
+                        paging===1?'bg-gray-800 dark:bg-white':''
                       }`}
                     >
                       1
@@ -301,7 +322,8 @@ const AddTrainee = (props: any) => {
                         key={el}
                         className={`page py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white ${
                           page === el ? "active" : ""
-                        }`}
+                          
+                        }${paging===el?'bg-gray-800 dark:bg-white':''}`}
                       >
                         {el}
                       </button>
@@ -310,9 +332,9 @@ const AddTrainee = (props: any) => {
                       <button
                         onClick={() => setPaging(totalPages)}
                         data-testid="page3"
-                        className={`page py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white ${
-                          page === totalPages && "disabled"
-                        }`}
+                        className={`page py-2 px-3 leading-tight text-gray-500 ${paging===totalPages?'bg-gray-800 dark:bg-white':'bg-white'} border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white ${
+                          paging===totalPages?'bg-gray-800':''
+                        }${paging===totalPages?'bg-gray-800':''}`}
                       >
                         {totalPages}
                       </button>
