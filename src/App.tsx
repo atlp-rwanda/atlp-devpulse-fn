@@ -17,16 +17,20 @@ import CreateScoreType from "./pages/FilterTeainee/createScoreType";
 import ScoreTypesActions from "./pages/FilterTeainee/ ScoreTypesActions";
 import "./index.css";
 import ImportTraineeDetailsFromGoogleSheet from "./pages/importAndSaveManyTraineesFromGoogleSheet/importAndSaveManyTraineesFromGoogleSheet";
+import PageNotFound from "./pages/404";
+import Counter from "./components/Counter/Counter";
 
-const Counter = React.lazy(() => import("./components/Counter/Counter"));
-import Trash from './pages/Trash/Trash'
-import ApplicationCycle  from './pages/ApplicationCycle/ApplicationCycle'
+import ApplicationCycle from "./pages/ApplicationCycle/ApplicationCycle";
 
+import Trash from "./pages/Trash/Trash";
 function App() {
   return (
     <Routes>
       <Route path="/test_tailwind" element={<TestTailwind />} />
-      <Route path="/trainee-applicant-details/:traineeId" element={<TrainneeDetails />} />
+      <Route
+        path="/trainee-applicant-details/:traineeId"
+        element={<TrainneeDetails />}
+      />
       <Route path="/traineeb-details" element={<TrainneeDetailsB />} />
       <Route path="/sidebar" element={<Sidebar />} />
       <Route path="/Trainee-applicants" element={<Trainee />} />
@@ -36,11 +40,21 @@ function App() {
       <Route path="/trash" element={<Trash />} />
       <Route path="/nav-bar" element={<NavBar />} />
       <Route path="/filter_trainee-applicants" element={<FilterTrainee />} />
-      <Route path="/import_trainee-aplicants" element={<ImportTraineeDetailsFromGoogleSheet />}/>
-      <Route path="/trainee-applicant/:traineeId/edit" element={<UpdateTraine />} />
+      <Route
+        path="/import_trainee-aplicants"
+        element={<ImportTraineeDetailsFromGoogleSheet />}
+      />
+      <Route
+        path="/trainee-applicant/:traineeId/edit"
+        element={<UpdateTraine />}
+      />
       <Route path="/" element={<Trainee />} />
-      <Route path="/filter_trainee-applicants/:id" element={<CreateScoreType />} />
+      <Route
+        path="/filter_trainee-applicants/:id"
+        element={<CreateScoreType />}
+      />
       <Route path="/admins/" element={<ScoreTypesActions />} />
+      <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
 }
