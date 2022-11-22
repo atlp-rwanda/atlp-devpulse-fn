@@ -71,12 +71,12 @@ const ImportTraineeDetailsFromGoogleSheet = () => {
     successStatusMessage ===
     "The data mapped has been saved successfully, CONGRATS"
   ) {
-    navigate("/filter_trainee");
+    navigate("/filter_trainee-applicants");
     dispatch(load_data_request());
   }
 
   if (successStatusMessage === "Trainees data loaded to db successfully") {
-    navigate("/filter_trainee");
+    navigate("filter_trainee-applicants");
     dispatch(load_data_request());
   }
 
@@ -134,12 +134,12 @@ const ImportTraineeDetailsFromGoogleSheet = () => {
               required
             />
           </div>
-          <Link to="/filter_trainee">
+          <Link to="/filter_trainee-applicants">
             <button
               type="submit"
               className="text-gray-300 mr-4 bg-[#6c1313]  hover:bg-[#931a1a]  focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
             >
-              Back to all trainees
+              Back to all trainee-applicants
             </button>
           </Link>
 
@@ -175,12 +175,12 @@ const ImportTraineeDetailsFromGoogleSheet = () => {
                 required
               />
             </div>
-            <Link to="/filter_trainee">
+            <Link to="/filter_trainee-applicants">
               <button
                 type="submit"
                 className="text-gray-300 mr-4 bg-[#d57878]  hover:bg-[#931a1a]  focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
               >
-                Back to all trainees
+                Back to all trainee-applicants
               </button>
             </Link>
             <button
@@ -257,12 +257,12 @@ const ImportTraineeDetailsFromGoogleSheet = () => {
                   </div>
                 );
               })}
-              <Link to="/filter_trainee">
+              <Link to="/filter_trainee-applicants">
                 <button
                   type="submit"
                   className="text-gray-300 mr-4 bg-[#d57878]  hover:bg-[#931a1a]  focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
                 >
-                  Back to all trainees
+                 Back to all trainee-applicants
                 </button>
               </Link>
               <button
