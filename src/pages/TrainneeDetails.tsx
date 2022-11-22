@@ -285,25 +285,29 @@ const TrainneeDetails = (props: any) => {
             <div className=" btn ml-5 mt-[-10%] mb-3   ">
               <button className="btn-Aprov  bg-[#10292C] dark:bg-green hover:bg-[#1f544cef] text-white font-bold py-2 px-4 rounded mt-20 mr-4">
                 <FcApproval className="float-left m-1" />
-                Approve
+                Passed
+              </button>
+              <button className="btn-Aprov2 bg-[#10292C] hover:bg-[#1f544cef] dark:hover:bg-[#1f544cef] text-white font-bold py-2 px-4 rounded mr-8 dark:bg-[#56C870] ">
+                <BsEnvelope className="float-left m-1" />
+                Email
               </button>
 
-              {/* <div className=""> */}
+             
               <button
                 onClick={(e) => handleDropDown(open)}
-                className="btn-Aprov bg-[#10292C] dark:bg-green hover:bg-[#1f544cef] text-white font-bold py-2 px-4 rounded mr-8"
+                className="btn-Aprov  bg-[#10292C] hover:bg-[#f9e84eef] dark:hover:bg-[#f9e84eef] text-white font-bold py-2 px-4 rounded mr-8 dark:bg-yellow-500"
               >
                 <TiExportOutline className="float-left m-1" />
-                Export
-                <AiFillCaretDown className="float-right m-1" />
-                {open && (
+                Religated
+                {/* <AiFillCaretDown className="float-right m-1" /> */}
+                {/* {open && (
                   <ul className="bg-[#1F2A37] font-light text-sm text-white m-1">
                     <li className="border-solid border-black border-b-2 ">
                       Export to PDF
                     </li>
                     <li>Export to CSV</li>
                   </ul>
-                )}
+                )} */}
               </button>
               {/* </div> */}
 
@@ -311,9 +315,11 @@ const TrainneeDetails = (props: any) => {
                 <BsEnvelope className="float-left m-1" />
                 Email
               </button>
-              <button className="btn-Aprov3 bg-[#DC5454] hover:text-red-500 hover:bg-[#1f544cef] text-white font-bold py-2 px-2 rounded ">
+
+             
+              <button className="btn-Aprov3 bg-[#DC5454] hover:text-white hover:bg-[#ed7373fa] text-white font-bold py-2 px-2 rounded ">
                 <MdOutlineCancel className="float-left m-1" />
-                Reject
+                Failed
               </button>
             </div>
           </div>
