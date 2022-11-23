@@ -322,6 +322,7 @@ const AddTrainee = (props: any) => {
                                           </div>
                                         </td>
 
+<<<<<<< HEAD
                                         <td>
                                           <div>
                                             <HiDotsVertical
@@ -342,6 +343,24 @@ const AddTrainee = (props: any) => {
                                               <ul
                                                 className="py-1"
                                                 aria-labelledby="dropdown"
+=======
+                                          <td>
+                                            <div className="relative">
+                                              <HiDotsVertical
+                                                className=" text-black dark:text-white text-3xl ml-6 font-size-6 cursor-pointer"
+                                                onClick={(e: any) => {
+                                                  e.preventDefault();
+                                                  onSubmitHandler(item._id);
+                                                }}
+                                              />
+                                              <div
+                                                className={`${
+                                                  moredrop === item._id
+                                                    ? "block"
+                                                    : "hidden"
+                                                } absolute z-20  bg-white dark:bg-dark-tertiary  dark:text-white text-base z-50 list-none divide-y divide-gray-100 rounded shadow my-4`}
+                                                id="dropdown"
+>>>>>>> armustrong
                                               >
                                                 <li>
                                                   <Link
