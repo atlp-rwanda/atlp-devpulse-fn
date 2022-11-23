@@ -14,6 +14,10 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { useTheme } from "../../hooks/darkmode";
 import { Link } from "react-router-dom";
+import {
+  DOTS,
+  useCustomPagination,
+} from "../../components/Pagination/useCustomPagination";
 
 export const customTheme = (theme: any) => {
   return {
@@ -105,7 +109,6 @@ const FilterTrainee = (props: any) => {
       wordEntered: enteredWord,
       filterAttribute,
     };
-    // console.log(" dATA SENT", data)
     props.getAllFilteredTraineess(data);
   }, [enteredWord, filterAttribute]);
 
@@ -288,6 +291,7 @@ const FilterTrainee = (props: any) => {
     pageOptions,
     gotoPage,
     pageCount,
+    setPageSize,
     state,
     prepareRow,
     allColumns,
@@ -318,9 +322,15 @@ const FilterTrainee = (props: any) => {
     }
   );
   const { pageIndex, pageSize } = state;
+
+  const paginationRange = useCustomPagination({
+    totalPageCount: pageCount,
+    currentPage: pageIndex,
+  });
+
   return (
     <>
-      <div className="flex bg-[#F9F9FB] dark:bg-dark-bg min-h-[100vh]">
+      <div className="flex bg-[#F9F9FB] dark:bg-dark-bg  min-h-[100vh]">
         <NavBar />
         <div className="min-h-[50vh] w-[100%] block mt-10 md:w-[100%] md:mt-0 pl-[16rem] md:pl-0">
           <div className=" table table-fixed mt-[5rem] w-[100%] top-[20%] md:top-[10%] pb-10 md:relative px-[10%] md:px-[10px]">
@@ -514,64 +524,97 @@ const FilterTrainee = (props: any) => {
               </div>
             </div>
 
-            <div className="block mx-auto my-0 w-[100%]  bottom-0 overflow-x-auto">
-              <div className="w-[100%] flex items-center justify-center my-[30px]  mx-auto md:block md:mx-auto">
-                <span className="flex items-center md:justify-center md:mt-[10px]">
-                  {" "}
+            <div className="py-3 flex items-center text-center justify-center pt-10">
+              <span className="dark:text-zinc-100">
+                Jump to:{" "}
+                <input
+                  type="number"
+                  value={pageIndex + 1}
+                  onChange={(e) => {
+                    const pageNumber = e.target.value
+                      ? Number(e.target.value) - 1
+                      : 0;
+                    gotoPage(pageNumber);
+                  }}
+                  className="w-[70px] pl-2 border border-[#a8a8a8] rounded-[2px] dark:bg-dark-frame-bg"
+                />
+              </span>
+              <div
+                className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between"
+                aria-label="Pagination"
+              >
+                <div
+                  className="relative z-0 inline-flex items-center ml-auto mr-auto  rounded-[2px] shadow-sm space-x-2"
+                  aria-label="Pagination"
+                >
                   <button
-                    className="my-0 mx-[5px] px-[5px] py-0 text-[#333] h-[38px] border-solid border-[1px]  border-[#a8a8a8]  disabled:bg-[#E7E7E7] disabled:text-[#a8a8a8]"
+                    className="my-0 mx-[5px] px-[5px] py-0 text-[#333] h-[38px] border-solid border-[1px]  border-[#a8a8a8] dark:disabled:bg-[#485970]  disabled:bg-[#E7E7E7] disabled:text-[#a8a8a8] dark:text-zinc-100"
                     onClick={() => gotoPage(0)}
                     disabled={!canPreviousPage}
                   >
                     <AiIcons.AiOutlineDoubleLeft />
                   </button>
                   <button
-                    className=" border-solid border-[1px]  border-[#a8a8a8] py-0 px-[10px] text-[#333] rounded-l-[5px] h-[38px] disabled:bg-[#E7E7E7] disabled:text-[#a8a8a8] "
+                    className=" border-solid border-[1px]  border-[#a8a8a8] py-0 px-[10px] text-[#333] rounded-l-[5px] h-[38px] disabled:bg-[#E7E7E7] disabled:text-[#a8a8a8] dark:text-zinc-100 dark:disabled:bg-[#485970]"
                     onClick={() => previousPage()}
                     disabled={!canPreviousPage}
                   >
                     <AiIcons.AiOutlineLeft />
                   </button>
-                  <span className="flex flex-wrap md:hidden " id="pages">
-                    {pageOptions?.map((pageOption: any, i: number) => {
+                  {paginationRange?.map((pageNumber, idx) => {
+                    if (pageNumber === DOTS) {
                       return (
-                        <div>
-                          <button
-                            className={`border-solid border-[1px] mx-[2px]  border-[#a8a8a8] bg-[#fff] w-[35px] h-[38px]  active:bg-[#333] active:text-[#fff]-500 ${
-                              pageIndex === i && "bg-[#eef1f1]"
-                            }`}
-                            onClick={(e: any) => {
-                              const pageNumber = e.target.innerText;
-                              gotoPage(pageNumber - 1);
-                              setPageIdx(pageNumber);
-                            }}
-                          >
-                            {pageOption + 1}
-                          </button>
+                        <div key={idx} className="dark:text-zinc-100 md:hidden">
+                          ...
                         </div>
                       );
-                    })}
-                  </span>
+                    }
+
+                    if (pageNumber - 1 === pageIndex) {
+                      return (
+                        <button
+                          key={idx}
+                          className={`border-solid border-[1px] cursor-pointer border-[#a8a8a8] bg-[#fff] min-w-[35px] h-[38px]  active:bg-[#333] active:text-[#fff]-500 rounded-[2px] md:hidden
+                        ${pageIndex && "bg-[#d6dfdf] text-black"} 
+                        ${pageIndex === 0 && "bg-[#d6dfdf] text-black"} 
+                          `}
+                          onClick={() => gotoPage(pageNumber - 1)}
+                        >
+                          {pageNumber}
+                        </button>
+                      );
+                    }
+
+                    return (
+                      <button
+                        key={idx}
+                        className={`border-solid border-[1px]  cursor-pointer border-[#a8a8a8] bg-[#fff] min-w-[35px] h-[38px]  active:bg-[#333] active:text-[#fff]-500 rounded-[2px] md:hidden`}
+                        onClick={() => gotoPage(pageNumber - 1)}
+                      >
+                        {pageNumber}
+                      </button>
+                    );
+                  })}
                   <button
-                    className=" border-solid border-[1px]  border-[#a8a8a8] py-0 px-[10px] text-[#333] rounded-r-[5px] h-[38px]  disabled:bg-[#E7E7E7] disabled:text-[#a8a8a8]"
+                    className=" border-solid border-[1px]  border-[#a8a8a8] py-0 px-[10px] text-[#333] rounded-r-[5px] h-[38px]  disabled:bg-[#E7E7E7] disabled:text-[#a8a8a8] dark:disabled:bg-[#485970] dark:text-zinc-100"
                     onClick={() => nextPage()}
                     disabled={!canNextPage}
                   >
                     <AiIcons.AiOutlineRight />
                   </button>
                   <button
-                    className="my-0 mx-[5px] px-[5px] py-0 text-[#333] h-[38px] border-solid border-[1px]  border-[#a8a8a8]  disabled:bg-[#E7E7E7] disabled:text-[#a8a8a8]"
+                    className="my-0 mx-[5px] px-[5px] py-0 text-[#333] h-[38px] border-solid border-[1px]  border-[#a8a8a8]  disabled:bg-[#E7E7E7] disabled:text-[#a8a8a8] dark:disabled:bg-[#485970] dark:text-zinc-100"
                     onClick={() => gotoPage(pageCount - 1)}
                     disabled={!canNextPage}
                   >
                     <AiIcons.AiOutlineDoubleRight />
                   </button>
-                </span>{" "}
-                <span className="flex ml-3 md:justify-center dark:text-ltb text-center md:mt-3 md:ml-0">
-                  Page <strong>{pageIndex + 1} </strong>of{" "}
-                  <strong>{pageOptions.length}</strong>
-                </span>
-              </div>
+                </div>
+              </div>{" "}
+              <span className="flex ml-3 md:justify-center dark:text-ltb text-center md:mt-3 md:ml-0">
+                Page <strong className="mx-1">{pageIndex + 1} </strong>of{" "}
+                <strong className="mx-1">{pageOptions.length}</strong>
+              </span>
             </div>
           </div>
         </div>
