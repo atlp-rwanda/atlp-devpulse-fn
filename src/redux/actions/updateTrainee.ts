@@ -14,7 +14,6 @@ export const getTraineeToUpdate = (Traineid: any) => async (dispatch: any) => {
   try {
     const datas = await axios.post("/", {
       query: `
-<<<<<<< HEAD
       query GetOneTraineeAllDetails($input: one) {
         getOneTraineeAllDetails(input: $input) {
           gender
@@ -37,26 +36,6 @@ export const getTraineeToUpdate = (Traineid: any) => async (dispatch: any) => {
           trainee_id {
             lastName
             firstName
-=======
-        query GetOneTraineeAllDetails($input: one) {
-          getOneTraineeAllDetails(input: $input) {
-            gender
-            birth_date
-            Address
-            phone
-            field_of_study
-            education_level
-            province
-            district
-            sector
-            isEmployed
-            haveLaptop
-            isStudent
-            Hackerrank_score
-            english_score
-            interview_decision
-            past_andela_programs
->>>>>>> 3b957df (Gedeon fiz)
             _id
             email
             cycle_id {
