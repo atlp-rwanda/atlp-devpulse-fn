@@ -531,8 +531,9 @@ const AddTrainee = (props: any) => {
 const mapState = (state: any) => ({
   delettraine: state.deletetraine,
   softdeletettraine: state.softdeletetraine,
-  traines: state.traine,
+  trainees: state.traine,
   cycles: state.cycles,
+  error: state.traine,
 });
 
 export default connect(mapState, {

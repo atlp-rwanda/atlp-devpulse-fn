@@ -129,6 +129,7 @@ const Trash = (props: any) => {
       });
     }
   );
+  console.log("trashdata", page);
   const { pageIndex, pageSize } = state;
 
   const emptyRecycleBin = async () => {
@@ -229,7 +230,7 @@ const Trash = (props: any) => {
                     ))}
                   </thead>
                   <tbody {...getTableBodyProps()}>
-                    {page.map((row: any) => {
+                    {page?.map((row: any) => {
                       prepareRow(row);
                       return (
                         <tr
@@ -343,6 +344,7 @@ const mapState = (state: any) => ({
   allTrainees: state.softDeletedTrainees,
   restore: state.restore,
   clearTrashMessage: state.clearTrash,
+  error: state.softDeletedTrainees,
 });
 
 export default connect(mapState, {
