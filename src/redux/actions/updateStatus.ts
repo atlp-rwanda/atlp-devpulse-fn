@@ -1,6 +1,7 @@
 import creator from "./creator";
 import axios from "./axiosconfig";
 import { UPDATE_TRAINEE_STATUS } from "..";
+import { toast } from "react-toastify";
 
 export const updateTraineeStatus =
   ({ id, status, cycle_id }: any) =>
@@ -30,7 +31,12 @@ export const updateTraineeStatus =
       });
 
       const response = await datas.data.data.updateTraineeApplicant;
-      dispatch(creator(UPDATE_TRAINEE_STATUS, response));
+      if (response !== null) {
+        toast.success("Status updated successfully.");
+        dispatch(creator(UPDATE_TRAINEE_STATUS, response));
+      } else {
+        toast.error("Error while Updating status");
+      }
     } catch (error) {
       if (error) {
         return console.log(error);
