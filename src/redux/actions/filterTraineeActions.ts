@@ -1,16 +1,13 @@
 import creator from "./creator";
+import axios from "./axiosconfig";
 import { GET_ALL_FILTERED_TRAINEES } from "..";
-import axios from "axios";
 
 export const getAllFilteredTraineess =
   ({ page, itemsPerPage, All, wordEntered, filterAttribute }: any) =>
   async (dispatch: any) => {
     try {
-      const datas = await axios({
-        url: process.env.BACKEND_URL,
-        method: "post",
-        data: {
-          query: `
+      const datas = await axios.post("/", {
+        query: `
         query Query($input: filterOptions) {
           filterTraineesDetails(input: $input) {
             trainee_id {
@@ -60,14 +57,13 @@ export const getAllFilteredTraineess =
           }
         }
       `,
-          variables: {
-            input: {
-              page,
-              itemsPerPage,
-              All,
-              wordEntered,
-              filterAttribute,
-            },
+        variables: {
+          input: {
+            page,
+            itemsPerPage,
+            All,
+            wordEntered,
+            filterAttribute,
           },
         },
       });

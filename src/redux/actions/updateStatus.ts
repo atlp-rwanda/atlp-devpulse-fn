@@ -1,10 +1,9 @@
 import creator from "./creator";
-// import axios from "axios";
 import axios from "./axiosconfig";
 import { UPDATE_TRAINEE_STATUS } from "..";
 
 export const updateTraineeStatus =
-  ({ id, status }: any) =>
+  ({ id, status, cycle_id }: any) =>
   async (dispatch: any) => {
     try {
       const datas = await axios.post("/", {
@@ -25,6 +24,7 @@ export const updateTraineeStatus =
           id: id,
           updateInput: {
             status: status,
+            cycle_id: cycle_id,
           },
         },
       });

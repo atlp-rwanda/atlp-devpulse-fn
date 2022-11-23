@@ -101,10 +101,11 @@ const FilterTrainee = (props: any) => {
     return value.trainee_id.delete_at == false;
   });
 
-  const traineeStatusUpdate = (id: any, status: any) => {
+  const traineeStatusUpdate = (id: any, status: any, cycle_id: any) => {
     const input = {
       id,
       status,
+      cycle_id,
     };
     updateTraineeStatus(input);
   };
@@ -236,14 +237,17 @@ const FilterTrainee = (props: any) => {
       Header: "Status",
       accessor: "",
       Cell: ({ row }: any) => {
-        console.log("Row status", row.original.trainee_id.status);
         return (
           <select
             defaultValue={row.original.trainee_id.status}
             id="status"
             className="dark:text-[#dbdee6] border bg-row-gray dark:bg-[#293647] border-solid border-bdr dark:border-cg dark:border-opacity-5 shadow-sm px-4 py-4px rounded-bt-rd focus:outline-none sm:text-sm"
             onChange={(e) => {
-              traineeStatusUpdate(row.original.trainee_id._id, e.target.value);
+              traineeStatusUpdate(
+                row.original.trainee_id._id,
+                e.target.value,
+                row.original.trainee_id.cycle_id.id
+              );
             }}
           >
             <option value="">Not Assigned</option>
