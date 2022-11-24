@@ -24,7 +24,7 @@ const Threedots = (props: any) => {
   };
   const navigate = useNavigate();
   const handleOpenDetails = () => {
-    navigate("/trainee-details");
+    navigate("/trainee-applicant-details");
   };
 
   const scorePageId = props.min;
@@ -54,14 +54,14 @@ const Threedots = (props: any) => {
             }}
           >
             <a
-              href={`/filter_trainee/${scorePageId}`}
+              href={`/filter_trainee-applicants/${scorePageId}`}
               className="text-button-color hover:bg-bdr text-sm"
             >
               <MenuItem>Rate</MenuItem>
             </a>
             <a href="#" ><MenuItem>Email</MenuItem></a>
             {traineeList.trainee_id && <>
-              <Link to={`/trainee-Details/${traineeList.trainee_id._id}`}>
+              <Link to={`/trainee-applicant-details/${traineeList.trainee_id._id}`}>
                 <a href="#" className="text-button-color hover:bg-bdr text-sm" ><MenuItem>View</MenuItem></a>
 
               </Link></>}

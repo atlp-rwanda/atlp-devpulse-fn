@@ -6,6 +6,7 @@ import {
   UPDATE_SCORE_VALUE_ERROR,
   DELETE_SCORE_VALUE,
   DELETE_SCORE_VALUE_ERROR,
+  UPDATE_MANY_SCORE_VALUES,
 } from "..";
 
 const initialState = {
@@ -51,6 +52,22 @@ export default (state = initialState, { type, payload }: any) => {
         ...state,
         isLoading: false,
         data: [...state.data],
+      };
+
+    case UPDATE_MANY_SCORE_VALUES:
+      return {
+        ...state,
+        isLoading: false,
+        data: state.data.map((data: any, idx) => {
+          const nn = payload.filter((values: any) => {
+            return values.id == data.id;
+          });
+          const newData = {
+            ...data,
+            ...nn[0],
+          };
+          return newData;
+        }),
       };
 
     case UPDATE_SCORE_VALUE_ERROR:

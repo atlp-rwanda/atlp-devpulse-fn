@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { HiDotsVertical } from "react-icons/hi";
 import * as icons from "react-icons/ai";
 import { AiOutlinePlus } from "react-icons/ai";
-import {BrowserRouter as Router, Link, useNavigate} from 'react-router-dom';
+import { BrowserRouter as Router, Link, useNavigate } from "react-router-dom";
 import pagination from "../../components/pagination";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -18,10 +18,13 @@ import {
 } from "../../redux/actions/deletetraine";
 import { useAppDispatch } from "../../hooks/hooks";
 import { getAllCycles } from "../../redux/actions/cyclesActions";
+import Select from "react-select";
+import { customTheme, darkTheme } from "../FilterTeainee/FilterTrainee";
+import { useTheme } from "../../hooks/darkmode";
 
 const AddTrainee = (props: any) => {
   const [addNewTraineeModel, setAddNewTraineeModel] = useState(false);
-const Open=() =>{
+  const Open = () => {
     setAddNewTraineeModel(true);
   }
   const removeModel = () => {
@@ -37,8 +40,10 @@ const Open=() =>{
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [page, setPage] = useState(0);
-  const [itemsPerPage, setiIemsPerPage] = useState(0);
+  const [itemsPerPage, setiIemsPerPage] = useState(10);
   const [All, setAll] = useState(true);
+  const { theme, setTheme } = useTheme();
+
   const input = {
     page: page,
     itemsPerPage: itemsPerPage,
@@ -49,11 +54,9 @@ const Open=() =>{
     props.getAllCycles();
   }, []);
   
-  // const trainees = alltrainees.data;
-  //  console.log("llllllllllllll",trainees)
+
 
   const cycle=cycles.data;
-
 
   const traine = traines.message;
   useEffect(() => {
@@ -72,6 +75,9 @@ const Open=() =>{
     await dispatch(softdeletetraine(userId));
     setmoredrop("");
   };
+  const setFilterAttribute = async (id)=>{
+    setiIemsPerPage(parseInt(id))
+  }
 
   console.log(props);
 
@@ -86,7 +92,7 @@ const Open=() =>{
     setPaging,
     totalPages,
   } = pagination({
-    contentPerPage: 10,
+    contentPerPage: itemsPerPage,
     count: traine?.length,
   });
 
@@ -129,6 +135,7 @@ const createNewTrainee = () => {
 };
 
 
+  console.log("Here",paging,totalPages)
 
   return (
     <>
@@ -235,12 +242,12 @@ const createNewTrainee = () => {
                       className="flex bg-primary dark:bg-[#56C870] rounded-md py-2 px-4 text-white font-medium cursor-pointer"
                     >
                       <icons.AiOutlinePlus className="mt-1 mr-1 font-bold" />{" "}
-                      Trainee
+                      Trainee-applicant
                     </button>
                     <div></div>
                   </div>
 
-                  <Link to="/filter_trainee">
+                  <Link to="/filter_trainee-applicants">
                     <button className="flex bg-primary dark:bg-[#56C870] rounded-md py-2 mt-2 px-4 text-white font-medium cursor-pointer">
                       <icons.AiOutlineSearch className="mt-1 mr-1 font-bold" />{" "}
                       Search
@@ -280,7 +287,7 @@ const createNewTrainee = () => {
                               </tr>
                             </thead>
                             <tbody className="overflow-y-auto">
-                            {props.traines.message !== null
+                              {props.traines.message !== null
                                 ? props.traines.message
                                     .slice(firstContentIndex, lastContentIndex)
                                     .reverse()
@@ -308,25 +315,27 @@ const createNewTrainee = () => {
                                         </div>
                                       </td>
 
-                                      <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
-                                        <div className="flex items-center">
-                                          <div className="">
-                                            <p className="text-gray-900 items-center dark:text-white whitespace-no-wrap">
-                                              {item.email}
-                                            </p>
-                                          </div>
-                                        </div>
-                                      </td>
+                                          <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
+                                            <div className="flex items-center">
+                                              <div className="">
+                                                <p className="text-gray-900 items-center dark:text-white whitespace-no-wrap">
+                                                  {item.email}
+                                                </p>
+                                              </div>
+                                            </div>
+                                          </td>
 
-                                      <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
-                                        <div className="flex items-center">
-                                          <div className="">
-                                            <p className="text-gray-900 items-center dark:text-white whitespace-no-wrap">
-                                              {item.cycle_id?item.cycle_id.name:'-'}
-                                            </p>
-                                          </div>
-                                        </div>
-                                      </td>
+                                          <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
+                                            <div className="flex items-center">
+                                              <div className="">
+                                                <p className="text-gray-900 items-center dark:text-white whitespace-no-wrap">
+                                                  {item.cycle_id
+                                                    ? item.cycle_id.name
+                                                    : "-"}
+                                                </p>
+                                              </div>
+                                            </div>
+                                          </td>
 
                                       <td>
                                         <div>
@@ -350,14 +359,14 @@ const createNewTrainee = () => {
                                               aria-labelledby="dropdown"
                                             >
                                               <li>
-                                                <Link to={`/trainees/${item._id}/edit`}
+                                                <Link to={`/trainee-applicant/${item._id}/edit`}
                                                 className="text-sm hover:bg-gray-100 text-gray-700 dark:hover:bg-gray-500 dark:text-white  block px-4 py-2"
                                                 >
                                                   Edit 
                                                 </Link>
                                               </li>
                                               <li>
-                                                <Link to={`/trainee-details/${item._id}`}
+                                                <Link to={`/trainee-applicant-details/${item._id}`}
                                                 className="text-sm hover:bg-gray-100 text-gray-700  dark:text-white   dark:hover:bg-gray-500 block px-4 py-2"
                                                 >
                                                   View
@@ -371,33 +380,55 @@ const createNewTrainee = () => {
                                                     onSubmitHandlesoft(item._id);
                                                   }}
                                                 >
-                                                  Soft Delete
-                                                </div>
-                                              </li>
-                                              <li>
-                                                <div
-                                                  className="text-sm hover:bg-gray-100 text-gray-700   dark:hover:bg-gray-500 dark:text-white  block px-4 py-2"
-                                                  onClick={(e: any) => {
-                                                    e.preventDefault();
-                                                    onSubmitHandle(item._id);
-                                                  }}
-                                                >
-                                                  Hard Delete
-                                                </div>
-                                              </li>
-                                            </ul>
-                                          </div>
-                                        </div>
-                                        {/* </div> */}
-                                      </td>
-                                    </tr>
-                                  ) :null
-                                ):null}
+                                           
+       
+                                                      Soft Delete
+                                                    </div>
+                                                  </li>
+                                                  <li>
+                                                    <div
+                                                      className="text-sm hover:bg-gray-100 text-gray-700   dark:hover:bg-gray-500 dark:text-white  block px-4 py-2"
+                                                      onClick={(e: any) => {
+                                                        e.preventDefault();
+                                                        onSubmitHandle(
+                                                          item._id
+                                                        );
+                                                      }}
+                                                    >
+                                                      Hard Delete
+                                                    </div>
+                                                  </li>
+                                                </ul>
+                                              </div>
+                                            </div>
+                                            {/* </div> */}
+                                          </td>
+                                        </tr>
+                                      ) : null
+                                    )
+                                : null}
                             </tbody>
                           </table>
                         </div>
                       </div>
                     </div>
+                    <div  className=" absolute flex">
+                      <label htmlFor="">rows per page</label>
+                         <Select
+                         menuPlacement="auto"
+                        className="sm:text-sm  w-13 rounded-bt-rd absolute dark:text-ltb active;"
+                        options={[
+                          { value: '10', label: "10" },
+                          { value: '50', label: "50" },
+                          { value: '100', label: "100" },
+                          { value: '500', label: "500" },
+                          { value: '1000', label: "1000" },
+                        ]}
+                        defaultValue={{ value: "", label: "10" }}
+                        onChange={(e) => setFilterAttribute(`${e?.value}`)}
+                       theme={theme ? customTheme : darkTheme}
+                   />
+                   </div>
                   </div>
                   {/* //pagination */}
                   <div className="flex relative items-center justify-center gap-1  mb-10 lg:left-[100px]">
@@ -415,7 +446,7 @@ const createNewTrainee = () => {
                       onClick={() => setPaging(1)}
                       data-testid="page1"
                       className={`page py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white ${
-                        page === 1 && "disabled"
+                        paging===1?'bg-gray-800 dark:bg-white':''
                       }`}
                     >
                       1
@@ -427,21 +458,23 @@ const createNewTrainee = () => {
                         key={el}
                         className={`page py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white ${
                           page === el ? "active" : ""
-                        }`}
+                          
+                        }${paging===el?'bg-gray-800 dark:bg-white':''}`}
                       >
                         {el}
                       </button>
                     ))}
-                    {totalPages?
-                    <button
-                      onClick={() => setPaging(totalPages)}
-                      data-testid="page3"
-                      className={`page py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white ${
-                        page === totalPages && "disabled"
-                      }`}
-                    >
-                      {totalPages}
-                    </button>:null}
+                    {totalPages ? (
+                      <button
+                        onClick={() => setPaging(totalPages)}
+                        data-testid="page3"
+                        className={`page py-2 px-3 leading-tight text-gray-500 ${paging===totalPages?'bg-gray-800 dark:bg-white':'bg-white'} border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white ${
+                          paging===totalPages?'bg-gray-800':''
+                        }${paging===totalPages?'bg-gray-800':''}`}
+                      >
+                        {totalPages}
+                      </button>
+                    ) : null}
                     <button
                       onClick={nextPage}
                       data-testid="next"

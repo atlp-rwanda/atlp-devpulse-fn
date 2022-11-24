@@ -228,7 +228,7 @@ const ApplicationCycle = (props: any) => {
                     ))}
                   </thead>
                   <tbody {...getTableBodyProps()}>
-                    {page.map((row: any) => {
+                    {page.reverse().map((row: any) => {
                       prepareRow(row);
                       return (
                         <tr

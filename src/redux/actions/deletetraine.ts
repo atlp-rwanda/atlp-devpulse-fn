@@ -139,16 +139,16 @@ export const fetchtraine = ({ page,itemsPerPage,  All }:any) => {
                     }
                                 )
             .then((res)=> {
-                if (res.data.data){toast.success("traines fetched successfully") ;dispatch({type: fetchtrainesss.fetchtraines_success,data:res.data.data.allTrainees})};
+                if (res.data.data)
+                {toast.success("traine-applicants fetched successfully") ;
+                dispatch({type: fetchtrainesss.fetchtraines_success,data:res.data.data.allTrainees})};
                 if (res.data.errors) {
                      var mess
                 res.data.errors.map((b:any)=>{ mess =b.message})
-                toast.error(mess)
                 dispatch({type: fetchtrainesss.fetchtraines_fail,error:mess});
                 }
             })
             .catch(err=> {
-                  toast.error(err.message)
                   dispatch({type: fetchtrainesss.fetchtraines_fail,error:err})})
         } catch(err:any) {toast.error(err.message);dispatch({type: fetchtrainesss.fetchtraines_fail,error:err})}
     }

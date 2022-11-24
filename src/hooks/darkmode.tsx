@@ -1,4 +1,4 @@
-import { createContext, ReactElement, useContext, useEffect, useState, SetStateAction } from "react";
+import React, { createContext, ReactElement, useContext, useEffect, useState, SetStateAction } from "react";
 
 interface ThemeContextProps {
   children: ReactElement;
@@ -14,9 +14,7 @@ const ThemeContext = createContext({} as ThemeContextData )
 // result.matches==true?localStorage.theme === 'dark':localStorage.theme === 'light'
 export function ThemeContextProvider({ children }: ThemeContextProps) {
  const result = window.matchMedia('(prefers-color-scheme: dark)');
-  console.log(result.matches);
   const [theme, setTheme] = useState(() => localStorage.theme === 'light')
-  console.log(theme,"iiiiiii")
   useEffect(() => {
     const rootElement = window.document.documentElement
     const currentTheme = theme
