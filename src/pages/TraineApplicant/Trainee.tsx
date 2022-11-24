@@ -7,7 +7,6 @@ import { BrowserRouter as Router, Link, useNavigate } from "react-router-dom";
 import pagination from "../../components/pagination";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { getAllTraineess, createTrainee } from "../../redux/actions/TraineeAction";
 import { connect, useSelector } from "react-redux";
 import NavBar from "../../components/sidebar/navHeader";
 import {
@@ -50,7 +49,6 @@ const AddTrainee = (props: any) => {
     All: All,
   };
   useEffect(() => {
-    props.getAllTraineess(input);
     props.getAllCycles();
   }, []);
   
@@ -501,7 +499,6 @@ const createNewTrainee = () => {
 // export default AddTrainee;
 
 const mapState = (state: any) => ({
-  alltrainees: state.trainee,
   delettraine: state.deletetraine,
   softdeletettraine: state.softdeletetraine,
   traines: state.traine,
@@ -509,7 +506,6 @@ const mapState = (state: any) => ({
 });
 
 export default connect(mapState, {
-  getAllTraineess,
   deletetraine,
   softdeletetraine,
   fetchtraine,
