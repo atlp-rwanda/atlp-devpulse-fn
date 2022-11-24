@@ -13,19 +13,24 @@ import {
   softdeletetraine,
   deletetraine,
   fetchtraine,
-  createtraine
+  createtraine,
 } from "../../redux/actions/deletetraine";
 import { useAppDispatch } from "../../hooks/hooks";
 import { getAllCycles } from "../../redux/actions/cyclesActions";
 import Select from "react-select";
 import { customTheme, darkTheme } from "../FilterTeainee/FilterTrainee";
 import { useTheme } from "../../hooks/darkmode";
+import {
+  DOTS,
+  useCustomPagination,
+} from "../../components/Pagination/useCustomPagination";
+import * as AiIcons from "react-icons/ai";
 
 const AddTrainee = (props: any) => {
   const [addNewTraineeModel, setAddNewTraineeModel] = useState(false);
   const Open = () => {
     setAddNewTraineeModel(true);
-  }
+  };
   const removeModel = () => {
     let newState = !addNewTraineeModel;
     setAddNewTraineeModel(newState);
@@ -35,31 +40,30 @@ const AddTrainee = (props: any) => {
   const [email, setEmail] = useState("");
   const [cycle_id, setCycleId] = useState("");
   // LIST ALL TRAINEE
-  const { alltrainees, delettraine, softdeletettraine, traines,cycles } = props;
+  const { alltrainees, delettraine, softdeletettraine, traines, cycles } =
+    props;
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [page, setPage] = useState(0);
-  const [itemsPerPage, setiIemsPerPage] = useState(10);
-  const [All, setAll] = useState(true);
+  const [itemsPerPage, setItemsPerPage] = useState<number>(10);
+  const [All, setAll] = useState(false);
   const { theme, setTheme } = useTheme();
 
   const input = {
-    page: page,
+    page: page + 1,
     itemsPerPage: itemsPerPage,
     All: All,
   };
   useEffect(() => {
     props.getAllCycles();
   }, []);
-  
 
-
-  const cycle=cycles.data;
+  const cycle = cycles.data;
 
   const traine = traines.message;
   useEffect(() => {
     dispatch(fetchtraine(input));
-  }, [delettraine, softdeletettraine]);
+  }, [delettraine, softdeletettraine, page, itemsPerPage, itemsPerPage]);
   const [moredrop, setmoredrop] = useState("");
   const onSubmitHandler = (userid: any) => {
     if (!moredrop) setmoredrop(userid);
@@ -73,67 +77,51 @@ const AddTrainee = (props: any) => {
     await dispatch(softdeletetraine(userId));
     setmoredrop("");
   };
-  const setFilterAttribute = async (id)=>{
-    setiIemsPerPage(parseInt(id))
-  }
-
-  console.log(props);
-
-  //pagination
-  const {
-    firstContentIndex,
-    lastContentIndex,
-    nextPage,
-    prevPage,
-    paging,
-    gaps,
-    setPaging,
-    totalPages,
-  } = pagination({
-    contentPerPage: itemsPerPage,
-    count: traine?.length,
-  });
-
-// console.log("Here",props.traines)
-const validation = () => {
-  if (firstName === "") {
-    toast.error("Enter your firstname");
-    return;
-  }
-  if (lastName === "") {
-    toast.error("Enter your Lastname");
-    return;
-  }
-  if (email === "") {
-    toast.error("Enter your Email");
-    return;
-  }
-  if (cycle_id === "") {
-    toast.error("select a cycle");
-    return;
-  } else {
-    createNewTrainee();
-  }
-};
-const createNewTrainee = () => {
-  
-  const data = {
-    firstName: firstName,
-    lastName: lastName,
-    email: email,
-    cycle_id: cycle_id,
+  const validation = () => {
+    if (firstName === "") {
+      toast.error("Enter your firstname");
+      return;
+    }
+    if (lastName === "") {
+      toast.error("Enter your Lastname");
+      return;
+    }
+    if (email === "") {
+      toast.error("Enter your Email");
+      return;
+    }
+    if (cycle_id === "") {
+      toast.error("select a cycle");
+      return;
+    } else {
+      createNewTrainee();
+    }
   };
-  if (props.createtraine(data)) {
-    setFirstname("");
-    setLastname("");
-    setEmail("");
-    setAddNewTraineeModel(false);
+  const createNewTrainee = () => {
+    const data = {
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+      cycle_id: cycle_id,
+    };
+    if (props.createtraine(data)) {
+      setFirstname("");
+      setLastname("");
+      setEmail("");
+      setAddNewTraineeModel(false);
+    }
+  };
 
-  }
-};
+  console.log(
+    "Here",
+    Math.ceil(traines?.pagination.totalItems / itemsPerPage),
+    page
+  );
 
-
-  console.log("Here",paging,totalPages)
+  const paginationRange = useCustomPagination({
+    totalPageCount: Math.ceil(traines?.pagination.totalItems / itemsPerPage),
+    currentPage: page,
+  });
 
   return (
     <>
@@ -146,86 +134,90 @@ const createNewTrainee = () => {
       >
         {/* <Modal cycles={props.cycles.data} /> */}
         <div className="bg-white dark:bg-dark-bg w-full sm:w-[50%] xl:w-4/12 rounded-lg p-4 pb-8">
-        <div className="card-title w-full flex  flex-wrap justify-center items-center  ">
-          <h3 className="font-bold text-sm dark:text-white text-center w-11/12 ">
-            <icons.AiOutlineClose
-              className="float-right text-3xl cursor-pointer"
-              onClick={() => removeModel()}
-            />
+          <div className="card-title w-full flex  flex-wrap justify-center items-center  ">
+            <h3 className="font-bold text-sm dark:text-white text-center w-11/12 ">
+              <icons.AiOutlineClose
+                className="float-right text-3xl cursor-pointer"
+                onClick={() => removeModel()}
+              />
 
-            {"New Trainee"}
-          </h3>
-          <hr className=" bg-primary border-b my-3 w-full" />
+              {"New Trainee"}
+            </h3>
+            <hr className=" bg-primary border-b my-3 w-full" />
+          </div>
+          <div className="card-body">
+            <section className=" py-3 px-8">
+              <div className="input my-3 h-9 ">
+                <div className="grouped-input flex items-center h-full w-full rounded-md">
+                  <input
+                    type="text"
+                    name="gpa"
+                    className=" dark:bg-dark-tertiary border border-primary rounded outline-none px-5 font-sans text-xs py-2 w-full pt-4"
+                    placeholder={"FirstName"}
+                    value={firstName}
+                    onChange={(e) => {
+                      setFirstname(e.target.value);
+                    }}
+                  />
+                </div>
+              </div>
+              <div className="input my-3 h-9 ">
+                <div className="grouped-input flex items-center h-full w-full rounded-md">
+                  <input
+                    type="text"
+                    name="definition"
+                    className=" dark:bg-dark-tertiary border border-primary py-2 rounded outline-none px-5 font-sans text-xs w-full pt-4"
+                    placeholder={"LastName"}
+                    value={lastName}
+                    onChange={(e) => {
+                      setLastname(e.target.value);
+                    }}
+                  />
+                </div>
+              </div>
+              <div className="input my-3 h-9 ">
+                <div className="grouped-input flex items-center h-full w-full rounded-md">
+                  <input
+                    type="text"
+                    name="grade"
+                    className=" dark:bg-dark-tertiary border border-primary py-2 rounded outline-none px-5 font-sans text-xs w-full pt-4"
+                    placeholder={"Email"}
+                    value={email}
+                    onChange={(e) => {
+                      setEmail(e.target.value);
+                    }}
+                  />
+                </div>
+              </div>
+              <div className="input my-3 h-9 ">
+                <div className="grouped-input flex items-center h-full w-full rounded-md">
+                  <select
+                    name="cycle"
+                    id="cycle"
+                    value={cycle_id}
+                    className=" dark:bg-dark-tertiary border dark:text-white border-primary py-2 rounded outline-none px-5 font-sans text-xs w-full pt-4"
+                    onChange={(e) => setCycleId(e.target.value)}
+                  >
+                    <option className="dark:text-white " value="">
+                      --Please choose a cycle--
+                    </option>
+                    {cycle?.map((cycle: any) => (
+                      <option className="dark:text-white " value={cycle.id}>
+                        {cycle.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+              <button
+                className="flex bg-primary dark:bg-[#56C870] rounded-md py-2 px-4 text-white font-medium cursor-pointer m-auto"
+                onClick={validation}
+              >
+                save
+              </button>
+            </section>
+          </div>
         </div>
-        <div className="card-body">
-          <section className=" py-3 px-8">
-            <div className="input my-3 h-9 ">
-              <div className="grouped-input flex items-center h-full w-full rounded-md">
-                <input
-                  type="text"
-                  name="gpa"
-                  className=" dark:bg-dark-tertiary border border-primary rounded outline-none px-5 font-sans text-xs py-2 w-full pt-4"
-                  placeholder={"FirstName"}
-                  value={firstName}
-                  onChange={(e) => {
-                    setFirstname(e.target.value);
-                  }}
-                />
-              </div>
-            </div>
-            <div className="input my-3 h-9 ">
-              <div className="grouped-input flex items-center h-full w-full rounded-md">
-                <input
-                  type="text"
-                  name="definition"
-                  className=" dark:bg-dark-tertiary border border-primary py-2 rounded outline-none px-5 font-sans text-xs w-full pt-4"
-                  placeholder={"LastName"}
-                  value={lastName}
-                  onChange={(e) => {
-                    setLastname(e.target.value);
-                  }}
-                />
-              </div>
-            </div>
-            <div className="input my-3 h-9 ">
-              <div className="grouped-input flex items-center h-full w-full rounded-md">
-                <input
-                  type="text"
-                  name="grade"
-                  className=" dark:bg-dark-tertiary border border-primary py-2 rounded outline-none px-5 font-sans text-xs w-full pt-4"
-                  placeholder={"Email"}
-                  value={email}
-                  onChange={(e) => {
-                    setEmail(e.target.value);
-                  }}
-                />
-              </div>
-            </div>
-            <div className="input my-3 h-9 ">
-              <div className="grouped-input flex items-center h-full w-full rounded-md">
-                <select
-                  name="cycle"
-                  id="cycle"
-                  value={cycle_id}
-                  className=" dark:bg-dark-tertiary border dark:text-white border-primary py-2 rounded outline-none px-5 font-sans text-xs w-full pt-4"
-                  onChange={(e) => setCycleId(e.target.value)}
-                >
-                  <option className="dark:text-white " value="">--Please choose a cycle--</option>
-                  {cycle?.map((cycle: any) => (
-                    <option className="dark:text-white " value={cycle.id}>{cycle.name}</option>
-                  ))}
-                </select>
-              </div>
-            </div>
-            <button
-              className="flex bg-primary dark:bg-[#56C870] rounded-md py-2 px-4 text-white font-medium cursor-pointer m-auto"
-              onClick={validation}
-            >
-              save
-            </button>
-          </section>
-        </div>
-      </div>
       </div>
       {/* =========================== End:: addnewtraineeModel =============================== */}
       <div className="flex flex-col  h-screen absolute w-[100%]">
@@ -285,205 +277,243 @@ const createNewTrainee = () => {
                               </tr>
                             </thead>
                             <tbody className="overflow-y-auto">
-                              {props.traines.message !== null
-                                ? props.traines.message
-                                    .slice(firstContentIndex, lastContentIndex)
-                                    .reverse()
-                                    .map((item: any) =>
-                                  item.delete_at == false ? (
-                                    <tr>
-                                      <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
-                                        <div className="flex">
-                                          <div className="">
-                                            
-                                            <p className="text-gray-900 text-center dark:text-white whitespace-no-wrap">
-                                              {item.firstName}
-                                              
-                                            </p>
-                                          </div>
-                                        </div>
-                                      </td>
-                                      <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
-                                        <div className="flex items-center">
-                                          <div className="">
-                                            <p className="text-gray-900 text-center dark:text-white whitespace-no-wrap">
-                                              {item.lastName}
-                                            </p>
-                                          </div>
-                                        </div>
-                                      </td>
-
-                                          <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
-                                            <div className="flex items-center">
-                                              <div className="">
-                                                <p className="text-gray-900 items-center dark:text-white whitespace-no-wrap">
-                                                  {item.email}
-                                                </p>
-                                              </div>
+                              {traines.message !== null
+                                ? traines.message.map((item: any) =>
+                                    item ? (
+                                      <tr>
+                                        <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
+                                          <div className="flex">
+                                            <div className="">
+                                              <p className="text-gray-900 text-center dark:text-white whitespace-no-wrap">
+                                                {item.firstName}
+                                              </p>
                                             </div>
-                                          </td>
-
-                                          <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
-                                            <div className="flex items-center">
-                                              <div className="">
-                                                <p className="text-gray-900 items-center dark:text-white whitespace-no-wrap">
-                                                  {item.cycle_id
-                                                    ? item.cycle_id.name
-                                                    : "-"}
-                                                </p>
-                                              </div>
+                                          </div>
+                                        </td>
+                                        <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
+                                          <div className="flex items-center">
+                                            <div className="">
+                                              <p className="text-gray-900 text-center dark:text-white whitespace-no-wrap">
+                                                {item.lastName}
+                                              </p>
                                             </div>
-                                          </td>
+                                          </div>
+                                        </td>
 
-                                      <td>
-                                        <div className="relative">
-                                          <HiDotsVertical
-                                            className=" text-black dark:text-white text-3xl ml-6 font-size-6 cursor-pointer"
-                                            onClick={(e: any) => {
-                                              e.preventDefault();
-                                              onSubmitHandler(item._id);
-                                            }}
-                                          />
-                                          <div
-                                            className={`${
-                                              moredrop === item._id
-                                                ? "block"
-                                                : "hidden"
-                                            } absolute z-20  bg-white dark:bg-dark-tertiary  dark:text-white text-base z-50 list-none divide-y divide-gray-100 rounded shadow my-4`}
-                                            id="dropdown"
-                                          >
-                                            <ul
-                                              className="py-1"
-                                              aria-labelledby="dropdown"
+                                        <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
+                                          <div className="flex items-center">
+                                            <div className="">
+                                              <p className="text-gray-900 items-center dark:text-white whitespace-no-wrap">
+                                                {item.email}
+                                              </p>
+                                            </div>
+                                          </div>
+                                        </td>
+
+                                        <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
+                                          <div className="flex items-center">
+                                            <div className="">
+                                              <p className="text-gray-900 items-center dark:text-white whitespace-no-wrap">
+                                                {item.cycle_id
+                                                  ? item.cycle_id.name
+                                                  : "-"}
+                                              </p>
+                                            </div>
+                                          </div>
+                                        </td>
+
+                                        <td>
+                                          <div>
+                                            <HiDotsVertical
+                                              className=" text-black dark:text-white text-3xl ml-6 font-size-6 cursor-pointer"
+                                              onClick={(e: any) => {
+                                                e.preventDefault();
+                                                onSubmitHandler(item._id);
+                                              }}
+                                            />
+                                            <div
+                                              className={`${
+                                                moredrop === item._id
+                                                  ? "block"
+                                                  : "hidden"
+                                              } absolute  bg-white dark:bg-dark-tertiary  dark:text-white text-base z-50 list-none divide-y divide-gray-100 rounded shadow my-4`}
+                                              id="dropdown"
                                             >
-                                              <li>
-                                                <Link to={`/trainee-applicant/${item._id}/edit`}
-                                                className="text-sm hover:bg-gray-100 text-gray-700 dark:hover:bg-gray-500 dark:text-white  block px-4 py-2"
-                                                >
-                                                  Edit 
-                                                </Link>
-                                              </li>
-                                              <li>
-                                                <Link to={`/trainee-applicant-details/${item._id}`}
-                                                className="text-sm hover:bg-gray-100 text-gray-700  dark:text-white   dark:hover:bg-gray-500 block px-4 py-2"
-                                                >
-                                                  View
-                                                </Link>
-                                              </li>
-                                              <li>
-                                                <div
-                                                  className="text-sm hover:bg-gray-100 text-gray-700  dark:hover:bg-gray-500 dark:text-white  block px-4 py-2"
-                                                  onClick={(e: any) => {
-                                                    e.preventDefault();
-                                                    onSubmitHandlesoft(item._id);
-                                                  }}
-                                                >
-                                           
-       
-                                                      Soft Delete
-                                                    </div>
-                                                  </li>
-                                                  <li>
-                                                    <div
-                                                      className="text-sm hover:bg-gray-100 text-gray-700   dark:hover:bg-gray-500 dark:text-white  block px-4 py-2"
-                                                      onClick={(e: any) => {
-                                                        e.preventDefault();
-                                                        onSubmitHandle(
-                                                          item._id
-                                                        );
-                                                      }}
-                                                    >
-                                                      Hard Delete
-                                                    </div>
-                                                  </li>
-                                                </ul>
-                                              </div>
+                                              <ul
+                                                className="py-1"
+                                                aria-labelledby="dropdown"
+                                              >
+                                                <li>
+                                                  <Link
+                                                    to={`/trainee-applicant/${item._id}/edit`}
+                                                    className="text-sm hover:bg-gray-100 text-gray-700 dark:hover:bg-gray-500 dark:text-white  block px-4 py-2"
+                                                  >
+                                                    Edit
+                                                  </Link>
+                                                </li>
+                                                <li>
+                                                  <Link
+                                                    to={`/trainee-applicant-details/${item._id}`}
+                                                    className="text-sm hover:bg-gray-100 text-gray-700  dark:text-white   dark:hover:bg-gray-500 block px-4 py-2"
+                                                  >
+                                                    View
+                                                  </Link>
+                                                </li>
+                                                <li>
+                                                  <div
+                                                    className="text-sm hover:bg-gray-100 text-gray-700  dark:hover:bg-gray-500 dark:text-white  block px-4 py-2"
+                                                    onClick={(e: any) => {
+                                                      e.preventDefault();
+                                                      onSubmitHandlesoft(
+                                                        item._id
+                                                      );
+                                                    }}
+                                                  >
+                                                    Soft Delete
+                                                  </div>
+                                                </li>
+                                                <li>
+                                                  <div
+                                                    className="text-sm hover:bg-gray-100 text-gray-700   dark:hover:bg-gray-500 dark:text-white  block px-4 py-2"
+                                                    onClick={(e: any) => {
+                                                      e.preventDefault();
+                                                      onSubmitHandle(item._id);
+                                                    }}
+                                                  >
+                                                    Hard Delete
+                                                  </div>
+                                                </li>
+                                              </ul>
                                             </div>
-                                            {/* </div> */}
-                                          </td>
-                                        </tr>
-                                      ) : null
-                                    )
+                                          </div>
+                                          {/* </div> */}
+                                        </td>
+                                      </tr>
+                                    ) : null
+                                  )
                                 : null}
                             </tbody>
                           </table>
                         </div>
                       </div>
                     </div>
-                    <div  className=" absolute flex">
-                      <label htmlFor="">rows per page</label>
-                         <Select
-                         menuPlacement="auto"
-                        className="sm:text-sm  w-13 rounded-bt-rd absolute dark:text-ltb active;"
-                        options={[
-                          { value: '10', label: "10" },
-                          { value: '50', label: "50" },
-                          { value: '100', label: "100" },
-                          { value: '500', label: "500" },
-                          { value: '1000', label: "1000" },
-                        ]}
-                        defaultValue={{ value: "", label: "10" }}
-                        onChange={(e) => setFilterAttribute(`${e?.value}`)}
-                       theme={theme ? customTheme : darkTheme}
-                   />
-                   </div>
+                    <div className="py-3 flex items-center text-center justify-center pt-10">
+                      <div className="pb-1">
+                        <label htmlFor="" className="dark:text-zinc-100">
+                          rows per page
+                        </label>
+                        <Select
+                          menuPlacement="top"
+                          className="sm:text-sm  w-13 rounded-bt-rd absolute active dark:bg-dark-frame-bg"
+                          options={[
+                            { value: "10", label: "10" },
+                            { value: "50", label: "50" },
+                            { value: "100", label: "100" },
+                            { value: "500", label: "500" },
+                            { value: "1000", label: "1000" },
+                          ]}
+                          defaultValue={{ value: "", label: "10" }}
+                          onChange={(e: any) =>
+                            setItemsPerPage(Number(e?.value))
+                          }
+                        />
+                      </div>
+                      <div
+                        className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between"
+                        aria-label="Pagination"
+                      >
+                        <div
+                          className="relative z-0 inline-flex items-center ml-auto mr-auto  rounded-[2px] shadow-sm space-x-2"
+                          aria-label="Pagination"
+                        >
+                          <button
+                            className="my-0 mx-[5px] px-[5px] py-0 text-[#333] h-[38px] border-solid border-[1px]  border-[#a8a8a8] dark:disabled:bg-[#485970]  disabled:bg-[#E7E7E7] disabled:text-[#a8a8a8] dark:text-zinc-100"
+                            onClick={() => setPage(0)}
+                            disabled={page <= 0}
+                          >
+                            <AiIcons.AiOutlineDoubleLeft />
+                          </button>
+                          <button
+                            className=" border-solid border-[1px]  border-[#a8a8a8] py-0 px-[10px] text-[#333] rounded-l-[5px] h-[38px] disabled:bg-[#E7E7E7] disabled:text-[#a8a8a8] dark:text-zinc-100 dark:disabled:bg-[#485970]"
+                            onClick={() => setPage(page - 1)}
+                            disabled={page <= 0}
+                          >
+                            <AiIcons.AiOutlineLeft />
+                          </button>
+                          {paginationRange?.map((pageNumber, idx) => {
+                            if (pageNumber === DOTS) {
+                              return (
+                                <div
+                                  key={idx}
+                                  className="dark:text-zinc-100 md:hidden"
+                                >
+                                  ...
+                                </div>
+                              );
+                            }
+
+                            if (pageNumber - 1 === page) {
+                              return (
+                                <button
+                                  key={idx}
+                                  className={`border-solid border-[1px] cursor-pointer border-[#a8a8a8] bg-[#fff] min-w-[35px] h-[38px]  active:bg-[#333] active:text-[#fff]-500 rounded-[2px] md:hidden
+                        ${page && "bg-[#d6dfdf] text-black"} 
+                        ${page === 0 && "bg-[#d6dfdf] text-black"} 
+                          `}
+                                  onClick={() => setPage(pageNumber - 1)}
+                                >
+                                  {pageNumber}
+                                </button>
+                              );
+                            }
+
+                            return (
+                              <button
+                                key={idx}
+                                className={`border-solid border-[1px]  cursor-pointer border-[#a8a8a8] bg-[#fff] min-w-[35px] h-[38px]  active:bg-[#333] active:text-[#fff]-500 rounded-[2px] md:hidden`}
+                                onClick={() => setPage(pageNumber - 1)}
+                              >
+                                {pageNumber}
+                              </button>
+                            );
+                          })}
+                          <button
+                            className=" border-solid border-[1px]  border-[#a8a8a8] py-0 px-[10px] text-[#333] rounded-r-[5px] h-[38px]  disabled:bg-[#E7E7E7] disabled:text-[#a8a8a8] dark:disabled:bg-[#485970] dark:text-zinc-100"
+                            onClick={() => setPage(page + 1)}
+                            disabled={
+                              page >=
+                              Math.ceil(
+                                traines?.pagination.totalItems / itemsPerPage
+                              ) -
+                                1
+                            }
+                          >
+                            <AiIcons.AiOutlineRight />
+                          </button>
+                          <button
+                            className="my-0 mx-[5px] px-[5px] py-0 text-[#333] h-[38px] border-solid border-[1px]  border-[#a8a8a8]  disabled:bg-[#E7E7E7] disabled:text-[#a8a8a8] dark:disabled:bg-[#485970] dark:text-zinc-100"
+                            onClick={() =>
+                              setPage(
+                                Math.ceil(
+                                  traines?.pagination.totalItems / itemsPerPage
+                                ) - 1
+                              )
+                            }
+                            disabled={
+                              page >=
+                              Math.ceil(
+                                traines?.pagination.totalItems / itemsPerPage
+                              ) -
+                                1
+                            }
+                          >
+                            <AiIcons.AiOutlineDoubleRight />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                   {/* //pagination */}
-                  <div className="flex relative items-center justify-center gap-1  mb-10 lg:left-[100px]">
-                    <button
-                      onClick={prevPage}
-                      data-testid="prev"
-                      className={`page py-2 px-3 ml-0 leading-tight text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white ${
-                        page === 1 && "disabled"
-                      }`}
-                    >
-                      {/* &larr; */}
-                      Prev
-                    </button>
-                    <button
-                      onClick={() => setPaging(1)}
-                      data-testid="page1"
-                      className={`page py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white ${
-                        paging===1?'bg-gray-800 dark:bg-white':''
-                      }`}
-                    >
-                      1
-                    </button>
-                    {gaps.paginationGroup.map((el) => (
-                      <button
-                        onClick={() => setPaging(el)}
-                        data-testid="page2"
-                        key={el}
-                        className={`page py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white ${
-                          page === el ? "active" : ""
-                          
-                        }${paging===el?'bg-gray-800 dark:bg-white':''}`}
-                      >
-                        {el}
-                      </button>
-                    ))}
-                    {totalPages ? (
-                      <button
-                        onClick={() => setPaging(totalPages)}
-                        data-testid="page3"
-                        className={`page py-2 px-3 leading-tight text-gray-500 ${paging===totalPages?'bg-gray-800 dark:bg-white':'bg-white'} border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white ${
-                          paging===totalPages?'bg-gray-800':''
-                        }${paging===totalPages?'bg-gray-800':''}`}
-                      >
-                        {totalPages}
-                      </button>
-                    ) : null}
-                    <button
-                      onClick={nextPage}
-                      data-testid="next"
-                      className={`page py-2 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white ${
-                        page === totalPages && "disabled"
-                      }`}
-                    >
-                      {/* &rarr; */}
-                      Next
-                    </button>
-                  </div>
                 </div>
               </div>
             </div>
@@ -510,5 +540,5 @@ export default connect(mapState, {
   softdeletetraine,
   fetchtraine,
   getAllCycles,
-  createtraine
+  createtraine,
 })(AddTrainee);
