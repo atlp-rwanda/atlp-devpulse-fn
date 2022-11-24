@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import { BsEnvelope } from "react-icons/bs";
 import { TiExportOutline } from "react-icons/ti";
 import { FcApproval } from "react-icons/fc";
-import { AiFillSetting, AiFillCaretDown } from "react-icons/ai";
+import { AiFillSetting } from "react-icons/ai";
 import { MdOutlineCancel } from "react-icons/md";
 import { BsFillPersonLinesFill } from "react-icons/bs";
-import Sidebar from "../components/sidebar/sidebar";
+// import Sidebar from "../components/sidebar/sidebar";
 import { getOneTraineeAllDetails } from "../redux/actions/trainnee";
 import { connect } from "react-redux";
 import Navbar from "./../components/sidebar/navHeader";
@@ -299,17 +299,8 @@ const TrainneeDetails = (props: any) => {
               >
                 <TiExportOutline className="float-left m-1" />
                 Religated
-                {/* <AiFillCaretDown className="float-right m-1" /> */}
-                {/* {open && (
-                  <ul className="bg-[#1F2A37] font-light text-sm text-white m-1">
-                    <li className="border-solid border-black border-b-2 ">
-                      Export to PDF
-                    </li>
-                    <li>Export to CSV</li>
-                  </ul>
-                )} */}
               </button>
-              {/* </div> */}
+             
 
               <button className="btn-Aprov2 bg-[#10292C] dark:bg-green hover:bg-[#1f544cef] text-white font-bold py-2 px-4 rounded mr-8 ">
                 <BsEnvelope className="float-left m-1" />
