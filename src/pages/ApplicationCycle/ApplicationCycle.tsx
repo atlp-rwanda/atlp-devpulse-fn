@@ -95,9 +95,9 @@ const ApplicationCycle = (props: any) => {
     props.createCycle(data);
     setOpenCreateModal(false);
 
-    // setTimeout(() => {
-    //   window.location.reload();
-    // }, 3000);
+    setTimeout(() => {
+      window.location.reload();
+    }, 3000);
   };
 
   const updateCycle = (e: any) => {

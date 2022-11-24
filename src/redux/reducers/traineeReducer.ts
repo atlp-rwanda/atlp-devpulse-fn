@@ -16,8 +16,6 @@ export default (state = initialState, { type, payload }: any) => {
         data: payload,
       }; 
       case CREATE_TRAINEES:
-        console.log('state',state);
-        console.log('payload',payload);
         return {
           ...state,
           loading: false,

@@ -10,20 +10,12 @@ export enum softDeleteActionType {
 }
 export enum fetchtrainesss{
     fetchtraines_success='fetchtraines_success',
-    fetchtraines_fail='fetchtraines_fail',
-    createtrainee_success = "createtrainee_success",
-    createtrainee_fail = "createtrainee_fail",
+    fetchtraines_fail='fetchtraines_fail'
 
 }
 
-interface createtrainee {
-    type: fetchtrainesss.createtrainee_success;
-    data: any;
-  }
-  interface createtraineefail {
-    type: fetchtrainesss.createtrainee_fail;
-    error: any;
-  }
+
+
 interface actionPending {
     type: DeleteActionType.DELETE_TRAINE_LOADING;
 }
@@ -62,4 +54,4 @@ interface fetchtrainesfail{
 
 export type Action = actionPending | actionSuccess | actionFail;
 export type softAction = softactionPending | softactionSuccess | softactionFail;
-export type fetchact = fetchtraines|fetchtrainesfail | createtrainee | createtraineefail;
+export type fetchact = fetchtraines|fetchtrainesfail;
