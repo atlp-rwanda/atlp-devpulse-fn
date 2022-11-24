@@ -1,6 +1,6 @@
 import counterReducer from "./counterReducer";
 import deletetraineReducer from "./deletetraineReducer";
-import { softdeletetraineReducer, traineReducer } from "./deletetraineReducer";
+import { softdeletetraineReducer, traineReducer ,traineCountReducer} from "./deletetraineReducer";
 import cycleReducer from "./cycleReducer";
 import softDeletedTraineeReducer from "./softDeletedTraineesReducer";
 import restoretraineReducer from "./RestoreReducer";
@@ -30,6 +30,7 @@ const allReducers = combineReducers({
   // viewtrainee:viewtraineReducer,
   // addtrainee:addtraineReducer,
   trainee: traineeReducer,
+  count:traineCountReducer,
   traine: traineReducer,
   filterTrainee: filterTraineeReducer,
   loadData: loadDataReducer,

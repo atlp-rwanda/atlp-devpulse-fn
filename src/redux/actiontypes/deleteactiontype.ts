@@ -13,7 +13,10 @@ export enum fetchtrainesss{
     fetchtraines_fail='fetchtraines_fail',
     createtrainee_success = "createtrainee_success",
     createtrainee_fail = "createtrainee_fail",
-
+}
+export enum fetchtrainapplicantcount{
+    fetchtrainapplicantcount_success='fetchtrainapplicantcount_success',
+    fetchtrainapplicantcount_fail='fetchtrainapplicantcount_fail'
 }
 
 interface createtrainee {
@@ -59,7 +62,17 @@ interface fetchtrainesfail{
     error: any;
 }
 
+interface fetchtraincount{
+    type: fetchtrainapplicantcount.fetchtrainapplicantcount_success;
+    data: any;
+}
+interface fetchtraincountfail{
+    type: fetchtrainapplicantcount.fetchtrainapplicantcount_fail;
+    error: any;
+}
+
 
 export type Action = actionPending | actionSuccess | actionFail;
 export type softAction = softactionPending | softactionSuccess | softactionFail;
-export type fetchact = fetchtraines|fetchtrainesfail | createtrainee | createtraineefail;
+export type fetchact = fetchtraines|fetchtrainesfail|createtrainee|createtraineefail;
+export type fetchtrainapplicantscount = fetchtraincount|fetchtraincountfail;

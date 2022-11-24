@@ -54,7 +54,7 @@ const Threedots = (props: any) => {
             }}
           >
             <a
-              href={`/filter_trainee-applicants/${scorePageId}`}
+              href={`#/filter_trainee-applicants/${scorePageId}`}
               className="text-button-color hover:bg-bdr text-sm"
             >
               <MenuItem>Rate</MenuItem>
