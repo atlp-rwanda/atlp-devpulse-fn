@@ -16,6 +16,7 @@ import clearTrashReducer from "./clearTrashReducer";
 import loadDataReducer from "./loadDataReducer";
 import scoreTypesReducers from "./scoreTypesReducers";
 import scoreValuesReducer from "./scoreValuesReducer";
+import updateStatusReducer from "./updateStatusReducer";
 
 const allReducers = combineReducers({
   counter: counterReducer,
@@ -37,6 +38,7 @@ const allReducers = combineReducers({
   updateTraineeAttributes: updateTraineeAttributesReducer,
   scoreTypes: scoreTypesReducers,
   scoreValues: scoreValuesReducer,
+  updateTraineeStatus: updateStatusReducer,
 });
 
 export default allReducers;

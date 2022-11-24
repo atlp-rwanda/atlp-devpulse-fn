@@ -18,6 +18,7 @@ import {
   DOTS,
   useCustomPagination,
 } from "../../components/Pagination/useCustomPagination";
+import { updateTraineeStatus } from "../../redux/actions/updateStatus";
 
 export const customTheme = (theme: any) => {
   return {
@@ -85,8 +86,7 @@ const FilterTrainee = (props: any) => {
     );
   };
   // All trainees in DB
-  const { allfilteredTrainees } = props;
-
+  const { allfilteredTrainees, updateTraineeStatus } = props;
   const traineeList = allfilteredTrainees?.data;
   const handleNullTraineeList = traineeList === undefined ? [] : traineeList;
 
@@ -100,6 +100,15 @@ const FilterTrainee = (props: any) => {
   const nonDeletedTrainee = nonNullTrainee?.filter((value) => {
     return value.trainee_id.delete_at == false;
   });
+
+  const traineeStatusUpdate = (id: any, status: any, cycle_id: any) => {
+    const input = {
+      id,
+      status,
+      cycle_id,
+    };
+    updateTraineeStatus(input);
+  };
 
   useEffect(() => {
     const data = {
@@ -230,14 +239,21 @@ const FilterTrainee = (props: any) => {
       Cell: ({ row }: any) => {
         return (
           <select
-            defaultValue={""}
+            defaultValue={row.original.trainee_id.status}
             id="status"
             className="dark:text-[#dbdee6] border bg-row-gray dark:bg-[#293647] border-solid border-bdr dark:border-cg dark:border-opacity-5 shadow-sm px-4 py-4px rounded-bt-rd focus:outline-none sm:text-sm"
+            onChange={(e) => {
+              traineeStatusUpdate(
+                row.original.trainee_id._id,
+                e.target.value,
+                row.original.trainee_id.cycle_id.id
+              );
+            }}
           >
-            <option value="">Select value</option>
+            <option value="">Not Assigned</option>
             <option value="passed">Passed</option>
             <option value="failed">Failed</option>
-            <option value="religated">Religated</option>
+            <option value="relegated">Relegated</option>
           </select>
         );
       },
@@ -395,18 +411,18 @@ const FilterTrainee = (props: any) => {
               </div>
 
               <div className="mx-auto order-2 semi-sm:mt-2 lg:mr-0 block semi-md:mr-0">
-                <button className="bg-button-color dark:bg-green text-ltb text-fb font-medium ml-8 mt-2 pl-3 pr-3 py-1 rounded-bt-rd semi-sm:ml-0">
+                {/* <button className="bg-button-color dark:bg-green text-ltb text-fb font-medium ml-8 mt-2 pl-3 pr-3 py-1 rounded-bt-rd semi-sm:ml-0">
                   ADD INTERVIEWER
-                </button>
+                </button> */}
 
                 <Link to="/import_trainee-aplicants">
                   <button className="bg-button-color dark:bg-green text-ltb text-fb font-medium ml-8 mt-2 pl-3 pr-3 py-1 rounded-bt-rd semi-sm:ml-2">
                     IMPORT FROM
                   </button>
                 </Link>
-                <button className="bg-button-color dark:bg-green text-ltb text-fb font-medium ml-8 mt-2 pl-3 pr-3 py-1 rounded-bt-rd semi-sm:ml-2">
+                {/* <button className="bg-button-color dark:bg-green text-ltb text-fb font-medium ml-8 mt-2 pl-3 pr-3 py-1 rounded-bt-rd semi-sm:ml-2">
                   EXPORT TO
-                </button>
+                </button> */}
                 <button className="bg-cgray text-button-color dark:bg-button-color dark:text-ltb text-fb font-medium ml-8 mt-2 pl-3 pr-3 py-1 rounded-bt-rd semi-sm:ml-2">
                   BULK EMAIL
                 </button>
@@ -630,4 +646,5 @@ const mapState = ({ filterTrainee }: any) => ({
 
 export default connect(mapState, {
   getAllFilteredTraineess: getAllFilteredTraineess,
+  updateTraineeStatus: updateTraineeStatus,
 })(FilterTrainee);
