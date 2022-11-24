@@ -13,7 +13,7 @@ import {
   softdeletetraine,
   deletetraine,
   fetchtraine,
-  createtraine,
+  createtraine
 } from "../../redux/actions/deletetraine";
 import { useAppDispatch } from "../../hooks/hooks";
 import { getAllCycles } from "../../redux/actions/cyclesActions";
@@ -510,5 +510,5 @@ export default connect(mapState, {
   softdeletetraine,
   fetchtraine,
   getAllCycles,
-  createtraine,
+  createtraine
 })(AddTrainee);
