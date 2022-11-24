@@ -153,3 +153,70 @@ export const fetchtraine = ({ page,itemsPerPage,  All }:any) => {
         } catch(err:any) {toast.error(err.message);dispatch({type: fetchtrainesss.fetchtraines_fail,error:err})}
     }
 }
+export const createtraine = ({ firstName, lastName, email, cycle_id }: any) => {
+    return async (dispatch: Dispatch<fetchact>) => {
+      try {
+        await axios
+          .post(
+            "/",
+            {
+              query: ` mutation CreateNewTraineeApplicant($input: newTraineeApplicantInput) {
+              createNewTraineeApplicant(input: $input) {
+                lastName
+                                          firstName
+                                          _id
+                                          email
+                                          delete_at
+                                          cycle_id {
+                                             name
+                                          }
+              }
+            }`,
+              variables: {
+                input: {
+                  firstName,
+                  lastName,
+                  email,
+                  cycle_id,
+                },
+              },
+            },
+            {
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          )
+          .then((res) => {
+            if (res.data.data) {
+              toast.success("traine-applicants created successfully");
+              dispatch({
+                type: fetchtrainesss.createtrainee_success,
+                data: res.data.data.createNewTraineeApplicant,
+              });
+            }
+            if (res.data.errors) {
+              var mess;
+              res.data.errors.map((b: any) => {
+                mess = b.message;
+                toast.error(mess);
+              });
+              dispatch({
+                type: fetchtrainesss.createtrainee_fail,
+                error: mess,
+              });
+            }
+          })
+          .catch((err) => {
+            dispatch({
+              type: fetchtrainesss.createtrainee_fail,
+              error: err,
+            });
+          });
+      } catch (err: any) {
+        toast.error(err.message);
+        dispatch({ type: fetchtrainesss.createtrainee_fail, error: err });
+      }
+    };
+  };
+  

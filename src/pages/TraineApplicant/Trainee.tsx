@@ -14,6 +14,7 @@ import {
   softdeletetraine,
   deletetraine,
   fetchtraine,
+  createtraine,
 } from "../../redux/actions/deletetraine";
 import { useAppDispatch } from "../../hooks/hooks";
 import { getAllCycles } from "../../redux/actions/cyclesActions";
@@ -47,11 +48,12 @@ const Open=() =>{
     props.getAllTraineess(input);
     props.getAllCycles();
   }, []);
-  const trainees = alltrainees.data;
-   
+  
+  // const trainees = alltrainees.data;
+  //  console.log("llllllllllllll",trainees)
 
   const cycle=cycles.data;
-  console.log("hello",cycle)
+
 
   const traine = traines.message;
   useEffect(() => {
@@ -110,22 +112,23 @@ const validation = () => {
   }
 };
 const createNewTrainee = () => {
+  
   const data = {
     firstName: firstName,
     lastName: lastName,
     email: email,
     cycle_id: cycle_id,
   };
-  if (props.createTrainee(data)) {
+  if (props.createtraine(data)) {
     setFirstname("");
     setLastname("");
     setEmail("");
     setAddNewTraineeModel(false);
-    setTimeout(() => {
-      window.location.reload();
-    }, 3000);
+
   }
 };
+
+
 
   return (
     <>
@@ -277,8 +280,11 @@ const createNewTrainee = () => {
                               </tr>
                             </thead>
                             <tbody className="overflow-y-auto">
-                              {props.traines.message!== null
-                              ?props.traines.message.slice(firstContentIndex, lastContentIndex).map((item: any) =>
+                            {props.traines.message !== null
+                                ? props.traines.message
+                                    .slice(firstContentIndex, lastContentIndex)
+                                    .reverse()
+                                    .map((item: any) =>
                                   item.delete_at == false ? (
                                     <tr>
                                       <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
@@ -475,5 +481,5 @@ export default connect(mapState, {
   softdeletetraine,
   fetchtraine,
   getAllCycles,
-  createTrainee,
+  createtraine,
 })(AddTrainee);
