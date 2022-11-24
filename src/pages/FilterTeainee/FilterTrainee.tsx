@@ -411,18 +411,18 @@ const FilterTrainee = (props: any) => {
               </div>
 
               <div className="mx-auto order-2 semi-sm:mt-2 lg:mr-0 block semi-md:mr-0">
-                <button className="bg-button-color dark:bg-green text-ltb text-fb font-medium ml-8 mt-2 pl-3 pr-3 py-1 rounded-bt-rd semi-sm:ml-0">
+                {/* <button className="bg-button-color dark:bg-green text-ltb text-fb font-medium ml-8 mt-2 pl-3 pr-3 py-1 rounded-bt-rd semi-sm:ml-0">
                   ADD INTERVIEWER
-                </button>
+                </button> */}
 
                 <Link to="/import_trainee-aplicants">
                   <button className="bg-button-color dark:bg-green text-ltb text-fb font-medium ml-8 mt-2 pl-3 pr-3 py-1 rounded-bt-rd semi-sm:ml-2">
                     IMPORT FROM
                   </button>
                 </Link>
-                <button className="bg-button-color dark:bg-green text-ltb text-fb font-medium ml-8 mt-2 pl-3 pr-3 py-1 rounded-bt-rd semi-sm:ml-2">
+                {/* <button className="bg-button-color dark:bg-green text-ltb text-fb font-medium ml-8 mt-2 pl-3 pr-3 py-1 rounded-bt-rd semi-sm:ml-2">
                   EXPORT TO
-                </button>
+                </button> */}
                 <button className="bg-cgray text-button-color dark:bg-button-color dark:text-ltb text-fb font-medium ml-8 mt-2 pl-3 pr-3 py-1 rounded-bt-rd semi-sm:ml-2">
                   BULK EMAIL
                 </button>
