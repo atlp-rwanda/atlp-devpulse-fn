@@ -89,7 +89,7 @@ export const createTrainee =
             dispatch(
               creator(
                 CREATE_TRAINEES,
-                response.data.data.createApplicationCycle
+                response.data.data.createNewTraineeApplicant
               )
             );
           } else {

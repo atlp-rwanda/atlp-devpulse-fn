@@ -7,11 +7,14 @@ import { BrowserRouter as Router, Link, useNavigate } from "react-router-dom";
 import pagination from "../../components/pagination";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { getAllTraineess } from "../../redux/actions/TraineeAction";
 import { connect, useSelector } from "react-redux";
-import Modal from "./modal";
 import NavBar from "../../components/sidebar/navHeader";
-import {softdeletetraine,deletetraine,fetchtraine} from "../../redux/actions/deletetraine";
+import {
+  softdeletetraine,
+  deletetraine,
+  fetchtraine,
+  createtraine,
+} from "../../redux/actions/deletetraine";
 import { useAppDispatch } from "../../hooks/hooks";
 import { getAllCycles } from "../../redux/actions/cyclesActions";
 import Select from "react-select";
@@ -22,10 +25,17 @@ const AddTrainee = (props: any) => {
   const [addNewTraineeModel, setAddNewTraineeModel] = useState(false);
   const Open = () => {
     setAddNewTraineeModel(true);
+  }
+  const removeModel = () => {
+    let newState = !addNewTraineeModel;
+    setAddNewTraineeModel(newState);
   };
-
+  const [firstName, setFirstname] = useState("");
+  const [lastName, setLastname] = useState("");
+  const [email, setEmail] = useState("");
+  const [cycle_id, setCycleId] = useState("");
   // LIST ALL TRAINEE
-  const { alltrainees, delettraine, softdeletettraine, traines } = props;
+  const { alltrainees, delettraine, softdeletettraine, traines,cycles } = props;
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [page, setPage] = useState(0);
@@ -39,10 +49,12 @@ const AddTrainee = (props: any) => {
     All: All,
   };
   useEffect(() => {
-    props.getAllTraineess(input);
     props.getAllCycles();
   }, []);
-  const trainees = alltrainees.data;
+  
+
+
+  const cycle=cycles.data;
 
   const traine = traines.message;
   useEffect(() => {
@@ -82,6 +94,45 @@ const AddTrainee = (props: any) => {
     count: traine?.length,
   });
 
+// console.log("Here",props.traines)
+const validation = () => {
+  if (firstName === "") {
+    toast.error("Enter your firstname");
+    return;
+  }
+  if (lastName === "") {
+    toast.error("Enter your Lastname");
+    return;
+  }
+  if (email === "") {
+    toast.error("Enter your Email");
+    return;
+  }
+  if (cycle_id === "") {
+    toast.error("select a cycle");
+    return;
+  } else {
+    createNewTrainee();
+  }
+};
+const createNewTrainee = () => {
+  
+  const data = {
+    firstName: firstName,
+    lastName: lastName,
+    email: email,
+    cycle_id: cycle_id,
+  };
+  if (props.createtraine(data)) {
+    setFirstname("");
+    setLastname("");
+    setEmail("");
+    setAddNewTraineeModel(false);
+
+  }
+};
+
+
   console.log("Here",paging,totalPages)
 
   return (
@@ -93,7 +144,88 @@ const AddTrainee = (props: any) => {
           addNewTraineeModel === true ? "block" : "hidden"
         }`}
       >
-        <Modal cycles={props.cycles.data} />
+        {/* <Modal cycles={props.cycles.data} /> */}
+        <div className="bg-white dark:bg-dark-bg w-full sm:w-[50%] xl:w-4/12 rounded-lg p-4 pb-8">
+        <div className="card-title w-full flex  flex-wrap justify-center items-center  ">
+          <h3 className="font-bold text-sm dark:text-white text-center w-11/12 ">
+            <icons.AiOutlineClose
+              className="float-right text-3xl cursor-pointer"
+              onClick={() => removeModel()}
+            />
+
+            {"New Trainee"}
+          </h3>
+          <hr className=" bg-primary border-b my-3 w-full" />
+        </div>
+        <div className="card-body">
+          <section className=" py-3 px-8">
+            <div className="input my-3 h-9 ">
+              <div className="grouped-input flex items-center h-full w-full rounded-md">
+                <input
+                  type="text"
+                  name="gpa"
+                  className=" dark:bg-dark-tertiary border border-primary rounded outline-none px-5 font-sans text-xs py-2 w-full pt-4"
+                  placeholder={"FirstName"}
+                  value={firstName}
+                  onChange={(e) => {
+                    setFirstname(e.target.value);
+                  }}
+                />
+              </div>
+            </div>
+            <div className="input my-3 h-9 ">
+              <div className="grouped-input flex items-center h-full w-full rounded-md">
+                <input
+                  type="text"
+                  name="definition"
+                  className=" dark:bg-dark-tertiary border border-primary py-2 rounded outline-none px-5 font-sans text-xs w-full pt-4"
+                  placeholder={"LastName"}
+                  value={lastName}
+                  onChange={(e) => {
+                    setLastname(e.target.value);
+                  }}
+                />
+              </div>
+            </div>
+            <div className="input my-3 h-9 ">
+              <div className="grouped-input flex items-center h-full w-full rounded-md">
+                <input
+                  type="text"
+                  name="grade"
+                  className=" dark:bg-dark-tertiary border border-primary py-2 rounded outline-none px-5 font-sans text-xs w-full pt-4"
+                  placeholder={"Email"}
+                  value={email}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                  }}
+                />
+              </div>
+            </div>
+            <div className="input my-3 h-9 ">
+              <div className="grouped-input flex items-center h-full w-full rounded-md">
+                <select
+                  name="cycle"
+                  id="cycle"
+                  value={cycle_id}
+                  className=" dark:bg-dark-tertiary border dark:text-white border-primary py-2 rounded outline-none px-5 font-sans text-xs w-full pt-4"
+                  onChange={(e) => setCycleId(e.target.value)}
+                >
+                  <option className="dark:text-white " value="">--Please choose a cycle--</option>
+                  {cycle?.map((cycle: any) => (
+                    <option className="dark:text-white " value={cycle.id}>{cycle.name}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+            <button
+              className="flex bg-primary dark:bg-[#56C870] rounded-md py-2 px-4 text-white font-medium cursor-pointer m-auto"
+              onClick={validation}
+            >
+              save
+            </button>
+          </section>
+        </div>
+      </div>
       </div>
       {/* =========================== End:: addnewtraineeModel =============================== */}
       <div className="flex flex-col  h-screen absolute w-[100%]">
@@ -158,26 +290,28 @@ const AddTrainee = (props: any) => {
                                     .slice(firstContentIndex, lastContentIndex)
                                     .reverse()
                                     .map((item: any) =>
-                                      item?.delete_at == false ? (
-                                        <tr>
-                                          <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
-                                            <div className="flex">
-                                              <div className="">
-                                                <p className="text-gray-900 text-center dark:text-white whitespace-no-wrap">
-                                                  {item.firstName}
-                                                </p>
-                                              </div>
-                                            </div>
-                                          </td>
-                                          <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
-                                            <div className="flex items-center">
-                                              <div className="">
-                                                <p className="text-gray-900 text-center dark:text-white whitespace-no-wrap">
-                                                  {item.lastName}
-                                                </p>
-                                              </div>
-                                            </div>
-                                          </td>
+                                  item.delete_at == false ? (
+                                    <tr>
+                                      <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
+                                        <div className="flex">
+                                          <div className="">
+                                            
+                                            <p className="text-gray-900 text-center dark:text-white whitespace-no-wrap">
+                                              {item.firstName}
+                                              
+                                            </p>
+                                          </div>
+                                        </div>
+                                      </td>
+                                      <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
+                                        <div className="flex items-center">
+                                          <div className="">
+                                            <p className="text-gray-900 text-center dark:text-white whitespace-no-wrap">
+                                              {item.lastName}
+                                            </p>
+                                          </div>
+                                        </div>
+                                      </td>
 
                                           <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
                                             <div className="flex items-center">
@@ -365,7 +499,6 @@ const AddTrainee = (props: any) => {
 // export default AddTrainee;
 
 const mapState = (state: any) => ({
-  alltrainees: state.trainee,
   delettraine: state.deletetraine,
   softdeletettraine: state.softdeletetraine,
   traines: state.traine,
@@ -373,9 +506,9 @@ const mapState = (state: any) => ({
 });
 
 export default connect(mapState, {
-  getAllTraineess,
   deletetraine,
   softdeletetraine,
   fetchtraine,
   getAllCycles,
+  createtraine,
 })(AddTrainee);
