@@ -155,6 +155,7 @@ export const fetchtraine = ({ page, itemsPerPage, All }: any) => {
                     lastName
                     email
                     _id
+                    delete_at
                     cycle_id {
                         name
                     }

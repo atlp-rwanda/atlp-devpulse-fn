@@ -279,7 +279,7 @@ const AddTrainee = (props: any) => {
                             <tbody className="overflow-y-auto">
                               {traines.message !== null
                                 ? traines.message.map((item: any) =>
-                                    item ? (
+                                    item?.delete_at == false ? (
                                       <tr>
                                         <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
                                           <div className="flex">
