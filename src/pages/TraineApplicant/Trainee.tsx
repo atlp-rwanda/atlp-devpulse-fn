@@ -336,7 +336,7 @@ const createNewTrainee = () => {
                                           </td>
 
                                       <td>
-                                        <div>
+                                        <div className="relative">
                                           <HiDotsVertical
                                             className=" text-black dark:text-white text-3xl ml-6 font-size-6 cursor-pointer"
                                             onClick={(e: any) => {
@@ -349,7 +349,7 @@ const createNewTrainee = () => {
                                               moredrop === item._id
                                                 ? "block"
                                                 : "hidden"
-                                            } absolute  bg-white dark:bg-dark-tertiary  dark:text-white text-base z-50 list-none divide-y divide-gray-100 rounded shadow my-4`}
+                                            } absolute z-20  bg-white dark:bg-dark-tertiary  dark:text-white text-base z-50 list-none divide-y divide-gray-100 rounded shadow my-4`}
                                             id="dropdown"
                                           >
                                             <ul

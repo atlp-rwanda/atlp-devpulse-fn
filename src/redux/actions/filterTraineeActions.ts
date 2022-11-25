@@ -1,6 +1,8 @@
 import creator from "./creator";
 import axios from "./axiosconfig";
 import { GET_ALL_FILTERED_TRAINEES } from "..";
+import { fetchtrainapplicantcount} from '../actiontypes/deleteactiontype';
+
 
 export const getAllFilteredTraineess =
   ({ page, itemsPerPage, All, wordEntered, filterAttribute }: any) =>
@@ -77,3 +79,25 @@ export const getAllFilteredTraineess =
       }
     }
   };
+
+export const getAlltraineeapplicants = () => async (dispatch: any) => {
+  try {
+   const datas = await axios.post("/", {
+          query: `
+            query GetAlltraineEAttributescount {
+                getAlltraineEAttributescount {
+                  total
+                }
+              }
+              `,
+    },);
+    
+    const totalTraineeApllicants = await datas.data.data.getAlltraineEAttributescount.total;
+    console.log(totalTraineeApllicants)
+    dispatch({type: fetchtrainapplicantcount.fetchtrainapplicantcount_success,data:totalTraineeApllicants});
+  } catch (error) {
+    if (error) {
+      return console.log(error);
+    }
+  }
+};
