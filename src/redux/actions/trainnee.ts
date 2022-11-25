@@ -36,7 +36,6 @@ export const getOneTraineeAllDetails =
                 firstName
                 _id
                 email
-<<<<<<< HEAD
                 cycle_id {
                   id
                   name
@@ -44,10 +43,6 @@ export const getOneTraineeAllDetails =
                   endDate
                 }
               }
-=======
-              }
-             
->>>>>>> 0d85e477 (responsive on view single trainee details)
             }
           }
         `,

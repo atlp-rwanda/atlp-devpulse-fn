@@ -175,19 +175,23 @@ const TrainneeDetails = (props: any) => {
                   {traineeDetails.english_score}
                 </p>
                 <h3>Date of Bith</h3>
-                <p className="text-gray-500 text-sm dark:text-gray-400">
-                  {traineeDetails.birth_date}
+                <p className="text-gray-500 text-sm">
+                  {new Intl.DateTimeFormat("en-CA", {
+                    year: "numeric",
+                    month: "2-digit",
+                    day: "2-digit",
+                  }).format(traineeDetails.birth_date)}
                 </p>
               </div>
             </div>
           )}
-          <div className="bg-slate-50 rounded-xl dark:bg-dark-bg shadow-md overflow-hidden md:w-[90%] px-10 mb-6 lg:max-w-2xl w-[90%] mx-auto">
+          <div className="max-w-md mx-5 bg-slate-50 rounded-xl shadow-md overflow-hidden md:max-w-xl mb-6 lg:flex lg:max-w-2xl dark:bg-[#192432] dark:text-white ">
             <form className="w-fit ">
-              <h2 className="top-5 m-5 ml-0 font-medium dark:text-zinc-100">
+              <h2 className="top-5 m-5 ml-0 font-medium dark:text-zinc-100 lg:ml-5">
                 <BsFillPersonLinesFill className="float-left m-1 " />
                 User ratings
               </h2>
-              <div className="dark:text-zinc-100 sm:grid sm:grid-cols-2 block pl-[0px] py-[10px] mb-5">
+              <div className="dark:text-zinc-100 sm:grid sm:grid-cols-2 block pl-[0px] py-[10px] mb-5 ">
                 {score_value?.map((values: any, idx: number) => {
                   return (
                     <div
@@ -245,49 +249,77 @@ const TrainneeDetails = (props: any) => {
               )}
             </form>
           </div>
-          <div className=" max-w-md bg-slate-50 rounded-xl dark:bg-dark-bg shadow-md overflow-hidden md:w-[100%] mb-6 lg:flex lg:max-w-2xl dark:text-zinc-100  mx-auto">
-            <div>
-              <h2 className="top-5 m-5  font-medium">
-                <BsFillPersonLinesFill className="float-left m-1" />
-                Application Information
-              </h2>
-              <div className="m-5 lg:my-14">
-                <h3>Application Phase</h3>
-                <p className="text-gray-500 text-sm dark:text-gray-400">
-                  Initial Phase
-                </p>
-                <h3 className="mt-5">Program</h3>
-                <p className="text-gray-500 text-sm dark:text-gray-400">
-                  {" "}
-                  Andela Technical Leadership Program
-                </p>
-              </div>
-            </div>
-            <div>
-              <div className="mt-8 m-5 lg:mt-24">
-                <h3>Application Date</h3>
-                <p className="text-gray-500 text-sm dark:text-gray-400">
-                  Initial Phase
-                </p>
-                <h3 className="mt-5">Expected program start date</h3>
-                <p className="text-gray-500 text-sm dark:text-gray-400">
-                  {" "}
-                  08/01/2022
-                </p>
-              </div>
-            </div>
-          </div>{" "}
-          <div className=" max-w-md dark:text-zinc-100 dark:bg-dark-bg bg-slate-50 rounded-xl shadow-md overflow-hidden md:max-w-xl  lg:max-w-2xl lg:mb-10 pb-5  mx-auto">
+          {traineeDetails && (
+            <>
+              <div className=" max-w-md mx-5 bg-slate-50 rounded-xl shadow-md overflow-hidden md:max-w-xl mb-6 lg:flex lg:max-w-2xl dark:bg-[#192432] dark:text-white ">
+                <div>
+                  <h2 className="top-5 m-5  font-medium">
+                    <BsFillPersonLinesFill className="float-left m-1" />
+                    Application Information
+                  </h2>
+                  <div className="m-5 lg:my-14">
+                    <h3>Application Cyle</h3>
+                    {traineeDetails.trainee_id && (
+                      <>
+                        {traineeDetails.trainee_id.cycle_id && (
+                          <>
+                            <p className="text-gray-500 text-sm">
+                              {traineeDetails.trainee_id.cycle_id.name}
+                            </p>
+                          </>
+                        )}
+                      </>
+                    )}
+                    <h3 className="mt-5">Program</h3>
+                    <p className="text-gray-500 text-sm">
+                      {" "}
+                      Andela Technical Leadership Program
+                    </p>
+                  </div>
+                </div>
+                <div>
+                  <div className="mt-8 m-5 lg:mt-24">
+                    <h3>Application start date</h3>
+                    {traineeDetails.trainee_id && (
+                      <>
+                        {traineeDetails.trainee_id.cycle_id && (
+                          <>
+                            <p className="text-gray-500 text-sm">
+                              {traineeDetails.trainee_id.cycle_id.startDate}
+                            </p>{" "}
+                          </>
+                        )}
+                      </>
+                    )}
+                    <h3 className="mt-5">Expected program end Date</h3>
+                    {traineeDetails.trainee_id && (
+                      <>
+                        {traineeDetails.trainee_id.cycle_id && (
+                          <>
+                            <p className="text-gray-500 text-sm">
+                              {" "}
+                              {traineeDetails.trainee_id.cycle_id.endDate}
+                            </p>
+                          </>
+                        )}
+                      </>
+                    )}
+                  </div>
+                </div>
+              </div>{" "}
+            </>
+          )}
+          <div className=" max-w-md mx-5 bg-slate-50  rounded-xl shadow-md overflow-hidden md:max-w-xl  lg:max-w-2xl lg:mb-10 dark:bg-[#192432] dark:text-white  ">
             <h2 className="font-bold top-5 ml-5 mt-5 ">
               <AiFillSetting className="float-left m-1 " />
               Actions
             </h2>
             <div className=" btn ml-5 mt-[-10%] mb-3   ">
-              <button className="btn-Aprov  bg-[#10292C] dark:bg-green hover:bg-[#1f544cef] text-white font-bold py-2 px-4 rounded mt-20 mr-4">
+              <button className="btn-Aprov  bg-[#10292C] hover:bg-[#56C870]  dark:hover:bg-[#1f544cef] text-white font-bold py-2 px-4 rounded mt-20 mr-4  dark:bg-[#56C870]">
                 <FcApproval className="float-left m-1" />
                 Passed
               </button>
-              <button className="btn-Aprov2 bg-[#10292C] hover:bg-[#1f544cef] dark:hover:bg-[#1f544cef] text-white font-bold py-2 px-4 rounded mr-8 dark:bg-[#56C870] ">
+              <button className="btn-Aprov2 bg-[#10292C] hover:bg-[#56C870]  dark:hover:bg-[#1f544cef] text-white font-bold py-2 px-4 rounded mr-8 dark:bg-[#56C870] ">
                 <BsEnvelope className="float-left m-1" />
                 Email
               </button>
@@ -295,20 +327,15 @@ const TrainneeDetails = (props: any) => {
              
               <button
                 onClick={(e) => handleDropDown(open)}
-                className="btn-Aprov  bg-[#10292C] hover:bg-[#f9e84eef] dark:hover:bg-[#f9e84eef] text-white font-bold py-2 px-4 rounded mr-8 dark:bg-yellow-500"
+                className="btn-Aprov  bg-yellow-500 hover:bg-[#f9e84eef] dark:hover:bg-[#f9e84eef] text-white font-bold py-2 px-4 rounded mr-8 dark:bg-yellow-500"
               >
                 <TiExportOutline className="float-left m-1" />
                 Religated
               </button>
              
 
-              <button className="btn-Aprov2 bg-[#10292C] dark:bg-green hover:bg-[#1f544cef] text-white font-bold py-2 px-4 rounded mr-8 ">
-                <BsEnvelope className="float-left m-1" />
-                Email
-              </button>
-
              
-              <button className="btn-Aprov3 bg-[#DC5454] hover:text-white hover:bg-[#ed7373fa] text-white font-bold py-2 px-2 rounded ">
+              <button className="btn-Aprov3 bg-red-800 hover:text-white hover:bg-red-500 text-white font-bold py-2 px-2 rounded ">
                 <MdOutlineCancel className="float-left m-1" />
                 Failed
               </button>
