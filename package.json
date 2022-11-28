@@ -74,6 +74,7 @@
     "@mui/x-date-pickers": "^5.0.6",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
+    "@tinymce/tinymce-react": "^4.2.0",
     "@types/react-i18next": "^8.1.0",
     "@types/react-router": "^5.1.19",
     "@types/react-router-dom": "^5.3.3",
