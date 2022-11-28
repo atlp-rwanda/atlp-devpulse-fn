@@ -10,7 +10,7 @@ import Select from "react-select";
 import Threedots from "../../components/Dropdown/Threedots";
 import { FaCaretDown } from "react-icons/fa";
 import { getAllFilteredTraineess } from "../../redux/actions/filterTraineeActions";
-import {getAlltraineeapplicants} from "../../redux/actions/filterTraineeActions"
+import { getAlltraineeapplicants } from "../../redux/actions/filterTraineeActions";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { useTheme } from "../../hooks/darkmode";
@@ -20,7 +20,7 @@ import {
   useCustomPagination,
 } from "../../components/Pagination/useCustomPagination";
 import { updateTraineeStatus } from "../../redux/actions/updateStatus";
-import Pagination from "../../components/pagination2/pagination2"
+import Pagination from "../../components/pagination2/pagination2";
 
 export const customTheme = (theme: any) => {
   return {
@@ -48,7 +48,7 @@ export const darkTheme = (theme: any) => {
 
 const FilterTrainee = (props: any) => {
   const { theme, setTheme } = useTheme();
-  console.log(props)
+  console.log(props);
   const [filterAttribute, setFilterAttribute] = useState("");
   const [enteredWord, setEnteredWord] = useState("");
   const [All, setAll] = useState(false);
@@ -59,7 +59,7 @@ const FilterTrainee = (props: any) => {
     totalPages: 0,
     totalTraineeapplicants: 0,
   });
- const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const clearInpunt = () => {
     setEnteredWord("");
@@ -95,21 +95,20 @@ const FilterTrainee = (props: any) => {
     );
   };
   // All trainees in DB
-  const { allfilteredTrainees, updateTraineeStatus ,count} = props;
+  const { allfilteredTrainees, updateTraineeStatus, count } = props;
   const traineeList = allfilteredTrainees?.data;
   const handleNullTraineeList = traineeList === undefined ? [] : traineeList;
 
   const [pageIdx, setPageIdx] = useState(1);
-  const [itemsPerPage,setitemsPerPage] = useState(10);
+  const [itemsPerPage, setitemsPerPage] = useState(10);
 
-  const nonNullTrainee = handleNullTraineeList.filter((value) => {
+  const nonNullTrainee = handleNullTraineeList?.filter((value) => {
     return value !== null;
   });
 
   const nonDeletedTrainee = nonNullTrainee?.filter((value) => {
     return value.trainee_id.delete_at == false;
   });
- 
 
   const traineeStatusUpdate = (id: any, status: any, cycle_id: any) => {
     const input = {
@@ -289,13 +288,13 @@ const FilterTrainee = (props: any) => {
     };
 
     props.getAllFilteredTraineess(data23);
-    setPageData((prevstate)=>({
-        ...prevstate,
-        isLoading: false,
-        rowData:data,
-        totalTraineeapplicants: count.message,
-      }));
-  }, [currentPage,enteredWord, filterAttribute,itemsPerPage]);
+    setPageData((prevstate) => ({
+      ...prevstate,
+      isLoading: false,
+      rowData: data,
+      totalTraineeapplicants: count.message,
+    }));
+  }, [currentPage, enteredWord, filterAttribute, itemsPerPage]);
   const initialState = {
     hiddenColumns: [
       "trainee_id.firstName",
@@ -340,11 +339,11 @@ const FilterTrainee = (props: any) => {
   }: any = useTable(
     {
       columns,
-      data,
+      data: data,
       initialState,
     },
     // usePagination,
-   
+
     useRowSelect,
     (hooks: any) => {
       hooks.visibleColumns.push((columns: any) => {
@@ -566,13 +565,12 @@ const FilterTrainee = (props: any) => {
               </div>
             </div>
             <div className="py-3 flex items-center text-center justify-center pt-10">
-                <Pagination
-                  totalRows={count.message}
-                  pageChangeHandler={setCurrentPage}
-                  rowsChangeHandler={setitemsPerPage}
-                  rowsPerPage={itemsPerPage}
-                />
-             
+              <Pagination
+                totalRows={count.message}
+                pageChangeHandler={setCurrentPage}
+                rowsChangeHandler={setitemsPerPage}
+                rowsPerPage={itemsPerPage}
+              />
             </div>
           </div>
         </div>
@@ -584,11 +582,11 @@ const FilterTrainee = (props: any) => {
 const mapState = (state: any) => ({
   allfilteredTrainees: state.filterTrainee,
   errors: state.filterTrainee.errors,
-  count:state.count
+  count: state.count,
 });
 
 export default connect(mapState, {
   getAllFilteredTraineess: getAllFilteredTraineess,
   updateTraineeStatus: updateTraineeStatus,
-  getAlltraineeapplicants:getAlltraineeapplicants,
+  getAlltraineeapplicants: getAlltraineeapplicants,
 })(FilterTrainee);

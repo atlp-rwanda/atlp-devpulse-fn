@@ -323,7 +323,7 @@ const AddTrainee = (props: any) => {
                                         </td>
 
                                         <td>
-                                          <div>
+                                          <div className="relative">
                                             <HiDotsVertical
                                               className=" text-black dark:text-white text-3xl ml-6 font-size-6 cursor-pointer"
                                               onClick={(e: any) => {
@@ -336,7 +336,7 @@ const AddTrainee = (props: any) => {
                                                 moredrop === item._id
                                                   ? "block"
                                                   : "hidden"
-                                              } absolute  bg-white dark:bg-dark-tertiary  dark:text-white text-base z-50 list-none divide-y divide-gray-100 rounded shadow my-4`}
+                                              } absolute z-20 bg-white dark:bg-dark-tertiary  dark:text-white text-base z-50 list-none divide-y divide-gray-100 rounded shadow my-4`}
                                               id="dropdown"
                                             >
                                               <ul
@@ -531,7 +531,7 @@ const AddTrainee = (props: any) => {
 const mapState = (state: any) => ({
   delettraine: state.deletetraine,
   softdeletettraine: state.softdeletetraine,
-  trainees: state.traine,
+  traines: state.traine,
   cycles: state.cycles,
   error: state.traine,
 });
