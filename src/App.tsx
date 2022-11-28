@@ -20,8 +20,18 @@ import ImportTraineeDetailsFromGoogleSheet from "./pages/importAndSaveManyTraine
 import PageNotFound from "./pages/404";
 import Counter from "./components/Counter/Counter";
 
+<<<<<<< HEAD
 import ApplicationCycle from "./pages/ApplicationCycle/ApplicationCycle";
 
+=======
+// const Counter = React.lazy(() => import("./components/Counter/Counter"));
+import Counter from "./components/Counter/Counter";
+// const ApplicationCycle = React.lazy(
+//   () => import("./pages/ApplicationCycle/ApplicationCycle")
+// );
+import ApplicationCycle from "./pages/ApplicationCycle/ApplicationCycle";
+// const Trash = React.lazy(() => import("./pages/Trash/Trash"));
+>>>>>>> a7c251ad4ade4dbaf6857e3dc2b5c30f3b5b07f8
 import Trash from "./pages/Trash/Trash";
 function App() {
   return (

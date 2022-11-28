@@ -102,7 +102,7 @@ const FilterTrainee = (props: any) => {
   const [pageIdx, setPageIdx] = useState(1);
   const [itemsPerPage, setitemsPerPage] = useState(10);
 
-  const nonNullTrainee = handleNullTraineeList?.filter((value) => {
+  const nonNullTrainee = handleNullTraineeList.filter((value) => {
     return value !== null;
   });
 
@@ -339,7 +339,7 @@ const FilterTrainee = (props: any) => {
   }: any = useTable(
     {
       columns,
-      data: data,
+      data,
       initialState,
     },
     // usePagination,
@@ -583,6 +583,7 @@ const mapState = (state: any) => ({
   allfilteredTrainees: state.filterTrainee,
   errors: state.filterTrainee.errors,
   count: state.count,
+  error: state.filterTrainee,
 });
 
 export default connect(mapState, {
