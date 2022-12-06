@@ -196,7 +196,7 @@ const TrainneeDetails = (props: any) => {
                   return (
                     <div
                       key={idx}
-                      className="p-[1px] w-[150px] block mr-0 even:ml-[50px] mt-2"
+                      className="p-[1px] w-[150px] block mr-0 even:ml-[50px] mt-2 ml-10"
                     >
                       <div>
                         <label htmlFor="">{values.test}</label>
@@ -225,7 +225,7 @@ const TrainneeDetails = (props: any) => {
                 })}
               </div>
               {changed && (
-                <div className="flex items-center">
+                <div className="flex items-center ml-10">
                   <button
                     className="text-white border border-[#333] border-1 bg-[#173b3f] rounded-[5px] p-2 w-[100px] mb-5 block dark:bg-green dark:border"
                     onClick={() => {
