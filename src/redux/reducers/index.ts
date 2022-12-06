@@ -27,8 +27,6 @@ const allReducers = combineReducers({
   softDeletedTrainees: softDeletedTraineeReducer,
   restore: restoretraineReducer,
   clearTrash: clearTrashReducer,
-  // viewtrainee:viewtraineReducer,
-  // addtrainee:addtraineReducer,
   trainee: traineeReducer,
   count:traineCountReducer,
   traine: traineReducer,

@@ -31,6 +31,7 @@ const TrainneeDetails = (props: any) => {
 
   const traineeDetails = oneTraineeDetails.data;
 
+  console.log("Trainess",traineeDetails);
 
   return (
     <>

@@ -1,4 +1,3 @@
-/** @format */
 
 import React, { useEffect, useState, useMemo } from "react";
 import { connect } from "react-redux";

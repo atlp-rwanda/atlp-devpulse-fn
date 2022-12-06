@@ -1,4 +1,4 @@
-import { BsPause } from "react-icons/bs";
+// import { BsPause } from "react-icons/bs";
 import { EMPTYING_TRASH } from "..";
 const initialState = {
   isLoading: true,
