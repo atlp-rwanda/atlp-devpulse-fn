@@ -5,17 +5,20 @@ import { ToastContainer } from "react-toastify";
 
 const App = React.lazy(() => import("./App"));
 
-import { BrowserRouter } from "react-router-dom";
+import { HashRouter } from "react-router-dom";
 import { Provider } from "react-redux";
+import { ThemeContextProvider } from "./hooks/darkmode";
 import store from "./redux/store";
 
 const container = document.getElementById("app")!;
 
 const root = ReactDOMClient.createRoot(container).render(
   <Provider store={store}>
-    <BrowserRouter>
-      <App />
+    <HashRouter>
+      <ThemeContextProvider>
+        <App />
+      </ThemeContextProvider>
       <ToastContainer theme="colored" />
-    </BrowserRouter>
+    </HashRouter>
   </Provider>
 );

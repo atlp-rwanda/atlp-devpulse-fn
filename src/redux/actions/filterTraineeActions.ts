@@ -1,37 +1,38 @@
 import creator from "./creator";
+import axios from "./axiosconfig";
 import { GET_ALL_FILTERED_TRAINEES } from "..";
-import axios from "axios";
-// import * as dotenv from "dotenv"; // see https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
-// dotenv.config();
+import { fetchtrainapplicantcount} from '../actiontypes/deleteactiontype';
 
 
-
-export const getAllFilteredTraineess = ({ page,itemsPerPage,  All, wordEntered, filterAttribute }:any) => async (dispatch: any) => {
-  try {
-    const datas = await axios({
-      url: "http://localhost:4000/",
-      // url: process.env.BACKEND_URL,
-      method: "post",
-      data: {
+export const getAllFilteredTraineess =
+  ({ page, itemsPerPage, All, wordEntered, filterAttribute }: any) =>
+  async (dispatch: any) => {
+    try {
+      const datas = await axios.post("/", {
         query: `
-        query FilterTraineesDetails($input: filterOptions) {
+        query Query($input: filterOptions) {
           filterTraineesDetails(input: $input) {
             trainee_id {
               lastName
               firstName
               _id
               email
+              delete_at
+              cycle_id {
+                id
+                name
+                startDate
+                endDate
+              }
             }
             gender
             birth_date
-            Address
             phone
             field_of_study
             education_level
             province
             district
             sector
-            cohort
             isEmployed
             haveLaptop
             isStudent
@@ -40,24 +41,60 @@ export const getAllFilteredTraineess = ({ page,itemsPerPage,  All, wordEntered, 
             interview_decision
             past_andela_programs
             _id
+            trainee_id {
+              lastName
+              firstName
+              _id
+              email
+              cycle_id {
+                id
+                name
+                startDate
+                endDate
+              }
+              delete_at
+              status
+            }
+          
           }
         }
-      `,  variables: {
-        input: {
-          page,
-          itemsPerPage,
-          All,
-          wordEntered,
-          filterAttribute
+      `,
+        variables: {
+          input: {
+            page,
+            itemsPerPage,
+            All,
+            wordEntered,
+            filterAttribute,
+          },
         },
-      },
+      });
+      // console.log("result",datas.data.data.filterTraineesDetails);
+      const traineesss = await datas.data.data.filterTraineesDetails;
+      // console.log( "actionnnnnnnnnnn", traineesss )
+      dispatch(creator(GET_ALL_FILTERED_TRAINEES, traineesss));
+    } catch (error) {
+      if (error) {
+        return console.log(error);
+      }
+    }
+  };
 
-      },
-    });
-    // console.log("result",datas.data.data.filterTraineesDetails);
-    const traineesss = await datas.data.data.filterTraineesDetails;
-    // console.log( "actionnnnnnnnnnn", traineesss )
-    dispatch(creator(GET_ALL_FILTERED_TRAINEES, traineesss));
+export const getAlltraineeapplicants = () => async (dispatch: any) => {
+  try {
+   const datas = await axios.post("/", {
+          query: `
+            query GetAlltraineEAttributescount {
+                getAlltraineEAttributescount {
+                  total
+                }
+              }
+              `,
+    },);
+    
+    const totalTraineeApllicants = await datas.data.data.getAlltraineEAttributescount.total;
+    console.log(totalTraineeApllicants)
+    dispatch({type: fetchtrainapplicantcount.fetchtrainapplicantcount_success,data:totalTraineeApllicants});
   } catch (error) {
     if (error) {
       return console.log(error);

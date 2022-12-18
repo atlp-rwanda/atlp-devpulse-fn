@@ -19,13 +19,14 @@ function Table() {
               className={
                 ' items-center' + (traineeData?.length > 0 ? ' flex' : ' hidden')
               }
+ 
             >
              
-              <HiDotsVertical  className=" text-black text-3xl ml-6 font-size-6 cursor-pointer"/>
+              <HiDotsVertical onClick={() => {
+              }}  className=" text-black text-3xl ml-6 font-size-6 cursor-pointer"/>
               </div>
               )}
       ];
-      console.log(traineeData,"hey")
       const data =[];
       let datum: any = [];
       if (traineeData && traineeData.length > 0) {

@@ -8,7 +8,6 @@ import {
 import { connect } from "react-redux";
 import "react-toastify/dist/ReactToastify.css";
 import { useTable, usePagination } from "react-table";
-import Sidebar from "../../components/sidebar/sidebar";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Menu from "@mui/material/Menu";
@@ -96,9 +95,9 @@ const ApplicationCycle = (props: any) => {
     props.createCycle(data);
     setOpenCreateModal(false);
 
-    setTimeout(() => {
-      window.location.reload();
-    }, 3000);
+    // setTimeout(() => {
+    //   window.location.reload();
+    // }, 3000);
   };
 
   const updateCycle = (e: any) => {
@@ -191,18 +190,18 @@ const ApplicationCycle = (props: any) => {
   return (
     <>
       <NavBar />
-      <div className="flex bg-[#F9F9FB]">
+      <div className="flex dark:bg-dark-bg dark:text-white bg-[#F9F9FB] min-h-[100vh]">
         <div className="min-h-[50vh] w-[100%] block mt-10 md:w-[100%] md:mt-0 pl-[16rem]  pt-[80px] md:pl-0">
           <div className=" table table-fixed w-[100%] top-[20%] md:top-[10%] pb-10 md:relative px-[10%] md:px-[10px]">
             <button
-              className="h-[40px] rounded-[5px] bg-[#173b3f] text-white flex items-center p-0 pl-[5px] pr-[10px] mb-[20px]"
+              className="h-[40px] rounded-[5px]  dark:bg-[#56C870] bg-[#173b3f] text-white flex items-center p-0 pl-[5px] pr-[10px] mb-[20px]"
               onClick={() => handleOpenCreateCycle()}
             >
               <BsIcons.BsPlusLg className="mx-[5px]" />
               <span>Cycle</span>
             </button>
             <div>
-              <div className=" w-[100%] max-h-[70vh] m-auto  bg-[#fff] shadow-md rounded-[10px] relative pb-[20px]  overflow-x-auto  overflow-y-scroll 	md:w-[100%]">
+              <div className=" w-[100%] dark:bg-dark-bg max-h-[70vh] m-auto  bg-[#fff] shadow-md rounded-[10px] relative pb-[20px]  overflow-x-auto  overflow-y-scroll 	md:w-[100%]">
                 <table
                   {...getTableProps()}
                   className="border-collapse w-[100%] m-auto rounded-[15px] whitespace-nowrap "
@@ -212,14 +211,14 @@ const ApplicationCycle = (props: any) => {
                       <tr
                         key={index}
                         {...headerGroup.getHeaderGroupProps()}
-                        className="border-solid border-[1px] border-white even:bg-[#eef1f1] first:w-[20px]"
+                        className="border-solid border-[1px] border-white dark:border-dark-tertiary even:bg-[#eef1f1] first:w-[20px]"
                       >
                         {headerGroup.headers.map(
                           (column: any, index: number) => (
                             <th
                               key={index}
                               {...column.getHeaderProps}
-                              className="border-solid pl-[30px] h-[50px] text-left bg-[#eef1f1]  first:rounded-tl-[10px] last:rounded-tr-[10px] border-b-[2px] border-[#c5c5c5] py-6   last:pl-[0px] w-[150px] last:w-[20px]  first:w-[20px]  "
+                              className="border-solid pl-[30px] h-[50px] text-left dark:bg-dark-tertiary bg-[#eef1f1]  first:rounded-tl-[10px] last:rounded-tr-[10px] border-b-[2px] border-[#c5c5c5] dark:border-dark-tertiary py-6   last:pl-[0px] w-[150px] last:w-[20px]  first:w-[20px]  "
                             >
                               {column.render("Header")}
                             </th>
@@ -229,13 +228,13 @@ const ApplicationCycle = (props: any) => {
                     ))}
                   </thead>
                   <tbody {...getTableBodyProps()}>
-                    {page.map((row: any) => {
+                    {page.reverse().map((row: any) => {
                       prepareRow(row);
                       return (
                         <tr
                           {...row.getRowProps()}
                           key={row.original.id}
-                          className="even:bg-[#eef1f1] border-b border-gray-200 "
+                          className="border-b dark:border-dark-tertiary border-gray-200 "
                         >
                           {row.cells.map((cell: any) => {
                             return (
@@ -260,14 +259,14 @@ const ApplicationCycle = (props: any) => {
                 <span className="flex items-center md:justify-center md:mt-[10px]">
                   {" "}
                   <button
-                    className="my-0 mx-[5px] px-[5px] py-0 text-[#333] h-[38px] border-solid border-[1px]  border-[#a8a8a8]  disabled:bg-[#E7E7E7] disabled:text-[#a8a8a8]"
+                    className="my-0 mx-[5px] px-[5px] py-0 dark:border-dark-tertiary dark:bg-dark-bg dark:text-white text-[#333] h-[38px] border-solid border-[1px]  border-[#a8a8a8]  disabled:bg-[#E7E7E7] disabled:text-[#a8a8a8]"
                     onClick={() => gotoPage(0)}
                     disabled={!canPreviousPage}
                   >
                     <AiIcons.AiOutlineDoubleLeft />
                   </button>
                   <button
-                    className=" border-solid border-[1px]  border-[#a8a8a8] py-0 px-[10px] text-[#333] rounded-l-[5px] h-[38px] disabled:bg-[#E7E7E7] disabled:text-[#a8a8a8] "
+                    className=" border-solid border-[1px] dark:border-dark-tertiary dark:bg-dark-bg dark:text-white  border-[#a8a8a8] py-0 px-[10px] text-[#333] rounded-l-[5px] h-[38px] disabled:bg-[#E7E7E7] disabled:text-[#a8a8a8] "
                     onClick={() => previousPage()}
                     disabled={!canPreviousPage}
                   >
@@ -278,7 +277,7 @@ const ApplicationCycle = (props: any) => {
                       return (
                         <div>
                           <button
-                            className={`border-solid border-[1px] mx-[2px]  border-[#a8a8a8] bg-[#fff] w-[35px] h-[38px]  active:bg-[#333] active:text-[#fff]-500 ${
+                            className={`border-solid border-[1px] mx-[2px] dark:border-dark-tertiary dark:bg-dark-bg dark:text-white  border-[#a8a8a8] bg-[#fff] w-[35px] h-[38px]  active:bg-[#333] active:text-[#fff]-500 ${
                               pageIndex === i && "bg-[#eef1f1]"
                             }`}
                             onClick={(e: any) => {
@@ -293,14 +292,14 @@ const ApplicationCycle = (props: any) => {
                     })}
                   </span>
                   <button
-                    className=" border-solid border-[1px]  border-[#a8a8a8] py-0 px-[10px] text-[#333] rounded-r-[5px] h-[38px]  disabled:bg-[#E7E7E7] disabled:text-[#a8a8a8]"
+                    className=" border-solid border-[1px] dark:border-dark-tertiary dark:bg-dark-bg dark:text-white  border-[#a8a8a8] py-0 px-[10px] text-[#333] rounded-r-[5px] h-[38px]  disabled:bg-[#E7E7E7] disabled:text-[#a8a8a8]"
                     onClick={() => nextPage()}
                     disabled={!canNextPage}
                   >
                     <AiIcons.AiOutlineRight />
                   </button>
                   <button
-                    className="my-0 mx-[5px] px-[5px] py-0 text-[#333] h-[38px] border-solid border-[1px]  border-[#a8a8a8]  disabled:bg-[#E7E7E7] disabled:text-[#a8a8a8]"
+                    className="my-0 mx-[5px] px-[5px] py-0 dark:border-dark-tertiary dark:bg-dark-bg dark:text-white text-[#333] h-[38px] border-solid border-[1px]  border-[#a8a8a8]  disabled:bg-[#E7E7E7] disabled:text-[#a8a8a8]"
                     onClick={() => gotoPage(pageCount - 1)}
                     disabled={!canNextPage}
                   >
@@ -347,47 +346,63 @@ const ApplicationCycle = (props: any) => {
             <form
               action=""
               onSubmit={createNewCycle}
-              className=" relative w-[100%] rounded-[5px] h-[455px] m-auto p-[10px] pt-[5px] bg-[#f0f0f0] "
+              className=" relative w-[100%] rounded-[5px] h-[455px] m-auto p-[10px] pt-[5px] dark:bg-dark-bg bg-[#f0f0f0] "
             >
-              <h1 className="text-center font-bold text-[24px] m-[20px]">
+              <h1 className="text-center font-bold dark:text-white text-[22px] m-[20px]">
                 Add new cycle
               </h1>
               <IoIcons.IoClose
                 className="absolute top-[20px] right-[20px] text-[35px] cursor-pointer"
                 onClick={handleCloseCreateModel}
               />
-              <hr style={{ marginBottom: "40px" }} />
-              <input
-                type="text"
-                name="name"
-                placeholder="Cycle name"
-                value={name}
-                onChange={(e) => {
-                  setName(e.target.value);
-                }}
-                className=" mt-3 bg-lime cursor-pointer text-[18px] self-center py-1 rounded-[5px] h-[50px] my-[20px] mx-auto w-[80%] block border-[2px] border-[#a8a8a8]  px-[10px] md:w-[90%]"
-              />
-              <input
-                type="date"
-                name="start date"
-                value={startDate}
-                onChange={(e) => {
-                  setStartDate(e.target.value);
-                }}
-                className=" mt-3 bg-lime cursor-pointer text-[18px] self-center py-1 rounded-[5px] h-[50px] my-[20px] mx-auto w-[80%] block border-[2px] border-[#a8a8a8]  px-[10px] md:w-[90%]"
-              />
-              <input
-                type="date"
-                name="end date"
-                value={endDate}
-                onChange={(e) => {
-                  setEndDate(e.target.value);
-                }}
-                className=" mt-3 bg-lime cursor-pointer text-[18px] self-center py-1 rounded-[5px] h-[50px] my-[20px] mx-auto w-[80%] block border-[2px] border-[#a8a8a8]  px-[10px] md:w-[90%]"
-              />
+              <hr style={{ marginBottom: "4px" }} />
+              <div>
+                <label className="mr-3 p-14 dark:text-white font-bold text-[19px]">
+                  Cycle Name
+                </label>
+                <input
+                  type="text"
+                  name="name"
+                  placeholder="Cycle name"
+                  value={name}
+                  onChange={(e) => {
+                    setName(e.target.value);
+                  }}
+                  className=" mt-2 bg-lime cursor-pointer text-[18px] self-center py-1 rounded-[5px] h-[50px] my-[20px] mx-auto w-[80%] block border-[2px] border-[#a8a8a8]  px-[10px] md:w-[90%]"
+                />
+              </div>
+              <div>
+                <label className="mr-3 p-14 dark:text-white font-bold text-[19px]">
+                  Start Date
+                </label>
+                <input
+                  type="date"
+                  name="start date"
+                  value={startDate}
+                  onChange={(e) => {
+                    setStartDate(e.target.value);
+                  }}
+                  className=" mt-2 bg-lime cursor-pointer text-[18px] self-center py-1 rounded-[5px] h-[50px] my-[20px] mx-auto w-[80%] block border-[2px] border-[#a8a8a8]  px-[10px] md:w-[90%]"
+                />
+              </div>
+              <div>
+                <label className="mr-3 p-14 dark:text-white font-bold text-[19px]">
+                  End Date
+                </label>
+                <input
+                  type="date"
+                  name="end date"
+                  value={endDate}
+                  onChange={(e) => {
+                    setEndDate(e.target.value);
+                  }}
+                  className=" mt-2 bg-lime cursor-pointer text-[18px] self-center py-1 rounded-[5px] h-[50px] my-[20px] mx-auto w-[80%] block border-[2px] border-[#a8a8a8]  px-[10px] md:w-[90%]"
+                  min={startDate}
+                />
+              </div>
               <button
                 type="submit"
-                className="text-white border-[1px] border-[#a8a8a8] h-[40px] w-[100px] block rounded-[5px] my-[10px] mx-[auto] bg-[#173b3f]"
+                className="text-white border-[1px] border-[#a8a8a8] dark:bg-[#56C870] h-[40px] w-[100px] block rounded-[5px] my-[10px] mx-[auto] bg-[#173b3f]"
               >
                 Save
               </button>
@@ -400,8 +415,8 @@ const ApplicationCycle = (props: any) => {
           aria-labelledby="parent-modal-title"
           aria-describedby="parent-modal-description"
         >
-          <Box className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] rounded-[5px] bg-[#f0f0f0]">
-            <div className="block w-[300px] h-[200px] bg-[#f0f0f0] rounded-[5px]">
+          <Box className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] rounded-[5px] dark:bg-dark-bg bg-[#f0f0f0]">
+            <div className="block w-[300px] h-[200px] dark:bg-dark-bg dark:text-white bg-[#f0f0f0] rounded-[5px]">
               <div className="text-center">
                 <AiIcons.AiFillExclamationCircle className="w-[40px] my-[20px] mx-auto text-[40px]" />
                 <p className="w-[60%] m-auto font-bold">
@@ -435,9 +450,9 @@ const ApplicationCycle = (props: any) => {
             <form
               action=""
               onSubmit={updateCycle}
-              className="relative rounded-[5px] w-[100%] h-[455px] m-auto p-[10px] pt-[5px] bg-[#f0f0f0] "
+              className="relative rounded-[5px] w-[100%] h-[455px] m-auto p-[10px] pt-[5px] dark:bg-dark-bg bg-[#f0f0f0] "
             >
-              <h1 className="text-center font-bold text-[24px] m-[20px]">
+              <h1 className="text-center dark:text-white font-bold text-[24px] m-[20px]">
                 Update cycle
               </h1>
               <IoIcons.IoClose
@@ -481,7 +496,7 @@ const ApplicationCycle = (props: any) => {
               />
               <div className="flex flex-wrap w-[300px] m-auto">
                 <button
-                  className="text-white border-[1px] border-[#a8a8a8] h-[40px] w-[100px] block rounded-[5px] my-[10px] mx-[auto] bg-[#173b3f]"
+                  className="text-white border-[1px] dark:bg-[#56C870] h-[40px] w-[100px] block rounded-[5px] my-[10px] mx-[auto] bg-[#173b3f]"
                   type="submit"
                 >
                   Save
