@@ -19,28 +19,51 @@ import "./index.css";
 import ImportTraineeDetailsFromGoogleSheet from "./pages/importAndSaveManyTraineesFromGoogleSheet/importAndSaveManyTraineesFromGoogleSheet";
 
 const Counter = React.lazy(() => import("./components/Counter/Counter"));
-import Trash from './pages/Trash/Trash'
-import ApplicationCycle  from './pages/ApplicationCycle/ApplicationCycle'
+import Trash from "./pages/Trash/Trash";
+import ApplicationCycle from "./pages/ApplicationCycle/ApplicationCycle";
+import LoginPage from "./pages/LoginPage";
+import { Token } from "./utils/utils";
+const access_token = Token();
+
+// {!token ? ( <Route path="/login" element={<Login />} />
 
 function App() {
+  const authenticated =
+    access_token !== null && access_token !== undefined && access_token !== "";
+  console.log("authenticated", authenticated);
   return (
     <Routes>
       <Route path="/test_tailwind" element={<TestTailwind />} />
-      <Route path="/trainee-applicant-details/:traineeId" element={<TrainneeDetails />} />
+      <Route
+        path="/trainee-applicant-details/:traineeId"
+        element={<TrainneeDetails />}
+      />
       <Route path="/traineeb-details" element={<TrainneeDetailsB />} />
       <Route path="/sidebar" element={<Sidebar />} />
       <Route path="/Trainee-applicants" element={<Trainee />} />
       <Route path="/sidebar" element={<Sidebar />} />
       <Route path="/table" element={<Table />} />
       <Route path="/cycles" element={<ApplicationCycle />} />
+      {/* {authenticated ? ( */}
       <Route path="/trash" element={<Trash />} />
+
       <Route path="/nav-bar" element={<NavBar />} />
       <Route path="/filter_trainee-applicants" element={<FilterTrainee />} />
-      <Route path="/import_trainee-aplicants" element={<ImportTraineeDetailsFromGoogleSheet />}/>
-      <Route path="/trainee-applicant/:traineeId/edit" element={<UpdateTraine />} />
+      <Route
+        path="/import_trainee-aplicants"
+        element={<ImportTraineeDetailsFromGoogleSheet />}
+      />
+      <Route
+        path="/trainee-applicant/:traineeId/edit"
+        element={<UpdateTraine />}
+      />
       <Route path="/" element={<Trainee />} />
-      <Route path="/filter_trainee-applicants/:id" element={<CreateScoreType />} />
+      <Route
+        path="/filter_trainee-applicants/:id"
+        element={<CreateScoreType />}
+      />
       <Route path="/admins/" element={<ScoreTypesActions />} />
+      <Route path="/login" element={<LoginPage />} />
     </Routes>
   );
 }

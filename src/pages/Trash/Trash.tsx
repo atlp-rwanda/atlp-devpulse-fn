@@ -13,6 +13,13 @@ import { clearTrash } from "../../redux/actions/clearTrash";
 import Select from "react-select";
 import { customTheme, darkTheme } from "../FilterTeainee/FilterTrainee";
 import { useTheme } from "../../hooks/darkmode";
+import { Navigate, useNavigate } from "react-router-dom";
+import { Token } from "../../utils/utils";
+
+const access_token = Token();
+const authenticated =
+  access_token !== null && access_token !== undefined && access_token !== "";
+console.log("authenticated", authenticated);
 
 const Trash = (props: any) => {
   const { allTrainees, restore, clearTrashMessage } = props;
@@ -138,8 +145,7 @@ const Trash = (props: any) => {
   const clearInput = () => {
     setWordsEntered("");
   };
-
-  return (
+  return authenticated ? (
     <>
       <NavBar />
       <div className="flex bg-[#F9F9FB] min-h-[100vh] dark:bg-dark-bg dark:text-white">
@@ -336,6 +342,8 @@ const Trash = (props: any) => {
         </div>
       </div>
     </>
+  ) : (
+    <Navigate to="/login" />
   );
 };
 

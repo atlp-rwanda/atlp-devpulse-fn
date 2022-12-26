@@ -1,16 +1,16 @@
 import React, { useContext, useEffect, useState } from "react";
 import { loginAction } from "../redux/actions/login_action";
-
+import { Navigate, useNavigate } from "react-router-dom";
 import { request, GraphQLClient } from "graphql-request";
 import { connect } from "react-redux";
 import { Token } from "../utils/utils";
 const access_token = Token();
 const LoginPage = (props: any) => {
   // console.log("Props", props);
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState("");
   const [idToken, setIdToken] = useState();
   const CLIENT_ID = process.env.CLIENT_ID;
-
+  console.log("User from logout", user);
   const MY_QUERY = `
     {
   getUsers_Logged {
@@ -40,6 +40,7 @@ const LoginPage = (props: any) => {
     });
     await client.request(MY_QUERY).then((data) => {
       console.log("data", data);
+      <Navigate to="/" />;
     });
   };
 
@@ -56,25 +57,30 @@ const LoginPage = (props: any) => {
     google.accounts.id.renderButton(document.getElementById("signInDiv"), {
       theme: "outline",
       size: "large",
-      // Text: "Login with Google",
     });
 
-    // props.loginUser();
     props.loginAction();
-  }, [access_token]);
+  }, [user]);
 
-  const { name, picture, email }: any = user;
+  const authenticated =
+    access_token !== null && access_token !== undefined && access_token !== "";
+
+  const handleLogout = async () => {
+    await localStorage.removeItem("access_token");
+    // localStorage.clear()
+    console.log("Logout");
+    setUser("Logout");
+    <Navigate to="/login" />;
+  };
 
   return (
     <div className="App">
-      {access_token !== null &&
-      access_token !== undefined &&
-      access_token !== "" ? (
+      {authenticated ? (
         <div className="Logout">
-          <button>Logout</button>
+          <button onClick={handleLogout}>Logout</button>
         </div>
       ) : (
-        <div id="signInDiv">Login with Google</div>
+        <div id="signInDiv"></div>
       )}
     </div>
   );
@@ -87,5 +93,3 @@ const mapState = (state: any) => ({
 export default connect(mapState, {
   loginAction,
 })(LoginPage);
-
-// export default LoginPage;

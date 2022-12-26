@@ -6,6 +6,7 @@ export const Token = () => {
   const verifyToken = (token: any) => {
     try {
       const decoded = jwtDecode(token);
+      console.log("decoded", decoded);
       return decoded;
     } catch (error) {
       //@ts-ignore
