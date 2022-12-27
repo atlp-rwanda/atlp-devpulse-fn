@@ -49,8 +49,9 @@ export const darkTheme = (theme: any) => {
 const FilterTrainee = (props: any) => {
   const { theme, setTheme } = useTheme();
   console.log(props)
-  const [filterAttribute, setFilterAttribute] = useState("");
+  const [filterAttribute, setFilterAttribute] = useState("firstName");
   const [enteredWord, setEnteredWord] = useState("");
+  const [enteredsubmitWord, setenteredsubmitWord] = useState("");
   const [All, setAll] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [pageData, setPageData] = useState({
@@ -62,14 +63,21 @@ const FilterTrainee = (props: any) => {
  const [currentPage, setCurrentPage] = useState(1);
 
   const clearInpunt = () => {
-    setEnteredWord("");
+    setenteredsubmitWord("");
+    setEnteredWord("")
   };
 
   const open = Boolean(anchorEl);
   const handleClose = () => {
     setAnchorEl(null);
   };
-
+  const handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+        setEnteredWord(enteredsubmitWord) 
+    }
+     
+    
+  }
   const showTaggleOptions = () => {
     return (
       <div>
@@ -102,7 +110,7 @@ const FilterTrainee = (props: any) => {
   const [pageIdx, setPageIdx] = useState(1);
   const [itemsPerPage,setitemsPerPage] = useState(10);
 
-  const nonNullTrainee = handleNullTraineeList.filter((value) => {
+  const nonNullTrainee = handleNullTraineeList?.filter((value) => {
     return value !== null;
   });
 
@@ -404,6 +412,7 @@ const FilterTrainee = (props: any) => {
                     value: "past_andela_programs",
                     label: "Attended Andela Programs",
                   },
+                  { value: "status", label: "Status" },
                   { value: "", label: "Select by" },
                 ]}
                 defaultValue={{ value: "", label: "Select by" }}
@@ -419,7 +428,7 @@ const FilterTrainee = (props: any) => {
                     onClick={clearInpunt}
                     viewBox="-6 -6 20 20"
                   >
-                    {enteredWord === "" ? (
+                    {enteredsubmitWord === "" ? (
                       <AiIcons.AiOutlineSearch />
                     ) : (
                       <AiIcons.AiOutlineClose />
@@ -427,9 +436,10 @@ const FilterTrainee = (props: any) => {
                   </svg>
                 </span>
                 <input
-                  onChange={(e) => setEnteredWord(e.target.value)}
+                  onChange={(e) => setenteredsubmitWord(e.target.value)}
+                  onKeyDown={(e)=>handleKeyDown(e)}
                   className="dark:text-ltb block bg-row-gray dark:bg-[#293647] w-50 border border-bdr dark:border-cg dark:border-opacity-5 rounded-bt-rd mt-2 py-2 pl-9 pr-4 focus:outline-none sm:text-sm"
-                  value={enteredWord}
+                  value={enteredsubmitWord}
                   placeholder="Search"
                   type="text"
                   name="search"

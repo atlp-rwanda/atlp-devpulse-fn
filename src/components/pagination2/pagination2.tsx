@@ -54,7 +54,7 @@ const Pagination = ({ rowsChangeHandler,pageChangeHandler, totalRows, rowsPerPag
 
   return (
     <>
-      {noOfPages > 1 ? (
+      
         <>
               <span className="dark:text-zinc-100 flex">
                 <label>rows per page:</label>
@@ -72,6 +72,7 @@ const Pagination = ({ rowsChangeHandler,pageChangeHandler, totalRows, rowsPerPag
                         onChange={(e) => setFilterAttribute(`${e?.value}`)}
                        theme={theme ? customTheme : darkTheme}
                    />
+                    {noOfPages > 1 ? (
                       <span className="dark:text-zinc-100">
                 Jump to:{" "}
                 <input
@@ -87,7 +88,9 @@ const Pagination = ({ rowsChangeHandler,pageChangeHandler, totalRows, rowsPerPag
                   className="w-[70px] pl-2 border border-[#a8a8a8] rounded-[2px] dark:bg-dark-frame-bg"
                 />
               </span>
+              ) : null} 
               </span>
+              {noOfPages > 1 ? (
               <div
                 className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between"
                 aria-label="Pagination"
@@ -160,11 +163,11 @@ const Pagination = ({ rowsChangeHandler,pageChangeHandler, totalRows, rowsPerPag
                     <AiIcons.AiOutlineDoubleRight />
                   </button>
                   </div>
-                  </div>
-                
+              </div>
+               ) : null} 
              
             </> 
-      ) : null}
+      
     </>
   );
 };
