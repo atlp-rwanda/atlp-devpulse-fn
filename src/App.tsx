@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { HashRouter as Router, Routes, Route, Link } from "react-router-dom";
 import TestTailwind from "./components/TestTailwind";
 import TrainneeDetails from "./pages/TrainneeDetails";
@@ -23,14 +23,23 @@ import Trash from "./pages/Trash/Trash";
 import ApplicationCycle from "./pages/ApplicationCycle/ApplicationCycle";
 import LoginPage from "./pages/LoginPage";
 import { Token } from "./utils/utils";
-const access_token = Token();
-
-// {!token ? ( <Route path="/login" element={<Login />} />
+import LogoutPage from "./pages/LogoutPage";
+import ProtectedRoutes from "./pages/ProtectedRoutes";
+// const access_token = Token();
 
 function App() {
-  const authenticated =
-    access_token !== null && access_token !== undefined && access_token !== "";
-  console.log("authenticated", authenticated);
+  const [isSignedIn, setIsSignedIn] = useState(false);
+
+  // useEffect(() => {
+  //   const authenticated =
+  //     access_token !== null &&
+  //     access_token !== undefined &&
+  //     access_token !== "";
+  //   console.log("authenticated", authenticated);
+
+  //   authenticated ? setIsSignedIn(true) : setIsSignedIn(false);
+  // }, [isSignedIn]);
+
   return (
     <Routes>
       <Route path="/test_tailwind" element={<TestTailwind />} />
@@ -44,7 +53,6 @@ function App() {
       <Route path="/sidebar" element={<Sidebar />} />
       <Route path="/table" element={<Table />} />
       <Route path="/cycles" element={<ApplicationCycle />} />
-      {/* {authenticated ? ( */}
       <Route path="/trash" element={<Trash />} />
 
       <Route path="/nav-bar" element={<NavBar />} />
@@ -62,8 +70,17 @@ function App() {
         path="/filter_trainee-applicants/:id"
         element={<CreateScoreType />}
       />
-      <Route path="/admins/" element={<ScoreTypesActions />} />
+      {/* <Route path="/admins/" element={<ScoreTypesActions />} /> */}
       <Route path="/login" element={<LoginPage />} />
+      <Route path="/logout" element={<LogoutPage />} />
+      <Route
+        path="/admins"
+        element={
+          <ProtectedRoutes>
+            <ScoreTypesActions />
+          </ProtectedRoutes>
+        }
+      />
     </Routes>
   );
 }

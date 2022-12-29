@@ -4,9 +4,13 @@ import { Navigate, useNavigate } from "react-router-dom";
 import { request, GraphQLClient } from "graphql-request";
 import { connect } from "react-redux";
 import { Token } from "../utils/utils";
+
 const access_token = Token();
+const authenticated =
+  access_token !== null && access_token !== undefined && access_token !== "";
+
 const LoginPage = (props: any) => {
-  // console.log("Props", props);
+  const navigate = useNavigate();
   const [user, setUser] = useState("");
   const [idToken, setIdToken] = useState();
   const CLIENT_ID = process.env.CLIENT_ID;
@@ -27,11 +31,8 @@ const LoginPage = (props: any) => {
     // google.accounts.id.prompt();
     // console.log("Encoded JWT token", response.credential);
     const token = response.credential;
-
     localStorage.setItem("access_token", token);
-
     console.log("token", token);
-
     //@ts-ignore
     setIdToken(response.credential);
     // @ts-ignore
@@ -40,7 +41,13 @@ const LoginPage = (props: any) => {
     });
     await client.request(MY_QUERY).then((data) => {
       console.log("data", data);
-      <Navigate to="/" />;
+      // <Navigate to="/" />;
+      data && navigate("/");
+      // if (data) {
+      //   navigate("/");
+      // } else {
+      //   return;
+      // }
     });
   };
 
@@ -59,37 +66,25 @@ const LoginPage = (props: any) => {
       size: "large",
     });
 
-    props.loginAction();
+    // props.loginAction();
   }, [user]);
 
-  const authenticated =
-    access_token !== null && access_token !== undefined && access_token !== "";
-
-  const handleLogout = async () => {
-    await localStorage.removeItem("access_token");
-    // localStorage.clear()
-    console.log("Logout");
-    setUser("Logout");
-    <Navigate to="/login" />;
-  };
-
-  return (
+  return authenticated ? (
+    <Navigate to="/logout" />
+  ) : (
     <div className="App">
-      {authenticated ? (
-        <div className="Logout">
-          <button onClick={handleLogout}>Logout</button>
-        </div>
-      ) : (
-        <div id="signInDiv"></div>
-      )}
+      {" "}
+      <div id="signInDiv"></div>
     </div>
   );
 };
 
-const mapState = (state: any) => ({
-  LoggedUser: state.loginReducer,
-});
+// const mapState = (state: any) => ({
+//   LoggedUser: state.loginReducer,
+// });
 
-export default connect(mapState, {
-  loginAction,
-})(LoginPage);
+// export default connect(mapState, {
+//   loginAction,
+// })(LoginPage);
+
+export default LoginPage;
