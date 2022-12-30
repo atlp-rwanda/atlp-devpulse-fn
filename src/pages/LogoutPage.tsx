@@ -1,23 +1,15 @@
 import React from "react";
 import { Navigate, useNavigate } from "react-router-dom";
-import { Token } from "../utils/utils";
-
-const access_token = Token();
-const authenticated =
-  access_token !== null && access_token !== undefined && access_token !== "";
 
 const LogoutPage = () => {
   const navigate = useNavigate();
   const handleLogout = async (e: any) => {
-    await localStorage.removeItem("access_token");
-    console.log("Logout");
+    localStorage.removeItem("access_token");
     navigate("/login");
   };
 
-  return authenticated ? (
-    <Navigate to="/cycles" />
-  ) : (
-    <div className="App">
+  return (
+    <div className="App grid h-screen place-items-center justify-center text-lg font-bold border-2 border-solid rounded-sm">
       <button onClick={(e) => handleLogout(e)}>Logout</button>
     </div>
   );

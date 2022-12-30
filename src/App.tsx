@@ -22,63 +22,84 @@ const Counter = React.lazy(() => import("./components/Counter/Counter"));
 import Trash from "./pages/Trash/Trash";
 import ApplicationCycle from "./pages/ApplicationCycle/ApplicationCycle";
 import LoginPage from "./pages/LoginPage";
-import { Token } from "./utils/utils";
 import LogoutPage from "./pages/LogoutPage";
-import ProtectedRoutes from "./pages/ProtectedRoutes";
-// const access_token = Token();
+import PrivateRoute from "./pages/PrivateRoute";
 
 function App() {
-  const [isSignedIn, setIsSignedIn] = useState(false);
-
-  // useEffect(() => {
-  //   const authenticated =
-  //     access_token !== null &&
-  //     access_token !== undefined &&
-  //     access_token !== "";
-  //   console.log("authenticated", authenticated);
-
-  //   authenticated ? setIsSignedIn(true) : setIsSignedIn(false);
-  // }, [isSignedIn]);
-
   return (
     <Routes>
       <Route path="/test_tailwind" element={<TestTailwind />} />
       <Route
         path="/trainee-applicant-details/:traineeId"
-        element={<TrainneeDetails />}
+        element={
+          <PrivateRoute>
+            <TrainneeDetails />
+          </PrivateRoute>
+        }
       />
       <Route path="/traineeb-details" element={<TrainneeDetailsB />} />
       <Route path="/sidebar" element={<Sidebar />} />
       <Route path="/Trainee-applicants" element={<Trainee />} />
       <Route path="/sidebar" element={<Sidebar />} />
       <Route path="/table" element={<Table />} />
-      <Route path="/cycles" element={<ApplicationCycle />} />
-      <Route path="/trash" element={<Trash />} />
-
+      <Route
+        path="/cycles"
+        element={
+          <PrivateRoute>
+            <ApplicationCycle />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/trash"
+        element={
+          <PrivateRoute>
+            <Trash />
+          </PrivateRoute>
+        }
+      />
       <Route path="/nav-bar" element={<NavBar />} />
-      <Route path="/filter_trainee-applicants" element={<FilterTrainee />} />
+      <Route
+        path="/filter_trainee-applicants"
+        element={
+          <PrivateRoute>
+            <FilterTrainee />
+          </PrivateRoute>
+        }
+      />
       <Route
         path="/import_trainee-aplicants"
-        element={<ImportTraineeDetailsFromGoogleSheet />}
+        element={
+          <PrivateRoute>
+            <ImportTraineeDetailsFromGoogleSheet />
+          </PrivateRoute>
+        }
       />
       <Route
         path="/trainee-applicant/:traineeId/edit"
-        element={<UpdateTraine />}
+        element={
+          <PrivateRoute>
+            <UpdateTraine />
+          </PrivateRoute>
+        }
       />
       <Route path="/" element={<Trainee />} />
       <Route
         path="/filter_trainee-applicants/:id"
-        element={<CreateScoreType />}
+        element={
+          <PrivateRoute>
+            <CreateScoreType />
+          </PrivateRoute>
+        }
       />
-      {/* <Route path="/admins/" element={<ScoreTypesActions />} /> */}
       <Route path="/login" element={<LoginPage />} />
       <Route path="/logout" element={<LogoutPage />} />
       <Route
         path="/admins"
         element={
-          <ProtectedRoutes>
+          <PrivateRoute>
             <ScoreTypesActions />
-          </ProtectedRoutes>
+          </PrivateRoute>
         }
       />
     </Routes>

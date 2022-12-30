@@ -1,9 +1,8 @@
-import React, { useContext, useEffect, useState } from "react";
-import { loginAction } from "../redux/actions/login_action";
-import { Navigate, useNavigate } from "react-router-dom";
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { request, GraphQLClient } from "graphql-request";
-import { connect } from "react-redux";
 import { Token } from "../utils/utils";
+import LogoutPage from "./LogoutPage";
 
 const access_token = Token();
 const authenticated =
@@ -11,10 +10,9 @@ const authenticated =
 
 const LoginPage = (props: any) => {
   const navigate = useNavigate();
-  const [user, setUser] = useState("");
-  const [idToken, setIdToken] = useState();
+
   const CLIENT_ID = process.env.CLIENT_ID;
-  console.log("User from logout", user);
+
   const MY_QUERY = `
     {
   getUsers_Logged {
@@ -32,22 +30,12 @@ const LoginPage = (props: any) => {
     // console.log("Encoded JWT token", response.credential);
     const token = response.credential;
     localStorage.setItem("access_token", token);
-    console.log("token", token);
-    //@ts-ignore
-    setIdToken(response.credential);
     // @ts-ignore
     const client = new GraphQLClient(process.env.BACKEND_URL, {
       headers: { Authorization: token },
     });
     await client.request(MY_QUERY).then((data) => {
-      console.log("data", data);
-      // <Navigate to="/" />;
-      data && navigate("/");
-      // if (data) {
-      //   navigate("/");
-      // } else {
-      //   return;
-      // }
+      data && navigate(props.path);
     });
   };
 
@@ -65,12 +53,10 @@ const LoginPage = (props: any) => {
       theme: "outline",
       size: "large",
     });
-
-    // props.loginAction();
-  }, [user]);
+  }, []);
 
   return authenticated ? (
-    <Navigate to="/logout" />
+    <LogoutPage />
   ) : (
     <div className="App">
       {" "}
@@ -78,13 +64,5 @@ const LoginPage = (props: any) => {
     </div>
   );
 };
-
-// const mapState = (state: any) => ({
-//   LoggedUser: state.loginReducer,
-// });
-
-// export default connect(mapState, {
-//   loginAction,
-// })(LoginPage);
 
 export default LoginPage;
