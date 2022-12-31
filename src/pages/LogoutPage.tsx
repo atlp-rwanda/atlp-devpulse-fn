@@ -1,5 +1,5 @@
-import React from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { Icon } from "@iconify/react";
 
 const LogoutPage = () => {
   const navigate = useNavigate();
@@ -7,10 +7,12 @@ const LogoutPage = () => {
     localStorage.removeItem("access_token");
     navigate("/login");
   };
-
   return (
-    <div className="App grid h-screen place-items-center justify-center text-lg font-bold border-2 border-solid rounded-sm">
-      <button onClick={(e) => handleLogout(e)}>Logout</button>
+    <div className="flex ">
+      <Icon icon="nimbus:arrow-left"></Icon>
+      <button className="ml-2 pt-1" onClick={(e) => handleLogout(e)}>
+        Logout
+      </button>
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { HashRouter as Router, Routes, Route, Link } from "react-router-dom";
 import TestTailwind from "./components/TestTailwind";
 import TrainneeDetails from "./pages/TrainneeDetails";
@@ -22,7 +22,6 @@ const Counter = React.lazy(() => import("./components/Counter/Counter"));
 import Trash from "./pages/Trash/Trash";
 import ApplicationCycle from "./pages/ApplicationCycle/ApplicationCycle";
 import LoginPage from "./pages/LoginPage";
-import LogoutPage from "./pages/LogoutPage";
 import PrivateRoute from "./pages/PrivateRoute";
 
 function App() {
@@ -37,9 +36,23 @@ function App() {
           </PrivateRoute>
         }
       />
-      <Route path="/traineeb-details" element={<TrainneeDetailsB />} />
+      <Route
+        path="/traineeb-details"
+        element={
+          <PrivateRoute>
+            <TrainneeDetailsB />
+          </PrivateRoute>
+        }
+      />
       <Route path="/sidebar" element={<Sidebar />} />
-      <Route path="/Trainee-applicants" element={<Trainee />} />
+      <Route
+        path="/Trainee-applicants"
+        element={
+          <PrivateRoute>
+            <Trainee />
+          </PrivateRoute>
+        }
+      />
       <Route path="/sidebar" element={<Sidebar />} />
       <Route path="/table" element={<Table />} />
       <Route
@@ -83,7 +96,14 @@ function App() {
           </PrivateRoute>
         }
       />
-      <Route path="/" element={<Trainee />} />
+      <Route
+        path="/"
+        element={
+          <PrivateRoute>
+            <Trainee />
+          </PrivateRoute>
+        }
+      />
       <Route
         path="/filter_trainee-applicants/:id"
         element={
@@ -93,7 +113,6 @@ function App() {
         }
       />
       <Route path="/login" element={<LoginPage />} />
-      <Route path="/logout" element={<LogoutPage />} />
       <Route
         path="/admins"
         element={

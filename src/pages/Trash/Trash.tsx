@@ -13,7 +13,6 @@ import { clearTrash } from "../../redux/actions/clearTrash";
 import Select from "react-select";
 import { customTheme, darkTheme } from "../FilterTeainee/FilterTrainee";
 import { useTheme } from "../../hooks/darkmode";
-import { Navigate } from "react-router-dom";
 const Trash = (props: any) => {
   const { allTrainees, restore, clearTrashMessage } = props;
   const [pageIdx] = useState(1);

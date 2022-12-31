@@ -3,12 +3,13 @@ import { useNavigate } from "react-router-dom";
 import { request, GraphQLClient } from "graphql-request";
 import { Token } from "../utils/utils";
 import LogoutPage from "./LogoutPage";
-
-const access_token = Token();
-const authenticated =
-  access_token !== null && access_token !== undefined && access_token !== "";
+import NavBar from "../components/sidebar/navHeader";
 
 const LoginPage = (props: any) => {
+  const access_token = Token();
+  const authenticated =
+    access_token !== null && access_token !== undefined && access_token !== "";
+
   const navigate = useNavigate();
 
   const CLIENT_ID = process.env.CLIENT_ID;
@@ -27,7 +28,6 @@ const LoginPage = (props: any) => {
   const handleCallBackResponse = async (response: any) => {
     // //@ts-ignore
     // google.accounts.id.prompt();
-    // console.log("Encoded JWT token", response.credential);
     const token = response.credential;
     localStorage.setItem("access_token", token);
     // @ts-ignore
@@ -35,7 +35,7 @@ const LoginPage = (props: any) => {
       headers: { Authorization: token },
     });
     await client.request(MY_QUERY).then((data) => {
-      data && navigate(props.path);
+      data && navigate("/");
     });
   };
 
@@ -50,7 +50,7 @@ const LoginPage = (props: any) => {
 
     //@ts-ignore
     google.accounts.id.renderButton(document.getElementById("signInDiv"), {
-      theme: "outline",
+      theme: "contained",
       size: "large",
     });
   }, []);
@@ -58,10 +58,13 @@ const LoginPage = (props: any) => {
   return authenticated ? (
     <LogoutPage />
   ) : (
-    <div className="App">
-      {" "}
-      <div id="signInDiv"></div>
-    </div>
+    <>
+      <NavBar />
+      <div className=" App grid h-screen place-items-center justify-center text-lg font-bold border-2 border-solid rounded-sm">
+        {" "}
+        <div id="signInDiv" className=""></div>
+      </div>
+    </>
   );
 };
 
