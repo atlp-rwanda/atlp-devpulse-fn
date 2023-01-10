@@ -59,7 +59,6 @@ const LoginPage = (props: any) => {
     <LogoutPage />
   ) : (
     <>
-      <NavBar />
       <div className=" App grid h-screen place-items-center justify-center text-lg font-bold border-2 border-solid rounded-sm">
         {" "}
         <div id="signInDiv" className=""></div>
