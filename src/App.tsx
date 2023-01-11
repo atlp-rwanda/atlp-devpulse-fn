@@ -27,7 +27,14 @@ import PrivateRoute from "./pages/PrivateRoute";
 function App() {
   return (
     <Routes>
-      <Route path="/test_tailwind" element={<TestTailwind />} />
+      <Route
+        path="/test_tailwind"
+        element={
+          <PrivateRoute>
+            <TestTailwind />
+          </PrivateRoute>
+        }
+      />
       <Route
         path="/trainee-applicant-details/:traineeId"
         element={
@@ -44,7 +51,6 @@ function App() {
           </PrivateRoute>
         }
       />
-      <Route path="/sidebar" element={<Sidebar />} />
       <Route
         path="/Trainee-applicants"
         element={
@@ -53,8 +59,22 @@ function App() {
           </PrivateRoute>
         }
       />
-      <Route path="/sidebar" element={<Sidebar />} />
-      <Route path="/table" element={<Table />} />
+      <Route
+        path="/sidebar"
+        element={
+          <PrivateRoute>
+            <Sidebar />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/table"
+        element={
+          <PrivateRoute>
+            <Table />
+          </PrivateRoute>
+        }
+      />
       <Route
         path="/cycles"
         element={
@@ -71,7 +91,14 @@ function App() {
           </PrivateRoute>
         }
       />
-      <Route path="/nav-bar" element={<NavBar />} />
+      <Route
+        path="/nav-bar"
+        element={
+          <PrivateRoute>
+            <NavBar />
+          </PrivateRoute>
+        }
+      />
       <Route
         path="/filter_trainee-applicants"
         element={

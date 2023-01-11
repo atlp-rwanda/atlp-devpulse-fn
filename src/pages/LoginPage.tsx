@@ -1,9 +1,7 @@
 import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Navigate } from "react-router-dom";
 import { request, GraphQLClient } from "graphql-request";
 import { Token } from "../utils/utils";
-import LogoutPage from "./LogoutPage";
-import NavBar from "../components/sidebar/navHeader";
 
 const LoginPage = (props: any) => {
   const access_token = Token();
@@ -56,7 +54,7 @@ const LoginPage = (props: any) => {
   }, []);
 
   return authenticated ? (
-    <LogoutPage />
+    <Navigate to="/" />
   ) : (
     <>
       <div className=" App grid h-screen place-items-center justify-center text-lg font-bold border-2 border-solid rounded-sm">
