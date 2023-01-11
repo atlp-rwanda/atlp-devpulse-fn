@@ -19,28 +19,135 @@ import "./index.css";
 import ImportTraineeDetailsFromGoogleSheet from "./pages/importAndSaveManyTraineesFromGoogleSheet/importAndSaveManyTraineesFromGoogleSheet";
 
 const Counter = React.lazy(() => import("./components/Counter/Counter"));
-import Trash from './pages/Trash/Trash'
-import ApplicationCycle  from './pages/ApplicationCycle/ApplicationCycle'
+import Trash from "./pages/Trash/Trash";
+import ApplicationCycle from "./pages/ApplicationCycle/ApplicationCycle";
+import LoginPage from "./pages/LoginPage";
+import PrivateRoute from "./pages/PrivateRoute";
 
 function App() {
   return (
     <Routes>
-      <Route path="/test_tailwind" element={<TestTailwind />} />
-      <Route path="/trainee-applicant-details/:traineeId" element={<TrainneeDetails />} />
-      <Route path="/traineeb-details" element={<TrainneeDetailsB />} />
-      <Route path="/sidebar" element={<Sidebar />} />
-      <Route path="/Trainee-applicants" element={<Trainee />} />
-      <Route path="/sidebar" element={<Sidebar />} />
-      <Route path="/table" element={<Table />} />
-      <Route path="/cycles" element={<ApplicationCycle />} />
-      <Route path="/trash" element={<Trash />} />
-      <Route path="/nav-bar" element={<NavBar />} />
-      <Route path="/filter_trainee-applicants" element={<FilterTrainee />} />
-      <Route path="/import_trainee-aplicants" element={<ImportTraineeDetailsFromGoogleSheet />}/>
-      <Route path="/trainee-applicant/:traineeId/edit" element={<UpdateTraine />} />
-      <Route path="/" element={<Trainee />} />
-      <Route path="/filter_trainee-applicants/:id" element={<CreateScoreType />} />
-      <Route path="/admins/" element={<ScoreTypesActions />} />
+      <Route
+        path="/test_tailwind"
+        element={
+          <PrivateRoute>
+            <TestTailwind />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/trainee-applicant-details/:traineeId"
+        element={
+          <PrivateRoute>
+            <TrainneeDetails />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/traineeb-details"
+        element={
+          <PrivateRoute>
+            <TrainneeDetailsB />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/Trainee-applicants"
+        element={
+          <PrivateRoute>
+            <Trainee />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/sidebar"
+        element={
+          <PrivateRoute>
+            <Sidebar />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/table"
+        element={
+          <PrivateRoute>
+            <Table />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/cycles"
+        element={
+          <PrivateRoute>
+            <ApplicationCycle />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/trash"
+        element={
+          <PrivateRoute>
+            <Trash />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/nav-bar"
+        element={
+          <PrivateRoute>
+            <NavBar />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/filter_trainee-applicants"
+        element={
+          <PrivateRoute>
+            <FilterTrainee />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/import_trainee-aplicants"
+        element={
+          <PrivateRoute>
+            <ImportTraineeDetailsFromGoogleSheet />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/trainee-applicant/:traineeId/edit"
+        element={
+          <PrivateRoute>
+            <UpdateTraine />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/"
+        element={
+          <PrivateRoute>
+            <Trainee />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/filter_trainee-applicants/:id"
+        element={
+          <PrivateRoute>
+            <CreateScoreType />
+          </PrivateRoute>
+        }
+      />
+      <Route path="/login" element={<LoginPage />} />
+      <Route
+        path="/admins"
+        element={
+          <PrivateRoute>
+            <ScoreTypesActions />
+          </PrivateRoute>
+        }
+      />
     </Routes>
   );
 }

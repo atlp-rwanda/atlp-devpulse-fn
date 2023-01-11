@@ -100,6 +100,11 @@ export const sidebarItems2 = [
     icon: <Icon icon="nimbus:globe"></Icon>,
     title: "Help",
   },
+  // {
+  //   path: "/Logout",
+  //   icon: <Icon icon="nimbus:arrow-left"></Icon>,
+  //   title: "Logout",
+  // },
 ];
 
 export const sidebarItems3 = [
