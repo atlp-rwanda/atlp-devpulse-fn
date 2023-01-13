@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-
 import Sidebar from "./sidebar";
 import { SunIcon } from "@heroicons/react/outline";
 import { MoonIcon } from "@heroicons/react/solid";
 import ProfileDropdown from "../profileDropdown";
-import { FaMoon, FaBars } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
 import * as icon from "react-icons/hi2";
 import { AiOutlineBell } from "react-icons/ai";
@@ -13,8 +11,12 @@ import { useTheme } from "../../hooks/darkmode";
 const logo: string = require("../../assets/logo.svg").default;
 const profile: string = require("../../assets/avatar.png").default;
 const LogoWhite: string = require("../../assets/logoWhite.svg").default;
+import jwtDecode from "jwt-decode";
 
 function NavBar() {
+  const access_token = localStorage.getItem("access_token");
+  //@ts-ignore
+  const user = access_token ? jwtDecode(access_token).picture : profile;
   const [showNotification, setShowNotification] = useState(false);
   const [showProfileDropdown, setShowprofileDropdown] = useState(false);
   const { theme, setTheme } = useTheme();
@@ -93,9 +95,9 @@ function NavBar() {
           </div>
           <span onClick={handleShowProfileDropdown}>
             <img
-              src={profile}
+              src={user}
               alt="profile"
-              className="w-[30px] cursor-pointer mx-2 "
+              className="w-[30px] cursor-pointer mx-2 rounded "
             />
           </span>
         </div>
