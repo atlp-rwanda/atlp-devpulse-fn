@@ -23,6 +23,7 @@ import Trash from "./pages/Trash/Trash";
 import ApplicationCycle from "./pages/ApplicationCycle/ApplicationCycle";
 import LoginPage from "./pages/LoginPage";
 import PrivateRoute from "./pages/PrivateRoute";
+import PageNotFound from "./pages/PageNotFound";
 
 function App() {
   return (
@@ -145,6 +146,14 @@ function App() {
         element={
           <PrivateRoute>
             <ScoreTypesActions />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="*"
+        element={
+          <PrivateRoute>
+            <PageNotFound />
           </PrivateRoute>
         }
       />

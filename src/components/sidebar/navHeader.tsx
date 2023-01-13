@@ -52,7 +52,7 @@ function NavBar() {
             )}
           </span>
           <span>
-            <Link to="/dashboard/super-admin" className="flex items-center">
+            <Link to="/" className="flex items-center">
               {theme ? (
                 <img
                   className="cursor-pointer mx-2 fill-[blue]"
