@@ -1,112 +1,82 @@
 import React from "react";
 import { Icon } from "@iconify/react";
+import { Link, useNavigate } from "react-router-dom";
+import {
+  sidebarItems1,
+  sidebarItems2,
+  sidebarItems3,
+  applicantSidebarItems,
+} from "./sidebarItems";
+import "./navslide.css";
 
-import { NavLink } from "react-router-dom";
-import { sidebarItems2, sidebarItems1, sidebarItems3 } from "./sidebarItems";
-import { BrowserRouter } from "react-router-dom";
-import { BrowserRouter as Router, Link } from "react-router-dom";
-import LogoutPage from "../../pages/LogoutPage";
-import { Token } from "../../utils/utils";
+const Sidebar = ({ expanded, setExpanded }) => {
+  const navigate = useNavigate();
+  const roleName = localStorage.getItem("roleName");
 
-const sidebar = () => {
-  const access_token = Token();
-  const authenticated =
-    access_token !== null && access_token !== undefined && access_token !== "";
+  // Select items based on the role
+  const items =
+    roleName === "applicant"
+      ? applicantSidebarItems
+      : [...sidebarItems1, ...sidebarItems2];
+
+  const handleLogout = () => {
+    localStorage.clear();
+    navigate("/login");
+  };
+
   return (
-    <>
-      <div className="top-0 bottom-0 overflow-y-scroll mt-[70px] w-[16rem] grow z-10 fixed dark:bg-dark-bg  bg-white font-sans border-r border-[#979797] ">
-        {authenticated ? (
-          <div className="mb-2 border-b border-[#000]">
-            <ul className=" min:mt-0 pl-4 block mt-2">
-              {sidebarItems1.map((items, index) => {
-                return (
-                  <>
-                    <li
-                      key={index}
-                      className=" min:text-xl lg:justify-content-start align-items-center  dark:text-white text-[#173B3F]  text-base"
-                    >
-                      <Link
-                        to={items.path}
-                        className="is-active focus:text-green-600  p-1 flex align-items-center leading-3 cursor-pointer font-semibold hover:font-bold  "
-                      >
-                        <label className="mr-3 p-1">{items.icon}</label>
-                        <label className="p-1  ">{items.title} </label>
-                      </Link>
-                    </li>
-                  </>
-                );
-              })}
-              <li className=" min:text-xl lg:justify-content-start align-items-center  dark:text-white text-[#173B3F]  text-base">
-                <LogoutPage />
-              </li>
-            </ul>
-          </div>
-        ) : (
-          <div className="mb-2 border-b border-[#000]">
-            <ul className=" min:mt-0 pl-4 block mt-2">
-              {sidebarItems1.map((items, index) => {
-                return (
-                  <>
-                    <li
-                      key={index}
-                      className=" min:text-xl lg:justify-content-start align-items-center  dark:text-white text-[#173B3F]  text-base"
-                    >
-                      <Link
-                        to={items.path}
-                        className="is-active focus:text-green-600  p-1 flex align-items-center leading-3 cursor-pointer font-semibold hover:font-bold  "
-                      >
-                        <label className="mr-3 p-1">{items.icon}</label>
-                        <label className="p-1  ">{items.title} </label>
-                      </Link>
-                    </li>
-                  </>
-                );
-              })}
-            </ul>
-          </div>
-        )}
-
-        <div className="mb-3">
-          <ul className="pl-4 block mt-2 md:mt-0">
-            {sidebarItems2.map((items, index) => {
-              return (
-                <li
-                  key={index}
-                  className=" align-items-center  dark:text-white text-[#173B3F] text-base"
-                >
-                  <a
-                    href={items.path}
-                    className="p-1 flex align-items-center leading-3 cursor-pointer font-semibold hover:font-bold"
-                  >
-                    <label className="mr-3 p-1">{items.icon}</label>
-                    <label className="p-1">{items.title} </label>
-                  </a>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-        <div className="inset-x-0 bottom-2  mt-20">
-          <ul className="px-20 flex justify-content-center">
-            {sidebarItems3.map((items, index) => {
-              return (
-                <li
-                  key={index}
-                  className=" justify-content-center mb-1 align-items-center  dark:text-white text-[#173B3F] text-lg ml-2"
-                >
-                  <a
-                    href={items.path}
-                    className="p-1 flex align-items-center leading-5 cursor-pointer"
-                  >
-                    <label className="mr-3 p-1">{items.icon}</label>
-                  </a>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
+    <div
+      className={` ${
+        expanded ? "w-[16rem]" : "w-[4rem]"
+      } fixed  dark:bg-dark-bg bg-white border-r transition-width duration-300 h-full`}
+    >
+      <button
+        onClick={() => setExpanded(!expanded)}
+        className="p-1.5 rounded-lg bg-gray-50 absolute top-2 right-2 z-20"
+      >
+        <Icon
+          icon={expanded ? "material-symbols:menu-open" : "mdi:menu-close"}
+          color="#000"
+        />
+      </button>
+      <div className="pt-12 pb-12 mb-20">
+        <ul className="pl-4">
+          {items.map((item, index) => (
+            <li
+              key={index}
+              className="flex items-center text-white hover:text-[#56c770]"
+            >
+              <Link to={item.path} className="p-1 flex items-center">
+                <span className="mr-3">{item.icon}</span>
+                {expanded && <span>{item.title}</span>}
+              </Link>
+            </li>
+          ))}
+        </ul>
+        {/* Render sidebarItems3 at the bottom */}
+        <ul className="px-4 mt-4">
+          {sidebarItems3.map((item, index) => (
+            <li
+              key={index}
+              className="flex items-center text-white hover:text-[#56c770]"
+            >
+              <Link to={item.path} className="p-1 flex items-center">
+                <span className="mr-3">{item.icon}</span>
+                {expanded && <span>{item.title}</span>}
+              </Link>
+            </li>
+          ))}
+        </ul>
+        <button
+          onClick={handleLogout}
+          className="flex items-center p-1 font-semibold hover:font-bold text-white focus:outline-none hover:text-[#56c770] mt-4 ml-4"
+        >
+          <Icon icon="hugeicons:logout-circle-02" className="mr-3" />
+          {expanded && <span>Logout</span>}
+        </button>
       </div>
-    </>
+    </div>
   );
 };
-export default sidebar;
+
+export default Sidebar;

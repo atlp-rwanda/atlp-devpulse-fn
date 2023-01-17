@@ -1,0 +1,25 @@
+
+.custom-toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+    opacity: 0;
+    transition: opacity 0.6s ease-in-out;
+  }
+  
+  .custom-toast.visible {
+    opacity: 1;
+  }
+  
+  .custom-toast.error {
+    background-color: #ff6b6b;
+  }
+  
+  .custom-toast.success {
+    background-color: #56c870;
+  }
+  

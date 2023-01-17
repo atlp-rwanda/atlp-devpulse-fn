@@ -113,11 +113,12 @@ const ImportTraineeDetailsFromGoogleSheet = () => {
   // <<== end.
 
   return (
-    <div className="ml-[1rem] mr-[1rem]  h-full p-[9rem] flex justify-center flex-col items-center bg-[#aaa] pb-[20rem]">
+    <>
+    <div className="w-full h-screen flex items-center justify-center dark:bg-dark-frame-bg">
       {/* ==>> begin ---- PERTAINS TO THE HANDLING THE LOADING OF THE DATA INTO DATABASE WHEN THE COLUMNS ARE
   // MATCHING TO THOSE IN THE DATABASE ----  */}
       {!failedStatusMessage && (
-        <form className="w-[80%] h-1/2 ml-[50rem] border-[#c5c5c5] mr-[50rem] bg-slate-50 p-[2rem]  shadow-2xl shadow-blue-100 hover:shadow-indigo-100/40 ">
+        <form className="w-[80%] h-1/2 border-[#c5c5c5] bg-slate-50 p-[2rem]  shadow-2xl hover:shadow-indigo-100/40 ">
           <div className="mb-6">
             <label
               htmlFor="email"
@@ -135,7 +136,7 @@ const ImportTraineeDetailsFromGoogleSheet = () => {
               required
             />
           </div>
-          <Link to="/filter_trainee-applicants">
+          <Link to="/admin/filter_trainee-applicants">
             <button
               type="submit"
               className="text-gray-300 mr-4 bg-[#6c1313]  hover:bg-[#931a1a]  focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
@@ -233,6 +234,7 @@ const ImportTraineeDetailsFromGoogleSheet = () => {
       )}
       {/* <<== end. */}
     </div>
+    </>
   );
 };
 

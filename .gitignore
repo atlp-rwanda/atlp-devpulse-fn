@@ -5,3 +5,5 @@ coverage
 dist
 buildcoverage
 package-lock.json
+.DS_Store
+build/

@@ -1,0 +1,57 @@
+[
+    {
+      "id": 1,
+      "firstname": "Leanne",
+      "lastname": "Graham",
+      "email": "Sincere@april.biz",
+      "availability": "Kulas Light",
+      "suite": "Apt. 556",
+      "city": "Gwenborough",
+      "status": "submitted",
+      "zipcode": "92998-3874"
+    },
+    {
+      "id": 2,
+      "firstname": "Clementine ",
+      "lastname": "Bauch",
+      "email": "Sincere@april.biz",
+      "availability": "Kulas Light",
+      "suite": "Apt. 556",
+      "city": "Gwenborough",
+      "status": "submitted",
+      "zipcode": "92998-3874"
+    },
+    {
+      "id": 3,
+      "firstname": "Patricia",
+      "lastname": "Lebsack",
+      "email": "Sincere@april.biz",
+      "availability": "Kulas Light",
+      "suite": "Apt. 556",
+      "city": "Gwenborough",
+      "status": "submitted",
+      "zipcode": "92998-3874"
+    },
+    {
+      "id": 4,
+      "firstname": "Chelsey",
+      "lastname": "Dietrich",
+      "email": "Sincere@april.biz",
+      "availability": "Kulas Light",
+      "suite": "Apt. 556",
+      "city": "Gwenborough",
+      "status": "submitted",
+      "zipcode": "92998-3874"
+    },
+    {
+      "id": 5,
+      "name": "Mrs. Dennis Schulist",
+      "username": "Leopoldo_Corkery",
+      "email": "Karley_Dach@jasper.info",
+      "availability": "Kulas Light",
+      "status": "submitted",
+      "suite": "Apt. 556",
+      "city": "Gwenborough",
+      "zipcode": "92998-3874"
+    }
+  ]
