@@ -129,9 +129,9 @@ export const sendBulkyEmail =
           },
         },
       });
-      const emailResponse = await datas.data.data.sendBulkyEmail; 
+      const emailResponse = await datas.data.data.sendBulkyEmail;
 
-      if (emailResponse.status === 'success') {
+      if (emailResponse.status === "success") {
         toast.success(emailResponse.mail_res);
         dispatch(creator(SEND_EMAIL, emailResponse));
       } else {

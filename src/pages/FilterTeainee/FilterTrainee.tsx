@@ -1,6 +1,6 @@
 /** @format */
 
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState, useMemo, useRef } from "react";
 import { connect } from "react-redux";
 import { useTable, usePagination, useRowSelect } from "react-table";
 import NavBar from "../../components/sidebar/navHeader";
@@ -28,7 +28,8 @@ import {
 import { updateTraineeStatus } from "../../redux/actions/updateStatus";
 import Pagination from "../../components/pagination2/pagination2";
 import Tinymce from "../../components/tinymce/Tinymce";
-
+import { Editor } from "@tinymce/tinymce-react";
+import { Editor as TinyMCEEditor } from "tinymce";
 export const customTheme = (theme: any) => {
   return {
     ...theme,
@@ -53,6 +54,10 @@ export const darkTheme = (theme: any) => {
   };
 };
 
+//tynmce editor
+// const editorRef = useRef();
+// const editorRef = useRef(null);
+
 const FilterTrainee = (props: any) => {
   const { theme, setTheme } = useTheme();
   console.log(props);
@@ -68,7 +73,7 @@ const FilterTrainee = (props: any) => {
     totalTraineeapplicants: 0,
   });
   const [openSendModal, setOpenSendModal] = useState(false);
-  const [to, setTo] = useState("");
+  const [to, setTo] = useState([""]);
   const [subject, setSubject] = useState("");
   const [html, setHtml] = useState("");
   const [isChecked, setIsChecked] = useState(false);
@@ -79,12 +84,15 @@ const FilterTrainee = (props: any) => {
       setIsActive(!isActive);
     }
   };
-
+  console.log("to", to);
   const handleCloseSendModel = () => {
     setOpenSendModal(false);
   };
   const handleOpenSendModel = () => {
     setOpenSendModal(true);
+    {
+      rowsSelected.length != "" ? setTo(rowsSelected) : setTo([]);
+    }
   };
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -110,14 +118,12 @@ const FilterTrainee = (props: any) => {
       to,
       subject,
       html,
-      // cc,
-      // bcc
     };
 
     props.sendBulkyEmail(data);
     setOpenSendModal(false);
   };
-
+  console.log("to", to);
   const showTaggleOptions = () => {
     return (
       <div>
@@ -384,6 +390,7 @@ const FilterTrainee = (props: any) => {
     allColumns,
     rows,
     getToggleHideAllColumnsProps,
+    selectedFlatRows,
   }: any = useTable(
     {
       columns,
@@ -411,6 +418,14 @@ const FilterTrainee = (props: any) => {
     }
   );
   const { pageIndex, pageSize } = state;
+  const rowsSelected = selectedFlatRows.map(
+    (row) => row.original.trainee_id.email
+  );
+  console.log("rowsSelected", rowsSelected);
+
+  function push(value: string): React.SetStateAction<never[]> {
+    throw new Error("Function not implemented.");
+  }
 
   // const paginationRange = useCustomPagination({
   //   totalPageCount: pageCount,
@@ -664,7 +679,8 @@ const FilterTrainee = (props: any) => {
                     placeholder="To whom (Email...)"
                     value={to}
                     onChange={(e) => {
-                      setTo(e.target.value);
+                      // setTo(rowsSelected);
+                      setTo([...e.target.value.split(",")]);
                     }}
                     className=" mt-1 bg-lime cursor-pointer text-[18px] self-center py-1 rounded-[5px] h-[50px] my-[20px] mx-auto w-[80%] block border-[2px] border-[#a8a8a8]  px-[10px] md:w-[90%]"
                   />
@@ -683,18 +699,54 @@ const FilterTrainee = (props: any) => {
                 </div>
                 <div>
                   <div className=" mt-1 cursor-pointer text-[18px] self-center py-0 h-[10rem] my-[50px] mx-auto w-[90%] block px-[5px] md:w-[100%]">
-                    <Tinymce />
+                    <Editor
+                      value={html}
+                      onEditorChange={(Editorcontent) => {
+                        setHtml(Editorcontent);
+                      }}
+                      init={{
+                        height: 220,
+                        //menubar: false,
+                        placeholder: "Write your Email Here.....",
+                        plugins: [
+                          "advlist",
+                          "autolink",
+                          "lists",
+                          "link",
+                          "image",
+                          "charmap",
+                          "preview",
+                          "anchor",
+                          "searchreplace",
+                          "visualblocks",
+                          "code",
+                          "fullscreen",
+                          "insertdatetime",
+                          "media",
+                          "table",
+                          "code",
+                          "help",
+                          "wordcount",
+                        ],
+                        toolbar:
+                          "undo redo | blocks | " +
+                          "bold italic forecolor | alignleft aligncenter " +
+                          "alignright alignjustify | bullist numlist outdent indent | " +
+                          "removeformat | help",
+                        content_style:
+                          "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
+                      }}
+                    />
                   </div>
                   {/* <input
-                  type="text"
-                  name="message"
-                  value={html}
-                  onChange={(e) => {
-                    setHtml(e.target.value);
-                  }}
-                  className=" mt-2 bg-lime cursor-pointer text-[18px] self-center py-1 rounded-[5px] h-[50px] my-[20px] mx-auto w-[80%] block border-[2px] border-[#a8a8a8]  px-[10px] md:w-[90%]"
-                
-                /> */}
+                    type="text"
+                    name="message"
+                    value={html}
+                    onChange={(e) => {
+                      setHtml(e.target.value);
+                    }}
+                    className=" mt-2 bg-lime cursor-pointer text-[18px] self-center py-1 rounded-[5px] h-[50px] my-[20px] mx-auto w-[80%] block border-[2px] border-[#a8a8a8]  px-[10px] md:w-[90%]"
+                  /> */}
                 </div>
                 <button
                   type="submit"
