@@ -1,33 +1,40 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-body{
-    background: #f4f4f4;
+::notification--warning {
+  display: none !important;
+}
+.notification--warning {
+  display: none !important;
+}
+.tox .tox-notification {
+  display: none !important;
+}
+body {
+  background: #f4f4f4;
 }
 
-@media screen and (max-width: 920px){
-  .btn{
-      display: grid;
-      grid-template-rows: repeat(4, 1fr);
-      gap: .5rem;
+@media screen and (max-width: 920px) {
+  .btn {
+    display: grid;
+    grid-template-rows: repeat(4, 1fr);
+    gap: 0.5rem;
   }
   .btn-Aprov {
-      width: 250px;
-      height: 3rem;
-      margin-bottom: .5rem;
+    width: 250px;
+    height: 3rem;
+    margin-bottom: 0.5rem;
   }
-    
+
   .btn-Aprov2 {
-      width: 250px;
-      height: 3rem;
-      margin-top: -60px;
+    width: 250px;
+    height: 3rem;
+    margin-top: -60px;
   }
-    
+
   .btn-Aprov3 {
-      width: 250px;
-      height: 3rem;
-      margin-top: -8rem;
+    width: 250px;
+    height: 3rem;
+    margin-top: -8rem;
   }
-    
 }
