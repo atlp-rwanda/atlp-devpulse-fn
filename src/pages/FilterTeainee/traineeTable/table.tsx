@@ -3,22 +3,18 @@ import React, { useEffect, useState, useMemo, useRef } from "react";
 import { updateTraineeStatus } from "../../../redux/actions/updateStatus";
 import { connect } from "react-redux";
 import CheckBox from "../../../components/CkeckBox";
-import Select from "react-select";
 import { FaCaretDown } from "react-icons/fa";
-
 import Threedots from "../../../components/Dropdown/Threedots";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-
-
- const Userxlsxtable = ({ data, nonDeletedTrainee,setrowsSelected}) => {
- const traineeStatusUpdate = (id: any, status: any, cycle_id: any) => {
+const Userxlsxtable = ({updateTraineeStatus, data, nonDeletedTrainee,setrowsSelected}) => {
+  const traineeStatusUpdate = async(id: any, status: any, cycle_id: any) => {
     const input = {
       id,
       status,
       cycle_id,
     };
-    updateTraineeStatus(input);
+    await updateTraineeStatus(input);
   };
   const [me, setMe] = useState("Keroity");
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -179,7 +175,7 @@ import MenuItem from "@mui/material/MenuItem";
       },
     },
   ];
-    const initialState = {
+  const initialState = {
     hiddenColumns: [
       "trainee_id.firstName",
       "Deleted",
@@ -202,7 +198,7 @@ import MenuItem from "@mui/material/MenuItem";
     ],
   };
   const columns = useMemo(() => COLS, []);
- const {
+  const {
     getTableProps,
     getTableBodyProps,
     headerGroups,
@@ -237,15 +233,13 @@ import MenuItem from "@mui/material/MenuItem";
       });
     }
   );  
-const rowsSelecte = selectedFlatRows.map(
+  const rowsSelecte = selectedFlatRows.map(
     (row) => row.original.trainee_id.email
   );
-// setrowsSelected(rowsSelecte)
-console.log(getToggleHideAllColumnsProps,"++++++++++++++")
-useEffect(()=>{
-    setrowsSelected(rowsSelecte)
-},[selectedFlatRows])
-     return(
+  useEffect(()=>{
+      setrowsSelected(rowsSelecte)
+  },[selectedFlatRows])
+  return(
         <>
             <div className="relative block">
                 <button

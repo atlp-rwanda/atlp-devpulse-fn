@@ -6,26 +6,17 @@ import { useTable, usePagination, useRowSelect } from "react-table";
 import NavBar from "../../components/sidebar/navHeader";
 import * as AiIcons from "react-icons/ai";
 import * as IoIcons from "react-icons/io5";
-import CheckBox from "../../components/CkeckBox";
 import Select from "react-select";
-import Threedots from "../../components/Dropdown/Threedots";
-import { FaCaretDown } from "react-icons/fa";
 import FiltrerTable from "./traineeTable/table"
 import {
   getAllFilteredTraineess,
   sendBulkyEmail,
 } from "../../redux/actions/filterTraineeActions";
 import { getAlltraineeapplicants } from "../../redux/actions/filterTraineeActions";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import { useTheme } from "../../hooks/darkmode";
 import { Link } from "react-router-dom";
-import {
-  DOTS,
-  useCustomPagination,
-} from "../../components/Pagination/useCustomPagination";
 import { updateTraineeStatus } from "../../redux/actions/updateStatus";
 import Pagination from "../../components/pagination2/pagination2";
 import Tinymce from "../../components/tinymce/Tinymce";
@@ -123,32 +114,6 @@ const FilterTrainee = (props: any) => {
     setOpenSendModal(false);
   };
   console.log("to", to);
-  const childFunc = React.useRef(null)
-  // const showTaggleOptions = () => {
-  //   return (
-  //     <div>
-  //       <div className="flex">
-  //         <div className="mr-[5px]">
-  //           <CheckBox {...getToggleHideAllColumnsProps()} />{" "}
-  //         </div>
-  //         <div>Toggle All</div>
-  //       </div>
-  //       {allColumns.map((column) => (
-  //         <div key={column.id}>
-  //           <label>
-  //             <input
-  //               type="checkbox"
-  //               {...column.getToggleHiddenProps()}
-  //               className="mr-[5px]"
-  //             />
-  //             {column.Header}
-  //           </label>
-  //         </div>
-  //       ))}
-  //     </div>
-  //   );
-  // };
-  // All trainees in DB
   const { allfilteredTrainees, updateTraineeStatus, count } = props;
   const traineeList = allfilteredTrainees?.data;
   const handleNullTraineeList = traineeList === undefined ? [] : traineeList;
@@ -164,14 +129,6 @@ const FilterTrainee = (props: any) => {
     return value.trainee_id.delete_at == false;
   });
 
-  const traineeStatusUpdate = (id: any, status: any, cycle_id: any) => {
-    const input = {
-      id,
-      status,
-      cycle_id,
-    };
-    updateTraineeStatus(input);
-  };
 
   useEffect(() => {
     props.getAlltraineeapplicants();
@@ -201,11 +158,7 @@ const FilterTrainee = (props: any) => {
     }));
   }, [currentPage, enteredWord, filterAttribute, itemsPerPage]);
 
- 
-  // const { pageIndex, pageSize } = state;
-  // const rowsSelected = selectedFlatRows.map(
-  //   (row) => row.original.trainee_id.email
-  // );
+
   console.log("rowsSelected", rowsSelected);
 
   function push(value: string): React.SetStateAction<never[]> {
@@ -298,118 +251,6 @@ const FilterTrainee = (props: any) => {
               </div>
             </div>
             <div>
-              {/* <div className="relative block">
-                <button
-                  onClick={(event) => {
-                    setAnchorEl(event.currentTarget as unknown as HTMLElement);
-                  }}
-                  className="flex items-center mb-4 py-2 px-7 w-50 rounded-bt-rd border bg-row-gray dark:bg-[#293647] border-solid border-bdr dark:border-cg dark:border-opacity-5 shadow-sm text-button-color dark:text-[#dbdee6]  text-fb font-medium"
-                >
-                  <h4>CHOOSE COLUMN</h4>
-                  <span className="pl-3">
-                    <FaCaretDown />
-                  </span>
-                </button>
-              </div> */}
-              {/* <Menu
-                anchorEl={anchorEl}
-                open={open}
-                onClose={handleClose}
-                MenuListProps={{
-                  "aria-labelledby": "basic-button",
-                }}
-                className="h-[23rem] mt-[8px]"
-              >
-                <MenuItem>
-                  <div className="flex">
-                    <div className="mr-[5px]">
-                      <CheckBox
-                        {...getToggleHideAllColumnsProps()}
-                        checked={isChecked}
-                      />{" "}
-                    </div>
-                    <div className="text-[#173B3F] text-base">Toggle All</div>
-                  </div>
-                </MenuItem>
-                {allColumns?.map((column) => (
-                  <MenuItem>
-                    <div key={column.id}>
-                      <label className="text-[#173B3F] text-base">
-                        <input
-                          type="checkbox"
-                          {...column.getToggleHiddenProps()}
-                          className="mr-[5px]"
-                          checked={isChecked}
-                        />
-                        {column.Header}
-                      </label>
-                    </div>
-                  </MenuItem>
-                ))}
-              </Menu> */}
-              {/* <div className=" w-[100%] max-h-[70vh] m-auto bg-[#fff] dark:bg-dark-bg shadow-md rounded-[10px] relative pb-[20px]  overflow-x-auto  overflow-y-scroll md:w-[100%]"> */}
-                {/* <table
-                  {...getTableProps()}
-                  className="border-collapse w-[100%] m-auto rounded-[15px] whitespace-nowrap"
-                >
-                  <thead className=" w-full px-32 sticky top-0">
-                    {headerGroups?.map((headerGroup: any, index: number) => (
-                      <tr
-                        key={index}
-                        {...headerGroup.getHeaderGroupProps()}
-                        className="border-solid border-[1px] border-white dark:border-[#abb8c3] dark:border-opacity-10 even:bg-[#eef1f1] first:w-[20px]"
-                      >
-                        {headerGroup.headers.map(
-                          (column: any, index: number) => (
-                            <th
-                              key={index}
-                              {...column.getHeaderProps}
-                              className="border-solid pl-[30px] h-[50px] text-left bg-[#eef1f1] dark:bg-dark-frame-bg dark:text-ltb first:rounded-tl-[10px] last:rounded-tr-[10px] border-b-[2px] border-[#c5c5c5] dark:border-[#f3f4f5] dark:border-opacity-10 py-6 last:pl-[0px] w-[150px] last:w-[20px] first:w-[20px]"
-                            >
-                              {column.render("Header")}
-                            </th>
-                          )
-                        )}
-                      </tr>
-                    ))}
-                  </thead>
-                  <tbody {...getTableBodyProps()}>
-                    {nonDeletedTrainee?.length !== 0 ? (
-                      rows?.map((row: any) => {
-                        prepareRow(row);
-                        return (
-                          <tr
-                            {...row.getRowProps()}
-                            key={row.original.id}
-                            className="even:bg-[#eef1f1] dark:even:bg-dark-frame-bg border-b dark:text-ltb border-gray-200 dark:border-cg dark:border-opacity-5"
-                          >
-                            {row.cells.map((cell: any) => {
-                              return (
-                                <td
-                                  onClick={handleOnChange}
-                                  {...cell.getCellProps()}
-                                  className="pl-[30px] text-left max-w-[150px] overflow-x-auto p-4 last:w-[2px] last:pl-[0px]"
-                                >
-                                  {cell.render("Cell")}
-                                </td>
-                              );
-                            })}
-                          </tr>
-                        );
-                      })
-                    ) : (
-                      <tr>
-                        <td></td>
-                        <td></td>
-                        <td className="float-right text-fb p-5 font-normal text-stone-500 dark:text-stone-400">
-                          No data{" "}
-                        </td>
-                        <td></td>
-                        <td></td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table> */}
                 <FiltrerTable 
                 data={data}
                 setrowsSelected={setrowsSelected}
@@ -513,15 +354,7 @@ const FilterTrainee = (props: any) => {
                       }}
                     />
                   </div>
-                  {/* <input
-                    type="text"
-                    name="message"
-                    value={html}
-                    onChange={(e) => {
-                      setHtml(e.target.value);
-                    }}
-                    className=" mt-2 bg-lime cursor-pointer text-[18px] self-center py-1 rounded-[5px] h-[50px] my-[20px] mx-auto w-[80%] block border-[2px] border-[#a8a8a8]  px-[10px] md:w-[90%]"
-                  /> */}
+      
                 </div>
                 <button
                   type="submit"

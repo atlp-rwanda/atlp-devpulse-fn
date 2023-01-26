@@ -323,7 +323,7 @@ const AddTrainee = (props: any) => {
                                         </td>
 
                                         <td>
-                                          <div>
+                                          <div className="relative"> 
                                             <HiDotsVertical
                                               className=" text-black dark:text-white text-3xl ml-6 font-size-6 cursor-pointer"
                                               onClick={(e: any) => {

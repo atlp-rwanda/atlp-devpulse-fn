@@ -29,7 +29,7 @@ export const updateTraineeStatus =
           },
         },
       });
-
+     console.log(datas)
       const response = await datas.data.data.updateTraineeApplicant;
       if (response !== null) {
         toast.success("Status updated successfully.");
@@ -38,6 +38,7 @@ export const updateTraineeStatus =
         toast.error("Error while Updating status");
       }
     } catch (error) {
+      console.log(error)
       if (error) {
         return console.log(error);
       }
