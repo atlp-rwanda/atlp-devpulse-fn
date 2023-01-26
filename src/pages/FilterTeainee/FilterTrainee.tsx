@@ -10,6 +10,7 @@ import CheckBox from "../../components/CkeckBox";
 import Select from "react-select";
 import Threedots from "../../components/Dropdown/Threedots";
 import { FaCaretDown } from "react-icons/fa";
+import FiltrerTable from "./traineeTable/table"
 import {
   getAllFilteredTraineess,
   sendBulkyEmail,
@@ -53,17 +54,14 @@ export const darkTheme = (theme: any) => {
     },
   };
 };
-
-//tynmce editor
-// const editorRef = useRef();
-// const editorRef = useRef(null);
-
 const FilterTrainee = (props: any) => {
   const { theme, setTheme } = useTheme();
   console.log(props);
   const [filterAttribute, setFilterAttribute] = useState("");
   const [enteredWord, setEnteredWord] = useState("");
   const [enteredsubmitWord, setenteredsubmitWord] = useState("");
+  const[rowsSelected,setrowsSelected]=useState([]);
+  const[columnSelected,setcolumnSelected]=useState([])
   const [All, setAll] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [pageData, setPageData] = useState({
@@ -88,10 +86,11 @@ const FilterTrainee = (props: any) => {
   const handleCloseSendModel = () => {
     setOpenSendModal(false);
   };
+
   const handleOpenSendModel = () => {
     setOpenSendModal(true);
     {
-      rowsSelected.length != "" ? setTo(rowsSelected) : setTo([]);
+      rowsSelected.length != 0 ? setTo(rowsSelected) : setTo([]);
     }
   };
   const [currentPage, setCurrentPage] = useState(1);
@@ -124,30 +123,31 @@ const FilterTrainee = (props: any) => {
     setOpenSendModal(false);
   };
   console.log("to", to);
-  const showTaggleOptions = () => {
-    return (
-      <div>
-        <div className="flex">
-          <div className="mr-[5px]">
-            <CheckBox {...getToggleHideAllColumnsProps()} />{" "}
-          </div>
-          <div>Toggle All</div>
-        </div>
-        {allColumns.map((column) => (
-          <div key={column.id}>
-            <label>
-              <input
-                type="checkbox"
-                {...column.getToggleHiddenProps()}
-                className="mr-[5px]"
-              />
-              {column.Header}
-            </label>
-          </div>
-        ))}
-      </div>
-    );
-  };
+  const childFunc = React.useRef(null)
+  // const showTaggleOptions = () => {
+  //   return (
+  //     <div>
+  //       <div className="flex">
+  //         <div className="mr-[5px]">
+  //           <CheckBox {...getToggleHideAllColumnsProps()} />{" "}
+  //         </div>
+  //         <div>Toggle All</div>
+  //       </div>
+  //       {allColumns.map((column) => (
+  //         <div key={column.id}>
+  //           <label>
+  //             <input
+  //               type="checkbox"
+  //               {...column.getToggleHiddenProps()}
+  //               className="mr-[5px]"
+  //             />
+  //             {column.Header}
+  //           </label>
+  //         </div>
+  //       ))}
+  //     </div>
+  //   );
+  // };
   // All trainees in DB
   const { allfilteredTrainees, updateTraineeStatus, count } = props;
   const traineeList = allfilteredTrainees?.data;
@@ -177,155 +177,6 @@ const FilterTrainee = (props: any) => {
     props.getAlltraineeapplicants();
   }, [enteredWord, filterAttribute]);
 
-  const [me, setMe] = useState("Keroity");
-
-  const handleMe = () => {
-    setMe("Heroiks");
-  };
-
-  const COLS = [
-    {
-      Header: "Name",
-      accessor: "",
-      Cell: ({ row }: any) => {
-        return (
-          <div>
-            <span>{row.original.trainee_id.firstName} </span>
-            <span className="semi-md-col:hidden">
-              {row.original.trainee_id.lastName}
-            </span>
-          </div>
-        );
-      },
-      visible: false,
-    },
-    {
-      Header: "Email",
-      accessor: "trainee_id.email",
-    },
-    {
-      Header: "Deleted",
-      accessor: "",
-      Cell: ({ row }: any) => {
-        return <div>{row.original.trainee_id.delete_at.toString()}</div>;
-      },
-    },
-    {
-      Header: "Gender",
-      accessor: "gender",
-    },
-    {
-      Header: "Birth Date",
-      accessor: "",
-      Cell: ({ row }: any) => {
-        const humanDateFormat = new Date(
-          parseInt(row.original.birth_date)
-        ).toLocaleDateString();
-        return <div>{humanDateFormat}</div>;
-      },
-    },
-    {
-      Header: "Phone number",
-      accessor: "phone",
-    },
-    {
-      Header: "Field of Study",
-      accessor: "field_of_study",
-    },
-    {
-      Header: "Education Level",
-      accessor: "education_level",
-    },
-    {
-      Header: "Province",
-      accessor: "province",
-    },
-    {
-      Header: "District",
-      accessor: "district",
-    },
-    {
-      Header: "Sector",
-      accessor: "sector",
-    },
-    {
-      Header: "Employment",
-      accessor: "",
-      Cell: ({ row }: any) => {
-        return <div>{row.original.isEmployed.toString()}</div>;
-      },
-    },
-    {
-      Header: "Has Laptop",
-      accessor: "",
-      Cell: ({ row }: any) => {
-        return <div>{row.original.haveLaptop.toString()}</div>;
-      },
-    },
-    {
-      Header: "Student",
-      accessor: "",
-      Cell: ({ row }: any) => {
-        return <div>{row.original.isStudent.toString()}</div>;
-      },
-    },
-    {
-      Header: "Hackerrank Score",
-      accessor: "Hackerrank_score",
-    },
-    {
-      Header: "English Score",
-      accessor: "english_score",
-    },
-    {
-      Header: "Interview Decision",
-      accessor: "interview_decision",
-    },
-    {
-      Header: "Andela Programs",
-      accessor: "past_andela_programs",
-    },
-    {
-      Header: "Address",
-      accessor: "Address",
-    },
-    {
-      Header: "Status",
-      accessor: "",
-      Cell: ({ row }: any) => {
-        return (
-          <select
-            defaultValue={row.original.trainee_id.status}
-            id="status"
-            className="dark:text-[#dbdee6] border bg-row-gray dark:bg-[#293647] border-solid border-bdr dark:border-cg dark:border-opacity-5 shadow-sm px-4 py-4px rounded-bt-rd focus:outline-none sm:text-sm"
-            onChange={(e) => {
-              traineeStatusUpdate(
-                row.original.trainee_id._id,
-                e.target.value,
-                row.original.trainee_id.cycle_id.id
-              );
-            }}
-          >
-            <option value="">Not Assigned</option>
-            <option value="passed">Passed</option>
-            <option value="failed">Failed</option>
-            <option value="relegated">Relegated</option>
-          </select>
-        );
-      },
-    },
-
-    {
-      Header: "Actions",
-      accessor: "",
-      Cell: ({ row }: any) => {
-        return (
-          <Threedots useParentFx={() => handleMe()} min={row.original._id} />
-        );
-      },
-    },
-  ];
-  const columns = useMemo(() => COLS, []);
   const data = useMemo(() => nonDeletedTrainee, [allfilteredTrainees]);
   useEffect(() => {
     setPageData((prevState) => ({
@@ -349,89 +200,17 @@ const FilterTrainee = (props: any) => {
       totalTraineeapplicants: count.message,
     }));
   }, [currentPage, enteredWord, filterAttribute, itemsPerPage]);
-  const initialState = {
-    hiddenColumns: [
-      "trainee_id.firstName",
-      "Deleted",
-      "gender",
-      "birth_date",
-      "phone",
-      "field_of_study",
-      "education_level",
-      "province",
-      "district",
-      "sector",
-      "Employment",
-      "Has Laptop",
-      "Student",
-      "Hackerrank_score",
-      "english_score",
-      "interview_decision",
-      "past_andela_programs",
-      "Address",
-    ],
-  };
 
-  const {
-    getTableProps,
-    getTableBodyProps,
-    headerGroups,
-    // page,
-    // nextPage,
-    // previousPage,
-    // canNextPage,
-    // canPreviousPage,
-    // pageOptions,
-    // gotoPage,
-    // pageCount,
-    setPageSize,
-    state,
-    prepareRow,
-    allColumns,
-    rows,
-    getToggleHideAllColumnsProps,
-    selectedFlatRows,
-  }: any = useTable(
-    {
-      columns,
-      data,
-      initialState,
-    },
-    // usePagination,
-
-    useRowSelect,
-    (hooks: any) => {
-      hooks.visibleColumns.push((columns: any) => {
-        return [
-          {
-            id: "selection",
-            Header: ({ getToggleAllRowsSelectedProps }: any) => (
-              <CheckBox {...getToggleAllRowsSelectedProps()} />
-            ),
-            Cell: ({ row }: any) => (
-              <CheckBox {...row.getToggleRowSelectedProps()} />
-            ),
-          },
-          ...columns,
-        ];
-      });
-    }
-  );
-  const { pageIndex, pageSize } = state;
-  const rowsSelected = selectedFlatRows.map(
-    (row) => row.original.trainee_id.email
-  );
+ 
+  // const { pageIndex, pageSize } = state;
+  // const rowsSelected = selectedFlatRows.map(
+  //   (row) => row.original.trainee_id.email
+  // );
   console.log("rowsSelected", rowsSelected);
 
   function push(value: string): React.SetStateAction<never[]> {
     throw new Error("Function not implemented.");
   }
-
-  // const paginationRange = useCustomPagination({
-  //   totalPageCount: pageCount,
-  //   currentPage: pageIndex,
-  // });
-
   return (
     <>
       <div className="flex bg-[#F9F9FB] dark:bg-dark-bg  min-h-[100vh]">
@@ -501,18 +280,11 @@ const FilterTrainee = (props: any) => {
               </div>
 
               <div className="mx-auto order-2 semi-sm:mt-2 lg:mr-0 block semi-md:mr-0">
-                {/* <button className="bg-button-color dark:bg-green text-ltb text-fb font-medium ml-8 mt-2 pl-3 pr-3 py-1 rounded-bt-rd semi-sm:ml-0">
-                  ADD INTERVIEWER
-                </button> */}
-
                 <Link to="/import_trainee-aplicants">
                   <button className="bg-button-color dark:bg-green text-ltb text-fb font-medium ml-8 mt-2 pl-3 pr-3 py-1 rounded-bt-rd semi-sm:ml-2">
                     IMPORT FROM
                   </button>
                 </Link>
-                {/* <button className="bg-button-color dark:bg-green text-ltb text-fb font-medium ml-8 mt-2 pl-3 pr-3 py-1 rounded-bt-rd semi-sm:ml-2">
-                  EXPORT TO
-                </button> */}
                 <button
                   style={{
                     backgroundColor: isActive ? "#293647" : "#dbdee6",
@@ -526,7 +298,7 @@ const FilterTrainee = (props: any) => {
               </div>
             </div>
             <div>
-              <div className="relative block">
+              {/* <div className="relative block">
                 <button
                   onClick={(event) => {
                     setAnchorEl(event.currentTarget as unknown as HTMLElement);
@@ -538,9 +310,8 @@ const FilterTrainee = (props: any) => {
                     <FaCaretDown />
                   </span>
                 </button>
-              </div>
-              <Menu
-                // id="basic-menu"
+              </div> */}
+              {/* <Menu
                 anchorEl={anchorEl}
                 open={open}
                 onClose={handleClose}
@@ -569,16 +340,15 @@ const FilterTrainee = (props: any) => {
                           {...column.getToggleHiddenProps()}
                           className="mr-[5px]"
                           checked={isChecked}
-                          // onChange={handleOnChange}
                         />
                         {column.Header}
                       </label>
                     </div>
                   </MenuItem>
                 ))}
-              </Menu>
-              <div className=" w-[100%] max-h-[70vh] m-auto bg-[#fff] dark:bg-dark-bg shadow-md rounded-[10px] relative pb-[20px]  overflow-x-auto  overflow-y-scroll md:w-[100%]">
-                <table
+              </Menu> */}
+              {/* <div className=" w-[100%] max-h-[70vh] m-auto bg-[#fff] dark:bg-dark-bg shadow-md rounded-[10px] relative pb-[20px]  overflow-x-auto  overflow-y-scroll md:w-[100%]"> */}
+                {/* <table
                   {...getTableProps()}
                   className="border-collapse w-[100%] m-auto rounded-[15px] whitespace-nowrap"
                 >
@@ -617,7 +387,6 @@ const FilterTrainee = (props: any) => {
                               return (
                                 <td
                                   onClick={handleOnChange}
-                                  // checked={handleOnChange}
                                   {...cell.getCellProps()}
                                   className="pl-[30px] text-left max-w-[150px] overflow-x-auto p-4 last:w-[2px] last:pl-[0px]"
                                 >
@@ -640,8 +409,14 @@ const FilterTrainee = (props: any) => {
                       </tr>
                     )}
                   </tbody>
-                </table>
-              </div>
+                </table> */}
+                <FiltrerTable 
+                data={data}
+                setrowsSelected={setrowsSelected}
+                nonDeletedTrainee={nonDeletedTrainee}
+                // handleOnChange={handleOnChange}
+                />
+              {/* </div> */}
             </div>
             <div className="py-3 flex items-center text-center justify-center pt-10">
               <Pagination
