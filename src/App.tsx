@@ -14,7 +14,7 @@ import "./index.css";
 import Table from "./pages/Table";
 import UpdateTraine from "./pages/updateTrainee/traineUpdate";
 import CreateScoreType from "./pages/FilterTeainee/createScoreType";
-import ScoreTypesActions from "./pages/FilterTeainee/ ScoreTypesActions";
+import ScoreTypesActions from "./pages/FilterTeainee/ScoreTypesActions";
 import "./index.css";
 import ImportTraineeDetailsFromGoogleSheet from "./pages/importAndSaveManyTraineesFromGoogleSheet/importAndSaveManyTraineesFromGoogleSheet";
 
