@@ -10,7 +10,7 @@ const LoginPage = (props: any) => {
 
   const navigate = useNavigate();
 
-  const CLIENT_ID = process.env.CLIENT_ID;
+  const CLIENT_ID = "739275083877-igkga4j0nu59d0c3qr37i8hlr2iihl6c.apps.googleusercontent.com";
 
   const MY_QUERY = `
     {

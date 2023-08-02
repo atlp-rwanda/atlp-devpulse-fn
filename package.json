@@ -1,13 +1,14 @@
 {
   "name": "atlp-devpulse-fn",
   "version": "1.0.0",
-  "description": "",
+  "description": "[![Maintainability](https://api.codeclimate.com/v1/badges/2c2cd9c0f847fcbba7a9/maintainability)](https://codeclimate.com/github/atlp-rwanda/atlp-devpulse-fn/maintainability)",
   "main": "index.js",
   "scripts": {
-    "start": "echo \"Error: no test specified\" && exit 1",
+    "start": "webpack server",
     "dev": "webpack server",
     "test": "react-scripts test --watchAll=false",
     "build": "webpack build"
+    
   },
   "repository": {
     "type": "git",
