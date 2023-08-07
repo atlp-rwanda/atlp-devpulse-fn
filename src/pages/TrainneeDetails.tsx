@@ -90,14 +90,14 @@ const TrainneeDetails = (props: any) => {
         {/* <div className="min-h-[50vh] dark:bg-dark-frame-bg  w-[100%] block mt-10 md:w-[100%] md:mt-0 pl-[16rem] pt-[80px] md:pl-0"> */}
         <div className="block w-[100%] pl-[16rem] h-max md:pl-0 mx-auto dark:bg-dark-frame-bg pb-10 mt-10  pt-[80px]">
           {traineeDetails && (
-            <div className=" max-w-md bg-slate-50 dark:text-zinc-100 rounded-xl dark:bg-dark-bg shadow-md  overflow-hidden md:w-[100%] mb-6 lg:flex lg:max-w-2xl mx-auto">
-              <div className="md:flex  ">
+            <div className=" max-w-md bg-slate-50 dark:text-zinc-100 rounded-xl dark:bg-dark-bg shadow-md  overflow-hidden md:w-[100%] mb-6 lg:flex lg:max-w-2xl mx-auto sm:px-3 sm:grid sm:grid-cols-2">
+              <div className=" ">
                 <h2 className="top-5 m-5  font-medium  md:m-3 ">
                   <BsFillPersonLinesFill className="float-left m-1" />
                   Trainee Applicant Information
                 </h2>
 
-                <div className=" m-5 sm:mt-20 sm:ml-[-12rem] md:shrink-0  lg:ml-10 lg:mt-10  ">
+                <div className=" m-3 sm:mt-5 md:shrink-0  lg:ml-10 lg:mt-10  ">
                   {traineeDetails?.trainee_id && (
                     <>
                       {" "}
@@ -141,7 +141,7 @@ const TrainneeDetails = (props: any) => {
                   )}
                 </div>
               </div>
-              <div className="m-5 sm:ml-[20rem] md:ml-2 lg:mt-20 lg:ml-[5rem]">
+              <div className="m-3  md:ml-2 lg:mt-20 sm:mt-20 lg:ml-[5rem]">
                 {traineeDetails?.trainee_id && (
                   <>
                     <h3>LastName</h3>
@@ -181,7 +181,7 @@ const TrainneeDetails = (props: any) => {
               </div>
             </div>
           )}
-          <div className="bg-slate-50 rounded-xl dark:bg-dark-bg shadow-md overflow-hidden md:w-[90%] px-10 mb-6 lg:max-w-2xl w-[90%] mx-auto">
+          <div className=" max-w-md bg-slate-50 rounded-xl dark:bg-dark-bg shadow-md overflow-hidden md:w-[90%] px-10 mb-6 lg:max-w-2xl w-[90%]  mx-auto">
             <form className="w-fit ">
               <h2 className="top-5 m-5 ml-0 font-medium dark:text-zinc-100">
                 <BsFillPersonLinesFill className="float-left m-1 " />

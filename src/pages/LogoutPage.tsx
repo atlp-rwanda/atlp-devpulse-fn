@@ -8,9 +8,11 @@ const LogoutPage = () => {
     navigate("/login");
   };
   return (
-    <div className="flex ">
+    <div className=" is-active focus:text-green-600  p-1 flex align-items-center leading-3 cursor-pointer font-semibold hover:font-bold">
+      <label className="mr-3 p-1">
       <Icon icon="nimbus:arrow-left"></Icon>
-      <button className="ml-2 pt-1" onClick={(e) => handleLogout(e)}>
+      </label>
+      <button className=" p-1" onClick={(e) => handleLogout(e)}>
         Logout
       </button>
     </div>
