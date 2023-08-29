@@ -11,7 +11,8 @@ export const loginAction = () => async (dispatch: any) => {
                     getUsers_Logged {
                         id
                         createdAt
-                        name
+                        firstname
+                        lastname
                         email
                     }
                 }
