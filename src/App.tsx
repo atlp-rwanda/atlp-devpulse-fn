@@ -24,6 +24,8 @@ import ApplicationCycle from "./pages/ApplicationCycle/ApplicationCycle";
 import LoginPage from "./pages/LoginPage";
 import PrivateRoute from "./pages/PrivateRoute";
 import PageNotFound from "./pages/PageNotFound";
+import ApplicantFormTwo from "./pages/TraineApplicant/ApplicantFormTwo";
+import ApplicantForm from './pages/TraineApplicant/ApplicantForm';
 
 function App() {
   return (
@@ -140,7 +142,9 @@ function App() {
           </PrivateRoute>
         }
       />
-      <Route path="/login" element={<LoginPage />} />
+      <Route path="/login2" element={<ApplicantFormTwo />} />
+      <Route path="/login" element={<ApplicantForm />} />
+
       <Route
         path="/admins"
         element={
