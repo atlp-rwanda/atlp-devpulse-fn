@@ -1,29 +1,30 @@
-import React from "react";
-import { HashRouter as Router, Routes, Route, Link } from "react-router-dom";
-import TestTailwind from "./components/TestTailwind";
-import TrainneeDetails from "./pages/TrainneeDetails";
-import TrainneeDetailsB from "./pages/TrainneDetailsB";
-import "./index.css";
-import Sidebar from "./components/sidebar/sidebar";
-import "./index.css";
-import "./index.css";
-import NavBar from "./components/sidebar/navHeader";
-import Trainee from "./pages/TraineApplicant/Trainee";
-import FilterTrainee from "./pages/FilterTeainee/FilterTrainee";
-import "./index.css";
-import Table from "./pages/Table";
-import UpdateTraine from "./pages/updateTrainee/traineUpdate";
-import CreateScoreType from "./pages/FilterTeainee/createScoreType";
-import ScoreTypesActions from "./pages/FilterTeainee/ScoreTypesActions";
-import "./index.css";
-import ImportTraineeDetailsFromGoogleSheet from "./pages/importAndSaveManyTraineesFromGoogleSheet/importAndSaveManyTraineesFromGoogleSheet";
+import React from 'react';
+import { HashRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import TestTailwind from './components/TestTailwind';
+import TrainneeDetails from './pages/TrainneeDetails';
+import TrainneeDetailsB from './pages/TrainneDetailsB';
+import './index.css';
+import Sidebar from './components/sidebar/sidebar';
+import './index.css';
+import './index.css';
+import NavBar from './components/sidebar/navHeader';
+import Trainee from './pages/TraineApplicant/Trainee';
+import FilterTrainee from './pages/FilterTeainee/FilterTrainee';
+import './index.css';
+import Table from './pages/Table';
+import UpdateTraine from './pages/updateTrainee/traineUpdate';
+import CreateScoreType from './pages/FilterTeainee/createScoreType';
+import ScoreTypesActions from './pages/FilterTeainee/ScoreTypesActions';
+import ScheduleInterview from './pages/ApplicationCycle/ScheduleInterview';
+import './index.css';
+import ImportTraineeDetailsFromGoogleSheet from './pages/importAndSaveManyTraineesFromGoogleSheet/importAndSaveManyTraineesFromGoogleSheet';
 
-const Counter = React.lazy(() => import("./components/Counter/Counter"));
-import Trash from "./pages/Trash/Trash";
-import ApplicationCycle from "./pages/ApplicationCycle/ApplicationCycle";
-import LoginPage from "./pages/LoginPage";
-import PrivateRoute from "./pages/PrivateRoute";
-import PageNotFound from "./pages/PageNotFound";
+const Counter = React.lazy(() => import('./components/Counter/Counter'));
+import Trash from './pages/Trash/Trash';
+import ApplicationCycle from './pages/ApplicationCycle/ApplicationCycle';
+import LoginPage from './pages/LoginPage';
+import PrivateRoute from './pages/PrivateRoute';
+import PageNotFound from './pages/PageNotFound';
 
 function App() {
   return (
@@ -149,6 +150,7 @@ function App() {
           </PrivateRoute>
         }
       />
+      <Route path="/interview" element={<ScheduleInterview />} />
       <Route
         path="*"
         element={
