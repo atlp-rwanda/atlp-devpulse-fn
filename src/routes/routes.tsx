@@ -1,18 +1,18 @@
-import React from "react";
-import { HashRouter as Router, Routes, Route, Link } from "react-router-dom";
-import TestTailwind from "./../components/TestTailwind";
-import TrainneeDetails from "./../pages/TrainneeDetails";
-import TrainneeDetailsB from "./../pages/TrainneDetailsB";
-import "./../index.css";
-import Sidebar from "./../components/sidebar/sidebar";
-import NavBar from "./../components/sidebar/navHeader";
-import Trainee from "./../pages/TraineApplicant/Trainee";
-import FilterTrainee from "./../pages/FilterTeainee/FilterTrainee";
-import Table from "./../pages/Table";
-import UpdateTraine from "./../pages/updateTrainee/traineUpdate";
-import CreateScoreType from "./../pages/FilterTeainee/createScoreType";
-import ScoreTypesActions from "./../pages/FilterTeainee/ScoreTypesActions";
-import ImportTraineeDetailsFromGoogleSheet from "./../pages/importAndSaveManyTraineesFromGoogleSheet/importAndSaveManyTraineesFromGoogleSheet";
+import React from 'react';
+import { HashRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import TestTailwind from './../components/TestTailwind';
+import TrainneeDetails from './../pages/TrainneeDetails';
+import TrainneeDetailsB from './../pages/TrainneDetailsB';
+import './../index.css';
+import Sidebar from './../components/sidebar/sidebar';
+import NavBar from './../components/sidebar/navHeader';
+import Trainee from './../pages/TraineApplicant/Trainee';
+import FilterTrainee from './../pages/FilterTeainee/FilterTrainee';
+import Table from './../pages/Table';
+import UpdateTraine from './../pages/updateTrainee/traineUpdate';
+import CreateScoreType from './../pages/FilterTeainee/createScoreType';
+import ScoreTypesActions from './../pages/FilterTeainee/ScoreTypesActions';
+import ImportTraineeDetailsFromGoogleSheet from './../pages/importAndSaveManyTraineesFromGoogleSheet/importAndSaveManyTraineesFromGoogleSheet';
 
 const Counter = React.lazy(() => import('./../components/Counter/Counter'));
 import Trash from './../pages/Trash/Trash';
@@ -28,10 +28,13 @@ import RolePermission from '../pages/roles&permissions/RolePermission';
 import CreateFormPage from './../pages/ApplicationForms/CreateApplicantForm';
 import UpdateSavedFormPage from './../pages/ApplicationForms/UpdateSavedForm';
 import ViewApplicationForms from './../pages/ApplicationForms/ViewApplicationForms';
-import UpdateProgram from "../pages/programs/UpdateProgram";
+import UpdateProgram from '../pages/programs/UpdateProgram';
 import Jobs from '../pages/JobPost/job';
 import SingleJobPostDetails from '../pages/JobPost/viewSingleJob';
 import SharedPosts from '../pages/sharedPosts';
+import Applications from '../pages/Applications';
+import ScheduleInterview from '../pages/ScheduleInterview';
+import SubmitApplication from '../pages/SubmitApplication';
 
 function Navigation() {
   return (
@@ -157,6 +160,14 @@ function Navigation() {
           </PrivateRoute>
         }
       />
+      <Route
+        path="/roles"
+        element={
+          <PrivateRoute>
+            <RolePermission />
+          </PrivateRoute>
+        }
+      />
       <Route path="/login" element={<LoginPage />} />
       <Route
         path="/admins"
@@ -183,12 +194,45 @@ function Navigation() {
         }
       />
       <Route
+        path="/program/:id"
+        element={
+          <PrivateRoute>
+            <SingleProgramDetails />
+          </PrivateRoute>
+        }
+      />
+      <Route
         path="/programs"
         element={
           <PrivateRoute>
             <Programs />
           </PrivateRoute>
         }
+      />
+      <Route
+        path="/myApplications"
+        element={
+          <PrivateRoute>
+            <Applications />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/scheduleInterview"
+        element={
+          <PrivateRoute>
+            <ScheduleInterview />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/jobPost/:id/apply"
+        element={
+          <PrivateRoute>
+            <SubmitApplication />
+          </PrivateRoute>
+        }
+        
       />
       <Route
         path="*"
