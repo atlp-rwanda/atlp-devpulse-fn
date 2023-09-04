@@ -1,10 +1,10 @@
-import { useState, useEffect, FunctionComponent } from 'react';
-import { connect } from 'react-redux';
+import { useState, useEffect, FunctionComponent } from "react";
+import { connect } from "react-redux";
 import { useAppDispatch } from "../../hooks/hooks";
-import ListAllUsers from '../../components/roles&permissions/ListAllUsers';
-import NavBar from '../../components/sidebar/navHeader';
-import { getAllMembers } from '../../redux/actions/users';
-import { getRoles } from '../../redux/actions/roles';
+import ListAllUsers from "../../components/roles&permissions/ListAllUsers";
+import NavBar from "../../components/sidebar/navHeader";
+import { getAllMembers } from "../../redux/actions/users";
+import { getRoles } from "../../redux/actions/roles";
 import * as AiIcons from "react-icons/ai";
 import {
   DOTS,
@@ -23,187 +23,223 @@ interface User {
     description: string;
     _id: string;
   };
-  permissions: []
+  permissions: [];
 }
 
-type MemberC = User[]
+type MemberC = User[];
 
 const ListAllUsersPage: FunctionComponent = (props: any) => {
-
   const [member, setmembers] = useState(null);
-  const [underline, setunderline] = useState("All")
+  const [underline, setunderline] = useState("All");
   const [filteredMembers, setFilteredMembers] = useState<MemberC>([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [membersPerPage] = useState(6);
   const [moredrp, setmoredrp] = useState(false);
-
   const indexOfLastMember = (currentPage + 1) * membersPerPage;
   const indexOfFirstMember = indexOfLastMember - membersPerPage;
-
-
   const dispatch = useAppDispatch();
-  const { members, roles } =
-    props;
-
+  const { members, roles } = props;
 
   useEffect(() => {
-    dispatch(getAllMembers())
-    dispatch(getRoles())
-
+    dispatch(getAllMembers());
+    dispatch(getRoles());
   }, [member]);
 
-
-
   const rolesArrange = roles?.message;
-  const currentMembers = (filteredMembers.length !== 0) ? filteredMembers.slice(indexOfFirstMember, indexOfLastMember) : members?.message?.getUsers_Logged.slice(indexOfFirstMember, indexOfLastMember);
+  const currentMembers =
+    filteredMembers.length !== 0
+      ? filteredMembers.slice(indexOfFirstMember, indexOfLastMember)
+      : members?.message?.getUsers_Logged.slice(
+          indexOfFirstMember,
+          indexOfLastMember
+        );
   const searchFilter = members?.message?.getUsers_Logged;
 
-
   const previousPage = () => {
-    if ((currentPage + 1) !== 1) {
+    if (currentPage + 1 !== 1) {
       setCurrentPage(currentPage - 1);
     }
   };
 
   const nextPage = () => {
-    if ((currentPage + 1) !== Math.ceil(members?.message?.getUsers_Logged.length / membersPerPage)) {
+    if (
+      currentPage + 1 !==
+      Math.ceil(members?.message?.getUsers_Logged.length / membersPerPage)
+    ) {
       setCurrentPage(currentPage + 1);
     }
   };
-
 
   const paginate = (pageNumber: number) => {
     setCurrentPage(pageNumber);
   };
 
-
   const paginationRange = useCustomPagination({
-    totalPageCount: Math.ceil((filteredMembers.length !== 0) ? filteredMembers.length / 6 : members?.message?.getUsers_Logged.length / 6),
+    totalPageCount: Math.ceil(
+      filteredMembers.length !== 0
+        ? filteredMembers.length / 6
+        : members?.message?.getUsers_Logged.length / 6
+    ),
     currentPage,
   });
 
-
   const memberFiltering = (role) => {
-    const results = (role === "All") ?
-      members?.message?.getUsers_Logged :
-      (role === "Active" || role === "Inactive") ?
-        members?.message?.getUsers_Logged.filter((item: any) => {
-          let status: boolean;
-          role === "Inactive" ? status = false : status = true
-          return (
-            item &&
-            `${item?.isActive}` &&
-            `${item?.isActive}` === `${status}`
-          );
-        }) :
-        members?.message?.getUsers_Logged.filter((item: any) => {
-          return (
-            item &&
-            item?.role &&
-            item?.role?.roleName &&
-            item?.role?.roleName.toLowerCase() === role.toLowerCase()
-          );
-        });
+    const results =
+      role === "All"
+        ? members?.message?.getUsers_Logged
+        : role === "Active" || role === "Inactive"
+        ? members?.message?.getUsers_Logged.filter((item: any) => {
+            let status: boolean;
+            role === "Inactive" ? (status = false) : (status = true);
+            return (
+              item && `${item?.isActive}` && `${item?.isActive}` === `${status}`
+            );
+          })
+        : members?.message?.getUsers_Logged.filter((item: any) => {
+            return (
+              item &&
+              item?.role &&
+              item?.role?.roleName &&
+              item?.role?.roleName.toLowerCase() === role.toLowerCase()
+            );
+          });
 
-    const index1 = rolesArrange.findIndex(item => {
-      return item.roleName.toLowerCase() === role.toLowerCase()
-    })
+    const index1 = rolesArrange.findIndex((item) => {
+      return item.roleName.toLowerCase() === role.toLowerCase();
+    });
 
     if (index1 > 2) {
       const element = rolesArrange.splice(index1, 1)[0];
       rolesArrange.splice(0, 0, element);
-
     }
-    setunderline(role)
+    setunderline(role);
     setFilteredMembers(results);
   };
 
-
   const updateMembers = (data, id) => {
-
     if (data === "add member") {
-      
       if (filteredMembers.length !== 0) {
-
-        setFilteredMembers(current => [id, ...current]);
-        return;
-      };
-
-    };
-
-    const updatedMembers = filteredMembers.map((member: any, index) => {
-      if (data !== "delete" && data?.data?.assignRoleToUser === undefined && member.id === id) {
-        member.isActive = data?.data?.data?.updateUserStatus
-      } else if (data !== "delete" && data?.data?.assignRoleToUser !== undefined && member.id === id) {
-        member.role = data?.data?.assignRoleToUser.role
-      } else if (data === "delete" && member.id === id) {
-
-        filteredMembers.splice(index, 1)
+        setFilteredMembers((current) => [id, ...current]);
         return;
       }
-      return member
-    })
+    }
+
+    const updatedMembers = filteredMembers.map((member: any, index) => {
+      if (
+        data !== "delete" &&
+        data?.data?.assignRoleToUser === undefined &&
+        member.id === id
+      ) {
+        member.isActive = data?.data?.data?.updateUserStatus;
+      } else if (
+        data !== "delete" &&
+        data?.data?.assignRoleToUser !== undefined &&
+        member.id === id
+      ) {
+        member.role = data?.data?.assignRoleToUser.role;
+      } else if (data === "delete" && member.id === id) {
+        filteredMembers.splice(index, 1);
+        return;
+      }
+      return member;
+    });
 
     setFilteredMembers(updatedMembers);
   };
-
 
   const handleRemoveMember = (id: any) => {
     if (filteredMembers.length !== 0) {
       filteredMembers.map((member: any, index) => {
         if (member.id === id) {
-          filteredMembers.splice(index, 1)
-          setFilteredMembers(filteredMembers)
+          filteredMembers.splice(index, 1);
+          setFilteredMembers(filteredMembers);
         }
-      })
+      });
     }
-  }
-
+  };
 
   return (
     <>
       <NavBar />
-      <div className=' p-5  dark:bg-dark-frame-bg'>
-        <div className=' lg:p-[40px] dark:bg-dark-frame-bg lg:ml-[230px] semi-md:ml-[230px] semi-md:p-[60px] py-[30px]' >
+      <div className=" p-5  dark:bg-dark-frame-bg">
+        <div className=" lg:p-[40px] dark:bg-dark-frame-bg lg:ml-[230px] semi-md:ml-[230px] semi-md:p-[60px] py-[30px]">
           <div>
             <div>
-              <ul className=' flex dark:text-white semi-md:space-x-5 p-5 px-0 text-sm semi-md:flex-row sm:flex-col '>
-                <li className={` ${underline === "All" ? "underline underline-offset-8 decoration-green" : ""} cursor-pointer`} onClick={() => memberFiltering("All")}>All</li>
+              <ul className=" flex dark:text-white semi-md:space-x-5 p-5 px-0 text-sm semi-md:flex-row sm:flex-col ">
+                <li
+                  className={` ${
+                    underline === "All"
+                      ? "underline underline-offset-8 decoration-green"
+                      : ""
+                  } cursor-pointer`}
+                  onClick={() => memberFiltering("All")}
+                >
+                  All
+                </li>
                 {roles?.message !== null &&
-                  rolesArrange?.map((role: any, index) =>
-                    index <= 2 &&
-                    <li key={index} className={` ${underline === role.roleName ? "underline underline-offset-8 decoration-green" : ""} cursor-pointer`} onClick={() => memberFiltering(role.roleName)}>{role.roleName}</li>
+                  rolesArrange?.map(
+                    (role: any, index) =>
+                      index <= 2 && (
+                        <li
+                          key={index}
+                          className={` ${
+                            underline === role.roleName
+                              ? "underline underline-offset-8 decoration-green"
+                              : ""
+                          } cursor-pointer`}
+                          onClick={() => memberFiltering(role.roleName)}
+                        >
+                          {role.roleName}
+                        </li>
+                      )
                   )}
-                {roles.message !== null &&
-                  roles.message.length > 3 &&
-                  <li className=' underline underline-offset-8 decoration-sky-500 pt-1 cursor-pointer'>
-                    <div onClick={() => {
-                      setmoredrp(!moredrp)
-                    }}>
-                      {moredrp ? < AiIcons.AiOutlineUp /> : < AiIcons.AiOutlineDown />}
+                {roles.message !== null && roles.message.length > 3 && (
+                  <li className=" underline underline-offset-8 decoration-sky-500 pt-1 cursor-pointer">
+                    <div
+                      onClick={() => {
+                        setmoredrp(!moredrp);
+                      }}
+                    >
+                      {moredrp ? (
+                        <AiIcons.AiOutlineUp />
+                      ) : (
+                        <AiIcons.AiOutlineDown />
+                      )}
                     </div>
                     <div
-                      className={`${moredrp === true
-                        ? "block"
-                        : "hidden"
-                        } absolute  bg-white dark:bg-dark-tertiary  dark:text-white text-base z-50 list-none divide-y divide-gray-100 rounded shadow my-4`}
+                      className={`${
+                        moredrp === true ? "block" : "hidden"
+                      } absolute  bg-white dark:bg-dark-tertiary  dark:text-white text-base z-50 list-none divide-y divide-gray-100 rounded shadow my-4`}
                       id="dropdown"
                     >
-                      <ul
-                        className="py-1"
-                        aria-labelledby="dropdown"
-                      >
+                      <ul className="py-1" aria-labelledby="dropdown">
                         {roles?.message !== null &&
-                          rolesArrange?.map((role: any, index) =>
-                            index > 2 &&
-                            <li key={index} className={` ${underline === role.roleName ? "underline underline-offset-8 decoration-green" : ""} text-sm hover:bg-gray-100 text-gray-700  dark:hover:bg-gray-500 dark:text-white  block px-4 py-2 cursor-pointer`} onClick={() => memberFiltering(role.roleName)}>{role.roleName}</li>
+                          rolesArrange?.map(
+                            (role: any, index) =>
+                              index > 2 && (
+                                <li
+                                  key={index}
+                                  className={` ${
+                                    underline === role.roleName
+                                      ? "underline underline-offset-8 decoration-green"
+                                      : ""
+                                  } text-sm hover:bg-gray-100 text-gray-700  dark:hover:bg-gray-500 dark:text-white  block px-4 py-2 cursor-pointer`}
+                                  onClick={() => memberFiltering(role.roleName)}
+                                >
+                                  {role.roleName}
+                                </li>
+                              )
                           )}
                         <li>
                           <div
-                            className={` ${underline === "Active" ? "underline underline-offset-8 decoration-green" : ""} text-sm hover:bg-gray-100 text-gray-700  dark:hover:bg-gray-500 dark:text-white  block px-4 py-2 cursor-pointer`}
+                            className={` ${
+                              underline === "Active"
+                                ? "underline underline-offset-8 decoration-green"
+                                : ""
+                            } text-sm hover:bg-gray-100 text-gray-700  dark:hover:bg-gray-500 dark:text-white  block px-4 py-2 cursor-pointer`}
                             onClick={(e: any) => {
                               e.preventDefault();
-                              memberFiltering("Active")
+                              memberFiltering("Active");
                             }}
                           >
                             Active
@@ -211,10 +247,14 @@ const ListAllUsersPage: FunctionComponent = (props: any) => {
                         </li>
                         <li>
                           <div
-                            className={` ${underline === "Inactive" ? "underline underline-offset-8 decoration-green" : ""} text-sm hover:bg-gray-100 text-gray-700  dark:hover:bg-gray-500 dark:text-white  block px-4 py-2 cursor-pointer`}
+                            className={` ${
+                              underline === "Inactive"
+                                ? "underline underline-offset-8 decoration-green"
+                                : ""
+                            } text-sm hover:bg-gray-100 text-gray-700  dark:hover:bg-gray-500 dark:text-white  block px-4 py-2 cursor-pointer`}
                             onClick={(e: any) => {
                               e.preventDefault();
-                              memberFiltering("Inactive")
+                              memberFiltering("Inactive");
                             }}
                           >
                             Inactive
@@ -223,9 +263,8 @@ const ListAllUsersPage: FunctionComponent = (props: any) => {
                       </ul>
                     </div>
                   </li>
-                }
+                )}
               </ul>
-
             </div>
           </div>
 
@@ -261,10 +300,7 @@ const ListAllUsersPage: FunctionComponent = (props: any) => {
               {paginationRange?.map((pageNumber, idx) => {
                 if (pageNumber === DOTS) {
                   return (
-                    <div
-                      key={idx}
-                      className="dark:text-zinc-100 md:hidden"
-                    >
+                    <div key={idx} className="dark:text-zinc-100 md:hidden">
                       ...
                     </div>
                   );
@@ -303,7 +339,7 @@ const ListAllUsersPage: FunctionComponent = (props: any) => {
                   Math.ceil(
                     members?.message?.getUsers_Logged.length / membersPerPage
                   ) -
-                  1
+                    1
                 }
               >
                 <AiIcons.AiOutlineRight />
@@ -322,7 +358,7 @@ const ListAllUsersPage: FunctionComponent = (props: any) => {
                   Math.ceil(
                     members?.message?.getUsers_Logged.length / membersPerPage
                   ) -
-                  1
+                    1
                 }
               >
                 <AiIcons.AiOutlineDoubleRight />
@@ -332,15 +368,15 @@ const ListAllUsersPage: FunctionComponent = (props: any) => {
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
 const mapState = (state: any) => ({
   members: state.members,
-  roles: state.roles
+  roles: state.roles,
 });
 
 export default connect(mapState, {
   getAllMembers,
-  getRoles
-})(ListAllUsersPage)
+  getRoles,
+})(ListAllUsersPage);

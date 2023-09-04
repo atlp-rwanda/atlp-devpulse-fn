@@ -112,9 +112,7 @@ function NavBar() {
       <ul className={!nav ? "hidden" : "bg-white  cursor-pointer text-black  "}>
         <Sidebar />
       </ul>
-      <div className="block md:hidden">
-        <Sidebar />
-      </div>
+      <div className="block md:hidden">{<Sidebar />}</div>
     </div>
   );
 }
