@@ -23,6 +23,11 @@ export const sidebarItems1 = [
     title: "Admins",
   },
   {
+    path: "/create-form",
+    icon: <Icon icon="fluent:form-28-regular"></Icon>,
+    title: "Application Forms",
+  },
+  {
     path: "/domains",
     icon: <Icon icon="akar-icons:globe"></Icon>,
     title: "Domains",
