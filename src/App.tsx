@@ -25,6 +25,7 @@ import LoginPage from "./pages/LoginPage";
 import PrivateRoute from "./pages/PrivateRoute";
 import PageNotFound from "./pages/PageNotFound";
 import ListAllUsersPage from "./pages/roles&permissions/ListAllUsersPage";
+import SignupForm from "./components/form/RegisterForm";
 
 function App() {
   return (
@@ -166,6 +167,7 @@ function App() {
           </PrivateRoute>
         }
       />
+      <Route path="/signup" element={<SignupForm />} />
     </Routes>
   );
 }
