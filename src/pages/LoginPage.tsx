@@ -17,7 +17,8 @@ const LoginPage = (props: any) => {
   getUsers_Logged {
     id
     createdAt
-    name
+    firstname
+    lastname
     email
   }
 }

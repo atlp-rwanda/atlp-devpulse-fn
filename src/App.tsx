@@ -24,6 +24,7 @@ import ApplicationCycle from "./pages/ApplicationCycle/ApplicationCycle";
 import LoginPage from "./pages/LoginPage";
 import PrivateRoute from "./pages/PrivateRoute";
 import PageNotFound from "./pages/PageNotFound";
+import ListAllUsersPage from "./pages/roles&permissions/ListAllUsersPage";
 
 function App() {
   return (
@@ -31,9 +32,9 @@ function App() {
       <Route
         path="/test_tailwind"
         element={
-          <PrivateRoute>
+          // <PrivateRoute>
             <TestTailwind />
-          </PrivateRoute>
+          // </PrivateRoute>
         }
       />
       <Route
@@ -137,6 +138,14 @@ function App() {
         element={
           <PrivateRoute>
             <CreateScoreType />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/rolesandaccess"
+        element={
+          <PrivateRoute>
+            <ListAllUsersPage />
           </PrivateRoute>
         }
       />

@@ -6,7 +6,7 @@
   "scripts": {
     "start": "echo \"Error: no test specified\" && exit 1",
     "dev": "webpack server",
-    "test": "react-scripts test --watchAll=false",
+    "test": "jest --watchAll=false",
     "build": "webpack build"
   },
   "repository": {
