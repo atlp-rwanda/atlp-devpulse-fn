@@ -121,6 +121,16 @@ const ListAllUsersPage: FunctionComponent = (props: any) => {
 
   const updateMembers = (data, id) => {
 
+    if (data === "add member") {
+      
+      if (filteredMembers.length !== 0) {
+
+        setFilteredMembers(current => [id, ...current]);
+        return;
+      };
+
+    };
+
     const updatedMembers = filteredMembers.map((member: any, index) => {
       if (data !== "delete" && data?.data?.assignRoleToUser === undefined && member.id === id) {
         member.isActive = data?.data?.data?.updateUserStatus
@@ -157,7 +167,7 @@ const ListAllUsersPage: FunctionComponent = (props: any) => {
         <div className=' lg:p-[40px] dark:bg-dark-frame-bg lg:ml-[230px] semi-md:ml-[230px] semi-md:p-[60px] py-[30px]' >
           <div>
             <div>
-              <ul className=' flex dark:text-white space-x-5 p-5 px-0 text-sm '>
+              <ul className=' flex dark:text-white semi-md:space-x-5 p-5 px-0 text-sm semi-md:flex-row sm:flex-col '>
                 <li className={` ${underline === "All" ? "underline underline-offset-8 decoration-green" : ""} cursor-pointer`} onClick={() => memberFiltering("All")}>All</li>
                 {roles?.message !== null &&
                   rolesArrange?.map((role: any, index) =>
