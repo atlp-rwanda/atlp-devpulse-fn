@@ -9,8 +9,16 @@ import { connect } from 'react-redux';
 import { updateStatus } from '../../redux/actions/updateUserStatus';
 import { getRoles } from '../../redux/actions/roles';
 import { deleteUser } from '../../redux/actions/deleteUser';
+import { inviteUser } from '../../redux/actions/inviteUser';
 
 const book: string = require("../../assets/assets/book.svg").default;
+const profile: string = require("../../assets/avatar.png").default;
+
+const placeholderImage = profile;
+
+const onImageError = (e) => {
+  e.target.src = placeholderImage
+}
 
 interface Update {
   id: string;
@@ -118,12 +126,23 @@ const ListAllUsers: FunctionComponent<Props> = (props) => {
   };
 
 
-  const validation = () => {
-    if (autoFill === "") {
+  const validation = async () => {
+    if (emailfilter === "") {
       toast.error("Enter the email");
       return;
     } else {
+      const response = await inviteUser(emailfilter, handleRole);
+      if (response?.data?.data?.createUser_Logged !== undefined && response?.data?.data?.createUser_Logged !== null) {
+        setAddNewTraineeModel(false);
+        setmembers(response)
+        updateMember("add member", response.data?.data?.createUser_Logged)
+        toast.success("The Invitation is sent successfully")
 
+      } else {
+        (response?.data?.errors !== undefined) ?
+          toast.error(response?.data?.errors[0].message) :
+          toast.error("Something went wrong");
+      }
     }
   };
 
@@ -168,13 +187,16 @@ const ListAllUsers: FunctionComponent<Props> = (props) => {
   const handleChangeStatus = async (id: any) => {
     const data = await updateStatus(id)
 
-    if (data?.data?.data?.updateUserStatus) {
+    if (data?.data?.data?.updateUserStatus !== undefined && data?.data?.data?.updateUserStatus !== null) {
       setStatWarn({ ...statWarn, open: false })
       setmembers(data);
       setUser({ ...user, isActive: data?.data?.data?.updateUserStatus })
       updateMember(data, id);
+      toast.success("status updated successful")
     } else {
-      toast.error("something went wrong")
+      (data?.data?.errors !== undefined) ?
+        toast.error(data?.data?.errors[0].message) :
+        toast.error("Something went wrong");
     }
 
   };
@@ -182,26 +204,32 @@ const ListAllUsers: FunctionComponent<Props> = (props) => {
 
 
   const handleDeleteUser = async (id: any) => {
-    const data = await deleteUser(id)
-    setmembers(data);
-    setUser(
-      {
-        id: "",
-        email: "",
-        isActive: false,
-        firstname: "",
-        lastname: "",
-        picture: "",
-        role: {
-          roleName: "",
-          description: "",
-          _id: ""
-        },
-        permissions: []
+    const data = await deleteUser(id);
+    if (data?.data?.data?.deleteUser_Logged !== undefined && data?.data?.data?.deleteUser_Logged !== null) {
+      setmembers(data);
+      setUser(
+        {
+          id: "",
+          email: "",
+          isActive: false,
+          firstname: "",
+          lastname: "",
+          picture: "",
+          role: {
+            roleName: "",
+            description: "",
+            _id: ""
+          },
+          permissions: []
 
-      }
-    );
-    handleRemove(id);
+        }
+      );
+      handleRemove(id);
+    } else {
+      (data?.data?.errors !== undefined) ?
+        toast.error("Unautholized to delete Member") :
+        toast.error("Something went wrong");
+    }
   };
 
 
@@ -213,7 +241,9 @@ const ListAllUsers: FunctionComponent<Props> = (props) => {
       setmembers(data);
       updateMember(data, userId);
     } else {
-      toast.error("something went wrong")
+      (data?.data?.errors !== undefined) ?
+        toast.error(data?.data?.errors[0].message) :
+        toast.error("Something went wrong");
     }
 
   };
@@ -328,9 +358,12 @@ const ListAllUsers: FunctionComponent<Props> = (props) => {
                   <td className="px-2 border-b border-gray-200 dark:border-dark-tertiary lg:text-sm sm:text-[10px]">
                     <div className="flex">
                       <div className="flex sm:space-x-2 lg:space-x-5 items-center" >
-                        <img src={user?.picture} alt="" className="w-[25px] h-[25px] lg:h-[40px] lg:w-[40px] rounded-full" />
+                        <img src={user?.picture ? user?.picture : placeholderImage}
+                          alt="profile pic"
+                          onError={onImageError}
+                          className="w-[25px] h-[25px] lg:h-[40px] lg:w-[40px] rounded-full" />
                         <p className="text-gray-900 dark:text-white whitespace-no-wrap my-5">
-                          {`${user?.firstname}` + " " + `${user?.lastname}`}
+                          {(user?.firstname !== null && user?.lastname !== null) ? `${user?.firstname}` + " " + `${user?.lastname}` : (user?.firstname === null && user?.lastname !== null ) ? `${user?.lastname}` : (user?.firstname !== null && user?.lastname === null ) ? `${user?.firstname}` : "No name"}
                         </p>
                       </div>
                     </div>
@@ -340,11 +373,11 @@ const ListAllUsers: FunctionComponent<Props> = (props) => {
                       <div className="">
                         {status !== "" ?
                           <p className={`whitespace-no-wrap ${status == true ? "text-green" : "text-red-600"}`} >
-                            {status ? "Active" : "inactive"}
+                            {status ? "Active" : "Inactive"}
                           </p> :
 
                           <p className={`whitespace-no-wrap ${user?.isActive == true ? "text-green" : "text-red-600"}`} >
-                            {user?.isActive ? "Active" : "inactive"}
+                            {user?.isActive ? "Active" : "Inactive"}
                           </p>
 
                         }
@@ -370,7 +403,7 @@ const ListAllUsers: FunctionComponent<Props> = (props) => {
                                 {(user?.role?.roleName === role?.roleName) ? <HiCheck className=" text-green text-base mt-[4px]" /> : <div className=' p-2'></div>}
                                 <p className=' font-bold dark:text-white text-base '>  {role.roleName}</p>
                               </div>
-                              <p className=' dark:text-gray-500 mt-1 ml-5 w-[250px]'> {role.description}</p>
+                              <p className=' dark:text-gray-500 mt-1 ml-5 sm:w-[100px] lg:w-[250px]'> {role.description}</p>
                             </div>
                           ))}
                         </div>
@@ -440,9 +473,12 @@ const ListAllUsers: FunctionComponent<Props> = (props) => {
                       <td className="px-2 border-b border-gray-200 dark:border-dark-tertiary lg:text-sm text-[10px]">
                         <div className="flex">
                           <div className="flex sm:space-x-2 lg:space-x-5 items-center" >
-                            <img src={item?.picture} alt="" className="w-[25px] h-[25px] lg:h-[40px] lg:w-[40px] rounded-full" />
+                            <img src={item?.picture ? item?.picture : placeholderImage}
+                              alt="profile pic"
+                              onError={onImageError}
+                              className="w-[25px] h-[25px] lg:h-[40px] lg:w-[40px] rounded-full" />
                             <p className="text-gray-900 dark:text-white whitespace-no-wrap my-5">
-                              {`${item?.firstname}` + " " + `${item?.lastname}`}
+                              {(item?.firstname !== null && item?.lastname !== null) ? `${item?.firstname}` + " " + `${item?.lastname}` : (item?.firstname === null && item?.lastname !== null ) ? `${item?.lastname}` : (item?.firstname !== null && item?.lastname === null ) ? `${item?.firstname}` : "No name"}
                             </p>
                           </div>
                         </div>
@@ -451,7 +487,7 @@ const ListAllUsers: FunctionComponent<Props> = (props) => {
                         <div className="">
                           <div className="">
                             <p className={`whitespace-no-wrap ${item?.isActive == true ? "text-green" : "text-red-600"}`}>
-                              {item?.isActive ? "Active" : "inactive"}
+                              {item?.isActive ? "Active" : "Inactive"}
                             </p>
                           </div>
                         </div>
@@ -466,7 +502,7 @@ const ListAllUsers: FunctionComponent<Props> = (props) => {
                               </p>
                             </div>
                             <div className={` absolute z-20 border dark:border-gray-200 border-gray-200 rounded dark:bg-slate-900 bg-gray-200 max-h-[250px] overflow-y-scroll ${dropRoles === item?.id ? "block" : "hidden"} ${(members?.length - 1) === index && index >= 5 ? " bottom-0" : ""}`}>
-                              <div className='flex space-x-[160px] border-b dark:border-gray-200 border-gray-300 dark:text-white p-2 sticky top-0 dark:bg-slate-900 bg-gray-200'>
+                              <div className='flex sm:space-x-[70px] lg:space-x-[160px] border-b dark:border-gray-200 border-gray-300 dark:text-white p-2 sticky top-0 dark:bg-slate-900 bg-gray-200'>
                                 <h4 >
                                   Choose a Role
                                 </h4>
@@ -482,7 +518,7 @@ const ListAllUsers: FunctionComponent<Props> = (props) => {
                                     {(item?.role?.roleName === role?.roleName) ? <HiCheck className=" text-green text-base mt-[4px]" /> : <div className=' p-2'></div>}
                                     <p className=' font-bold dark:text-white text-base '>  {role.roleName}</p>
                                   </div>
-                                  <p className=' dark:text-gray-500 mt-1 ml-5 w-[250px]'> {role.description}</p>
+                                  <p className=' dark:text-gray-500 mt-1 ml-5 sm:w-[100px] lg:w-[250px]'> {role.description}</p>
                                 </div>
                               ))}
                             </div>
@@ -597,7 +633,7 @@ const ListAllUsers: FunctionComponent<Props> = (props) => {
                   <div className="text-center">
                     <icons.AiFillExclamationCircle className="w-[40px] my-[20px] mx-auto text-[40px]" />
                     <p className="w-[80%] m-auto font-bold">
-                      {statWarn?.isActive ? "Are you sure you want to disactivate this member?" : "Are you sure you want to disactivate this member?"}
+                      {statWarn?.isActive ? "Are you sure you want to disactivate this member?" : "Are you sure you want to activate this member?"}
                     </p>
                   </div>
                   <div className="flex flex-wrap my-[20px] mx-0">
@@ -652,7 +688,7 @@ const ListAllUsers: FunctionComponent<Props> = (props) => {
                 <div className="grouped-input flex items-center h-full w-full rounded-md">
                   <input
                     type="email"
-                    name="gpa"
+                    name=""
                     className=" dark:text-white dark:bg-dark-tertiary border border-primary rounded outline-none px-10 font-sans text-sm py-2 w-full pt-4"
                     placeholder={"Invite member by email ..."}
                     value={emailfilter}
