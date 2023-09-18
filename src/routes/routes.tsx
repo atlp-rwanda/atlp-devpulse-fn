@@ -29,9 +29,9 @@ function Navigation() {
       <Route
         path='/test_tailwind'
         element={
-          <PrivateRoute>
+          
             <TestTailwind />
-          </PrivateRoute>
+          
         }
       />
       <Route
