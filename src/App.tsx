@@ -20,6 +20,7 @@ import ImportTraineeDetailsFromGoogleSheet from "./pages/importAndSaveManyTraine
 
 const Counter = React.lazy(() => import("./components/Counter/Counter"));
 import Trash from "./pages/Trash/Trash";
+import CreateFormPage from "./pages/JobPosting/GoogleForms";
 import ApplicationCycle from "./pages/ApplicationCycle/ApplicationCycle";
 import LoginPage from "./pages/LoginPage";
 import PrivateRoute from "./pages/PrivateRoute";
@@ -147,6 +148,14 @@ function App() {
         element={
           <PrivateRoute>
             <ListAllUsersPage />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/CreateFormPage"
+        element={
+          <PrivateRoute>
+            <CreateFormPage />
           </PrivateRoute>
         }
       />

@@ -87,6 +87,11 @@ export const sidebarItems1 = [
     icon: <Icon icon="fa-solid:trash"></Icon>,
     title: "Trash",
   },
+  {
+    path: "/CreateFormPage",
+    icon: <Icon icon="fontisto:pie-chart-1"></Icon>,
+    title: "Job Post",
+  },
 ];
 
 export const sidebarItems2 = [
