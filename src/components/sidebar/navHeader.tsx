@@ -13,6 +13,12 @@ const profile: string = require("../../assets/avatar.png").default;
 const LogoWhite: string = require("../../assets/logoWhite.svg").default;
 import jwtDecode from "jwt-decode";
 
+const placeholderImage = profile;
+
+const onImageError = (e) => {
+  e.target.src = placeholderImage
+}
+
 function NavBar() {
   const access_token = localStorage.getItem("access_token");
   //@ts-ignore
@@ -97,6 +103,7 @@ function NavBar() {
             <img
               src={user}
               alt="profile"
+              onError={onImageError}
               className="w-[30px] cursor-pointer mx-2 rounded "
             />
           </span>

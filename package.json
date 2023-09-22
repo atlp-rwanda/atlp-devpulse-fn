@@ -7,7 +7,8 @@
     "start": "echo \"Error: no test specified\" && exit 1",
     "dev": "webpack server",
     "test": "jest --watchAll=false",
-    "build": "webpack build"
+    "build": "webpack build",
+    "lint": "eslint src --ext ts,tsx"
   },
   "repository": {
     "type": "git",

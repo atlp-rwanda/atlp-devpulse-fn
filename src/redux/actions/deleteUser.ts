@@ -14,7 +14,6 @@ export const deleteUser = async(id:any) => {
             }
         })
 
-        console.log(response);
         return response;
 
     } catch (error) {
