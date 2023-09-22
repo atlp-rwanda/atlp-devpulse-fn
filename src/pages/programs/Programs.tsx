@@ -3,7 +3,7 @@ import NavBar from "../../components/sidebar/navHeader";
 import * as icons from "react-icons/ai";
 import { connect } from "react-redux";
 import { createProgramAction } from "../../redux/actions/createProgramAction";
-import { useAppDispatch } from "../../hooks/hooks";
+import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import programSchema from "../../validation/programSchema";
 
 const Programs = (props: any) => {
@@ -17,6 +17,7 @@ const Programs = (props: any) => {
     modeOfExecution: "",
   });
   const dispatch = useAppDispatch();
+  const createProgramStates = useAppSelector((state) => state.createProgram);
 
   const [currentEntry, setCurrentEntry] = useState<string>("");
   const [errors, setErrors] = useState({
@@ -278,9 +279,10 @@ const Programs = (props: any) => {
 
                     <button
                       type="submit"
-                      className="flex justify-self-start self-start rounded px-3 py-1 mt-10 bg-green text-white transition-colors hover:bg-dark-frame-bg hover:text-green hover:border hover:border-green"
+                      disabled={createProgramStates.loading}
+                      className="flex justify-self-start self-start rounded w-15 px-5 py-1 mt-10 bg-green text-white transition-colors hover:bg-dark-frame-bg hover:text-green hover:border hover:border-green"
                     >
-                      Submit
+                      {createProgramStates.loading ? "Submitting..." : "Submit"}
                     </button>
                   </div>
                 </div>

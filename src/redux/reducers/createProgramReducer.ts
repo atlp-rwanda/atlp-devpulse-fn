@@ -32,11 +32,13 @@ const createProgramReducer = (
     case createProgramType.CREATE_PROGRAM_SUCCESS:
       return {
         ...state,
+        loading: false,
         message: action.message,
       };
     case createProgramType.CREATE_PROGRAM_FAIL:
       return {
         ...state,
+        loading: false,
         error: action.error,
       };
     default:
