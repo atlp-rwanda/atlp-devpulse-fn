@@ -23,18 +23,12 @@ import PageNotFound from "./../pages/PageNotFound";
 import ListAllUsersPage from "./../pages/roles&permissions/ListAllUsersPage";
 import SignupForm from "./../components/form/RegisterForm";
 import Programs from "../pages/programs/Programs";
+import SingleProgramDetails from "../pages/programs/SingleProgramDetails";
 
 function Navigation() {
   return (
     <Routes>
-      <Route
-        path="/test_tailwind"
-        element={
-          
-            <TestTailwind />
-          
-        }
-      />
+      <Route path="/test_tailwind" element={<TestTailwind />} />
       <Route
         path="/trainee-applicant-details/:traineeId"
         element={
@@ -157,13 +151,21 @@ function Navigation() {
         }
       />
       <Route
+        path="/program/:id"
+        element={
+          <PrivateRoute>
+            <SingleProgramDetails />
+          </PrivateRoute>
+        }
+      />
+      <Route
         path="/programs"
         element={
           <PrivateRoute>
             <Programs />
           </PrivateRoute>
         }
-      />
+      />      
       <Route
         path="*"
         element={

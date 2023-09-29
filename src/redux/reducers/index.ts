@@ -24,6 +24,8 @@ import updateStatusReducer from "./updateStatusReducer";
 import { membersReducer } from "./usersReducer";
 import { rolesReducer } from "./rolesReducer";
 import createProgramReducer from "./createProgramReducer";
+import fetchProgramsReducer from "./fetchProgramsReducer";
+import fetchSingleProgramReducer from "./fetchSingleProgramReducer";
 
 const allReducers = combineReducers({
   counter: counterReducer,
@@ -34,8 +36,6 @@ const allReducers = combineReducers({
   softDeletedTrainees: softDeletedTraineeReducer,
   restore: restoretraineReducer,
   clearTrash: clearTrashReducer,
-  // viewtrainee:viewtraineReducer,
-  // addtrainee:addtraineReducer,
   trainee: traineeReducer,
   count: traineCountReducer,
   traine: traineReducer,
@@ -50,6 +50,8 @@ const allReducers = combineReducers({
   members: membersReducer,
   roles: rolesReducer,
   createProgram: createProgramReducer,
+  fetchPrograms: fetchProgramsReducer,
+  fetchSingleProgram: fetchSingleProgramReducer,
 });
 
 export default allReducers;
