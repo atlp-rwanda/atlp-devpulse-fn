@@ -13,6 +13,11 @@ export const sidebarItems1 = [
     title: "Organisations",
   },
   {
+    path: "/programs",
+    icon: <Icon icon="ic:round-maps-home-work"></Icon>,
+    title: "Programs",
+  },
+  {
     path: "/admins",
     icon: <Icon icon="ic:round-people"></Icon>,
     title: "Admins",

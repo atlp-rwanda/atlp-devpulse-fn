@@ -1,6 +1,10 @@
 import counterReducer from "./counterReducer";
 import deletetraineReducer from "./deletetraineReducer";
-import { softdeletetraineReducer, traineReducer ,traineCountReducer} from "./deletetraineReducer";
+import {
+  softdeletetraineReducer,
+  traineReducer,
+  traineCountReducer,
+} from "./deletetraineReducer";
 import cycleReducer from "./cycleReducer";
 import softDeletedTraineeReducer from "./softDeletedTraineesReducer";
 import restoretraineReducer from "./RestoreReducer";
@@ -17,6 +21,9 @@ import loadDataReducer from "./loadDataReducer";
 import scoreTypesReducers from "./scoreTypesReducers";
 import scoreValuesReducer from "./scoreValuesReducer";
 import updateStatusReducer from "./updateStatusReducer";
+import { membersReducer } from "./usersReducer";
+import { rolesReducer } from "./rolesReducer";
+import createProgramReducer from "./createProgramReducer";
 
 const allReducers = combineReducers({
   counter: counterReducer,
@@ -30,7 +37,7 @@ const allReducers = combineReducers({
   // viewtrainee:viewtraineReducer,
   // addtrainee:addtraineReducer,
   trainee: traineeReducer,
-  count:traineCountReducer,
+  count: traineCountReducer,
   traine: traineReducer,
   filterTrainee: filterTraineeReducer,
   loadData: loadDataReducer,
@@ -40,6 +47,9 @@ const allReducers = combineReducers({
   scoreTypes: scoreTypesReducers,
   scoreValues: scoreValuesReducer,
   updateTraineeStatus: updateStatusReducer,
+  members: membersReducer,
+  roles: rolesReducer,
+  createProgram: createProgramReducer,
 });
 
 export default allReducers;

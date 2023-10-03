@@ -20,7 +20,7 @@ const sidebar = () => {
             <ul className=" min:mt-0 pl-4 block mt-2">
               {sidebarItems1.map((items, index) => {
                 return (
-                  <>
+                 
                     <li
                       key={index}
                       className=" min:text-xl lg:justify-content-start align-items-center  dark:text-white text-[#173B3F]  text-base"
@@ -33,7 +33,7 @@ const sidebar = () => {
                         <label className="p-1  ">{items.title} </label>
                       </Link>
                     </li>
-                  </>
+                  
                 );
               })}
               <li className=" min:text-xl lg:justify-content-start align-items-center  dark:text-white text-[#173B3F]  text-base">
@@ -46,7 +46,7 @@ const sidebar = () => {
             <ul className=" min:mt-0 pl-4 block mt-2">
               {sidebarItems1.map((items, index) => {
                 return (
-                  <>
+                  
                     <li
                       key={index}
                       className=" min:text-xl lg:justify-content-start align-items-center  dark:text-white text-[#173B3F]  text-base"
@@ -59,7 +59,7 @@ const sidebar = () => {
                         <label className="p-1  ">{items.title} </label>
                       </Link>
                     </li>
-                  </>
+                 
                 );
               })}
             </ul>

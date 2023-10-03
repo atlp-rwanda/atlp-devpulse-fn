@@ -14,6 +14,8 @@ body {
   background: #f4f4f4;
 }
 
+/* Other existing CSS rules for input and label styles */
+
 @media screen and (max-width: 920px) {
   .btn {
     display: grid;
