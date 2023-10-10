@@ -36,6 +36,7 @@ import Applications from '../pages/Applications';
 import ScheduleInterview from '../pages/ScheduleInterview';
 import SubmitApplication from '../pages/SubmitApplication';
 
+
 function Navigation() {
   return (
     <Routes>

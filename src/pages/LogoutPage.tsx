@@ -8,9 +8,9 @@ const LogoutPage = () => {
     navigate("/login");
   };
   return (
-    <div className="flex ">
+    <div className="flex items-center p-1 cursor-pointer">
       <Icon icon="nimbus:arrow-left"></Icon>
-      <button className="ml-2 pt-1" onClick={(e) => handleLogout(e)}>
+      <button className="ml-2" onClick={(e) => handleLogout(e)}>
         Logout
       </button>
     </div>
