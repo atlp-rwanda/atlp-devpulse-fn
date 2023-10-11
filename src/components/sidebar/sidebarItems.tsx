@@ -13,6 +13,11 @@ export const sidebarItems1 = [
     title: 'Organisations',
   },
   {
+    path: '/roles',
+    icon: <Icon icon="fluent:people-team-20-filled"></Icon>,
+    title: 'Members',
+  },
+  {
     path: '/programs',
     icon: <Icon icon="ic:round-maps-home-work"></Icon>,
     title: 'Programs',
@@ -88,9 +93,9 @@ export const sidebarItems1 = [
     title: 'Notifications',
   },
   {
-    path: '/myApplications',
+    path: '/create-form',
     icon: <Icon icon="material-symbols:wysiwyg-rounded"></Icon>,
-    title: 'My Applications',
+    title: 'Applications Form',
   },
   {
     path: '/calendar',

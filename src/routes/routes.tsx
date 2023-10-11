@@ -35,8 +35,10 @@ import SharedPosts from '../pages/sharedPosts';
 import Applications from '../pages/Applications';
 import ScheduleInterview from '../pages/ScheduleInterview';
 import SubmitApplication from '../pages/SubmitApplication';
+import GradingSystemPage from "../pages/GradingSystemPage";
 
 function Navigation() {
+  const roleName = localStorage.getItem('roleName');
   return (
     <Routes>
       <Route path="/test_tailwind" element={<TestTailwind />} />
@@ -130,10 +132,17 @@ function Navigation() {
       />
       <Route
         path="/"
-        element={
-          <PrivateRoute>
-            <Trainee />
-          </PrivateRoute>
+        element={roleName === 'applicant' ?
+          (
+            <PrivateRoute>
+              <Applications />
+            </PrivateRoute>
+          ) : (
+            <PrivateRoute>
+              <Trainee />
+            </PrivateRoute>
+          )
+
         }
       />
       <Route
@@ -232,7 +241,7 @@ function Navigation() {
             <SubmitApplication />
           </PrivateRoute>
         }
-        
+
       />
       <Route
         path="*"
@@ -290,6 +299,14 @@ function Navigation() {
         element={
           <PrivateRoute>
             <SingleJobPostDetails />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/grading"
+        element={
+          <PrivateRoute>
+            <GradingSystemPage />
           </PrivateRoute>
         }
       />
