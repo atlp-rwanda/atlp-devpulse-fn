@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { toast } from "react-toastify";
+import * as icons from "react-icons/ai";
 import {
-  createScoreType,
-  getAllScoreTypes,
-  deleteScoreType,
-  updateScoreType,
+	createScoreType,
+	getAllScoreTypes,
+	deleteScoreType,
+	updateScoreType,
 } from "../../redux/actions/scoreTypesActions";
 import { getAllScoreValues } from "../../redux/actions/scoreValueActions";
 import * as BsIcons from "react-icons/bs";
@@ -16,254 +17,546 @@ import Modal from "@mui/material/Modal";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import NavBar from "../../components/sidebar/navHeader";
+import DataTable from "components/TableData";
 import filterTraineeReducer from "../../redux/reducers/filterTraineeReducer";
+import { HiDotsVertical } from "react-icons/hi";
+import { Link } from "react-router-dom";
 
 const ScoreTypesActions = (props: any) => {
-  const { scoreTypes, scoreValues } = props;
+	const { scoreTypes, scoreValues } = props;
 
-  const scoreTypesData = scoreTypes.data;
+	const scoreTypesData = scoreTypes.data;
 
-  const scoreValuesArray = scoreValues.data?.map((values: any, idx: number) => {
-    return values.score_id.score_type;
-  });
+	const scoreValuesArray = scoreValues.data?.map((values: any, idx: number) => {
+		return values.score_id.score_type;
+	});
 
-  const scoreTypesArray = scoreTypesData?.map((dta: any) => {
-    const filtered = scoreValuesArray?.filter((values: any) => {
-      return values == dta.score_type;
-    });
+	const scoreTypesArray = scoreTypesData?.map((dta: any) => {
+		const filtered = scoreValuesArray?.filter((values: any) => {
+			return values == dta.score_type;
+		});
 
-    return {
-      id: dta.id,
-      name: dta.score_type,
-      nbr: filtered.length,
-    };
-  });
+		return {
+			id: dta.id,
+			name: dta.score_type,
+			nbr: filtered.length,
+		};
+	});
+	console.log(scoreTypesArray);
 
-  useEffect(() => {
-    props.getAllScoreTypes();
-    props.getAllScoreValues();
-  }, []);
-  const [num, setNum] = useState("");
-  const [deleteScoreTypeId, setdeleteScoreTypeId] = useState("");
-  const [updateScoreTypeId, setupdateScoreTypeId] = useState("");
-  const [openUpdateModal, setOpenUpdateModel] = useState(false);
-  const [score_type, setscore_type] = useState("");
-  const [id, setId] = useState("");
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
-  const [activeCycle, setActiveCycle] = useState<number | undefined>(undefined);
-  const handleCloseUpdateModal = (e: any) => {
-    e.preventDefault();
-    setOpenUpdateModel(false);
-  };
-  const [openCreateModal, setOpenCreateModal] = useState(false);
+	useEffect(() => {
+		props.getAllScoreTypes();
+		props.getAllScoreValues();
+	}, []);
+	const [num, setNum] = useState("");
+	const [deleteScoreTypeId, setdeleteScoreTypeId] = useState("");
+	const [updateScoreTypeId, setupdateScoreTypeId] = useState("");
+	const [openUpdateModal, setOpenUpdateModel] = useState(false);
+	const [score_type, setscore_type] = useState("");
+	const [id, setId] = useState("");
+	const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+	const open = Boolean(anchorEl);
+	const [activeCycle, setActiveCycle] = useState<number | undefined>(undefined);
+	const [selectedOption, setSelectedOption] = useState("");
+	const [selectedProgram, setSelectedProgram] = useState("");
+	const [programDuration, setProgramDuration] = useState("");
+	const [assessmentModel, setAssmentModel] = useState(false);
+	const handleCloseUpdateModal = (e: any) => {
+		e.preventDefault();
+		setOpenUpdateModel(false);
+	};
+	const [openCreateModal, setOpenCreateModal] = useState(false);
 
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-  const handleCloseCreateModel = () => {
-    setOpenCreateModal(false);
-  };
+	const handleClose = () => {
+		setAnchorEl(null);
+	};
+	const handleCloseCreateModel = () => {
+		setOpenCreateModal(false);
+	};
 
-  const handleOpenUpdateModal = (e: any) => {
-    const cycle = scoreTypesData[activeCycle!];
+	// useEffect(() => {
+	// 	const handleClickOutside = (event) => {
+	// 	  if (assessmentModel && event.target.classList.contains("modal")) {
+	// 		handleClose();
+	// 	  }
+	// 	};
 
-    setOpenUpdateModel(true);
-    setscore_type(cycle.score_type);
-    setupdateScoreTypeId(cycle.id);
-    setId(cycle.id);
-    setAnchorEl(null);
-  };
-  const createScoreType = () => {
-    const data = {
-      score_type: num,
-    };
-    props.createScoreType(data);
-    setOpenCreateModal(false);
-    setTimeout(() => {
-      window.location.reload();
-    }, 1000);
-  };
-  const handleOpenCreateCycle = () => {
-    setOpenCreateModal(true);
-  };
-  const updateScoreType = () => {
-    const data = {
-      updateScoreTypeId,
-      id,
-      score_type,
-    };
-    props.updateScoreType(data);
+	// 	document.addEventListener("click", handleClickOutside);
 
-    setTimeout(() => {
-      window.location.reload();
-    }, 1000);
-  };
-  const deleteScoreType = () => {
-    const data = {
-      deleteScoreTypeId,
-    };
+	// 	return () => {
+	// 	  document.removeEventListener("click", handleClickOutside);
+	// 	};
+	//   }, [assessmentModel, handleClose]);
 
-    props.deleteScoreType(data);
-    setTimeout(() => {
-      window.location.reload();
-    }, 1000);
-  };
+	const handleOpenUpdateModal = (e: any) => {
+		const cycle = scoreTypesData[activeCycle!];
 
-  return (
-    <>
-      <NavBar />
-      <div className="flex bg-[#F9F9FB] min-h-[100vh]">
-        <div className="min-h-[50vh] w-[100%] block mt-10 md:w-[100%] md:mt-0 pl-[16rem]  pt-[80px] md:pl-0 dark:bg-dark-frame-bg ">
-          <Modal
-            open={openCreateModal}
-            onClose={handleCloseCreateModel}
-            aria-labelledby="parent-modal-title"
-            aria-describedby="parent-modal-description"
-          >
-            <Box className="absolute w-fit top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] md:w-[fit]">
-              <form
-                onSubmit={createScoreType}
-                className="border border-[#333] border-1 bg-[#eaeaea] rounded-[5px] p-2 w-fit mx-auto my-7"
-              >
-                <input
-                  required
-                  type="text"
-                  placeholder="Enter your test/exam name."
-                  className="block border border-[#333] border-1 bg-[#ffffff] rounded-[5px] p-2 w-[260px] mx-auto my-3"
-                  value={num}
-                  onChange={(e) => {
-                    e.preventDefault();
-                    setNum(e.target.value);
-                  }}
-                />
-                <button
-                  type="submit"
-                  className="block text-white border border-[#333] border-1 bg-[#173b3f] rounded-[5px] p-2 w-[100px] mb-5 mx-auto"
-                >
-                  SAVE
-                </button>
-              </form>
-            </Box>
-          </Modal>{" "}
-          <div className="w-fit block mx-auto sticky top-[100px] z-50">
-            {" "}
-            <button
-              className="h-[40px] rounded-[5px] bg-[#173b3f] text-white flex items-center p-0 pl-[5px] pr-[10px] mb-[20px] dark:bg-green"
-              onClick={() => handleOpenCreateCycle()}
-            >
-              <BsIcons.BsPlusLg className="mx-[5px]" />
-              <span>Test</span>
-            </button>
-          </div>{" "}
-          {scoreTypesArray?.map((values: any, i: number) => {
-            return (
-              <div
-                className="w-[80%] lg:w-[50%] h-[100px] bg-[#ffffff] dark:bg-dark-bg rounded-[7px] pt-3 text-[#173b3f] mx-auto my-2 relative dark:text-zinc-100 "
-                style={{
-                  boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
-                }}
-              >
-                <div className="mt-[25px] flex semi-md-col:block">
-                  <div className="font-normal pl-10 semi-md-col:text-center semi-md-col:pl-0">
-                    {i + 1}. {values.name}
-                  </div>{" "}
-                  <div className="ml-5 semi-md-col:text-center">
-                    ({values.nbr} candidates)
-                  </div>
-                </div>
-                <div className="absolute m-0 top-[50%] right-2 -translate-y-2/4  -translate-x-2/4">
-                  <BsIcons.BsThreeDotsVertical
-                    onClick={(event) => {
-                      setAnchorEl(
-                        event.currentTarget as unknown as HTMLElement
-                      );
-                      event.preventDefault();
-                      setActiveCycle(i);
-                      setdeleteScoreTypeId(values.id);
-                    }}
-                    className="dark:text-zinc-100 text-[20px]"
-                  />
-                </div>
-              </div>
-            );
-          })}
-          <Menu
-            id="basic-menu"
-            anchorEl={anchorEl}
-            open={open}
-            onClose={handleClose}
-            MenuListProps={{
-              "aria-labelledby": "basic-button",
-            }}
-          >
-            <MenuItem
-              onClick={(e) => {
-                handleOpenUpdateModal(e);
-              }}
-            >
-              Update
-            </MenuItem>
-            <MenuItem
-              onClick={() => {
-                deleteScoreType();
-              }}
-            >
-              Delete
-            </MenuItem>
-          </Menu>{" "}
-          <Modal
-            open={openUpdateModal}
-            onClose={handleCloseUpdateModal}
-            aria-labelledby="parent-modal-title"
-            aria-describedby="parent-modal-description"
-          >
-            <Box className="absolute w-fit top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] md:w-[fit]">
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  updateScoreType();
-                }}
-                className="border border-[#333] border-1 bg-[#eaeaea] rounded-[5px] px-2 w-fit mx-auto "
-              >
-                <hr style={{ marginBottom: "40px" }} />
-                <input
-                  required
-                  type="text"
-                  name="score_type"
-                  value={score_type}
-                  placeholder="Enter new score type name"
-                  onChange={(e) => {
-                    e.preventDefault();
-                    setscore_type(e.target.value);
-                  }}
-                  className="block border border-[#333] border-1 bg-[#ffffff] rounded-[5px] p-2 w-[260px] mx-auto mb-3"
-                />
-                <div className="flex flex-wrap w-[300px] m-auto">
-                  <button
-                    className="block text-white border border-[#333] border-1 bg-[#173b3f] rounded-[5px] p-2 w-[100px] mb-5 mx-auto"
-                    type="submit"
-                  >
-                    SAVE
-                  </button>
-                </div>
-              </form>
-            </Box>
-          </Modal>
-        </div>
-      </div>
-    </>
-  );
+		setOpenUpdateModel(true);
+		setscore_type(cycle.score_type);
+		setupdateScoreTypeId(cycle.id);
+		setId(cycle.id);
+		setAnchorEl(null);
+	};
+	const createScoreType = () => {
+		const data = {
+			score_type: num,
+		};
+		props.createScoreType(data);
+		setOpenCreateModal(false);
+		setTimeout(() => {
+			window.location.reload();
+		}, 1000);
+	};
+	const handleOpenCreateCycle = () => {
+		setAssmentModel(true);
+		setOpenCreateModal(true);
+	};
+	const updateScoreType = () => {
+		const data = {
+			updateScoreTypeId,
+			id,
+			score_type,
+		};
+		props.updateScoreType(data);
+
+		setTimeout(() => {
+			window.location.reload();
+		}, 1000);
+	};
+	const deleteScoreType = () => {
+		const data = {
+			deleteScoreTypeId,
+		};
+
+		props.deleteScoreType(data);
+		setTimeout(() => {
+			window.location.reload();
+		}, 1000);
+	};
+	console.log(assessmentModel, "<<<----------");
+
+	const removeModel = () => {
+		// let newState = !assessmentModel;
+		setAssmentModel(!assessmentModel);
+	};
+
+	const options = [
+		{ value: "remote", label: "remote" },
+		{ value: "hybrid", label: "Hybrid" },
+		{ value: "office", label: "Office" },
+		{ value: "online", label: "Online" },
+	];
+	const programs = [
+		{ value: "atlp", label: "ATLP", time: "9 months" },
+		{ value: "rca", label: "RCA", time: "2 months" },
+		{ value: "girlsProgram", label: "Girls Program", time: "2 months" },
+		{ value: "kickstart", label: "Kick Start", time: "3 months" },
+	];
+	const [moredrop, setmoredrop] = useState("");
+	const onSubmitHandler = (userid: any) => {
+		if (!moredrop) setmoredrop(userid);
+		if (moredrop) setmoredrop("");
+	};
+	const onSubmitHandle = async (userId: any) => {
+		// await dispatch(deletetraine(userId));
+		// setmoredrop("");
+	};
+	const onSubmitHandlesoft = async (userId: any) => {
+		// await dispatch(softdeletetraine(userId));
+		// setmoredrop("");
+	};
+	const getAllScoreTypes = [
+		{
+			id: "651c0e4dac2250d3acaa46b8",
+			name: "Interview",
+			nbr: 10,
+			description: "this is the description",
+			score_type: "Interview",
+			program: "ATLP",
+			mode: "online",
+		},
+		{
+			id: "651eb4ea0b9622d3a3620707",
+			name: "Qualified",
+			nbr: 20,
+			score_type: "Qualified",
+			program: "ATLP",
+			description: "this is the description",
+			mode: "Office",
+		},
+		{
+			id: "6522a406679e2421ffb44651",
+			name: "English assessment",
+			nbr: 30,
+			score_type: "English assessment",
+			program: "ATLP",
+			description: "this is the description",
+			mode: "Hybrid",
+		},
+		{
+			id: "6522a74e679e2421ffb44696",
+			name: "Hacckerrank",
+			nbr: 19,
+			description: "this is the description",
+			program: "KickStart",
+			score_type: "Hacckerrank",
+			mode: "Office",
+		},
+		{
+			id: "6522a764679e2421ffb4469b",
+			name: "Uptitude test",
+			nbr: 10,
+			description: "this is the description",
+			program: "RCA",
+			score_type: "Uptitude test",
+			mode: "Online",
+		},
+	];
+	const filteredPrograms = programs?.filter(
+		(program) => program?.label === selectedProgram
+	);
+	console.log(filteredPrograms, "------------>>>>>");
+	return (
+		<>
+			<NavBar />
+			<div className='flex bg-[#F9F9FB] min-h-[100vh]'>
+				<div className='min-h-[50vh] w-[100%] mt-10 md:w-[100%] md:mt-0 pl-[16rem]  pt-[80px] md:pl-0 dark:bg-dark-frame-bg flex justify-start flex-col'>
+					{assessmentModel ? 
+					<Modal
+						open={openCreateModal}
+						onClose={handleCloseCreateModel}
+						aria-labelledby='parent-modal-title'
+						aria-describedby='parent-modal-description'>
+						<Box className='absolute w-fit top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] md:w-fit'>
+							<div className='bg-white dark:bg-dark-bg w-full rounded-lg p-4 pb-8'>
+								<div className='card-title w-full flex  flex-wrap justify-center items-center  '>
+									<h3 className='font-bold text-sm dark:text-white text-center w-11/12 '>
+										<icons.AiOutlineClose
+											className='float-right text-3xl cursor-pointer'
+											onClick={() => removeModel()}
+										/>
+
+										{"Assessment"}
+									</h3>
+									<hr className=' bg-primary border-b my-3 w-full' />
+								</div>
+								<form
+									onSubmit={createScoreType}
+									className='border border-[#333] border-1 dark:text-[#ffffff9f] bg-[#eaeaea] dark:bg-dark-bg rounded-[5px] p-2 w-fit md:mx-auto my-7 space-y-3'>
+									<input
+										required
+										type='text'
+										placeholder='Title/Name'
+										className=' dark:bg-dark-tertiary border border-primary rounded outline-none px-5 font-sans text-xs py-2 w-full pt-4'
+										value={num}
+										onChange={(e) => {
+											e.preventDefault();
+											setNum(e.target.value);
+										}}
+									/>
+									<input
+										required
+										type='text'
+										placeholder='Description.'
+										className=' dark:bg-dark-tertiary border border-primary rounded outline-none px-5 font-sans text-xs py-2 w-full pt-4'
+										value={num}
+										onChange={(e) => {
+											e.preventDefault();
+											setNum(e.target.value);
+										}}
+									/>
+									<input
+										required
+										type='text'
+										placeholder='Duration'
+										className=' dark:bg-dark-tertiary border border-primary rounded outline-none px-5 font-sans text-xs py-2 w-full pt-4'
+										value={num}
+										onChange={(e) => {
+											e.preventDefault();
+											setNum(e.target.value);
+										}}
+									/>
+									<select
+										required
+										className=' dark:bg-dark-tertiary border text-[#ffffff9f] border-primary rounded outline-none px-5 font-sans text-xs py-2 w-full pt-4'
+										value={selectedOption}
+										onChange={(e) => {
+											e.preventDefault();
+											setSelectedOption(e.target.value);
+										}}>
+										<option value=''>Mode of engagement</option>
+										{options.map((option) => (
+											<option
+												key={option.value}
+												value={option.value}
+												className=' dark:bg-dark-tertiary border border-primary rounded outline-none px-5 font-sans text-xs py-2 w-full pt-4'>
+												{option.label}
+											</option>
+										))}
+									</select>
+									<div className='flex flex-row'>
+										<select
+											required
+											className=' dark:bg-dark-tertiary border border-primary rounded outline-none px-5 font-sans text-xs py-2 w-full pt-4'
+											value={selectedProgram}
+											onChange={(e) => {
+												e.preventDefault();
+												setSelectedProgram(e.target.value);
+											}}>
+											<option value=''>Select Program</option>
+											{programs.map((option) => (
+												<option key={option.value} value={option.value}>
+													{option.label}
+												</option>
+											))}
+										</select>
+										<select
+											required
+											className=' dark:bg-dark-tertiary border border-primary rounded outline-none px-5 font-sans text-xs py-2 w-full pt-4'
+											value={programDuration}
+											onChange={(e) => {
+												e.preventDefault();
+												setProgramDuration(e.target.value);
+											}}>
+											<option value=''>Program Duration</option>
+											{filteredPrograms.map((option) => (
+												<option key={option.value} value={option.value}>
+													{option.label}
+												</option>
+											))}
+										</select>
+									</div>
+									<button
+										type='submit'
+										className='block text-white border border-[#333] border-1 bg-dark-bg rounded-[5px] p-2 w-[100px] mb-5 mx-auto'>
+										SAVE
+									</button>
+								</form>
+							</div>
+						</Box>
+					</Modal>
+					:""
+					}
+					<div className='px-3'>
+						<div className='bg-white  dark:bg-dark-bg shadow-lg rounded-md w-[100%] mx-auto lg:w-[80%]'>
+							<div className='w-fit block sticky top-[100px] z-50'>
+								{" "}
+								<button
+									className='h-[40px] rounded-[5px] bg-[#173b3f] text-white flex items-center p-0 pl-[5px] pr-[10px] mb-[20px] dark:bg-green'
+									onClick={() => handleOpenCreateCycle()}>
+									<BsIcons.BsPlusLg className='mx-[5px]' />
+									<span>assessment</span>
+								</button>
+							</div>{" "}
+							<div>
+								<div className='-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto'>
+									<div className='inline-block w-full h-[55vh] lg:min-w-full shadow rounded-lg overflow-y-scroll'>
+										<table className='min-w-full leading-normal px-4'>
+											<thead className='w-full px-32 sticky top-0'>
+												<tr>
+													<th className='p-6 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider'>
+														{"Title"}
+													</th>
+													<th className='px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left text-xs font-semibold text-gray-600 dark:text-white uppercase md:table-cell tracking-wider'>
+														{"Description"}
+													</th>
+													<th className='px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider'>
+														{"Engagement Mode"}
+													</th>
+													<th className='px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider'>
+														{"Candidates"}
+													</th>
+													<th className='border-b-2 sm:text-center border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider'>
+														{"Program"}
+													</th>
+													<th className='border-b-2 sm:text-center border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider'>
+														{"action"}
+													</th>
+												</tr>
+											</thead>
+											<tbody>
+												{getAllScoreTypes.map((item: any) => (
+													<tr key={item.id}>
+														<td className='px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm'>
+															<div className='flex'>
+																<div className=''>
+																	<p className='text-gray-900 text-center dark:text-white whitespace-no-wrap'>
+																		{item.name}
+																	</p>
+																</div>
+															</div>
+														</td>
+														<td className='px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm'>
+															<div className='flex items-center'>
+																<div className=''>
+																	<p className='text-gray-900 text-center dark:text-white whitespace-no-wrap'>
+																		{item.description}
+																	</p>
+																</div>
+															</div>
+														</td>
+														<td className='px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm'>
+															<div className='flex items-center'>
+																<div className=''>
+																	<p className='text-gray-900 items-center dark:text-white whitespace-no-wrap'>
+																		{item.mode}
+																	</p>
+																</div>
+															</div>
+														</td>
+														<td className='px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm'>
+															<div className='flex items-center'>
+																<div className=''>
+																	<p className='text-gray-900 items-center dark:text-white whitespace-no-wrap'>
+																		{item.nbr}
+																	</p>
+																</div>
+															</div>
+														</td>
+														<td className='px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm'>
+															<div className='flex items-center'>
+																<div className=''>
+																	<p className='text-gray-900 items-center dark:text-white whitespace-no-wrap'>
+																		{item.program}
+																	</p>
+																</div>
+															</div>
+														</td>
+														<td>
+															<div>
+																<HiDotsVertical
+																	className=' text-black dark:text-white text-3xl ml-6 font-size-6 cursor-pointer'
+																	onClick={(e: any) => {
+																		e.preventDefault();
+																		onSubmitHandler(item.id);
+																	}}
+																/>
+																<div
+																	className={`${
+																		moredrop === item.id ? "block" : "hidden"
+																	} absolute right-10  bg-white dark:bg-dark-tertiary  dark:text-white text-base z-50 list-none divide-y divide-gray-100 rounded shadow my-4`}
+																	id='dropdown'>
+																	<ul
+																		className='py-1'
+																		aria-labelledby='dropdown'>
+																		<li>
+																			<Link
+																				to={`/trainee-applicant/${item.id}/edit`}
+																				className='text-sm hover:bg-gray-100 text-gray-700 dark:hover:bg-gray-500 dark:text-white  block px-4 py-2'>
+																				Edit
+																			</Link>
+																		</li>
+																		<li>
+																			<Link
+																				to={`/trainee-applicant-details/${item.id}`}
+																				className='text-sm hover:bg-gray-100 text-gray-700  dark:text-white   dark:hover:bg-gray-500 block px-4 py-2'>
+																				View
+																			</Link>
+																		</li>
+																		<li>
+																			<div
+																				className='text-sm hover:bg-gray-100 text-gray-700  dark:hover:bg-gray-500 dark:text-white  block px-4 py-2'
+																				onClick={(e: any) => {
+																					e.preventDefault();
+																					onSubmitHandlesoft(item._id);
+																				}}>
+																				Soft Delete
+																			</div>
+																		</li>
+																		<li>
+																			<div
+																				className='text-sm hover:bg-gray-100 text-gray-700   dark:hover:bg-gray-500 dark:text-white  block px-4 py-2'
+																				onClick={(e: any) => {
+																					e.preventDefault();
+																					onSubmitHandle(item.id);
+																				}}>
+																				Hard Delete
+																			</div>
+																		</li>
+																	</ul>
+																</div>
+															</div>
+														</td>
+													</tr>
+												))}
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					{/* })} */}
+					<Menu
+						id='basic-menu'
+						anchorEl={anchorEl}
+						open={open}
+						onClose={handleClose}
+						MenuListProps={{
+							"aria-labelledby": "basic-button",
+						}}>
+						<MenuItem
+							onClick={(e) => {
+								handleOpenUpdateModal(e);
+							}}>
+							Update
+						</MenuItem>
+						<MenuItem
+							onClick={() => {
+								deleteScoreType();
+							}}>
+							Delete
+						</MenuItem>
+					</Menu>{" "}
+					<Modal
+						open={openUpdateModal}
+						onClose={handleCloseUpdateModal}
+						aria-labelledby='parent-modal-title'
+						aria-describedby='parent-modal-description'>
+						<Box className='absolute w-fit top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] md:w-[fit]'>
+							<form
+								onSubmit={(e) => {
+									e.preventDefault();
+									updateScoreType();
+								}}
+								className='border border-[#333] border-1 bg-[#eaeaea] rounded-[5px] px-2 w-fit mx-auto '>
+								<hr style={{ marginBottom: "40px" }} />
+								<input
+									required
+									type='text'
+									name='score_type'
+									value={score_type}
+									placeholder='Enter new score type name'
+									onChange={(e) => {
+										e.preventDefault();
+										setscore_type(e.target.value);
+									}}
+									className='block border border-[#333] border-1 bg-[#ffffff] rounded-[5px] p-2 w-[260px] mx-auto mb-3'
+								/>
+								<div className='flex flex-wrap w-[300px] m-auto'>
+									<button
+										className='block text-white border border-[#333] border-1 bg-[#173b3f] rounded-[5px] p-2 w-[100px] mb-5 mx-auto'
+										type='submit'>
+										SAVE
+									</button>
+								</div>
+							</form>
+						</Box>
+					</Modal>
+				</div>
+			</div>
+		</>
+	);
 };
 const mapState = (state: any) => ({
-  scoreTypes: state.scoreTypes,
-  scoreValues: state.scoreValues,
+	scoreTypes: state.scoreTypes,
+	scoreValues: state.scoreValues,
 });
 
 export default connect(mapState, {
-  createScoreType,
-  getAllScoreTypes,
-  deleteScoreType,
-  updateScoreType,
-  getAllScoreValues,
+	createScoreType,
+	getAllScoreTypes,
+	deleteScoreType,
+	updateScoreType,
+	getAllScoreValues,
 })(ScoreTypesActions);
