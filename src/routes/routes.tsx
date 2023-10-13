@@ -1,29 +1,29 @@
-import React from 'react'
-import { HashRouter as Router, Routes, Route, Link } from 'react-router-dom'
-import TestTailwind from './../components/TestTailwind'
-import TrainneeDetails from './../pages/TrainneeDetails'
-import TrainneeDetailsB from './../pages/TrainneDetailsB'
-import './../index.css'
-import Sidebar from './../components/sidebar/sidebar'
-import NavBar from './../components/sidebar/navHeader'
-import Trainee from './../pages/TraineApplicant/Trainee'
-import FilterTrainee from './../pages/FilterTeainee/FilterTrainee'
-import Table from './../pages/Table'
-import UpdateTraine from './../pages/updateTrainee/traineUpdate'
-import CreateScoreType from './../pages/FilterTeainee/createScoreType'
-import ScoreTypesActions from './../pages/FilterTeainee/ScoreTypesActions'
-import ImportTraineeDetailsFromGoogleSheet from './../pages/importAndSaveManyTraineesFromGoogleSheet/importAndSaveManyTraineesFromGoogleSheet'
+import React from 'react';
+import { HashRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import TestTailwind from './../components/TestTailwind';
+import TrainneeDetails from './../pages/TrainneeDetails';
+import TrainneeDetailsB from './../pages/TrainneDetailsB';
+import './../index.css';
+import Sidebar from './../components/sidebar/sidebar';
+import NavBar from './../components/sidebar/navHeader';
+import Trainee from './../pages/TraineApplicant/Trainee';
+import FilterTrainee from './../pages/FilterTeainee/FilterTrainee';
+import Table from './../pages/Table';
+import UpdateTraine from './../pages/updateTrainee/traineUpdate';
+import CreateScoreType from './../pages/FilterTeainee/createScoreType';
+import ScoreTypesActions from './../pages/FilterTeainee/ScoreTypesActions';
+import ImportTraineeDetailsFromGoogleSheet from './../pages/importAndSaveManyTraineesFromGoogleSheet/importAndSaveManyTraineesFromGoogleSheet';
 
-const Counter = React.lazy(() => import('./../components/Counter/Counter'))
-import Trash from './../pages/Trash/Trash'
-import ApplicationCycle from './../pages/ApplicationCycle/ApplicationCycle'
-import LoginPage from './../pages/LoginPage'
-import PrivateRoute from './../pages/PrivateRoute'
-import PageNotFound from './../pages/PageNotFound'
-import ListAllUsersPage from './../pages/roles&permissions/ListAllUsersPage'
-import SignupForm from './../components/form/RegisterForm'
-import Programs from '../pages/programs/Programs'
-import RolePermission from '../pages/RolesAndPermissions/RolePermission'
+const Counter = React.lazy(() => import('./../components/Counter/Counter'));
+import Trash from './../pages/Trash/Trash';
+import ApplicationCycle from './../pages/ApplicationCycle/ApplicationCycle';
+import LoginPage from './../pages/LoginPage';
+import PrivateRoute from './../pages/PrivateRoute';
+import PageNotFound from './../pages/PageNotFound';
+import ListAllUsersPage from './../pages/roles&permissions/ListAllUsersPage';
+import SignupForm from './../components/form/RegisterForm';
+import Programs from '../pages/programs/Programs';
+import RolePermission from '../pages/roles&permissions/RolePermission';
 
 function Navigation() {
   return (
@@ -176,7 +176,7 @@ function Navigation() {
       />
       <Route path='/signup' element={<SignupForm />} />
     </Routes>
-  )
+  );
 }
 
-export default Navigation
+export default Navigation;
