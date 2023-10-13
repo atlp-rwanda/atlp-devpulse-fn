@@ -22,6 +22,27 @@ import ApplicationEntity from "../../components/roles&permissions/ApplicationEnt
 import CohortEntity from "../../components/roles&permissions/CohortEntity";
 import RoleEntity from "../../components/roles&permissions/RoleEntity";
 
+export interface SingleRole {
+  _id?: string;
+  roleName: string;
+  description: string;
+  permissions: Permission[];
+}
+export type Permission = {
+  create: boolean;
+  deleteMultiple: boolean;
+  deleteOne: boolean;
+  deleteOwn: boolean;
+  entity: string;
+  updateMultiple: boolean;
+  updateOne: boolean;
+  updateOwn: boolean;
+  viewMultiple: boolean;
+  viewOne: boolean;
+  viewOwn: boolean;
+  _id?: string;
+};
+
 function RolePermission(props: any) {
   const token = localStorage.getItem("access_token");
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -43,7 +64,11 @@ function RolePermission(props: any) {
       setError(null);
     }, 3000);
   };
-
+  const [getRoleId, setGetRoleId] = useState<string | null>(null);
+  const [updateRoleId, setUpdateRoleId] = useState<string | null>(null);
+  const [isViewingSingleRole, setIsViewSingleRole] = useState(false);
+  const [isSingleRole, setIsSingleRole] = useState(false);
+  const [singleRoleData, setSingleRoleData] = useState<SingleRole | null>(null);
   const [currentDropdownIndex, setCurrentDropdownIndex] = useState<
     number | null
   >(null);
@@ -265,6 +290,61 @@ function RolePermission(props: any) {
     }
   };
 
+  const handleViewSingleRole = async (getRoleId) => {
+    try {
+      if (!getRoleId) {
+        console.error("Role ID is null");
+        return;
+      }
+      console.log("Role ID is", getRoleId);
+      setAnchorEl(null);
+      setGetRoleId(getRoleId);
+      const response = await axios.post("/", {
+        query: `
+          query GetRole($getRoleId: ID!) {
+            getRole(id: $getRoleId) {
+              _id
+              roleName
+              description
+              permissions {
+                entity
+                _id
+                create
+                viewOwn
+                viewMultiple
+                viewOne
+                updateOwn
+                updateMultiple
+                updateOne
+                deleteOwn
+                deleteMultiple
+                deleteOne
+              }
+            }
+          }
+        `,
+        variables: {
+          getRoleId,
+        },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `${token}`,
+        },
+      });
+      const role = response.data.data.getRole;
+      setSingleRoleData(role);
+      setIsSingleRole(true);
+      setIsViewSingleRole(true);
+    } catch (error) {
+      console.error("Error viewing role:", error);
+    }
+  };
+
+  const handleBack = () => {
+    setIsSingleRole(false);
+    setSingleRoleData(null);
+  };
+
   const COLS = [
     {
       Header: "Role Name",
@@ -333,64 +413,220 @@ function RolePermission(props: any) {
       <NavBar />
       <div className="flex dark:bg-dark-bg dark:text-white bg-[#F9F9FB] min-h-[100vh]">
         <div className="min-h-[50vh] w-[100%] block mt-10 md:w-[100%] md:mt-0 pl-[16rem]  pt-[80px] md:pl-0">
-          <div className=" table table-fixed w-[100%] top-[20%] md:top-[10%] pb-10 md:relative px-[10%] md:px-[10px]">
+          <div className=" table table-fixed w-[100%] top-[20%] md:top-[10%] pb-10 md:relative px-[5%] md:px-[10px]">
             <button
               className="h-[40px] rounded-[5px]  dark:bg-[#56C870] bg-[#173b3f] text-white flex items-center p-0 pl-[5px] pr-[10px] mb-[20px]"
               onClick={() => handleOpenCreateRole()}
+              style={{ display: isSingleRole ? "none" : "block" }}
             >
               <span>Add new Role</span>
-              <BsIcons.BsPlusLg className="mx-[5px]" />
             </button>
             <div>
-              <div className=" w-[100%] dark:bg-dark-bg max-h-[70vh] m-auto  bg-[#fff] shadow-md rounded-[10px] relative pb-[20px]  overflow-x-auto  overflow-y-scroll 	md:w-[100%]">
-                <table
-                  {...getTableProps()}
-                  className="border-collapse w-[100%] m-auto rounded-[15px] whitespace-nowrap "
-                >
-                  <thead className=" w-full px-32 sticky top-0">
-                    {headerGroups.map((headerGroup: any, index: number) => (
-                      <tr
-                        key={index}
-                        {...headerGroup.getHeaderGroupProps()}
-                        className="border-solid border-[1px] border-white dark:border-dark-tertiary even:bg-[#eef1f1] first:w-[20px]"
+              <div className=" w-[100%] dark:bg-dark-bg max-h-[70vh] m-auto  bg-[#fff] shadow-md rounded-[10px] relative pb-[20px]  overflow-x-auto  overflow-y-scroll 	md:w-[100%] p-10">
+                {isSingleRole && singleRoleData ? (
+                  <div className="w-full">
+                    <div>
+                      <button
+                        className="h-[40px] w-28 rounded-[5px]  dark:bg-[#56C870] bg-[#173b3f] text-white "
+                        onClick={handleBack}
                       >
-                        {headerGroup.headers.map(
-                          (column: any, index: number) => (
-                            <th
-                              key={index}
-                              {...column.getHeaderProps}
-                              className="border-solid pl-[30px] h-[50px] text-left dark:bg-dark-tertiary bg-[#eef1f1]  first:rounded-tl-[10px] last:rounded-tr-[10px] border-b-[2px] border-[#c5c5c5] dark:border-dark-tertiary py-6   last:pl-[0px] w-[150px] last:w-[20px]  first:w-[20px]  "
-                            >
-                              {column.render("Header")}
-                            </th>
-                          )
-                        )}
-                      </tr>
-                    ))}
-                  </thead>
-                  <tbody {...getTableBodyProps()}>
-                    {page.reverse().map((row: any) => {
-                      prepareRow(row);
-                      return (
+                        <span className="">Back</span>
+                      </button>
+                    </div>
+                    <div className="mt-8">
+                      <h2 className="text-2xl font-bold">
+                        {singleRoleData.roleName}
+                      </h2>
+                      <h1>{singleRoleData.description}</h1>
+                    </div>
+                    <div className="mt-5">
+                      {singleRoleData.permissions?.map((permission, index) => (
+                        <div>
+                          <div className="">
+                            <h2 key={index} className="text-white text-lg">
+                              {permission.entity}
+                            </h2>
+                          </div>
+                          <div className="flex gap-x-2 md:flex-col">
+                            <div>
+                              <label
+                                htmlFor="create"
+                                className=" block text-sm"
+                              >
+                                Create
+                              </label>
+                              <input
+                                type="checkbox"
+                                checked={permission.create}
+                              />
+                            </div>
+                            <div>
+                              <label
+                                htmlFor="deleteMultiple"
+                                className=" block text-sm"
+                              >
+                                deleteMultiple
+                              </label>
+                              <input
+                                type="checkbox"
+                                checked={permission.deleteMultiple}
+                              />
+                            </div>
+                            <div>
+                              <label
+                                htmlFor="deleteOne"
+                                className=" block text-sm"
+                              >
+                                deleteOne
+                              </label>
+                              <input
+                                type="checkbox"
+                                checked={permission.deleteOne}
+                              />
+                            </div>
+                            <div>
+                              <label
+                                htmlFor="deleteOwn"
+                                className=" block text-sm"
+                              >
+                                deleteOwn
+                              </label>
+                              <input
+                                type="checkbox"
+                                checked={permission.deleteOwn}
+                              />
+                            </div>
+                            <div>
+                              <label
+                                htmlFor="updateOne"
+                                className=" block text-sm"
+                              >
+                                updateOne
+                              </label>
+                              <input
+                                type="checkbox"
+                                checked={permission.updateOne}
+                              />
+                            </div>
+                            <div>
+                              <label
+                                htmlFor="updateOwn"
+                                className=" block text-sm"
+                              >
+                                updateOwn
+                              </label>
+                              <input
+                                type="checkbox"
+                                checked={permission.updateOwn}
+                              />
+                            </div>
+                            <div>
+                              <label
+                                htmlFor="updateMultiple"
+                                className=" block text-sm"
+                              >
+                                updateMultiple
+                              </label>
+                              <input
+                                type="checkbox"
+                                checked={permission.updateMultiple}
+                              />
+                            </div>
+                            <div>
+                              <label
+                                htmlFor="viewOwn"
+                                className=" block text-sm"
+                              >
+                                viewOwn
+                              </label>
+                              <input
+                                type="checkbox"
+                                checked={permission.viewOwn}
+                              />
+                            </div>
+                            <div>
+                              <label
+                                htmlFor="viewOne"
+                                className=" block text-sm"
+                              >
+                                viewOne
+                              </label>
+                              <input
+                                type="checkbox"
+                                checked={permission.viewOne}
+                              />
+                            </div>
+                            <div>
+                              <label
+                                htmlFor="viewMultiple"
+                                className=" block text-sm"
+                              >
+                                viewMultiple
+                              </label>
+                              <input
+                                type="checkbox"
+                                checked={permission.viewMultiple}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  <table
+                    {...getTableProps()}
+                    className="border-collapse w-[100%] m-auto rounded-[15px] whitespace-nowrap "
+                  >
+                    <thead className=" w-full px-32 sticky top-0">
+                      {headerGroups.map((headerGroup: any, index: number) => (
                         <tr
-                          {...row.getRowProps()}
-                          className="border-b dark:border-dark-tertiary border-gray-200 "
-                          key={row.original._id}
-                          onClick={() => setDeleteRoleId(row.original._id)}
+                          key={index}
+                          {...headerGroup.getHeaderGroupProps()}
+                          className="border-solid border-[1px] border-white dark:border-dark-tertiary even:bg-[#eef1f1] first:w-[20px]"
                         >
-                          {row.cells.map((cell: any) => (
-                            <td
-                              {...cell.getCellProps()}
-                              className="pl-[30px] text-left max-w-[150px] overflow-x-auto p-4 last:w-[2px] last:pl-[0px]"
-                            >
-                              {cell.render("Cell")}
-                            </td>
-                          ))}
+                          {headerGroup.headers.map(
+                            (column: any, index: number) => (
+                              <th
+                                key={index}
+                                {...column.getHeaderProps}
+                                className="border-solid pl-[30px] h-[50px] text-left dark:bg-dark-tertiary bg-[#eef1f1]  first:rounded-tl-[10px] last:rounded-tr-[10px] border-b-[2px] border-[#c5c5c5] dark:border-dark-tertiary py-6   last:pl-[0px] w-[150px] last:w-[20px]  first:w-[20px]  "
+                              >
+                                {column.render("Header")}
+                              </th>
+                            )
+                          )}
                         </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
+                      ))}
+                    </thead>
+                    <tbody {...getTableBodyProps()}>
+                      {page.reverse().map((row: any) => {
+                        prepareRow(row);
+                        return (
+                          <tr
+                            {...row.getRowProps()}
+                            className="border-b dark:border-dark-tertiary border-gray-200 "
+                            key={row.original._id}
+                            onClick={() => {
+                              setDeleteRoleId(row.original._id);
+                              setGetRoleId(row.original._id);
+                              setUpdateRoleId(row.original._id);
+                            }}
+                          >
+                            {row.cells.map((cell: any) => (
+                              <td
+                                {...cell.getCellProps()}
+                                className="pl-[30px] text-left max-w-[150px] overflow-x-auto p-4 last:w-[2px] last:pl-[0px]"
+                              >
+                                {cell.render("Cell")}
+                              </td>
+                            ))}
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                )}
               </div>
             </div>
             <div className="block mx-auto my-0 w-[100%]  bottom-0 overflow-x-auto">
@@ -468,6 +704,10 @@ function RolePermission(props: any) {
             <MenuItem onClick={() => handleOpenDeleteRole(deleteRoleId)}>
               <BsIcons.BsFillTrashFill className="mr-[5px]" />
               Delete
+            </MenuItem>
+            <MenuItem onClick={() => handleViewSingleRole(getRoleId)}>
+              <AiIcons.AiOutlineEye className="mr-[5px]" />
+              View Single Role
             </MenuItem>
           </Menu>
         )}

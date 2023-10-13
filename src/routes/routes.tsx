@@ -138,7 +138,7 @@ function Navigation() {
         path="/rolesandaccess"
         element={
           <PrivateRoute>
-            <ListAllUsersPage />
+            <RolePermission />
           </PrivateRoute>
         }
       />
@@ -146,7 +146,7 @@ function Navigation() {
         path="/roles"
         element={
           <PrivateRoute>
-            <RolePermission />
+            <ListAllUsersPage />
           </PrivateRoute>
         }
       />
