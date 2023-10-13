@@ -12,5 +12,12 @@
     "gender": "Male",
     "email": "gilbert@gmail.com",
     "cycle": "cohort 1"
+  },
+  {
+    "firstname": "Manzi",
+    "lastname": "Gandhi",
+    "gender": "Male",
+    "email": "manzi123@gmail.com",
+    "cycle": "cohort 2"
   }
 ]

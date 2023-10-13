@@ -6,28 +6,33 @@ export const getRoles = () => async (dispatch: any) => {
   try {
     const data = await axios.post('/', {
       query: `
-              query getRoles {
-                roles {
-                    _id
-                    description
-                    roleName
-                    permissions {
-                      viewOwn {
-                        isPermitted
-                      }
-                      updateMultiple {
-                        isPermitted
-                      }
-                    }
-                    
-                  }
-               }
+      query GetAllRoles {
+        getAllRoles {
+          _id
+          roleName
+          description
+          permissions {
+            entity
+            _id
+            create
+            viewOwn
+            viewMultiple
+            viewOne
+            updateOwn
+            updateMultiple
+            updateOne
+            deleteOwn
+            deleteMultiple
+            deleteOne
+          }
+        }
+      }
              `,
     });
-    if (data?.data?.data?.roles !== undefined) {
+    if (data.data.data.getAllRoles !== undefined) {
       dispatch({
         type: fetchRole.fetchRoles,
-        data: data.data.data.roles,
+        data: data.data.data.getAllRoles,
       });
     } else {
       data?.data?.errors !== undefined
