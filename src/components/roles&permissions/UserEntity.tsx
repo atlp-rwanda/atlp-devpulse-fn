@@ -1,12 +1,12 @@
 import * as IoIcons from 'react-icons/io5';
 
-function EntityDropdown({
-  selectedEntity,
-  setSelectedEntity,
-  setOpenP,
-  entities,
-  openP,
-  setPermissions,
+function UserEntity({
+  userSelectedEntity,
+  setUserSelectedEntity,
+  setUserOpen,
+  userEntities,
+  userOpen,
+  setUserPermissions,
   className,
 }) {
   return (
@@ -14,23 +14,23 @@ function EntityDropdown({
       <select
         name='entity'
         id='entity'
-        value={selectedEntity}
+        value={userSelectedEntity}
         onChange={(e) => {
-          setSelectedEntity(e.target.value);
-          setOpenP(true);
+          setUserSelectedEntity(e.target.value);
+          setUserOpen(true);
         }}
         className='dark:bg-dark-tertiary border dark:text-white border-primary py-2 rounded outline-none px-5 font-sans text-xs w-4/5 pt-4 ml-20 md:ml-4'
       >
         <option className='' value=''>
           -- Please choose an Entity --
         </option>
-        {entities?.map((entity: string) => (
+        {userEntities?.map((entity: string) => (
           <option className='dark:text-white' key={entity} value={entity}>
             {entity}
           </option>
         ))}
       </select>
-      {openP && (
+      {userOpen && (
         <div className='mt-2 dark:bg-dark-tertiary dark:text-white p-5 relative m-auto w-[80%] ml-20 md:ml-4 '>
           {/* <IoIcons.IoClose
             onClick={() => setOpenP(false)}
@@ -43,7 +43,7 @@ function EntityDropdown({
                 className=''
                 value='create'
                 onChange={(e) =>
-                  setPermissions((currentState) => [
+                  setUserPermissions((currentState) => [
                     ...currentState,
                     e.target.value,
                   ])
@@ -57,7 +57,7 @@ function EntityDropdown({
                   type='checkbox'
                   value='viewOne'
                   onChange={(e) =>
-                    setPermissions((currentState) => [
+                    setUserPermissions((currentState) => [
                       ...currentState,
                       e.target.value,
                     ])
@@ -72,7 +72,7 @@ function EntityDropdown({
                   type='checkbox'
                   value='viewOwn'
                   onChange={(e) =>
-                    setPermissions((currentState) => [
+                    setUserPermissions((currentState) => [
                       ...currentState,
                       e.target.value,
                     ])
@@ -87,7 +87,7 @@ function EntityDropdown({
                   type='checkbox'
                   value='viewMultiple'
                   onChange={(e) =>
-                    setPermissions((currentState) => [
+                    setUserPermissions((currentState) => [
                       ...currentState,
                       e.target.value,
                     ])
@@ -102,7 +102,7 @@ function EntityDropdown({
                   type='checkbox'
                   value='updateOne'
                   onChange={(e) =>
-                    setPermissions((currentState) => [
+                    setUserPermissions((currentState) => [
                       ...currentState,
                       e.target.value,
                     ])
@@ -117,7 +117,7 @@ function EntityDropdown({
                   type='checkbox'
                   value='updateOwn'
                   onChange={(e) =>
-                    setPermissions((currentState) => [
+                    setUserPermissions((currentState) => [
                       ...currentState,
                       e.target.value,
                     ])
@@ -132,7 +132,7 @@ function EntityDropdown({
                   type='checkbox'
                   value='updateMultiple'
                   onChange={(e) =>
-                    setPermissions((currentState) => [
+                    setUserPermissions((currentState) => [
                       ...currentState,
                       e.target.value,
                     ])
@@ -147,7 +147,7 @@ function EntityDropdown({
                   type='checkbox'
                   value='deleteOne'
                   onChange={(e) =>
-                    setPermissions((currentState) => [
+                    setUserPermissions((currentState) => [
                       ...currentState,
                       e.target.value,
                     ])
@@ -162,7 +162,7 @@ function EntityDropdown({
                   type='checkbox'
                   value='deleteOwn'
                   onChange={(e) =>
-                    setPermissions((currentState) => [
+                    setUserPermissions((currentState) => [
                       ...currentState,
                       e.target.value,
                     ])
@@ -177,7 +177,7 @@ function EntityDropdown({
                   type='checkbox'
                   value='deleteMultiple'
                   onChange={(e) =>
-                    setPermissions((currentState) => [
+                    setUserPermissions((currentState) => [
                       ...currentState,
                       e.target.value,
                     ])
@@ -193,4 +193,4 @@ function EntityDropdown({
   );
 }
 
-export default EntityDropdown;
+export default UserEntity;

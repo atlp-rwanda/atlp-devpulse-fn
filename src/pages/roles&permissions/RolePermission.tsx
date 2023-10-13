@@ -17,14 +17,13 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios from '../../redux/actions/axiosconfig';
 import { toast } from 'react-toastify';
-import EntityDropdown from '../../components/roles&permissions/EntityDropdown';
-import EntityDropdown2 from '../../components/roles&permissions/EntityDropdown2';
-import EntityDropdown3 from '../../components/roles&permissions/EntityDropdown3';
-import EntityDropdown4 from '../../components/roles&permissions/EntityDropdown4';
+import UserEntity from '../../components/roles&permissions/UserEntity';
+import ApplicationEntity from '../../components/roles&permissions/ApplicationEntity';
+import CohortEntity from '../../components/roles&permissions/CohortEntity';
+import RoleEntity from '../../components/roles&permissions/RoleEntity';
 
 function RolePermission(props: any) {
   const token = localStorage.getItem('access_token');
-
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
@@ -48,29 +47,26 @@ function RolePermission(props: any) {
   const [currentDropdownIndex, setCurrentDropdownIndex] = useState<
     number | null
   >(null);
-  const [isEntitySelected, setIsEntitySelected] = useState(false);
-  const [isPermissionSelected, setIsPermissionSelected] = useState(false);
-  const [updateDescription, setUpdateDesciption] = useState('');
   const [openUpdateModal, setOpenUpdateModel] = useState(false);
   const [openCreateModal, setOpenCreateModal] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [deleteRoleId, setDeleteRoleId] = useState<string | null>(null);
-  const [openP, setOpenP] = useState(false);
-  const [openP2, setOpenP2] = useState(false);
-  const [openP3, setOpenP3] = useState(false);
-  const [openP4, setOpenP4] = useState(false);
+  const [userOpen, setUserOpen] = useState(false);
+  const [appOpen, setAppOpen] = useState(false);
+  const [openCohort, setOpenCohort] = useState(false);
+  const [openRole, setOpenRole] = useState(false);
   const [isAnError, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [roles, setRoles] = useState([]);
-  const [permissions, setPermissions] = useState<any>([]);
-  const [permissions2, setPermissions2] = useState<any>([]);
-  const [permissions3, setPermissions3] = useState<any>([]);
-  const [permissions4, setPermissions4] = useState<any>([]);
+  const [userPermissions, setUserPermissions] = useState<any>([]);
+  const [appPermissions, setAppPermissions] = useState<any>([]);
+  const [cohortPermissions, setCohortPermissions] = useState<any>([]);
+  const [rolePermissions, setRolePermissions] = useState<any>([]);
   const [isEditable, setIsEditable] = useState(false);
-  const [selectedEntity, setSelectedEntity] = useState('');
-  const [selectedEntity2, setSelectedEntity2] = useState('');
-  const [selectedEntity3, setSelectedEntity3] = useState('');
-  const [selectedEntity4, setSelectedEntity4] = useState('');
+  const [userSelectedEntity, setUserSelectedEntity] = useState('');
+  const [appSelectedEntity, setAppSelectedEntity] = useState('');
+  const [selectedCohortEntity, setSelectedCohortEntity] = useState('');
+  const [selectedRoleEntity, setSelectedRoleEntity] = useState('');
   const [menuPosition, setMenuPosition] = useState<{
     top: number;
     left: number;
@@ -80,26 +76,26 @@ function RolePermission(props: any) {
     setIsLoading(true);
     const finalPermission = [
       {
-        entity: selectedEntity,
-        permissions: permissions,
+        entity: userSelectedEntity,
+        permissions: userPermissions,
       },
       {
-        entity: selectedEntity2,
-        permissions: permissions2,
+        entity: appSelectedEntity,
+        permissions: appPermissions,
       },
       {
-        entity: selectedEntity3,
-        permissions: permissions3,
+        entity: selectedCohortEntity,
+        permissions: cohortPermissions,
       },
       {
-        entity: selectedEntity4,
-        permissions: permissions4,
+        entity: selectedRoleEntity,
+        permissions: rolePermissions,
       },
     ];
     const filteredPermissions = finalPermission.filter(
       (item) => item.entity !== undefined && item.entity !== ''
     );
-    console.log('Filtered permission ==>', filteredPermissions);
+
     try {
       const parsedData = roleSchema.parse(data);
       const response = await axios.post('/', {
@@ -156,7 +152,7 @@ function RolePermission(props: any) {
       console.log(response.data.message);
     } catch (error: any) {
       showToast(error, 'error');
-      console.log('Error is ==>', error.message);
+      toast.error(error.message);
     }
     setIsLoading(false);
   };
@@ -258,6 +254,7 @@ function RolePermission(props: any) {
       ),
     },
   ];
+
   const columns = useMemo(() => COLS, []);
   const {
     getTableProps,
@@ -282,20 +279,20 @@ function RolePermission(props: any) {
     usePagination
   );
   const { pageIndex, pageSize } = state;
-  const entities = ['Users', 'Applications', 'Cohorts', 'Roles'];
-  let entities2 = ['Users', 'Applications', 'Cohorts', 'Roles'];
-  let entities3 = ['Users', 'Applications', 'Cohorts', 'Roles'];
-  let entities4 = ['Users', 'Applications', 'Cohorts', 'Roles'];
+  const userEntities = ['Users', 'Applications', 'Cohorts', 'Roles'];
+  let appEntities = ['Users', 'Applications', 'Cohorts', 'Roles'];
+  let cohortEntities = ['Users', 'Applications', 'Cohorts', 'Roles'];
+  let roleEntities = ['Users', 'Applications', 'Cohorts', 'Roles'];
 
-  if (entities2.includes(selectedEntity)) {
-    entities2 = entities.filter((ent) => ent !== selectedEntity);
+  if (appEntities.includes(userSelectedEntity)) {
+    appEntities = userEntities.filter((ent) => ent !== userSelectedEntity);
   }
-  if (entities3.includes(selectedEntity2)) {
-    entities3 = entities2.filter((ent) => ent !== selectedEntity2);
+  if (cohortEntities.includes(appSelectedEntity)) {
+    cohortEntities = appEntities.filter((ent) => ent !== appSelectedEntity);
   }
 
-  if (entities4.includes(selectedEntity3)) {
-    entities4 = entities3.filter((ent) => ent !== selectedEntity3);
+  if (roleEntities.includes(selectedCohortEntity)) {
+    roleEntities = cohortEntities.filter((ent) => ent !== selectedCohortEntity);
   }
 
   return (
@@ -505,46 +502,46 @@ function RolePermission(props: any) {
                 {currentDropdownIndex !== null && (
                   <div>
                     {currentDropdownIndex === 0 && (
-                      <EntityDropdown
-                        selectedEntity={selectedEntity}
-                        setSelectedEntity={setSelectedEntity}
-                        setOpenP={setOpenP}
-                        entities={entities}
-                        openP={openP}
-                        setPermissions={setPermissions}
+                      <UserEntity
+                        userSelectedEntity={userSelectedEntity}
+                        setUserSelectedEntity={setUserSelectedEntity}
+                        setUserOpen={setUserOpen}
+                        userEntities={userEntities}
+                        userOpen={userOpen}
+                        setUserPermissions={setUserPermissions}
                         className=''
                       />
                     )}
                     {currentDropdownIndex === 1 && (
-                      <EntityDropdown2
-                        selectedEntity={selectedEntity2}
-                        setSelectedEntity={setSelectedEntity2}
-                        setOpenP={setOpenP2}
-                        entities={entities2}
-                        openP={openP2}
-                        setPermissions={setPermissions2}
+                      <ApplicationEntity
+                        appSelectedEntity={appSelectedEntity}
+                        setAppSelectedEntity={setAppSelectedEntity}
+                        setAppOpen={setAppOpen}
+                        appEntities={appEntities}
+                        appOpen={appOpen}
+                        setAppPermissions={setAppPermissions}
                         className=''
                       />
                     )}
                     {currentDropdownIndex === 2 && (
-                      <EntityDropdown3
-                        selectedEntity={selectedEntity3}
-                        setSelectedEntity={setSelectedEntity3}
-                        setOpenP={setOpenP3}
-                        entities={entities3}
-                        openP={openP3}
-                        setPermissions={setPermissions3}
+                      <CohortEntity
+                        selectedCohortEntity={selectedCohortEntity}
+                        setSelectedCohortEntity={setSelectedCohortEntity}
+                        setOpenCohort={setOpenCohort}
+                        cohortEntities={cohortEntities}
+                        openCohort={openCohort}
+                        setCohortPermissions={setCohortPermissions}
                         className=''
                       />
                     )}
                     {currentDropdownIndex === 3 && (
-                      <EntityDropdown4
-                        selectedEntity={selectedEntity4}
-                        setSelectedEntity={setSelectedEntity4}
-                        setOpenP={setOpenP4}
-                        entities={entities4}
-                        openP={openP4}
-                        setPermissions={setPermissions4}
+                      <RoleEntity
+                        selectedRoleEntity={selectedRoleEntity}
+                        setSelectedRoleEntity={setSelectedRoleEntity}
+                        setOpenRole={setOpenRole}
+                        roleEntities={roleEntities}
+                        openRole={openRole}
+                        setRolePermissions={setRolePermissions}
                         className=''
                       />
                     )}
@@ -652,12 +649,8 @@ function RolePermission(props: any) {
               <input
                 className=' mt-3 bg-lime cursor-pointer text-[18px] self-center py-1 rounded-[5px] h-[50px] my-[20px] mx-auto w-[80%] block border-[2px] border-[#a8a8a8]  px-[10px] md:w-[90%]'
                 name='Description'
-                onChange={(e) => {
-                  setUpdateDesciption(e.target.value);
-                }}
                 type='text'
                 placeholder='Description'
-                value={updateDescription}
               />
               <div className='flex flex-wrap w-[300px] m-auto'>
                 <button
