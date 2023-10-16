@@ -1,178 +1,221 @@
-import React from "react";
-import { HashRouter as Router, Routes, Route, Link } from "react-router-dom";
-import TestTailwind from "./../components/TestTailwind";
-import TrainneeDetails from "./../pages/TrainneeDetails";
-import TrainneeDetailsB from "./../pages/TrainneDetailsB";
-import "./../index.css";
-import Sidebar from "./../components/sidebar/sidebar";
-import NavBar from "./../components/sidebar/navHeader";
-import Trainee from "./../pages/TraineApplicant/Trainee";
-import FilterTrainee from "./../pages/FilterTeainee/FilterTrainee";
-import Table from "./../pages/Table";
-import UpdateTraine from "./../pages/updateTrainee/traineUpdate";
-import CreateScoreType from "./../pages/FilterTeainee/createScoreType";
-import ScoreTypesActions from "./../pages/FilterTeainee/ScoreTypesActions";
-import ImportTraineeDetailsFromGoogleSheet from "./../pages/importAndSaveManyTraineesFromGoogleSheet/importAndSaveManyTraineesFromGoogleSheet";
+import React from 'react';
+import { Link, Route, HashRouter as Router, Routes } from 'react-router-dom';
+import TestTailwind from './../components/TestTailwind';
+import TrainneeDetails from './../pages/TrainneeDetails';
+import TrainneeDetailsB from './../pages/TrainneDetailsB';
+import './../index.css';
+import Sidebar from './../components/sidebar/sidebar';
+import NavBar from './../components/sidebar/navHeader';
+import Trainee from './../pages/TraineApplicant/Trainee';
+import FilterTrainee from './../pages/FilterTeainee/FilterTrainee';
+import Table from './../pages/Table';
+import UpdateTraine from './../pages/updateTrainee/traineUpdate';
+import CreateScoreType from './../pages/FilterTeainee/createScoreType';
+import ScoreTypesActions from './../pages/FilterTeainee/ScoreTypesActions';
+import ImportTraineeDetailsFromGoogleSheet from './../pages/importAndSaveManyTraineesFromGoogleSheet/importAndSaveManyTraineesFromGoogleSheet';
+import Trash from './../pages/Trash/Trash';
+import ApplicationCycle from './../pages/ApplicationCycle/ApplicationCycle';
+import LoginPage from './../pages/LoginPage';
+import PrivateRoute from './../pages/PrivateRoute';
+import PageNotFound from './../pages/PageNotFound';
+import ListAllUsersPage from './../pages/roles&permissions/ListAllUsersPage';
+import SignupForm from './../components/form/RegisterForm';
+import Programs from '../pages/programs/Programs';
+import CreateFormPage from './../pages/ApplicationForms/CreateApplicantForm';
+import UpdateSavedFormPage from './../pages/ApplicationForms/UpdateSavedForm';
+import ViewApplicationForms from './../pages/ApplicationForms/ViewApplicationForms';
 
-const Counter = React.lazy(() => import("./../components/Counter/Counter"));
-import Trash from "./../pages/Trash/Trash";
-import ApplicationCycle from "./../pages/ApplicationCycle/ApplicationCycle";
-import LoginPage from "./../pages/LoginPage";
-import PrivateRoute from "./../pages/PrivateRoute";
-import PageNotFound from "./../pages/PageNotFound";
-import ListAllUsersPage from "./../pages/roles&permissions/ListAllUsersPage";
-import SignupForm from "./../components/form/RegisterForm";
-import Programs from "../pages/programs/Programs";
+const Counter = React.lazy(
+  async () => await import('./../components/Counter/Counter')
+);
 
 function Navigation() {
   return (
     <Routes>
+      <Route element={<TestTailwind />} path='/test_tailwind' />
+
       <Route
-        path="/test_tailwind"
-        element={
-          
-            <TestTailwind />
-          
-        }
-      />
-      <Route
-        path="/trainee-applicant-details/:traineeId"
         element={
           <PrivateRoute>
             <TrainneeDetails />
           </PrivateRoute>
         }
+        path='/trainee-applicant-details/:traineeId'
       />
+
       <Route
-        path="/traineeb-details"
         element={
           <PrivateRoute>
             <TrainneeDetailsB />
           </PrivateRoute>
         }
+        path='/traineeb-details'
       />
+
       <Route
-        path="/Trainee-applicants"
         element={
           <PrivateRoute>
             <Trainee />
           </PrivateRoute>
         }
+        path='/Trainee-applicants'
       />
+
       <Route
-        path="/sidebar"
         element={
           <PrivateRoute>
             <Sidebar />
           </PrivateRoute>
         }
+        path='/sidebar'
       />
+
       <Route
-        path="/table"
         element={
           <PrivateRoute>
             <Table />
           </PrivateRoute>
         }
+        path='/table'
       />
+
       <Route
-        path="/cycles"
         element={
           <PrivateRoute>
             <ApplicationCycle />
           </PrivateRoute>
         }
+        path='/cycles'
       />
+
       <Route
-        path="/trash"
         element={
           <PrivateRoute>
             <Trash />
           </PrivateRoute>
         }
+        path='/trash'
       />
+
       <Route
-        path="/nav-bar"
         element={
           <PrivateRoute>
             <NavBar />
           </PrivateRoute>
         }
+        path='/nav-bar'
       />
+
       <Route
-        path="/filter_trainee-applicants"
         element={
           <PrivateRoute>
             <FilterTrainee />
           </PrivateRoute>
         }
+        path='/filter_trainee-applicants'
       />
+
       <Route
-        path="/import_trainee-aplicants"
         element={
           <PrivateRoute>
             <ImportTraineeDetailsFromGoogleSheet />
           </PrivateRoute>
         }
+        path='/import_trainee-aplicants'
       />
+
       <Route
-        path="/trainee-applicant/:traineeId/edit"
         element={
           <PrivateRoute>
             <UpdateTraine />
           </PrivateRoute>
         }
+        path='/trainee-applicant/:traineeId/edit'
       />
+
       <Route
-        path="/"
         element={
           <PrivateRoute>
             <Trainee />
           </PrivateRoute>
         }
+        path='/'
       />
+
       <Route
-        path="/filter_trainee-applicants/:id"
         element={
           <PrivateRoute>
             <CreateScoreType />
           </PrivateRoute>
         }
+        path='/filter_trainee-applicants/:id'
       />
+
       <Route
-        path="/rolesandaccess"
         element={
           <PrivateRoute>
             <ListAllUsersPage />
           </PrivateRoute>
         }
+        path='/rolesandaccess'
       />
-      <Route path="/login" element={<LoginPage />} />
+
+      <Route element={<LoginPage />} path='/login' />
+
       <Route
-        path="/admins"
         element={
           <PrivateRoute>
             <ScoreTypesActions />
           </PrivateRoute>
         }
+        path='/admins'
+      />
+
+      <Route
+        element={
+          <PrivateRoute>
+            <CreateFormPage />
+          </PrivateRoute>
+        }
+        path='/create-form'
       />
       <Route
-        path="/programs"
+        element={
+          <PrivateRoute>
+            <ViewApplicationForms />
+          </PrivateRoute>
+        }
+        path='/view-forms'
+      />
+
+      <Route
+        element={
+          <PrivateRoute>
+            <UpdateSavedFormPage />
+          </PrivateRoute>
+        }
+        path='/update-saved-form/:id'
+      />
+
+      <Route
         element={
           <PrivateRoute>
             <Programs />
           </PrivateRoute>
         }
+        path='/programs'
       />
+
       <Route
-        path="*"
         element={
           <PrivateRoute>
             <PageNotFound />
           </PrivateRoute>
         }
+        path='*'
       />
-      <Route path="/signup" element={<SignupForm />} />
+
+      <Route element={<SignupForm />} path='/signup' />
     </Routes>
   );
 }
