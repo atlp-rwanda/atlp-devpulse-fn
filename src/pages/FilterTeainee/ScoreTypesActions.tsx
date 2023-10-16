@@ -21,7 +21,11 @@ import DataTable from "components/TableData";
 import filterTraineeReducer from "../../redux/reducers/filterTraineeReducer";
 import { HiDotsVertical } from "react-icons/hi";
 import { Link } from "react-router-dom";
-
+import {
+	DOTS,
+	useCustomPagination,
+  } from "../../components/Pagination/useCustomPagination";
+  import Select from "react-select";
 const ScoreTypesActions = (props: any) => {
 	const { scoreTypes, scoreValues } = props;
 
@@ -61,6 +65,8 @@ const ScoreTypesActions = (props: any) => {
 	const [selectedProgram, setSelectedProgram] = useState("");
 	const [programDuration, setProgramDuration] = useState("");
 	const [assessmentModel, setAssmentModel] = useState(false);
+	const [itemsPerPage, setItemsPerPage] = useState<number>(10);
+	const [page, setPage] = useState(0);
 	const handleCloseUpdateModal = (e: any) => {
 		e.preventDefault();
 		setOpenUpdateModel(false);
@@ -215,139 +221,148 @@ const ScoreTypesActions = (props: any) => {
 	const filteredPrograms = programs?.filter(
 		(program) => program?.label === selectedProgram
 	);
-	console.log(filteredPrograms, "------------>>>>>");
+	const paginationRange = useCustomPagination({
+		totalPageCount: Math.ceil(filteredPrograms.length / itemsPerPage),
+		currentPage: page,
+	  });
 	return (
 		<>
 			<NavBar />
 			<div className='flex bg-[#F9F9FB] min-h-[100vh]'>
 				<div className='min-h-[50vh] w-[100%] mt-10 md:w-[100%] md:mt-0 pl-[16rem]  pt-[80px] md:pl-0 dark:bg-dark-frame-bg flex justify-start flex-col'>
-					{assessmentModel ? 
-					<Modal
-						open={openCreateModal}
-						onClose={handleCloseCreateModel}
-						aria-labelledby='parent-modal-title'
-						aria-describedby='parent-modal-description'>
-						<Box className='absolute w-fit top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] md:w-fit'>
-							<div className='bg-white dark:bg-dark-bg w-full rounded-lg p-4 pb-8'>
-								<div className='card-title w-full flex  flex-wrap justify-center items-center  '>
-									<h3 className='font-bold text-sm dark:text-white text-center w-11/12 '>
-										<icons.AiOutlineClose
-											className='float-right text-3xl cursor-pointer'
-											onClick={() => removeModel()}
-										/>
+					{assessmentModel ? (
+						<Modal
+							open={openCreateModal}
+							onClose={handleCloseCreateModel}
+							aria-labelledby='parent-modal-title'
+							aria-describedby='parent-modal-description'>
+							<Box className='absolute w-fit top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] md:w-fit'>
+								<div className='bg-white dark:bg-dark-bg w-full rounded-lg p-4 pb-8'>
+									<div className='card-title w-full flex  flex-wrap justify-center items-center  '>
+										<h3 className='font-bold text-sm dark:text-white text-center w-11/12 '>
+											<icons.AiOutlineClose
+												className='float-right text-3xl cursor-pointer'
+												onClick={() => removeModel()}
+											/>
 
-										{"Assessment"}
-									</h3>
-									<hr className=' bg-primary border-b my-3 w-full' />
-								</div>
-								<form
-									onSubmit={createScoreType}
-									className='border border-[#333] border-1 dark:text-[#ffffff9f] bg-[#eaeaea] dark:bg-dark-bg rounded-[5px] p-2 w-fit md:mx-auto my-7 space-y-3'>
-									<input
-										required
-										type='text'
-										placeholder='Title/Name'
-										className=' dark:bg-dark-tertiary border border-primary rounded outline-none px-5 font-sans text-xs py-2 w-full pt-4'
-										value={num}
-										onChange={(e) => {
-											e.preventDefault();
-											setNum(e.target.value);
-										}}
-									/>
-									<input
-										required
-										type='text'
-										placeholder='Description.'
-										className=' dark:bg-dark-tertiary border border-primary rounded outline-none px-5 font-sans text-xs py-2 w-full pt-4'
-										value={num}
-										onChange={(e) => {
-											e.preventDefault();
-											setNum(e.target.value);
-										}}
-									/>
-									<input
-										required
-										type='text'
-										placeholder='Duration'
-										className=' dark:bg-dark-tertiary border border-primary rounded outline-none px-5 font-sans text-xs py-2 w-full pt-4'
-										value={num}
-										onChange={(e) => {
-											e.preventDefault();
-											setNum(e.target.value);
-										}}
-									/>
-									<select
-										required
-										className=' dark:bg-dark-tertiary border text-[#ffffff9f] border-primary rounded outline-none px-5 font-sans text-xs py-2 w-full pt-4'
-										value={selectedOption}
-										onChange={(e) => {
-											e.preventDefault();
-											setSelectedOption(e.target.value);
-										}}>
-										<option value=''>Mode of engagement</option>
-										{options.map((option) => (
-											<option
-												key={option.value}
-												value={option.value}
-												className=' dark:bg-dark-tertiary border border-primary rounded outline-none px-5 font-sans text-xs py-2 w-full pt-4'>
-												{option.label}
-											</option>
-										))}
-									</select>
-									<div className='flex flex-row'>
-										<select
-											required
-											className=' dark:bg-dark-tertiary border border-primary rounded outline-none px-5 font-sans text-xs py-2 w-full pt-4'
-											value={selectedProgram}
-											onChange={(e) => {
-												e.preventDefault();
-												setSelectedProgram(e.target.value);
-											}}>
-											<option value=''>Select Program</option>
-											{programs.map((option) => (
-												<option key={option.value} value={option.value}>
-													{option.label}
-												</option>
-											))}
-										</select>
-										<select
-											required
-											className=' dark:bg-dark-tertiary border border-primary rounded outline-none px-5 font-sans text-xs py-2 w-full pt-4'
-											value={programDuration}
-											onChange={(e) => {
-												e.preventDefault();
-												setProgramDuration(e.target.value);
-											}}>
-											<option value=''>Program Duration</option>
-											{filteredPrograms.map((option) => (
-												<option key={option.value} value={option.value}>
-													{option.label}
-												</option>
-											))}
-										</select>
+											{"Assessment"}
+										</h3>
+										<hr className=' bg-primary border-b my-3 w-full' />
 									</div>
+									<form
+										onSubmit={createScoreType}
+										className='border border-[#333] border-1 dark:text-[#ffffff9f] bg-[#eaeaea] dark:bg-dark-bg rounded-[5px] p-2 w-fit md:mx-auto my-7 space-y-3'>
+										<input
+											required
+											type='text'
+											placeholder='Title/Name'
+											className=' dark:bg-dark-tertiary border border-primary rounded outline-none px-5 font-sans text-xs py-2 w-full pt-4'
+											value={num}
+											onChange={(e) => {
+												e.preventDefault();
+												setNum(e.target.value);
+											}}
+										/>
+										<input
+											required
+											type='text'
+											placeholder='Description.'
+											className=' dark:bg-dark-tertiary border border-primary rounded outline-none px-5 font-sans text-xs py-2 w-full pt-4'
+											value={num}
+											onChange={(e) => {
+												e.preventDefault();
+												setNum(e.target.value);
+											}}
+										/>
+										<input
+											required
+											type='text'
+											placeholder='Duration'
+											className=' dark:bg-dark-tertiary border border-primary rounded outline-none px-5 font-sans text-xs py-2 w-full pt-4'
+											value={num}
+											onChange={(e) => {
+												e.preventDefault();
+												setNum(e.target.value);
+											}}
+										/>
+										<select
+											required
+											className=' dark:bg-dark-tertiary border text-[#ffffff9f] border-primary rounded outline-none px-5 font-sans text-xs py-2 w-full pt-4'
+											value={selectedOption}
+											onChange={(e) => {
+												e.preventDefault();
+												setSelectedOption(e.target.value);
+											}}>
+											<option value=''>Mode of engagement</option>
+											{options.map((option) => (
+												<option
+													key={option.value}
+													value={option.value}
+													className=' dark:bg-dark-tertiary border border-primary rounded outline-none px-5 font-sans text-xs py-2 w-full pt-4'>
+													{option.label}
+												</option>
+											))}
+										</select>
+										<div className='flex flex-row'>
+											<select
+												required
+												className=' dark:bg-dark-tertiary border border-primary rounded outline-none px-5 font-sans text-xs py-2 w-full pt-4'
+												value={selectedProgram}
+												onChange={(e) => {
+													e.preventDefault();
+													setSelectedProgram(e.target.value);
+												}}>
+												<option value=''>Select Program</option>
+												{programs.map((option) => (
+													<option key={option.value} value={option.value}>
+														{option.label}
+													</option>
+												))}
+											</select>
+											<select
+												required
+												className=' dark:bg-dark-tertiary border border-primary rounded outline-none px-5 font-sans text-xs py-2 w-full pt-4'
+												value={programDuration}
+												onChange={(e) => {
+													e.preventDefault();
+													setProgramDuration(e.target.value);
+												}}>
+												<option value=''>Program Duration</option>
+												{filteredPrograms.map((option) => (
+													<option key={option.value} value={option.value}>
+														{option.label}
+													</option>
+												))}
+											</select>
+										</div>
+										<button
+											type='submit'
+											className='block text-white border border-[#333] border-1 bg-dark-bg rounded-[5px] p-2 w-[100px] mb-5 mx-auto'>
+											SAVE
+										</button>
+									</form>
+								</div>
+							</Box>
+						</Modal>
+					) : (
+						""
+					)}
+					<div className=''>
+					<div className='flex px-8 flex-row space-x-8'>
 									<button
-										type='submit'
-										className='block text-white border border-[#333] border-1 bg-dark-bg rounded-[5px] p-2 w-[100px] mb-5 mx-auto'>
-										SAVE
+										onClick={() => handleOpenCreateCycle()}
+										className='flex bg-primary dark:bg-[#56C870] rounded-md py-2 px-4 text-white font-medium cursor-pointer'>
+										<icons.AiOutlinePlus className='mt-1 mr-1 font-bold' />{" "}
+										Trainee-applicant
 									</button>
-								</form>
-							</div>
-						</Box>
-					</Modal>
-					:""
-					}
-					<div className='px-3'>
-						<div className='bg-white  dark:bg-dark-bg shadow-lg rounded-md w-[100%] mx-auto lg:w-[80%]'>
-							<div className='w-fit block sticky top-[100px] z-50'>
-								{" "}
-								<button
-									className='h-[40px] rounded-[5px] bg-[#173b3f] text-white flex items-center p-0 pl-[5px] pr-[10px] mb-[20px] dark:bg-green'
-									onClick={() => handleOpenCreateCycle()}>
-									<BsIcons.BsPlusLg className='mx-[5px]' />
-									<span>assessment</span>
-								</button>
-							</div>{" "}
+									<Link to='/filter_trainee-applicants'>
+										<button className='flex bg-primary dark:bg-[#56C870] rounded-md py-2 px-4 text-white font-medium cursor-pointer'>
+											<icons.AiOutlineSearch className='mt-1 mr-1 font-bold' />{" "}
+											Search
+										</button>
+									</Link>
+								</div>
+						<div className='bg-white  dark:bg-dark-bg shadow-lg rounded-md w-[100%] mx-auto lg:w-[95%]'>
 							<div>
 								<div className='-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto'>
 									<div className='inline-block w-full h-[55vh] lg:min-w-full shadow rounded-lg overflow-y-scroll'>
@@ -483,6 +498,121 @@ const ScoreTypesActions = (props: any) => {
 										</table>
 									</div>
 								</div>
+								<div className="py-3 flex items-center text-center justify-center pt-10">
+                      <div className="pb-1">
+                        <label htmlFor="" className="dark:text-zinc-100">
+                          rows per page
+                        </label>
+                        <Select
+                          menuPlacement="top"
+                          className="sm:text-sm  w-13 rounded-bt-rd absolute active dark:bg-dark-frame-bg"
+                          options={[
+                            { value: "10", label: "10" },
+                            { value: "50", label: "50" },
+                            { value: "100", label: "100" },
+                            { value: "500", label: "500" },
+                            { value: "1000", label: "1000" },
+                          ]}
+                          defaultValue={{ value: "", label: "10" }}
+                          onChange={(e: any) =>
+                            setItemsPerPage(Number(e?.value))
+                          }
+                        />
+                      </div>
+                      <div
+                        className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between"
+                        aria-label="Pagination"
+                      >
+                        <div
+                          className="relative z-0 inline-flex items-center ml-auto mr-auto  rounded-[2px] shadow-sm space-x-2"
+                          aria-label="Pagination"
+                        >
+                          <button
+                            className="my-0 mx-[5px] px-[5px] py-0 text-[#333] h-[38px] border-solid border-[1px]  border-[#a8a8a8] dark:disabled:bg-[#485970]  disabled:bg-[#E7E7E7] disabled:text-[#a8a8a8] dark:text-zinc-100"
+                            onClick={() => setPage(0)}
+                            disabled={page <= 0}
+                          >
+                            <AiIcons.AiOutlineDoubleLeft />
+                          </button>
+                          <button
+                            className=" border-solid border-[1px]  border-[#a8a8a8] py-0 px-[10px] text-[#333] rounded-l-[5px] h-[38px] disabled:bg-[#E7E7E7] disabled:text-[#a8a8a8] dark:text-zinc-100 dark:disabled:bg-[#485970]"
+                            onClick={() => setPage(page - 1)}
+                            disabled={page <= 0}
+                          >
+                            <AiIcons.AiOutlineLeft />
+                          </button>
+                          {paginationRange?.map((pageNumber, idx) => {
+                            if (pageNumber === DOTS) {
+                              return (
+                                <div
+                                  key={idx}
+                                  className="dark:text-zinc-100 md:hidden"
+                                >
+                                  ...
+                                </div>
+                              );
+                            }
+
+                            if (pageNumber - 1 === page) {
+                              return (
+                                <button
+                                  key={idx}
+                                  className={`border-solid border-[1px] cursor-pointer border-[#a8a8a8] bg-[#fff] min-w-[35px] h-[38px]  active:bg-[#333] active:text-[#fff]-500 rounded-[2px] md:hidden
+                        ${page && "bg-[#d6dfdf] text-black"} 
+                        ${page === 0 && "bg-[#d6dfdf] text-black"} 
+                          `}
+                                  onClick={() => setPage(pageNumber - 1)}
+                                >
+                                  {pageNumber}
+                                </button>
+                              );
+                            }
+
+                            return (
+                              <button
+                                key={idx}
+                                className={`border-solid border-[1px]  cursor-pointer border-[#a8a8a8] bg-[#fff] min-w-[35px] h-[38px]  active:bg-[#333] active:text-[#fff]-500 rounded-[2px] md:hidden`}
+                                onClick={() => setPage(pageNumber - 1)}
+                              >
+                                {pageNumber}
+                              </button>
+                            );
+                          })}
+                          <button
+                            className=" border-solid border-[1px]  border-[#a8a8a8] py-0 px-[10px] text-[#333] rounded-r-[5px] h-[38px]  disabled:bg-[#E7E7E7] disabled:text-[#a8a8a8] dark:disabled:bg-[#485970] dark:text-zinc-100"
+                            onClick={() => setPage(page + 1)}
+                            disabled={
+                              page >=
+                              Math.ceil(
+                                filteredPrograms.length / itemsPerPage
+                              ) -
+                                1
+                            }
+                          >
+                            <AiIcons.AiOutlineRight />
+                          </button>
+                          <button
+                            className="my-0 mx-[5px] px-[5px] py-0 text-[#333] h-[38px] border-solid border-[1px]  border-[#a8a8a8]  disabled:bg-[#E7E7E7] disabled:text-[#a8a8a8] dark:disabled:bg-[#485970] dark:text-zinc-100"
+                            onClick={() =>
+                              setPage(
+                                Math.ceil(
+                                  filteredPrograms.length / itemsPerPage
+                                ) - 1
+                              )
+                            }
+                            disabled={
+                              page >=
+                              Math.ceil(
+                                filteredPrograms.length / itemsPerPage
+                              ) -
+                                1
+                            }
+                          >
+                            <AiIcons.AiOutlineDoubleRight />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
 							</div>
 						</div>
 					</div>
