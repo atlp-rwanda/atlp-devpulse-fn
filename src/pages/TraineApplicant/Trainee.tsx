@@ -249,151 +249,152 @@ const AddTrainee = (props: any) => {
                     <div>
                       <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
                         <div className="inline-block w-full h-[55vh] lg:min-w-full shadow rounded-lg overflow-y-scroll">
-                          <table className="min-w-full leading-normal">
-                            <thead className=" w-full px-32 sticky top-0">
-                              <tr>
-                                <th className="p-6 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
-                                  {"firstname"}
-                                </th>
-
-                                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left text-xs font-semibold text-gray-600 dark:text-white uppercase md:table-cell tracking-wider">
-                                  {"lastname"}
-                                </th>
-
-                                {/* <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
-                                  {('gender')}
-                                </th> */}
-                                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
-                                  {"email"}
-                                </th>
-                                {
-                                  <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
-                                    {"cycle"}
+                          <div>
+                            <table className="min-w-full leading-normal">
+                              <thead className=" w-full px-32 sticky top-0">
+                                <tr>
+                                  <th className="p-6 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
+                                    {"firstname"}
                                   </th>
-                                }
-                                <th className="border-b-2 sm:text-center border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
-                                  {"action"}
-                                </th>
-                              </tr>
-                            </thead>
-                            <tbody className="overflow-y-auto">
-                              {traines.message !== null
-                                ? traines.message.map((item: any) =>
-                                    item?.delete_at == false ? (
-                                      <tr>
-                                        <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
-                                          <div className="flex">
-                                            <div className="">
-                                              <p className="text-gray-900 text-center dark:text-white whitespace-no-wrap">
-                                                {item.firstName}
-                                              </p>
-                                            </div>
-                                          </div>
-                                        </td>
-                                        <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
-                                          <div className="flex items-center">
-                                            <div className="">
-                                              <p className="text-gray-900 text-center dark:text-white whitespace-no-wrap">
-                                                {item.lastName}
-                                              </p>
-                                            </div>
-                                          </div>
-                                        </td>
 
-                                        <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
-                                          <div className="flex items-center">
-                                            <div className="">
-                                              <p className="text-gray-900 items-center dark:text-white whitespace-no-wrap">
-                                                {item.email}
-                                              </p>
-                                            </div>
-                                          </div>
-                                        </td>
+                                  <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left text-xs font-semibold text-gray-600 dark:text-white uppercase md:table-cell tracking-wider">
+                                    {"lastname"}
+                                  </th>
 
-                                        <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
-                                          <div className="flex items-center">
-                                            <div className="">
-                                              <p className="text-gray-900 items-center dark:text-white whitespace-no-wrap">
-                                                {item.cycle_id
-                                                  ? item.cycle_id.name
-                                                  : "-"}
-                                              </p>
+                                  <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
+                                    {"email"}
+                                  </th>
+                                  {
+                                    <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
+                                      {"cycle"}
+                                    </th>
+                                  }
+                                  <th className="border-b-2 sm:text-center border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
+                                    {"action"}
+                                  </th>
+                                </tr>
+                              </thead>
+                              <tbody className="overflow-y-auto">
+                                {traines.message !== null
+                                  ? traines.message.map((item: any) =>
+                                      item?.delete_at == false ? (
+                                        <tr>
+                                          <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
+                                            <div className="flex">
+                                              <div className="">
+                                                <p className="text-gray-900 text-center dark:text-white whitespace-no-wrap">
+                                                  {item.firstName}
+                                                </p>
+                                              </div>
                                             </div>
-                                          </div>
-                                        </td>
+                                          </td>
+                                          <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
+                                            <div className="flex items-center">
+                                              <div className="">
+                                                <p className="text-gray-900 text-center dark:text-white whitespace-no-wrap">
+                                                  {item.lastName}
+                                                </p>
+                                              </div>
+                                            </div>
+                                          </td>
 
-                                        <td>
-                                          <div>
-                                            <HiDotsVertical
-                                              className=" text-black dark:text-white text-3xl ml-6 font-size-6 cursor-pointer"
-                                              onClick={(e: any) => {
-                                                e.preventDefault();
-                                                onSubmitHandler(item._id);
-                                              }}
-                                            />
-                                            <div
-                                              className={`${
-                                                moredrop === item._id
-                                                  ? "block"
-                                                  : "hidden"
-                                              } absolute  bg-white dark:bg-dark-tertiary  dark:text-white text-base z-50 list-none divide-y divide-gray-100 rounded shadow my-4`}
-                                              id="dropdown"
-                                            >
-                                              <ul
-                                                className="py-1"
-                                                aria-labelledby="dropdown"
+                                          <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
+                                            <div className="flex items-center">
+                                              <div className="">
+                                                <p className="text-gray-900 items-center dark:text-white whitespace-no-wrap">
+                                                  {item.email}
+                                                </p>
+                                              </div>
+                                            </div>
+                                          </td>
+
+                                          <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
+                                            <div className="flex items-center">
+                                              <div className="">
+                                                <p className="text-gray-900 items-center dark:text-white whitespace-no-wrap">
+                                                  {item.cycle_id
+                                                    ? item.cycle_id.name
+                                                    : "-"}
+                                                </p>
+                                              </div>
+                                            </div>
+                                          </td>
+
+                                          <td>
+                                            <div>
+                                              <HiDotsVertical
+                                                className=" text-black dark:text-white text-3xl ml-6 font-size-6 cursor-pointer"
+                                                onClick={(e: any) => {
+                                                  e.preventDefault();
+                                                  onSubmitHandler(item._id);
+                                                }}
+                                              />
+                                              <div
+                                                className={`${
+                                                  moredrop === item._id
+                                                    ? "block"
+                                                    : "hidden"
+                                                } absolute  bg-white dark:bg-dark-tertiary  dark:text-white text-base z-50 list-none divide-y divide-gray-100 rounded shadow my-4`}
+                                                id="dropdown"
                                               >
-                                                <li>
-                                                  <Link
-                                                    to={`/trainee-applicant/${item._id}/edit`}
-                                                    className="text-sm hover:bg-gray-100 text-gray-700 dark:hover:bg-gray-500 dark:text-white  block px-4 py-2"
-                                                  >
-                                                    Edit
-                                                  </Link>
-                                                </li>
-                                                <li>
-                                                  <Link
-                                                    to={`/trainee-applicant-details/${item._id}`}
-                                                    className="text-sm hover:bg-gray-100 text-gray-700  dark:text-white   dark:hover:bg-gray-500 block px-4 py-2"
-                                                  >
-                                                    View
-                                                  </Link>
-                                                </li>
-                                                <li>
-                                                  <div
-                                                    className="text-sm hover:bg-gray-100 text-gray-700  dark:hover:bg-gray-500 dark:text-white  block px-4 py-2"
-                                                    onClick={(e: any) => {
-                                                      e.preventDefault();
-                                                      onSubmitHandlesoft(
-                                                        item._id
-                                                      );
-                                                    }}
-                                                  >
-                                                    Soft Delete
-                                                  </div>
-                                                </li>
-                                                <li>
-                                                  <div
-                                                    className="text-sm hover:bg-gray-100 text-gray-700   dark:hover:bg-gray-500 dark:text-white  block px-4 py-2"
-                                                    onClick={(e: any) => {
-                                                      e.preventDefault();
-                                                      onSubmitHandle(item._id);
-                                                    }}
-                                                  >
-                                                    Hard Delete
-                                                  </div>
-                                                </li>
-                                              </ul>
+                                                <ul
+                                                  className="py-1"
+                                                  aria-labelledby="dropdown"
+                                                >
+                                                  <li>
+                                                    <Link
+                                                      to={`/trainee-applicant/${item._id}/edit`}
+                                                      className="text-sm hover:bg-gray-100 text-gray-700 dark:hover:bg-gray-500 dark:text-white  block px-4 py-2"
+                                                    >
+                                                      Edit
+                                                    </Link>
+                                                  </li>
+                                                  <li>
+                                                    <Link
+                                                      to={`/trainee-applicant-details/${item._id}`}
+                                                      className="text-sm hover:bg-gray-100 text-gray-700  dark:text-white   dark:hover:bg-gray-500 block px-4 py-2"
+                                                    >
+                                                      View
+                                                    </Link>
+                                                  </li>
+                                                  <li>
+                                                    <div
+                                                      className="text-sm hover:bg-gray-100 text-gray-700  dark:hover:bg-gray-500 dark:text-white  block px-4 py-2"
+                                                      onClick={(e: any) => {
+                                                        e.preventDefault();
+                                                        onSubmitHandlesoft(
+                                                          item._id
+                                                        );
+                                                      }}
+                                                    >
+                                                      Soft Delete
+                                                    </div>
+                                                  </li>
+                                                  <li>
+                                                    <div
+                                                      className="text-sm hover:bg-gray-100 text-gray-700   dark:hover:bg-gray-500 dark:text-white  block px-4 py-2"
+                                                      onClick={(e: any) => {
+                                                        e.preventDefault();
+                                                        onSubmitHandle(
+                                                          item._id
+                                                        );
+                                                      }}
+                                                    >
+                                                      Hard Delete
+                                                    </div>
+                                                  </li>
+                                                </ul>
+                                              </div>
                                             </div>
-                                          </div>
-                                          {/* </div> */}
-                                        </td>
-                                      </tr>
-                                    ) : null
-                                  )
-                                : null}
-                            </tbody>
-                          </table>
+                                            {/* </div> */}
+                                          </td>
+                                        </tr>
+                                      ) : null
+                                    )
+                                  : null}
+                              </tbody>
+                            </table>
+                          </div>
                         </div>
                       </div>
                     </div>
