@@ -24,6 +24,7 @@ import updateStatusReducer from "./updateStatusReducer";
 import { membersReducer } from "./usersReducer";
 import { rolesReducer } from "./rolesReducer";
 import createProgramReducer from "./createProgramReducer";
+import { applicationsReducer } from "./applicationReducer";
 
 const allReducers = combineReducers({
   counter: counterReducer,
@@ -50,6 +51,7 @@ const allReducers = combineReducers({
   members: membersReducer,
   roles: rolesReducer,
   createProgram: createProgramReducer,
+  myApplications: applicationsReducer,
 });
 
 export default allReducers;

@@ -24,13 +24,14 @@ import ListAllUsersPage from './../pages/roles&permissions/ListAllUsersPage';
 import SignupForm from './../components/form/RegisterForm';
 import Programs from '../pages/programs/Programs';
 import RolePermission from '../pages/roles&permissions/RolePermission';
+import Applications from '../pages/Applications';
 
 function Navigation() {
   return (
     <Routes>
-      <Route path='/test_tailwind' element={<TestTailwind />} />
+      <Route path="/test_tailwind" element={<TestTailwind />} />
       <Route
-        path='/trainee-applicant-details/:traineeId'
+        path="/trainee-applicant-details/:traineeId"
         element={
           <PrivateRoute>
             <TrainneeDetails />
@@ -167,7 +168,15 @@ function Navigation() {
         }
       />
       <Route
-        path='*'
+        path="/myApplications"
+        element={
+          <PrivateRoute>
+            <Applications />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="*"
         element={
           <PrivateRoute>
             <PageNotFound />
