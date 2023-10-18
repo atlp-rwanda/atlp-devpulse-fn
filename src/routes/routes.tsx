@@ -191,6 +191,14 @@ function Navigation() {
         }
       />
       <Route
+        path="/myApplications"
+        element={
+          <PrivateRoute>
+            <Applications />
+          </PrivateRoute>
+        }
+      />
+      <Route
         path="*"
         element={
           <PrivateRoute>
