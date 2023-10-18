@@ -36,9 +36,9 @@ const sidebar = () => {
                   
                 );
               })}
-              <li className=" min:text-xl lg:justify-content-start align-items-center  dark:text-white text-[#173B3F]  text-base">
+              {/* <li className=" min:text-xl lg:justify-content-start align-items-center  dark:text-white text-[#173B3F]  text-base">
                 <LogoutPage />
-              </li>
+              </li> */}
             </ul>
           </div>
         ) : (
@@ -62,6 +62,9 @@ const sidebar = () => {
                  
                 );
               })}
+              <li className=" min:text-xl lg:justify-content-start align-items-center  dark:text-white text-[#173B3F]  text-base">
+                <LogoutPage />
+              </li>
             </ul>
           </div>
         )}
