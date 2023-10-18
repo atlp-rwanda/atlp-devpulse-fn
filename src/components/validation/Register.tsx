@@ -5,8 +5,8 @@ export type formData = {
   lastname: string;
   email: string;
   phoneNumber: string;
-  password:   string;
-  confirmPassword:  string;
+  password: string;
+  confirmPassword: string;
   countryCode: string;
   country: string;
   gender: string;
@@ -15,11 +15,14 @@ export type formData = {
 
 export const registerSchema: ZodType<formData> = z.object({
   firstname: z.string().min(3, "firstname must be at least 3 characters"),
-  lastname: z.string().min(3, { message: "lastname must be at least 3 characters" }),
+  lastname: z
+    .string()
+    .min(3, { message: "lastname must be at least 3 characters" }),
   email: z.string().toLowerCase().min(3, "email is required").email().trim(),
   phoneNumber: z
     .string()
-    .regex(/^(\+\d{1,2}\s?)?1?\-?\.?\s?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/).trim(),
+    .regex(/^(\+\d{1,2}\s?)?1?\-?\.?\s?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/)
+    .trim(),
   countryCode: z
     .string()
     .min(1, { message: "Country code is required" })
@@ -27,15 +30,22 @@ export const registerSchema: ZodType<formData> = z.object({
   country: z.string().min(1, { message: "Country is required" }).trim(),
   gender: z
     .string()
-    .refine((value) => ["female", "male", "other"].includes(value.toLowerCase()), {
-      message: "gender is required",
-    }),
+    .refine(
+      (value) => ["female", "male", "other"].includes(value.toLowerCase()),
+      {
+        message: "gender is required",
+      }
+    ),
 
   password: z
     .string()
     .min(8, { message: "Password must be at least 8 characters" })
-    .regex(/[A-Z]/, { message: "Password must contain at least one uppercase letter" })
-    .regex(/[a-z]/, { message: "Password must contain at least one lowercase letter" })
+    .regex(/[A-Z]/, {
+      message: "Password must contain at least one uppercase letter",
+    })
+    .regex(/[a-z]/, {
+      message: "Password must contain at least one lowercase letter",
+    })
     .regex(/[0-9]/, { message: "Password must contain at least one digit" })
     .regex(/[!@#$%^&*(),.?":{}|<>]/, {
       message: "Password must contain at least one special character",
@@ -46,6 +56,16 @@ export const registerSchema: ZodType<formData> = z.object({
     .min(8, { message: "Confirm Password must be at least 8 characters" }),
   acceptTerms: z.boolean().refine((value) => value === true, {
     message: "accept",
-  })   
-   
+  }),
+});
+export type RolePermission = {
+  Name: string;
+  Description: string;
+};
+
+export const roleSchema: ZodType<RolePermission> = z.object({
+  Name: z.string().min(3, "Name must be at least 4 characters"),
+  Description: z
+    .string()
+    .min(4, { message: "Description must be at least 4 characters" }),
 });
