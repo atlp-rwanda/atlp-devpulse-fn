@@ -24,8 +24,8 @@ import { Link } from "react-router-dom";
 import {
 	DOTS,
 	useCustomPagination,
-  } from "../../components/Pagination/useCustomPagination";
-  import Select from "react-select";
+} from "../../components/Pagination/useCustomPagination";
+import Select from "react-select";
 const ScoreTypesActions = (props: any) => {
 	const { scoreTypes, scoreValues } = props;
 
@@ -42,17 +42,28 @@ const ScoreTypesActions = (props: any) => {
 
 		return {
 			id: dta.id,
-			name: dta.score_type,
-			nbr: filtered.length,
+			description: dta.description,
+			modeOfEngagement: dta.modeOfEngagement,
+			duration: dta.duration,
+			startDate: dta.startDate,
+			endDate: dta.endDate,
+			title: dta.title,
 		};
 	});
 	console.log(scoreTypesArray);
+	console.log("data from scoretypes", scoreTypesArray);
 
 	useEffect(() => {
 		props.getAllScoreTypes();
 		props.getAllScoreValues();
 	}, []);
-	const [num, setNum] = useState("");
+	const [title, setTitle] = useState("");
+	const [description, setDescription] = useState("");
+	const [duration, setDuration] = useState("");
+	const [startdate, setStartdate] = useState("");
+	const [endDate, setEndDate] = useState("");
+	const [program, setProgram] = useState("");
+	const [engagement, setEngagement] = useState("");
 	const [deleteScoreTypeId, setdeleteScoreTypeId] = useState("");
 	const [updateScoreTypeId, setupdateScoreTypeId] = useState("");
 	const [openUpdateModal, setOpenUpdateModel] = useState(false);
@@ -105,13 +116,20 @@ const ScoreTypesActions = (props: any) => {
 	};
 	const createScoreType = () => {
 		const data = {
-			score_type: num,
+			description: description,
+			duration: duration,
+			endDate: endDate,
+			modeOfEngagement: engagement, // This is assuming selectedOption is what you intended to use.
+			program: program,
+			startDate: startdate,
+			title: title,
+
 		};
 		props.createScoreType(data);
 		setOpenCreateModal(false);
-		setTimeout(() => {
-			window.location.reload();
-		}, 1000);
+		// setTimeout(() => {
+		// 	window.location.reload();
+		// }, 1000);
 	};
 	const handleOpenCreateCycle = () => {
 		setAssmentModel(true);
@@ -224,7 +242,7 @@ const ScoreTypesActions = (props: any) => {
 	const paginationRange = useCustomPagination({
 		totalPageCount: Math.ceil(filteredPrograms.length / itemsPerPage),
 		currentPage: page,
-	  });
+	});
 	return (
 		<>
 			<NavBar />
@@ -257,10 +275,10 @@ const ScoreTypesActions = (props: any) => {
 											type='text'
 											placeholder='Title/Name'
 											className=' dark:bg-dark-tertiary border border-primary rounded outline-none px-5 font-sans text-xs py-2 w-full pt-4'
-											value={num}
+											value={title}
 											onChange={(e) => {
 												e.preventDefault();
-												setNum(e.target.value);
+												setTitle(e.target.value);
 											}}
 										/>
 										<input
@@ -268,10 +286,10 @@ const ScoreTypesActions = (props: any) => {
 											type='text'
 											placeholder='Description.'
 											className=' dark:bg-dark-tertiary border border-primary rounded outline-none px-5 font-sans text-xs py-2 w-full pt-4'
-											value={num}
+											value={description}
 											onChange={(e) => {
 												e.preventDefault();
-												setNum(e.target.value);
+												setDescription(e.target.value);
 											}}
 										/>
 										<input
@@ -279,13 +297,51 @@ const ScoreTypesActions = (props: any) => {
 											type='text'
 											placeholder='Duration'
 											className=' dark:bg-dark-tertiary border border-primary rounded outline-none px-5 font-sans text-xs py-2 w-full pt-4'
-											value={num}
+											value={duration}
 											onChange={(e) => {
 												e.preventDefault();
-												setNum(e.target.value);
+												setDuration(e.target.value);
 											}}
 										/>
-										<select
+										<input
+											required
+											type='text'
+											placeholder='Start date'
+											className=' dark:bg-dark-tertiary border border-primary rounded outline-none px-5 font-sans text-xs py-2 w-full pt-4'
+											value={startdate}
+											onChange={(e) => {
+												e.preventDefault();
+												setStartdate(e.target.value);
+											}}
+										/>
+										<input
+											required
+											type='text'
+											placeholder='End date'
+											className=' dark:bg-dark-tertiary border border-primary rounded outline-none px-5 font-sans text-xs py-2 w-full pt-4'
+											value={endDate}
+											onChange={(e) => {
+												e.preventDefault();
+												setEndDate(e.target.value);
+											}}
+										/>
+										<input
+											required
+											type='text'
+											placeholder='Program'
+											className=' dark:bg-dark-tertiary border border-primary rounded outline-none px-5 font-sans text-xs py-2 w-full pt-4'
+											value={program}
+											onChange={(e) => setProgram(e.target.value)}
+										/>
+										<input
+											required
+											type='text'
+											placeholder='Engagement'
+											className=' dark:bg-dark-tertiary border border-primary rounded outline-none px-5 font-sans text-xs py-2 w-full pt-4'
+											value={engagement}
+											onChange={(e) => setEngagement(e.target.value)}
+										/>
+										{/* <select
 											required
 											className=' dark:bg-dark-tertiary border text-[#ffffff9f] border-primary rounded outline-none px-5 font-sans text-xs py-2 w-full pt-4'
 											value={selectedOption}
@@ -302,8 +358,8 @@ const ScoreTypesActions = (props: any) => {
 													{option.label}
 												</option>
 											))}
-										</select>
-										<div className='flex flex-row'>
+										</select> */}
+										{/* <div className='flex flex-row'>
 											<select
 												required
 												className=' dark:bg-dark-tertiary border border-primary rounded outline-none px-5 font-sans text-xs py-2 w-full pt-4'
@@ -334,7 +390,7 @@ const ScoreTypesActions = (props: any) => {
 													</option>
 												))}
 											</select>
-										</div>
+										</div> */}
 										<button
 											type='submit'
 											className='block text-white border border-[#333] border-1 bg-dark-bg rounded-[5px] p-2 w-[100px] mb-5 mx-auto'>
@@ -348,20 +404,20 @@ const ScoreTypesActions = (props: any) => {
 						""
 					)}
 					<div className=''>
-					<div className='flex px-8 flex-row space-x-8'>
-									<button
-										onClick={() => handleOpenCreateCycle()}
-										className='flex bg-primary dark:bg-[#56C870] rounded-md py-2 px-4 text-white font-medium cursor-pointer'>
-										<icons.AiOutlinePlus className='mt-1 mr-1 font-bold' />{" "}
-										Trainee-applicant
-									</button>
-									<Link to='/filter_trainee-applicants'>
-										<button className='flex bg-primary dark:bg-[#56C870] rounded-md py-2 px-4 text-white font-medium cursor-pointer'>
-											<icons.AiOutlineSearch className='mt-1 mr-1 font-bold' />{" "}
-											Search
-										</button>
-									</Link>
-								</div>
+						<div className='flex px-8 flex-row space-x-8'>
+							<button
+								onClick={() => handleOpenCreateCycle()}
+								className='flex bg-primary dark:bg-[#56C870] rounded-md py-2 px-4 text-white font-medium cursor-pointer'>
+								<icons.AiOutlinePlus className='mt-1 mr-1 font-bold' />{" "}
+								Assessments
+							</button>
+							<Link to='/filter_trainee-applicants'>
+								<button className='flex bg-primary dark:bg-[#56C870] rounded-md py-2 px-4 text-white font-medium cursor-pointer'>
+									<icons.AiOutlineSearch className='mt-1 mr-1 font-bold' />{" "}
+									Search
+								</button>
+							</Link>
+						</div>
 						<div className='bg-white  dark:bg-dark-bg shadow-lg rounded-md w-[100%] mx-auto lg:w-[95%]'>
 							<div>
 								<div className='-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto'>
@@ -379,7 +435,7 @@ const ScoreTypesActions = (props: any) => {
 														{"Engagement Mode"}
 													</th>
 													<th className='px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider'>
-														{"Candidates"}
+														{"Duration"}
 													</th>
 													<th className='border-b-2 sm:text-center border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider'>
 														{"Program"}
@@ -390,13 +446,13 @@ const ScoreTypesActions = (props: any) => {
 												</tr>
 											</thead>
 											<tbody>
-												{getAllScoreTypes.map((item: any) => (
-													<tr key={item.id}>
+												{scoreTypesArray?.map((values: any, i: number) => (
+													<tr key={i}>
 														<td className='px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm'>
 															<div className='flex'>
 																<div className=''>
 																	<p className='text-gray-900 text-center dark:text-white whitespace-no-wrap'>
-																		{item.name}
+																		{values.title}
 																	</p>
 																</div>
 															</div>
@@ -405,7 +461,7 @@ const ScoreTypesActions = (props: any) => {
 															<div className='flex items-center'>
 																<div className=''>
 																	<p className='text-gray-900 text-center dark:text-white whitespace-no-wrap'>
-																		{item.description}
+																		{values.description}
 																	</p>
 																</div>
 															</div>
@@ -414,7 +470,7 @@ const ScoreTypesActions = (props: any) => {
 															<div className='flex items-center'>
 																<div className=''>
 																	<p className='text-gray-900 items-center dark:text-white whitespace-no-wrap'>
-																		{item.mode}
+																		{values.modeOfEngagement}
 																	</p>
 																</div>
 															</div>
@@ -423,7 +479,7 @@ const ScoreTypesActions = (props: any) => {
 															<div className='flex items-center'>
 																<div className=''>
 																	<p className='text-gray-900 items-center dark:text-white whitespace-no-wrap'>
-																		{item.nbr}
+																		{values.duration} month
 																	</p>
 																</div>
 															</div>
@@ -432,7 +488,7 @@ const ScoreTypesActions = (props: any) => {
 															<div className='flex items-center'>
 																<div className=''>
 																	<p className='text-gray-900 items-center dark:text-white whitespace-no-wrap'>
-																		{item.program}
+																		{values.program}
 																	</p>
 																</div>
 															</div>
@@ -443,12 +499,12 @@ const ScoreTypesActions = (props: any) => {
 																	className=' text-black dark:text-white text-3xl ml-6 font-size-6 cursor-pointer'
 																	onClick={(e: any) => {
 																		e.preventDefault();
-																		onSubmitHandler(item.id);
+																		onSubmitHandler(values.id);
 																	}}
 																/>
 																<div
 																	className={`${
-																		moredrop === item.id ? "block" : "hidden"
+																		moredrop === values.id ? "block" : "hidden"
 																	} absolute right-10  bg-white dark:bg-dark-tertiary  dark:text-white text-base z-50 list-none divide-y divide-gray-100 rounded shadow my-4`}
 																	id='dropdown'>
 																	<ul
@@ -456,14 +512,14 @@ const ScoreTypesActions = (props: any) => {
 																		aria-labelledby='dropdown'>
 																		<li>
 																			<Link
-																				to={`/trainee-applicant/${item.id}/edit`}
+																				to={`/trainee-applicant/${values.id}/edit`}
 																				className='text-sm hover:bg-gray-100 text-gray-700 dark:hover:bg-gray-500 dark:text-white  block px-4 py-2'>
 																				Edit
 																			</Link>
 																		</li>
 																		<li>
 																			<Link
-																				to={`/trainee-applicant-details/${item.id}`}
+																				to={`/trainee-applicant-details/${values.id}`}
 																				className='text-sm hover:bg-gray-100 text-gray-700  dark:text-white   dark:hover:bg-gray-500 block px-4 py-2'>
 																				View
 																			</Link>
@@ -473,7 +529,7 @@ const ScoreTypesActions = (props: any) => {
 																				className='text-sm hover:bg-gray-100 text-gray-700  dark:hover:bg-gray-500 dark:text-white  block px-4 py-2'
 																				onClick={(e: any) => {
 																					e.preventDefault();
-																					onSubmitHandlesoft(item._id);
+																					onSubmitHandlesoft(values._id);
 																				}}>
 																				Soft Delete
 																			</div>
@@ -483,7 +539,7 @@ const ScoreTypesActions = (props: any) => {
 																				className='text-sm hover:bg-gray-100 text-gray-700   dark:hover:bg-gray-500 dark:text-white  block px-4 py-2'
 																				onClick={(e: any) => {
 																					e.preventDefault();
-																					onSubmitHandle(item.id);
+																					onSubmitHandle(values.id);
 																				}}>
 																				Hard Delete
 																			</div>
@@ -498,121 +554,103 @@ const ScoreTypesActions = (props: any) => {
 										</table>
 									</div>
 								</div>
-								<div className="py-3 flex items-center text-center justify-center pt-10">
-                      <div className="pb-1">
-                        <label htmlFor="" className="dark:text-zinc-100">
-                          rows per page
-                        </label>
-                        <Select
-                          menuPlacement="top"
-                          className="sm:text-sm  w-13 rounded-bt-rd absolute active dark:bg-dark-frame-bg"
-                          options={[
-                            { value: "10", label: "10" },
-                            { value: "50", label: "50" },
-                            { value: "100", label: "100" },
-                            { value: "500", label: "500" },
-                            { value: "1000", label: "1000" },
-                          ]}
-                          defaultValue={{ value: "", label: "10" }}
-                          onChange={(e: any) =>
-                            setItemsPerPage(Number(e?.value))
-                          }
-                        />
-                      </div>
-                      <div
-                        className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between"
-                        aria-label="Pagination"
-                      >
-                        <div
-                          className="relative z-0 inline-flex items-center ml-auto mr-auto  rounded-[2px] shadow-sm space-x-2"
-                          aria-label="Pagination"
-                        >
-                          <button
-                            className="my-0 mx-[5px] px-[5px] py-0 text-[#333] h-[38px] border-solid border-[1px]  border-[#a8a8a8] dark:disabled:bg-[#485970]  disabled:bg-[#E7E7E7] disabled:text-[#a8a8a8] dark:text-zinc-100"
-                            onClick={() => setPage(0)}
-                            disabled={page <= 0}
-                          >
-                            <AiIcons.AiOutlineDoubleLeft />
-                          </button>
-                          <button
-                            className=" border-solid border-[1px]  border-[#a8a8a8] py-0 px-[10px] text-[#333] rounded-l-[5px] h-[38px] disabled:bg-[#E7E7E7] disabled:text-[#a8a8a8] dark:text-zinc-100 dark:disabled:bg-[#485970]"
-                            onClick={() => setPage(page - 1)}
-                            disabled={page <= 0}
-                          >
-                            <AiIcons.AiOutlineLeft />
-                          </button>
-                          {paginationRange?.map((pageNumber, idx) => {
-                            if (pageNumber === DOTS) {
-                              return (
-                                <div
-                                  key={idx}
-                                  className="dark:text-zinc-100 md:hidden"
-                                >
-                                  ...
-                                </div>
-                              );
-                            }
+								<div className='py-3 flex items-center text-center justify-center pt-10'>
+									<div className='pb-1'>
+										<label htmlFor='' className='dark:text-zinc-100'>
+											rows per page
+										</label>
+										<Select
+											menuPlacement='top'
+											className='sm:text-sm  w-13 rounded-bt-rd absolute active dark:bg-dark-frame-bg'
+											options={[
+												{ value: "10", label: "10" },
+												{ value: "50", label: "50" },
+												{ value: "100", label: "100" },
+												{ value: "500", label: "500" },
+												{ value: "1000", label: "1000" },
+											]}
+											defaultValue={{ value: "", label: "10" }}
+											onChange={(e: any) => setItemsPerPage(Number(e?.value))}
+										/>
+									</div>
+									<div
+										className='hidden sm:flex-1 sm:flex sm:items-center sm:justify-between'
+										aria-label='Pagination'>
+										<div
+											className='relative z-0 inline-flex items-center ml-auto mr-auto  rounded-[2px] shadow-sm space-x-2'
+											aria-label='Pagination'>
+											<button
+												className='my-0 mx-[5px] px-[5px] py-0 text-[#333] h-[38px] border-solid border-[1px]  border-[#a8a8a8] dark:disabled:bg-[#485970]  disabled:bg-[#E7E7E7] disabled:text-[#a8a8a8] dark:text-zinc-100'
+												onClick={() => setPage(0)}
+												disabled={page <= 0}>
+												<AiIcons.AiOutlineDoubleLeft />
+											</button>
+											<button
+												className=' border-solid border-[1px]  border-[#a8a8a8] py-0 px-[10px] text-[#333] rounded-l-[5px] h-[38px] disabled:bg-[#E7E7E7] disabled:text-[#a8a8a8] dark:text-zinc-100 dark:disabled:bg-[#485970]'
+												onClick={() => setPage(page - 1)}
+												disabled={page <= 0}>
+												<AiIcons.AiOutlineLeft />
+											</button>
+											{paginationRange?.map((pageNumber, idx) => {
+												if (pageNumber === DOTS) {
+													return (
+														<div
+															key={idx}
+															className='dark:text-zinc-100 md:hidden'>
+															...
+														</div>
+													);
+												}
 
-                            if (pageNumber - 1 === page) {
-                              return (
-                                <button
-                                  key={idx}
-                                  className={`border-solid border-[1px] cursor-pointer border-[#a8a8a8] bg-[#fff] min-w-[35px] h-[38px]  active:bg-[#333] active:text-[#fff]-500 rounded-[2px] md:hidden
+												if (pageNumber - 1 === page) {
+													return (
+														<button
+															key={idx}
+															className={`border-solid border-[1px] cursor-pointer border-[#a8a8a8] bg-[#fff] min-w-[35px] h-[38px]  active:bg-[#333] active:text-[#fff]-500 rounded-[2px] md:hidden
                         ${page && "bg-[#d6dfdf] text-black"} 
                         ${page === 0 && "bg-[#d6dfdf] text-black"} 
                           `}
-                                  onClick={() => setPage(pageNumber - 1)}
-                                >
-                                  {pageNumber}
-                                </button>
-                              );
-                            }
+															onClick={() => setPage(pageNumber - 1)}>
+															{pageNumber}
+														</button>
+													);
+												}
 
-                            return (
-                              <button
-                                key={idx}
-                                className={`border-solid border-[1px]  cursor-pointer border-[#a8a8a8] bg-[#fff] min-w-[35px] h-[38px]  active:bg-[#333] active:text-[#fff]-500 rounded-[2px] md:hidden`}
-                                onClick={() => setPage(pageNumber - 1)}
-                              >
-                                {pageNumber}
-                              </button>
-                            );
-                          })}
-                          <button
-                            className=" border-solid border-[1px]  border-[#a8a8a8] py-0 px-[10px] text-[#333] rounded-r-[5px] h-[38px]  disabled:bg-[#E7E7E7] disabled:text-[#a8a8a8] dark:disabled:bg-[#485970] dark:text-zinc-100"
-                            onClick={() => setPage(page + 1)}
-                            disabled={
-                              page >=
-                              Math.ceil(
-                                filteredPrograms.length / itemsPerPage
-                              ) -
-                                1
-                            }
-                          >
-                            <AiIcons.AiOutlineRight />
-                          </button>
-                          <button
-                            className="my-0 mx-[5px] px-[5px] py-0 text-[#333] h-[38px] border-solid border-[1px]  border-[#a8a8a8]  disabled:bg-[#E7E7E7] disabled:text-[#a8a8a8] dark:disabled:bg-[#485970] dark:text-zinc-100"
-                            onClick={() =>
-                              setPage(
-                                Math.ceil(
-                                  filteredPrograms.length / itemsPerPage
-                                ) - 1
-                              )
-                            }
-                            disabled={
-                              page >=
-                              Math.ceil(
-                                filteredPrograms.length / itemsPerPage
-                              ) -
-                                1
-                            }
-                          >
-                            <AiIcons.AiOutlineDoubleRight />
-                          </button>
-                        </div>
-                      </div>
-                    </div>
+												return (
+													<button
+														key={idx}
+														className={`border-solid border-[1px]  cursor-pointer border-[#a8a8a8] bg-[#fff] min-w-[35px] h-[38px]  active:bg-[#333] active:text-[#fff]-500 rounded-[2px] md:hidden`}
+														onClick={() => setPage(pageNumber - 1)}>
+														{pageNumber}
+													</button>
+												);
+											})}
+											<button
+												className=' border-solid border-[1px]  border-[#a8a8a8] py-0 px-[10px] text-[#333] rounded-r-[5px] h-[38px]  disabled:bg-[#E7E7E7] disabled:text-[#a8a8a8] dark:disabled:bg-[#485970] dark:text-zinc-100'
+												onClick={() => setPage(page + 1)}
+												disabled={
+													page >=
+													Math.ceil(filteredPrograms.length / itemsPerPage) - 1
+												}>
+												<AiIcons.AiOutlineRight />
+											</button>
+											<button
+												className='my-0 mx-[5px] px-[5px] py-0 text-[#333] h-[38px] border-solid border-[1px]  border-[#a8a8a8]  disabled:bg-[#E7E7E7] disabled:text-[#a8a8a8] dark:disabled:bg-[#485970] dark:text-zinc-100'
+												onClick={() =>
+													setPage(
+														Math.ceil(filteredPrograms.length / itemsPerPage) -
+															1
+													)
+												}
+												disabled={
+													page >=
+													Math.ceil(filteredPrograms.length / itemsPerPage) - 1
+												}>
+												<AiIcons.AiOutlineDoubleRight />
+											</button>
+										</div>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
