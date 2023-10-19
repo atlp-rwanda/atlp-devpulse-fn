@@ -153,7 +153,6 @@ const FilterTrainee = (props: any) => {
   const traineeList = allfilteredTrainees?.data;
   const handleNullTraineeList = traineeList === undefined ? [] : traineeList;
 
-  const [pageIdx, setPageIdx] = useState(1);
   const [itemsPerPage, setitemsPerPage] = useState(10);
 
   const nonNullTrainee = handleNullTraineeList?.filter((value) => {
