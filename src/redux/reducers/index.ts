@@ -28,6 +28,13 @@ import fetchProgramsReducer from "./fetchProgramsReducer";
 import fetchSingleProgramReducer from "./fetchSingleProgramReducer";
 import deleteProgramReducer from "./deleteProgramReducer";
 import updateProgramReducer from "./updateProgramReducer";
+import fetchJobPostReducer from "./fetchJobPostReducer";
+import createJobPostReducer from "./createJobPostReducer";
+import fetchSingleJobPostReducer from './fetchSingleJobPostReducer';
+import deleteJobPostReducer from './deleteJobPostReducer';
+import programReducer from './programReducer';
+import cohortReducer from './cohortReducer';
+import updateJobPostReducer from './updateJobPostReducer';
 
 const allReducers = combineReducers({
   counter: counterReducer,
@@ -56,6 +63,13 @@ const allReducers = combineReducers({
   fetchSingleProgram: fetchSingleProgramReducer,
   deleteProgram: deleteProgramReducer,
   updateProgram: updateProgramReducer,
+  fetchJobPost: fetchJobPostReducer,
+  fetchSingleJobPost: fetchSingleJobPostReducer,
+  createJobPost: createJobPostReducer,
+  deleteJobPost: deleteJobPostReducer,
+  updateJobPost: updateJobPostReducer,
+  programs: programReducer,
+  cohorts: cohortReducer,
 });
 
 export default allReducers;
