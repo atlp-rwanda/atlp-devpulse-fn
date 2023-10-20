@@ -30,6 +30,7 @@ export const fetchSingleProgram = (id: any) => {
           },
         },
       });
+      console.log(response);
       if (response.data.data !== null) {
         dispatch({
           type: fetchSingleProgramType.FETCH_SINGLE_PROGRAM_SUCCESS,
