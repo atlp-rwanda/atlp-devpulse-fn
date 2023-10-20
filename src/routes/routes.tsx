@@ -29,13 +29,17 @@ import CreateFormPage from './../pages/ApplicationForms/CreateApplicantForm';
 import UpdateSavedFormPage from './../pages/ApplicationForms/UpdateSavedForm';
 import ViewApplicationForms from './../pages/ApplicationForms/ViewApplicationForms';
 import UpdateProgram from "../pages/programs/UpdateProgram";
+import Jobs from '../pages/JobPost/job';
+import SingleJobPostDetails from '../pages/JobPost/viewSingleJob';
+import UpdateJobPost from '../pages/JobPost/updateJobPost';
+
 
 function Navigation() {
   return (
     <Routes>
-      <Route path='/test_tailwind' element={<TestTailwind />} />
+      <Route path="/test_tailwind" element={<TestTailwind />} />
       <Route
-        path='/trainee-applicant-details/:traineeId'
+        path="/trainee-applicant-details/:traineeId"
         element={
           <PrivateRoute>
             <TrainneeDetails />
@@ -172,7 +176,7 @@ function Navigation() {
         }
       />
       <Route
-        path='/program/:id'
+        path="/program/:id"
         element={
           <PrivateRoute>
             <SingleProgramDetails />
@@ -180,7 +184,7 @@ function Navigation() {
         }
       />
       <Route
-        path='/programs'
+        path="/programs"
         element={
           <PrivateRoute>
             <Programs />
@@ -195,14 +199,14 @@ function Navigation() {
           </PrivateRoute>
         }
       />
-      <Route path='/signup' element={<SignupForm />} />
+      <Route path="/signup" element={<SignupForm />} />
       <Route
         element={
           <PrivateRoute>
             <CreateFormPage />
           </PrivateRoute>
         }
-        path='/create-form'
+        path="/create-form"
       />
       <Route
         element={
@@ -210,7 +214,7 @@ function Navigation() {
             <ViewApplicationForms />
           </PrivateRoute>
         }
-        path='/view-forms'
+        path="/view-forms"
       />
 
       <Route
@@ -219,7 +223,32 @@ function Navigation() {
             <UpdateSavedFormPage />
           </PrivateRoute>
         }
-        path='/update-saved-form/:id'
+        path="/update-saved-form/:id"
+      />
+      <Route path="/signup" element={<SignupForm />} />
+      <Route
+        path="/Job-Post"
+        element={
+          <PrivateRoute>
+            <Jobs />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/Job/Post/:id"
+        element={
+          <PrivateRoute>
+            <SingleJobPostDetails />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/job/:jobPostId/edit"
+        element={
+          <PrivateRoute>
+            <UpdateJobPost />
+          </PrivateRoute>
+        }
       />
     </Routes>
   );

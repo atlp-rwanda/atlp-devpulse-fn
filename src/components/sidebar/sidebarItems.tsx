@@ -1,26 +1,35 @@
-import React from "react";
-import { Icon } from "@iconify/react";
+import React from 'react';
+import { Icon } from '@iconify/react';
+
 
 export const sidebarItems1 = [
   {
-    path: "/dashboard",
+    path: '/dashboard',
     icon: <Icon icon="fontisto:pie-chart-1"></Icon>,
-    title: "Dashboard",
+    title: 'Dashboard',
   },
+
   {
-    path: "/organisations",
+    path: '/organisations',
     icon: <Icon icon="fluent:people-team-20-filled"></Icon>,
-    title: "Organisations",
+    title: 'Organisations',
   },
+  
   {
-    path: "/programs",
+    path: '/programs',
     icon: <Icon icon="ic:round-maps-home-work"></Icon>,
-    title: "Programs",
+    title: 'Programs',
+  },
+
+  {
+    path: '/Job-Post',
+    icon: <Icon icon="fluent:people-team-20-filled" />,
+    title: 'View Job Post',
   },
   {
-    path: "/admins",
+    path: '/admins',
     icon: <Icon icon="ic:round-people"></Icon>,
-    title: "Admins",
+    title: 'Admins',
   },
   {
     path: "/create-form",
@@ -30,100 +39,100 @@ export const sidebarItems1 = [
   {
     path: "/domains",
     icon: <Icon icon="akar-icons:globe"></Icon>,
-    title: "Domains",
+    title: 'Domains',
   },
   {
-    path: "/Trainee-applicants",
+    path: '/Trainee-applicants',
     icon: <Icon icon="ic:round-people"></Icon>,
-    title: "Trainees-Applicants",
+    title: 'Trainees-Applicants',
   },
   {
-    path: "/attendance",
+    path: '/attendance',
     icon: <Icon icon="teenyicons:clipboard-tick-solid"></Icon>,
-    title: "Attendance",
+    title: 'Attendance',
   },
   {
-    path: "/performance",
+    path: '/performance',
     icon: <Icon icon="fa6-solid:arrow-trend-up"></Icon>,
-    title: "Performance",
+    title: 'Performance',
   },
   {
-    path: "/sessions",
+    path: '/sessions',
     icon: <Icon icon="fluent:clipboard-bullet-list-ltr-16-filled"></Icon>,
-    title: "Sessions",
+    title: 'Sessions',
   },
   {
-    path: "/coordinators",
+    path: '/coordinators',
     icon: <Icon icon="fluent:people-team-20-filled"></Icon>,
-    title: "Coordinators",
+    title: 'Coordinators',
   },
   {
-    path: "/cohort",
+    path: '/cohort',
     icon: <Icon icon="fa6-solid:graduation-cap"></Icon>,
-    title: "Cohorts",
+    title: 'Cohorts',
   },
   {
-    path: "/cycles",
+    path: '/cycles',
     icon: <Icon icon="game-icons:cycle"></Icon>,
-    title: "Application Cycles",
+    title: 'Application Cycles',
   },
   {
-    path: "/updatedRatings",
+    path: '/updatedRatings',
     icon: <Icon icon="charm:refresh"></Icon>,
-    title: "Updated Ratings",
+    title: 'Updated Ratings',
   },
   {
-    path: "/grading",
+    path: '/grading',
     icon: <Icon icon="bxs:dashboard"></Icon>,
-    title: "Grading System",
+    title: 'Grading System',
   },
   {
-    path: "/rolesandaccess",
+    path: '/rolesandaccess',
     icon: <Icon icon="heroicons:key-20-solid"></Icon>,
-    title: "Roles & Access",
+    title: 'Roles & Access',
   },
   {
-    path: "/notifications",
+    path: '/notifications',
     icon: <Icon icon="heroicons-solid:inbox-in"></Icon>,
-    title: "Notifications",
+    title: 'Notifications',
   },
   {
-    path: "/calendar",
+    path: '/calendar',
     icon: <Icon icon="ant-design:calendar-filled"></Icon>,
-    title: "Calendar",
+    title: 'Calendar',
   },
   {
-    path: "/Trash",
+    path: '/Trash',
     icon: <Icon icon="fa-solid:trash"></Icon>,
-    title: "Trash",
+    title: 'Trash',
   },
 ];
 
 export const sidebarItems2 = [
   {
-    path: "/documents",
+    path: '/documents',
     icon: <Icon icon="heroicons:document-20-solid"></Icon>,
-    title: "Docs",
+    title: 'Docs',
   },
   {
-    path: "/help",
+    path: '/help',
     icon: <Icon icon="nimbus:globe"></Icon>,
-    title: "Help",
+    title: 'Help',
   },
   {
-    path: "/Logout",
+    path: '/Logout',
     icon: <Icon icon="nimbus:arrow-left"></Icon>,
-    title: "Logout",
+    title: 'Logout',
   },
 ];
 
 export const sidebarItems3 = [
   {
-    path: "/settings",
+    path: '/settings',
     icon: <Icon icon="akar-icons:settings-vertical"></Icon>,
   },
   {
-    path: "/settings",
+    path: '/settings',
     icon: <Icon icon="eva:settings-2-outline"></Icon>,
   },
 ];
