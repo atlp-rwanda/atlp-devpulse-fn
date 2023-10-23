@@ -22,6 +22,7 @@ export const fetchSingleProgram = (id: any) => {
               mainObjective 
               requirements 
               modeOfExecution
+              duration
               }
           }
             `,
@@ -30,6 +31,7 @@ export const fetchSingleProgram = (id: any) => {
           },
         },
       });
+
       if (response.data.data !== null) {
         dispatch({
           type: fetchSingleProgramType.FETCH_SINGLE_PROGRAM_SUCCESS,

@@ -4,6 +4,7 @@ export enum fetchProgramType {
   FETCH_PROGRAM_FAIL = "FETCH_PROGRAM_FAIL",
   PROGRAM_REMOVED = "PROGRAM_REMOVED",
   PROGRAM_ADDED = "PROGRAM_ADDED",
+  PROGRAM_EDITED = "PROGRAM_EDITED",
 }
 
 interface actionPending {
@@ -29,9 +30,15 @@ interface actionRenew {
   data: string;
 }
 
+interface actionUpdate {
+  type: fetchProgramType.PROGRAM_EDITED;
+  data: string;
+}
+
 export type ActionFetch =
   | actionPending
   | actionSuccess
   | actionFail
   | actionRefresh
-  | actionRenew;
+  | actionRenew
+  | actionUpdate;
