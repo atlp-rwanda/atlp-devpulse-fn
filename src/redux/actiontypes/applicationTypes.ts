@@ -9,6 +9,11 @@ export enum deleteOwnApplication {
   DELETE_APPLICATION_SUCCESS = 'DELETE_APPLICATION_SUCCESS',
   DELETE_APPLICATION_FAIL = 'DELETE_APPLICATION_FAIL',
 }
+export enum fetchSingleOwnApplication {
+  FETCH_SINGLE_APPLICATION_LOADING = 'FETCH_SINGLE_APPLICATION_LOADING',
+  FETCH_SINGLE_APPLICATION_SUCCESS = 'FETCH_SINGLE_APPLICATION_SUCCESS',
+  FETCH_SINGLE_APPLICATION_FAIL = 'FETCH_SINGLE_APPLICATION_FAIL',
+}
 interface actionPending {
   type: fetchMyApplications.FETCH_MYAPPLICATIONS_LOADING;
 }
@@ -42,6 +47,19 @@ interface deleteOwnApplicationActionFail {
   error: any;
 }
 
+interface fetchSingleOwnApplicationActionPending {
+  type: fetchSingleOwnApplication.FETCH_SINGLE_APPLICATION_LOADING;
+}
+interface fetchSingleOwnApplicationActionSuccess {
+  type: fetchSingleOwnApplication.FETCH_SINGLE_APPLICATION_SUCCESS;
+  message: string;
+  data: any;
+}
+
+interface fetchSingleOwnApplicationActionFail {
+  type: fetchSingleOwnApplication.FETCH_SINGLE_APPLICATION_FAIL;
+  error: any;
+}
 export type Action =
   | actionPending
   | actionSuccess
@@ -49,4 +67,7 @@ export type Action =
   | actionRefresh
   | deleteOwnApplicationActionPending
   | deleteOwnApplicationActionFail
-  | deleteOwnApplicationActionSuccess;
+  | deleteOwnApplicationActionSuccess
+  | fetchSingleOwnApplicationActionPending
+  | fetchSingleOwnApplicationActionFail
+  | fetchSingleOwnApplicationActionSuccess;
