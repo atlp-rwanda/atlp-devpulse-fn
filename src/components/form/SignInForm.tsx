@@ -1,33 +1,33 @@
-import React, { useState, useEffect, useRef } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
-import { loginSchema } from "../validation/login";
-import { useForm } from "react-hook-form";
-import InputField from "./InputField";
-import Button from "./Button";
-import { fetchCountries } from "../country/country";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { loginFormData } from "../validation/login";
-import { AiOutlineCheck } from "react-icons/ai";
-import { AiOutlineClose } from "react-icons/ai";
-import { Link } from "react-router-dom";
-import { HiOutlineExclamationCircle } from "react-icons/hi"
-import { Toasty } from "../Toasty/Toasty";
-import axios from "axios";
-import { useNavigate, Navigate } from "react-router-dom";
-import { request, GraphQLClient } from "graphql-request";
-import { loginAction } from "../../redux/actions/login";
-import { toast } from "react-toastify";
+import React, { useState, useEffect, useRef } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faEyeSlash } from '@fortawesome/free-regular-svg-icons';
+import { loginSchema } from '../validation/login';
+import { useForm } from 'react-hook-form';
+import InputField from './InputField';
+import Button from './Button';
+import { fetchCountries } from '../country/country';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { loginFormData } from '../validation/login';
+import { AiOutlineCheck } from 'react-icons/ai';
+import { AiOutlineClose } from 'react-icons/ai';
+import { Link } from 'react-router-dom';
+import { HiOutlineExclamationCircle } from 'react-icons/hi';
+import { Toasty } from '../Toasty/Toasty';
+import axios from 'axios';
+import { useNavigate, Navigate } from 'react-router-dom';
+import { request, GraphQLClient } from 'graphql-request';
+import { loginAction } from '../../redux/actions/login';
+import { toast } from 'react-toastify';
 
-const googleIcn: string = require("../../assets/assets/googleIcon.jpg").default;
+const googleIcn: string = require('../../assets/assets/googleIcon.jpg').default;
 
 function LoginForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState([false, false]);
+  const [path, setPath] = useState('/');
   const [isSuccess, setIsSuccess] = useState(false);
   const CLIENT_ID = process.env.CLIENT_ID;
   const navigate = useNavigate();
-
 
   const MY_QUERY = `
     {
@@ -45,13 +45,17 @@ function LoginForm() {
     // //@ts-ignore
     // google.accounts.id.prompt();
     const token = response.credential;
-    localStorage.setItem("access_token", token);
+    localStorage.setItem('access_token', token);
+    const roleName = localStorage.getItem('roleName');
+    if (roleName === 'applicant') {
+     return navigate('/myApplications');
+    }
     // @ts-ignore
     const client = new GraphQLClient(process.env.BACKEND_URL, {
       headers: { Authorization: token },
     });
     await client.request(MY_QUERY).then((data) => {
-      data && navigate("/");
+      data && navigate(path);
     });
   };
 
@@ -65,10 +69,10 @@ function LoginForm() {
     });
 
     //@ts-ignore
-    google.accounts.id.renderButton(document.getElementById("signInDiv"), {
-      type:"icon",
-      theme: "contained",
-      size: "large",
+    google.accounts.id.renderButton(document.getElementById('signInDiv'), {
+      type: 'icon',
+      theme: 'contained',
+      size: 'large',
     });
   }, []);
 
@@ -81,7 +85,6 @@ function LoginForm() {
   });
 
   const onSubmit = async (data: any) => {
-
     setIsLoading(true);
 
     try {
@@ -89,16 +92,23 @@ function LoginForm() {
       const response = await loginAction(parsedData.email, parsedData.password);
 
       const validate = (token) => {
-        localStorage.setItem("access_token", response?.data?.data?.login?.token);
-        navigate("/");
+        localStorage.setItem(
+          'access_token',
+          response?.data?.data?.login?.token,
+        );
+       const roleName = localStorage.getItem('roleName');
+       if (roleName === 'applicant') {
+         return navigate('/myApplications');
+       }
+        navigate('/');
         setIsLoading(false);
       };
 
-      (response?.data?.data?.login !== null) ? validate(response?.data?.data?.login?.token) : toast.error(response?.data?.errors[0].message)
-
-
+      response?.data?.data?.login !== null
+        ? validate(response?.data?.data?.login?.token)
+        : toast.error(response?.data?.errors[0].message);
     } catch (error: any) {
-      toast.error("something went wrong!!")
+      toast.error('something went wrong!!');
     }
     setIsLoading(false);
   };
@@ -113,7 +123,6 @@ function LoginForm() {
   return (
     <>
       <div className="flex items-center  justify-center mx-auto bg-white dark:bg-[#374151] h-screen">
-
         <form
           onSubmit={(event) => {
             handleSubmit(onSubmit)(event);
@@ -129,7 +138,7 @@ function LoginForm() {
                 placeholder="andela@gmail.com"
                 type="text"
                 className="w-full rounded-md px-2 py-3 border border-white placeholder:text-gray-400 text-black dark:text-white sm:text-[12px] outline-none autofill:bg-transparent autofill:text-black dark:autofill:text-white bg-gray-100 dark:bg-[#1F2A37]"
-                {...register("email")}
+                {...register('email')}
                 error={errors?.email}
                 autoComplete="on"
               />
@@ -137,9 +146,9 @@ function LoginForm() {
             <div className=" relative w-[25vw] sm:w-5/6 lg:w-[25vw]">
               <InputField
                 placeholder="Password"
-                type={showPassword[0] ? "text" : "password"}
+                type={showPassword[0] ? 'text' : 'password'}
                 className="w-full rounded-md   px-2 py-3 border border-white placeholder:text-gray-400 text-black dark:text-white sm:text-[12px] outline-none autofill:bg-transparent autofill:text-black dark:autofill:text-white  bg-gray-100 dark:bg-[#1F2A37]"
-                {...register("password")}
+                {...register('password')}
                 error={errors?.password}
                 onCopy={(e) => e.preventDefault()}
               />
@@ -148,9 +157,15 @@ function LoginForm() {
                 className=" absolute right-4 top-4"
               >
                 {showPassword[0] ? (
-                  <FontAwesomeIcon icon={faEye} className="text-gray-400 dark:text-white" />
+                  <FontAwesomeIcon
+                    icon={faEye}
+                    className="text-gray-400 dark:text-white"
+                  />
                 ) : (
-                  <FontAwesomeIcon icon={faEyeSlash} className="text-gray-400 dark:text-white" />
+                  <FontAwesomeIcon
+                    icon={faEyeSlash}
+                    className="text-gray-400 dark:text-white"
+                  />
                 )}
               </div>
             </div>
@@ -183,20 +198,25 @@ function LoginForm() {
                 </Button>
               </>
             ) : (
-              <Button type="submit" label="Login" className="my-1  mb-4 sm:w-full w-5/6 " />
+              <Button
+                type="submit"
+                label="Login"
+                className="my-1  mb-4 sm:w-full w-5/6 "
+              />
             )}
           </div>
-          <div className='flex items-center justify-center gap-2 sm:w-[35vw] lg:w-[20vw] w-[20vw]'>
-            <hr className='flex-grow border-gray-600 dark:border-gray-100 border-t ' />
-            <span className='px-4 dark:text-[#e2e2e2] text-sm'>Or continue with</span>
-            <hr className='flex-grow border-gray-600 dark:border-gray-100 border-t' />
+          <div className="flex items-center justify-center gap-2 sm:w-[35vw] lg:w-[20vw] w-[20vw]">
+            <hr className="flex-grow border-gray-600 dark:border-gray-100 border-t " />
+            <span className="px-4 dark:text-[#e2e2e2] text-sm">
+              Or continue with
+            </span>
+            <hr className="flex-grow border-gray-600 dark:border-gray-100 border-t" />
           </div>
           <div className=" py-2 mt-3 mb-4">
             <div id="signInDiv" className=" rounded-full h-[40px] w-[40px]">
               <img src={googleIcn} alt="google" />
             </div>
           </div>
-
         </form>
       </div>
     </>

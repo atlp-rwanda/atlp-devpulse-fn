@@ -3,6 +3,7 @@ import {
   Action,
   fetchMyApplications,
   deleteOwnApplication,
+  fetchSingleOwnApplication,
 } from '../actiontypes/applicationTypes';
 
 interface State {
@@ -57,12 +58,12 @@ export const applicationsReducer = (
         error: action.error,
         data: null,
       };
-   
+
     case deleteOwnApplication.DELETE_APPLICATION_SUCCESS:
-      if(!action.data.id){
-        toast.error('Application has already been withdrawn')
+      if (!action.data.id) {
+        toast.error('Application has already been withdrawn');
       }
-    return {
+      return {
         // remove the application from the state
         ...state,
         loading: false,
@@ -72,6 +73,39 @@ export const applicationsReducer = (
           ),
         },
       };
+    default:
+      return state;
+  }
+};
+export const singleApplicationReducer = (
+  state: State = initialState,
+  action: Action,
+): State => {
+  switch (action.type) {
+    case fetchSingleOwnApplication.FETCH_SINGLE_APPLICATION_LOADING:
+      return {
+        loading: true,
+        success: false,
+        error: null,
+        message: null,
+        data: null,
+      };
+    case fetchSingleOwnApplication.FETCH_SINGLE_APPLICATION_SUCCESS:
+      return {
+        ...state,
+        success: true,
+        loading: false,
+        message: action.message,
+        data: action.data,
+      };
+    case fetchSingleOwnApplication.FETCH_SINGLE_APPLICATION_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: action.error,
+        data: null,
+      };
+
     default:
       return state;
   }

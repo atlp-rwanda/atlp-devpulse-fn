@@ -15,7 +15,6 @@ import { Token } from '../../utils/utils';
 
 const sidebar = () => {
   const roleName = localStorage.getItem('roleName');
-  console.log(roleName);
 
   return (
     <>

@@ -1,25 +1,23 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate, Navigate } from "react-router-dom";
-import { request, GraphQLClient } from "graphql-request";
-import { Token } from "../utils/utils";
-import { Link } from "react-router-dom";
-import { SunIcon } from "@heroicons/react/outline";
-import { MoonIcon } from "@heroicons/react/solid";
-import { IoClose } from "react-icons/io5";
-import * as icon from "react-icons/hi2";
-import { AiOutlineBell } from "react-icons/ai";
-import { useTheme } from "../hooks/darkmode";
-import LoginForm from "../components/form/SignInForm";
-const logo: string = require("../assets/logo.svg").default;
-const profile: string = require("../assets/avatar.png").default;
-const LogoWhite: string = require("../assets/logoWhite.svg").default;
-import jwtDecode from "jwt-decode";
+import React, { useState, useEffect } from 'react';
+import { useNavigate, Navigate } from 'react-router-dom';
+import { request, GraphQLClient } from 'graphql-request';
+import { Token } from '../utils/utils';
+import { Link } from 'react-router-dom';
+import { SunIcon } from '@heroicons/react/outline';
+import { MoonIcon } from '@heroicons/react/solid';
+import { IoClose } from 'react-icons/io5';
+import * as icon from 'react-icons/hi2';
+import { AiOutlineBell } from 'react-icons/ai';
+import { useTheme } from '../hooks/darkmode';
+import LoginForm from '../components/form/SignInForm';
+const logo: string = require('../assets/logo.svg').default;
+const profile: string = require('../assets/avatar.png').default;
+const LogoWhite: string = require('../assets/logoWhite.svg').default;
+import jwtDecode from 'jwt-decode';
 
 const LoginPage = (props: any) => {
   const access_token = Token();
-  const authenticated =
-  //@ts-ignore
-    access_token !== null && access_token !== undefined && access_token !== '';
+  const authenticated = access_token !== null && access_token !== undefined;
   const [showNotification, setShowNotification] = useState(false);
   const [showProfileDropdown, setShowprofileDropdown] = useState(false);
   const { theme, setTheme } = useTheme();
@@ -50,8 +48,7 @@ const LoginPage = (props: any) => {
 
   return authenticated ? (
     <Navigate to="/" />
-  ) : 
-  (
+  ) : (
     <>
       <div className="flex items-center dark:bg-zinc-800 ">
         <div
