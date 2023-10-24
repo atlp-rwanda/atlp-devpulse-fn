@@ -24,7 +24,6 @@ interface Update {
 const Applications = (props: any) => {
   const dispatch = useAppDispatch();
   const { myApplications } = props;
-  console.log(myApplications);
 
   const [moredrop, setmoredrop] = useState('');
   const [filter, setFilter] = useState('submitted');
