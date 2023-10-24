@@ -1,6 +1,7 @@
 import {
   fetchMyApplications,
   deleteOwnApplication,
+  fetchSingleOwnApplication,
 } from '../actiontypes/applicationTypes';
 import axios from './axiosconfig';
 import { toast } from 'react-toastify';
@@ -118,5 +119,58 @@ export const deleteApplication =
       return response;
     } catch (error: any) {
       toast.error(error.message);
+    }
+  };
+
+export const getSingleApplication =
+  (application_id: any) => async (dispatch: any) => {
+    dispatch({
+      type: fetchSingleOwnApplication.FETCH_SINGLE_APPLICATION_LOADING,
+      data: null,
+      message: 'loading',
+    });
+    try {
+      const response = await axios.post('/', {
+        query: `query ViewOwnApplication($viewOwnApplicationId: ID!) {
+  viewOwnApplication(id: $viewOwnApplicationId) {
+      _id
+      firstName
+      lastName
+      email
+      telephone
+      gender
+      resume
+      comments
+      address
+      status
+      dateOfSubmission
+      availability_for_interview
+      formUrl
+      associatedForm {
+        _id
+        title
+        description
+        link
+        jobpost
+      }
+    }
+  }
+`,
+        variables: {
+          viewOwnApplicationId: application_id,
+        },
+      });
+      if (response.data.data?.viewOwnApplication != null) {
+        dispatch({
+          type: fetchSingleOwnApplication.FETCH_SINGLE_APPLICATION_SUCCESS,
+          data: response.data.data.viewOwnApplication,
+          message: 'Success',
+        });
+      } else {
+        toast.error('Something went wrong');
+      }
+      return response.data.data;
+    } catch (err: any) {
+      toast.error(err.message);
     }
   };

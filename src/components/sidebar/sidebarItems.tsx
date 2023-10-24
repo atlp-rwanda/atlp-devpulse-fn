@@ -1,5 +1,5 @@
-import React from "react";
-import { Icon } from "@iconify/react";
+import React from 'react';
+import { Icon } from '@iconify/react';
 
 export const sidebarItems1 = [
   {
@@ -99,31 +99,55 @@ export const sidebarItems1 = [
   },
 ];
 
+export const applicantSidebarItems = [
+  {
+    path: '/myApplications',
+    icon: <Icon icon="material-symbols:wysiwyg-rounded"></Icon>,
+    title: 'My Applications',
+  },
+  {
+    path: '/interviewScheduler',
+    icon: (
+      <Icon icon="material-symbols:interpreter-mode-outline-rounded"></Icon>
+    ),
+    title: 'Schedule Interview',
+  },
+  {
+    path: '/notifications',
+    icon: <Icon icon="heroicons-solid:inbox-in"></Icon>,
+    title: 'Notifications',
+  },
+  {
+    path: '/calendar',
+    icon: <Icon icon="ant-design:calendar-filled"></Icon>,
+    title: 'Calendar',
+  },
+];
 export const sidebarItems2 = [
   {
-    path: "/documents",
+    path: '/documents',
     icon: <Icon icon="heroicons:document-20-solid"></Icon>,
-    title: "Docs",
+    title: 'Docs',
   },
   {
-    path: "/help",
+    path: '/help',
     icon: <Icon icon="nimbus:globe"></Icon>,
-    title: "Help",
+    title: 'Help',
   },
   {
-    path: "/Logout",
+    path: '/Logout',
     icon: <Icon icon="nimbus:arrow-left"></Icon>,
-    title: "Logout",
+    title: 'Logout',
   },
 ];
 
 export const sidebarItems3 = [
   {
-    path: "/settings",
+    path: '/settings',
     icon: <Icon icon="akar-icons:settings-vertical"></Icon>,
   },
   {
-    path: "/settings",
+    path: '/settings',
     icon: <Icon icon="eva:settings-2-outline"></Icon>,
   },
 ];

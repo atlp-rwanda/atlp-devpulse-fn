@@ -25,6 +25,8 @@ import SignupForm from './../components/form/RegisterForm';
 import Programs from '../pages/programs/Programs';
 import RolePermission from '../pages/roles&permissions/RolePermission';
 import Applications from '../pages/Applications';
+import ScheduleInterview from '../pages/ScheduleInterview';
+import SubmitApplication from '../pages/SubmitApplication';
 
 function Navigation() {
   return (
@@ -39,7 +41,7 @@ function Navigation() {
         }
       />
       <Route
-        path='/traineeb-details'
+        path="/traineeb-details"
         element={
           <PrivateRoute>
             <TrainneeDetailsB />
@@ -47,7 +49,7 @@ function Navigation() {
         }
       />
       <Route
-        path='/Trainee-applicants'
+        path="/Trainee-applicants"
         element={
           <PrivateRoute>
             <Trainee />
@@ -55,7 +57,7 @@ function Navigation() {
         }
       />
       <Route
-        path='/sidebar'
+        path="/sidebar"
         element={
           <PrivateRoute>
             <Sidebar />
@@ -63,7 +65,7 @@ function Navigation() {
         }
       />
       <Route
-        path='/table'
+        path="/table"
         element={
           <PrivateRoute>
             <Table />
@@ -71,7 +73,7 @@ function Navigation() {
         }
       />
       <Route
-        path='/cycles'
+        path="/cycles"
         element={
           <PrivateRoute>
             <ApplicationCycle />
@@ -79,7 +81,7 @@ function Navigation() {
         }
       />
       <Route
-        path='/trash'
+        path="/trash"
         element={
           <PrivateRoute>
             <Trash />
@@ -87,7 +89,7 @@ function Navigation() {
         }
       />
       <Route
-        path='/nav-bar'
+        path="/nav-bar"
         element={
           <PrivateRoute>
             <NavBar />
@@ -95,7 +97,7 @@ function Navigation() {
         }
       />
       <Route
-        path='/filter_trainee-applicants'
+        path="/filter_trainee-applicants"
         element={
           <PrivateRoute>
             <FilterTrainee />
@@ -103,7 +105,7 @@ function Navigation() {
         }
       />
       <Route
-        path='/import_trainee-aplicants'
+        path="/import_trainee-aplicants"
         element={
           <PrivateRoute>
             <ImportTraineeDetailsFromGoogleSheet />
@@ -111,7 +113,7 @@ function Navigation() {
         }
       />
       <Route
-        path='/trainee-applicant/:traineeId/edit'
+        path="/trainee-applicant/:traineeId/edit"
         element={
           <PrivateRoute>
             <UpdateTraine />
@@ -119,7 +121,7 @@ function Navigation() {
         }
       />
       <Route
-        path='/'
+        path="/"
         element={
           <PrivateRoute>
             <Trainee />
@@ -127,7 +129,7 @@ function Navigation() {
         }
       />
       <Route
-        path='/filter_trainee-applicants/:id'
+        path="/filter_trainee-applicants/:id"
         element={
           <PrivateRoute>
             <CreateScoreType />
@@ -135,7 +137,7 @@ function Navigation() {
         }
       />
       <Route
-        path='/rolesandaccess'
+        path="/rolesandaccess"
         element={
           <PrivateRoute>
             <ListAllUsersPage />
@@ -143,16 +145,16 @@ function Navigation() {
         }
       />
       <Route
-        path='/roles'
+        path="/roles"
         element={
           <PrivateRoute>
             <RolePermission />
           </PrivateRoute>
         }
       />
-      <Route path='/login' element={<LoginPage />} />
+      <Route path="/login" element={<LoginPage />} />
       <Route
-        path='/admins'
+        path="/admins"
         element={
           <PrivateRoute>
             <ScoreTypesActions />
@@ -160,7 +162,7 @@ function Navigation() {
         }
       />
       <Route
-        path='/programs'
+        path="/programs"
         element={
           <PrivateRoute>
             <Programs />
@@ -176,6 +178,22 @@ function Navigation() {
         }
       />
       <Route
+        path="/scheduleInterview"
+        element={
+          <PrivateRoute>
+            <ScheduleInterview />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/jobPost/:formLink/apply"
+        element={
+          <PrivateRoute>
+            <SubmitApplication />
+          </PrivateRoute>
+        }
+      />
+      <Route
         path="*"
         element={
           <PrivateRoute>
@@ -183,7 +201,7 @@ function Navigation() {
           </PrivateRoute>
         }
       />
-      <Route path='/signup' element={<SignupForm />} />
+      <Route path="/signup" element={<SignupForm />} />
     </Routes>
   );
 }

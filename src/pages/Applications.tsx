@@ -8,6 +8,7 @@ import * as AiIcons from 'react-icons/ai';
 import {
   deleteApplication,
   getMyApplications,
+  getSingleApplication,
 } from '../redux/actions/applications';
 import { useAppDispatch } from '../hooks/hooks';
 import { connect, useSelector } from 'react-redux';
@@ -23,8 +24,7 @@ interface Update {
 }
 const Applications = (props: any) => {
   const dispatch = useAppDispatch();
-  const { myApplications } = props;
-  console.log(myApplications);
+  const { myApplications, currentApplication } = props;
 
   const [moredrop, setmoredrop] = useState('');
   const [filter, setFilter] = useState('submitted');
@@ -38,6 +38,16 @@ const Applications = (props: any) => {
     open: false,
   });
 
+  const [displayApplication, setDisplayApplication] = useState({
+    open: false,
+  });
+  const handleViewApplication = (application_id: any) => {
+    try {
+      dispatch(getSingleApplication(application_id));
+    } catch (e) {
+      console.log(e);
+    }
+  };
   const handleMoreOptions = (item_id: any) => {
     if (!moredrop) setmoredrop(item_id);
     if (moredrop) setmoredrop('');
@@ -205,6 +215,22 @@ const Applications = (props: any) => {
                                                     className="text-sm hover:bg-gray-100 text-gray-700  dark:hover:bg-gray-500 dark:text-white  block px-4 py-2"
                                                     onClick={(e: any) => {
                                                       e.preventDefault();
+                                                      setDisplayApplication({
+                                                        open: true,
+                                                      });
+                                                      handleViewApplication(
+                                                        item?._id,
+                                                      );
+                                                    }}
+                                                  >
+                                                    View
+                                                  </div>
+                                                </li>
+                                                <li>
+                                                  <div
+                                                    className="text-sm hover:bg-gray-100 text-gray-700  dark:hover:bg-gray-500 dark:text-white  block px-4 py-2"
+                                                    onClick={(e: any) => {
+                                                      e.preventDefault();
                                                       setDeleteWarn({
                                                         id: item?._id,
                                                         open: true,
@@ -266,6 +292,117 @@ const Applications = (props: any) => {
                                     >
                                       Cancel
                                     </button>
+                                  </div>
+                                </div>
+                              </Box>
+                            </div>
+                          )}
+                          {displayApplication.open && (
+                            <div
+                              className={`h-screen w-screen z-50 bg-black bg-opacity-10 backdrop-blur-sm absolute flex items-center justify-center  px-4 top-0 left-0 ${
+                                displayApplication.open === true
+                                  ? 'block'
+                                  : 'hidden'
+                              }`}
+                            >
+                              <Box className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] rounded-[5px] dark:bg-dark-bg bg-[#f0f0f0]">
+                                <div className="block w-[100%] h-[100%] dark:bg-dark-tertiary  dark:text-white bg-[#f0f0f0] rounded-[5px] px-10">
+                                  <div className="text-center">
+                                    <p className="w-[80%] m-auto font-bold underline px-3 py-3 text-lg">
+                                      {
+                                        currentApplication.data?.associatedForm
+                                          .title
+                                      }
+                                    </p>
+                                  </div>
+                                  <div className=" flex flex-col space-y-5  py-10">
+                                    {/* FirstName */}
+                                    <div className="flex space-x-3">
+                                      <p className="font-semibold">
+                                        First Name:
+                                      </p>
+                                      <p className="font-sans">
+                                        {' '}
+                                        {currentApplication.data?.firstName}
+                                      </p>
+                                    </div>
+                                    {/* LastName */}
+                                    <div className="flex space-x-3">
+                                      <p className="font-semibold">
+                                        Last Name:
+                                      </p>
+                                      <p className="font-sans">
+                                        {' '}
+                                        {currentApplication.data?.lastName}
+                                      </p>
+                                    </div>
+                                    {/* Email */}
+                                    <div className="flex space-x-3">
+                                      <p className="font-semibold">Email:</p>
+                                      <p className="font-sans">
+                                        {' '}
+                                        {currentApplication.data?.email}
+                                      </p>
+                                    </div>
+                                    {/* Address */}
+                                    <div className="flex space-x-3">
+                                      <p className="font-semibold">Address:</p>
+                                      <p className="font-sans">
+                                        {' '}
+                                        {currentApplication.data?.address}
+                                      </p>
+                                    </div>
+                                    {/* Phone Number */}
+                                    <div className="flex space-x-3">
+                                      <p className="font-semibold">
+                                        Phone Number:
+                                      </p>
+                                      <p className="font-sans">
+                                        {currentApplication.data?.telephone}
+                                      </p>
+                                    </div>
+                                    {/* Gender */}
+                                    <div className="flex space-x-3">
+                                      <p className="font-semibold">Gender:</p>
+                                      <p className="font-sans">
+                                        {' '}
+                                        {currentApplication.data?.gender}
+                                      </p>
+                                    </div>
+                                    {/* Interview Date */}
+                                    <div className="flex space-x-3 md:space-x-2">
+                                      <p className="font-semibold">
+                                        Availability Date For Inteview:
+                                      </p>
+                                      <p className="font-sans">
+                                        {
+                                          currentApplication.data
+                                            ?.availability_for_interview
+                                        }
+                                      </p>
+                                    </div>
+                                    {/* Submitted At */}
+                                    <div className="flex space-x-3">
+                                      <p className="font-semibold">
+                                        Submitted At:
+                                      </p>
+                                      <p className="font-sans">
+                                        {currentApplication.data
+                                          ?.dateOfSubmission !== undefined
+                                          ? handleDateOfSubmission(
+                                              currentApplication.data
+                                                ?.dateOfSubmission,
+                                            )
+                                          : null}
+                                      </p>
+                                    </div>
+                                    <div className="flex space-x-3">
+                                      <p className="font-semibold">Status:</p>
+                                      <p className="font-sans">
+                                        {' '}
+                                        {currentApplication.data?.status}{' '}
+                                      </p>
+                                    </div>
                                   </div>
                                 </div>
                               </Box>
@@ -396,9 +533,11 @@ const Applications = (props: any) => {
 
 const mapState = (state: any) => ({
   myApplications: state.myApplications,
+  currentApplication: state.currentApplication,
 });
 
 export default connect(mapState, {
   getMyApplications,
   deleteApplication,
+  getSingleApplication,
 })(Applications);
