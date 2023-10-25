@@ -619,7 +619,7 @@ const ListAllUsers: FunctionComponent<Props> = (props) => {
                 </div>
               </Box>
             </div>
-          )}
+          }
 
           {statWarn.open && (
             <div

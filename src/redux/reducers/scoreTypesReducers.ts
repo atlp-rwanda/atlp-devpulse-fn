@@ -14,7 +14,7 @@ const initialState = {
   isLoaded: false,
   errors: null,
   data: [],
-  obj: {},
+  obj: null,
 };
 
 export default (state = initialState, { type, payload }: any) => {
