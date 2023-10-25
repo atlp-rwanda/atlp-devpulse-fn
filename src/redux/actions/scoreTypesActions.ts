@@ -40,69 +40,34 @@ export const getAllScoreTypes =
 			});
 
 			const assessmentsData = await response.data.data.getAllScoreTypes;
-			console.log(assessmentsData, "------------------------>>>>>>>>>>>>>>>");
 			dispatch(creator(GET_SCORE_TYPES, assessmentsData));
 		} catch (error) {
 			console.error(error);
 		}
 	};
-
-// export const getAllScoreTypes = () => async (dispatch: any) => {
-//   try {
-//     const datas = await axios({
-//       url: process.env.BACKEND_URL,
-//       method: "post",
-//       data: {
-//         query: `
-//         query getAllScoreTypes {
-//           getAllScoreTypes {
-//             id
-//             score_type
-//           }
-//         }
-//       `,
-//       },
-//     });
-
-//     const scoreTypes = await datas.data.data.getAllScoreTypes;
-//     dispatch(creator(GET_SCORE_TYPES, scoreTypes));
-//   } catch (error) {
-//     if (error) {
-//       return console.log(error);
-//     }
-//   }
-// };
-
 export const getOneScoreType =
 	({ getOneScoreTypeId }: any) =>
 	async (dispatch: any) => {
-		try {
-			const datas = await axios({
-				url: process.env.BACKEND_URL,
-				method: "post",
-				data: {
-					query: `
-        query GetOneScoreType($getOneScoreTypeId: ID!) {
-          getOneScoreType(id: $getOneScoreTypeId) {
-            id
-            score_type
-          }
-        }
-      `,
-					variables: {
-						getOneScoreTypeId,
-					},
-				},
+		try{
+			const datas = await axios.post('/',{
+				query: `
+	query GetOneScoreType($getOneScoreTypeId: ID!) {
+	  getOneScoreType(id: $getOneScoreTypeId) {
+		id
+		score_type
+	  }
+	}
+  `,
+				variables: {
+					getOneScoreTypeId,
+				}
+				
 			});
-
-			console.log(datas, "datas");
-
-			const scoreType = await datas.data.data.getOneScoreType;
-			dispatch(creator(GET_ONE_SCORE_TYPE, scoreType));
-		} catch (error) {
-			if (error) {
-				return console.log(error);
-			}
+			const scoreType = await datas.data.data.getAllScoreTypes;
+			console.log(scoreType,'single one')
+				dispatch(creator(GET_ONE_SCORE_TYPE, scoreType));
+		}catch(error){
+			console.log(error)
 		}
 	};
 

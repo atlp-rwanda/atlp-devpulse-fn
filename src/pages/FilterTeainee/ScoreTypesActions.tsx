@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { toast } from "react-toastify";
 import * as icons from "react-icons/ai";
@@ -7,7 +7,9 @@ import {
 	getAllScoreTypes,
 	deleteScoreType,
 	updateScoreType,
+	getOneScoreType
 } from "../../redux/actions/scoreTypesActions";
+import { useAppDispatch } from '../../hooks/hooks';
 import { getAllScoreValues } from "../../redux/actions/scoreValueActions";
 import * as BsIcons from "react-icons/bs";
 import * as AiIcons from "react-icons/ai";
@@ -28,6 +30,7 @@ import {
 import Select from "react-select";
 const ScoreTypesActions = (props: any) => {
 	const { scoreTypes, scoreValues } = props;
+	const dispatch = useAppDispatch();
 
 	const scoreTypesData = scoreTypes.data;
 
@@ -78,6 +81,7 @@ const ScoreTypesActions = (props: any) => {
 	const [assessmentModel, setAssmentModel] = useState(false);
 	const [itemsPerPage, setItemsPerPage] = useState<number>(10);
 	const [page, setPage] = useState(0);
+	const [openAssessment,setOpenAssessment] = useState(false);
 	const handleCloseUpdateModal = (e: any) => {
 		e.preventDefault();
 		setOpenUpdateModel(false);
@@ -90,20 +94,6 @@ const ScoreTypesActions = (props: any) => {
 	const handleCloseCreateModel = () => {
 		setOpenCreateModal(false);
 	};
-
-	// useEffect(() => {
-	// 	const handleClickOutside = (event) => {
-	// 	  if (assessmentModel && event.target.classList.contains("modal")) {
-	// 		handleClose();
-	// 	  }
-	// 	};
-
-	// 	document.addEventListener("click", handleClickOutside);
-
-	// 	return () => {
-	// 	  document.removeEventListener("click", handleClickOutside);
-	// 	};
-	//   }, [assessmentModel, handleClose]);
 
 	const handleOpenUpdateModal = (e: any) => {
 		const cycle = scoreTypesData[activeCycle!];
@@ -123,7 +113,6 @@ const ScoreTypesActions = (props: any) => {
 			program: program,
 			startDate: startdate,
 			title: title,
-
 		};
 		props.createScoreType(data);
 		setOpenCreateModal(false);
@@ -170,12 +159,6 @@ const ScoreTypesActions = (props: any) => {
 		{ value: "office", label: "Office" },
 		{ value: "online", label: "Online" },
 	];
-	const programs = [
-		{ value: "atlp", label: "ATLP", time: "9 months" },
-		{ value: "rca", label: "RCA", time: "2 months" },
-		{ value: "girlsProgram", label: "Girls Program", time: "2 months" },
-		{ value: "kickstart", label: "Kick Start", time: "3 months" },
-	];
 	const [moredrop, setmoredrop] = useState("");
 	const onSubmitHandler = (userid: any) => {
 		if (!moredrop) setmoredrop(userid);
@@ -189,53 +172,6 @@ const ScoreTypesActions = (props: any) => {
 		// await dispatch(softdeletetraine(userId));
 		// setmoredrop("");
 	};
-	const getAllScoreTypes = [
-		{
-			id: "651c0e4dac2250d3acaa46b8",
-			name: "Interview",
-			nbr: 10,
-			description: "this is the description",
-			score_type: "Interview",
-			program: "ATLP",
-			mode: "online",
-		},
-		{
-			id: "651eb4ea0b9622d3a3620707",
-			name: "Qualified",
-			nbr: 20,
-			score_type: "Qualified",
-			program: "ATLP",
-			description: "this is the description",
-			mode: "Office",
-		},
-		{
-			id: "6522a406679e2421ffb44651",
-			name: "English assessment",
-			nbr: 30,
-			score_type: "English assessment",
-			program: "ATLP",
-			description: "this is the description",
-			mode: "Hybrid",
-		},
-		{
-			id: "6522a74e679e2421ffb44696",
-			name: "Hacckerrank",
-			nbr: 19,
-			description: "this is the description",
-			program: "KickStart",
-			score_type: "Hacckerrank",
-			mode: "Office",
-		},
-		{
-			id: "6522a764679e2421ffb4469b",
-			name: "Uptitude test",
-			nbr: 10,
-			description: "this is the description",
-			program: "RCA",
-			score_type: "Uptitude test",
-			mode: "Online",
-		},
-	];
 	const filteredPrograms = programs?.filter(
 		(program) => program?.label === selectedProgram
 	);
@@ -243,6 +179,16 @@ const ScoreTypesActions = (props: any) => {
 		totalPageCount: Math.ceil(filteredPrograms.length / itemsPerPage),
 		currentPage: page,
 	});
+	const handleSelectChange = (e) => {
+		setEngagement(e.target.value);
+	};
+	const handleViewAssessment = (assessment_id: any) => {
+		try {
+		  dispatch(getOneScoreType(assessment_id));
+		} catch (e) {
+		  console.log(e);
+		}
+	  };
 	return (
 		<>
 			<NavBar />
@@ -274,7 +220,7 @@ const ScoreTypesActions = (props: any) => {
 											required
 											type='text'
 											placeholder='Title/Name'
-											className=' dark:bg-dark-tertiary border border-primary rounded outline-none px-5 font-sans text-xs py-2 w-full pt-4'
+											className=' dark:bg-dark-tertiary border border-primary rounded outline-none px-5 font-sans  py-2 w-full pt-4'
 											value={title}
 											onChange={(e) => {
 												e.preventDefault();
@@ -285,7 +231,7 @@ const ScoreTypesActions = (props: any) => {
 											required
 											type='text'
 											placeholder='Description.'
-											className=' dark:bg-dark-tertiary border border-primary rounded outline-none px-5 font-sans text-xs py-2 w-full pt-4'
+											className=' dark:bg-dark-tertiary border border-primary rounded outline-none px-5 font-sans  py-2 w-full pt-4'
 											value={description}
 											onChange={(e) => {
 												e.preventDefault();
@@ -296,54 +242,65 @@ const ScoreTypesActions = (props: any) => {
 											required
 											type='text'
 											placeholder='Duration'
-											className=' dark:bg-dark-tertiary border border-primary rounded outline-none px-5 font-sans text-xs py-2 w-full pt-4'
+											className=' dark:bg-dark-tertiary border border-primary rounded outline-none px-5 font-sans  py-2 w-full pt-4'
 											value={duration}
 											onChange={(e) => {
 												e.preventDefault();
 												setDuration(e.target.value);
 											}}
 										/>
-										<input
-											required
-											type='text'
-											placeholder='Start date'
-											className=' dark:bg-dark-tertiary border border-primary rounded outline-none px-5 font-sans text-xs py-2 w-full pt-4'
-											value={startdate}
-											onChange={(e) => {
-												e.preventDefault();
-												setStartdate(e.target.value);
-											}}
-										/>
-										<input
-											required
-											type='text'
-											placeholder='End date'
-											className=' dark:bg-dark-tertiary border border-primary rounded outline-none px-5 font-sans text-xs py-2 w-full pt-4'
-											value={endDate}
-											onChange={(e) => {
-												e.preventDefault();
-												setEndDate(e.target.value);
-											}}
-										/>
+										<div className='flex flex-col justify-center items-center'>
+											<p className='font-bold'>----Start Date End Date----</p>
+											<div className='w-full flex flex-row space-x-2'>
+												<input
+													required
+													type='date'
+													placeholder='Start date'
+													className=' dark:bg-dark-tertiary border border-primary rounded outline-none px-5 font-sans  py-2 w-full pt-4'
+													value={startdate}
+													onChange={(e) => {
+														e.preventDefault();
+														setStartdate(e.target.value);
+													}}
+												/>
+												<input
+													required
+													type='date'
+													placeholder='End date'
+													className=' dark:bg-dark-tertiary border border-primary rounded outline-none px-5 font-sans  py-2 w-full pt-4'
+													value={endDate}
+													onChange={(e) => {
+														e.preventDefault();
+														setEndDate(e.target.value);
+													}}
+												/>
+											</div>
+										</div>
 										<input
 											required
 											type='text'
 											placeholder='Program'
-											className=' dark:bg-dark-tertiary border border-primary rounded outline-none px-5 font-sans text-xs py-2 w-full pt-4'
+											className=' dark:bg-dark-tertiary border border-primary rounded outline-none px-5 font-sans  py-2 w-full pt-4'
 											value={program}
 											onChange={(e) => setProgram(e.target.value)}
 										/>
-										<input
+										<select
 											required
-											type='text'
-											placeholder='Engagement'
-											className=' dark:bg-dark-tertiary border border-primary rounded outline-none px-5 font-sans text-xs py-2 w-full pt-4'
+											className='dark:bg-dark-tertiary border border-primary rounded outline-none px-5 font-sans  py-2 w-full pt-4'
 											value={engagement}
-											onChange={(e) => setEngagement(e.target.value)}
-										/>
+											onChange={handleSelectChange}>
+											<option value='' disabled>
+												---Select Engagement---
+											</option>
+											{options.map((option) => (
+												<option key={option.value} value={option.value}>
+													{option.label}
+												</option>
+											))}
+										</select>
 										{/* <select
 											required
-											className=' dark:bg-dark-tertiary border text-[#ffffff9f] border-primary rounded outline-none px-5 font-sans text-xs py-2 w-full pt-4'
+											className=' dark:bg-dark-tertiary border text-[#ffffff9f] border-primary rounded outline-none px-5 font-sans  py-2 w-full pt-4'
 											value={selectedOption}
 											onChange={(e) => {
 												e.preventDefault();
@@ -354,7 +311,7 @@ const ScoreTypesActions = (props: any) => {
 												<option
 													key={option.value}
 													value={option.value}
-													className=' dark:bg-dark-tertiary border border-primary rounded outline-none px-5 font-sans text-xs py-2 w-full pt-4'>
+													className=' dark:bg-dark-tertiary border border-primary rounded outline-none px-5 font-sans  py-2 w-full pt-4'>
 													{option.label}
 												</option>
 											))}
@@ -362,7 +319,7 @@ const ScoreTypesActions = (props: any) => {
 										{/* <div className='flex flex-row'>
 											<select
 												required
-												className=' dark:bg-dark-tertiary border border-primary rounded outline-none px-5 font-sans text-xs py-2 w-full pt-4'
+												className=' dark:bg-dark-tertiary border border-primary rounded outline-none px-5 font-sans  py-2 w-full pt-4'
 												value={selectedProgram}
 												onChange={(e) => {
 													e.preventDefault();
@@ -377,7 +334,7 @@ const ScoreTypesActions = (props: any) => {
 											</select>
 											<select
 												required
-												className=' dark:bg-dark-tertiary border border-primary rounded outline-none px-5 font-sans text-xs py-2 w-full pt-4'
+												className=' dark:bg-dark-tertiary border border-primary rounded outline-none px-5 font-sans  py-2 w-full pt-4'
 												value={programDuration}
 												onChange={(e) => {
 													e.preventDefault();
@@ -393,7 +350,7 @@ const ScoreTypesActions = (props: any) => {
 										</div> */}
 										<button
 											type='submit'
-											className='block text-white border border-[#333] border-1 bg-dark-bg rounded-[5px] p-2 w-[100px] mb-5 mx-auto'>
+											className='block text-white border border-[#333] dark:bg-[#56C870] border-1 bg-dark-bg rounded-[5px] p-2 w-[100px] mb-5 mx-auto'>
 											SAVE
 										</button>
 									</form>
@@ -423,24 +380,24 @@ const ScoreTypesActions = (props: any) => {
 								<div className='-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto'>
 									<div className='inline-block w-full h-[55vh] lg:min-w-full shadow rounded-lg overflow-y-scroll'>
 										<table className='min-w-full leading-normal px-4'>
-											<thead className='w-full px-32 sticky top-0'>
+											<thead className='w-full px-32 sticky top-0 z-50'>
 												<tr>
-													<th className='p-6 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider'>
+													<th className='p-6 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary text-left  font-semibold text-gray-600 dark:text-white uppercase tracking-wider'>
 														{"Title"}
 													</th>
-													<th className='px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left text-xs font-semibold text-gray-600 dark:text-white uppercase md:table-cell tracking-wider'>
+													<th className='px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left  font-semibold text-gray-600 dark:text-white uppercase md:table-cell tracking-wider'>
 														{"Description"}
 													</th>
-													<th className='px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider'>
+													<th className='px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left  font-semibold text-gray-600 dark:text-white uppercase tracking-wider'>
 														{"Engagement Mode"}
 													</th>
-													<th className='px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider'>
+													<th className='px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left  font-semibold text-gray-600 dark:text-white uppercase tracking-wider'>
 														{"Duration"}
 													</th>
-													<th className='border-b-2 sm:text-center border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider'>
+													<th className='border-b-2 sm:text-center border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left  font-semibold text-gray-600 dark:text-white uppercase tracking-wider'>
 														{"Program"}
 													</th>
-													<th className='border-b-2 sm:text-center border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider'>
+													<th className='border-b-2 sm:text-center border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left  font-semibold text-gray-600 dark:text-white uppercase tracking-wider'>
 														{"action"}
 													</th>
 												</tr>
@@ -518,11 +475,19 @@ const ScoreTypesActions = (props: any) => {
 																			</Link>
 																		</li>
 																		<li>
-																			<Link
-																				to={`/trainee-applicant-details/${values.id}`}
+																			{/* <Link
+																				to={`/assessments/${values.id}`}
 																				className='text-sm hover:bg-gray-100 text-gray-700  dark:text-white   dark:hover:bg-gray-500 block px-4 py-2'>
 																				View
-																			</Link>
+																			</Link> */}
+																			<div
+																				onClick={(e: any) => {
+																					e.preventDefault();
+																					setOpenAssessment(true)
+																					handleViewAssessment(values?._id);
+																				}}>
+																					View
+																				</div>
 																		</li>
 																		<li>
 																			<div
