@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { BsEnvelope } from "react-icons/bs";
 import { TiExportOutline } from "react-icons/ti";
 import { FcApproval } from "react-icons/fc";
@@ -15,6 +15,10 @@ import {
   updateManyScoreValues,
 } from "../redux/actions/scoreValueActions";
 import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
+import { dataTocsv } from "../helpers/exportTocsv";
+
+import PDFExport from "../components/PDFexport";
 
 const TrainneeDetails = (props: any) => {
   const params = useParams();
@@ -83,6 +87,8 @@ const TrainneeDetails = (props: any) => {
     props.updateManyScoreValues(tsabus);
   };
 
+  const divRef = useRef<HTMLDivElement>(null);
+
   return (
     <>
       <Navbar />
@@ -90,7 +96,10 @@ const TrainneeDetails = (props: any) => {
         {/* <div className="min-h-[50vh] dark:bg-dark-frame-bg  w-[100%] block mt-10 md:w-[100%] md:mt-0 pl-[16rem] pt-[80px] md:pl-0"> */}
         <div className="block w-[100%] pl-[16rem] h-max md:pl-0 mx-auto dark:bg-dark-frame-bg pb-10 mt-10  pt-[80px]">
           {traineeDetails && (
-            <div className=" max-w-md bg-slate-50 dark:text-zinc-100 rounded-xl dark:bg-dark-bg shadow-md  overflow-hidden md:w-[100%] mb-6 lg:flex lg:max-w-2xl mx-auto">
+            <div
+              ref={divRef}
+              className=" max-w-md bg-slate-50 dark:text-zinc-100 rounded-xl dark:bg-dark-bg shadow-md  overflow-hidden md:w-[100%] mb-6 lg:flex lg:max-w-2xl mx-auto"
+            >
               <div className="md:flex  ">
                 <h2 className="top-5 m-5  font-medium  md:m-3 ">
                   <BsFillPersonLinesFill className="float-left m-1" />
@@ -299,9 +308,21 @@ const TrainneeDetails = (props: any) => {
                 {open && (
                   <ul className="bg-[#1F2A37] font-light text-sm text-white m-1">
                     <li className="border-solid border-black border-b-2 ">
-                      Export to PDF
+                      {/* <Link to={"#"} onClick={}>
+                        Export to PDF
+                      </Link> */}
+                      <PDFExport obj1={traineeDetails} obj2={traineeDetails.trainee_id} />
                     </li>
-                    <li>Export to CSV</li>
+                    <li>
+                      <Link
+                        to={"#"}
+                        onClick={() =>
+                          dataTocsv(traineeDetails, traineeDetails.trainee_id)
+                        }
+                      >
+                        Export to CSV
+                      </Link>
+                    </li>
                   </ul>
                 )}
               </button>
