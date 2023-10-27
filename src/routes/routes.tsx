@@ -13,7 +13,6 @@ import UpdateTraine from './../pages/updateTrainee/traineUpdate';
 import CreateScoreType from './../pages/FilterTeainee/createScoreType';
 import ScoreTypesActions from './../pages/FilterTeainee/ScoreTypesActions';
 import ImportTraineeDetailsFromGoogleSheet from './../pages/importAndSaveManyTraineesFromGoogleSheet/importAndSaveManyTraineesFromGoogleSheet';
-
 const Counter = React.lazy(() => import('./../components/Counter/Counter'));
 import Trash from './../pages/Trash/Trash';
 import ApplicationCycle from './../pages/ApplicationCycle/ApplicationCycle';

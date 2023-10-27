@@ -21,25 +21,26 @@ import UserEntity from "../../components/roles&permissions/UserEntity";
 import ApplicationEntity from "../../components/roles&permissions/ApplicationEntity";
 import CohortEntity from "../../components/roles&permissions/CohortEntity";
 import RoleEntity from "../../components/roles&permissions/RoleEntity";
+import { useFormik } from "formik";
 
 export interface SingleRole {
   _id?: string;
-  roleName: string;
-  description: string;
-  permissions: Permission[];
+  roleName?: string;
+  description?: string;
+  permissions?: Permission[];
 }
 export type Permission = {
-  create: boolean;
-  deleteMultiple: boolean;
-  deleteOne: boolean;
-  deleteOwn: boolean;
-  entity: string;
-  updateMultiple: boolean;
-  updateOne: boolean;
-  updateOwn: boolean;
-  viewMultiple: boolean;
-  viewOne: boolean;
-  viewOwn: boolean;
+  create?: boolean;
+  deleteMultiple?: boolean;
+  deleteOne?: boolean;
+  deleteOwn?: boolean;
+  entity?: string;
+  updateMultiple?: boolean;
+  updateOne?: boolean;
+  updateOwn?: boolean;
+  viewMultiple?: boolean;
+  viewOne?: boolean;
+  viewOwn?: boolean;
   _id?: string;
 };
 
@@ -68,7 +69,26 @@ function RolePermission(props: any) {
   const [updateRoleId, setUpdateRoleId] = useState<string | null>(null);
   const [isViewingSingleRole, setIsViewSingleRole] = useState(false);
   const [isSingleRole, setIsSingleRole] = useState(false);
-  const [singleRoleData, setSingleRoleData] = useState<SingleRole | null>(null);
+  const [singleRoleData, setSingleRoleData] = useState<
+    SingleRole | null | undefined
+  >({
+    roleName: "",
+    description: "",
+    permissions: [],
+  });
+  const [updatePermissionData, setUpdatePermissionData] = useState({
+    create: false,
+    deleteMultiple: false,
+    deleteOne: false,
+    deleteOwn: false,
+    entity: "",
+    updateMultiple: false,
+    updateOne: false,
+    updateOwn: false,
+    viewMultiple: false,
+    viewOne: false,
+    viewOwn: false,
+  });
   const [currentDropdownIndex, setCurrentDropdownIndex] = useState<
     number | null
   >(null);
@@ -289,6 +309,10 @@ function RolePermission(props: any) {
       setCurrentDropdownIndex(nextDropdownIndex);
     }
   };
+  const handleInputChange = (e: any) => {
+    // const { name, value } = e.target;
+    setSingleRoleData({ ...singleRoleData, [e.target.name]: e.target.value });
+  };
 
   const handleViewSingleRole = async (getRoleId) => {
     try {
@@ -333,8 +357,10 @@ function RolePermission(props: any) {
       });
       const role = response.data.data.getRole;
       setSingleRoleData(role);
+      setOpenUpdateModel(true);
       setIsSingleRole(true);
       setIsViewSingleRole(true);
+      setUpdatePermissionData(role.permissions);
     } catch (error) {
       console.error("Error viewing role:", error);
     }
@@ -343,6 +369,60 @@ function RolePermission(props: any) {
   const handleBack = () => {
     setIsSingleRole(false);
     setSingleRoleData(null);
+  };
+  const handleUpdateRole = async (e: any) => {
+    e.preventDefault();
+    console.log("update idd ===>", updatePermissionData);
+    // try {
+    //   if (!getRoleId) {
+    //     console.error("Role ID is null");
+    //     return;
+    //   }
+    //   const updatedData = {
+    //     roleName: singleRoleData?.roleName,
+    //     description: singleRoleData?.description,
+    //     permissions: singleRoleData?.permissions,
+    //   };
+    //   const response = await axios.post("/", {
+    //     query: `
+    //       mutation UpdateRole($updateRoleId: ID!, $input: UpdateRoleInput!) {
+    //         updateRole(id: $updateRoleId, input: $input) {
+    //           _id
+    //           roleName
+    //           description
+    //           permissions {
+    //             entity
+    //             _id
+    //             create
+    //             viewOwn
+    //             viewMultiple
+    //             viewOne
+    //             updateOwn
+    //             updateMultiple
+    //             updateOne
+    //             deleteOwn
+    //             deleteMultiple
+    //             deleteOne
+    //           }
+    //         }
+    //       }
+    //     `,
+    //     variables: {
+    //       updateRoleId: getRoleId,
+    //       input: updatedData,
+    //     },
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //       Authorization: `${token}`,
+    //     },
+    //   });
+
+    //   const updatedRole = response.data.data.updateRole;
+    //   console.log("Role updated:", updatedRole);
+    //   setOpenUpdateModel(false);
+    // } catch (error) {
+    //   console.error("Error updating role:", error);
+    // }
   };
 
   const COLS = [
@@ -697,7 +777,7 @@ function RolePermission(props: any) {
             onClose={handleClose}
             open={open}
           >
-            <MenuItem onClick={() => handleOpenUpdateModal()}>
+            <MenuItem onClick={() => handleViewSingleRole(getRoleId)}>
               <BsIcons.BsPencilFill className="mr-[5px]" />
               Edit
             </MenuItem>
@@ -912,22 +992,208 @@ function RolePermission(props: any) {
               <hr style={{ marginBottom: "40px" }} />
               <input
                 className=" mt-3 bg-lime cursor-pointer text-[18px] self-center py-1 rounded-[5px] h-[50px] my-[20px] mx-auto w-[80%] block border-[2px] border-[#a8a8a8]  px-[10px] md:w-[90%]"
-                name="name"
-                placeholder="Role Name"
+                name="roleName"
                 type="text"
+                value={singleRoleData?.roleName}
+                onChange={handleInputChange}
               />
               <input
                 className=" mt-3 bg-lime cursor-pointer text-[18px] self-center py-1 rounded-[5px] h-[50px] my-[20px] mx-auto w-[80%] block border-[2px] border-[#a8a8a8]  px-[10px] md:w-[90%]"
-                name="Description"
+                name="description"
                 type="text"
                 placeholder="Description"
+                value={singleRoleData?.description}
+                onChange={handleInputChange}
               />
+              <div className="mt-5">
+                {singleRoleData?.permissions?.map((permission, index) => (
+                  <div>
+                    <div className="">
+                      <h2 key={index} className="text-white text-lg">
+                        {permission.entity}
+                      </h2>
+                    </div>
+                    <div className="flex gap-x-2 md:flex-col">
+                      <div>
+                        <label htmlFor="create" className=" block text-sm">
+                          Create
+                        </label>
+                        <input
+                          type="checkbox"
+                          value="create"
+                          onChange={(e) =>
+                            setUpdatePermissionData((currentState) => ({
+                              ...currentState,
+                              [e.target.name]: e.target.checked,
+                            }))
+                          }
+                          checked={updatePermissionData.create}
+                        />
+                      </div>
+                      <div>
+                        <label
+                          htmlFor="deleteMultiple"
+                          className=" block text-sm"
+                        >
+                          deleteMultiple
+                        </label>
+                        <input
+                          type="checkbox"
+                          value="deleteMultiple"
+                          onChange={(e) =>
+                            setUpdatePermissionData((currentState) => ({
+                              ...currentState,
+                              [e.target.name]: e.target.checked,
+                            }))
+                          }
+                          checked={updatePermissionData.deleteMultiple}
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor="deleteOne" className=" block text-sm">
+                          deleteOne
+                        </label>
+                        <input
+                          type="checkbox"
+                          value="deleteOne"
+                          onChange={(e) =>
+                            setUpdatePermissionData((currentState) => ({
+                              ...currentState,
+                              [e.target.name]: e.target.checked,
+                            }))
+                          }
+                          checked={updatePermissionData.deleteOne}
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor="deleteOwn" className=" block text-sm">
+                          deleteOwn
+                        </label>
+                        <input
+                          type="checkbox"
+                          value="deleteOwn"
+                          onChange={(e) =>
+                            setUpdatePermissionData((currentState) => ({
+                              ...currentState,
+                              [e.target.name]: e.target.checked,
+                            }))
+                          }
+                          checked={updatePermissionData.deleteOwn}
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor="updateOne" className=" block text-sm">
+                          updateOne
+                        </label>
+                        <input
+                          type="checkbox"
+                          value="updateOne"
+                          onChange={(e) =>
+                            setUpdatePermissionData((currentState) => ({
+                              ...currentState,
+                              [e.target.name]: e.target.checked,
+                            }))
+                          }
+                          checked={updatePermissionData.updateOne}
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor="updateOwn" className=" block text-sm">
+                          updateOwn
+                        </label>
+                        <input
+                          type="checkbox"
+                          value="updateOwn"
+                          onChange={(e) =>
+                            setUpdatePermissionData((currentState) => ({
+                              ...currentState,
+                              [e.target.name]: e.target.checked,
+                            }))
+                          }
+                          checked={updatePermissionData.updateOwn}
+                        />
+                      </div>
+                      <div>
+                        <label
+                          htmlFor="updateMultiple"
+                          className=" block text-sm"
+                        >
+                          updateMultiple
+                        </label>
+                        <input
+                          type="checkbox"
+                          value="updateMultiple"
+                          onChange={(e) =>
+                            setUpdatePermissionData((currentState) => ({
+                              ...currentState,
+                              [e.target.name]: e.target.checked,
+                            }))
+                          }
+                          checked={updatePermissionData.updateMultiple}
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor="viewOwn" className=" block text-sm">
+                          viewOwn
+                        </label>
+                        <input
+                          type="checkbox"
+                          value="viewOwn"
+                          onChange={(e) =>
+                            setUpdatePermissionData((currentState) => ({
+                              ...currentState,
+                              [e.target.name]: e.target.checked,
+                            }))
+                          }
+                          checked={updatePermissionData.viewOwn}
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor="viewOne" className=" block text-sm">
+                          viewOne
+                        </label>
+                        <input
+                          type="checkbox"
+                          value="viewOne"
+                          onChange={(e) =>
+                            setUpdatePermissionData((currentState) => ({
+                              ...currentState,
+                              [e.target.name]: e.target.checked,
+                            }))
+                          }
+                          checked={updatePermissionData.viewOne}
+                        />
+                      </div>
+                      <div>
+                        <label
+                          htmlFor="viewMultiple"
+                          className=" block text-sm"
+                        >
+                          viewMultiple
+                        </label>
+                        <input
+                          type="checkbox"
+                          value="viewMultiple"
+                          onChange={(e) =>
+                            setUpdatePermissionData((currentState) => ({
+                              ...currentState,
+                              [e.target.name]: e.target.checked,
+                            }))
+                          }
+                          checked={updatePermissionData.viewMultiple}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
               <div className="flex flex-wrap w-[300px] m-auto">
                 <button
                   className="text-white border-[1px] dark:bg-[#56C870] h-[40px] w-[100px] block rounded-[5px] my-[10px] mx-[auto] bg-[#173b3f]"
                   type="submit"
+                  onClick={handleUpdateRole}
                 >
-                  Save
+                  Update
                 </button>
               </div>
             </form>
