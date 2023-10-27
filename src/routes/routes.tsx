@@ -1,18 +1,18 @@
-import React from 'react';
-import { HashRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import TestTailwind from './../components/TestTailwind';
-import TrainneeDetails from './../pages/TrainneeDetails';
-import TrainneeDetailsB from './../pages/TrainneDetailsB';
-import './../index.css';
-import Sidebar from './../components/sidebar/sidebar';
-import NavBar from './../components/sidebar/navHeader';
-import Trainee from './../pages/TraineApplicant/Trainee';
-import FilterTrainee from './../pages/FilterTeainee/FilterTrainee';
-import Table from './../pages/Table';
-import UpdateTraine from './../pages/updateTrainee/traineUpdate';
-import CreateScoreType from './../pages/FilterTeainee/createScoreType';
-import ScoreTypesActions from './../pages/FilterTeainee/ScoreTypesActions';
-import ImportTraineeDetailsFromGoogleSheet from './../pages/importAndSaveManyTraineesFromGoogleSheet/importAndSaveManyTraineesFromGoogleSheet';
+import React from "react";
+import { HashRouter as Router, Routes, Route, Link } from "react-router-dom";
+import TestTailwind from "./../components/TestTailwind";
+import TrainneeDetails from "./../pages/TrainneeDetails";
+import TrainneeDetailsB from "./../pages/TrainneDetailsB";
+import "./../index.css";
+import Sidebar from "./../components/sidebar/sidebar";
+import NavBar from "./../components/sidebar/navHeader";
+import Trainee from "./../pages/TraineApplicant/Trainee";
+import FilterTrainee from "./../pages/FilterTeainee/FilterTrainee";
+import Table from "./../pages/Table";
+import UpdateTraine from "./../pages/updateTrainee/traineUpdate";
+import CreateScoreType from "./../pages/FilterTeainee/createScoreType";
+import ScoreTypesActions from "./../pages/FilterTeainee/ScoreTypesActions";
+import ImportTraineeDetailsFromGoogleSheet from "./../pages/importAndSaveManyTraineesFromGoogleSheet/importAndSaveManyTraineesFromGoogleSheet";
 
 const Counter = React.lazy(() => import('./../components/Counter/Counter'));
 import Trash from './../pages/Trash/Trash';
@@ -28,13 +28,17 @@ import RolePermission from '../pages/roles&permissions/RolePermission';
 import CreateFormPage from './../pages/ApplicationForms/CreateApplicantForm';
 import UpdateSavedFormPage from './../pages/ApplicationForms/UpdateSavedForm';
 import ViewApplicationForms from './../pages/ApplicationForms/ViewApplicationForms';
+import UpdateProgram from "../pages/programs/UpdateProgram";
+import Jobs from '../pages/JobPost/job';
+import SingleJobPostDetails from '../pages/JobPost/viewSingleJob';
+import SharedPosts from '../pages/sharedPosts';
 
 function Navigation() {
   return (
     <Routes>
-      <Route path='/test_tailwind' element={<TestTailwind />} />
+      <Route path="/test_tailwind" element={<TestTailwind />} />
       <Route
-        path='/trainee-applicant-details/:traineeId'
+        path="/trainee-applicant-details/:traineeId"
         element={
           <PrivateRoute>
             <TrainneeDetails />
@@ -42,7 +46,7 @@ function Navigation() {
         }
       />
       <Route
-        path='/traineeb-details'
+        path="/traineeb-details"
         element={
           <PrivateRoute>
             <TrainneeDetailsB />
@@ -50,7 +54,7 @@ function Navigation() {
         }
       />
       <Route
-        path='/Trainee-applicants'
+        path="/Trainee-applicants"
         element={
           <PrivateRoute>
             <Trainee />
@@ -58,7 +62,7 @@ function Navigation() {
         }
       />
       <Route
-        path='/sidebar'
+        path="/sidebar"
         element={
           <PrivateRoute>
             <Sidebar />
@@ -66,7 +70,7 @@ function Navigation() {
         }
       />
       <Route
-        path='/table'
+        path="/table"
         element={
           <PrivateRoute>
             <Table />
@@ -74,7 +78,7 @@ function Navigation() {
         }
       />
       <Route
-        path='/cycles'
+        path="/cycles"
         element={
           <PrivateRoute>
             <ApplicationCycle />
@@ -82,7 +86,7 @@ function Navigation() {
         }
       />
       <Route
-        path='/trash'
+        path="/trash"
         element={
           <PrivateRoute>
             <Trash />
@@ -90,7 +94,7 @@ function Navigation() {
         }
       />
       <Route
-        path='/nav-bar'
+        path="/nav-bar"
         element={
           <PrivateRoute>
             <NavBar />
@@ -98,7 +102,7 @@ function Navigation() {
         }
       />
       <Route
-        path='/filter_trainee-applicants'
+        path="/filter_trainee-applicants"
         element={
           <PrivateRoute>
             <FilterTrainee />
@@ -106,7 +110,7 @@ function Navigation() {
         }
       />
       <Route
-        path='/import_trainee-aplicants'
+        path="/import_trainee-aplicants"
         element={
           <PrivateRoute>
             <ImportTraineeDetailsFromGoogleSheet />
@@ -114,7 +118,7 @@ function Navigation() {
         }
       />
       <Route
-        path='/trainee-applicant/:traineeId/edit'
+        path="/trainee-applicant/:traineeId/edit"
         element={
           <PrivateRoute>
             <UpdateTraine />
@@ -122,7 +126,7 @@ function Navigation() {
         }
       />
       <Route
-        path='/'
+        path="/"
         element={
           <PrivateRoute>
             <Trainee />
@@ -130,7 +134,7 @@ function Navigation() {
         }
       />
       <Route
-        path='/filter_trainee-applicants/:id'
+        path="/filter_trainee-applicants/:id"
         element={
           <PrivateRoute>
             <CreateScoreType />
@@ -138,7 +142,7 @@ function Navigation() {
         }
       />
       <Route
-        path='/rolesandaccess'
+        path="/rolesandaccess"
         element={
           <PrivateRoute>
             <RolePermission />
@@ -146,16 +150,16 @@ function Navigation() {
         }
       />
       <Route
-        path='/roles'
+        path="/roles"
         element={
           <PrivateRoute>
             <ListAllUsersPage />
           </PrivateRoute>
         }
       />
-      <Route path='/login' element={<LoginPage />} />
+      <Route path="/login" element={<LoginPage />} />
       <Route
-        path='/admins'
+        path="/admins"
         element={
           <PrivateRoute>
             <ScoreTypesActions />
@@ -163,7 +167,15 @@ function Navigation() {
         }
       />
       <Route
-        path='/program/:id'
+        path="/program/:programId/edit"
+        element={
+          <PrivateRoute>
+            <UpdateProgram />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/program/:id"
         element={
           <PrivateRoute>
             <SingleProgramDetails />
@@ -171,7 +183,7 @@ function Navigation() {
         }
       />
       <Route
-        path='/programs'
+        path="/programs"
         element={
           <PrivateRoute>
             <Programs />
@@ -179,21 +191,29 @@ function Navigation() {
         }
       />
       <Route
-        path='*'
+        path="*"
         element={
           <PrivateRoute>
             <PageNotFound />
           </PrivateRoute>
         }
       />
-      <Route path='/signup' element={<SignupForm />} />
+      <Route
+        path="/job/Post/view"
+        element={
+          <PrivateRoute>
+            <SharedPosts />
+          </PrivateRoute>
+        }
+      />
+      <Route path="/signup" element={<SignupForm />} />
       <Route
         element={
           <PrivateRoute>
             <CreateFormPage />
           </PrivateRoute>
         }
-        path='/create-form'
+        path="/create-form"
       />
       <Route
         element={
@@ -201,7 +221,7 @@ function Navigation() {
             <ViewApplicationForms />
           </PrivateRoute>
         }
-        path='/view-forms'
+        path="/view-forms"
       />
 
       <Route
@@ -210,7 +230,24 @@ function Navigation() {
             <UpdateSavedFormPage />
           </PrivateRoute>
         }
-        path='/update-saved-form/:id'
+        path="/update-saved-form/:id"
+      />
+      <Route path="/signup" element={<SignupForm />} />
+      <Route
+        path="/Job-Post"
+        element={
+          <PrivateRoute>
+            <Jobs />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/Job/Post/:id"
+        element={
+          <PrivateRoute>
+            <SingleJobPostDetails />
+          </PrivateRoute>
+        }
       />
     </Routes>
   );

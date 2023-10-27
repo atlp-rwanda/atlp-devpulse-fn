@@ -1,14 +1,13 @@
 import {
   Action,
-  fetchSingleProgramType,
-} from "../actiontypes/fetchSingleProgramTypes";
+  fetchSingleJobPostType,
+} from '../actiontypes/fetchSingleJobPostTypes';
 
 interface State {
   success: boolean;
   loading: boolean;
   error: any;
   data: any;
-  serverResponded: boolean;
 }
 
 const initialState = {
@@ -16,39 +15,35 @@ const initialState = {
   success: false,
   error: null,
   data: null,
-  serverResponded: false,
 };
 
-const fetchSingleProgramReducer = (
+const fetchSingleJobPostReducer = (
   state: State = initialState,
-  action: Action
+  action: Action,
 ): State => {
   switch (action.type) {
-    case fetchSingleProgramType.FETCH_SINGLE_PROGRAM_LOADING:
+    case fetchSingleJobPostType.FETCH_SINGLE_JOB_POST_LOADING:
       return {
         loading: true,
         success: false,
         error: null,
         data: null,
-        serverResponded: false,
       };
-    case fetchSingleProgramType.FETCH_SINGLE_PROGRAM_SUCCESS:
+    case fetchSingleJobPostType.FETCH_SINGLE_JOB_POST_SUCCESS:
       return {
         ...state,
         loading: false,
         data: action.data,
-        serverResponded: true,
       };
-    case fetchSingleProgramType.FETCH_SINGLE_PROGRAM_FAIL:
+    case fetchSingleJobPostType.FETCH_SINGLE_JOB_POST_FAIL:
       return {
         ...state,
         loading: false,
         error: action.error,
-        serverResponded: true,
       };
     default:
       return state;
   }
 };
 
-export default fetchSingleProgramReducer;
+export default fetchSingleJobPostReducer;

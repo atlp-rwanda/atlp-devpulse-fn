@@ -1,14 +1,13 @@
 import {
   ActionFetch,
-  fetchProgramType,
-} from "../actiontypes/fetchProgramActionTypes";
+  fetchJobPostType,
+} from '../actiontypes/fetchJobActionTypes';
 
 interface State {
   success: boolean;
   loading: boolean;
   error: any;
   data: any;
-  count: number;
 }
 
 const initialState = {
@@ -16,56 +15,51 @@ const initialState = {
   success: false,
   error: null,
   data: null,
-  count: 0,
 };
 
-const fetchProgramsReducer = (
+const fetchJobPostReducer = (
   state: State = initialState,
-  action: ActionFetch
+  action: ActionFetch,
 ): State => {
   switch (action.type) {
-    case fetchProgramType.FETCH_PROGRAM_LOADING:
+    case fetchJobPostType.FETCH_JOB_POST_LOADING:
       return {
         loading: true,
         success: false,
         error: null,
         data: null,
-        count: 0,
       };
-    case fetchProgramType.FETCH_PROGRAM_SUCCESS:
+    case fetchJobPostType.FETCH_JOB_POST_SUCCESS:
       return {
         ...state,
         loading: false,
         data: action.data,
-        count: action.data.length,
       };
-    case fetchProgramType.FETCH_PROGRAM_FAIL:
+    case fetchJobPostType.FETCH_JOB_POST_FAIL:
       return {
         ...state,
-        data: initialState.data,
         loading: false,
         error: action.error,
       };
-    case fetchProgramType.PROGRAM_REMOVED:
+    case fetchJobPostType.JOB_POST_REMOVED:
+      //@ts-ignore
       return {
         ...state,
         loading: false,
         //@ts-ignore
-        data: state.data.filter((item) => item._id !== action.data._id),
+        data: state.data.filter((item) => item.id !== action.data),
       };
-
-    case fetchProgramType.PROGRAM_ADDED:
+    case fetchJobPostType.JOB_POST_ADDED:
       const previousItems = state.data;
       //@ts-ignore
       let existingItem = state.data.find(
         //@ts-ignore
-        (item) => item._id === action.data._id
+        (item) => item.id === action.data,
       );
 
       //@ts-ignore
       let newItem = !existingItem && action.data;
       //@ts-ignore
-
       return {
         ...state,
         loading: false,
@@ -76,4 +70,4 @@ const fetchProgramsReducer = (
   }
 };
 
-export default fetchProgramsReducer;
+export default fetchJobPostReducer;

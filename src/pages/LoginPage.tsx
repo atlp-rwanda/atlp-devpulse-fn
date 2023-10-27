@@ -18,19 +18,19 @@ import jwtDecode from "jwt-decode";
 const LoginPage = (props: any) => {
   const access_token = Token();
   const authenticated =
-    access_token !== null && access_token !== undefined && access_token !== "";
-    const [showNotification, setShowNotification] = useState(false);
-    const [showProfileDropdown, setShowprofileDropdown] = useState(false);
-    const { theme, setTheme } = useTheme();
-    function handleToggleTheme() {
-      setTheme(!theme);
-    }
-    const [nav, setNav] = useState(false);
-    const handleClick = () => setNav(!nav);
-    const handleShowNotification = () => setShowNotification(!showNotification);
-    const handleShowProfileDropdown = () =>
-      setShowprofileDropdown(!showProfileDropdown);
-  
+  //@ts-ignore
+    access_token !== null && access_token !== undefined && access_token !== '';
+  const [showNotification, setShowNotification] = useState(false);
+  const [showProfileDropdown, setShowprofileDropdown] = useState(false);
+  const { theme, setTheme } = useTheme();
+  function handleToggleTheme() {
+    setTheme(!theme);
+  }
+  const [nav, setNav] = useState(false);
+  const handleClick = () => setNav(!nav);
+  const handleShowNotification = () => setShowNotification(!showNotification);
+  const handleShowProfileDropdown = () =>
+    setShowprofileDropdown(!showProfileDropdown);
 
   const navigate = useNavigate();
 
@@ -53,63 +53,61 @@ const LoginPage = (props: any) => {
   ) : 
   (
     <>
-    <div className="flex items-center dark:bg-zinc-800 ">
-      <div
-        className={`flex items-center justify-between h-[70px] fixed z-50 top-0 border-b border-gray-400 w-screen bg-gray-300 dark:bg-dark-bg`}
-      >
-        <div className="flex items-center ">
-          <span
-            onClick={handleClick}
-            onKeyDown={handleClick}
-            role="button"
-            tabIndex={0}
-            className="hidden md:block ml-2"
-          >
-          </span>
-          <span>
-            <Link to="/" className="flex items-center">
-              {theme ? (
-                <img
-                  className="cursor-pointer mx-2 fill-[blue]"
-                  src={logo}
-                  style={{ fill: "#333" }}
-                />
-              ) : (
-                <img
-                  className="cursor-pointer  mx-2"
-                  src={LogoWhite}
-                  alt="logoWhite"
-                />
-              )}
-              <h1 className=" sm-text-1xl mr-12  font-bold font-lexend text-primary  md:hidden dark:text-green">
-                PULSE
-              </h1>
-            </Link>
-          </span>
-        </div>
-        <div className="flex items-center mr-4">
-          
-          <div
-            className={`mx-4 dark:text-zinc-100 rounded-full px-2 text-xl cursor-pointer flex items-center w-9 h-9`}
-            onClick={handleToggleTheme}
-          >
-            {theme ? (
-              <MoonIcon className="w-8" />
-            ) : (
-              <SunIcon className="w-8 text-dark-text-fill" />
-            )}
+      <div className="flex items-center dark:bg-zinc-800 ">
+        <div
+          className={`flex items-center justify-between h-[70px] fixed z-50 top-0 border-b border-gray-400 w-screen bg-gray-300 dark:bg-dark-bg`}
+        >
+          <div className="flex items-center ">
+            <span
+              onClick={handleClick}
+              onKeyDown={handleClick}
+              role="button"
+              tabIndex={0}
+              className="hidden md:block ml-2"
+            ></span>
+            <span>
+              <Link to="/" className="flex items-center">
+                {theme ? (
+                  <img
+                    className="cursor-pointer mx-2 fill-[blue]"
+                    src={logo}
+                    style={{ fill: '#333' }}
+                  />
+                ) : (
+                  <img
+                    className="cursor-pointer  mx-2"
+                    src={LogoWhite}
+                    alt="logoWhite"
+                  />
+                )}
+                <h1 className=" sm-text-1xl mr-12  font-bold font-lexend text-primary  md:hidden dark:text-green">
+                  PULSE
+                </h1>
+              </Link>
+            </span>
           </div>
-          <Link to={"/signup"}>
-          <span className="flex items-center font-bold text-primary dark:text-white">
-            SignUp
-          </span>
-          </Link>
+          <div className="flex items-center mr-4">
+            <div
+              className={`mx-4 dark:text-zinc-100 rounded-full px-2 text-xl cursor-pointer flex items-center w-9 h-9`}
+              onClick={handleToggleTheme}
+            >
+              {theme ? (
+                <MoonIcon className="w-8" />
+              ) : (
+                <SunIcon className="w-8 text-dark-text-fill" />
+              )}
+            </div>
+            <Link to={'/signup'}>
+              <span className="flex items-center font-bold text-primary dark:text-white">
+                SignUp
+              </span>
+            </Link>
+          </div>
         </div>
       </div>
-    </div>
-    <LoginForm />
+      <LoginForm />
       <div className=" App  grid h-screen place-items-center justify-center text-lg font-bold border-2 border-solid rounded-sm">
-        {" "}
+        {' '}
         <div id="signInDiv" className="absolute z-50"></div>
       </div>
     </>
