@@ -23,10 +23,17 @@ import PageNotFound from './../pages/PageNotFound';
 import ListAllUsersPage from './../pages/roles&permissions/ListAllUsersPage';
 import SignupForm from './../components/form/RegisterForm';
 import Programs from '../pages/programs/Programs';
+import SingleProgramDetails from '../pages/programs/SingleProgramDetails';
 import RolePermission from '../pages/roles&permissions/RolePermission';
 import Applications from '../pages/Applications';
 import ScheduleInterview from '../pages/ScheduleInterview';
 import SubmitApplication from '../pages/SubmitApplication';
+import CreateFormPage from './../pages/ApplicationForms/CreateApplicantForm';
+import UpdateSavedFormPage from './../pages/ApplicationForms/UpdateSavedForm';
+import ViewApplicationForms from './../pages/ApplicationForms/ViewApplicationForms';
+import Jobs from '../pages/JobPost/job';
+import SingleJobPostDetails from '../pages/JobPost/viewSingleJob';
+import SharedPosts from '../pages/sharedPosts';
 
 function Navigation() {
   return (
@@ -140,7 +147,7 @@ function Navigation() {
         path="/rolesandaccess"
         element={
           <PrivateRoute>
-            <ListAllUsersPage />
+            <RolePermission />
           </PrivateRoute>
         }
       />
@@ -148,7 +155,7 @@ function Navigation() {
         path="/roles"
         element={
           <PrivateRoute>
-            <RolePermission />
+            <ListAllUsersPage />
           </PrivateRoute>
         }
       />
@@ -158,6 +165,14 @@ function Navigation() {
         element={
           <PrivateRoute>
             <ScoreTypesActions />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/program/:id"
+        element={
+          <PrivateRoute>
+            <SingleProgramDetails />
           </PrivateRoute>
         }
       />
@@ -186,7 +201,7 @@ function Navigation() {
         }
       />
       <Route
-        path="/jobPost/:formLink/apply"
+        path="/jobPost/:id/apply"
         element={
           <PrivateRoute>
             <SubmitApplication />
@@ -202,6 +217,57 @@ function Navigation() {
         }
       />
       <Route path="/signup" element={<SignupForm />} />
+      <Route
+        path="/job/Post/view"
+        element={
+          <PrivateRoute>
+            <SharedPosts />
+          </PrivateRoute>
+        }
+      />
+      <Route path="/signup" element={<SignupForm />} />
+      <Route
+        element={
+          <PrivateRoute>
+            <CreateFormPage />
+          </PrivateRoute>
+        }
+        path="/create-form"
+      />
+      <Route
+        element={
+          <PrivateRoute>
+            <ViewApplicationForms />
+          </PrivateRoute>
+        }
+        path="/view-forms"
+      />
+
+      <Route
+        element={
+          <PrivateRoute>
+            <UpdateSavedFormPage />
+          </PrivateRoute>
+        }
+        path="/update-saved-form/:id"
+      />
+      <Route path="/signup" element={<SignupForm />} />
+      <Route
+        path="/Job-Post"
+        element={
+          <PrivateRoute>
+            <Jobs />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/Job/Post/:id"
+        element={
+          <PrivateRoute>
+            <SingleJobPostDetails />
+          </PrivateRoute>
+        }
+      />
     </Routes>
   );
 }

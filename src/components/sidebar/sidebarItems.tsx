@@ -18,6 +18,11 @@ export const sidebarItems1 = [
     title: 'Programs',
   },
   {
+    path: '/job-post',
+    icon: <Icon icon="ic:round-maps-home-work"></Icon>,
+    title: 'View Job Post',
+  },
+  {
     path: '/admins',
     icon: <Icon icon="ic:round-people"></Icon>,
     title: 'Admins',
@@ -121,6 +126,11 @@ export const applicantSidebarItems = [
     path: '/calendar',
     icon: <Icon icon="ant-design:calendar-filled"></Icon>,
     title: 'Calendar',
+  },
+  {
+    path: '/job/Post/view',
+    icon: <Icon icon="ant-design:calendar-filled"></Icon>,
+    title: 'Job Post ',
   },
 ];
 export const sidebarItems2 = [

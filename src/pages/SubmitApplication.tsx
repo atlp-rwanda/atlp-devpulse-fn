@@ -1,10 +1,24 @@
+import { useParams } from 'react-router';
 import NavBar from '../components/sidebar/navHeader';
-import React from 'react';
+import React, { useEffect } from 'react';
+import { fetchSingleJobPost } from '../redux/actions/fetchSingleJobPostAction';
+import { connect, useDispatch } from 'react-redux';
+import { useAppSelector } from 'hooks/hooks';
 const banner: string = require('../assets/assets/banner.png').default;
 
 type Props = {};
 
-function SubmitApplication({}: Props) {
+const SubmitApplication = (props: any) => {
+  const { fetchSingleJobPostStates, updateJobPostStates } = props;
+  const dispatch = useDispatch();
+  const { id } = useParams();
+  console.log(id);
+  useEffect(() => {
+    dispatch(fetchSingleJobPost(id));
+  }, [id]);
+
+  console.log(fetchSingleJobPostStates?.data);
+
   return (
     <>
       <div className="flex flex-col  h-screen absolute w-[100%]">
@@ -17,23 +31,13 @@ function SubmitApplication({}: Props) {
                   {/* TITLE */}
                   <div className="flex justify-center">
                     <p className="text-white  font-semibold underline font-size-10">
-                      ATLP RWANDA
+                      {fetchSingleJobPostStates?.data?.title}
                     </p>
                   </div>
                   {/* DESCRIPTION */}
                   <div className="flex  justify-start width-[80%] ml-3 mt-5">
                     <p className="text-white font-sans">
-                      Lorem Ipsum is simply dummy text of the printing and
-                      typesetting industry. Lorem Ipsum has been the industry's
-                      standard dummy text ever since the 1500s, when an unknown
-                      printer took a galley of type and scrambled it to make a
-                      type specimen book. It has survived not only five
-                      centuries, but also the leap into electronic typesetting,
-                      remaining essentially unchanged. It was popularised in the
-                      1960s with the release of Letraset sheets containing Lorem
-                      Ipsum passages, and more recently with desktop publishing
-                      software like Aldus PageMaker including versions of Lorem
-                      Ipsum.
+                      {fetchSingleJobPostStates?.data?.description}
                     </p>
                   </div>
                   {/* REQUIREMENTS */}
@@ -42,17 +46,17 @@ function SubmitApplication({}: Props) {
                       Here are the requirements:
                     </p>
                     <ul className="list-disc ml-5">
-                      <li className="text-white  font-sans">Requirement</li>
-                      <li className="text-white  font-sans">Requirement</li>
-                      <li className="text-white  font-sans">Requirement</li>
-                      <li className="text-white  font-sans">Requirement</li>
-                      <li className="text-white  font-sans">Requirement</li>
+                      {fetchSingleJobPostStates?.data?.program?.requirements.map(
+                        (item: any) => (
+                          <li className="text-white font-sans">{item}</li>
+                        ),
+                      )}
                     </ul>
                   </div>
                   {/* FORM */}
                   <div className="flex justify-center round-md mt-5">
                     <iframe
-                      src="https://docs.google.com/forms/d/e/1FAIpQLSdMlFQIwkYR8LzvYEDySyf-9ZSYDnO9LR3EvPPa5IKC4fBbcw/viewform?usp=sf_link"
+                      src={fetchSingleJobPostStates?.data?.link}
                       width="640"
                       height="1000"
                     >
@@ -68,6 +72,14 @@ function SubmitApplication({}: Props) {
       <NavBar />
     </>
   );
-}
+};
 
-export default SubmitApplication;
+// export default SubmitApplication;
+
+const mapState = (state: any) => ({
+  fetchSingleJobPostStates: state.fetchSingleJobPost,
+});
+
+export default connect(mapState, {
+  fetchSingleJobPost,
+})(SubmitApplication);

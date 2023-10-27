@@ -13,17 +13,27 @@ import getOneTraineeReducer from './getOneTraineeReducer';
 import updateTraineeAttributesReducer from './updateTraineeAttributesReducer';
 import filterTraineeReducer from './filterTraineeReducer';
 //@ts-ignore
-import { combineReducers } from 'redux';
-import traineeReducer from './traineeReducer';
-import traineesReducer from './traineeReduces';
-import clearTrashReducer from './clearTrashReducer';
-import loadDataReducer from './loadDataReducer';
-import scoreTypesReducers from './scoreTypesReducers';
-import scoreValuesReducer from './scoreValuesReducer';
-import updateStatusReducer from './updateStatusReducer';
-import { membersReducer } from './usersReducer';
-import { rolesReducer } from './rolesReducer';
-import createProgramReducer from './createProgramReducer';
+import { combineReducers } from "redux";
+import traineeReducer from "./traineeReducer";
+import traineesReducer from "./traineeReduces";
+import clearTrashReducer from "./clearTrashReducer";
+import loadDataReducer from "./loadDataReducer";
+import scoreTypesReducers from "./scoreTypesReducers";
+import scoreValuesReducer from "./scoreValuesReducer";
+import updateStatusReducer from "./updateStatusReducer";
+import { membersReducer } from "./usersReducer";
+import { rolesReducer } from "./rolesReducer";
+import createProgramReducer from "./createProgramReducer";
+import fetchProgramsReducer from "./fetchProgramsReducer";
+import fetchSingleProgramReducer from "./fetchSingleProgramReducer";
+import deleteProgramReducer from "./deleteProgramReducer";
+import fetchJobPostReducer from "./fetchJobPostReducer";
+import createJobPostReducer from "./createJobPostReducer";
+import fetchSingleJobPostReducer from './fetchSingleJobPostReducer';
+import deleteJobPostReducer from './deleteJobPostReducer';
+import programReducer from './programReducer';
+import cohortReducer from './cohortReducer';
+import updateJobPostReducer from './updateJobPostReducer';
 import {
   applicationsReducer,
   singleApplicationReducer,
@@ -38,8 +48,6 @@ const allReducers = combineReducers({
   softDeletedTrainees: softDeletedTraineeReducer,
   restore: restoretraineReducer,
   clearTrash: clearTrashReducer,
-  // viewtrainee:viewtraineReducer,
-  // addtrainee:addtraineReducer,
   trainee: traineeReducer,
   count: traineCountReducer,
   traine: traineReducer,
@@ -56,6 +64,16 @@ const allReducers = combineReducers({
   createProgram: createProgramReducer,
   myApplications: applicationsReducer,
   currentApplication: singleApplicationReducer,
+  fetchPrograms: fetchProgramsReducer,
+  fetchSingleProgram: fetchSingleProgramReducer,
+  deleteProgram: deleteProgramReducer,
+  fetchJobPost: fetchJobPostReducer,
+  fetchSingleJobPost: fetchSingleJobPostReducer,
+  createJobPost: createJobPostReducer,
+  deleteJobPost: deleteJobPostReducer,
+  updateJobPost: updateJobPostReducer,
+  programs: programReducer,
+  cohorts: cohortReducer,
 });
 
 export default allReducers;

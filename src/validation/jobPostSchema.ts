@@ -1,7 +1,19 @@
-import joi from "joi";
+import joi from 'joi';
 
-const programSchema = joi.object({
+const jobPostSchema = joi.object({
   title: joi
+    .string()
+    .pattern(/^[a-zA-Z0-9\s]+$/)
+    .required(),
+  program: joi
+    .string()
+    .pattern(/^[a-zA-Z0-9\s]+$/)
+    .required(),
+  cycle: joi
+    .string()
+    .pattern(/^[a-zA-Z0-9\s]+$/)
+    .required(),
+  cohort: joi
     .string()
     .pattern(/^[a-zA-Z0-9\s]+$/)
     .required(),
@@ -9,19 +21,6 @@ const programSchema = joi.object({
     .string()
     .pattern(/^[a-zA-Z0-9\s]+$/)
     .required(),
-  mainObjective: joi
-    .string()
-    .pattern(/^[a-zA-Z0-9\s]+$/)
-    .required(),
-  modeOfExecution: joi
-    .string()
-    .pattern(/^[a-zA-Z0-9\s]+$/)
-    .required(),
-  duration: joi
-    .string()
-    .pattern(/^[a-zA-Z0-9\s]+$/)
-    .required(),
-  requirements: joi.array(),
 });
 
-export default programSchema;
+export default jobPostSchema;
