@@ -27,6 +27,7 @@ import createProgramReducer from "./createProgramReducer";
 import fetchProgramsReducer from "./fetchProgramsReducer";
 import fetchSingleProgramReducer from "./fetchSingleProgramReducer";
 import deleteProgramReducer from "./deleteProgramReducer";
+import updateProgramReducer from "./updateProgramReducer";
 
 const allReducers = combineReducers({
   counter: counterReducer,
@@ -54,6 +55,7 @@ const allReducers = combineReducers({
   fetchPrograms: fetchProgramsReducer,
   fetchSingleProgram: fetchSingleProgramReducer,
   deleteProgram: deleteProgramReducer,
+  updateProgram: updateProgramReducer,
 });
 
 export default allReducers;

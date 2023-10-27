@@ -53,6 +53,7 @@ const fetchProgramsReducer = (
         //@ts-ignore
         data: state.data.filter((item) => item._id !== action.data._id),
       };
+
     case fetchProgramType.PROGRAM_ADDED:
       const previousItems = state.data;
       //@ts-ignore

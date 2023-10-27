@@ -406,7 +406,7 @@ const Programs = (props: any) => {
                             {fetchProgramStates.data ? (
                               fetchProgramStates.data.map((item: any) => (
                                 <tr
-                                  className="hover:bg-slate-700 transition-colors"
+                                  className="dark:hover:bg-slate-700 hover:bg-slate-300 transition-colors"
                                   key={item._id}
                                 >
                                   <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
@@ -486,7 +486,7 @@ const Programs = (props: any) => {
                                         >
                                           <li>
                                             <Link
-                                              to={`#`}
+                                              to={`/program/${item._id}/edit`}
                                               className="text-sm hover:bg-gray-100 text-gray-700 dark:hover:bg-gray-500 dark:text-white  block px-4 py-2"
                                             >
                                               Edit
@@ -606,7 +606,7 @@ const Programs = (props: any) => {
                                 </label>
                                 <div className="flex flex-row gap-2 mt-2">
                                   <Link
-                                    to={"#"}
+                                    to={`/program/${item._id}/edit`}
                                     className="text-white bg-yellow-500 border border-solid border-yellow-500 rounded-md px-2 text-xs"
                                   >
                                     Edit
