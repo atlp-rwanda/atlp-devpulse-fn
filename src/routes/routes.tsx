@@ -23,7 +23,11 @@ import PageNotFound from './../pages/PageNotFound';
 import ListAllUsersPage from './../pages/roles&permissions/ListAllUsersPage';
 import SignupForm from './../components/form/RegisterForm';
 import Programs from '../pages/programs/Programs';
+import SingleProgramDetails from '../pages/programs/SingleProgramDetails';
 import RolePermission from '../pages/roles&permissions/RolePermission';
+import CreateFormPage from './../pages/ApplicationForms/CreateApplicantForm';
+import UpdateSavedFormPage from './../pages/ApplicationForms/UpdateSavedForm';
+import ViewApplicationForms from './../pages/ApplicationForms/ViewApplicationForms';
 
 function Navigation() {
   return (
@@ -137,7 +141,7 @@ function Navigation() {
         path='/rolesandaccess'
         element={
           <PrivateRoute>
-            <ListAllUsersPage />
+            <RolePermission />
           </PrivateRoute>
         }
       />
@@ -145,7 +149,7 @@ function Navigation() {
         path='/roles'
         element={
           <PrivateRoute>
-            <RolePermission />
+            <ListAllUsersPage />
           </PrivateRoute>
         }
       />
@@ -155,6 +159,14 @@ function Navigation() {
         element={
           <PrivateRoute>
             <ScoreTypesActions />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path='/program/:id'
+        element={
+          <PrivateRoute>
+            <SingleProgramDetails />
           </PrivateRoute>
         }
       />
@@ -175,6 +187,31 @@ function Navigation() {
         }
       />
       <Route path='/signup' element={<SignupForm />} />
+      <Route
+        element={
+          <PrivateRoute>
+            <CreateFormPage />
+          </PrivateRoute>
+        }
+        path='/create-form'
+      />
+      <Route
+        element={
+          <PrivateRoute>
+            <ViewApplicationForms />
+          </PrivateRoute>
+        }
+        path='/view-forms'
+      />
+
+      <Route
+        element={
+          <PrivateRoute>
+            <UpdateSavedFormPage />
+          </PrivateRoute>
+        }
+        path='/update-saved-form/:id'
+      />
     </Routes>
   );
 }

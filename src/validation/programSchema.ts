@@ -17,6 +17,10 @@ const programSchema = joi.object({
     .string()
     .pattern(/^[a-zA-Z0-9\s]+$/)
     .required(),
+  duration: joi
+    .string()
+    .pattern(/^[a-zA-Z0-9\s]+$/)
+    .required(),
   requirements: joi.array(),
 });
 
