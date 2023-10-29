@@ -14,7 +14,6 @@ import { useAppDispatch } from '../hooks/hooks';
 import { connect, useSelector } from 'react-redux';
 import { HiDotsVertical } from 'react-icons/hi';
 import Box from '@mui/material/Box';
-import { useCustomPagination } from 'components/Pagination/useCustomPagination';
 
 type Props = {};
 

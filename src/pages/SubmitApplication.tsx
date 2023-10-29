@@ -4,7 +4,6 @@ import React, { useEffect } from 'react';
 import { fetchSingleJobPost } from '../redux/actions/fetchSingleJobPostAction';
 import { connect, useDispatch } from 'react-redux';
 import { useAppSelector } from 'hooks/hooks';
-const banner: string = require('../assets/assets/banner.png').default;
 
 type Props = {};
 
