@@ -50,7 +50,8 @@ const LoginPage = (props: any) => {
 
   return authenticated ? (
     <Navigate to="/" />
-  ) : (
+  ) : 
+  (
     <>
       <div className="flex items-center dark:bg-zinc-800 ">
         <div

@@ -20,6 +20,7 @@ export const fetchSingleJobPost = (JobPostData: any) => {
                 title
                 program {
                 title
+                requirements
                 }
                 cycle {
                 name
@@ -28,6 +29,7 @@ export const fetchSingleJobPost = (JobPostData: any) => {
                 title
                 }
                 description
+                link
             }
             }
             `,
