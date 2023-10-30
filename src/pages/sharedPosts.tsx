@@ -165,11 +165,11 @@ function SharedJobPosts(props: any) {
                                 <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
                                   <div className="flex items-center">
                                     <div className="">
-                                      <a href="">
+                                      <Link to={`/jobPost/${item?.id}/apply`}>
                                         <button className="flex bg-primary dark:bg-[#56C870] rounded-md py-2 px-4 text-white font-medium cursor-pointer">
                                           Apply
                                         </button>
-                                      </a>
+                                      </Link>
                                     </div>
                                   </div>
                                 </td>

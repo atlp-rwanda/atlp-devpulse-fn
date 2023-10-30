@@ -14,24 +14,29 @@ import CreateScoreType from "./../pages/FilterTeainee/createScoreType";
 import ScoreTypesActions from "./../pages/FilterTeainee/ScoreTypesActions";
 import ImportTraineeDetailsFromGoogleSheet from "./../pages/importAndSaveManyTraineesFromGoogleSheet/importAndSaveManyTraineesFromGoogleSheet";
 
-const Counter = React.lazy(() => import('./../components/Counter/Counter'));
-import Trash from './../pages/Trash/Trash';
-import ApplicationCycle from './../pages/ApplicationCycle/ApplicationCycle';
-import LoginPage from './../pages/LoginPage';
-import PrivateRoute from './../pages/PrivateRoute';
-import PageNotFound from './../pages/PageNotFound';
-import ListAllUsersPage from './../pages/roles&permissions/ListAllUsersPage';
-import SignupForm from './../components/form/RegisterForm';
-import Programs from '../pages/programs/Programs';
-import SingleProgramDetails from '../pages/programs/SingleProgramDetails';
-import RolePermission from '../pages/roles&permissions/RolePermission';
-import CreateFormPage from './../pages/ApplicationForms/CreateApplicantForm';
-import UpdateSavedFormPage from './../pages/ApplicationForms/UpdateSavedForm';
-import ViewApplicationForms from './../pages/ApplicationForms/ViewApplicationForms';
+const Counter = React.lazy(() => import("./../components/Counter/Counter"));
+import Trash from "./../pages/Trash/Trash";
+import ApplicationCycle from "./../pages/ApplicationCycle/ApplicationCycle";
+import LoginPage from "./../pages/LoginPage";
+import PrivateRoute from "./../pages/PrivateRoute";
+import PageNotFound from "./../pages/PageNotFound";
+import ListAllUsersPage from "./../pages/roles&permissions/ListAllUsersPage";
+import SignupForm from "./../components/form/RegisterForm";
+import Programs from "../pages/programs/Programs";
+import SingleProgramDetails from "../pages/programs/SingleProgramDetails";
+import RolePermission from "../pages/roles&permissions/RolePermission";
+import CreateFormPage from "./../pages/ApplicationForms/CreateApplicantForm";
+import UpdateSavedFormPage from "./../pages/ApplicationForms/UpdateSavedForm";
+import ViewApplicationForms from "./../pages/ApplicationForms/ViewApplicationForms";
 import UpdateProgram from "../pages/programs/UpdateProgram";
-import Jobs from '../pages/JobPost/job';
-import SingleJobPostDetails from '../pages/JobPost/viewSingleJob';
-import SharedPosts from '../pages/sharedPosts';
+import Jobs from "../pages/JobPost/job";
+import SingleJobPostDetails from "../pages/JobPost/viewSingleJob";
+import SharedPosts from "../pages/sharedPosts";
+import Applications from "../pages/Applications";
+import ScheduleInterview from "../pages/ScheduleInterview";
+import SubmitApplication from "../pages/SubmitApplication";
+import ApplicationDetails from "../pages/AdminAction/ViewSingleApplication";
+import Application from "../pages/AdminAction/allApplication";
 
 function Navigation() {
   return (
@@ -157,6 +162,30 @@ function Navigation() {
           </PrivateRoute>
         }
       />
+      <Route
+        path="/roles"
+        element={
+          <PrivateRoute>
+            <RolePermission />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/application"
+        element={
+          <PrivateRoute>
+            <Application />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/application-details/:appId"
+        element={
+          <PrivateRoute>
+            <ApplicationDetails />
+          </PrivateRoute>
+        }
+      />
       <Route path="/login" element={<LoginPage />} />
       <Route
         path="/admins"
@@ -183,10 +212,42 @@ function Navigation() {
         }
       />
       <Route
+        path="/program/:id"
+        element={
+          <PrivateRoute>
+            <SingleProgramDetails />
+          </PrivateRoute>
+        }
+      />
+      <Route
         path="/programs"
         element={
           <PrivateRoute>
             <Programs />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/myApplications"
+        element={
+          <PrivateRoute>
+            <Applications />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/scheduleInterview"
+        element={
+          <PrivateRoute>
+            <ScheduleInterview />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/jobPost/:id/apply"
+        element={
+          <PrivateRoute>
+            <SubmitApplication />
           </PrivateRoute>
         }
       />
