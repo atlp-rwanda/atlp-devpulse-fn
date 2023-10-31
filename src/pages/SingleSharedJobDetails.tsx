@@ -1,9 +1,9 @@
 import { useParams } from 'react-router';
-import NavBar from '../../components/sidebar/navHeader';
+import NavBar from '../components/sidebar/navHeader';
 import { BsFillPersonLinesFill } from 'react-icons/bs';
 import React, { useEffect, useState } from 'react';
-import { fetchSingleJobPost } from '../../redux/actions/fetchSingleJobPostAction';
-import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
+import { fetchSingleJobPost } from '../redux/actions/fetchSingleJobPostAction';
+import { useAppDispatch, useAppSelector } from '../hooks/hooks';
 import { connect } from 'react-redux';
 
 const SingleJobPostDetails = (props: any) => {
@@ -22,7 +22,7 @@ const SingleJobPostDetails = (props: any) => {
         <div className="flex flex-col justify-start mt-24 items-start p-5 w-[95%] lg:w-1/2 md_:mx-auto overflow-hidden dark:bg-dark-bg">
           <h2 className="text-white font-bold my-5">
             <BsFillPersonLinesFill className="float-left m-1" />
-            Job Post information
+            Job Post Details
           </h2>
           <div className="flex flex-col justify-center gap-3 mb-8">
             {fetchSingleJobPostStates?.data != null && (
@@ -57,12 +57,14 @@ const SingleJobPostDetails = (props: any) => {
                     {fetchSingleJobPostStates.data.description}
                   </p>
                 </div>
-                <button
-                  type="submit"
-                  className="flex bg-primary dark:bg-[#56C870] rounded-md py-2 px-4 text-white font-medium cursor-pointer"
-                >
-                  Share Post
-                </button>
+                <a href="/#/job/Post/view">
+                  <button
+                    type="submit"
+                    className="flex justify-center rounded w-15 px-5 py-1 mt-10 bg-green text-white transition-colors hover:bg-dark-frame-bg hover:text-green hover:border hover:border-green"
+                  >
+                    Back
+                  </button>
+                </a>
               </>
             )}
           </div>

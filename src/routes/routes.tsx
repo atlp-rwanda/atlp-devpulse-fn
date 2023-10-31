@@ -35,6 +35,7 @@ import SharedPosts from '../pages/sharedPosts';
 import Applications from '../pages/Applications';
 import ScheduleInterview from '../pages/ScheduleInterview';
 import SubmitApplication from '../pages/SubmitApplication';
+import SingleSharedJobDetails from '../pages/SingleSharedJobDetails';
 
 function Navigation() {
   return (
@@ -289,6 +290,14 @@ function Navigation() {
         element={
           <PrivateRoute>
             <SingleJobPostDetails />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/JobPost/view/:id"
+        element={
+          <PrivateRoute>
+            <SingleSharedJobDetails />
           </PrivateRoute>
         }
       />

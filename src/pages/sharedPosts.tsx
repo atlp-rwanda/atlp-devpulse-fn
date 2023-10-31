@@ -16,7 +16,6 @@ import { getAllCycles } from '../redux/actions/cyclesActions';
 import { getAllCohorts } from '../redux/actions/cohortActions';
 import { connect, useSelector } from 'react-redux';
 
-
 function SharedJobPosts(props: any) {
   const [fetchProgram, setfetchProgram] = useState([]);
   const [fetchCycle, setfetchCycle] = useState([]);
@@ -105,6 +104,9 @@ function SharedJobPosts(props: any) {
                                 </th>
                               }
                               <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
+                                View
+                              </th>
+                              <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
                                 Action
                               </th>
                             </tr>
@@ -159,6 +161,18 @@ function SharedJobPosts(props: any) {
                                       <p className="text-gray-900 text-center dark:text-white whitespace-no-wrap">
                                         {item?.description}
                                       </p>
+                                    </div>
+                                  </div>
+                                </td>
+                                <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
+                                  <div className="flex items-center">
+                                    <div className="">
+                                      <Link
+                                        to={`/JobPost/view/${item.id}`}
+                                        className="flex bg-primary dark:bg-[#56C870] rounded-md py-2 px-4 text-white font-medium cursor-pointer"
+                                      >
+                                        View
+                                      </Link>
                                     </div>
                                   </div>
                                 </td>

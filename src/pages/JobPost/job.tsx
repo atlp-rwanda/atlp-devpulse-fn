@@ -237,7 +237,7 @@ const Jobs = (props: any) => {
                 </div>
               </div>
               <button
-                className="flex justify-self-start self-start rounded w-15 px-5 py-1 mt-10 bg-green ml-56 text-white transition-colors hover:bg-dark-frame-bg hover:text-green hover:border hover:border-green"
+                className="flex justify-center rounded w-15 px-5 py-1 mt-10 bg-green text-white transition-colors hover:bg-dark-frame-bg hover:text-green hover:border hover:border-green"
                 onClick={validation}
               >
                 Submit
@@ -486,6 +486,7 @@ const Jobs = (props: any) => {
                         ))}
                       </div>
                     </div>
+                  </div>
                     <div className="py-3 flex items-center text-center justify-center pt-10">
                       <div className="pb-1">
                         <label htmlFor="" className="dark:text-zinc-100">
@@ -601,7 +602,6 @@ const Jobs = (props: any) => {
                         </div>
                       </div>
                     </div>
-                  </div>
                 </div>
               </div>
             </div>
