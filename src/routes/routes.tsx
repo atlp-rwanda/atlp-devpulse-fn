@@ -38,6 +38,8 @@ import SubmitApplication from '../pages/SubmitApplication';
 import GradingSystemPage from "../pages/GradingSystemPage";
 import ListApplications from './../pages/Applications/AdminViewApplications';
 import ApplicationDetails from '../pages/Applications/ViewSingleApplication';
+import SingleSharedJobPostDetails from '../pages/singleSharedJobDetails';
+import AdminPostJob from '../pages/AdminPostJob';
 
 function Navigation() {
   const roleName = localStorage.getItem('roleName');
@@ -52,7 +54,7 @@ function Navigation() {
           </PrivateRoute>
         }
       />
-            <Route
+      <Route
         path="/application-details/:appId"
         element={
           <PrivateRoute>
@@ -142,8 +144,8 @@ function Navigation() {
       />
       <Route
         path="/"
-        element={roleName === 'applicant' ?
-          (
+        element={
+          roleName === 'applicant' ? (
             <PrivateRoute>
               <Applications />
             </PrivateRoute>
@@ -152,7 +154,6 @@ function Navigation() {
               <Trainee />
             </PrivateRoute>
           )
-
         }
       />
       <Route
@@ -251,7 +252,14 @@ function Navigation() {
             <SubmitApplication />
           </PrivateRoute>
         }
-
+      />
+      <Route
+        path="/job/post/view/:id"
+        element={
+          <PrivateRoute>
+            <AdminPostJob />
+          </PrivateRoute>
+        }
       />
       <Route
         path="*"
@@ -321,15 +329,21 @@ function Navigation() {
       />
       <Route
         element={
-           <PrivateRoute>
+          <PrivateRoute>
             <ListApplications />
-           </PrivateRoute>
+          </PrivateRoute>
         }
-        path='/view-applications'
-       />
-
+        path="/view-applications"
+      />
+      <Route
+        path="/Job/Post/view/:id"
+        element={
+          <PrivateRoute>
+            <SingleSharedJobPostDetails />
+          </PrivateRoute>
+        }
+      />
     </Routes>
-
   );
 }
 
