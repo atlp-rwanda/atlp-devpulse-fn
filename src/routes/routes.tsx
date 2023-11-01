@@ -36,6 +36,7 @@ import Applications from '../pages/Applications';
 import ScheduleInterview from '../pages/ScheduleInterview';
 import SubmitApplication from '../pages/SubmitApplication';
 import GradingSystemPage from "../pages/GradingSystemPage";
+import ListApplications from './../pages/Applications/AdminViewApplications';
 
 function Navigation() {
   const roleName = localStorage.getItem('roleName');
@@ -276,7 +277,6 @@ function Navigation() {
         }
         path="/view-forms"
       />
-
       <Route
         element={
           <PrivateRoute>
@@ -310,7 +310,17 @@ function Navigation() {
           </PrivateRoute>
         }
       />
+      <Route
+        element={
+           <PrivateRoute>
+            <ListApplications />
+           </PrivateRoute>
+        }
+        path='/view-applications'
+       />
+
     </Routes>
+
   );
 }
 
