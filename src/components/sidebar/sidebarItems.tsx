@@ -1,22 +1,30 @@
 import React from 'react';
 import { Icon } from '@iconify/react';
 
-export const sidebarItems1 = [
+export const entity = [
   {
-    path: '/dashboard',
-    icon: <Icon icon="fontisto:pie-chart-1"></Icon>,
-    title: 'Dashboard',
-  },
-  {
-    path: '/organisations',
+    title: "User",
+    path: "/Trainee-applicants",
     icon: <Icon icon="fluent:people-team-20-filled"></Icon>,
-    title: 'Organisations',
+    scope: [
+      {
+        path: "/filter_trainee-applicants",
+        icon: <Icon icon="fontisto:pie-chart-1"></Icon>,
+        title: "Trainees-Applicants",
+      },
+      {
+        path: "/Trainee-applicants/create",
+        icon: <Icon icon="ic:round-people"></Icon>,
+        title: "Create Trainee",
+      },
+      {
+        path: "/dashboard",
+        icon: <Icon icon="fontisto:pie-chart-1"></Icon>,
+        title: "Dashboard",
+      },
+    ],
   },
-  {
-    path: '/programs',
-    icon: <Icon icon="ic:round-maps-home-work"></Icon>,
-    title: 'Programs',
-  },
+
   {
     path: '/job-post',
     icon: <Icon icon="ic:round-maps-home-work"></Icon>,
@@ -25,52 +33,115 @@ export const sidebarItems1 = [
   {
     path: '/admins',
     icon: <Icon icon="ic:round-people"></Icon>,
-    title: 'Admins',
+    title: "Admins",
+    scope: []
   },
+
   {
-    path: '/domains',
-    icon: <Icon icon="akar-icons:globe"></Icon>,
-    title: 'Domains',
+    title: "Programs",
+    path: "/programs",
+    icon: <Icon icon="ic:round-maps-home-work"></Icon>,
+    scope: [
+      {
+        path: "/programs/list",
+        icon: <Icon icon="fontisto:pie-chart-1"></Icon>,
+        title: "View Programs",
+      },
+      {
+        path: "/programs/create",
+        icon: <Icon icon="fontisto:pie-chart-1"></Icon>,
+        title: "Create Programs",
+      },
+      {
+        path: "/dashboard",
+        icon: <Icon icon="fontisto:pie-chart-1"></Icon>,
+        title: "Dashboard",
+      },
+    ],
   },
+  
   {
-    path: '/Trainee-applicants',
-    icon: <Icon icon="ic:round-people"></Icon>,
-    title: 'Trainees-Applicants',
-  },
-  {
-    path: '/attendance',
-    icon: <Icon icon="teenyicons:clipboard-tick-solid"></Icon>,
-    title: 'Attendance',
-  },
-  {
-    path: '/performance',
-    icon: <Icon icon="fa6-solid:arrow-trend-up"></Icon>,
-    title: 'Performance',
-  },
-  {
-    path: '/sessions',
-    icon: <Icon icon="fluent:clipboard-bullet-list-ltr-16-filled"></Icon>,
-    title: 'Sessions',
-  },
-  {
-    path: '/coordinators',
-    icon: <Icon icon="fluent:people-team-20-filled"></Icon>,
-    title: 'Coordinators',
-  },
-  {
-    path: '/cohort',
+    title: "Cohorts",
     icon: <Icon icon="fa6-solid:graduation-cap"></Icon>,
-    title: 'Cohorts',
+    path: "/cohort",
+    scope: [
+      {
+        path: "/cohorts/list",
+        icon: <Icon icon="fontisto:pie-chart-1"></Icon>,
+        title: "View Cohorts",
+      },
+      {
+        path: "/cohorts/create",
+        icon: <Icon icon="fontisto:pie-chart-1"></Icon>,
+        title: "Create Cohort",
+      },
+      {
+        path: "/dashboard",
+        icon: <Icon icon="fontisto:pie-chart-1"></Icon>,
+        title: "Dashboard",
+      },
+    ],
   },
   {
-    path: '/cycles',
+    title: "Application",
+    icon: <Icon icon="fontisto:pie-chart-1"></Icon>,
+    path: "/application",
+    scope: [
+      {
+        path: "/application/list",
+        icon: <Icon icon="fontisto:pie-chart-1"></Icon>,
+        title: "View Applications",
+      },
+      {
+        path: "/application/create",
+        icon: <Icon icon="fontisto:pie-chart-1"></Icon>,
+        title: "Create Application",
+      },
+      {
+        path: "/dashboard",
+        icon: <Icon icon="fontisto:pie-chart-1"></Icon>,
+        title: "Dashboard",
+      },
+    ],
+  },
+  {
+    title: "Job Application",
+    icon: <Icon icon="fontisto:pie-chart-1"></Icon>,
+    path: "/jobapplication",
+    scope: [
+      {
+        path: "/jobapplication/list",
+        icon: <Icon icon="fontisto:pie-chart-1"></Icon>,
+        title: "View Job Post",
+      },
+      {
+        path: "/jobapplication/create",
+        icon: <Icon icon="fontisto:pie-chart-1"></Icon>,
+        title: "Create Job Application",
+      },
+    ],
+  },
+  {
+    title: "Cycle",
     icon: <Icon icon="game-icons:cycle"></Icon>,
-    title: 'Application Cycles',
-  },
-  {
-    path: '/updatedRatings',
-    icon: <Icon icon="charm:refresh"></Icon>,
-    title: 'Updated Ratings',
+    path: "/cycles",
+    scope: [
+      {
+        path: "/cycle/list",
+        icon: <Icon icon="fontisto:pie-chart-1"></Icon>,
+        title: "View Cycle",
+      },
+      {
+        path: "/jobapplication/create",
+        icon: <Icon icon="fontisto:pie-chart-1"></Icon>,
+        title: "Create A  Cycle",
+      },
+      {
+        path: "/dashboard",
+        icon: <Icon icon="fontisto:pie-chart-1"></Icon>,
+        title: "Dashboard",
+      },
+    ],
   },
   {
     path: '/grading',
@@ -83,22 +154,12 @@ export const sidebarItems1 = [
     title: 'Roles & Access',
   },
   {
-    path: '/notifications',
-    icon: <Icon icon="heroicons-solid:inbox-in"></Icon>,
-    title: 'Notifications',
-  },
-  {
     path: '/myApplications',
     icon: <Icon icon="material-symbols:wysiwyg-rounded"></Icon>,
     title: 'My Applications',
   },
   {
-    path: '/calendar',
-    icon: <Icon icon="ant-design:calendar-filled"></Icon>,
-    title: 'Calendar',
-  },
-  {
-    path: '/Trash',
+    path: "/Trash",
     icon: <Icon icon="fa-solid:trash"></Icon>,
     title: 'Trash',
   },
