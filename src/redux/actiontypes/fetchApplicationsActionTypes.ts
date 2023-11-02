@@ -6,25 +6,25 @@ export enum fetchApplicationsType {
     APPLICATION_ADDED = "APPLICATION_ADDED",
   }
   
-  interface actionApplicationsPending {
+  export interface actionApplicationsPending {
     type: fetchApplicationsType.FETCH_APPLICATIONS_LOADING;
   }
-  interface actionApplicationsSuccess {
+  export interface actionApplicationsSuccess {
     type: fetchApplicationsType.FETCH_APPLICATIONS_SUCCESS;
     data: ApplicationData[]; 
   }
   
-  interface actionApplicationsFail {
+  export interface actionApplicationsFail {
     type: fetchApplicationsType.FETCH_APPLICATIONS_FAIL;
     error: any;
   }
   
-  interface actionApplicationsRefresh {
+  export interface actionApplicationsRefresh {
     type: fetchApplicationsType.APPLICATION_REMOVED;
     data: string; 
   }
   
-  interface actionApplicationsRenew {
+ export interface actionApplicationsRenew {
     type: fetchApplicationsType.APPLICATION_ADDED;
     data: string; 
   }
@@ -36,7 +36,7 @@ export enum fetchApplicationsType {
     | actionApplicationsRefresh
     | actionApplicationsRenew;
   
-  interface ApplicationData {
+  export interface ApplicationData {
     _id: string;
     firstName: string;
     lastName: string;
@@ -53,7 +53,7 @@ export enum fetchApplicationsType {
     associatedFormData: FormData;
   }
   
-  interface FormData {
+  export interface FormData {
     _id: string;
     title: string;
     description: string;
@@ -61,7 +61,7 @@ export enum fetchApplicationsType {
     jobpost: Jobpost;
   }
   
-  interface Jobpost {
+  export interface Jobpost {
     _id: string;
     title: string;
     cycle: ApplicationCycleField;
@@ -72,14 +72,14 @@ export enum fetchApplicationsType {
     label: string;
   }
   
-  interface CohortField {
+  export interface CohortField {
     id: string;
     title: string;
     start: string;
     end: string;
   }
   
-  interface ProgramField {
+ export interface ProgramField {
     _id: string;
     title: string;
     description: string;
@@ -89,7 +89,7 @@ export enum fetchApplicationsType {
     duration: string;
   }
   
-  interface ApplicationCycleField {
+  export interface ApplicationCycleField {
     id: string;
     name: string;
     startDate: string;

@@ -1,6 +1,6 @@
 import { fetchApplicationsType } from "../actiontypes/fetchApplicationsActionTypes";
 
-interface ApplicationData {
+export interface ApplicationData {
     _id: string;
     firstName: string;
     lastName: string;
@@ -15,6 +15,7 @@ interface ApplicationData {
     dateOfSubmission: string;
     formUrl: string;
     associatedFormData: FormData;
+    delete_at: boolean;
   }
   
   interface State {
@@ -60,7 +61,7 @@ interface ApplicationData {
           applications: action.data as ApplicationData[],
           count: (action.data as ApplicationData[]).length,
         };
-  
+
       case fetchApplicationsType.FETCH_APPLICATIONS_FAIL:
         return {
           ...state,
