@@ -41,7 +41,6 @@ const ApplicationDetails = () => {
                   Applicant Information
                 </h2>
 
-                {/* <div className=" m-5 sm:mt-20 sm:ml-[-12rem] md:shrink-0  lg:ml-10 lg:mt-10  "> */}
                 <div className=" grid gap-2 top-5 m-5 font-medium md:m-3">
                   {singleData[0]?.id && (
                     <>
