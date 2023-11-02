@@ -37,6 +37,7 @@ import ScheduleInterview from '../pages/ScheduleInterview';
 import SubmitApplication from '../pages/SubmitApplication';
 import GradingSystemPage from "../pages/GradingSystemPage";
 import ListApplications from './../pages/Applications/AdminViewApplications';
+import ApplicationDetails from '../pages/Applications/ViewSingleApplication';
 
 function Navigation() {
   const roleName = localStorage.getItem('roleName');
@@ -48,6 +49,14 @@ function Navigation() {
         element={
           <PrivateRoute>
             <TrainneeDetails />
+          </PrivateRoute>
+        }
+      />
+            <Route
+        path="/application-details/:appId"
+        element={
+          <PrivateRoute>
+            <ApplicationDetails />
           </PrivateRoute>
         }
       />

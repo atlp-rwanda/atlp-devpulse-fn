@@ -11,10 +11,11 @@ const ListApplications = () => {
   const [activePage, setActivePage] = useState(1);
   const [itemsCountPerPage, setItemsCountPerPage] = useState(10);
 
-  const [moredrop, setmoredrop] = useState('');
-  const onSubmitHandler = (userid: any) => {
-    if (!moredrop) setmoredrop(userid);
-    if (moredrop) setmoredrop('');
+  const [isDrop, setDrop] = useState<String | Number>("");
+
+  const onSubmitHandler = (appId: any) => {
+    if (!isDrop) setDrop(appId);
+    if (isDrop) setDrop("");
   };
 
   useEffect(() => {
@@ -40,7 +41,6 @@ const ListApplications = () => {
   };
 
   const totalApplications = applications?.length;
-  console.log(totalApplications);
 
   return (
     <>
@@ -136,7 +136,7 @@ const ListApplications = () => {
                                           />
                                           <div
                                             className={`${
-                                              moredrop === item._id
+                                             isDrop === item._id
                                                 ? 'block'
                                                 : 'hidden'
                                             } absolute bg-white dark:bg-dark-tertiary dark:text-white text-base z-50 list-none divide-y divide-gray-100 rounded shadow my-4`}
