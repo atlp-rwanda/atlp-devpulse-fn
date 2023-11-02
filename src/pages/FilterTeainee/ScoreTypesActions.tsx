@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { connect } from "react-redux";
-import { toast } from "react-toastify";
 import * as icons from "react-icons/ai";
 import {
   createScoreType,
@@ -11,22 +10,13 @@ import {
 } from "../../redux/actions/scoreTypesActions";
 import { useAppDispatch } from "../../hooks/hooks";
 import { getAllScoreValues } from "../../redux/actions/scoreValueActions";
-import * as BsIcons from "react-icons/bs";
-import * as AiIcons from "react-icons/ai";
-import * as IoIcons from "react-icons/io5";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import NavBar from "../../components/sidebar/navHeader";
-import DataTable from "components/TableData";
-import filterTraineeReducer from "../../redux/reducers/filterTraineeReducer";
 import { HiDotsVertical } from "react-icons/hi";
 import { Link } from "react-router-dom";
-import {
-  DOTS,
-  useCustomPagination,
-} from "../../components/Pagination/useCustomPagination";
 import Select from "react-select";
 import { fetchPrograms } from "../../redux/actions/fetchProgramsAction";
 
@@ -72,13 +62,9 @@ const ScoreTypesActions = (props: any) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const [activeCycle, setActiveCycle] = useState<number | undefined>(undefined);
-  const [selectedOption, setSelectedOption] = useState("");
-  const [selectedProgram, setSelectedProgram] = useState("");
-  const [programDuration, setProgramDuration] = useState("");
   const [assessmentModel, setAssmentModel] = useState(false);
   const [itemsPerPage, setItemsPerPage] = useState<number>(10);
   const [page, setPage] = useState(0);
-  const [openAssessment, setOpenAssessment] = useState(false);
   const handleCloseUpdateModal = (e: any) => {
     e.preventDefault();
     setOpenUpdateModel(false);
@@ -196,57 +182,79 @@ const ScoreTypesActions = (props: any) => {
             singleViewModal === true ? "block" : "hidden"
           }`}
         >
-          <div className="bg-white dark:bg-dark-bg w-full mt-48 mb-9 max-h-[900px] sm_:mt-40 sm_:mb-10 md_:max-h-full overflow-auto md_:w-[65%] md-sm:w-[95%] rounded-lg p-4 pb-8">
+          <div className="bg-white dark:bg-dark-bg w-full mt-48 mb-9 max-h-[900px] sm_:mt-40 sm_:mb-10 md_:max-h-full overflow-auto md_:w-fit md-sm:w-[95%] rounded-lg p-4 pb-8">
             <div className="card-title w-full flex flex-wrap justify-center items-center">
-              <h3 className="font-bold text-sm dark:text-white text-center w-11/12 ">
+              <h2 className="font-bold text-sm dark:text-white text-center w-11/12 ">
                 <icons.AiOutlineClose
                   className="float-right text-3xl cursor-pointer"
                   onClick={() => setsingleViewModal(false)}
                 />
                 {"Assessment details"}
-              </h3>
-              <div className="flex flex-col justify-center gap-3 mb-8">
+              </h2>
+              <div className="flex flex-col w-full justify-center mt-8 mb-8">
                 {scoreTypes.obj !== null ? (
-                  <>
-                    <div className="flex flex-col">
-                      <h3 className="dark:text-white text-black">Title</h3>
-                      <p className="text-gray-500 text-sm dark:text-gray-400">
-                        {scoreTypes.obj.title}
-                      </p>
+                  <div className="flex flex-col md_:flex-row md_:justify-around gap-3 w-full">
+                    <div className="flex flex-col gap-3">
+                      <div className="flex flex-col">
+                        <h3 className="dark:text-white text-black">Title</h3>
+                        <p className="text-gray-500 text-sm dark:text-gray-400">
+                          {scoreTypes.obj.title}
+                        </p>
+                      </div>
+                      <div className="flex flex-col">
+                        <h3 className="dark:text-white text-black">
+                          Program description
+                        </h3>
+                        <p className="text-gray-500 text-sm dark:text-gray-400">
+                          {scoreTypes.obj.description}
+                        </p>
+                      </div>
+                      <div className="flex flex-col">
+                        <h3 className="dark:text-white text-black">
+                          Engagement mode
+                        </h3>
+                        <p className="text-gray-500 text-sm dark:text-gray-400">
+                          {scoreTypes.obj.modeOfEngagement}
+                        </p>
+                      </div>
+                      <div className="flex flex-col">
+                        <h3 className="dark:text-white text-black">Duration</h3>
+                        <p className="text-gray-500 text-sm dark:text-gray-400">
+                          {`${scoreTypes.obj.duration} month(s)`}
+                        </p>
+                      </div>
+                      <div className="flex flex-col">
+                        <h3 className="dark:text-white text-black">Program</h3>
+                        <p className="text-gray-500 text-sm dark:text-gray-400">
+                          {scoreTypes.obj.program === null
+                            ? "N/A"
+                            : scoreTypes.obj.program}
+                        </p>
+                      </div>
                     </div>
-                    <div className="flex flex-col">
-                      <h3 className="dark:text-white text-black">
-                        Program description
-                      </h3>
-                      <p className="text-gray-500 text-sm dark:text-gray-400">
-                        {scoreTypes.obj.description}
-                      </p>
+                    <div className="flex flex-col gap-3">
+                      <div className="flex flex-col">
+                        <h3 className="dark:text-white text-black">
+                          Start date
+                        </h3>
+                        <p className="text-gray-500 text-sm dark:text-gray-400">
+                          {scoreTypes.obj.startDate}
+                        </p>
+                      </div>
+                      <div className="flex flex-col">
+                        <h3 className="dark:text-white text-black">End date</h3>
+                        <p className="text-gray-500 text-sm dark:text-gray-400">
+                          {scoreTypes.obj.endDate}
+                        </p>
+                      </div>
                     </div>
-                    <div className="flex flex-col">
-                      <h3 className="dark:text-white text-black">
-                        Engagement mode
-                      </h3>
-                      <p className="text-gray-500 text-sm dark:text-gray-400">
-                        {scoreTypes.obj.modeOfEngagement}
-                      </p>
-                    </div>
-                    <div className="flex flex-col">
-                      <h3 className="dark:text-white text-black">Duration</h3>
-                      <p className="text-gray-500 text-sm dark:text-gray-400">
-                        {`${scoreTypes.obj.duration} month(s)`}
-                      </p>
-                    </div>
-                    <div className="flex flex-col">
-                      <h3 className="dark:text-white text-black">Program</h3>
-                      <p className="text-gray-500 text-sm dark:text-gray-400">
-                        {scoreTypes.obj.program === null
-                          ? "N/A"
-                          : scoreTypes.obj.program}
-                      </p>
-                    </div>
-                  </>
+                  </div>
                 ) : (
-                  "loading..."
+                  <div className="flex justify-center items-center w-full">
+                    <h3 className="font-bold text-sm dark:text-white text-center w-11/12 ">
+                      loading...
+                    </h3>
+                  </div>
                 )}
               </div>
             </div>
@@ -381,8 +389,8 @@ const ScoreTypesActions = (props: any) => {
           ) : (
             ""
           )}
-          <div className="">
-            <div className="flex px-8 flex-row space-x-8">
+          <div className="px-3">
+            <div className="flex px-8 flex-row space-x-8 mb-4">
               <button
                 onClick={() => handleOpenCreateCycle()}
                 className="flex bg-primary dark:bg-[#56C870] rounded-md py-2 px-4 text-white font-medium cursor-pointer"
@@ -391,10 +399,10 @@ const ScoreTypesActions = (props: any) => {
                 Assessments
               </button>
             </div>
-            <div className="bg-white  dark:bg-dark-bg shadow-lg rounded-md w-[100%] mx-auto lg:w-[95%]">
+            <div className="bg-white dark:bg-dark-bg shadow-lg rounded-md w-[100%] px-2 mx-auto lg:w-[95%]">
               <div>
                 <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
-                  <div className="inline-block w-full h-[55vh] lg:min-w-full shadow rounded-lg overflow-y-scroll">
+                  <div className="hidden md_:inline-block w-full h-[55vh] lg:min-w-full shadow rounded-lg overflow-y-scroll">
                     <table className="min-w-full leading-normal">
                       <thead className="w-full px-32 sticky top-0">
                         <tr>
@@ -449,7 +457,7 @@ const ScoreTypesActions = (props: any) => {
                               <div className="flex items-center">
                                 <div className="">
                                   <p className="text-gray-900 items-center dark:text-white whitespace-no-wrap">
-                                    {values.duration} month
+                                    {values.duration} month(s)
                                   </p>
                                 </div>
                               </div>
@@ -466,7 +474,7 @@ const ScoreTypesActions = (props: any) => {
                                 <div
                                   className={`${
                                     moredrop === values.id ? "block" : "hidden"
-                                  } absolute right-10  bg-white dark:bg-dark-tertiary  dark:text-white text-base z-50 list-none divide-y divide-gray-100 rounded shadow my-4`}
+                                  } absolute right-10  bg-white dark:bg-dark-tertiary  dark:text-white text-base z-30 list-none divide-y divide-gray-100 rounded shadow my-4`}
                                   id="dropdown"
                                 >
                                   <ul
@@ -512,6 +520,80 @@ const ScoreTypesActions = (props: any) => {
                         ))}
                       </tbody>
                     </table>
+                  </div>
+                  <div className="flex md_:hidden flex-col gap-4 w-full rounded-lg">
+                    <label className="text-left text-black-text dark:text-white text-lg font-bold">
+                      Assessments
+                    </label>
+                    {scoreTypesArray?.map((values: any, i: number) => (
+                      <div
+                        key={values.id}
+                        className="flex flex-col w-full gap-2 border border-solid border-transparent border-t-black dark:border-t-white border-t-4 rounded-t-sm"
+                      >
+                        <div className="flex flex-col w-full mt-3">
+                          <label className="text-left text-gray-400 text-sm">
+                            Title
+                          </label>
+                          <label className="text-left text-black-text dark:text-white text-base font-normal">
+                            {values.title}
+                          </label>
+                        </div>
+                        <div className="flex flex-col w-full">
+                          <label className="text-left text-gray-400 text-sm">
+                            Description
+                          </label>
+                          <label className="text-left text-black-text dark:text-white text-base font-normal">
+                            {values.description}
+                          </label>
+                        </div>
+                        <div className="flex flex-col w-full">
+                          <label className="text-left text-gray-400 text-sm">
+                            Mode of engagement
+                          </label>
+                          <label className="text-left text-black-text dark:text-white text-base font-normal">
+                            {values.modeOfEngagement}
+                          </label>
+                        </div>
+                        <div className="flex flex-col w-full">
+                          <label className="text-left text-gray-400 text-sm">
+                            Duration
+                          </label>
+                          <label className="text-left text-black-text dark:text-white text-base font-normal">
+                            {values.duration} month(s)
+                          </label>
+                        </div>
+
+                        <div className="flex flex-col w-full">
+                          <label className="text-left text-gray-400 text-sm">
+                            Action
+                          </label>
+                          <div className="flex flex-row gap-2 mt-2">
+                            <Link
+                              to={`#`}
+                              className="text-white bg-yellow-500 border border-solid border-yellow-500 rounded-md px-2 text-xs"
+                            >
+                              Edit
+                            </Link>
+                            <Link
+                              to={`#`}
+                              onClick={() => {
+                                handleViewAssessment(values.id);
+                                setsingleViewModal(true);
+                              }}
+                              className="text-white bg-green border border-solid border-green rounded-md px-2 text-xs"
+                            >
+                              View
+                            </Link>
+                            <Link
+                              to={"#"}
+                              className="text-white bg-red-700 border border-solid border-red-700 rounded-md px-2 text-xs"
+                            >
+                              Delete
+                            </Link>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
                 <div className="py-3 flex items-center text-center justify-center pt-10">

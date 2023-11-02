@@ -73,8 +73,30 @@ export const getOneScoreType =
         },
       });
       const scoreType = await datas.data.data.getOneScoreType;
-      console.log(scoreType);
-      dispatch(creator(GET_ONE_SCORE_TYPE, scoreType));
+      let timestampStart = parseInt(scoreType.startDate);
+      let timestampEnd = parseInt(scoreType.endDate);
+      let dateStart = new Date(timestampStart);
+      let dateEnd = new Date(timestampEnd);
+
+      let startDate = dateStart.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        timeZoneName: "short",
+      });
+      let endDate = dateEnd.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        timeZoneName: "short",
+      });
+
+      let assessment = {
+        ...scoreType,
+        startDate,
+        endDate,
+      };
+      dispatch(creator(GET_ONE_SCORE_TYPE, assessment));
     } catch (error) {
       console.log(error);
     }
