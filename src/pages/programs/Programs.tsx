@@ -394,9 +394,9 @@ const Programs = (props: any) => {
                               <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
                                 {"Mode of execution"}
                               </th>
-                              <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
+                              {/* <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
                                 {"Requirements"}
-                              </th>
+                              </th> */}
                               <th className="border-b-2 sm:text-center border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
                                 {"action"}
                               </th>
@@ -438,7 +438,7 @@ const Programs = (props: any) => {
                                     </div>
                                   </td>
 
-                                  <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
+                                  {/* <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
                                     <div className="flex items-center">
                                       <div className="">
                                         {item.requirements
@@ -461,7 +461,7 @@ const Programs = (props: any) => {
                                           ))}
                                       </div>
                                     </div>
-                                  </td>
+                                  </td> */}
                                   <td>
                                     <div>
                                       <HiDotsVertical

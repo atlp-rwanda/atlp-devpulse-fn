@@ -105,11 +105,7 @@ const LoginPage = (props: any) => {
           </div>
         </div>
       </div>
-      <LoginForm />
-      <div className=" App  grid h-screen place-items-center justify-center text-lg font-bold border-2 border-solid rounded-sm">
-        {' '}
-        <div id="signInDiv" className="absolute z-50"></div>
-      </div>
+    <LoginForm />
     </>
   );
 };

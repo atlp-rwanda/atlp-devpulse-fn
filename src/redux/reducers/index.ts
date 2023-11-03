@@ -39,6 +39,7 @@ import {
   applicationsReducer,
   singleApplicationReducer,
 } from './applicationReducer';
+import { assessmentsReducer } from './assessmentReducer';
 
 const allReducers = combineReducers({
   counter: counterReducer,
@@ -76,6 +77,7 @@ const allReducers = combineReducers({
   cohorts: cohortReducer,
   myApplications: applicationsReducer,
   currentApplication: singleApplicationReducer,
+  assessments: assessmentsReducer,
 });
 
 export default allReducers;

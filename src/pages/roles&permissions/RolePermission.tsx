@@ -355,8 +355,8 @@ function RolePermission(props: any) {
       accessor: "description",
     },
     {
-      Header: " ",
-      accessor: "",
+      Header: "Action",
+      accessor: "action",
       Cell: ({ row }: any) => (
         <div>
           <BsIcons.BsThreeDotsVertical

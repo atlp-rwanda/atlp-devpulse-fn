@@ -78,7 +78,7 @@ const Applications = (props: any) => {
               <div className="bg-light-bg dark:bg-dark-frame-bg  min-h-screen overflow-y-hidden overflow-x-hidden lg:ml-[3rem]">
                 <div className="flex items-left px-7 lg:px-64 pt-24">
                   <Link to="/filter_trainee-applicants">
-                    <button className="flex bg-primary dark:bg-[#56C870] rounded-md py-2 mt-2 px-4 text-white font-medium cursor-pointer">
+                    <button className="flex bg-primary dark:bg-[#56C870] rounded-md py-2 mt-2 px-4 text-white font-medium cursor-pointer" disabled>
                       <icons.AiOutlineSearch className="mt-1 mr-1 font-bold" />{' '}
                       Search
                     </button>
@@ -122,9 +122,9 @@ const Applications = (props: any) => {
                                   {'Title'}
                                 </th>
 
-                                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left text-xs font-semibold text-gray-600 dark:text-white uppercase md:table-cell tracking-wider">
+                                {/* <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left text-xs font-semibold text-gray-600 dark:text-white uppercase md:table-cell tracking-wider">
                                   {'Description'}
-                                </th>
+                                </th> */}
 
                                 <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
                                   {'Date of submission'}
@@ -153,7 +153,7 @@ const Applications = (props: any) => {
                                             </div>
                                           </div>
                                         </td>
-                                        <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
+                                        {/* <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
                                           <div className="flex items-center">
                                             <div className="">
                                               <p className="text-gray-900 text-center dark:text-white whitespace-no-wrap">
@@ -164,7 +164,7 @@ const Applications = (props: any) => {
                                               </p>
                                             </div>
                                           </div>
-                                        </td>
+                                        </td> */}
 
                                         <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
                                           <div className="flex items-center">

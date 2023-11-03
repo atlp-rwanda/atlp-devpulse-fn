@@ -40,3 +40,23 @@ body {
     margin-top: -8rem;
   }
 }
+/* width */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #1F2A37;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #1F2A37;
+  border-radius: 5px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
