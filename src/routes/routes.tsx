@@ -35,6 +35,8 @@ import SharedPosts from '../pages/sharedPosts';
 import Applications from '../pages/Applications';
 import ScheduleInterview from '../pages/ScheduleInterview';
 import SubmitApplication from '../pages/SubmitApplication';
+import CandidateAssessmentPage from '../pages/adminCandidate/CandidateAssessmentPage';
+import ViewCandidateRatings from '../pages/adminCandidate/ViewCandidateRatings';
 
 function Navigation() {
   return (
@@ -291,6 +293,22 @@ function Navigation() {
           <PrivateRoute>
             <SingleJobPostDetails />
           </PrivateRoute>
+        }
+      />
+      <Route
+        path="/candidates/assessments/:id"
+        element={
+          // <PrivateRoute>
+            <CandidateAssessmentPage />
+          // </PrivateRoute>
+        }
+      />
+       <Route
+        path="/candidate/assessment/:id"
+        element={
+          // <PrivateRoute>
+            <ViewCandidateRatings />
+          // </PrivateRoute>
         }
       />
     </Routes>

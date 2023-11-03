@@ -358,6 +358,14 @@ const AddTrainee = (props: any) => {
                                                     </Link>
                                                   </li>
                                                   <li>
+                                                    <Link
+                                                      to={`/candidates/assessments/${item._id}`}
+                                                      className="text-sm hover:bg-gray-100 text-gray-700  dark:text-white   dark:hover:bg-gray-500 block px-4 py-2"
+                                                    >
+                                                      Grade Assessment
+                                                    </Link>
+                                                  </li>
+                                                  <li>
                                                     <div
                                                       className="text-sm hover:bg-gray-100 text-gray-700  dark:hover:bg-gray-500 dark:text-white  block px-4 py-2"
                                                       onClick={(e: any) => {
