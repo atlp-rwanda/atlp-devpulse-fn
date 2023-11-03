@@ -8,6 +8,8 @@ import Sidebar from './../components/sidebar/sidebar';
 import NavBar from './../components/sidebar/navHeader';
 import Trainee from './../pages/TraineApplicant/Trainee';
 import FilterTrainee from './../pages/FilterTeainee/FilterTrainee';
+import FilterProgram from '../pages/programs/filterPrograms';
+import FilterJobPost from '../pages/JobPost/fiterJopPost';
 import Table from './../pages/Table';
 import UpdateTraine from './../pages/updateTrainee/traineUpdate';
 import CreateScoreType from './../pages/FilterTeainee/createScoreType';
@@ -35,6 +37,7 @@ import SharedPosts from '../pages/sharedPosts';
 import Applications from '../pages/Applications';
 import ScheduleInterview from '../pages/ScheduleInterview';
 import SubmitApplication from '../pages/SubmitApplication';
+import FilterRole from '../pages/roles&permissions/filterRolesAccess';
 
 function Navigation() {
   return (
@@ -109,6 +112,30 @@ function Navigation() {
         element={
           <PrivateRoute>
             <FilterTrainee />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/filter_programs"
+        element={
+          <PrivateRoute>
+            <FilterProgram/>
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/filter_job_post"
+        element={
+          <PrivateRoute>
+            <FilterJobPost/>
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/filter_roles_access"
+        element={
+          <PrivateRoute>
+            <FilterRole/>
           </PrivateRoute>
         }
       />
