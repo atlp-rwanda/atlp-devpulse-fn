@@ -64,6 +64,7 @@ const AddTrainee = (props: any) => {
   useEffect(() => {
     dispatch(fetchtraine(input));
   }, [delettraine, softdeletettraine, page, itemsPerPage, itemsPerPage]);
+
   const [moredrop, setmoredrop] = useState("");
   const onSubmitHandler = (userid: any) => {
     if (!moredrop) setmoredrop(userid);
