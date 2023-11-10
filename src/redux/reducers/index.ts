@@ -80,4 +80,6 @@ const allReducers = combineReducers({
   assessments: assessmentsReducer,
 });
 
+export type RootState = ReturnType<typeof allReducers>;
+
 export default allReducers;
