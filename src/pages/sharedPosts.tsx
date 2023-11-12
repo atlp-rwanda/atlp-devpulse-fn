@@ -100,9 +100,9 @@ function SharedJobPosts(props: any) {
                                 Cohort
                               </th>
                               {
-                                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
-                                  Description
-                                </th>
+                                // <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
+                                //   Description
+                                // </th>
                               }
                               <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
                                 Action
@@ -153,7 +153,7 @@ function SharedJobPosts(props: any) {
                                     </div>
                                   </div>
                                 </td>
-                                <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
+                                {/* <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
                                   <div className="flex items-center">
                                     <div className="">
                                       <p className="text-gray-900 text-center dark:text-white whitespace-no-wrap">
@@ -161,7 +161,7 @@ function SharedJobPosts(props: any) {
                                       </p>
                                     </div>
                                   </div>
-                                </td>
+                                </td> */}
                                 <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
                                   <div className="flex items-center">
                                     <div className="">
@@ -223,14 +223,14 @@ function SharedJobPosts(props: any) {
                                 {item?.cohort?.title}
                               </label>
                             </div>
-                            <div className="flex flex-col w-full">
+                            {/* <div className="flex flex-col w-full">
                               <label className="text-left text-gray-400 text-sm">
                                 Description
                               </label>
                               <div className="text-left text-black-text dark:text-white text-base font-normal">
                                 {item?.description}
                               </div>
-                            </div>
+                            </div> */}
                           </div>
                         ))}
                       </div>

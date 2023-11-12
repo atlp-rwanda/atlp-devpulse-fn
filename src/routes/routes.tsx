@@ -35,8 +35,9 @@ import SharedPosts from '../pages/sharedPosts';
 import Applications from '../pages/Applications';
 import ScheduleInterview from '../pages/ScheduleInterview';
 import SubmitApplication from '../pages/SubmitApplication';
-import GradingSystemPage from "../pages/GradingSystemPage";
+import GradingSystemPage from '../pages/GradingSystemPage';
 import ListApplications from './../pages/Applications/AdminViewApplications';
+import ShareApplication from '../pages/ShareApplication';
 
 function Navigation() {
   const roleName = localStorage.getItem('roleName');
@@ -133,8 +134,8 @@ function Navigation() {
       />
       <Route
         path="/"
-        element={roleName === 'applicant' ?
-          (
+        element={
+          roleName === 'applicant' ? (
             <PrivateRoute>
               <Applications />
             </PrivateRoute>
@@ -143,7 +144,6 @@ function Navigation() {
               <Trainee />
             </PrivateRoute>
           )
-
         }
       />
       <Route
@@ -242,8 +242,8 @@ function Navigation() {
             <SubmitApplication />
           </PrivateRoute>
         }
-
       />
+      <Route path="/jobPost/:id" element={<ShareApplication />} />
       <Route
         path="*"
         element={
@@ -312,15 +312,13 @@ function Navigation() {
       />
       <Route
         element={
-           <PrivateRoute>
+          <PrivateRoute>
             <ListApplications />
-           </PrivateRoute>
+          </PrivateRoute>
         }
-        path='/view-applications'
-       />
-
+        path="/view-applications"
+      />
     </Routes>
-
   );
 }
 
