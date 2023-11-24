@@ -16,7 +16,6 @@ import { getAllCycles } from '../redux/actions/cyclesActions';
 import { getAllCohorts } from '../redux/actions/cohortActions';
 import { connect, useSelector } from 'react-redux';
 
-
 function SharedJobPosts(props: any) {
   const [fetchProgram, setfetchProgram] = useState([]);
   const [fetchCycle, setfetchCycle] = useState([]);
@@ -105,6 +104,9 @@ function SharedJobPosts(props: any) {
                                 </th>
                               }
                               <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
+                                View
+                              </th>
+                              <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
                                 Action
                               </th>
                             </tr>
@@ -165,6 +167,18 @@ function SharedJobPosts(props: any) {
                                 <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
                                   <div className="flex items-center">
                                     <div className="">
+                                      <Link
+                                        to={`/Job/Post/view/${item.id}`}
+                                        className="flex bg-primary dark:bg-[#56C870] rounded-md py-2 px-4 text-white font-medium cursor-pointer"
+                                      >
+                                        View
+                                      </Link>
+                                    </div>
+                                  </div>
+                                </td>
+                                <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
+                                  <div className="flex items-center">
+                                    <div className="">
                                       <Link to={`/jobPost/${item?.id}/apply`}>
                                         <button className="flex bg-primary dark:bg-[#56C870] rounded-md py-2 px-4 text-white font-medium cursor-pointer">
                                           Apply
@@ -179,9 +193,6 @@ function SharedJobPosts(props: any) {
                         </table>
                       </div>
                       <div className="flex md_:hidden flex-col gap-4 w-full rounded-lg">
-                        <label className="text-left text-black-text dark:text-white text-lg font-bold">
-                          Job POST
-                        </label>
                         {fetchJobPostStates?.data?.map((item: any) => (
                           <div
                             key={item._id}
@@ -230,6 +241,27 @@ function SharedJobPosts(props: any) {
                               <div className="text-left text-black-text dark:text-white text-base font-normal">
                                 {item?.description}
                               </div>
+                            </div>
+                            <div className="flex flex-row gap-2 mt-2"> 
+                            <div className="flex items-center">
+                              <div className="">
+                                <Link
+                                  to={`/Job/Post/view/${item.id}`}
+                                  className="flex bg-primary dark:bg-[#56C870] rounded-md py-2 px-4 text-white font-medium cursor-pointer"
+                                >
+                                  View
+                                </Link>
+                              </div>
+                            </div>
+                            <div className="flex items-center">
+                              <div className="">
+                                <Link to={`/jobPost/${item?.id}/apply`}>
+                                  <button className="flex bg-primary dark:bg-[#56C870] rounded-md py-2 px-4 text-white font-medium cursor-pointer">
+                                    Apply
+                                  </button>
+                                </Link>
+                              </div>
+                            </div>
                             </div>
                           </div>
                         ))}
