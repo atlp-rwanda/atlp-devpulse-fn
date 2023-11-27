@@ -327,216 +327,39 @@ const ListAllUsers: FunctionComponent<Props> = (props) => {
         </button>
       </div>
       <div className="bg-white  dark:bg-dark-bg shadow-lg px-5 py-8 rounded-t-md w-[100%]">
-        <div className="rounded-lg h-[56vh] overflow-y-scroll shadow">
-          <table className=" container min-w-full ">
-            <thead className=" w-full px-32 sticky top-0 ">
-              <tr>
-                <th className="p-6  bg-gray-200 dark:bg-[#111827] text-left  text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
-                  {"Name"}
-                </th>
-
-                <th className="px-5 py-3  bg-gray-200 dark:bg-[#111827]  text-center  text-xs font-semibold text-gray-600 dark:text-white uppercase md:table-cell tracking-wider">
-                  {"Status"}
-                </th>
-                <th className="px-5 py-3  bg-gray-200 dark:bg-[#111827]  text-center  text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
-                  {"Roles"}
-                </th>
-                {
-                  <th className="px-5 py-3  bg-gray-200 dark:bg-[#111827]  text-center  text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
-                    {"Actions"}
+        <div className='rounded-lg h-[56vh] overflow-y-scroll shadow'>
+            <table className=" container min-w-full ">
+              <thead className=" w-full px-32 sticky top-0 ">
+                <tr>
+                  <th className="p-6  bg-gray-200 dark:bg-[#111827] text-left  text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
+                    {"Name"}
                   </th>
-                }
-              </tr>
-            </thead>
-            <tbody className="overflow-y-auto">
-              {user?.id !== undefined && user.id !== "" ? (
-                <tr
-                  key={user?.id}
-                  className={` border-dark-tertiary bg-bg-dark-bg`}
-                >
-                  <td className="px-2 border-b border-gray-200 dark:border-dark-tertiary lg:text-sm sm:text-[10px]">
-                    <div className="flex">
-                      <div className="flex sm:space-x-2 lg:space-x-5 items-center">
-                        <img
-                          src={user?.picture ? user?.picture : placeholderImage}
-                          alt="profile pic"
-                          onError={onImageError}
-                          className="w-[25px] h-[25px] lg:h-[40px] lg:w-[40px] rounded-full"
-                        />
-                        <p className="text-gray-900 dark:text-white whitespace-no-wrap my-5">
-                          {user?.firstname !== null && user?.lastname !== null
-                            ? `${user?.firstname}` + " " + `${user?.lastname}`
-                            : user?.firstname === null &&
-                              user?.lastname !== null
-                            ? `${user?.lastname}`
-                            : user?.firstname !== null &&
-                              user?.lastname === null
-                            ? `${user?.firstname}`
-                            : "No name"}
-                        </p>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-2 border-b border-gray-200 dark:border-dark-tertiary text-sm text-center">
-                    <div className="">
-                      <div className="">
-                        {status !== "" ? (
-                          <p
-                            className={`whitespace-no-wrap ${
-                              status == true ? "text-green" : "text-red-600"
-                            }`}
-                          >
-                            {status ? "Active" : "Inactive"}
-                          </p>
-                        ) : (
-                          <p
-                            className={`whitespace-no-wrap ${
-                              user?.isActive == true
-                                ? "text-green"
-                                : "text-red-600"
-                            }`}
-                          >
-                            {user?.isActive ? "Active" : "Inactive"}
-                          </p>
-                        )}
-                      </div>
-                    </div>
-                  </td>
 
-                  <td className="px-2 border-b border-gray-200 dark:border-dark-tertiary text-sm">
-                    <div className="flex justify-center">
-                      <div className="">
-                        <div className=" px-2 py-1 h-[50px] lg:w-[120px] lg:h-[30px] border border-gray-100 rounded-bt-rd lg:text-sm text-[10px]">
-                          <p
-                            className="text-gray-900 items-center dark:text-white whitespace-no-wrap cursor-pointer"
-                            onClick={() => updateRoles(user?.id)}
-                          >
-                            <span className="text-gray-500">Role: </span>{" "}
-                            {user.role === null
-                              ? "no role"
-                              : `${user?.role?.roleName.slice(0, 8)}`}
-                          </p>
-                        </div>
-                        <div
-                          className={` absolute border dark:border-gray-200 rounded dark:bg-slate-900 bg-gray-200 max-h-[250px] overflow-y-scroll ${
-                            dropRoles === user?.id ? "block" : "hidden"
-                          }`}
-                        >
-                          <p className=" border-b dark:border-gray-200 border-gray-300 dark:text-white  p-2 sticky top-0 dark:bg-slate-900 bg-gray-200">
-                            Choose a Role
-                          </p>
-                          {roles?.message?.map((role: any) => (
-                            <div
-                              key={role._id}
-                              className=" py-3 px-3 border-b dark:border-gray-200 dark:hover:bg-gray-800 hover:bg-gray-300 border-gray-300 cursor-pointer"
-                              onClick={() =>
-                                handleAssignRole(user?.id, role._id)
-                              }
-                            >
-                              <div className="flex space-x-2">
-                                {user?.role?.roleName === role?.roleName ? (
-                                  <HiCheck className=" text-green text-base mt-[4px]" />
-                                ) : (
-                                  <div className=" p-2"></div>
-                                )}
-                                <p className=" font-bold dark:text-white text-base ">
-                                  {" "}
-                                  {role.roleName}
-                                </p>
-                              </div>
-                              <p className=" dark:text-gray-500 mt-1 ml-5 sm:w-[100px] lg:w-[250px]">
-                                {" "}
-                                {role.description}
-                              </p>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  </td>
-
-                  <td className=" border-b dark:border-dark-tertiary text-center">
-                    <div className=" flex justify-center">
-                      <HiDotsVertical
-                        className=" text-black dark:text-white text-3xl cursor-pointer"
-                        onClick={(e: any) => {
-                          e.preventDefault();
-                          handleMoreOptions(user?.id);
-                        }}
-                      />
-                      <div
-                        className={`${
-                          moredrop === user?.id ? "block" : "hidden"
-                        } absolute  bg-white dark:bg-dark-tertiary  dark:text-white text-base z-50 list-none divide-y divide-gray-100 rounded shadow my-4`}
-                        id="dropdown"
-                      >
-                        <ul className="py-1" aria-labelledby="dropdown">
-                          <li>
-                            <div
-                              className="text-sm hover:bg-gray-100 text-gray-700  dark:hover:bg-gray-500 dark:text-white  block px-4 py-2"
-                              onClick={(e: any) => {
-                                e.preventDefault();
-                                setStatWarn({
-                                  id: user?.id,
-                                  open: true,
-                                  isActive: user?.isActive,
-                                });
-                              }}
-                            >
-                              Change Status
-                            </div>
-                          </li>
-                          <li>
-                            <div
-                              className="text-sm hover:bg-gray-100 text-gray-700   dark:hover:bg-gray-500 dark:text-white  block px-4 py-2"
-                              onClick={(e: any) => {
-                                e.preventDefault();
-                                setDeleteWarn({
-                                  id: user?.id,
-                                  open: true,
-                                  isActive: user?.isActive,
-                                });
-                              }}
-                            >
-                              Remove Member
-                            </div>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                  </td>
+                  <th className="px-5 py-3  bg-gray-200 dark:bg-[#111827]  text-center  text-xs font-semibold text-gray-600 dark:text-white uppercase md:table-cell tracking-wider">
+                    {"Status"}
+                  </th>
+                  <th className="px-5 py-3  bg-gray-200 dark:bg-[#111827]  text-center  text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
+                    {"Roles"}
+                  </th>
+                  {
+                    <th className="px-5 py-3  bg-gray-200 dark:bg-[#111827]  text-center  text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
+                      {"Actions"}
+                    </th>
+                  }
                 </tr>
-              ) : members !== null ? (
-                members?.map((item: any, index) => (
-                  <tr
-                    key={item?.id}
-                    className={` border-dark-tertiary ${
-                      index % 2 === 0 || index == 0
-                        ? "bg-bg-dark-bg"
-                        : "dark:bg-[#111827]"
-                    }`}
-                  >
-                    <td className="px-2 border-b border-gray-200 dark:border-dark-tertiary lg:text-sm text-[10px]">
+              </thead>
+              <tbody className="overflow-y-auto">
+                {user?.id !== undefined && user.id !== "" ?
+                  (<tr key={user?.id} className={` border-dark-tertiary bg-bg-dark-bg`}>
+                    <td className="px-2 border-b border-gray-200 dark:border-dark-tertiary lg:text-sm sm:text-[10px]">
                       <div className="flex">
-                        <div className="flex sm:space-x-2 lg:space-x-5 items-center">
-                          <img
-                            src={
-                              item?.picture ? item?.picture : placeholderImage
-                            }
+                        <div className="flex sm:space-x-2 lg:space-x-5 items-center" >
+                          <img src={user?.picture ? user?.picture : placeholderImage}
                             alt="profile pic"
                             onError={onImageError}
-                            className="w-[25px] h-[25px] lg:h-[40px] lg:w-[40px] rounded-full"
-                          />
+                            className="w-[25px] h-[25px] lg:h-[40px] lg:w-[40px] rounded-full" />
                           <p className="text-gray-900 dark:text-white whitespace-no-wrap my-5">
-                            {item?.firstname !== null && item?.lastname !== null
-                              ? `${item?.firstname}` + " " + `${item?.lastname}`
-                              : item?.firstname === null &&
-                                item?.lastname !== null
-                              ? `${item?.lastname}`
-                              : item?.firstname !== null &&
-                                item?.lastname === null
-                              ? `${item?.firstname}`
-                              : "No name"}
+                            {(user?.firstname !== null && user?.lastname !== null) ? `${user?.firstname}` + " " + `${user?.lastname}` : (user?.firstname === null && user?.lastname !== null ) ? `${user?.lastname}` : (user?.firstname !== null && user?.lastname === null ) ? `${user?.firstname}` : "No name"}
                           </p>
                         </div>
                       </div>
@@ -544,15 +367,16 @@ const ListAllUsers: FunctionComponent<Props> = (props) => {
                     <td className="px-2 border-b border-gray-200 dark:border-dark-tertiary text-sm text-center">
                       <div className="">
                         <div className="">
-                          <p
-                            className={`whitespace-no-wrap ${
-                              item?.isActive == true
-                                ? "text-green"
-                                : "text-red-600"
-                            }`}
-                          >
-                            {item?.isActive ? "Active" : "Inactive"}
-                          </p>
+                          {status !== "" ?
+                            <p className={`whitespace-no-wrap ${status == true ? "text-green" : "text-red-600"}`} >
+                              {status ? "Active" : "Inactive"}
+                            </p> :
+
+                            <p className={`whitespace-no-wrap ${user?.isActive == true ? "text-green" : "text-red-600"}`} >
+                              {user?.isActive ? "Active" : "Inactive"}
+                            </p>
+
+                          }
                         </div>
                       </div>
                     </td>
@@ -560,57 +384,22 @@ const ListAllUsers: FunctionComponent<Props> = (props) => {
                     <td className="px-2 border-b border-gray-200 dark:border-dark-tertiary text-sm">
                       <div className="flex justify-center">
                         <div className="">
-                          <div className=" px-2 py-1 h-[50px] lg:w-[120px] lg:h-[30px] border border-gray-100 rounded-bt-rd">
-                            <p
-                              className="text-gray-900 items-center dark:text-white whitespace-no-wrap cursor-pointer lg:text-sm text-[10px]"
-                              onClick={() => updateRoles(item?.id)}
-                            >
-                              <span className="text-gray-500">Role: </span>{" "}
-                              {item?.role === null
-                                ? "no role"
-                                : `${item?.role?.roleName.slice(0, 8)}`}
+                          <div className=' px-2 py-1 h-[50px] lg:w-[120px] lg:h-[30px] border border-gray-100 rounded-bt-rd lg:text-sm text-[10px]'>
+                            <p className="text-gray-900 items-center dark:text-white whitespace-no-wrap cursor-pointer" onClick={() => updateRoles(user?.id)}>
+                              <span className='text-gray-500'>Role: </span> {user.role === null ? "no role" : `${user?.role?.roleName.slice(0, 8)}`}
                             </p>
                           </div>
-                          <div
-                            className={` absolute z-20 border dark:border-gray-200 border-gray-200 rounded dark:bg-slate-900 bg-gray-200 max-h-[250px] overflow-y-scroll ${
-                              dropRoles === item?.id ? "block" : "hidden"
-                            } ${
-                              members?.length - 1 === index && index >= 5
-                                ? " bottom-0"
-                                : ""
-                            }`}
-                          >
-                            <div className="flex sm:space-x-[70px] lg:space-x-[160px] border-b dark:border-gray-200 border-gray-300 dark:text-white p-2 sticky top-0 dark:bg-slate-900 bg-gray-200">
-                              <h4>Choose a Role</h4>
-                              <icons.AiOutlineClose
-                                className=" mt-0 mr-0 text-xl cursor-pointer hover:text-red-600"
-                                onClick={() => setDropRoles("")}
-                              />
-                            </div>
-
-                            {roles.message?.map((role: any) => (
-                              <div
-                                key={role._id}
-                                className=" py-3 px-3 border-b dark:border-gray-200 dark:hover:bg-gray-800 hover:bg-gray-300 border-gray-300 cursor-pointer"
-                                onClick={() =>
-                                  handleAssignRole(item?.id, role._id)
-                                }
-                              >
-                                <div className="flex space-x-2">
-                                  {item?.role?.roleName === role?.roleName ? (
-                                    <HiCheck className=" text-green text-base mt-[4px]" />
-                                  ) : (
-                                    <div className=" p-2"></div>
-                                  )}
-                                  <p className=" font-bold dark:text-white text-base ">
-                                    {" "}
-                                    {role.roleName}
-                                  </p>
+                          <div className={` absolute border dark:border-gray-200 rounded dark:bg-slate-900 bg-gray-200 max-h-[250px] overflow-y-scroll ${dropRoles === user?.id ? "block" : "hidden"}`}>
+                            <p className=' border-b dark:border-gray-200 border-gray-300 dark:text-white  p-2 sticky top-0 dark:bg-slate-900 bg-gray-200'>
+                              Choose a Role
+                            </p>
+                            {roles?.message?.map((role: any) => (
+                              <div key={role._id} className=' py-3 px-3 border-b dark:border-gray-200 dark:hover:bg-gray-800 hover:bg-gray-300 border-gray-300 cursor-pointer' onClick={() => handleAssignRole(user?.id, role._id)}>
+                                <div className='flex space-x-2'>
+                                  {(user?.role?.roleName === role?.roleName) ? <HiCheck className=" text-green text-base mt-[4px]" /> : <div className=' p-2'></div>}
+                                  <p className=' font-bold dark:text-white text-base '>  {role.roleName}</p>
                                 </div>
-                                <p className=" dark:text-gray-500 mt-1 ml-5 sm:w-[100px] lg:w-[250px]">
-                                  {" "}
-                                  {role.description}
-                                </p>
+                                <p className=' dark:text-gray-500 mt-1 ml-5 sm:w-[100px] lg:w-[250px]'> {role.description}</p>
                               </div>
                             ))}
                           </div>
@@ -618,31 +407,35 @@ const ListAllUsers: FunctionComponent<Props> = (props) => {
                       </div>
                     </td>
 
-                    <td className="  border-b dark:border-dark-tertiary  text-center">
-                      <div className=" flex justify-center">
+                    <td className=' border-b dark:border-dark-tertiary text-center'>
+                      <div className=' flex justify-center' >
                         <HiDotsVertical
                           className=" text-black dark:text-white text-3xl cursor-pointer"
                           onClick={(e: any) => {
                             e.preventDefault();
-                            handleMoreOptions(item?.id);
+                            handleMoreOptions(user?.id)
                           }}
                         />
                         <div
-                          className={`${
-                            moredrop === item?.id ? "block" : "hidden"
-                          } absolute  bg-white dark:bg-dark-tertiary  dark:text-white text-base z-50 list-none divide-y divide-gray-100 rounded shadow my-4`}
+                          className={`${moredrop === user?.id
+                            ? "block"
+                            : "hidden"
+                            } absolute  bg-white dark:bg-dark-tertiary  dark:text-white text-base z-50 list-none divide-y divide-gray-100 rounded shadow my-4`}
                           id="dropdown"
                         >
-                          <ul className="py-1" aria-labelledby="dropdown">
+                          <ul
+                            className="py-1"
+                            aria-labelledby="dropdown"
+                          >
                             <li>
                               <div
                                 className="text-sm hover:bg-gray-100 text-gray-700  dark:hover:bg-gray-500 dark:text-white  block px-4 py-2"
                                 onClick={(e: any) => {
                                   e.preventDefault();
                                   setStatWarn({
-                                    id: item.id,
+                                    id: user?.id,
                                     open: true,
-                                    isActive: item?.isActive,
+                                    isActive: user?.isActive
                                   });
                                 }}
                               >
@@ -655,10 +448,10 @@ const ListAllUsers: FunctionComponent<Props> = (props) => {
                                 onClick={(e: any) => {
                                   e.preventDefault();
                                   setDeleteWarn({
-                                    id: item?.id,
+                                    id: user?.id,
                                     open: true,
-                                    isActive: item?.isActive,
-                                  });
+                                    isActive: user?.isActive
+                                  })
                                 }}
                               >
                                 Remove Member
@@ -668,12 +461,127 @@ const ListAllUsers: FunctionComponent<Props> = (props) => {
                         </div>
                       </div>
                     </td>
-                  </tr>
-                ))
-              ) : null}
-            </tbody>
-          </table>
-          {deleteWarn.open && (
+                  </tr>)
+                  : members !== null
+                    ? members?.map((item: any, index) =>
+
+                      <tr key={item?.id} className={` border-dark-tertiary ${(index % 2 === 0 || index == 0 ? "bg-bg-dark-bg" : "dark:bg-[#111827]")}`}>
+                        <td className="px-2 border-b border-gray-200 dark:border-dark-tertiary lg:text-sm text-[10px]">
+                          <div className="flex">
+                            <div className="flex sm:space-x-2 lg:space-x-5 items-center" >
+                              <img src={item?.picture ? item?.picture : placeholderImage}
+                                alt="profile pic"
+                                onError={onImageError}
+                                className="w-[25px] h-[25px] lg:h-[40px] lg:w-[40px] rounded-full" />
+                              <p className="text-gray-900 dark:text-white whitespace-no-wrap my-5">
+                                {(item?.firstname !== null && item?.lastname !== null) ? `${item?.firstname}` + " " + `${item?.lastname}` : (item?.firstname === null && item?.lastname !== null ) ? `${item?.lastname}` : (item?.firstname !== null && item?.lastname === null ) ? `${item?.firstname}` : "No name"}
+                              </p>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="px-2 border-b border-gray-200 dark:border-dark-tertiary text-sm text-center">
+                          <div className="">
+                            <div className="">
+                              <p className={`whitespace-no-wrap ${item?.isActive == true ? "text-green" : "text-red-600"}`}>
+                                {item?.isActive ? "Active" : "Inactive"}
+                              </p>
+                            </div>
+                          </div>
+                        </td>
+
+                        <td className="px-2 border-b border-gray-200 dark:border-dark-tertiary text-sm">
+                          <div className="flex justify-center">
+                            <div className="">
+                              <div className=' px-2 py-1 h-[50px] lg:w-[120px] lg:h-[30px] border border-gray-100 rounded-bt-rd'>
+                                <p className="text-gray-900 items-center dark:text-white whitespace-no-wrap cursor-pointer lg:text-sm text-[10px]" onClick={() => updateRoles(item?.id)}>
+                                  <span className='text-gray-500'>Role: </span> {item?.role === null ? "no role" : `${item?.role?.roleName.slice(0, 8)}`}
+                                </p>
+                              </div>
+                              <div className={` absolute z-20 border dark:border-gray-200 border-gray-200 rounded dark:bg-slate-900 bg-gray-200 max-h-[250px] overflow-y-scroll ${dropRoles === item?.id ? "block" : "hidden"} ${(members?.length - 1) === index && index >= 5 ? " bottom-0" : ""}`}>
+                                <div className='flex sm:space-x-[70px] lg:space-x-[160px] border-b dark:border-gray-200 border-gray-300 dark:text-white p-2 sticky top-0 dark:bg-slate-900 bg-gray-200'>
+                                  <h4 >
+                                    Choose a Role
+                                  </h4>
+                                  <icons.AiOutlineClose
+                                    className=" mt-0 mr-0 text-xl cursor-pointer hover:text-red-600"
+                                    onClick={() => setDropRoles("")}
+                                  />
+                                </div>
+
+                                {roles.message?.map((role: any) => (
+                                  <div key={role._id} className=' py-3 px-3 border-b dark:border-gray-200 dark:hover:bg-gray-800 hover:bg-gray-300 border-gray-300 cursor-pointer' onClick={() => handleAssignRole(item?.id, role._id)}>
+                                    <div className='flex space-x-2'>
+                                      {(item?.role?.roleName === role?.roleName) ? <HiCheck className=" text-green text-base mt-[4px]" /> : <div className=' p-2'></div>}
+                                      <p className=' font-bold dark:text-white text-base '>  {role.roleName}</p>
+                                    </div>
+                                    <p className=' dark:text-gray-500 mt-1 ml-5 sm:w-[100px] lg:w-[250px]'> {role.description}</p>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+
+                        <td className='  border-b dark:border-dark-tertiary  text-center'>
+                          <div className=' flex justify-center' >
+                            <HiDotsVertical
+                              className=" text-black dark:text-white text-3xl cursor-pointer"
+                              onClick={(e: any) => {
+                                e.preventDefault();
+                                handleMoreOptions(item?.id)
+                              }}
+                            />
+                            <div
+                              className={`${moredrop === item?.id
+                                ? "block"
+                                : "hidden"
+                                } absolute  bg-white dark:bg-dark-tertiary  dark:text-white text-base z-50 list-none divide-y divide-gray-100 rounded shadow my-4`}
+                              id="dropdown"
+                            >
+                              <ul
+                                className="py-1"
+                                aria-labelledby="dropdown"
+                              >
+                                <li>
+                                  <div
+                                    className="text-sm hover:bg-gray-100 text-gray-700  dark:hover:bg-gray-500 dark:text-white  block px-4 py-2"
+                                    onClick={(e: any) => {
+                                      e.preventDefault();
+                                      setStatWarn({
+                                        id: item.id,
+                                        open: true,
+                                        isActive: item?.isActive
+                                      })
+                                    }}
+                                  >
+                                    Change Status
+                                  </div>
+                                </li>
+                                <li>
+                                  <div
+                                    className="text-sm hover:bg-gray-100 text-gray-700   dark:hover:bg-gray-500 dark:text-white  block px-4 py-2"
+                                    onClick={(e: any) => {
+                                      e.preventDefault();
+                                      setDeleteWarn({
+                                        id: item?.id,
+                                        open: true,
+                                        isActive: item?.isActive
+                                      })
+                                    }}
+                                  >
+                                    Remove Member
+                                  </div>
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    )
+                    : null}
+              </tbody>
+            </table>
+          {deleteWarn.open &&
             <div
               className={`h-screen w-screen z-50 bg-black bg-opacity-10 backdrop-blur-sm absolute flex items-center justify-center  px-4 top-0 left-0 ${
                 deleteWarn.open === true ? "block" : "hidden"
@@ -711,7 +619,7 @@ const ListAllUsers: FunctionComponent<Props> = (props) => {
                 </div>
               </Box>
             </div>
-          )}
+          }
 
           {statWarn.open && (
             <div

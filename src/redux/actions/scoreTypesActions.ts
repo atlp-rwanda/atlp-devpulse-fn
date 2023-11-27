@@ -9,91 +9,143 @@ import {
   DELETE_SCORE_TYPE,
   DELETE_SCORE_ERROR,
 } from "..";
-import axios from "axios";
+// import axios from "axios";
 import { toast } from "react-toastify";
+import axios from "./axiosconfig";
 
-export const getAllScoreTypes = () => async (dispatch: any) => {
-  try {
-    const datas = await axios({
-      url: process.env.BACKEND_URL,
-      method: "post",
-      data: {
-        query: `
-        query getAllScoreTypes {
-          getAllScoreTypes {
-            id
-            score_type
-          }
-        }
-      `,
-      },
-    });
-
-    const scoreTypes = await datas.data.data.getAllScoreTypes;
-    dispatch(creator(GET_SCORE_TYPES, scoreTypes));
-  } catch (error) {
-    if (error) {
-      return console.log(error);
+export const getAllScoreTypes =
+  (variables = {}) =>
+  async (dispatch: any) => {
+    const query = `
+  query GetAllScoreTypes($title: String, $programId: String) {
+    getAllScoreTypes(title: $title, programId: $programId) {
+      id
+      description
+      modeOfEngagement
+      duration
+      startDate
+      endDate
+      title
+      program {
+      _id  
+      }
     }
   }
-};
+  `;
 
-export const getOneScoreType =
-  ({ getOneScoreTypeId }: any) =>
-  async (dispatch: any) => {
     try {
-      const datas = await axios({
-        url: process.env.BACKEND_URL,
-        method: "post",
-        data: {
-          query: `
-        query GetOneScoreType($getOneScoreTypeId: ID!) {
-          getOneScoreType(id: $getOneScoreTypeId) {
-            id
-            score_type
-          }
-        }
-      `,
-          variables: {
-            getOneScoreTypeId,
-          },
-        },
+      const response = await axios.post("/", {
+        query,
+        variables,
       });
 
-      console.log(datas, "datas");
-
-      const scoreType = await datas.data.data.getOneScoreType;
-      dispatch(creator(GET_ONE_SCORE_TYPE, scoreType));
+      const assessmentsData = await response.data.data.getAllScoreTypes;
+      dispatch(creator(GET_SCORE_TYPES, assessmentsData));
     } catch (error) {
-      if (error) {
-        return console.log(error);
-      }
+      console.error(error);
+    }
+  };
+export const getOneScoreType =
+  (getOneScoreTypeId: any) => async (dispatch: any) => {
+    try {
+      const datas = await axios.post("/", {
+        query: `
+	query GetOneScoreType($getOneScoreTypeId: ID!) {
+	  getOneScoreType(id: $getOneScoreTypeId) {
+		id
+    title
+    description
+    modeOfEngagement
+    duration
+    startDate
+    endDate
+    program {
+      title
+    }
+    grading {
+      title
+    }
+	  }
+	}
+  `,
+        variables: {
+          getOneScoreTypeId,
+        },
+      });
+      const scoreType = await datas.data.data.getOneScoreType;
+      let timestampStart = parseInt(scoreType.startDate);
+      let timestampEnd = parseInt(scoreType.endDate);
+      let dateStart = new Date(timestampStart);
+      let dateEnd = new Date(timestampEnd);
+
+      let startDate = dateStart.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        timeZoneName: "short",
+      });
+      let endDate = dateEnd.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        timeZoneName: "short",
+      });
+
+      let assessment = {
+        ...scoreType,
+        startDate,
+        endDate,
+      };
+      dispatch(creator(GET_ONE_SCORE_TYPE, assessment));
+    } catch (error) {
+      console.log(error);
     }
   };
 
 export const createScoreType =
-  ({ score_type }: any) =>
+  ({
+    description,
+    duration,
+    endDate,
+    modeOfEngagement,
+    program,
+    startDate,
+    title,
+  }: any) =>
   async (dispatch: any) => {
     try {
-      const datas = await axios({
-        url: process.env.BACKEND_URL,
-        method: "post",
-        data: {
+      const datas = await axios
+        .post("/", {
           query: `
-        mutation CreateScoreType($input: createScoreType) {
-          createScoreType(input: $input) {
-            id
-            score_type
+          mutation CreateScoreType($input: createScoreType) {
+            createScoreType(input: $input) {
+              id
+              title
+              description
+              modeOfEngagement
+              duration
+              startDate
+              endDate
+              program {
+                _id
+              }
+            }
           }
-        }
       `,
           variables: {
             input: {
-              score_type,
+              description,
+              duration: parseInt(duration),
+              durationUnit: "month",
+              grading: "Pass",
+              endDate,
+              modeOfEngagement,
+              program,
+              startDate,
+              title,
             },
           },
-        },
-      })
+        })
         .then((response) => {
           if (response.data.data !== null) {
             toast.success("Score type successfully created.");
@@ -103,11 +155,13 @@ export const createScoreType =
           } else {
             const err = response.data.errors[0].message;
 
+            console.log(response.data);
             toast.error(err);
             dispatch(creator(CREATE_SCORE_ERROR, err));
           }
         })
         .catch((error) => {
+          console.log(error);
           dispatch(creator(CREATE_SCORE_ERROR, error));
         });
     } catch (error) {

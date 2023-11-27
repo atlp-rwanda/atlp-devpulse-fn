@@ -28,9 +28,9 @@ export const sidebarItems1 = [
     title: 'View Job Post',
   },
   {
-    path: '/admins',
+    path: "/assessments",
     icon: <Icon icon="ic:round-people"></Icon>,
-    title: 'Admins',
+    title: "assessments",
   },
   {
     path: '/domains',

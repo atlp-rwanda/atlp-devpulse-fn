@@ -43,7 +43,6 @@ export const getAllScoreValues = () => async (dispatch: any) => {
               }
               score_id {
                 id
-                score_type
               }
           }
         }

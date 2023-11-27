@@ -12,6 +12,7 @@ import Table from './../pages/Table';
 import UpdateTraine from './../pages/updateTrainee/traineUpdate';
 import CreateScoreType from './../pages/FilterTeainee/createScoreType';
 import ScoreTypesActions from './../pages/FilterTeainee/ScoreTypesActions';
+import SingleAssessment from './../pages/FilterTeainee/scoreTypes/view'
 import ImportTraineeDetailsFromGoogleSheet from './../pages/importAndSaveManyTraineesFromGoogleSheet/importAndSaveManyTraineesFromGoogleSheet';
 
 const Counter = React.lazy(() => import('./../components/Counter/Counter'));
@@ -189,7 +190,7 @@ function Navigation() {
       />
       <Route path="/login" element={<LoginPage />} />
       <Route
-        path="/admins"
+        path="/assessments"
         element={
           <PrivateRoute>
             <ScoreTypesActions />
