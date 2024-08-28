@@ -281,8 +281,11 @@ const TraineeUpdate = (props: any) => {
                         });
                         getDistricts(e.target.value);
                       }}
-                      // placeholder="Select province"
                     >
+                      <option value="" disabled>
+                        Select province
+                      </option>
+                      
                       {provinces?.map((province: any) => (
                         <option
                           className="dark:bg-dark-tertiary dark:text-white p-3 dark:hover:bg-dark-frame-bg"
@@ -311,8 +314,11 @@ const TraineeUpdate = (props: any) => {
                         });
                         getSectors(formData.province, e.target.value);
                       }}
-                      // placeholder="Select district"
                     >
+
+                      <option value="" disabled>
+                        Select district
+                      </option>
                       <option
                         className="dark:bg-dark-tertiary dark:text-white hidden"
                         value={traineeData.district}
@@ -346,8 +352,10 @@ const TraineeUpdate = (props: any) => {
                         })
                       }
                       name="sector"
-                      // placeholder="Select sector"
                     >
+                      <option value="" disabled>
+                        Select sector
+                      </option>
                       <option
                         className="dark:bg-dark-tertiary dark:text-white hidden"
                         value={traineeData.sector}
@@ -559,8 +567,10 @@ const TraineeUpdate = (props: any) => {
                           level_education: e.target.value,
                         })
                       }
-                      // placeholder="Please select level"
                     >
+                      <option value="" disabled>
+                        Select education level
+                      </option>
                       {options?.educationOptions?.map((option: any) => (
                         <option
                           className="dark:bg-dark-tertiary p-3 dark:text-white dark:hover:bg-dark-frame-bg"
@@ -623,7 +633,6 @@ const TraineeUpdate = (props: any) => {
                     </label>
                     <select
                       className="dark:bg-dark-tertiary dark:text-white py-2 px-3 shadow appearance-none  rounded w-full  leading-tight focus:outline-none focus:shadow-outline"
-                      // placeholder="Interview decisison"
                       defaultValue={traineeData.interview_decision}
                       onChange={(e) =>
                         setFormData({
@@ -632,6 +641,9 @@ const TraineeUpdate = (props: any) => {
                         })
                       }
                     >
+                      <option value="" disabled>
+                        Interview decision
+                      </option>
                       {options?.interviewOptions?.map((option: any) => (
                         <option
                           className="dark:bg-dark-tertiary p-3 dark:text-white dark:hover:bg-dark-frame-bg"
@@ -650,7 +662,6 @@ const TraineeUpdate = (props: any) => {
                     <select
                       className="dark:bg-dark-tertiary dark:text-white shadow py-2 px-3 appearance-none  rounded w-full  leading-tight focus:outline-none focus:shadow-outline"
                       ref={cycleRef}
-                      // placeholder="Please select cycle"
                       defaultValue={traineeData?.trainee_id?.cycle_id?.id}
                       onChange={(e) =>
                         setFormData({
@@ -659,6 +670,9 @@ const TraineeUpdate = (props: any) => {
                         })
                       }
                     >
+                      <option value="" disabled>
+                        Please select cycle
+                      </option>
                       {cycles?.map((cycle: any) => (
                         <option
                           className="dark:bg-dark-tertiary dark:text-white dark:hover:bg-dark-frame-bg p-3"
