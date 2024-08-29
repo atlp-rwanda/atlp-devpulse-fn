@@ -281,7 +281,7 @@ const TraineeUpdate = (props: any) => {
                         });
                         getDistricts(e.target.value);
                       }}
-                      placeholder="Select province"
+                      // placeholder="Select province"
                     >
                       {provinces?.map((province: any) => (
                         <option
@@ -311,7 +311,7 @@ const TraineeUpdate = (props: any) => {
                         });
                         getSectors(formData.province, e.target.value);
                       }}
-                      placeholder="Select district"
+                      // placeholder="Select district"
                     >
                       <option
                         className="dark:bg-dark-tertiary dark:text-white hidden"
@@ -346,7 +346,7 @@ const TraineeUpdate = (props: any) => {
                         })
                       }
                       name="sector"
-                      placeholder="Select sector"
+                      // placeholder="Select sector"
                     >
                       <option
                         className="dark:bg-dark-tertiary dark:text-white hidden"
@@ -559,7 +559,7 @@ const TraineeUpdate = (props: any) => {
                           level_education: e.target.value,
                         })
                       }
-                      placeholder="Please select level"
+                      // placeholder="Please select level"
                     >
                       {options?.educationOptions?.map((option: any) => (
                         <option
@@ -623,7 +623,7 @@ const TraineeUpdate = (props: any) => {
                     </label>
                     <select
                       className="dark:bg-dark-tertiary dark:text-white py-2 px-3 shadow appearance-none  rounded w-full  leading-tight focus:outline-none focus:shadow-outline"
-                      placeholder="Interview decisison"
+                      // placeholder="Interview decisison"
                       defaultValue={traineeData.interview_decision}
                       onChange={(e) =>
                         setFormData({
@@ -650,7 +650,7 @@ const TraineeUpdate = (props: any) => {
                     <select
                       className="dark:bg-dark-tertiary dark:text-white shadow py-2 px-3 appearance-none  rounded w-full  leading-tight focus:outline-none focus:shadow-outline"
                       ref={cycleRef}
-                      placeholder="Please select cycle"
+                      // placeholder="Please select cycle"
                       defaultValue={traineeData?.trainee_id?.cycle_id?.id}
                       onChange={(e) =>
                         setFormData({
