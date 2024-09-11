@@ -134,7 +134,7 @@ function SaveFormDetails() {
   });
 
   return (
-    <div className='overflow-hidden  py-16 px-6 lg:px-8 lg:py-24'>
+    <div className='overflow-hidden'>
       <div className='relative mx-auto max-w-xl'>
         <div className='text-center'>
           <h2 className='text-3xl font-bold tracking-tight text-primary dark:text-secondary sm:text-4xl'>

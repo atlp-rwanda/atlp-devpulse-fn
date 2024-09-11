@@ -11,7 +11,7 @@ const ApplicationForm = () => {
 
   return (
     <div>
-      <div className='flex '>
+      <div className='flex justify-center'>
         <div className='flex px-5 py-2 w-fit'>
           <button
             onClick={() =>
@@ -23,7 +23,7 @@ const ApplicationForm = () => {
           </button>
         </div>
         <div>
-          <Link to={'/view-forms'}>
+          <Link to={'/admin/view-forms'}>
             <button className='flex bg-primary dark:bg-[#56C870] rounded-md py-2 mt-2 px-4 text-white font-medium cursor-pointer'>
               <icons.AiFillBook className='mt-1 mr-1 font-bold' /> View All
               Forms

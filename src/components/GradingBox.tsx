@@ -229,7 +229,7 @@ function GradingBox(props: any) {
   return (
     <div>
       <div
-        className={` flex  justify-center mt-20 static left-0`}
+        className={` flex  justify-center static left-0`}
       >
         <div className="bg-white dark:bg-dark-bg w-full lg:w-[50%] xl:w-5/12 rounded-lg p-1 xl:p-4 lg:p-4 pb-8 mb-20">
           <div className="card-title w-full flex  flex-wrap justify-center items-center  ">
