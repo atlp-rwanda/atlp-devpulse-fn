@@ -1,14 +1,21 @@
-import { useParams } from 'react-router';
-import NavBar from '../../components/sidebar/navHeader';
-import { BsFillPersonLinesFill } from 'react-icons/bs';
-import React, { useEffect, useState } from 'react';
-import { fetchSingleJobPost } from '../../redux/actions/fetchSingleJobPostAction';
-import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
-import { connect } from 'react-redux';
+import { useParams } from "react-router";
+import NavBar from "../../components/sidebar/navHeader";
+import { BsFillPersonLinesFill } from "react-icons/bs";
+import React, { useEffect, useState } from "react";
+import { fetchSingleJobPost } from "../../redux/actions/fetchSingleJobPostAction";
+import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
+import { connect } from "react-redux";
+import {
+  FaFacebook,
+  FaLinkedin,
+  FaTelegram,
+  FaTwitter,
+  FaWhatsapp,
+} from "react-icons/fa";
 
 const SingleJobPostDetails = (props: any) => {
   const { fetchSingleJobPostStates } = props;
-  console.log('fetchSingleJobPostStates:', fetchSingleJobPostStates);
+  console.log("fetchSingleJobPostStates:", fetchSingleJobPostStates);
   const dispatch = useAppDispatch();
   const params = useParams();
   const [jobPostId, setjobPostId] = useState(params.id);
@@ -16,6 +23,37 @@ const SingleJobPostDetails = (props: any) => {
   useEffect(() => {
     dispatch(fetchSingleJobPost(jobPostId));
   }, [jobPostId]);
+
+  const shareMessage = `Check out this job opportunity: ${fetchSingleJobPostStates?.data?.title}\n${window.location.href}`;
+
+  const shareOnTwitterDM = () => {
+    const url = `https://twitter.com/messages/compose?text=${encodeURIComponent(
+      shareMessage
+    )}`;
+    window.open(url, "_blank", "width=600,height=400");
+  };
+
+  const shareOnWhatsApp = () => {
+    const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(
+      shareMessage
+    )}`;
+    window.open(url, "_blank", "width=600,height=400");
+  };
+
+  const shareOnTelegram = () => {
+    const url = `https://t.me/share/url?url=${encodeURIComponent(
+      window.location.href
+    )}&text=${encodeURIComponent(shareMessage)}`;
+    window.open(url, "_blank", "width=600,height=400");
+  };
+
+  const shareOnLinkedIn = () => {
+    const url = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(
+      window.location.href
+    )}`;
+    window.open(url, "_blank");
+  };
+
   return (
     <>
       <div className="h-screen flex flex-col items-center dark:bg-dark-frame-bg">
@@ -57,12 +95,32 @@ const SingleJobPostDetails = (props: any) => {
                     {fetchSingleJobPostStates.data.description}
                   </p>
                 </div>
-                <button
-                  type="submit"
-                  className="flex justify-self-start self-start rounded w-15 px-5 py-2 mt-10 bg-green ml-2 sm:ml-80 text-white transition-colors hover:bg-dark-frame-bg hover:text-green hover:border hover:border-green"
-                >
-                  Share Post
-                </button>
+                <div className="flex gap-4 mt-6">
+                  <button
+                    onClick={shareOnTwitterDM}
+                    className="flex items-center gap-2 px-4 py-2 bg-blue-400 text-white rounded hover:bg-blue-500 transition-colors"
+                  >
+                    <FaTwitter />
+                  </button>
+                  <button
+                    onClick={shareOnWhatsApp}
+                    className="flex items-center gap-2 px-4 py-2 bg-green text-white rounded hover:bg-green-600 transition-colors"
+                  >
+                    <FaWhatsapp />
+                  </button>
+                  <button
+                    onClick={shareOnTelegram}
+                    className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
+                  >
+                    <FaTelegram />
+                  </button>
+                  <button
+                    onClick={shareOnLinkedIn}
+                    className="flex items-center gap-2 px-4 py-2 bg-blue-800 text-white rounded hover:bg-blue-900 transition-colors"
+                  >
+                    <FaLinkedin />
+                  </button>
+                </div>
               </>
             )}
           </div>
