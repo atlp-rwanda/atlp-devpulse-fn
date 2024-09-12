@@ -5,13 +5,7 @@ import React, { useEffect, useState } from "react";
 import { fetchSingleJobPost } from "../../redux/actions/fetchSingleJobPostAction";
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import { connect } from "react-redux";
-import {
-  FaFacebook,
-  FaLinkedin,
-  FaTelegram,
-  FaTwitter,
-  FaWhatsapp,
-} from "react-icons/fa";
+import { FaLinkedin, FaTelegram, FaTwitter, FaWhatsapp } from "react-icons/fa";
 
 const SingleJobPostDetails = (props: any) => {
   const { fetchSingleJobPostStates } = props;
