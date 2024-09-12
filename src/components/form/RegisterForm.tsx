@@ -11,7 +11,7 @@ import { formData } from "../validation/Register";
 import { AiOutlineCheck } from "react-icons/ai";
 import { AiOutlineClose } from "react-icons/ai";
 import { Link } from "react-router-dom";
-import {HiOutlineExclamationCircle} from "react-icons/hi"
+import { HiOutlineExclamationCircle } from "react-icons/hi";
 import { Toasty } from "../Toasty/Toasty";
 import axios from "axios";
 
@@ -59,15 +59,14 @@ function SignupForm() {
     resolver: zodResolver(registerSchema),
   });
 
-  const showToast = (message:any, type: any) => {
+  const showToast = (message: any, type: any) => {
     setError(message);
     setTimeout(() => {
       setError(null);
     }, 3000);
-  }
+  };
 
   const onSubmit = async (data: any) => {
-
     setIsLoading(true);
     if (data.password !== data.confirmPassword) {
       showToast("Passwords doesn't match!", "error");
@@ -106,7 +105,7 @@ function SignupForm() {
             gender: parsedData.gender,
             email: parsedData.email,
             password: parsedData.password,
-            telephone: parsedData.phoneNumber
+            telephone: `${parsedData.countryCode} ${parsedData.phoneNumber}`,
           },
         },
       });
@@ -121,7 +120,7 @@ function SignupForm() {
           showToast(error, "error");
         }
       } else {
-        setIsSuccess(true)
+        setIsSuccess(true);
       }
     } catch (error: any) {
       showToast("An error occurred.", "error");
@@ -129,7 +128,7 @@ function SignupForm() {
     setIsLoading(false);
   };
 
-  const handleClickShowPassword = (index:number) => {
+  const handleClickShowPassword = (index: number) => {
     setShowPassword((prevShowPassword) => {
       const updatedShowPassword = [...prevShowPassword];
       updatedShowPassword[index] = !prevShowPassword[index];
@@ -140,21 +139,27 @@ function SignupForm() {
     <>
       <div className="flex items-center  justify-center mx-auto bg-[#374151] h-screen">
         {isAnError && (
-          <Toasty message={isAnError} type="error" onClose={() => setError(null)} />
+          <Toasty
+            message={isAnError}
+            type="error"
+            onClose={() => setError(null)}
+          />
         )}
         {isSuccess ? (
           <div className="bg-[#1F2A37] w-[30vw]  flex h-[70vh] flex-col items-center justify-center rounded-sm sm:w-5/6 lg:w-[45vw]">
             <div
               className={`rounded-full flex items-center justify-center  ${
-                isAnError  ? "bg-white" : "bg-green"
+                isAnError ? "bg-white" : "bg-green"
               } p-4 mx-auto mb-4`}
             >
-                 <AiOutlineCheck className="text-white text-4xl" />
+              <AiOutlineCheck className="text-white text-4xl" />
             </div>
             <div className="text-[#afb1b4] text-lg mb-4 font-inter">
-                <p>Your account has been succefully created !</p>
+              <p>Your account has been succefully created !</p>
             </div>
-            <Link to="/login" ><Button label="Continue" className="w-[80px]"/></Link>
+            <Link to="/login">
+              <Button label="Continue" className="w-[80px]" />
+            </Link>
           </div>
         ) : (
           <form
@@ -268,52 +273,52 @@ function SignupForm() {
                   </datalist>
                 </div>
               </div>
-            
-            <div className="flex items-center w-[25vw] sm:w-5/6 lg:w-[25vw]  justify-between">
-              <div className="w-[20%] ">
+
+              <div className="flex items-center w-[25vw] sm:w-5/6 lg:w-[25vw]  justify-between">
+                <div className="w-[20%] ">
+                  <InputField
+                    type="text"
+                    placeholder="+250"
+                    {...register("countryCode")}
+                    className="w-full  rounded-md  px-2 py-3 border border-white placeholder:text-gray-400 text-white sm:text-[12px] outline-none autofill:bg-transparent autofill:text-white bg-[#1F2A37]"
+                    list="countryCodes"
+                    error={errors?.countryCode}
+                  />
+                  <datalist id="countryCodes" style={{ cursor: "pointer" }}>
+                    {filteredCountries.map((country) => (
+                      <option key={country.code}>
+                        {country.phone}
+                        {country.suffix}
+                      </option>
+                    ))}
+                  </datalist>
+                </div>
+                <div className=" w-[65%]">
+                  <InputField
+                    type="text"
+                    placeholder="Phone Number"
+                    className=" w-full  rounded-md px-2 py-3 border border-white placeholder:text-gray-400 text-white sm:text-[12px]  outline-none autofill:bg-transparent autofill:text-white bg-[#1F2A37]"
+                    {...register("phoneNumber")}
+                    error={errors?.phoneNumber}
+                  />
+                </div>
+              </div>
+              <div className="flex items-center sm:w-5/6 w-[25vw] lg:w-[25vw]   jusify-around">
                 <InputField
-                  type="text"
-                  placeholder="+250"
-                  {...register("countryCode")}
-                  className="w-full  rounded-md  px-2 py-3 border border-white placeholder:text-gray-400 text-white sm:text-[12px] outline-none autofill:bg-transparent autofill:text-white bg-[#1F2A37]"
-                  list="countryCodes"
-                  error={errors?.countryCode}
+                  type="checkbox"
+                  {...register("acceptTerms")}
+                  className="form-checkbox h-4 bg-green"
+                  error={errors?.acceptTerms}
                 />
-                <datalist id="countryCodes" style={{ cursor: "pointer" }}>
-                  {filteredCountries.map((country) => (
-                    <option key={country.code}>
-                      {country.phone}
-                      {country.suffix}
-                    </option>
-                  ))}
-                </datalist>
+                <div className="ml-[10px]">
+                  <label htmlFor="acceptTerms" className="text-white ">
+                    I accept the{" "}
+                    <a href="#" className="text-[#56C870]">
+                      Terms & Conditions
+                    </a>
+                  </label>
+                </div>
               </div>
-              <div className=" w-[65%]">
-                <InputField
-                  type="text"
-                  placeholder="Phone Number"
-                  className=" w-full  rounded-md px-2 py-3 border border-white placeholder:text-gray-400 text-white sm:text-[12px]  outline-none autofill:bg-transparent autofill:text-white bg-[#1F2A37]"
-                  {...register("phoneNumber")}
-                  error={errors?.phoneNumber}
-                />
-              </div>
-            </div>
-            <div className="flex items-center sm:w-5/6 w-[25vw] lg:w-[25vw]   jusify-around">
-              <InputField
-                type="checkbox"
-                {...register("acceptTerms")}
-                className="form-checkbox h-4 bg-green"
-                error={errors?.acceptTerms}
-              />
-              <div className="ml-[10px]">
-                <label htmlFor="acceptTerms" className="text-white ">
-                  I accept the{" "}
-                  <a href="#" className="text-[#56C870]">
-                    Terms & Conditions
-                  </a>
-                </label>
-              </div>
-            </div>
             </div>
             <div className="sm:w-[35vw] lg:w-[20vw] w-[20vw]">
               {isLoading ? (
@@ -343,7 +348,11 @@ function SignupForm() {
                   </Button>
                 </>
               ) : (
-                <Button type="submit" label="Signup" className="my-1  mb-4 sm:w-full w-5/6 " />
+                <Button
+                  type="submit"
+                  label="Signup"
+                  className="my-1  mb-4 sm:w-full w-5/6 "
+                />
               )}
             </div>
           </form>
