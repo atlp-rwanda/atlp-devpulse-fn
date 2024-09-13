@@ -14,7 +14,7 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { getAllCycles } from "../../redux/actions/cyclesActions";
 import { locations } from "./locations";
-import SelectField from '../Select'
+import SelectField from '../../components/ReusableComponents/Select'
 
 const TraineeUpdate = (props: any) => {
   const params = useParams();

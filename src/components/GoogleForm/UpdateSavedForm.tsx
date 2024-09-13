@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import axios from '../../redux/actions/axiosconfig';
 import { showSuccessToast, showErrorToast } from './../../utils/toast';
+import SelectField from '../ReusableComponents/Select';
 
 const UpdateSavedForm = () => {
   const [formData, setFormData] = useState({
@@ -177,18 +178,17 @@ const UpdateSavedForm = () => {
               </label>
               <div className='relative mt-1 rounded-md shadow-sm'>
                 <div className='absolute inset-y-0 left-0 flex items-center'>
-                  <select
-                    id='jobpost'
-                    name='jobpost'
-                    value={selectedJobPost}
-                    onChange={handleJobPostChange}
-                    className='block w-full text-primary rounded-md border-gray-300 py-3 px-4 pl-20 focus:border-indigo-500 focus:ring-indigo-500'>
-                    {jobposts.map((jobpost) => (
-                      <option key={jobpost.id} value={jobpost.id}>
-                        {jobpost.title}
-                      </option>
-                    ))}
-                  </select>
+                  <SelectField 
+                  id="jobpost"
+                  name='jobpost'
+                  value={selectedJobPost}
+                  onChange={handleJobPostChange}
+                  className='block w-full text-primary rounded-md border-gray-300 py-3 px-4 pl-20 focus:border-indigo-500 focus:ring-indigo-500'
+                  options={jobposts.map((jobpost)=> ({
+                    value: jobpost.id,
+                    label: jobpost.title
+                  }))}
+                  />
                 </div>
               </div>
             </div>
