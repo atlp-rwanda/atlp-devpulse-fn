@@ -366,8 +366,8 @@ const TrainneeDetails = (props: any) => {
             <h2 className="font-bold text-lg text-[#56C870] top-5 pb-7 ml-5 mt-5 uppercase ">
               Status
             </h2>
-            {traineeDetails.Hackerrank_score <= 10 &&
-            traineeDetails.english_score <= 10 ? (
+            {traineeDetails.Hackerrank_score >= 10 &&
+            traineeDetails.english_score >= 10 ? (
               <div className="py-10 btn ml-5 mt-[-10%] mb-3   ">
                 <button className="btn-Aprov  bg-[#10292C] hover:bg-[#56C870]  dark:hover:bg-[#1f544cef] text-white font-bold py-2 px-4 rounded mt-7 mr-4  dark:bg-[#56C870]">
                   Passed
