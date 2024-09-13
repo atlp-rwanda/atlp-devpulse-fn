@@ -105,5 +105,9 @@ export const sidebarItems3 = [
   {
     path: '/settings',
     icon: <Icon icon="akar-icons:settings-vertical"></Icon>,
-  }
+  },
+  {
+    path: '/settings',
+    icon: <Icon icon="eva:settings-2-outline"></Icon>,
+  },
 ];
