@@ -17,15 +17,8 @@ interface SelectInputProps {
   currentValue?: SelectOption;
 }
 
-const SelectInput: React.FC<SelectInputProps> = React.forwardRef(({
-  id,
-  name,
-  defaultValue,
-  onChange,
-  options,
-  placeholder,
-  currentValue
-}, ref) => {
+const SelectInput = React.forwardRef<HTMLSelectElement, SelectInputProps>(
+  ({ id, name, defaultValue, onChange, options, placeholder, currentValue }, ref) => {
   return (
     <select
       className="dark:bg-dark-tertiary dark:text-white shadow appearance-none py-2 px-3 rounded w-full leading-tight focus:outline-none focus:shadow-outline"
@@ -60,5 +53,7 @@ const SelectInput: React.FC<SelectInputProps> = React.forwardRef(({
     </select>
   );
 });
+
+SelectInput.displayName = 'SelectInput';
 
 export default SelectInput;

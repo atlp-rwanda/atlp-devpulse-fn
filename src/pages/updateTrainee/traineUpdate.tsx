@@ -4,7 +4,6 @@ import {
   updateTraineeAttributes,
   getTraineeToUpdate,
 } from "../../redux/actions/updateTrainee";
-// import Select from 'react-select'
 import { useAppSelector, useAppDispatch } from "../../hooks/hooks";
 import { toast } from "react-toastify";
 import NavBar from "../../components/sidebar/navHeader";
@@ -14,7 +13,7 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { getAllCycles } from "../../redux/actions/cyclesActions";
 import { locations } from "./locations";
-import SelectInput from "components/SelectInput";
+import SelectInput from "../../components/SelectInput";
 
 const TraineeUpdate = (props: any) => {
   const params = useParams();
