@@ -14,6 +14,7 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { getAllCycles } from "../../redux/actions/cyclesActions";
 import { locations } from "./locations";
+import SelectInput from "components/SelectInput";
 
 const TraineeUpdate = (props: any) => {
   const params = useParams();
@@ -100,6 +101,24 @@ const TraineeUpdate = (props: any) => {
 
   const [formData, setFormData] = useState(initialValues);
 
+  const provinceOptions = provinces?.map((province: string) => ({
+  value: province,
+  label: province
+})) || [];
+
+  const districtOptions = districts?.map((district: string) => ({
+  value: district,
+  label: district
+  })) || [];
+  const sectorOptions = sectors?.map((sector:string) => ({
+    value: sector,
+    label: sector,
+  })) || [];
+
+const currentDistrict = {
+  value: traineeData.district,
+  label: traineeData.district
+};
   const handleSubmit = async (event: any) => {
     event.preventDefault();
     const reg = new RegExp("^((072|078|073))[0-9]{7}$", "i");
@@ -268,109 +287,68 @@ const TraineeUpdate = (props: any) => {
                     <label className="block text-sm font-bold mb-2">
                       Province
                     </label>
-                    <select
-                      className="dark:bg-dark-tertiary dark:text-white shadow appearance-none py-2 px-3 rounded w-full leading-tight focus:outline-none focus:shadow-outline"
-                      id="province"
-                      ref={provinceRef}
-                      name="province"
-                      defaultValue={traineeData.province}
-                      onChange={(e) => {
-                        setFormData({
-                          ...formData,
-                          province: e.target.value,
-                        });
-                        getDistricts(e.target.value);
-                      }}
-                    >
-                      <option value="" disabled>
-                        Select province
-                      </option>
-                      
-                      {provinces?.map((province: any) => (
-                        <option
-                          className="dark:bg-dark-tertiary dark:text-white p-3 dark:hover:bg-dark-frame-bg"
-                          value={province}
-                        >
-                          {province}
-                        </option>
-                      ))}
-                    </select>
+<SelectInput
+id="province"
+name="province"
+ref={provinceRef}
+defaultValue={traineeData.province}
+onChange={(e) => {
+  setFormData({
+    ...formData,
+    province: e.target.value,
+  });
+  getDistricts(e.target.value);
+}}
+options={provinceOptions}
+placeholder="Select province"
+/>
                   </div>
 
                   <div className="mb-4">
                     <label className="block text-sm font-bold mb-2">
                       District
                     </label>
-                    <select
-                      className="dark:bg-dark-tertiary dark:text-white shadow appearance-none py-2 px-3 rounded w-full leading-tight focus:outline-none focus:shadow-outline"
-                      id="district"
-                      name="district"
-                      ref={districtRef}
-                      defaultValue={traineeData.district}
-                      onChange={(e) => {
-                        setFormData({
-                          ...formData,
-                          district: e.target.value,
-                        });
-                        getSectors(formData.province, e.target.value);
-                      }}
-                    >
-
-                      <option value="" disabled>
-                        Select district
-                      </option>
-                      <option
-                        className="dark:bg-dark-tertiary dark:text-white hidden"
-                        value={traineeData.district}
-                      >
-                        {traineeData.district}
-                      </option>
-                      {districts?.map((district: any) => (
-                        <option
-                          className="dark:bg-dark-tertiary dark:text-white p-3 dark:hover:bg-dark-frame-bg"
-                          value={district}
-                        >
-                          {district}
-                        </option>
-                      ))}
-                    </select>
+                   <SelectInput
+  id="district"
+  name="district"
+  ref={districtRef}
+  defaultValue={traineeData.district}
+  onChange={(e) => {
+    setFormData({
+      ...formData,
+      district: e.target.value,
+    });
+    getSectors(formData.province, e.target.value);
+  }}
+  options={districtOptions}
+  placeholder="Select district"
+  currentValue={currentDistrict}
+/>
                   </div>
 
                   <div className="mb-4">
                     <label className="block text-sm font-bold mb-2">
                       Sector
                     </label>
-                    <select
-                      className="dark:bg-dark-tertiary dark:text-white py-2 px-3 shadow appearance-none rounded w-full leading-tight focus:outline-none focus:shadow-outline"
-                      id="sector"
-                      ref={sectorRef}
-                      defaultValue={traineeData.sector}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          sector: e.target.value,
-                        })
-                      }
-                      name="sector"
-                    >
-                      <option value="" disabled>
-                        Select sector
-                      </option>
-                      <option
-                        className="dark:bg-dark-tertiary dark:text-white hidden"
-                        value={traineeData.sector}
-                      >
-                        {traineeData.sector}
-                      </option>
-                      {sectors?.map((sector: any) => (
-                        <option
-                          className="dark:bg-dark-tertiary p-3 dark:text-white dark:hover:bg-dark-frame-bg"
-                          value={sector}
-                        >
-                          {sector}
-                        </option>
-                      ))}
-                    </select>
+                   <SelectInput
+      id="sector"
+      name="sector"
+      defaultValue={traineeData.sector} 
+      onChange={(e) => 
+        setFormData({
+          ...formData,
+          sector: e.target.value,
+        })
+      }
+      options={sectorOptions}
+      ref={sectorRef}
+      placeholder="Select sector"
+      currentValue={{
+        value: traineeData.sector,
+        label: traineeData.sector,
+        hidden: true, 
+      }}
+    />
                   </div>
 
                   <div className="mb-4">
