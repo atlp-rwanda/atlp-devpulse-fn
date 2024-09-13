@@ -45,6 +45,7 @@ plugins:
   enabled: true
  eslint:
   enabled: true
+  channel: eslint-8
 exclude_patterns:
 - "config/"
 - "db/"

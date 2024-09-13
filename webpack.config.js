@@ -17,13 +17,13 @@ module.exports = () => {
       historyApiFallback: true,
       port: 3000,
       compress: true,
-      allowedHosts: ['all'],
+      allowedHosts: ["all"],
     },
     resolve: {
       fallback: {
         zlib: require.resolve("browserify-zlib"),
         https: require.resolve("https-browserify"),
-        http: require.resolve("stream-http"), 
+        http: require.resolve("stream-http"),
       },
       alias: {
         process: "process/browser",

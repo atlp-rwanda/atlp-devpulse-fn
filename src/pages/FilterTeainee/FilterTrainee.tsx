@@ -1,17 +1,23 @@
 
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState, useMemo, useRef } from "react";
 import { connect } from "react-redux";
 import { useTable, usePagination, useRowSelect } from "react-table";
 import NavBar from "../../components/sidebar/navHeader";
 import * as AiIcons from "react-icons/ai";
+import * as IoIcons from "react-icons/io5";
 import CheckBox from "../../components/CkeckBox";
 import Select from "react-select";
 import Threedots from "../../components/Dropdown/Threedots";
 import { FaCaretDown } from "react-icons/fa";
-import { getAllFilteredTraineess } from "../../redux/actions/filterTraineeActions";
-import {getAlltraineeapplicants} from "../../redux/actions/filterTraineeActions"
+import {
+  getAllFilteredTraineess,
+  sendBulkyEmail,
+} from "../../redux/actions/filterTraineeActions";
+import { getAlltraineeapplicants } from "../../redux/actions/filterTraineeActions";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
+import Modal from "@mui/material/Modal";
+import Box from "@mui/material/Box";
 import { useTheme } from "../../hooks/darkmode";
 import { Link } from "react-router-dom";
 import {
@@ -19,8 +25,10 @@ import {
   useCustomPagination,
 } from "../../components/Pagination/useCustomPagination";
 import { updateTraineeStatus } from "../../redux/actions/updateStatus";
-import Pagination from "../../components/pagination2/pagination2"
-
+import Pagination from "../../components/pagination2/pagination2";
+import Tinymce from "../../components/tinymce/Tinymce";
+import { Editor } from "@tinymce/tinymce-react";
+import { Editor as TinyMCEEditor } from "tinymce";
 export const customTheme = (theme: any) => {
   return {
     ...theme,
@@ -45,11 +53,16 @@ export const darkTheme = (theme: any) => {
   };
 };
 
+//tynmce editor
+// const editorRef = useRef();
+// const editorRef = useRef(null);
+
 const FilterTrainee = (props: any) => {
   const { theme, setTheme } = useTheme();
-  console.log(props)
+  console.log(props);
   const [filterAttribute, setFilterAttribute] = useState("");
   const [enteredWord, setEnteredWord] = useState("");
+  const [enteredsubmitWord, setenteredsubmitWord] = useState("");
   const [All, setAll] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [pageData, setPageData] = useState({
@@ -58,9 +71,32 @@ const FilterTrainee = (props: any) => {
     totalPages: 0,
     totalTraineeapplicants: 0,
   });
- const [currentPage, setCurrentPage] = useState(1);
+  const [openSendModal, setOpenSendModal] = useState(false);
+  const [to, setTo] = useState([""]);
+  const [subject, setSubject] = useState("");
+  const [html, setHtml] = useState("");
+  const [isChecked, setIsChecked] = useState(false);
+  const [isActive, setIsActive] = useState(false);
+  const handleOnChange = () => {
+    setIsChecked(!isChecked);
+    if (!isChecked) {
+      setIsActive(!isActive);
+    }
+  };
+  console.log("to", to);
+  const handleCloseSendModel = () => {
+    setOpenSendModal(false);
+  };
+  const handleOpenSendModel = () => {
+    setOpenSendModal(true);
+    {
+      rowsSelected.length != "" ? setTo(rowsSelected) : setTo([]);
+    }
+  };
+  const [currentPage, setCurrentPage] = useState(1);
 
   const clearInpunt = () => {
+    setenteredsubmitWord("");
     setEnteredWord("");
   };
 
@@ -68,7 +104,25 @@ const FilterTrainee = (props: any) => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      setEnteredWord(enteredsubmitWord);
+    }
+  };
 
+  const handleSendEmail = (e: any) => {
+    e.preventDefault();
+
+    const data = {
+      to,
+      subject,
+      html,
+    };
+
+    props.sendBulkyEmail(data);
+    setOpenSendModal(false);
+  };
+  console.log("to", to);
   const showTaggleOptions = () => {
     return (
       <div>
@@ -94,21 +148,19 @@ const FilterTrainee = (props: any) => {
     );
   };
   // All trainees in DB
-  const { allfilteredTrainees, updateTraineeStatus ,count} = props;
+  const { allfilteredTrainees, updateTraineeStatus, count } = props;
   const traineeList = allfilteredTrainees?.data;
   const handleNullTraineeList = traineeList === undefined ? [] : traineeList;
 
-  const [pageIdx, setPageIdx] = useState(1);
-  const [itemsPerPage,setitemsPerPage] = useState(10);
+  const [itemsPerPage, setitemsPerPage] = useState(10);
 
-  const nonNullTrainee = handleNullTraineeList.filter((value) => {
+  const nonNullTrainee = handleNullTraineeList?.filter((value) => {
     return value !== null;
   });
 
   const nonDeletedTrainee = nonNullTrainee?.filter((value) => {
     return value.trainee_id.delete_at == false;
   });
- 
 
   const traineeStatusUpdate = (id: any, status: any, cycle_id: any) => {
     const input = {
@@ -288,13 +340,13 @@ const FilterTrainee = (props: any) => {
     };
 
     props.getAllFilteredTraineess(data23);
-    setPageData((prevstate)=>({
-        ...prevstate,
-        isLoading: false,
-        rowData:data,
-        totalTraineeapplicants: count.message,
-      }));
-  }, [currentPage,enteredWord, filterAttribute,itemsPerPage]);
+    setPageData((prevstate) => ({
+      ...prevstate,
+      isLoading: false,
+      rowData: data,
+      totalTraineeapplicants: count.message,
+    }));
+  }, [currentPage, enteredWord, filterAttribute, itemsPerPage]);
   const initialState = {
     hiddenColumns: [
       "trainee_id.firstName",
@@ -336,6 +388,7 @@ const FilterTrainee = (props: any) => {
     allColumns,
     rows,
     getToggleHideAllColumnsProps,
+    selectedFlatRows,
   }: any = useTable(
     {
       columns,
@@ -343,7 +396,7 @@ const FilterTrainee = (props: any) => {
       initialState,
     },
     // usePagination,
-   
+
     useRowSelect,
     (hooks: any) => {
       hooks.visibleColumns.push((columns: any) => {
@@ -363,6 +416,14 @@ const FilterTrainee = (props: any) => {
     }
   );
   const { pageIndex, pageSize } = state;
+  const rowsSelected = selectedFlatRows.map(
+    (row) => row.original.trainee_id.email
+  );
+  console.log("rowsSelected", rowsSelected);
+
+  function push(value: string): React.SetStateAction<never[]> {
+    throw new Error("Function not implemented.");
+  }
 
   // const paginationRange = useCustomPagination({
   //   totalPageCount: pageCount,
@@ -403,6 +464,7 @@ const FilterTrainee = (props: any) => {
                     value: "past_andela_programs",
                     label: "Attended Andela Programs",
                   },
+                  { value: "status", label: "Status" },
                   { value: "", label: "Select by" },
                 ]}
                 defaultValue={{ value: "", label: "Select by" }}
@@ -418,7 +480,7 @@ const FilterTrainee = (props: any) => {
                     onClick={clearInpunt}
                     viewBox="-6 -6 20 20"
                   >
-                    {enteredWord === "" ? (
+                    {enteredsubmitWord === "" ? (
                       <AiIcons.AiOutlineSearch />
                     ) : (
                       <AiIcons.AiOutlineClose />
@@ -426,9 +488,10 @@ const FilterTrainee = (props: any) => {
                   </svg>
                 </span>
                 <input
-                  onChange={(e) => setEnteredWord(e.target.value)}
+                  onChange={(e) => setenteredsubmitWord(e.target.value)}
+                  onKeyDown={(e) => handleKeyDown(e)}
                   className="dark:text-ltb block bg-row-gray dark:bg-[#293647] w-50 border border-bdr dark:border-cg dark:border-opacity-5 rounded-bt-rd mt-2 py-2 pl-9 pr-4 focus:outline-none sm:text-sm"
-                  value={enteredWord}
+                  value={enteredsubmitWord}
                   placeholder="Search"
                   type="text"
                   name="search"
@@ -448,7 +511,14 @@ const FilterTrainee = (props: any) => {
                 {/* <button className="bg-button-color dark:bg-green text-ltb text-fb font-medium ml-8 mt-2 pl-3 pr-3 py-1 rounded-bt-rd semi-sm:ml-2">
                   EXPORT TO
                 </button> */}
-                <button className="bg-cgray text-button-color dark:bg-button-color dark:text-ltb text-fb font-medium ml-8 mt-2 pl-3 pr-3 py-1 rounded-bt-rd semi-sm:ml-2">
+                <button
+                  style={{
+                    backgroundColor: isActive ? "#293647" : "#dbdee6",
+                    color: isActive ? "white" : "#293647",
+                  }}
+                  onClick={() => handleOpenSendModel()}
+                  className="text-fb font-medium ml-8 mt-2 pl-3 pr-3 py-1 rounded-bt-rd semi-sm:ml-2"
+                >
                   BULK EMAIL
                 </button>
               </div>
@@ -480,7 +550,10 @@ const FilterTrainee = (props: any) => {
                 <MenuItem>
                   <div className="flex">
                     <div className="mr-[5px]">
-                      <CheckBox {...getToggleHideAllColumnsProps()} />{" "}
+                      <CheckBox
+                        {...getToggleHideAllColumnsProps()}
+                        checked={isChecked}
+                      />{" "}
                     </div>
                     <div className="text-[#173B3F] text-base">Toggle All</div>
                   </div>
@@ -493,6 +566,8 @@ const FilterTrainee = (props: any) => {
                           type="checkbox"
                           {...column.getToggleHiddenProps()}
                           className="mr-[5px]"
+                          checked={isChecked}
+                          // onChange={handleOnChange}
                         />
                         {column.Header}
                       </label>
@@ -539,6 +614,8 @@ const FilterTrainee = (props: any) => {
                             {row.cells.map((cell: any) => {
                               return (
                                 <td
+                                  onClick={handleOnChange}
+                                  // checked={handleOnChange}
                                   {...cell.getCellProps()}
                                   className="pl-[30px] text-left max-w-[150px] overflow-x-auto p-4 last:w-[2px] last:pl-[0px]"
                                 >
@@ -565,15 +642,120 @@ const FilterTrainee = (props: any) => {
               </div>
             </div>
             <div className="py-3 flex items-center text-center justify-center pt-10">
-                <Pagination
-                  totalRows={count.message}
-                  pageChangeHandler={setCurrentPage}
-                  rowsChangeHandler={setitemsPerPage}
-                  rowsPerPage={itemsPerPage}
-                />
-             
+              <Pagination
+                totalRows={count.message}
+                pageChangeHandler={setCurrentPage}
+                rowsChangeHandler={setitemsPerPage}
+                rowsPerPage={itemsPerPage}
+              />
             </div>
           </div>
+          <Modal
+            open={openSendModal}
+            onClose={handleCloseSendModel}
+            aria-labelledby="parent-modal-title"
+            aria-describedby="parent-modal-description"
+          >
+            <Box className="absolute w-[50%] top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] md:w-[90%]">
+              <form
+                action=""
+                onSubmit={handleSendEmail}
+                className=" relative w-[100%] rounded-[5px] h-[555px] m-auto p-[10px] pt-[5px] dark:bg-dark-bg bg-[#f0f0f0] "
+              >
+                <h1 className="text-center font-bold dark:text-white text-[22px] m-[20px]">
+                  New Email
+                </h1>
+                <IoIcons.IoClose
+                  className="absolute top-[20px] right-[20px] text-[35px] cursor-pointer"
+                  onClick={handleCloseSendModel}
+                />
+                <hr style={{ marginBottom: "4px" }} />
+                <div>
+                  <input
+                    type="text"
+                    name="to"
+                    placeholder="To whom (Email...)"
+                    value={to}
+                    onChange={(e) => {
+                      // setTo(rowsSelected);
+                      setTo([...e.target.value.split(",")]);
+                    }}
+                    className=" mt-1 bg-lime cursor-pointer text-[18px] self-center py-1 rounded-[5px] h-[50px] my-[20px] mx-auto w-[80%] block border-[2px] border-[#a8a8a8]  px-[10px] md:w-[90%]"
+                  />
+                </div>
+                <div>
+                  <input
+                    type="text"
+                    name="subject"
+                    placeholder="Subject"
+                    value={subject}
+                    onChange={(e) => {
+                      setSubject(e.target.value);
+                    }}
+                    className=" mt-1 bg-lime cursor-pointer text-[18px] self-center py-1 rounded-[5px] h-[50px] my-[20px] mx-auto w-[80%] block border-[2px] border-[#a8a8a8]  px-[10px] md:w-[90%]"
+                  />
+                </div>
+                <div>
+                  <div className=" mt-1 cursor-pointer text-[18px] self-center py-0 h-[10rem] my-[50px] mx-auto w-[90%] block px-[5px] md:w-[100%]">
+                    <Editor
+                      value={html}
+                      onEditorChange={(Editorcontent) => {
+                        setHtml(Editorcontent);
+                      }}
+                      init={{
+                        height: 220,
+                        //menubar: false,
+                        placeholder: "Write your Email Here.....",
+                        plugins: [
+                          "advlist",
+                          "autolink",
+                          "lists",
+                          "link",
+                          "image",
+                          "charmap",
+                          "preview",
+                          "anchor",
+                          "searchreplace",
+                          "visualblocks",
+                          "code",
+                          "fullscreen",
+                          "insertdatetime",
+                          "media",
+                          "table",
+                          "code",
+                          "help",
+                          "wordcount",
+                        ],
+                        toolbar:
+                          "undo redo | blocks | " +
+                          "bold italic forecolor | alignleft aligncenter " +
+                          "alignright alignjustify | bullist numlist outdent indent | " +
+                          "removeformat | help",
+                        content_style:
+                          "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
+                      }}
+                    />
+                  </div>
+                  {/* <input
+                    type="text"
+                    name="message"
+                    value={html}
+                    onChange={(e) => {
+                      setHtml(e.target.value);
+                    }}
+                    className=" mt-2 bg-lime cursor-pointer text-[18px] self-center py-1 rounded-[5px] h-[50px] my-[20px] mx-auto w-[80%] block border-[2px] border-[#a8a8a8]  px-[10px] md:w-[90%]"
+                  /> */}
+                </div>
+                <button
+                  type="submit"
+                  className="text-white border-[1px] border-[#a8a8a8] dark:bg-[#56C870] h-[40px] w-[100px] block rounded-[5px] my-[2px] mt-[5rem]  mx-[auto] bg-[#173b3f]"
+                >
+                  Send
+                </button>
+              </form>
+            </Box>
+          </Modal>
+          <div></div>
         </div>
       </div>
     </>
@@ -583,11 +765,12 @@ const FilterTrainee = (props: any) => {
 const mapState = (state: any) => ({
   allfilteredTrainees: state.filterTrainee,
   errors: state.filterTrainee.errors,
-  count:state.count
+  count: state.count,
 });
 
 export default connect(mapState, {
   getAllFilteredTraineess: getAllFilteredTraineess,
   updateTraineeStatus: updateTraineeStatus,
-  getAlltraineeapplicants:getAlltraineeapplicants,
+  getAlltraineeapplicants: getAlltraineeapplicants,
+  sendBulkyEmail: sendBulkyEmail,
 })(FilterTrainee);
