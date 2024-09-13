@@ -22,6 +22,7 @@ const TraineeUpdate = (props: any) => {
   const traineeData = useAppSelector(
     (state: any) => state.getOneTraineeReducer?.data
   );
+
   const cycles = props?.cycles?.cycles?.data;
   const [provinces, setProvinces] = useState<any[]>([]);
   const [districts, setDistricts] = useState<any[]>([]);
@@ -43,6 +44,7 @@ const TraineeUpdate = (props: any) => {
   const getDistricts = (provinceName: any) => {
     try {
       const data = locations[provinceName];
+      console.log(data);
       districts.length = 0;
       Object.keys(data).forEach((district) => {
         districts.push(district);
@@ -55,14 +57,18 @@ const TraineeUpdate = (props: any) => {
   const getSectors = (provinceName: any, districtName: any) => {
     try {
       const data = locations[provinceName][districtName];
+      console.log(data);
       sectors.length = 0;
       Object.keys(data).forEach((sector) => {
         sectors.push(sector);
+       
       });
     } catch (error) {
       console.log(error);
     }
   };
+
+
 
   useEffect(() => {
     async function handleGetTrainee() {
@@ -115,7 +121,7 @@ const TraineeUpdate = (props: any) => {
     const districtExists = Object.values(districts).includes(district);
     const sectorExists = Object.values(sectors).includes(sector);
 
-    console.log(districtRef);
+    // console.log(districtRef);
     if (formData.firstname === "") {
       toast.error("Firstname is required");
     } else if (formData.lastname === "") {
@@ -182,6 +188,7 @@ const TraineeUpdate = (props: any) => {
       }
     }
   };
+
   return (
     <>
       <NavBar />
@@ -281,7 +288,7 @@ const TraineeUpdate = (props: any) => {
                         });
                         getDistricts(e.target.value);
                       }}
-                      placeholder="Select province"
+                      aria-placeholder="Select province"
                     >
                       {provinces?.map((province: any) => (
                         <option
@@ -311,11 +318,11 @@ const TraineeUpdate = (props: any) => {
                         });
                         getSectors(formData.province, e.target.value);
                       }}
-                      placeholder="Select district"
+                      aria-placeholder="Select district"
                     >
                       <option
                         className="dark:bg-dark-tertiary dark:text-white hidden"
-                        value={traineeData.district}
+                        value={districts}
                       >
                         {traineeData.district}
                       </option>
@@ -346,7 +353,7 @@ const TraineeUpdate = (props: any) => {
                         })
                       }
                       name="sector"
-                      placeholder="Select sector"
+                      aria-placeholder="Select sector"
                     >
                       <option
                         className="dark:bg-dark-tertiary dark:text-white hidden"
@@ -559,14 +566,15 @@ const TraineeUpdate = (props: any) => {
                           level_education: e.target.value,
                         })
                       }
-                      placeholder="Please select level"
+                      // placeholder="Please select level"
                     >
                       {options?.educationOptions?.map((option: any) => (
                         <option
                           className="dark:bg-dark-tertiary p-3 dark:text-white dark:hover:bg-dark-frame-bg"
-                          value={option}
+                          value={option.value}
+                          key={option.value}
                         >
-                          {option}
+                          {option.label}
                         </option>
                       ))}
                     </select>
@@ -623,7 +631,7 @@ const TraineeUpdate = (props: any) => {
                     </label>
                     <select
                       className="dark:bg-dark-tertiary dark:text-white py-2 px-3 shadow appearance-none  rounded w-full  leading-tight focus:outline-none focus:shadow-outline"
-                      placeholder="Interview decisison"
+                      // placeholder="Interview decisison"
                       defaultValue={traineeData.interview_decision}
                       onChange={(e) =>
                         setFormData({
@@ -635,9 +643,9 @@ const TraineeUpdate = (props: any) => {
                       {options?.interviewOptions?.map((option: any) => (
                         <option
                           className="dark:bg-dark-tertiary p-3 dark:text-white dark:hover:bg-dark-frame-bg"
-                          value={option}
+                          value={option.value}
                         >
-                          {option}
+                          {option.label}
                         </option>
                       ))}
                     </select>
@@ -650,7 +658,7 @@ const TraineeUpdate = (props: any) => {
                     <select
                       className="dark:bg-dark-tertiary dark:text-white shadow py-2 px-3 appearance-none  rounded w-full  leading-tight focus:outline-none focus:shadow-outline"
                       ref={cycleRef}
-                      placeholder="Please select cycle"
+                      // placeholder="Please select cycle"
                       defaultValue={traineeData?.trainee_id?.cycle_id?.id}
                       onChange={(e) =>
                         setFormData({

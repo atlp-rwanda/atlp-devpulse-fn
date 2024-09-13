@@ -319,7 +319,7 @@ const ListAllUsers: FunctionComponent<Props> = (props) => {
         </div>
 
         <button
-          placeholder="Role"
+          // placeholder="Role"
           className=" lg:absolute text-md text-sm  text-center text-white rounded dark:bg-green bg-primary w-[120px] lg:right-[80px] lg:w-[150px] py-2 px-3"
           onClick={Open}
         >

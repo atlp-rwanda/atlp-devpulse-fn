@@ -2,7 +2,7 @@ import React from 'react';
 import { HashRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import TestTailwind from './../components/TestTailwind';
 import TrainneeDetails from './../pages/TrainneeDetails';
-import TrainneeDetailsB from './../pages/TrainneDetailsB';
+// import TrainneeDetailsB from './../pages/TrainneDetailsB';
 import './../index.css';
 import Sidebar from './../components/sidebar/sidebar';
 import NavBar from './../components/sidebar/navHeader';
@@ -60,14 +60,14 @@ function Navigation() {
           </PrivateRoute>
         }
       />
-      <Route
+      {/* <Route
         path="/traineeb-details"
         element={
           <PrivateRoute>
             <TrainneeDetailsB />
           </PrivateRoute>
         }
-      />
+      /> */}
       <Route
         path="/Trainee-applicants"
         element={

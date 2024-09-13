@@ -270,4 +270,4 @@ export const createtraine = ({ firstName, lastName, email, cycle_id }: any) => {
       dispatch({ type: fetchtrainesss.createtrainee_fail, error: err });
     }
   };
-};
+}

@@ -34,6 +34,17 @@ module.exports = () => {
         stream: "stream-browserify",
       },
     },
+    resolve: {
+      fallback: {
+        zlib: require.resolve('browserify-zlib'),
+        https: require.resolve("https-browserify"),
+        http: require.resolve("stream-http"), 
+      },
+      alias: {
+        process: "process/browser",
+        stream: "stream-browserify"
+      },
+    },
     module: {
       rules: [
         {
@@ -66,6 +77,9 @@ module.exports = () => {
       new webpack.ProvidePlugin({
         process: "process/browser",
       }),
+      new webpack.ProvidePlugin({
+        process: 'process/browser',
+       }),
     ],
   };
 };

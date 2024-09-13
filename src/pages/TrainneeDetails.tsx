@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { BsEnvelope } from "react-icons/bs";
-import { TiExportOutline } from "react-icons/ti";
+import { LuCalendarDays } from "react-icons/lu";
 import { FcApproval } from "react-icons/fc";
-import { AiFillSetting, AiFillCaretDown } from "react-icons/ai";
+import { FaRecycle } from "react-icons/fa6";
 import { MdOutlineCancel } from "react-icons/md";
-import { BsFillPersonLinesFill } from "react-icons/bs";
-import Sidebar from "../components/sidebar/sidebar";
+import { GoChecklist } from "react-icons/go";
+// import Sidebar from "../components/sidebar/sidebar";
 import { getOneTraineeAllDetails } from "../redux/actions/trainnee";
 import { connect } from "react-redux";
 import Navbar from "./../components/sidebar/navHeader";
@@ -86,113 +86,148 @@ const TrainneeDetails = (props: any) => {
   return (
     <>
       <Navbar />
-      <div className="flex items-center overflow-auto  dark:bg-dark-frame-bg ">
+      <div className="flex  items-center overflow-auto  dark:bg-dark-frame-bg ">
         {/* <div className="min-h-[50vh] dark:bg-dark-frame-bg  w-[100%] block mt-10 md:w-[100%] md:mt-0 pl-[16rem] pt-[80px] md:pl-0"> */}
-        <div className="block w-[100%] pl-[16rem] h-max md:pl-0 mx-auto dark:bg-dark-frame-bg pb-10 mt-10  pt-[80px]">
+        <div className="block w-[100%] pl-[16rem] h-max md:pl-0 mx-auto dark:bg-dark-frame-bg pb-10 mt-10 pt-[80px]">
           {traineeDetails && (
-            <div className=" max-w-md bg-slate-50 dark:text-zinc-100 rounded-xl dark:bg-dark-bg shadow-md  overflow-hidden md:w-[100%] mb-6 lg:flex lg:max-w-2xl mx-auto">
+            <div className="w-full  mx-16 bg-slate-50 rounded-xl shadow-md overflow-hidden md:max-w-2xl mb-6 lg:flex lg:max-w-3xl dark:bg-[#192432] dark:text-white">
               <div className="md:flex  ">
-                <h2 className="top-5 m-5  font-medium  md:m-3 ">
-                  <BsFillPersonLinesFill className="float-left m-1" />
-                  Trainee Applicant Information
+                <h2 className="top-5 m-5 font-medium  md:m-3 ">
+                  <span className="pl-5 text-lg text-[#56C870] uppercase">
+                    Trainee Applicant Information
+                  </span>
                 </h2>
 
-                <div className=" m-5 sm:mt-20 sm:ml-[-12rem] md:shrink-0  lg:ml-10 lg:mt-10  ">
+                <div className="m-5 sm:mt-20 sm:ml-[-12rem] md:shrink-0  lg:ml-10 lg:mt-10  ">
                   {traineeDetails?.trainee_id && (
-                    <>
+                    <div className="w-72  bg-gray-800  pl-2  py-2 mb-3 rounded-md">
                       {" "}
-                      <h3>FirstName</h3>
-                      <p className="text-gray-500 text-sm dark:text-gray-400 ">
+                      <h3 className="pb-1">FirstName</h3>
+                      <p className="text-gray-500 text-sm dark:text-gray-400">
                         {traineeDetails?.trainee_id.firstName}
                       </p>
-                    </>
+                    </div>
                   )}
-                  <h3>Gender</h3>
-                  <p className="text-gray-500 text-sm dark:text-gray-400">
-                    {traineeDetails.gender}
-                  </p>
-                  <h3>Address</h3>
-                  <p className="text-gray-500 text-sm dark:text-gray-400">
-                    {traineeDetails.Address}
-                  </p>
-                  <h3>Phone Number</h3>
-                  <p className="text-gray-500 text-sm dark:text-gray-400">
-                    {traineeDetails.phone}
-                  </p>
-                  <h3>Field of Study</h3>
-                  <p className="text-gray-500 text-sm dark:text-gray-400">
-                    {traineeDetails.field_of_study}
-                  </p>
-                  <h3>Education Level</h3>
-                  <p className="text-gray-500 text-sm dark:text-gray-400">
-                    {traineeDetails.education_level}
-                  </p>
-                  <h3>Is Employed</h3>
-                  <p className="text-gray-500 text-sm dark:text-gray-400">
-                    {String(traineeDetails.isEmployed)}
-                  </p>
-                  {traineeDetails?.trainee_id && (
-                    <>
-                      <h3>Email </h3>
-                      <p className="text-gray-500 text-sm dark:text-gray-400">
-                        {traineeDetails?.trainee_id.email}
-                      </p>
-                    </>
-                  )}
+                  <div className="w-72   bg-gray-800 pl-2 py-2 mb-3 rounded-md">
+                    <h3 className="pb-1">Gender</h3>
+                    <p className="text-gray-500 text-sm dark:text-gray-400">
+                      {traineeDetails.gender}
+                    </p>
+                  </div>
+                  <div className="w-72   bg-gray-800 pl-2 py-2 mb-3 rounded-md">
+                    <h3 className="pb-1">Address</h3>
+                    <p className="text-gray-500 text-sm dark:text-gray-400">
+                      {traineeDetails.Address}
+                    </p>
+                  </div>
+                  <div className="w-72   bg-gray-800 pl-2 py-2 mb-3 rounded-md">
+                    <h3 className="pb-1">Phone Number</h3>
+                    <p className="text-gray-500 text-sm dark:text-gray-400">
+                      {traineeDetails.phone}
+                    </p>
+                  </div>
+                  <div className="w-72   bg-gray-800 pl-2 py-2 mb-3 rounded-md">
+                    <h3 className="pb-1">Field of Study</h3>
+                    <p className="text-gray-500 text-sm dark:text-gray-400">
+                      {traineeDetails.field_of_study}
+                    </p>
+                  </div>
+                  <div className="w-72   bg-gray-800 pl-2 py-2 mb-3 rounded-md">
+                    <h3 className="pb-1">Education Level</h3>
+                    <p className="text-gray-500 text-sm dark:text-gray-400">
+                      {traineeDetails.education_level}
+                    </p>
+                  </div>
+                  <div className="w-72   bg-gray-800 pl-2 py-2 mb-3 rounded-md">
+                    <h3 className="pb-1">Is Employed</h3>
+                    <p className="text-gray-500 text-sm dark:text-gray-400">
+                      {String(traineeDetails.isEmployed)}
+                    </p>
+                  </div>
+
+                  <div className="w-72   bg-gray-800 pl-2 py-2 mb-3 rounded-md">
+                    {traineeDetails?.trainee_id && (
+                      <>
+                        <h3 className="pb-1">Email </h3>
+                        <p className="text-gray-500 text-sm dark:text-gray-400">
+                          {traineeDetails?.trainee_id.email}
+                        </p>
+                      </>
+                    )}
+                  </div>
                 </div>
               </div>
               <div className="m-5 sm:ml-[20rem] md:ml-2 lg:mt-20 lg:ml-[5rem]">
                 {traineeDetails?.trainee_id && (
-                  <>
-                    <h3>LastName</h3>
+                  <div className="w-72   bg-gray-800 pl-2 py-2 mb-3 rounded-md">
+                    <h3 className="pb-1">LastName</h3>
                     <p className="text-gray-500 text-sm dark:text-gray-400">
                       {traineeDetails?.trainee_id.lastName}
                     </p>
-                  </>
+                  </div>
                 )}
-                <h3>Province</h3>
-                <p className="text-gray-500 text-sm dark:text-gray-400">
-                  {traineeDetails.province}
-                </p>
-                <h3>District</h3>
-                <p className="text-gray-500 text-sm dark:text-gray-400">
-                  {traineeDetails.district}
-                </p>
-                <h3>Sector</h3>
-                <p className="text-gray-500 text-sm dark:text-gray-400">
-                  {traineeDetails.sector}
-                </p>
-                <h3>Is Student</h3>
-                <p className="text-gray-500 text-sm dark:text-gray-400">
-                  {String(traineeDetails.isStudent)}
-                </p>
-                <h3>Hackerrank Score</h3>
-                <p className="text-gray-500 text-sm dark:text-gray-400">
-                  {traineeDetails.Hackerrank_score}
-                </p>
-                <h3>English Score</h3>
-                <p className="text-gray-500 text-sm dark:text-gray-400">
-                  {traineeDetails.english_score}
-                </p>
-                <h3>Date of Bith</h3>
-                <p className="text-gray-500 text-sm dark:text-gray-400">
-                  {traineeDetails.birth_date}
-                </p>
+                <div className="w-72   bg-gray-800 pl-2 py-2 mb-3 rounded-md">
+                  <h3 className="pb-1">Province</h3>
+                  <p className="text-gray-500 text-sm dark:text-gray-400">
+                    {traineeDetails.province}
+                  </p>
+                </div>
+                <div className="w-72   bg-gray-800 pl-2 py-2 mb-3 rounded-md">
+                  <h3 className="pb-1">District</h3>
+                  <p className="text-gray-500 text-sm dark:text-gray-400">
+                    {traineeDetails.district}
+                  </p>
+                </div>
+                <div className="w-72   bg-gray-800 pl-2 py-2 mb-3 rounded-md">
+                  <h3 className="pb-1">Sector</h3>
+                  <p className="text-gray-500 text-sm dark:text-gray-400">
+                    {traineeDetails.sector}
+                  </p>
+                </div>
+                <div className="w-72   bg-gray-800 pl-2 py-2 mb-3 rounded-md">
+                  <h3 className="pb-1">Is Student</h3>
+                  <p className="text-gray-500 text-sm dark:text-gray-400">
+                    {String(traineeDetails.isStudent)}
+                  </p>
+                </div>
+                <div className="w-72   bg-gray-800 pl-2 py-2 mb-3 rounded-md">
+                  <h3 className="pb-1">Hackerrank Score</h3>
+                  <p className="text-gray-500 text-sm dark:text-gray-400">
+                    {traineeDetails.Hackerrank_score}
+                  </p>
+                </div>
+                <div className="w-72   bg-gray-800 pl-2 py-2 mb-3 rounded-md">
+                  <h3 className="pb-1">English Score</h3>
+                  <p className="text-gray-500 text-sm dark:text-gray-400">
+                    {traineeDetails.english_score}
+                  </p>
+                </div>
+                <div className="w-72   bg-gray-800 pl-2 py-2 mb-3 rounded-md">
+                  <h3 className="pb-1">Date of Bith</h3>
+                  <p className="text-gray-500 text-sm">
+                    {new Intl.DateTimeFormat("en-CA", {
+                      year: "numeric",
+                      month: "2-digit",
+                      day: "2-digit",
+                    }).format(traineeDetails.birth_date)}
+                  </p>
+                </div>
               </div>
             </div>
           )}
-          <div className="bg-slate-50 rounded-xl dark:bg-dark-bg shadow-md overflow-hidden md:w-[90%] px-10 mb-6 lg:max-w-2xl w-[90%] mx-auto">
+          {/* <div className="w-full mx-16 bg-slate-50 rounded-xl shadow-md overflow-hidden md:max-w-2xl mb-6 lg:flex lg:max-w-3xl dark:bg-[#192432] dark:text-white ">
             <form className="w-fit ">
-              <h2 className="top-5 m-5 ml-0 font-medium dark:text-zinc-100">
-                <BsFillPersonLinesFill className="float-left m-1 " />
-                User ratings
+              <h2 className="top-5 m-5 ml-0 font-medium dark:text-zinc-100 lg:ml-5">
+                <span className="pl-3 text-lg text-[#56C870] uppercase">
+                  User ratings
+                </span>
               </h2>
-              <div className="dark:text-zinc-100 sm:grid sm:grid-cols-2 block pl-[0px] py-[10px] mb-5">
+              <div className="dark:text-zinc-100 sm:grid sm:grid-cols-2 block pl-[0px] py-[10px] mb-5 ">
                 {score_value?.map((values: any, idx: number) => {
                   return (
                     <div
                       key={idx}
-                      className="p-[1px] w-[150px] block mr-0 even:ml-[50px] mt-2"
+                      className="p-[1px] w-[150px] block mr-0 even:ml-[50px] mt-2 ml-10"
                     >
                       <div>
                         <label htmlFor="">{values.test}</label>
@@ -221,7 +256,7 @@ const TrainneeDetails = (props: any) => {
                 })}
               </div>
               {changed && (
-                <div className="flex items-center">
+                <div className="flex items-center ml-10">
                   <button
                     className="text-white border border-[#333] border-1 bg-[#173b3f] rounded-[5px] p-2 w-[100px] mb-5 block dark:bg-green dark:border"
                     onClick={() => {
@@ -244,81 +279,109 @@ const TrainneeDetails = (props: any) => {
                 </div>
               )}
             </form>
-          </div>
-          <div className=" max-w-md bg-slate-50 rounded-xl dark:bg-dark-bg shadow-md overflow-hidden md:w-[100%] mb-6 lg:flex lg:max-w-2xl dark:text-zinc-100  mx-auto">
-            <div>
-              <h2 className="top-5 m-5  font-medium">
-                <BsFillPersonLinesFill className="float-left m-1" />
-                Application Information
-              </h2>
-              <div className="m-5 lg:my-14">
-                <h3>Application Phase</h3>
-                <p className="text-gray-500 text-sm dark:text-gray-400">
-                  Initial Phase
-                </p>
-                <h3 className="mt-5">Program</h3>
-                <p className="text-gray-500 text-sm dark:text-gray-400">
-                  {" "}
-                  Andela Technical Leadership Program
-                </p>
-              </div>
-            </div>
-            <div>
-              <div className="mt-8 m-5 lg:mt-24">
-                <h3>Application Date</h3>
-                <p className="text-gray-500 text-sm dark:text-gray-400">
-                  Initial Phase
-                </p>
-                <h3 className="mt-5">Expected program start date</h3>
-                <p className="text-gray-500 text-sm dark:text-gray-400">
-                  {" "}
-                  08/01/2022
-                </p>
-              </div>
-            </div>
-          </div>{" "}
-          <div className=" max-w-md dark:text-zinc-100 dark:bg-dark-bg bg-slate-50 rounded-xl shadow-md overflow-hidden md:max-w-xl  lg:max-w-2xl lg:mb-10 pb-5  mx-auto">
-            <h2 className="font-bold top-5 ml-5 mt-5 ">
-              <AiFillSetting className="float-left m-1 " />
-              Actions
+          </div> */}
+          {traineeDetails && (
+            <>
+              <div className=" w-full mx-16 bg-slate-50 rounded-xl shadow-md overflow-hidden md:max-w-2xl mb-6 lg:flex lg:max-w-3xl dark:bg-[#192432] dark:text-white">
+                <div className="">
+                  <h2 className="top-5 m-5  font-medium">
+                    <span className="pl-3 text-lg text-[#56C870] uppercase">
+                      Application Information
+                    </span>
+                  </h2>
+
+                  <div className="flex flex-col gap-7 m-5 lg:my-14">
+                    <div className="ml-5 flex items-center gap-4">
+                      <FaRecycle size={50} className="" />
+                      <div>
+                        <h3 className="pb-2">Application Cyle</h3>
+                        {traineeDetails.trainee_id && (
+                          <>
+                            {traineeDetails.trainee_id.cycle_id && (
+                              <>
+                                <p className="text-gray-500 text-sm">
+                                  {traineeDetails.trainee_id.cycle_id.name}
+                                </p>
+                              </>
+                            )}
+                          </>
+                        )}
+                      </div>
+                    </div>
+                    <div className="ml-5 flex items-center gap-4">
+                      <GoChecklist size={50} />
+                      <div>
+                        <h3 className=" pb-2">Program</h3>
+                        <p className="text-gray-500 text-sm">
+                          {" "}
+                          Andela Technical Leadership Program
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="mt-12">
+                  <div className="flex flex-col gap-7  m-5 lg:my-14">
+                    <div className="ml-5 flex items-center gap-4">
+                      <LuCalendarDays size={50} />
+                      <div>
+                        <h3 className="pb-2">Application start date</h3>
+                        {traineeDetails.trainee_id && (
+                          <>
+                            {traineeDetails.trainee_id.cycle_id && (
+                              <>
+                                <p className="text-gray-500 text-sm">
+                                  {traineeDetails.trainee_id.cycle_id.startDate}
+                                </p>{" "}
+                              </>
+                            )}
+                          </>
+                        )}
+                      </div>
+                    </div>
+                    <div className="ml-5 flex items-center gap-4">
+                      <LuCalendarDays size={50} />
+                      <div>
+                        <h3>Expected program end Date</h3>
+                        {traineeDetails.trainee_id && (
+                          <>
+                            {traineeDetails.trainee_id.cycle_id && (
+                              <>
+                                <p className="text-gray-500 text-sm">
+                                  {" "}
+                                  {traineeDetails.trainee_id.cycle_id.endDate}
+                                </p>
+                              </>
+                            )}
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>{" "}
+            </>
+          )}
+          <div className="w-full flex flex-col mx-16  pb-2 bg-slate-50 rounded-xl shadow-md overflow-hidden md:max-w-2xl mb-6 lg:flex lg:max-w-3xl dark:bg-[#192432] dark:text-white  ">
+            <h2 className="font-bold text-lg text-[#56C870] top-5 pb-7 ml-5 mt-5 uppercase ">
+              Status
             </h2>
-            <div className=" btn ml-5 mt-[-10%] mb-3   ">
-              <button className="btn-Aprov  bg-[#10292C] dark:bg-green hover:bg-[#1f544cef] text-white font-bold py-2 px-4 rounded mt-20 mr-4">
-                <FcApproval className="float-left m-1" />
-                Approve
-              </button>
-
-              {/* <div className=""> */}
-              <button
-                onClick={(e) => handleDropDown(open)}
-                className="btn-Aprov bg-[#10292C] dark:bg-green hover:bg-[#1f544cef] text-white font-bold py-2 px-4 rounded mr-8"
-              >
-                <TiExportOutline className="float-left m-1" />
-                Export
-                <AiFillCaretDown className="float-right m-1" />
-                {open && (
-                  <ul className="bg-[#1F2A37] font-light text-sm text-white m-1">
-                    <li className="border-solid border-black border-b-2 ">
-                      Export to PDF
-                    </li>
-                    <li>Export to CSV</li>
-                  </ul>
-                )}
-              </button>
-              {/* </div> */}
-
-              <button className="btn-Aprov2 bg-[#10292C] dark:bg-green hover:bg-[#1f544cef] text-white font-bold py-2 px-4 rounded mr-8 ">
-                <BsEnvelope className="float-left m-1" />
-                Email
-              </button>
-              <button className="btn-Aprov3 bg-[#DC5454] hover:text-red-500 hover:bg-[#1f544cef] text-white font-bold py-2 px-2 rounded ">
-                <MdOutlineCancel className="float-left m-1" />
-                Reject
-              </button>
-            </div>
+            {traineeDetails.Hackerrank_score >= 10 &&
+            traineeDetails.english_score >= 10 ? (
+              <div className="py-10 btn ml-5 mt-[-10%] mb-3   ">
+                <button className="btn-Aprov  bg-[#10292C] hover:bg-[#56C870]  dark:hover:bg-[#1f544cef] text-white font-bold py-2 px-4 rounded mt-7 mr-4  dark:bg-[#56C870]">
+                  Passed
+                </button>
+              </div>
+            ) : (
+              <div className="py-10 btn ml-5 mt-[-10%] mb-3   ">
+                <button className="btn-Aprov3 bg-red-800 hover:text-white hover:bg-red-500 text-white font-bold mt-7 py-2 px-2 rounded ">
+                  Failed
+                </button>
+              </div>
+            )}
           </div>
         </div>
-        {/* </div> */}
       </div>
     </>
   );
