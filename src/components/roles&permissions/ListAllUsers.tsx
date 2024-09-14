@@ -318,13 +318,12 @@ const ListAllUsers: FunctionComponent<Props> = (props) => {
           </div>
         </div>
 
-        <button
-          placeholder="Role"
-          className=" lg:absolute text-md text-sm  text-center text-white rounded dark:bg-green bg-primary w-[120px] lg:right-[80px] lg:w-[150px] py-2 px-3"
-          onClick={Open}
-        >
-          Add member
-        </button>
+<button
+  className=" lg:absolute text-md text-sm  text-center text-white rounded dark:bg-green bg-primary w-[120px] lg:right-[80px] lg:w-[150px] py-2 px-3"
+  onClick={Open}
+>
+  Add member
+</button>
       </div>
       <div className="bg-white  dark:bg-dark-bg shadow-lg px-5 py-8 rounded-t-md w-[100%]">
         <div className="rounded-lg h-[56vh] overflow-y-scroll shadow">

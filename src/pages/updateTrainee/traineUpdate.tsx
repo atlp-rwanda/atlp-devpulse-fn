@@ -186,7 +186,7 @@ const TraineeUpdate = (props: any) => {
     <>
       <NavBar />
       <div className="block bg-white dark:bg-dark-tertiary relative mt-10 w-[100%] py-3 min-h-[100vh]">
-        <div className="block text-center text-sm font-bold text-gray-600 relative lg:left-[8rem] dark:text-white text-base lg:max-w-3xl sm:w-[100%] p-4 lg:px-4 m-4 mx-auto text-[24px]">
+        <div className="block text-center  font-bold text-gray-600 relative lg:left-[8rem] dark:text-white text-base lg:max-w-3xl sm:w-[100%] p-4 lg:px-4 m-4 mx-auto text-[24px]">
           <h1 className="p-2">Update Trainee-applicant</h1>
         </div>
         <form
@@ -281,8 +281,19 @@ const TraineeUpdate = (props: any) => {
                         });
                         getDistricts(e.target.value);
                       }}
-                      placeholder="Select province"
+                     
                     >
+                       <option value="" disabled>
+    Select province
+  </option>
+
+
+  <option
+    className="dark:bg-dark-tertiary dark:text-white hidden"
+    value={traineeData.province}
+  >
+    {traineeData.province}
+  </option>
                       {provinces?.map((province: any) => (
                         <option
                           className="dark:bg-dark-tertiary dark:text-white p-3 dark:hover:bg-dark-frame-bg"
@@ -298,71 +309,41 @@ const TraineeUpdate = (props: any) => {
                     <label className="block text-sm font-bold mb-2">
                       District
                     </label>
-                    <select
-                      className="dark:bg-dark-tertiary dark:text-white shadow appearance-none py-2 px-3 rounded w-full leading-tight focus:outline-none focus:shadow-outline"
-                      id="district"
-                      name="district"
-                      ref={districtRef}
-                      defaultValue={traineeData.district}
-                      onChange={(e) => {
-                        setFormData({
-                          ...formData,
-                          district: e.target.value,
-                        });
-                        getSectors(formData.province, e.target.value);
-                      }}
-                      placeholder="Select district"
-                    >
-                      <option
-                        className="dark:bg-dark-tertiary dark:text-white hidden"
-                        value={traineeData.district}
-                      >
-                        {traineeData.district}
-                      </option>
-                      {districts?.map((district: any) => (
-                        <option
-                          className="dark:bg-dark-tertiary dark:text-white p-3 dark:hover:bg-dark-frame-bg"
-                          value={district}
-                        >
-                          {district}
-                        </option>
-                      ))}
-                    </select>
+                   z
                   </div>
 
                   <div className="mb-4">
                     <label className="block text-sm font-bold mb-2">
                       Sector
                     </label>
-                    <select
-                      className="dark:bg-dark-tertiary dark:text-white py-2 px-3 shadow appearance-none rounded w-full leading-tight focus:outline-none focus:shadow-outline"
-                      id="sector"
-                      ref={sectorRef}
-                      defaultValue={traineeData.sector}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          sector: e.target.value,
-                        })
-                      }
-                      name="sector"
-                      placeholder="Select sector"
-                    >
-                      <option
-                        className="dark:bg-dark-tertiary dark:text-white hidden"
-                        value={traineeData.sector}
-                      >
-                        {traineeData.sector}
-                      </option>
-                      {sectors?.map((sector: any) => (
-                        <option
-                          className="dark:bg-dark-tertiary p-3 dark:text-white dark:hover:bg-dark-frame-bg"
-                          value={sector}
-                        >
-                          {sector}
-                        </option>
-                      ))}
-                    </select>
+<select
+  className="dark:bg-dark-tertiary dark:text-white shadow appearance-none py-2 px-3 rounded w-full leading-tight focus:outline-none focus:shadow-outline"
+  id="sector"
+  ref={sectorRef}
+  defaultValue={traineeData.sector}
+  onChange={(e) =>
+    setFormData({
+      ...formData,
+      sector: e.target.value,
+    })
+  }
+  name="sector"
+>
+  <option
+    className="dark:bg-dark-tertiary dark:text-white hidden"
+    value={traineeData.sector}
+  >
+    {traineeData.sector}
+  </option>
+  {sectors?.map((sector: any) => (
+    <option
+      className="dark:bg-dark-tertiary p-3 dark:text-white dark:hover:bg-dark-frame-bg"
+      value={sector}
+    >
+      {sector}
+    </option>
+  ))}
+</select>
                   </div>
 
                   <div className="mb-4">
@@ -559,9 +540,20 @@ const TraineeUpdate = (props: any) => {
                           level_education: e.target.value,
                         })
                       }
-                      placeholder="Please select level"
+                      
                     >
+                      <option value="" disabled>
+    Select province
+  </option>
+
+  <option
+    className="dark:bg-dark-tertiary dark:text-white hidden"
+    value={traineeData.province}
+  >
+    {traineeData.province}
+  </option>
                       {options?.educationOptions?.map((option: any) => (
+                        
                         <option
                           className="dark:bg-dark-tertiary p-3 dark:text-white dark:hover:bg-dark-frame-bg"
                           value={option}
@@ -623,7 +615,7 @@ const TraineeUpdate = (props: any) => {
                     </label>
                     <select
                       className="dark:bg-dark-tertiary dark:text-white py-2 px-3 shadow appearance-none  rounded w-full  leading-tight focus:outline-none focus:shadow-outline"
-                      placeholder="Interview decisison"
+
                       defaultValue={traineeData.interview_decision}
                       onChange={(e) =>
                         setFormData({
@@ -632,6 +624,17 @@ const TraineeUpdate = (props: any) => {
                         })
                       }
                     >
+                      <option value="" disabled>
+                      Interview decision
+  </option>
+
+ 
+  <option
+    className="dark:bg-dark-tertiary dark:text-white hidden"
+    value={traineeData.province}
+  >
+    {traineeData.province}
+  </option>
                       {options?.interviewOptions?.map((option: any) => (
                         <option
                           className="dark:bg-dark-tertiary p-3 dark:text-white dark:hover:bg-dark-frame-bg"
@@ -650,7 +653,7 @@ const TraineeUpdate = (props: any) => {
                     <select
                       className="dark:bg-dark-tertiary dark:text-white shadow py-2 px-3 appearance-none  rounded w-full  leading-tight focus:outline-none focus:shadow-outline"
                       ref={cycleRef}
-                      placeholder="Please select cycle"
+                      
                       defaultValue={traineeData?.trainee_id?.cycle_id?.id}
                       onChange={(e) =>
                         setFormData({
@@ -659,6 +662,17 @@ const TraineeUpdate = (props: any) => {
                         })
                       }
                     >
+                       <option value="" disabled>
+                       Please select cycle
+  </option>
+
+ 
+  <option
+    className="dark:bg-dark-tertiary dark:text-white hidden"
+    value={traineeData.province}
+  >
+    {traineeData.province}
+  </option>
                       {cycles?.map((cycle: any) => (
                         <option
                           className="dark:bg-dark-tertiary dark:text-white dark:hover:bg-dark-frame-bg p-3"
