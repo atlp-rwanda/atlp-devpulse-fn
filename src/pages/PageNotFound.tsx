@@ -9,15 +9,15 @@ const PageNotFound = () => {
       <div className="text-xl">Oops! This page does not exist</div>
       <div className="text-xl my-3 text-blue-600">
         {
-          role === "applicant" && (
+          role === "applicant" ? (
             <Link to="/applicant">
               <button>Go to Applicant Dashboard</button>
             </Link>
-          ) || (
-            <Link to="/">
+          ) : role === "superAdmin" ? (
+            <Link to="/admin">
             <button>Go back to Homepage</button>
           </Link>
-          )
+          ) : null
         }
       </div>
     </div>

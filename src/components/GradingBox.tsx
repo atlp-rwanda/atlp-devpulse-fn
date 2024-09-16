@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getAllAssessment } from '../redux/actions/getAssessments';
 import { useAppDispatch } from "../hooks/hooks";
+import SelectField from './ReusableComponents/Select';
 
 interface Grade {
   attribute: string;
@@ -256,25 +257,19 @@ function GradingBox(props: any) {
               </div>
               <div className="input mt-4 mb-4 h-9 ">
                 <div className="grouped-input flex items-center h-full w-full rounded-md">
-                  <select
-                    name=""
+                  <SelectField
                     className=" dark:text-white dark:bg-dark-tertiary border border-primary rounded outline-none px-5 font-sans text-sm py-2 w-full pt-4"
-                    defaultValue=""
                     value={assessmentM}
                     onChange={(e) => {
                       setAssessmentM(e.target.value)
                       changeAssess(0, e.target.value)
                     }}
-                  >
-                    <option disabled hidden value="">{"---Choose Assessment---"}</option>
-                    {
-                      allAssessments?.data &&
-                      (allAssessments?.data.map((element) => {
-                        return (
-                          <option value={element.id}>{element.title}</option>)
-                      })
-                      )}
-                  </select>
+                    options={[{ value: "--- Choose assessment---", label: "Choose assessment" },
+                    allAssessments?.data.map((element) => ({
+                      value: element.id, label: element.label
+                    })
+                    )]}
+                  />
                   {assessmentM &&
                     <div className='h-full w-[10%] pl-2 py-1 items-center'>
                       <input

@@ -10,7 +10,7 @@ module.exports = () => {
     mode: prod ? "production" : "development",
     entry: "./src/index.tsx",
     output: {
-      path: path.resolve(__dirname, "dist/"),
+      path: path.resolve(__dirname, "build/"),
       publicPath: "/",
     },
     devServer: {
