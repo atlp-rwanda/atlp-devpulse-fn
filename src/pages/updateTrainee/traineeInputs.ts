@@ -6,6 +6,8 @@ const options ={
     'PhD',
   ],
   interviewOptions:[
+    'None',
+    'approved',
     'Passed',
     "Failed",
     "Rejected"

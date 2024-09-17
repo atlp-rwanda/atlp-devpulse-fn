@@ -42,6 +42,10 @@ const AddTrainee = (props: any) => {
   // LIST ALL TRAINEE
   const { alltrainees, delettraine, softdeletettraine, traines, cycles } =
     props;
+
+    const totalItems  = traines ? traines?.pagination.totalItems : 0;
+    console.log(totalItems)
+
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [page, setPage] = useState(0);
@@ -223,9 +227,37 @@ const AddTrainee = (props: any) => {
       <div className="flex flex-col  h-screen absolute w-[100%]">
         <div className="flex flex-row">
           <div className="w-full">
+
+
+
             <div>
               <div className="bg-light-bg dark:bg-dark-frame-bg  min-h-screen overflow-y-hidden overflow-x-hidden lg:ml-[3rem]">
-                <div className="flex items-left px-7 lg:px-64 pt-24">
+                <div className="flex flex-col px-7 lg:px-64 pt-24">
+<div className="grid grid-cols-2 gap-4 md:grid-cols-2 md:gap-6 lg:grid-cols-5 lg:gap-7 mb-2">
+<div className="bg-dark-bg border-2 border-white text-white p-4 flex flex-col gap-1 items-center justify-center w-full h-24 rounded-lg min-w-0 hover:bg-dark-tertiary hover:cursor-pointer hover:shadow-lg transition duration-300">
+      <span>Applicants</span>
+      <span className="font-bold text-xl">{totalItems}</span>
+    </div>
+<div className="bg-dark-bg border-2 border-white text-white p-4 flex flex-col gap-1 items-center justify-center w-full h-24 rounded-lg min-w-0 hover:bg-dark-tertiary hover:cursor-pointer hover:shadow-lg transition duration-300">
+      <span>Under Technical Assessment</span>
+      <span className="font-bold text-xl">0</span>
+    </div>
+<div className="bg-dark-bg border-2 border-white text-white p-4 flex flex-col gap-1 items-center justify-center w-full h-24 rounded-lg min-w-0 hover:bg-dark-tertiary hover:cursor-pointer hover:shadow-lg transition duration-300">
+      <span>Approved for Interview</span>
+      <span className="font-bold text-xl">0</span>
+    </div>
+<div className="bg-dark-bg border-2 border-white text-white p-4 flex flex-col gap-1 items-center justify-center w-full h-24 rounded-lg min-w-0 hover:bg-dark-tertiary hover:cursor-pointer hover:shadow-lg transition duration-300">
+      <span>Passed</span>
+      <span className="font-bold text-xl">0</span>
+    </div>
+<div className="bg-dark-bg border-2 border-white text-white p-4 flex flex-col gap-1 items-center justify-center w-full h-24 rounded-lg min-w-0 hover:bg-dark-tertiary hover:cursor-pointer hover:shadow-lg transition duration-300">
+      <span>Flagged</span>
+      <span className="font-bold text-xl">0</span>
+    </div>
+</div>
+
+
+<div className="flex flex-row">
                   <div className="flex px-5 py-2 pb-8 w-fit">
                     <button
                       onClick={Open}
@@ -243,6 +275,7 @@ const AddTrainee = (props: any) => {
                       Search
                     </button>
                   </Link>
+</div>
                 </div>
                 <div className="px-3 md:px-8">
                   <div className="bg-white  dark:bg-dark-bg shadow-lg px-5 py-8 rounded-md w-[100%] mx-auto lg:w-[80%] lg:ml-60 mb-10">
