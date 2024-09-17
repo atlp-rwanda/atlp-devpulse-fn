@@ -38,7 +38,10 @@ const Sidebar = () => {
         onClick={() => setExpanded(curr => !curr)}
         className="p-1.5 rounded-lg bg-gray-50 hover:bg-lime-800 absolute top-2 text-white right-2 z-20"
       >
-        <Icon icon={expanded ? 'hugeicons:minimize-screen' : 'hugeicons:maximize-screen'} color="#000" />
+        <Icon
+            icon={expanded ? "material-symbols:menu-open" : "mdi:menu-close"}
+            color="#000"
+          />
       </button>
 
       <div className="overflow-y-auto pt-12">
@@ -64,10 +67,7 @@ const SidebarSection = ({ items, title, expanded, open, toggle }) => (
   <div>
     <div onClick={toggle} className="cursor-pointer flex items-center justify-between p-2 text-white hover:bg-green">
       {expanded && <span className="font-bold">{title}</span>}
-      <Icon
-            icon={expanded ? "material-symbols:menu-open" : "mdi:menu-close"}
-            color="#000"
-          />
+      <Icon icon={open ? 'akar-icons:chevron-down' : 'akar-icons:chevron-right'} />
     </div>
     {open && (
       <ul className="pl-4 mt-2">
