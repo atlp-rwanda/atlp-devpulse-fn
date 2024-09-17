@@ -9,7 +9,7 @@ import {
   adminSectionItems,
   applicantSidebarItems,
   additionalSidebarItems,
-  settingsSidebarItems,
+  
 } from './sidebarItems';
 
 const Sidebar = () => {
@@ -22,7 +22,7 @@ const Sidebar = () => {
     performance: true,
     admin: true,
     additional: true,
-    settings: true,
+    
   });
 
   const toggleSection = (section) => {
@@ -57,7 +57,7 @@ const Sidebar = () => {
           </>
         )}
         <SidebarSection items={additionalSidebarItems} title="Additional" expanded={expanded} open={openSections.additional} toggle={() => toggleSection('additional')} />
-        <SidebarSection items={settingsSidebarItems} title="Settings" expanded={expanded} open={openSections.settings} toggle={() => toggleSection('settings')} />
+
       </div>
     </div>
   );

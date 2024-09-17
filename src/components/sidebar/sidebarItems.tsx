@@ -1,7 +1,6 @@
 import React from 'react';
 import { Icon } from '@iconify/react';
 
-// General Section
 export const generalSectionItems = [
   {
     path: '/dashboard',
@@ -20,7 +19,6 @@ export const generalSectionItems = [
   },
 ];
 
-// Management Section
 export const managementSectionItems = [
   {
     path: '/organisations',
@@ -44,7 +42,6 @@ export const managementSectionItems = [
   },
 ];
 
-// Application and Programs Section
 export const applicationsSectionItems = [
   {
     path: '/create-form',
@@ -163,20 +160,15 @@ export const additionalSidebarItems = [
     title: 'Help',
   },
   {
+    path: '/settings',
+    icon: <Icon icon="akar-icons:settings-vertical" />,
+    title: 'setting',
+  },
+  {
     path: '/Logout',
     icon: <Icon icon="nimbus:arrow-left" />,
     title: 'Logout',
   },
+
 ];
 
-// Settings Sidebar Items
-export const settingsSidebarItems = [
-  {
-    path: '/settings',
-    icon: <Icon icon="akar-icons:settings-vertical" />,
-  },
-  {
-    path: '/settings',
-    icon: <Icon icon="eva:settings-2-outline" />,
-  },
-];
