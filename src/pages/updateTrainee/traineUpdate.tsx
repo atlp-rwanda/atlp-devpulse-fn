@@ -105,12 +105,13 @@ const TraineeUpdate = (props: any) => {
     event.preventDefault();
     const reg = new RegExp("^((072|078|073))[0-9]{7}$", "i");
 
-    const province = provinceRef?.current.value;
-    const district = districtRef?.current.value;
-    const sector = sectorRef?.current.value;
-    const cycle = cycleRef.current.value;
-    const eScore = eScoreRef.current.value;
-    const hScore = hScoreRef.current.value;
+    const province = provinceRef?.current?.value || "";
+    const district = districtRef?.current?.value || "";
+    const sector = sectorRef?.current?.value || "";
+    const cycle = cycleRef.current?.value || "";
+    console.log(cycle);
+    const eScore = eScoreRef.current?.value || "";
+    const hScore = hScoreRef.current?.value || "";
     await getDistricts(province);
     await getSectors(province, district);
     const districtExists = Object.values(districts).includes(district);
@@ -123,7 +124,7 @@ const TraineeUpdate = (props: any) => {
       toast.error("Lastname is required");
     } else if (formData.phone === "") {
       toast.error("Phone number is required ");
-    } else if (cycle === "") {
+    } else if (formData.cycle === "") {
       toast.error("Please Select Cycle");
     } else if (formData.sector === "") {
       toast.error("Sector is required");
