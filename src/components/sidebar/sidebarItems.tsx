@@ -158,17 +158,20 @@ export const additionalSidebarItems = [
     path: '/help',
     icon: <Icon icon="nimbus:globe" />,
     title: 'Help',
+
   },
   {
     path: '/settings',
     icon: <Icon icon="akar-icons:settings-vertical" />,
-    title: 'setting',
-  },
+    title: 'settings',
+  }
+];
+
+// Settings Sidebar Items
+export const settingsSidebarItems = [
   {
     path: '/Logout',
     icon: <Icon icon="nimbus:arrow-left" />,
     title: 'Logout',
-  },
-
+  }
 ];
-
