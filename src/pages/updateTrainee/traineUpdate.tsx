@@ -14,6 +14,7 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { getAllCycles } from "../../redux/actions/cyclesActions";
 import { locations } from "./locations";
+import SelectField from '../../components/ReusableComponents/Select'
 
 const TraineeUpdate = (props: any) => {
   const params = useParams();
@@ -265,113 +266,67 @@ const TraineeUpdate = (props: any) => {
                   </div>
 
                   <div className="mb-4">
-                    <label className="block text-sm font-bold mb-2">
-                      Province
-                    </label>
-                    <select
-                      className="dark:bg-dark-tertiary dark:text-white shadow appearance-none py-2 px-3 rounded w-full leading-tight focus:outline-none focus:shadow-outline"
-                      id="province"
-                      ref={provinceRef}
-                      name="province"
-                      defaultValue={traineeData.province}
-                      onChange={(e) => {
-                        setFormData({
-                          ...formData,
-                          province: e.target.value,
-                        });
-                        getDistricts(e.target.value);
-                      }}
-                    >
-                      <option value="" disabled>
-                        Select province
-                      </option>
-                      
-                      {provinces?.map((province: any) => (
-                        <option
-                          className="dark:bg-dark-tertiary dark:text-white p-3 dark:hover:bg-dark-frame-bg"
-                          value={province}
-                        >
-                          {province}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
+                <label className="block text-sm font-bold mb-2">Province</label>
+                <SelectField
+                  id="province"
+                  name="province"
+                  ref={provinceRef}
+                  defaultValue={traineeData.province}
+                  options={provinces.map((province: any) => ({
+                    value: province,
+                    label: province,
+                  }))}
+                  onChange={(e) => {
+                    setFormData({
+                      ...formData,
+                      province: e.target.value,
+                    });
+                    getDistricts(e.target.value);
+                  }}
+                />
+              </div>
+
+              <div className="mb-4">
+                <label className="block text-sm font-bold mb-2">District</label>
+                <SelectField
+                  id="district"
+                  name="district"
+                  ref={districtRef}
+                  defaultValue={traineeData.district}
+                  options={districts.map((district: any) => ({
+                    value: district,
+                    label: district,
+                  }))}
+                  onChange={(e) => {
+                    setFormData({
+                      ...formData,
+                      district: e.target.value,
+                    });
+                    getSectors(formData.province, e.target.value);
+                  }}
+                />
+              </div>
+
 
                   <div className="mb-4">
-                    <label className="block text-sm font-bold mb-2">
-                      District
-                    </label>
-                    <select
-                      className="dark:bg-dark-tertiary dark:text-white shadow appearance-none py-2 px-3 rounded w-full leading-tight focus:outline-none focus:shadow-outline"
-                      id="district"
-                      name="district"
-                      ref={districtRef}
-                      defaultValue={traineeData.district}
-                      onChange={(e) => {
-                        setFormData({
-                          ...formData,
-                          district: e.target.value,
-                        });
-                        getSectors(formData.province, e.target.value);
-                      }}
-                    >
-
-                      <option value="" disabled>
-                        Select district
-                      </option>
-                      <option
-                        className="dark:bg-dark-tertiary dark:text-white hidden"
-                        value={traineeData.district}
-                      >
-                        {traineeData.district}
-                      </option>
-                      {districts?.map((district: any) => (
-                        <option
-                          className="dark:bg-dark-tertiary dark:text-white p-3 dark:hover:bg-dark-frame-bg"
-                          value={district}
-                        >
-                          {district}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-
-                  <div className="mb-4">
-                    <label className="block text-sm font-bold mb-2">
-                      Sector
-                    </label>
-                    <select
-                      className="dark:bg-dark-tertiary dark:text-white py-2 px-3 shadow appearance-none rounded w-full leading-tight focus:outline-none focus:shadow-outline"
-                      id="sector"
-                      ref={sectorRef}
-                      defaultValue={traineeData.sector}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          sector: e.target.value,
-                        })
-                      }
-                      name="sector"
-                    >
-                      <option value="" disabled>
-                        Select sector
-                      </option>
-                      <option
-                        className="dark:bg-dark-tertiary dark:text-white hidden"
-                        value={traineeData.sector}
-                      >
-                        {traineeData.sector}
-                      </option>
-                      {sectors?.map((sector: any) => (
-                        <option
-                          className="dark:bg-dark-tertiary p-3 dark:text-white dark:hover:bg-dark-frame-bg"
-                          value={sector}
-                        >
-                          {sector}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
+                <label className="block text-sm font-bold mb-2">Sector</label>
+                <SelectField
+                  id="sector"
+                  name="sector"
+                  ref={sectorRef}
+                  defaultValue={traineeData.sector}
+                  options={sectors.map((sector: any) => ({
+                    value: sector,
+                    label: sector,
+                  }))}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      sector: e.target.value,
+                    })
+                  }
+                />
+              </div>
 
                   <div className="mb-4">
                     <label className="block text-sm font-bold mb-2">
@@ -553,34 +508,25 @@ const TraineeUpdate = (props: any) => {
                     />
                   </div>
 
-                  <div className="mb-4">
-                    <label className="block text-sm font-bold mb-2">
-                      Education Level
-                    </label>
-                    <select
-                      name="level_education"
-                      className="dark:bg-dark-tertiary dark:text-white shadow appearance-none py-2 px-3 rounded w-full  leading-tight focus:outline-none focus:shadow-outline"
-                      defaultValue={traineeData.education_level}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          level_education: e.target.value,
-                        })
-                      }
-                    >
-                      <option value="" disabled>
-                        Select education level
-                      </option>
-                      {options?.educationOptions?.map((option: any) => (
-                        <option
-                          className="dark:bg-dark-tertiary p-3 dark:text-white dark:hover:bg-dark-frame-bg"
-                          value={option}
-                        >
-                          {option}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
+
+                   <div className="mb-4">
+                <label className="block text-sm font-bold mb-2">Education Level</label>
+                <SelectField
+                  name="level_education"
+                  defaultValue={traineeData.education_level}
+                  options={options?.educationOptions?.map((option: any) => ({
+                    value: option,
+                    label: option,
+                  }))}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      level_education: e.target.value,
+                    })
+                  }
+                />
+              </div>
+
 
                   <div className="mb-4">
                     <div className="lg:flex sm:block">
@@ -628,61 +574,40 @@ const TraineeUpdate = (props: any) => {
                   </div>
 
                   <div className="mb-4">
-                    <label className="block text-sm font-bold mb-2">
-                      Interview decision
-                    </label>
-                    <select
-                      className="dark:bg-dark-tertiary dark:text-white py-2 px-3 shadow appearance-none  rounded w-full  leading-tight focus:outline-none focus:shadow-outline"
-                      defaultValue={traineeData.interview_decision}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          interview_decision: e.target.value,
-                        })
-                      }
-                    >
-                      <option value="" disabled>
-                        Interview decision
-                      </option>
-                      {options?.interviewOptions?.map((option: any) => (
-                        <option
-                          className="dark:bg-dark-tertiary p-3 dark:text-white dark:hover:bg-dark-frame-bg"
-                          value={option}
-                        >
-                          {option}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
 
-                  <div className="mb-4">
-                    <label className="block text-sm font-bold mb-2">
-                      Application cycle
-                    </label>
-                    <select
-                      className="dark:bg-dark-tertiary dark:text-white shadow py-2 px-3 appearance-none  rounded w-full  leading-tight focus:outline-none focus:shadow-outline"
-                      ref={cycleRef}
-                      defaultValue={traineeData?.trainee_id?.cycle_id?.id}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          cycle: e.target.value,
-                        })
-                      }
-                    >
-                      <option value="" disabled>
-                        Please select cycle
-                      </option>
-                      {cycles?.map((cycle: any) => (
-                        <option
-                          className="dark:bg-dark-tertiary dark:text-white dark:hover:bg-dark-frame-bg p-3"
-                          value={cycle.id}
-                        >
-                          {cycle.name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
+                <label className="block text-sm font-bold mb-2">Interview decision</label>
+                <SelectField
+                  defaultValue={traineeData.interview_decision}
+                  options={options?.interviewOptions?.map((option: any) => ({
+                    value: option,
+                    label: option,
+                  }))}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      interview_decision: e.target.value,
+                    })
+                  }
+                />
+              </div>
+
+              <div className="mb-4">
+                <label className="block text-sm font-bold mb-2">Application cycle</label>
+                <SelectField
+                  ref={cycleRef}
+                  defaultValue={traineeData?.trainee_id?.cycle_id?.id}
+                  options={cycles?.map((cycle: any) => ({
+                    value: cycle.id,
+                    label: cycle.name,
+                  }))}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      cycle: e.target.value,
+                    })
+                  }
+                />
+              </div>
 
                   <div className="mb-4">
                     <label className="block text-sm font-bold mb-2">

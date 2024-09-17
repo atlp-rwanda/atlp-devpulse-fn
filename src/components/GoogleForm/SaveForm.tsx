@@ -3,6 +3,7 @@ import axios from '../../redux/actions/axiosconfig';
 import { showSuccessToast, showErrorToast } from './../../utils/toast';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import SelectField from "../ReusableComponents/Select"
 
 const validationSchema = Yup.object().shape({
   link: Yup.string().required('Please enter a Google Form link'),
@@ -160,11 +161,10 @@ function SaveFormDetails() {
               <div className='mt-1'>
                 <input
                   autoComplete='title'
-                  className={`block w-full text-primary rounded-md border-gray-300 py-3 px-4 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 ${
-                    formik.touched.title && formik.errors.title
-                      ? 'border-red-500'
-                      : ''
-                  }`}
+                  className={`block w-full text-primary rounded-md border-gray-300 py-3 px-4 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 ${formik.touched.title && formik.errors.title
+                    ? 'border-red-500'
+                    : ''
+                    }`}
                   id='title'
                   name='title'
                   onChange={formik.handleChange}
@@ -190,27 +190,24 @@ function SaveFormDetails() {
                   <label className='sr-only' htmlFor='jobpost'>
                     Job Post
                   </label>
-
-                  <select
-                    className={`block w-full text-primary rounded-md border-gray-300 py-3 px-4 pl-20 focus:border-indigo-500 focus:ring-indigo-500 ${
-                      formik.touched.jobpost && formik.errors.jobpost
-                        ? 'border-red-500'
-                        : ''
-                    }`}
+                  <SelectField
+                    className={`block w-full text-primary rounded-md border-gray-300 py-3 px-4 pl-20 focus:border-indigo-500 focus:ring-indigo-500 ${formik.touched.jobpost && formik.errors.jobpost
+                      ? 'border-red-500'
+                      : ''
+                      }`}
                     id='jobpost'
                     name='jobpost'
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    value={formik.values.jobpost}>
-                    {jobposts.length === 0 && (
-                      <option disabled>Select Job Post</option>
-                    )}
-                    {jobposts.map((jobpost) => (
-                      <option key={jobpost.id} value={jobpost.id}>
-                        {jobpost.title}
-                      </option>
-                    ))}
-                  </select>
+                    value={formik.values.jobpost}
+                    options={
+                      jobposts.map((jobpost) => (
+                        <option key={jobpost.id} value={jobpost.id}>
+                          {jobpost.title}
+                        </option>
+                      ))
+                    }
+                  />
                 </div>
                 {formik.touched.jobpost && formik.errors.jobpost && (
                   <div className='text-red-500'>{formik.errors.jobpost}</div>
@@ -228,11 +225,10 @@ function SaveFormDetails() {
               <div className='mt-1'>
                 <input
                   autoComplete='link'
-                  className={`block w-full text-primary rounded-md border-gray-300 py-3 px-4 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 ${
-                    formik.touched.link && formik.errors.link
-                      ? 'border-red-500'
-                      : ''
-                  }`}
+                  className={`block w-full text-primary rounded-md border-gray-300 py-3 px-4 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 ${formik.touched.link && formik.errors.link
+                    ? 'border-red-500'
+                    : ''
+                    }`}
                   id='link'
                   name='link'
                   onChange={formik.handleChange}
@@ -255,11 +251,10 @@ function SaveFormDetails() {
 
               <div className='mt-1'>
                 <textarea
-                  className={`block w-full text-primary rounded-md border-gray-300 py-3 px-4 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 ${
-                    formik.touched.description && formik.errors.description
-                      ? 'border-red-500'
-                      : ''
-                  }`}
+                  className={`block w-full text-primary rounded-md border-gray-300 py-3 px-4 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 ${formik.touched.description && formik.errors.description
+                    ? 'border-red-500'
+                    : ''
+                    }`}
                   defaultValue=''
                   id='description'
                   name='description'
