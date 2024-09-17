@@ -28,7 +28,7 @@ function SaveFormDetails() {
         }
       }
       `;
-
+ 
       try {
         const response = await axios.post('/', {
           query: graphqlQuery,
