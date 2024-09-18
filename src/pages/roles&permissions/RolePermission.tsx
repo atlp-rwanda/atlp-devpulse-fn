@@ -24,9 +24,9 @@ import RoleEntity from "../../components/roles&permissions/RoleEntity";
 
 export interface SingleRole {
   _id?: string;
-  roleName: string;
-  description: string;
-  permissions: Permission[];
+  roleName?: string;
+  description?: string;
+  permissions?: Permission[];
 }
 export type Permission = {
   create: boolean;
@@ -68,10 +68,30 @@ function RolePermission(props: any) {
   const [updateRoleId, setUpdateRoleId] = useState<string | null>(null);
   const [isViewingSingleRole, setIsViewSingleRole] = useState(false);
   const [isSingleRole, setIsSingleRole] = useState(false);
-  const [singleRoleData, setSingleRoleData] = useState<SingleRole | null>(null);
+  const [singleRoleData, setSingleRoleData] = useState<
+    SingleRole | null | undefined
+  >({
+    roleName: "",
+    description: "",
+    permissions: [],
+  });
+
   const [currentDropdownIndex, setCurrentDropdownIndex] = useState<
     number | null
   >(null);
+  const [updatePermissionData, setUpdatePermissionData] = useState({
+    create: false,
+    deleteMultiple: false,
+    deleteOne: false,
+    deleteOwn: false,
+    entity: "",
+    updateMultiple: false,
+    updateOne: false,
+    updateOwn: false,
+    viewMultiple: false,
+    viewOne: false,
+    viewOwn: false,
+  });
   const [openUpdateModal, setOpenUpdateModel] = useState(false);
   const [openCreateModal, setOpenCreateModal] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
@@ -270,7 +290,7 @@ function RolePermission(props: any) {
       }
     };
     getRoles();
-  }, [roles]);
+  }, []);
   const handleIconClick = (event: React.MouseEvent<SVGElement>) => {
     event.preventDefault();
     if (event.currentTarget) {
@@ -281,12 +301,87 @@ function RolePermission(props: any) {
       setAnchorEl(event.currentTarget as unknown as HTMLElement);
     }
   };
+
   const handleAddPermission = () => {
     if (currentDropdownIndex === null) {
       setCurrentDropdownIndex(0);
     } else {
       const nextDropdownIndex = (currentDropdownIndex + 1) % 4;
       setCurrentDropdownIndex(nextDropdownIndex);
+    }
+  };
+
+const handleInputChange = (e) => {
+  setSingleRoleData({
+    ...singleRoleData,
+    [e.target.name]: e.target.value,
+  });
+  };
+  
+  const handlePermissionChange = (entity, field, checked) => {
+    setUpdatePermissionData((prevState) => ({
+      ...prevState,
+      [entity]: {
+        ...prevState[entity],
+        [field]: checked,
+      },
+    }));
+  };
+
+  const handleViewUpdateRole = async (getRoleId) => {
+    try {
+      if (!getRoleId) {
+        console.error("Role ID is null");
+        return;
+      }
+      console.log("Role ID is", getRoleId);
+      setAnchorEl(null);
+      setGetRoleId(getRoleId);
+      const response = await axios.post("/", {
+        query: `
+        query GetRole($getRoleId: ID!) {
+          getRole(id: $getRoleId) {
+            _id
+            roleName
+            description
+            permissions {
+              entity
+              _id
+              create
+              viewOwn
+              viewMultiple
+              viewOne
+              updateOwn
+              updateMultiple
+              updateOne
+              deleteOwn
+              deleteMultiple
+              deleteOne
+            }
+          }
+        }
+      `,
+        variables: {
+          getRoleId,
+        },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `${token}`,
+        },
+      });
+      const role = response.data.data.getRole;
+      setSingleRoleData(role);
+      setOpenUpdateModel(true);
+      setIsSingleRole(true);
+
+      const formattedPermissions = role.permissions.reduce((acc, perm) => {
+        acc[perm.entity] = perm;
+        return acc;
+      }, {});
+
+      setUpdatePermissionData(formattedPermissions);
+    } catch (error) {
+      console.error("Error viewing role:", error);
     }
   };
 
@@ -344,7 +439,82 @@ function RolePermission(props: any) {
     setIsSingleRole(false);
     setSingleRoleData(null);
   };
+  
+const handleUpdateRole = async (e) => {
+  e.preventDefault();
+  try {
+    if (!getRoleId) {
+      console.error("Role ID is null");
+      return;
+    }
 
+    console.log("THe update Permissions Data: ", updatePermissionData)
+   const permissionsToUpdate = Object.keys(updatePermissionData).map(
+     (entity) => ({
+       entity,
+       permissions: Object.keys(updatePermissionData[entity])
+         .filter((key) => updatePermissionData[entity][key] === true)
+         .map((key) => key),
+     })
+   );
+    console.log("The update permissions data: ",permissionsToUpdate)
+
+    const updatedData = {
+      roleName: singleRoleData?.roleName,
+      description: singleRoleData?.description,
+      permissions: permissionsToUpdate,
+    };
+    console.log("The update id: ",getRoleId)
+
+        console.log("The rolename data: ", updatedData.roleName);
+    console.log("The description data: ", updatedData.description);
+
+    console.log("The permissions data: ", updatedData.permissions)
+    const response = await axios.post("/", {
+      query: `
+        mutation UpdateRole($updateRoleId: ID!, $input: UpdateRoleInput!) {
+          updateRole(id: $updateRoleId, input: $input) {
+            _id
+            roleName
+            description
+            permissions {
+              entity
+              _id
+              create
+              viewOwn
+              viewMultiple
+              viewOne
+              updateOwn
+              updateMultiple
+              updateOne
+              deleteOwn
+              deleteMultiple
+              deleteOne
+            }
+          }
+        }
+      `,
+      variables: {
+        updateRoleId: getRoleId,
+        input: {
+          roleName: updatedData?.roleName,
+          description: updatedData?.description,
+          permissions: updatedData?.permissions,
+        },
+      },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${token}`,
+      },
+    });
+
+    const updatedRole = response.data.data.updateRole;
+    console.log("Role updated:", updatedRole);
+    setOpenUpdateModel(false);
+  } catch (error) {
+    console.error("Error updating role:", error);
+  }
+};
   const COLS = [
     {
       Header: "Role Name",
@@ -697,7 +867,7 @@ function RolePermission(props: any) {
             onClose={handleClose}
             open={open}
           >
-            <MenuItem onClick={() => handleOpenUpdateModal()}>
+            <MenuItem onClick={() => handleViewUpdateRole(getRoleId)}>
               <BsIcons.BsPencilFill className="mr-[5px]" />
               Edit
             </MenuItem>
@@ -891,11 +1061,9 @@ function RolePermission(props: any) {
           onClose={handleCloseUpdateModal}
           open={openUpdateModal}
         >
+          <div>
           <Box className="absolute w-[50%] top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] md:w-[90%]">
-            <form
-              action=""
-              className="relative rounded-[5px] w-[100%] h-[455px] m-auto p-[10px] pt-[5px] dark:bg-dark-bg bg-[#f0f0f0] "
-            >
+            <form className="relative rounded-[5px] w-[100%] h-[455px] m-auto p-[10px] pt-[5px] dark:bg-dark-bg bg-[#f0f0f0]">
               <h1 className="text-center dark:text-white font-bold text-[24px] m-[20px]">
                 Update
               </h1>
@@ -911,27 +1079,77 @@ function RolePermission(props: any) {
               />
               <hr style={{ marginBottom: "40px" }} />
               <input
-                className=" mt-3 bg-lime cursor-pointer text-[18px] self-center py-1 rounded-[5px] h-[50px] my-[20px] mx-auto w-[80%] block border-[2px] border-[#a8a8a8]  px-[10px] md:w-[90%]"
-                name="name"
-                placeholder="Role Name"
+                className="mt-3 bg-lime cursor-pointer text-[18px] self-center py-1 rounded-[5px] h-[50px] my-[20px] mx-auto w-[80%] block border-[2px] border-[#a8a8a8] px-[10px] md:w-[90%]"
+                name="roleName"
                 type="text"
+                value={singleRoleData?.roleName}
+                onChange={handleInputChange}
               />
               <input
-                className=" mt-3 bg-lime cursor-pointer text-[18px] self-center py-1 rounded-[5px] h-[50px] my-[20px] mx-auto w-[80%] block border-[2px] border-[#a8a8a8]  px-[10px] md:w-[90%]"
-                name="Description"
+                className="mt-3 bg-lime cursor-pointer text-[18px] self-center py-1 rounded-[5px] h-[50px] my-[20px] mx-auto w-[80%] block border-[2px] border-[#a8a8a8] px-[10px] md:w-[90%]"
+                name="description"
                 type="text"
-                placeholder="Description"
+                value={singleRoleData?.description}
+                onChange={handleInputChange}
               />
+              <div className="mt-5">
+                {singleRoleData?.permissions?.map((permission, index) => (
+                  <div key={index}>
+                    <div className="">
+                      <h2 className="text-white text-lg">
+                        {permission.entity}
+                      </h2>
+                    </div>
+                    <div className="flex gap-x-2 md:flex-col">
+                      {[
+                        "create",
+                        "viewOwn",
+                        "viewMultiple",
+                        "viewOne",
+                        "updateOwn",
+                        "updateMultiple",
+                        "updateOne",
+                        "deleteOwn",
+                        "deleteMultiple",
+                        "deleteOne",
+                      ].map((field) => (
+                        <div key={field}>
+                          <label htmlFor={field} className=" text-sm">
+                            {field}
+                          </label>
+                          <input
+                            type="checkbox"
+                            checked={
+                              updatePermissionData[permission.entity]?.[
+                                field
+                              ] || false
+                            }
+                            onChange={(e) =>
+                              handlePermissionChange(
+                                permission.entity,
+                                field,
+                                e.target.checked
+                              )
+                            }
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
               <div className="flex flex-wrap w-[300px] m-auto">
                 <button
                   className="text-white border-[1px] dark:bg-[#56C870] h-[40px] w-[100px] block rounded-[5px] my-[10px] mx-[auto] bg-[#173b3f]"
                   type="submit"
+                  onClick={handleUpdateRole}
                 >
-                  Save
+                  Update
                 </button>
               </div>
             </form>
-          </Box>
+            </Box>
+            </div>
         </Modal>
       </div>
     </>
