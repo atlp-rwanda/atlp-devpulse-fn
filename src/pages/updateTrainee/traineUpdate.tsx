@@ -87,11 +87,10 @@ const TraineeUpdate = (props: any) => {
   useEffect(() => {
     if (traineeData) {
       let birthDate = "";
-      if (traineeData.birth_date) {
-        const timestamp = parseInt(traineeData.birth_date);
-        if (!isNaN(timestamp)) {
-          birthDate = new Date(timestamp).toISOString().split("T")[0];
-        }
+      const birthDateTimestamp = parseInt(traineeData.birth_date);
+
+      if (!isNaN(birthDateTimestamp)) {
+        birthDate = new Date(birthDateTimestamp).toISOString().split("T")[0];
       }
 
       setFormData({
