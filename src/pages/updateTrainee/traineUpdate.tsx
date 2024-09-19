@@ -86,8 +86,6 @@ const TraineeUpdate = (props: any) => {
 
   useEffect(() => {
     if (traineeData) {
-      console.log(traineeData);
-
       let birthDate = "";
       if (traineeData.birth_date) {
         const timestamp = parseInt(traineeData.birth_date);
