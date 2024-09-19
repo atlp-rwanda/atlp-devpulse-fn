@@ -85,42 +85,40 @@ const TraineeUpdate = (props: any) => {
   }, [dispatch, props.getAllCycles, ID]);
 
   useEffect(() => {
-    if (traineeData) {
-      let birthDate = "";
-      // if (traineeData?.birth_date) {
-      //   const birthDateTimestamp = isNaN(Date.parse(traineeData.birth_date))
-      //     ? 0
-      //     : Date.parse(traineeData.birth_date);
+    let birthDate = "";
+    // if (traineeData?.birth_date) {
+    //   const birthDateTimestamp = isNaN(Date.parse(traineeData.birth_date))
+    //     ? 0
+    //     : Date.parse(traineeData.birth_date);
 
-      //   if (birthDateTimestamp) {
-      //     birthDate = new Date(birthDateTimestamp).toISOString().split("T")[0];
-      //   }
-      // }
+    //   if (birthDateTimestamp) {
+    //     birthDate = new Date(birthDateTimestamp).toISOString().split("T")[0];
+    //   }
+    // }
 
-      setFormData({
-        firstname: traineeData?.trainee_id?.firstName || "",
-        lastname: traineeData?.trainee_id?.lastName || "",
-        gender: traineeData?.gender || "",
-        phone: traineeData?.phone || "",
-        address: traineeData?.Address || "",
-        birthDate: birthDate,
-        province: traineeData?.province || "",
-        district: traineeData?.district || "",
-        sector: traineeData?.sector || "",
-        field_of_study: traineeData?.field_of_study || "",
-        past_programs: traineeData?.past_andela_programs || "",
-        isStudent: traineeData?.isStudent || false,
-        hasLaptop: traineeData?.haveLaptop || false,
-        isEmployed: traineeData?.isEmployed || false,
-        level_education: traineeData?.education_level || "",
-        interview_decision: traineeData?.interview_decision || "",
-        cycle: traineeData?.trainee_id?.cycle_id?.id || "",
-        hackerrankScore: traineeData?.Hackerrank_score || "",
-        englishScore: traineeData?.english_score || "",
-      });
-      setDistricts([traineeData.district]);
-      setSectors([traineeData.sector]);
-    }
+    setFormData({
+      firstname: traineeData?.trainee_id?.firstName || "",
+      lastname: traineeData?.trainee_id?.lastName || "",
+      gender: traineeData?.gender || "",
+      phone: traineeData?.phone || "",
+      address: traineeData?.Address || "",
+      birthDate: birthDate,
+      province: traineeData?.province || "",
+      district: traineeData?.district || "",
+      sector: traineeData?.sector || "",
+      field_of_study: traineeData?.field_of_study || "",
+      past_programs: traineeData?.past_andela_programs || "",
+      isStudent: traineeData?.isStudent || false,
+      hasLaptop: traineeData?.haveLaptop || false,
+      isEmployed: traineeData?.isEmployed || false,
+      level_education: traineeData?.education_level || "",
+      interview_decision: traineeData?.interview_decision || "",
+      cycle: traineeData?.trainee_id?.cycle_id?.id || "",
+      hackerrankScore: traineeData?.Hackerrank_score || "",
+      englishScore: traineeData?.english_score || "",
+    });
+    setDistricts([traineeData.district]);
+    setSectors([traineeData.sector]);
   }, [traineeData]);
 
   const validateForm = () => {
