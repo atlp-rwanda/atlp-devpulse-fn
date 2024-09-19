@@ -13,7 +13,12 @@ import {
 import { toast } from "react-toastify";
 import DetailItem from "../components/TraineeDetail/DetailItem";
 import ProgramItem from "../components/TraineeDetail/ProgramBox";
+<<<<<<< HEAD
 import { DownloadPdf } from "../utils/DownloadPdf";
+=======
+import jspdf from "jspdf";
+import html2canvas from "html2canvas";
+>>>>>>> c8358c6 (handling missing application info, also adding download functionality)
 
 const TrainneeDetails = (props: any) => {
   const params = useParams();
@@ -57,6 +62,39 @@ const TrainneeDetails = (props: any) => {
 
 
 
+
+
+  const downloadDivAsPDF = () => {
+    const element = document.getElementById("trainee-info");
+    if (element) {
+      html2canvas(element)
+        .then((canvas) => {
+          const imgData = canvas.toDataURL("image/png");
+          const pdf = new jspdf();
+          const pdfWidth = pdf.internal.pageSize.getWidth();
+          const pdfHeight = pdf.internal.pageSize.getHeight();
+
+          const imgWidth = canvas.width;
+          const imgHeight = canvas.height;
+          const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
+
+          pdf.addImage(
+            imgData,
+            "PNG",
+            0,
+            0,
+            imgWidth * ratio,
+            imgHeight * ratio
+          );
+          pdf.save("Trainee-Information.pdf");
+        })
+        .catch((error) => {
+          console.error("Error capturing the div as PDF:", error);
+        });
+    }
+  };
+
+  // console.log(oneTraineeDetails)
 
   return (
     <>
