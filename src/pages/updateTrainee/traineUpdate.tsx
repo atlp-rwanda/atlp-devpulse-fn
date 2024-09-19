@@ -94,13 +94,21 @@ const TraineeUpdate = (props: any) => {
       console.log(traineeData);
       console.log(traineeData.sector);
 
+      let birthDate = "";
+      if (traineeData.birth_date) {
+        const timestamp = parseInt(traineeData.birth_date);
+        if (!isNaN(timestamp)) {
+          birthDate = new Date(timestamp).toISOString().split("T")[0];
+        }
+      }
+
       setFormData({
         firstname: traineeData?.trainee_id?.firstName || "",
         lastname: traineeData?.trainee_id?.lastName || "",
         gender: traineeData?.gender || "",
         phone: traineeData?.phone || "",
         address: traineeData?.Address || "",
-        birthDate: traineeData?.birth_date || "",
+        birthDate: birthDate,
         province: traineeData?.province || "",
         district: traineeData?.district || "",
         sector: traineeData?.sector || "",
@@ -279,6 +287,7 @@ const TraineeUpdate = (props: any) => {
                       className="dark:bg-dark-tertiary shadow appearance-none  rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
                       id="birthDate"
                       type="date"
+                      value={formData.birthDate}
                       onChange={(e) =>
                         setFormData({
                           ...formData,
