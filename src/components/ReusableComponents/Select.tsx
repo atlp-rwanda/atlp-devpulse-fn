@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 interface SelectFieldProps {
   id?: string;
@@ -21,7 +21,7 @@ const SelectField: React.FC<SelectFieldProps> = ({
   ref,
   className = "",
   defaultValue,
-  onBlur
+  onBlur,
 }) => {
   return (
     <select
