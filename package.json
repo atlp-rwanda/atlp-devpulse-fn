@@ -79,6 +79,7 @@
     "@hookform/resolvers": "^3.3.0",
     "@mui/material": "^5.10.11",
     "@mui/x-date-pickers": "^5.0.6",
+    "@fortawesome/free-solid-svg-icons": "^6.2.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@tinymce/tinymce-react": "^4.2.0",
