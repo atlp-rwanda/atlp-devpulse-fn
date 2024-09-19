@@ -6,7 +6,7 @@ import {
 } from "../../redux/actions/updateTrainee";
 // import Select from 'react-select'
 import { useAppSelector, useAppDispatch } from "../../hooks/hooks";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import NavBar from "../../components/sidebar/navHeader";
 import { useParams } from "react-router";
 import options from "./traineeInputs";
@@ -38,9 +38,9 @@ const TraineeUpdate = (props: any) => {
     sector: "",
     field_of_study: "",
     past_programs: "",
-    isStudent: "",
-    hasLaptop: "",
-    isEmployed: "",
+    isStudent: false,
+    hasLaptop: false,
+    isEmployed: false,
     level_education: "",
     interview_decision: "",
     cycle: "",
@@ -49,7 +49,6 @@ const TraineeUpdate = (props: any) => {
     gender: "",
   });
   const [errors, setErrors] = useState<any>({});
-  console.log(errors);
 
   const getProvinces = () => {
     const provinceList = Object.keys(locations);
@@ -77,14 +76,10 @@ const TraineeUpdate = (props: any) => {
   };
 
   useEffect(() => {
-    // console.log("ID:", ID);
-    // console.log("props.getAllCycles:", props.getAllCycles);
-    // console.log("dispatch:", dispatch);
-
     async function handleGetTrainee() {
       await dispatch(getTraineeToUpdate(ID));
+      props.getAllCycles();
     }
-    props.getAllCycles();
     handleGetTrainee();
     getProvinces();
   }, [dispatch, props.getAllCycles, ID]);
@@ -92,7 +87,6 @@ const TraineeUpdate = (props: any) => {
   useEffect(() => {
     if (traineeData) {
       console.log(traineeData);
-      console.log(traineeData.sector);
 
       let birthDate = "";
       if (traineeData.birth_date) {
@@ -114,9 +108,9 @@ const TraineeUpdate = (props: any) => {
         sector: traineeData?.sector || "",
         field_of_study: traineeData?.field_of_study || "",
         past_programs: traineeData?.past_andela_programs || "",
-        isStudent: traineeData?.isStudent || "",
-        hasLaptop: traineeData?.haveLaptop || "",
-        isEmployed: traineeData?.isEmployed || "",
+        isStudent: traineeData?.isStudent || false,
+        hasLaptop: traineeData?.haveLaptop || false,
+        isEmployed: traineeData?.isEmployed || false,
         level_education: traineeData?.education_level || "",
         interview_decision: traineeData?.interview_decision || "",
         cycle: traineeData?.trainee_id?.cycle_id?.id || "",
@@ -192,9 +186,9 @@ const TraineeUpdate = (props: any) => {
         interview_decision: formData.interview_decision,
         english_score: formData.englishScore,
         Hackerrank_score: formData.hackerrankScore,
-        isStudent: formData.isStudent === "true" ? true : false,
-        haveLaptop: formData.hasLaptop === "true" ? true : false,
-        isEmployed: formData.isEmployed === "true" ? true : false,
+        isStudent: formData.isStudent,
+        haveLaptop: formData.hasLaptop,
+        isEmployed: formData.isEmployed,
         sector: formData.sector,
         district: formData.district,
         province: formData.province,
@@ -238,7 +232,7 @@ const TraineeUpdate = (props: any) => {
                     className="dark:bg-dark-tertiary shadow appearance-none  rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
                     id="firstName"
                     type="text"
-                    defaultValue={traineeData.trainee_id.firstName}
+                    value={formData.firstname}
                     onChange={(e) =>
                       setFormData({
                         ...formData,
@@ -261,7 +255,7 @@ const TraineeUpdate = (props: any) => {
                     className=" dark:bg-dark-tertiary shadow appearance-none  rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
                     id="lastname"
                     type="text"
-                    defaultValue={traineeData.trainee_id.lastName}
+                    value={formData.lastname}
                     onChange={(e) =>
                       setFormData({
                         ...formData,
@@ -311,7 +305,7 @@ const TraineeUpdate = (props: any) => {
                     <SelectField
                       id="province"
                       name="province"
-                      defaultValue={traineeData.province}
+                      value={formData.province}
                       options={provinces.map((province: any) => ({
                         value: province,
                         label: province,
@@ -338,7 +332,7 @@ const TraineeUpdate = (props: any) => {
                     <SelectField
                       id="district"
                       name="district"
-                      defaultValue={traineeData.district}
+                      value={formData.district}
                       options={districts.map((district: any) => ({
                         value: district,
                         label: district,
@@ -365,7 +359,7 @@ const TraineeUpdate = (props: any) => {
                     <SelectField
                       id="sector"
                       name="sector"
-                      defaultValue={traineeData.sector}
+                      value={formData.sector}
                       options={sectors.map((sector: any) => ({
                         value: sector,
                         label: sector,
@@ -392,7 +386,7 @@ const TraineeUpdate = (props: any) => {
                       className="dark:bg-dark-tertiary shadow appearance-none  rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
                       id="field_of_study"
                       type="text"
-                      defaultValue={traineeData.field_of_study}
+                      value={formData.field_of_study}
                       onChange={(e) =>
                         setFormData({
                           ...formData,
@@ -417,7 +411,7 @@ const TraineeUpdate = (props: any) => {
                       className="dark:bg-dark-tertiary shadow appearance-none  rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
                       id="past_programs"
                       type="text"
-                      defaultValue={traineeData.past_andela_programs}
+                      value={formData.past_programs}
                       onChange={(e) =>
                         setFormData({
                           ...formData,
@@ -446,7 +440,7 @@ const TraineeUpdate = (props: any) => {
                               gender: e.target.value,
                             })
                           }
-                          defaultChecked={traineeData.gender === "Male"}
+                          checked={formData.gender === "Male"}
                         />
                         <label
                           htmlFor="gender-male"
@@ -468,7 +462,7 @@ const TraineeUpdate = (props: any) => {
                               gender: e.target.value,
                             })
                           }
-                          defaultChecked={traineeData.gender === "Female"}
+                          checked={formData.gender === "Female"}
                         />
                         <label
                           htmlFor="gender-female"
@@ -500,10 +494,10 @@ const TraineeUpdate = (props: any) => {
                           onChange={(e) =>
                             setFormData({
                               ...formData,
-                              hasLaptop: e.target.value,
+                              hasLaptop: true,
                             })
                           }
-                          defaultChecked={traineeData.haveLaptop === true}
+                          checked={formData.hasLaptop === true}
                           required
                         />
                         <label className="peer-checked/published:text-sky-500 px-2">
@@ -520,10 +514,10 @@ const TraineeUpdate = (props: any) => {
                           onChange={(e) =>
                             setFormData({
                               ...formData,
-                              hasLaptop: e.target.value,
+                              hasLaptop: false,
                             })
                           }
-                          defaultChecked={traineeData.haveLaptop === false}
+                          checked={formData.hasLaptop === false}
                           required
                         />
                         <label className="peer-checked/published:text-sky-500 px-2">
@@ -543,7 +537,7 @@ const TraineeUpdate = (props: any) => {
                       id="phone"
                       type="number"
                       name="phone"
-                      defaultValue={traineeData.phone}
+                      value={formData.phone}
                       onChange={(e) => {
                         setFormData({
                           ...formData,
@@ -566,7 +560,7 @@ const TraineeUpdate = (props: any) => {
                       className="dark:bg-dark-tertiary shadow appearance-none  rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
                       id="address"
                       type="text"
-                      defaultValue={traineeData.Address}
+                      value={formData.address}
                       onChange={(e) =>
                         setFormData({
                           ...formData,
@@ -588,7 +582,7 @@ const TraineeUpdate = (props: any) => {
                     </label>
                     <SelectField
                       name="level_education"
-                      defaultValue={traineeData.education_level}
+                      value={formData.level_education}
                       options={options?.educationOptions?.map(
                         (option: any) => ({
                           value: option,
@@ -621,7 +615,7 @@ const TraineeUpdate = (props: any) => {
                           type="number"
                           name="englishScore"
                           id="englishScore"
-                          defaultValue={traineeData.english_score}
+                          value={formData.englishScore}
                           onChange={(e) =>
                             setFormData({
                               ...formData,
@@ -645,7 +639,7 @@ const TraineeUpdate = (props: any) => {
                           type="number"
                           name="hackerrankScore"
                           id="hackerrankScore"
-                          defaultValue={traineeData.Hackerrank_score}
+                          value={formData.hackerrankScore}
                           onChange={(e) =>
                             setFormData({
                               ...formData,
@@ -668,7 +662,7 @@ const TraineeUpdate = (props: any) => {
                       Interview decision
                     </label>
                     <SelectField
-                      defaultValue={traineeData.interview_decision}
+                      value={formData.interview_decision}
                       options={options?.interviewOptions?.map(
                         (option: any) => ({
                           value: option,
@@ -694,7 +688,7 @@ const TraineeUpdate = (props: any) => {
                       Application cycle
                     </label>
                     <SelectField
-                      defaultValue={traineeData?.trainee_id?.cycle_id?.id}
+                      value={formData.cycle}
                       options={cycles?.map((cycle: any) => ({
                         value: cycle.id,
                         label: cycle.name,
@@ -723,10 +717,10 @@ const TraineeUpdate = (props: any) => {
                           onChange={(e) =>
                             setFormData({
                               ...formData,
-                              isEmployed: e.target.value,
+                              isEmployed: true,
                             })
                           }
-                          defaultChecked={traineeData.isEmployed === true}
+                          checked={formData.isEmployed === true}
                         />
                         <label className="peer-checked/published:text-sky-500 px-2">
                           Yes
@@ -742,10 +736,10 @@ const TraineeUpdate = (props: any) => {
                           onChange={(e) =>
                             setFormData({
                               ...formData,
-                              isEmployed: e.target.value,
+                              isEmployed: false,
                             })
                           }
-                          defaultChecked={traineeData.isEmployed === false}
+                          checked={formData.isEmployed === false}
                         />
                         <label className="peer-checked/published:text-sky-500 px-2">
                           No
@@ -768,10 +762,10 @@ const TraineeUpdate = (props: any) => {
                           onChange={(e) =>
                             setFormData({
                               ...formData,
-                              isStudent: e.target.value,
+                              isStudent: true,
                             })
                           }
-                          defaultChecked={traineeData.isStudent === true}
+                          checked={formData.isStudent === true}
                         />
                         <label className="peer-checked/published:text-sky-500 px-2">
                           Yes
@@ -787,10 +781,10 @@ const TraineeUpdate = (props: any) => {
                           onChange={(e) =>
                             setFormData({
                               ...formData,
-                              isStudent: e.target.value,
+                              isStudent: false,
                             })
                           }
-                          defaultChecked={traineeData.isStudent === false}
+                          checked={formData.isStudent === false}
                         />
                         <label className="peer-checked/published:text-sky-500 px-2">
                           No
