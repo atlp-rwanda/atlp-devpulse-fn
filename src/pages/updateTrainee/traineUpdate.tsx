@@ -88,7 +88,9 @@ const TraineeUpdate = (props: any) => {
     if (traineeData) {
       let birthDate = "";
       if (traineeData?.birth_date) {
-        const birthDateTimestamp = Number(traineeData.birth_date) || 0;
+        const birthDateTimestamp = isNaN(Date.parse(traineeData.birth_date))
+          ? 0
+          : Date.parse(traineeData.birth_date);
 
         if (birthDateTimestamp) {
           birthDate = new Date(birthDateTimestamp).toISOString().split("T")[0];
