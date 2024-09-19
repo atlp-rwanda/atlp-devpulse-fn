@@ -87,15 +87,15 @@ const TraineeUpdate = (props: any) => {
   useEffect(() => {
     if (traineeData) {
       let birthDate = "";
-      if (traineeData?.birth_date) {
-        const birthDateTimestamp = isNaN(Date.parse(traineeData.birth_date))
-          ? 0
-          : Date.parse(traineeData.birth_date);
+      // if (traineeData?.birth_date) {
+      //   const birthDateTimestamp = isNaN(Date.parse(traineeData.birth_date))
+      //     ? 0
+      //     : Date.parse(traineeData.birth_date);
 
-        if (birthDateTimestamp) {
-          birthDate = new Date(birthDateTimestamp).toISOString().split("T")[0];
-        }
-      }
+      //   if (birthDateTimestamp) {
+      //     birthDate = new Date(birthDateTimestamp).toISOString().split("T")[0];
+      //   }
+      // }
 
       setFormData({
         firstname: traineeData?.trainee_id?.firstName || "",
