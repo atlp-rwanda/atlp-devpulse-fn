@@ -13,8 +13,7 @@ import {
 import { toast } from "react-toastify";
 import DetailItem from "../components/TraineeDetail/DetailItem";
 import ProgramItem from "../components/TraineeDetail/ProgramBox";
-import jspdf from "jspdf";
-import html2canvas from "html2canvas";
+import { DownloadPdf } from "../utils/DownloadPdf";
 
 const TrainneeDetails = (props: any) => {
   const params = useParams();
@@ -56,46 +55,8 @@ const TrainneeDetails = (props: any) => {
 
   const traineeDetails = oneTraineeDetails.data;
 
-  const updateManyScoreValues = () => {
-    const scores = scoreValue.map((values: any) => {
-      delete values.test;
-      return values;
-    });
-    props.updateManyScoreValues(scores);
-  };
 
 
-  const downloadDivAsPDF = () => {
-    const element = document.getElementById("trainee-info");
-    if (element) {
-      html2canvas(element)
-        .then((canvas) => {
-          const imgData = canvas.toDataURL("image/png");
-          const pdf = new jspdf();
-          const pdfWidth = pdf.internal.pageSize.getWidth();
-          const pdfHeight = pdf.internal.pageSize.getHeight();
-
-          const imgWidth = canvas.width;
-          const imgHeight = canvas.height;
-          const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
-
-          pdf.addImage(
-            imgData,
-            "PNG",
-            0,
-            0,
-            imgWidth * ratio,
-            imgHeight * ratio
-          );
-          pdf.save("Trainee-Information.pdf");
-        })
-        .catch((error) => {
-          console.error("Error capturing the div as PDF:", error);
-        });
-    }
-  };
-
-  // console.log(oneTraineeDetails)
 
   return (
     <>
@@ -252,7 +213,7 @@ const TrainneeDetails = (props: any) => {
                 )}
               </div>
               <button
-                onClick={downloadDivAsPDF}
+                onClick={() => DownloadPdf("trainee-info")}
                 className="btn-Aprov  h-11 bg-blue-700 hover:bg-blue-600 dark:hover:bg-blue-600 text-white font-bold py-2 px-2 rounded   dark:bg-blue-700"
               >
                 Download PDF

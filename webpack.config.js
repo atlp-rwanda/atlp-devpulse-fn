@@ -52,6 +52,12 @@ module.exports = () => {
           test: /\.(png|jp(e*)g|svg|gif)$/,
           use: ["file-loader"],
         },
+        {
+          test: /\.m?js$/,
+          resolve: {
+            fullySpecified: false,
+          },
+        },
       ],
     },
     devtool: prod ? undefined : "source-map",
