@@ -6,7 +6,7 @@ import { fetchSingleJobPost } from "../../redux/actions/fetchSingleJobPostAction
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import { connect } from "react-redux";
 import { FaLinkedin, FaTelegram, FaTwitter, FaWhatsapp, FaEnvelope } from "react-icons/fa";
-
+import { FcGoogle } from 'react-icons/fc';
 
 const SingleJobPostDetails = (props: any) => {
   const { fetchSingleJobPostStates } = props;
@@ -121,8 +121,11 @@ const SingleJobPostDetails = (props: any) => {
                   >
                     <FaLinkedin />
                   </button>
-                  <button onClick={shareOnGmail} className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition-colors">
-                    <FaEnvelope />
+                  <button
+                    onClick={shareOnGmail}
+                    className="flex items-center justify-center gap-2 px-4 py-2 bg-white text-gray-700 rounded hover:bg-gray-100 transition-colors"
+                  >
+                    <FcGoogle size={20} />
                   </button>
                 </div>
               </>
