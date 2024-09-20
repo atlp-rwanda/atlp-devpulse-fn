@@ -11,7 +11,35 @@
     background-color: #888; 
     border-radius: 10px; 
     border: 1px solid #f1f1f1;
-  }
+  }/* Hide the scrollbar but keep scrolling */
+.custom-scrollbar {
+  overflow-y: scroll; /* Keep the scrolling */
+}
+
+/* For Chrome, Safari, and other Webkit browsers */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 0px; /* Hide the scrollbar */
+}
+
+/* For Firefox */
+.custom-scrollbar {
+  scrollbar-width: none; /* Hide scrollbar for Firefox */
+}
+
+/* Optional: If you still want to style the scrollbar for Webkit */
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Track color (optional) */
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #888; /* Scroll thumb color (optional) */
+  border-radius: 10px;
+  border: 1px solid #f1f1f1;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: #555; /* Thumb color on hover */
+}
   
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
     background-color: #555; 
