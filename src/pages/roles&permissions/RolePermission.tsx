@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import "react-toastify/dist/ReactToastify.css";
-import { usePagination, useTable } from "react-table";
+import { Column, usePagination, useTable } from "react-table";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Menu from "@mui/material/Menu";
@@ -102,7 +102,7 @@ function RolePermission(props: any) {
   const [openRole, setOpenRole] = useState(false);
   const [isAnError, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [roles, setRoles] = useState([]);
+  const [roles, setRoles] = useState<SingleRole[]>([]);
   const [userPermissions, setUserPermissions] = useState<any>([]);
   const [appPermissions, setAppPermissions] = useState<any>([]);
   const [cohortPermissions, setCohortPermissions] = useState<any>([]);
@@ -116,6 +116,15 @@ function RolePermission(props: any) {
     top: number;
     left: number;
   } | null>(null);
+  const [openEntities, setOpenEntities] = useState<string[]>([]);
+
+  const toggleEntityPermissions = (entity: string) => {
+    setOpenEntities((prevOpenEntities) =>
+      prevOpenEntities.includes(entity)
+        ? prevOpenEntities.filter((e) => e !== entity)
+        : [...prevOpenEntities, entity]
+    );
+  };
 
   const onSubmit = async (data: any) => {
     setIsLoading(true);
@@ -190,7 +199,6 @@ function RolePermission(props: any) {
           roleName: parsedData.Name,
           description: parsedData.Description,
         };
-        // @ts-expect-error
         setRoles((prevRoles) => [...prevRoles, newRole]);
         handleCloseCreateModel();
       }
@@ -440,82 +448,81 @@ const handleInputChange = (e) => {
     setSingleRoleData(null);
   };
   
-const handleUpdateRole = async (e) => {
-  e.preventDefault();
-  try {
-    if (!getRoleId) {
-      console.error("Role ID is null");
-      return;
-    }
-
-    console.log("THe update Permissions Data: ", updatePermissionData)
-   const permissionsToUpdate = Object.keys(updatePermissionData).map(
-     (entity) => ({
-       entity,
-       permissions: Object.keys(updatePermissionData[entity])
-         .filter((key) => updatePermissionData[entity][key] === true)
-         .map((key) => key),
-     })
-   );
-    console.log("The update permissions data: ",permissionsToUpdate)
-
-    const updatedData = {
-      roleName: singleRoleData?.roleName,
-      description: singleRoleData?.description,
-      permissions: permissionsToUpdate,
-    };
-    console.log("The update id: ",getRoleId)
-
-        console.log("The rolename data: ", updatedData.roleName);
-    console.log("The description data: ", updatedData.description);
-
-    console.log("The permissions data: ", updatedData.permissions)
-    const response = await axios.post("/", {
-      query: `
-        mutation UpdateRole($updateRoleId: ID!, $input: UpdateRoleInput!) {
-          updateRole(id: $updateRoleId, input: $input) {
-            _id
-            roleName
-            description
-            permissions {
-              entity
+  const handleUpdateRole = async (e) => {
+    e.preventDefault();
+    try {
+      if (!getRoleId) {
+        console.error("Role ID is null");
+        return;
+      }
+  
+      const permissionsToUpdate = Object.keys(updatePermissionData).map(
+        (entity) => ({
+          entity,
+          permissions: Object.keys(updatePermissionData[entity])
+            .filter((key) => updatePermissionData[entity][key] === true)
+            .map((key) => key),
+        })
+      );
+  
+      const updatedData = {
+        roleName: singleRoleData?.roleName,
+        description: singleRoleData?.description,
+        permissions: permissionsToUpdate,
+      };
+  
+      const response = await axios.post("/", {
+        query: `
+          mutation UpdateRole($updateRoleId: ID!, $input: UpdateRoleInput!) {
+            updateRole(id: $updateRoleId, input: $input) {
               _id
-              create
-              viewOwn
-              viewMultiple
-              viewOne
-              updateOwn
-              updateMultiple
-              updateOne
-              deleteOwn
-              deleteMultiple
-              deleteOne
+              roleName
+              description
+              permissions {
+                entity
+                _id
+                create
+                viewOwn
+                viewMultiple
+                viewOne
+                updateOwn
+                updateMultiple
+                updateOne
+                deleteOwn
+                deleteMultiple
+                deleteOne
+              }
             }
           }
-        }
-      `,
-      variables: {
-        updateRoleId: getRoleId,
-        input: {
-          roleName: updatedData?.roleName,
-          description: updatedData?.description,
-          permissions: updatedData?.permissions,
+        `,
+        variables: {
+          updateRoleId: getRoleId,
+          input: {
+            roleName: updatedData?.roleName,
+            description: updatedData?.description,
+            permissions: updatedData?.permissions,
+          },
         },
-      },
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `${token}`,
-      },
-    });
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `${token}`,
+        },
+      });
+  
+      const updatedRole = response.data.data.updateRole;
+  
+      setRoles((prevRoles) =>
+        prevRoles.map((role) =>
+          role._id === getRoleId ? updatedRole : role
+        )
+      );
 
-    const updatedRole = response.data.data.updateRole;
-    console.log("Role updated:", updatedRole);
-    setOpenUpdateModel(false);
-  } catch (error) {
-    console.error("Error updating role:", error);
-  }
-};
-  const COLS = [
+      setOpenUpdateModel(false);
+    } catch (error) {
+      console.error("Error updating role:", error);
+    }
+  };  
+  const COLS: Column<SingleRole>[] = [
     {
       Header: "Role Name",
       accessor: "roleName",
@@ -526,7 +533,6 @@ const handleUpdateRole = async (e) => {
     },
     {
       Header: "Action",
-      accessor: "action",
       Cell: ({ row }: any) => (
         <div>
           <BsIcons.BsThreeDotsVertical
@@ -537,7 +543,7 @@ const handleUpdateRole = async (e) => {
       ),
     },
   ];
-
+  
   const columns = useMemo(() => COLS, []);
   const {
     getTableProps,
@@ -1062,8 +1068,8 @@ const handleUpdateRole = async (e) => {
           open={openUpdateModal}
         >
           <div>
-          <Box className="absolute w-[50%] top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] md:w-[90%]">
-            <form className="relative rounded-[5px] w-[100%] h-[455px] m-auto p-[10px] pt-[5px] dark:bg-dark-bg bg-[#f0f0f0]">
+          <Box className="absolute w-[70%] h-[80%] top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] md:w-[90%]">
+            <form className="relative rounded-[5px] w-[100%] h-[100%] m-auto p-[10px] pt-[5px] dark:bg-dark-bg bg-[#f0f0f0] overflow-y-auto">
               <h1 className="text-center dark:text-white font-bold text-[24px] m-[20px]">
                 Update
               </h1>
@@ -1092,61 +1098,86 @@ const handleUpdateRole = async (e) => {
                 value={singleRoleData?.description}
                 onChange={handleInputChange}
               />
-              <div className="mt-5">
-                {singleRoleData?.permissions?.map((permission, index) => (
+            <div className="modal-body mt-5 flex flex-col bg-lime p-4 space-y-6">
+              {singleRoleData?.permissions?.map((permission, index) => {
+                const isOpen = openEntities.includes(permission.entity); 
+
+                return (
                   <div key={index}>
-                    <div className="">
-                      <h2 className="text-white text-lg">
+                    {/* Entity Header with Dropdown Icon */}
+                    <div className="p-3 flex justify-between items-center">
+                      <h2 className="text-black text-lg font-semibold">
                         {permission.entity}
                       </h2>
+                      <BsIcons.BsChevronDown
+                        className={`cursor-pointer text-xl transition-transform ${
+                          isOpen ? "rotate-180" : ""
+                        }`}
+                        onClick={() => toggleEntityPermissions(permission.entity)}
+                      />
                     </div>
-                    <div className="flex gap-x-2 md:flex-col">
-                      {[
-                        "create",
-                        "viewOwn",
-                        "viewMultiple",
-                        "viewOne",
-                        "updateOwn",
-                        "updateMultiple",
-                        "updateOne",
-                        "deleteOwn",
-                        "deleteMultiple",
-                        "deleteOne",
-                      ].map((field) => (
-                        <div key={field}>
-                          <label htmlFor={field} className=" text-sm">
-                            {field}
-                          </label>
-                          <input
-                            type="checkbox"
-                            checked={
-                              updatePermissionData[permission.entity]?.[
-                                field
-                              ] || false
-                            }
-                            onChange={(e) =>
-                              handlePermissionChange(
-                                permission.entity,
-                                field,
-                                e.target.checked
-                              )
-                            }
-                          />
-                        </div>
-                      ))}
-                    </div>
+
+                    {/* Roles Section (Hidden or Shown based on toggle) */}
+                    {isOpen && (
+                      <div className="grid grid-cols-3 gap-2 md:grid-cols-4">
+                        {[
+                          "create",
+                          "viewOwn",
+                          "viewMultiple",
+                          "viewOne",
+                          "updateOwn",
+                          "updateMultiple",
+                          "updateOne",
+                          "deleteOwn",
+                          "deleteMultiple",
+                          "deleteOne",
+                        ].map((field) => (
+                          <div
+                            key={field}
+                            className="flex items-center space-x-1 p-1 bg-gray-100 rounded-lg text-xs"
+                          >
+                            <label
+                              htmlFor={field}
+                              className="text-gray-700 text-xs capitalize"  
+                            >
+                              {field}
+                            </label>
+                            <input
+                              type="checkbox"
+                              checked={
+                                updatePermissionData[permission.entity]?.[field] || false
+                              }
+                              onChange={(e) =>
+                                handlePermissionChange(
+                                  permission.entity,
+                                  field,
+                                  e.target.checked
+                                )
+                              }
+                              className="h-3 w-3 text-blue-600 border-gray-300 rounded focus:ring-blue-500"  // Reduced checkbox size
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
-                ))}
-              </div>
-              <div className="flex flex-wrap w-[300px] m-auto">
-                <button
-                  className="text-white border-[1px] dark:bg-[#56C870] h-[40px] w-[100px] block rounded-[5px] my-[10px] mx-[auto] bg-[#173b3f]"
-                  type="submit"
-                  onClick={handleUpdateRole}
-                >
-                  Update
-                </button>
-              </div>
+                );
+              })}
+            </div>
+
+            <div className="modal-footer flex justify-center mt-6">
+              <button
+                className={`text-white h-[40px] w-[120px] rounded-lg bg-[#173b3f] 
+                  ${isLoading ? "bg-gray-400 cursor-not-allowed" : "hover:bg-[#145a58]"}
+                  transition-all duration-300 ease-in-out`}
+                type="submit"
+                onClick={handleUpdateRole}
+                disabled={isLoading}
+              >
+                {isLoading ? "Updating..." : "Update"}
+              </button>
+            </div>
+
             </form>
             </Box>
             </div>
