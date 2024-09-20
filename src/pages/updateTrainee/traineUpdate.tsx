@@ -11,6 +11,7 @@ import NavBar from "../../components/sidebar/navHeader";
 import { useParams } from "react-router";
 import options from "./traineeInputs";
 import { Link } from "react-router-dom";
+import { ThreeDots } from "react-loader-spinner";
 import { connect } from "react-redux";
 import { getAllCycles } from "../../redux/actions/cyclesActions";
 import { locations } from "./locations";
@@ -27,6 +28,7 @@ const TraineeUpdate = (props: any) => {
   const [provinces, setProvinces] = useState<any[]>([]);
   const [districts, setDistricts] = useState<any[]>([]);
   const [sectors, setSectors] = useState<any[]>([]);
+  const [loader, setLoader] = useState(false);
   const [formData, setFormData] = useState({
     firstname: "",
     lastname: "",
@@ -166,6 +168,7 @@ const TraineeUpdate = (props: any) => {
   const handleSubmit = async (event: any) => {
     event.preventDefault();
     if (!validateForm()) return;
+    setLoader(true);
 
     try {
       const inputTrainee = {
@@ -201,6 +204,8 @@ const TraineeUpdate = (props: any) => {
     } catch (err) {
       console.log(err);
       toast.error("Updating trainee failed");
+    } finally {
+      setLoader(false);
     }
   };
   return (
@@ -790,8 +795,18 @@ const TraineeUpdate = (props: any) => {
                 </div>
               </div>
               <div className="flex px-2 py-1 pb-3 w-fit">
-                <button className="dark:bg-[#56C870] flex bg-gray-600 mx-2 rounded-md py-2 px-4 text-white font-medium cursor-pointer">
-                  Update
+                <button
+                  type="submit"
+                  disabled={loader}
+                  className={`dark:bg-[#56C870] flex bg-gray-600 mx-2 rounded-md py-2 px-4 text-white font-medium cursor-pointer ${
+                    loader ? "opacity-50 cursor-not-allowed" : ""
+                  } flex items-center`}
+                >
+                  {loader ? (
+                    <ThreeDots height="20" width="20" color="#ffffff" />
+                  ) : (
+                    "Update"
+                  )}
                 </button>
                 <Link
                   to="/Trainee-applicants"
