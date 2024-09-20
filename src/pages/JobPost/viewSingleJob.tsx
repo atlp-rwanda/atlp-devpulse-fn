@@ -1,12 +1,12 @@
 import { useParams } from "react-router";
 import NavBar from "../../components/sidebar/navHeader";
 import { BsFillPersonLinesFill } from "react-icons/bs";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { fetchSingleJobPost } from "../../redux/actions/fetchSingleJobPostAction";
-import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
+import { useAppDispatch } from "../../hooks/hooks";
 import { connect } from "react-redux";
-import { FaLinkedin, FaTelegram, FaTwitter, FaWhatsapp, FaEnvelope } from "react-icons/fa";
-import { FcGoogle } from 'react-icons/fc';
+import { FaLinkedin, FaTelegram, FaTwitter, FaWhatsapp } from "react-icons/fa";
+import { FcGoogle } from "react-icons/fc";
 
 const SingleJobPostDetails = (props: any) => {
   const { fetchSingleJobPostStates } = props;
@@ -18,6 +18,26 @@ const SingleJobPostDetails = (props: any) => {
   useEffect(() => {
     dispatch(fetchSingleJobPost(jobPostId));
   }, [jobPostId]);
+
+  const handleShare = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: fetchSingleJobPostStates.data.title,
+          text: `Check out this job opportunity: ${fetchSingleJobPostStates.data.title}`,
+          url: window.location.href,
+        });
+        console.log("Content shared successfully");
+      } catch (error) {
+        console.log("Error sharing content:", error);
+      }
+    } else {
+      // Fallback for browsers that don't support Web Share API
+      alert(
+        "Web Share not supported on this browser. You can copy the URL to share."
+      );
+    }
+  };
 
   const shareMessage = `Check out this job opportunity: ${fetchSingleJobPostStates?.data?.title}\n${window.location.href}`;
 
@@ -36,7 +56,9 @@ const SingleJobPostDetails = (props: any) => {
   };
 
   const shareOnTelegram = () => {
-    const url = `https://t.me/share/url?url=${encodeURIComponent(window.location.href)}`;
+    const url = `https://t.me/share/url?url=${encodeURIComponent(
+      window.location.href
+    )}`;
     window.open(url, "_blank", "width=600,height=400");
   };
 
@@ -52,7 +74,7 @@ const SingleJobPostDetails = (props: any) => {
     const body = encodeURIComponent(shareMessage);
     const url = `https://mail.google.com/mail/?view=cm&fs=1&to=&su=${subject}&body=${body}`;
     window.open(url, "_blank");
-  }
+  };
 
   return (
     <>
@@ -95,8 +117,7 @@ const SingleJobPostDetails = (props: any) => {
                     {fetchSingleJobPostStates.data.description}
                   </p>
                 </div>
-                <div className="text-white">Share Job Post</div>
-                <div className="flex fle gap-4 mt-6">
+                <div className="flex gap-4 mt-6">
                   <button
                     onClick={shareOnTwitterDM}
                     className="flex items-center gap-2 px-4 py-2 bg-blue-400 text-white rounded hover:bg-blue-500 transition-colors"
@@ -120,12 +141,6 @@ const SingleJobPostDetails = (props: any) => {
                     className="flex items-center gap-2 px-4 py-2 bg-blue-800 text-white rounded hover:bg-blue-900 transition-colors"
                   >
                     <FaLinkedin />
-                  </button>
-                  <button
-                    onClick={shareOnGmail}
-                    className="flex items-center justify-center gap-2 px-4 py-2 bg-white text-gray-700 rounded hover:bg-gray-100 transition-colors"
-                  >
-                    <FcGoogle size={20} />
                   </button>
                 </div>
               </>

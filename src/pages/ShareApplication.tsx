@@ -1,10 +1,10 @@
-import { useParams } from 'react-router';
-import NavBar from '../components/sidebar/navHeader';
-import React, { useEffect } from 'react';
-import { fetchSingleJobPost } from '../redux/actions/fetchSingleJobPostAction';
-import { connect, useDispatch } from 'react-redux';
-import { useAppSelector } from 'hooks/hooks';
-import { Link } from 'react-router-dom';
+import { useParams } from "react-router";
+import NavBar from "../components/sidebar/navHeader";
+import React, { useEffect } from "react";
+import { fetchSingleJobPost } from "../redux/actions/fetchSingleJobPostAction";
+import { connect, useDispatch } from "react-redux";
+import { useAppSelector } from "hooks/hooks";
+import { Link } from "react-router-dom";
 
 type Props = {};
 
@@ -34,7 +34,7 @@ const ShareApplication = (props: any) => {
                       {fetchSingleJobPostStates?.data?.program?.requirements.map(
                         (item: any) => (
                           <li className="text-white font-sans">{item}</li>
-                        ),
+                        )
                       )}
                     </ul>
                   </div>
