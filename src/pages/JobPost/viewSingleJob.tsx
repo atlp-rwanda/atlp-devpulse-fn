@@ -5,7 +5,8 @@ import React, { useEffect, useState } from "react";
 import { fetchSingleJobPost } from "../../redux/actions/fetchSingleJobPostAction";
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import { connect } from "react-redux";
-import { FaLinkedin, FaTelegram, FaTwitter, FaWhatsapp } from "react-icons/fa";
+import { FaLinkedin, FaTelegram, FaTwitter, FaWhatsapp, FaEnvelope } from "react-icons/fa";
+
 
 const SingleJobPostDetails = (props: any) => {
   const { fetchSingleJobPostStates } = props;
@@ -35,9 +36,7 @@ const SingleJobPostDetails = (props: any) => {
   };
 
   const shareOnTelegram = () => {
-    const url = `https://t.me/share/url?url=${encodeURIComponent(
-      window.location.href
-    )}&text=${encodeURIComponent(shareMessage)}`;
+    const url = `https://t.me/share/url?url=${encodeURIComponent(window.location.href)}`;
     window.open(url, "_blank", "width=600,height=400");
   };
 
@@ -47,6 +46,13 @@ const SingleJobPostDetails = (props: any) => {
     )}`;
     window.open(url, "_blank");
   };
+
+  const shareOnGmail = () => {
+    const subject = encodeURIComponent("Interesting Job Opportunity");
+    const body = encodeURIComponent(shareMessage);
+    const url = `https://mail.google.com/mail/?view=cm&fs=1&to=&su=${subject}&body=${body}`;
+    window.open(url, "_blank");
+  }
 
   return (
     <>
@@ -114,6 +120,9 @@ const SingleJobPostDetails = (props: any) => {
                     className="flex items-center gap-2 px-4 py-2 bg-blue-800 text-white rounded hover:bg-blue-900 transition-colors"
                   >
                     <FaLinkedin />
+                  </button>
+                  <button onClick={shareOnGmail} className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition-colors">
+                    <FaEnvelope />
                   </button>
                 </div>
               </>
