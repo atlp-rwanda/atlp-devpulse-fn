@@ -20,6 +20,7 @@ const LoginPage = (props: any) => {
   const authenticated =
   //@ts-ignore
     access_token !== null && access_token !== undefined && access_token !== '';
+  const roleName = localStorage.getItem("roleName");
   const [showNotification, setShowNotification] = useState(false);
   const [showProfileDropdown, setShowprofileDropdown] = useState(false);
   const { theme, setTheme } = useTheme();
@@ -48,9 +49,9 @@ const LoginPage = (props: any) => {
 }
   `;
 
-  return authenticated ? (
-    <Navigate to="/" />
-  ) : 
+  return authenticated && roleName === "applicant" ? 
+    <Navigate to="/applicant" /> : authenticated && roleName === "supperAdmin" ? <Navigate to="/" />
+   : 
   (
     <>
       <div className="flex items-center dark:bg-zinc-800 ">

@@ -15,11 +15,10 @@ import { Token } from '../../utils/utils';
 
 const sidebar = () => {
   const roleName = localStorage.getItem('roleName');
-  console.log(roleName);
 
   return (
     <>
-      <div className="top-0 bottom-0 overflow-y-scroll mt-[70px] w-[16rem] grow z-10 fixed dark:bg-dark-bg  bg-white font-sans border-r border-[#979797] ">
+      <div className="overflow-y-scroll w-[16rem] grow fixed dark:bg-dark-bg  bg-white font-sans border-r border-[#979797] h-full">
         {roleName === 'applicant' ? (
           <div className="mb-2 border-b border-[#000] h-[70%]">
             <ul className=" min:mt-0 pl-4 block mt-2">
@@ -29,13 +28,14 @@ const sidebar = () => {
                     key={index}
                     className=" min:text-xl lg:justify-content-start align-items-center  dark:text-white text-[#173B3F]  text-base"
                   >
-                    <Link
+                    <NavLink
                       to={items.path}
+                      replace
                       className="is-active focus:text-green-600  p-1 flex align-items-center leading-3 cursor-pointer font-semibold hover:font-bold  "
                     >
                       <label className="mr-3 p-1">{items.icon}</label>
                       <label className="p-1  ">{items.title} </label>
-                    </Link>
+                    </NavLink>
                   </li>
                 );
               })}
@@ -75,13 +75,13 @@ const sidebar = () => {
                   key={index}
                   className=" align-items-center  dark:text-white text-[#173B3F] text-base"
                 >
-                  <a
-                    href={items.path}
+                  <Link
+                    to={items.path}
                     className="p-1 flex align-items-center leading-3 cursor-pointer font-semibold hover:font-bold"
                   >
                     <label className="mr-3 p-1">{items.icon}</label>
                     <label className="p-1">{items.title} </label>
-                  </a>
+                </Link>
                 </li>
               );
             })}
@@ -95,12 +95,12 @@ const sidebar = () => {
                   key={index}
                   className=" justify-content-center mb-1 align-items-center  dark:text-white text-[#173B3F] text-lg ml-2"
                 >
-                  <a
-                    href={items.path}
+                  <Link
+                    to={items.path}
                     className="p-1 flex align-items-center leading-5 cursor-pointer"
                   >
                     <label className="mr-3 p-1">{items.icon}</label>
-                  </a>
+                  </Link>
                 </li>
               );
             })}

@@ -185,9 +185,9 @@ const TraineeUpdate = (props: any) => {
   };
   return (
     <>
-      <NavBar />
+      
       <div className="block bg-white dark:bg-dark-tertiary relative mt-10 w-[100%] py-3 min-h-[100vh]">
-        <div className="block text-center text-sm font-bold text-gray-600 relative lg:left-[8rem] dark:text-white text-base lg:max-w-3xl sm:w-[100%] p-4 lg:px-4 m-4 mx-auto text-[24px]">
+        <div className="block text-center font-bold text-gray-600 relative lg:left-[8rem] dark:text-white text-base lg:max-w-3xl sm:w-[100%] p-4 lg:px-4 m-4 mx-auto text-[24px]">
           <h1 className="p-2">Update Trainee-applicant</h1>
         </div>
         <form
