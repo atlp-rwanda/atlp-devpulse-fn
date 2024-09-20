@@ -1104,20 +1104,18 @@ const handleInputChange = (e) => {
 
                 return (
                   <div key={index}>
-                    {/* Entity Header with Dropdown Icon */}
                     <div className="p-3 flex justify-between items-center">
-                      <h2 className="text-black text-lg font-semibold">
+                      <h2 className="text-white text-lg font-semibold">
                         {permission.entity}
                       </h2>
                       <BsIcons.BsChevronDown
-                        className={`cursor-pointer text-xl transition-transform ${
+                        className={`cursor-pointer text-xl bg-white transition-transform ${
                           isOpen ? "rotate-180" : ""
                         }`}
                         onClick={() => toggleEntityPermissions(permission.entity)}
                       />
                     </div>
 
-                    {/* Roles Section (Hidden or Shown based on toggle) */}
                     {isOpen && (
                       <div className="grid grid-cols-3 gap-2 md:grid-cols-4">
                         {[
