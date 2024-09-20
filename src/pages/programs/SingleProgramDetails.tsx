@@ -73,7 +73,7 @@ const SingleProgramDetails = (props: any) => {
           </div>
         </div>
       </div>
-      <NavBar />
+      
     </>
   );
 };

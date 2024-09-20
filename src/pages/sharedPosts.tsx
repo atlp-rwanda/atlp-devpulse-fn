@@ -65,12 +65,12 @@ function SharedJobPosts(props: any) {
   });
   return (
     <>
-      <div className="flex flex-col  h-screen absolute w-[100%]">
+      <div className="w-full">
         <div className="flex flex-row">
           <div className="w-full">
-            <div className="bg-light-bg dark:bg-dark-frame-bg min-h-screen overflow-x-hidden lg:ml-[3rem]">
-              <div className="flex items-left px-7 lg:px-64 pt-24">
-                <div className="flex px-5 py-2 pb-8 w-fit">
+            <div className="bg-light-bg dark:bg-dark-frame-bg min-h-screen overflow-x-hidden flex flex-col gap-8">
+              <div className="flex items-left px-8 pt-1">
+                <div className="flex w-fit">
                   <Link to="/filter_trainee-applicants">
                     <button className="flex bg-primary dark:bg-[#56C870] rounded-md py-2 mt-2 px-4 text-white font-medium cursor-pointer">
                       <icons.AiOutlineSearch className="mt-1 mr-1 font-bold" />{' '}
@@ -79,8 +79,8 @@ function SharedJobPosts(props: any) {
                   </Link>
                 </div>
               </div>
-              <div className="px-3 md:px-8">
-                <div className="bg-white  dark:bg-dark-bg shadow-lg px-5 py-8 rounded-md w-[100%] mx-auto lg:w-[80%] lg:ml-60 mb-10">
+              <div className='px-8'>
+                <div className="bg-white  dark:bg-dark-bg shadow-lg px-5 py-8 rounded-md w-[100%] mx-auto">
                   <div>
                     <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
                       <div className="hidden md_:inline-block w-full h-auto lg:min-w-full shadow rounded-lg overflow-y-hidden">
@@ -165,7 +165,7 @@ function SharedJobPosts(props: any) {
                                 <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
                                   <div className="flex items-center">
                                     <div className="">
-                                      <Link to={`/jobPost/${item?.id}/apply`}>
+                                      <Link to={`/applicant/available-job/${item?.id}/apply`} replace>
                                         <button className="flex bg-primary dark:bg-[#56C870] rounded-md py-2 px-4 text-white font-medium cursor-pointer">
                                           Apply
                                         </button>
@@ -357,7 +357,6 @@ function SharedJobPosts(props: any) {
           </div>
         </div>
       </div>
-      <NavBar />
     </>
   );
 }

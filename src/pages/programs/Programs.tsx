@@ -181,11 +181,11 @@ const Programs = (props: any) => {
     <>
       <ToastContainer />
       <div
-        className={`h-screen w-full z-20 bg-black bg-opacity-30 backdrop-blur-sm absolute flex items-center justify-center  px-4 overflow-y-hidden ${
+        className={`w-[63.5rem] h-screen z-20 bg-black bg-opacity-30 backdrop-blur-sm absolute flex items-center justify-center overflow-y-hidden ${
           addNewProgramModal === true ? "block" : "hidden"
         }`}
       >
-        <div className="bg-white dark:bg-dark-bg w-full mt-48 mb-9 max-h-[900px] sm_:mt-40 sm_:mb-10 md_:max-h-full overflow-auto md_:w-[65%] md-sm:w-[95%] rounded-lg p-4 pb-8">
+        <div className="bg-white dark:bg-dark-bg w-full max-h-[900px]  overflow-auto md_:w-[65%] md-sm:w-[95%] rounded-lg p-4 pb-8">
           <div className="card-title w-full flex flex-wrap justify-center items-center">
             <h3 className="font-bold text-sm dark:text-white text-center w-11/12 ">
               <icons.AiOutlineClose
@@ -360,11 +360,11 @@ const Programs = (props: any) => {
           </div>
         </div>
       </div>
-      <div className="flex flex-col  h-screen absolute w-[100%]">
+      <div className="flex flex-col w-[100%]">
         <div className="flex flex-row">
           <div className="w-full">
-            <div className="bg-light-bg dark:bg-dark-frame-bg min-h-screen overflow-x-hidden lg:ml-[3rem]">
-              <div className="flex items-left px-7 lg:px-64 pt-24">
+            <div className="bg-light-bg dark:bg-dark-frame-bg h-screen">
+              <div className="flex items-left px-7">
                 <div className="flex px-5 py-2 pb-8 w-fit">
                   <button
                     onClick={Open}
@@ -375,8 +375,8 @@ const Programs = (props: any) => {
                   </button>
                 </div>
               </div>
-              <div className="px-3 md:px-8">
-                <div className="bg-white  dark:bg-dark-bg shadow-lg px-5 py-8 rounded-md w-[100%] mx-auto lg:w-[80%] lg:ml-60 mb-10">
+              <div className="px-8">
+                <div className="bg-white  dark:bg-dark-bg shadow-lg px-5 py-8 rounded-md w-[100%] mx-auto">
                   <div>
                     <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
                       <div className="hidden md_:inline-block w-full h-auto lg:min-w-full shadow rounded-lg overflow-y-hidden">
@@ -754,7 +754,6 @@ const Programs = (props: any) => {
           </div>
         </div>
       </div>
-      <NavBar />
     </>
   );
 };
