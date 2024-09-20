@@ -26,4 +26,8 @@
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background-color: #555; /* Thumb color on hover */
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 74721ea (fix minimize dashboard scrollbar)
