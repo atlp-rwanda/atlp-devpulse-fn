@@ -6,6 +6,7 @@ import "./navslide.css";
 
 const Sidebar = () => {
   const [expanded, setExpanded] = useState(true);
+  const navigate = useNavigate()
   const [openSections, setOpenSections] = useState({ general: true, management: true, applications: true, performance: true, admin: true, additional: true });
   const roleName = localStorage.getItem('roleName');
   const sections = roleName === 'applicant' ? [{ title: 'Applicant Section', items: applicantSidebarItems }] : [
@@ -18,7 +19,10 @@ const Sidebar = () => {
   ];
 
   const toggleSection = (section) => setOpenSections(prev => ({ ...prev, [section]: !prev[section] }));
-  const handleLogout = () => { localStorage.clear(); useNavigate()('/login'); };
+  const handleLogout = () => { 
+    localStorage.clear(); 
+    navigate('/login'); 
+  };
 
   return (
     <div className={`top-0 mt-[70px] ${expanded ? 'w-[16rem]' : 'w-[4rem]'} fixed z-10 dark:bg-dark-bg bg-white border-r transition-width duration-300 h-screen overflow-y-auto custom-scrollbar`}>

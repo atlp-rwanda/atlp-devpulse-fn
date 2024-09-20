@@ -195,7 +195,7 @@ const ApplicationDetails = () => {
   };
   return (
     <>
-      <NavBar />
+      
       <div className="flex items-center flex-col overflow-auto dark:bg-dark-frame-bg">
         <div className="min-h-[100vh] dark:bg-dark-frame-bg w-[100%] block mt-10 md:w-[100%] md:mt-0 pl-[16rem] pt-[80px] md:pl-0">
           <div className="block w-[100%] pl-[16rem] h-max md:pl-0 mx-auto dark:bg-dark-frame-bg pb-10  ">
