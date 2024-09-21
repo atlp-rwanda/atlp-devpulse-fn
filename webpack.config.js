@@ -47,11 +47,17 @@ module.exports = {
         use: [MiniCssExtractPlugin.loader, "css-loader", "postcss-loader"],
       },
       {
-        test: /\.(png|jp(e*)g|svg|gif)$/,
-        type: 'asset/resource', 
-        generator: {
-          filename: 'assets/[name][ext]', 
-        },
+        test: /\.(png|jpe?g|svg|gif)$/, 
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: 'assets/[name].[hash].[ext]', 
+              outputPath: 'assets/', 
+              publicPath: 'assets/', 
+            },
+          },
+        ],
       },
     ],
   },
