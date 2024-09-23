@@ -56,8 +56,8 @@ const SingleJobPostDetails = (props: any) => {
 
   return (
     <>
-      <div className="h-screen flex flex-col items-center dark:bg-dark-frame-bg">
-        <div className="flex flex-col justify-start mt-24 items-start p-5 w-[95%] lg:w-1/2 md_:mx-auto overflow-hidden dark:bg-dark-bg">
+      <div className="min-h-screen flex flex-col items-center dark:bg-dark-frame-bg">
+        <div className="flex flex-col justify-start mt-24 items-start p-5 w-[95%] md_:mx-auto overflow-hidden dark:bg-dark-bg">
           <h2 className="text-white font-bold my-5">
             <BsFillPersonLinesFill className="float-left m-1" />
             Job Post information
@@ -133,7 +133,7 @@ const SingleJobPostDetails = (props: any) => {
           </div>
         </div>
       </div>
-      <NavBar />
+      
     </>
   );
 };

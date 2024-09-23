@@ -85,7 +85,7 @@ const TrainneeDetails = (props: any) => {
 
   return (
     <>
-      <Navbar />
+      
       <div className="flex items-center overflow-auto  dark:bg-dark-frame-bg ">
         {/* <div className="min-h-[50vh] dark:bg-dark-frame-bg  w-[100%] block mt-10 md:w-[100%] md:mt-0 pl-[16rem] pt-[80px] md:pl-0"> */}
         <div className="block w-[100%] pl-[16rem] h-max md:pl-0 mx-auto dark:bg-dark-frame-bg pb-10 mt-10  pt-[80px]">

@@ -38,295 +38,271 @@ import SubmitApplication from "../pages/SubmitApplication";
 import GradingSystemPage from "../pages/GradingSystemPage";
 import ListApplications from "./../pages/Applications/AdminViewApplications";
 import ApplicationDetails from "../pages/Applications/ViewSingleApplication";
-import ShareApplication from "../pages/ShareApplication";
+import Dashboard from "../pages/Dashboard";
+import ApplicantLayout from "../pages/Applicant/ApplicantLayout";
+import AdminLayout from "../components/Layout/Admins/AdminLayout";
 
 function Navigation() {
   const roleName = localStorage.getItem("roleName");
   return (
     <Routes>
       <Route path="/test_tailwind" element={<TestTailwind />} />
-      <Route
-        path="/trainee-applicant-details/:traineeId"
-        element={
-          <PrivateRoute>
-            <TrainneeDetails />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/application-details/:appId"
-        element={
-          <PrivateRoute>
-            <ApplicationDetails />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/traineeb-details"
-        element={
-          <PrivateRoute>
-            <TrainneeDetailsB />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/Trainee-applicants"
-        element={
-          <PrivateRoute>
-            <Trainee />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/sidebar"
-        element={
-          <PrivateRoute>
-            <Sidebar />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/table"
-        element={
-          <PrivateRoute>
-            <Table />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/cycles"
-        element={
-          <PrivateRoute>
-            <ApplicationCycle />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/trash"
-        element={
-          <PrivateRoute>
-            <Trash />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/nav-bar"
-        element={
-          <PrivateRoute>
-            <NavBar />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/filter_trainee-applicants"
-        element={
-          <PrivateRoute>
-            <FilterTrainee />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/import_trainee-aplicants"
-        element={
-          <PrivateRoute>
-            <ImportTraineeDetailsFromGoogleSheet />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/trainee-applicant/:traineeId/edit"
-        element={
-          <PrivateRoute>
-            <UpdateTraine />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/"
-        element={
-          roleName === "applicant" ? (
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/signup" element={<SignupForm />} />
+      <Route path="/admin" element={<AdminLayout />}>
+      <Route index element={<PrivateRoute><Dashboard /></PrivateRoute>} />
+        <Route
+          path="trainee-applicant-details/:traineeId"
+          element={
             <PrivateRoute>
-              <Applications />
+              <TrainneeDetails />
             </PrivateRoute>
-          ) : (
+          }
+        />
+        <Route
+          path="application-details/:appId"
+          element={
+            <PrivateRoute>
+              <ApplicationDetails />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="traineeb-details"
+          element={
+            <PrivateRoute>
+              <TrainneeDetailsB />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="Trainee-applicants"
+          element={
             <PrivateRoute>
               <Trainee />
             </PrivateRoute>
-          )
-        }
-      />
-      <Route
-        path="/filter_trainee-applicants/:id"
-        element={
-          <PrivateRoute>
-            <CreateScoreType />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/rolesandaccess"
-        element={
-          <PrivateRoute>
-            <RolePermission />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/roles"
-        element={
-          <PrivateRoute>
-            <ListAllUsersPage />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/roles"
-        element={
-          <PrivateRoute>
-            <RolePermission />
-          </PrivateRoute>
-        }
-      />
-      <Route path="/login" element={<LoginPage />} />
-      <Route
-        path="/admins"
-        element={
-          <PrivateRoute>
-            <ScoreTypesActions />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/program/:programId/edit"
-        element={
-          <PrivateRoute>
-            <UpdateProgram />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/program/:id"
-        element={
-          <PrivateRoute>
-            <SingleProgramDetails />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/program/:id"
-        element={
-          <PrivateRoute>
-            <SingleProgramDetails />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/programs"
-        element={
-          <PrivateRoute>
-            <Programs />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/myApplications"
-        element={
-          <PrivateRoute>
-            <Applications />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/scheduleInterview"
-        element={
-          <PrivateRoute>
-            <ScheduleInterview />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/jobPost/:id/apply"
-        element={
-          <PrivateRoute>
-            <SubmitApplication />
-          </PrivateRoute>
-        }
-      />
-      <Route path="/jobPost/:id" element={<ShareApplication />} />
-      <Route
-        path="*"
-        element={
-          <PrivateRoute>
-            <PageNotFound />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/job/Post/view"
-        element={
-          <PrivateRoute>
-            <SharedPosts />
-          </PrivateRoute>
-        }
-      />
-      <Route path="/signup" element={<SignupForm />} />
-      <Route
-        element={
-          <PrivateRoute>
-            <CreateFormPage />
-          </PrivateRoute>
-        }
-        path="/create-form"
-      />
-      <Route
-        element={
-          <PrivateRoute>
-            <ViewApplicationForms />
-          </PrivateRoute>
-        }
-        path="/view-forms"
-      />
-      <Route
-        element={
-          <PrivateRoute>
-            <UpdateSavedFormPage />
-          </PrivateRoute>
-        }
-        path="/update-saved-form/:id"
-      />
-      <Route path="/signup" element={<SignupForm />} />
-      <Route
-        path="/Job-Post"
-        element={
-          <PrivateRoute>
-            <Jobs />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/Job/Post/:id"
-        element={
-          <PrivateRoute>
-            <SingleJobPostDetails />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/grading"
-        element={
-          <PrivateRoute>
-            <GradingSystemPage />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        element={
-          <PrivateRoute>
-            <ListApplications />
-          </PrivateRoute>
-        }
-        path="/view-applications"
-      />
+          }
+        />
+        <Route
+          path="cycles"
+          element={
+            <PrivateRoute>
+              <ApplicationCycle />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="trash"
+          element={
+            <PrivateRoute>
+              <Trash />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="filter_trainee-applicants"
+          element={
+            <PrivateRoute>
+              <FilterTrainee />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="import_trainee-aplicants"
+          element={
+            <PrivateRoute>
+              <ImportTraineeDetailsFromGoogleSheet />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="trainee-applicant/:traineeId/edit"
+          element={
+            <PrivateRoute>
+              <UpdateTraine />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="filter_trainee-applicants/:id"
+          element={
+            <PrivateRoute>
+              <CreateScoreType />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="users"
+          element={
+            <PrivateRoute>
+              <ListAllUsersPage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="roles"
+          element={
+            <PrivateRoute>
+              <RolePermission />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="admins"
+          element={
+            <PrivateRoute>
+              <ScoreTypesActions />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="program/:programId/edit"
+          element={
+            <PrivateRoute>
+              <UpdateProgram />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="program/:id"
+          element={
+            <PrivateRoute>
+              <SingleProgramDetails />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="programs"
+          element={
+            <PrivateRoute>
+              <Programs />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="jobPost/:id/apply"
+          element={
+            <PrivateRoute>
+              <SubmitApplication />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="create-form"
+          element={
+            <PrivateRoute>
+              <CreateFormPage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="view-forms"
+          element={
+            <PrivateRoute>
+              <ViewApplicationForms />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="update-saved-form/:id"
+          element={
+            <PrivateRoute>
+              <UpdateSavedFormPage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="Job-Post"
+          element={
+            <PrivateRoute>
+              <Jobs />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="Job/Post/:id"
+          element={
+            <PrivateRoute>
+              <SingleJobPostDetails />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="grading"
+          element={
+            <PrivateRoute>
+              <GradingSystemPage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          element={
+            <PrivateRoute>
+              <ListApplications />
+            </PrivateRoute>
+          }
+          path="view-applications"
+        />
+        <Route
+          path="*"
+          element={
+            <PrivateRoute>
+              <PageNotFound />
+            </PrivateRoute>
+          }
+        />
+      </Route>
+      <Route path="/applicant" element={<ApplicantLayout />}>
+        <Route
+          index
+          element={
+            <PrivateRoute>
+              <Applications />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="myApplications"
+          element={
+            <PrivateRoute>
+              <Applications />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="available-jobs"
+          element={
+            <PrivateRoute>
+              <SharedPosts />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="available-job/:id/apply"
+          element={
+            <PrivateRoute>
+              <SubmitApplication />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="interviewScheduler"
+          element={
+            <PrivateRoute>
+              <ScheduleInterview />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="*"
+          element={
+            <PrivateRoute>
+              <PageNotFound />
+            </PrivateRoute>
+          }
+        />
+      </Route>
+      <Route path="*" element={<PrivateRoute><PageNotFound /></PrivateRoute>}/>
     </Routes>
   );
 }

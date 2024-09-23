@@ -79,7 +79,7 @@ function GradingBox(props: any) {
 
     if (exist) {
 
-      const newAssess = assessment.map((element, index) => {
+      const newAssess = assessment?.map((element, index) => {
         if (index === id) {
           return nAssessment;
         } else {
@@ -98,7 +98,7 @@ function GradingBox(props: any) {
 
     if (exist) {
 
-      const newGrade = grade.map((element, index) => {
+      const newGrade = grade?.map((element, index) => {
         if (index === id) {
           if (field === "attribute") {
             const grde = { attribute: value, scale: element?.scale }
@@ -230,7 +230,7 @@ function GradingBox(props: any) {
   return (
     <div>
       <div
-        className={` flex  justify-center mt-20 static left-0`}
+        className={` flex  justify-center static left-0`}
       >
         <div className="bg-white dark:bg-dark-bg w-full lg:w-[50%] xl:w-5/12 rounded-lg p-1 xl:p-4 lg:p-4 pb-8 mb-20">
           <div className="card-title w-full flex  flex-wrap justify-center items-center  ">
@@ -265,7 +265,7 @@ function GradingBox(props: any) {
                       changeAssess(0, e.target.value)
                     }}
                     options={[{ value: "--- Choose assessment---", label: "Choose assessment" },
-                    allAssessments?.data.map((element) => ({
+                    allAssessments?.data?.map((element) => ({
                       value: element.id, label: element.label
                     })
                     )]}
@@ -286,7 +286,7 @@ function GradingBox(props: any) {
               </div>
               {
                 (newAssessment.length > 0) &&
-                newAssessment.map((element, index) => {
+                newAssessment?.map((element, index) => {
                   return (
                     <div className="input mt-4 mb-4 h-9 ">
                       <div className="grouped-input flex items-center h-full w-full rounded-md">
@@ -301,7 +301,7 @@ function GradingBox(props: any) {
                           <option disabled hidden value="">{"---Choose Assessment---"}</option>
                           {
                             allAssessments?.data &&
-                            (allAssessments?.data.map((element) => {
+                            (allAssessments?.data?.map((element) => {
                               return (
                                 <option value={element.id}>{element.title}</option>)
                             })
@@ -368,7 +368,7 @@ function GradingBox(props: any) {
                       <option value="Letter Grades">Letter Grades</option>
                       <option value="Pass/Fail">Pass/Fail</option>
                     </select>
-                    {rateType.map((element) => {
+                    {rateType?.map((element) => {
                       return (element.attribute === "main" &&
                         ((element.type === "Linear Scale" || element.type === "Letter Grades") ?
 
@@ -500,7 +500,7 @@ function GradingBox(props: any) {
               </div>
               {
                 (newAttribute.length > 0) &&
-                newAttribute.map((element, index) => {
+                newAttribute?.map((element, index) => {
                   return (
                     <div className="input mt-4 mb-5 " key={element}>
                       <div className="grouped-input flex h-full w-full space-x-1 rounded-md">
@@ -532,7 +532,7 @@ function GradingBox(props: any) {
                             <option value="Letter Grades">Letter Grades</option>
                             <option value="Pass/Fail">Pass/Fail</option>
                           </select>
-                          {rateType.map((item) => {
+                          {rateType?.map((item) => {
                             return (item.attribute === element &&
                               (
                                 (item.type === "Linear Scale" || item.type === "Letter Grades") ?
