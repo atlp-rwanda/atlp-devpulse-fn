@@ -1,3 +1,4 @@
+/* eslint-disable  */
 import React from 'react';
 import { Icon } from '@iconify/react';
 
@@ -6,11 +7,6 @@ export const sidebarItems1 = [
     path: '/admin',
     icon: <Icon icon="fontisto:pie-chart-1"></Icon>,
     title: 'Dashboard',
-  },
-  {
-    path: 'organizations',
-    icon: <Icon icon="fluent:people-team-20-filled"></Icon>,
-    title: 'Organizations',
   },
   {
     path: 'users',
@@ -28,16 +24,6 @@ export const sidebarItems1 = [
     title: 'View Job Post',
   },
   {
-    path: 'admins',
-    icon: <Icon icon="ic:round-people"></Icon>,
-    title: 'Admins',
-  },
-  {
-    path: 'domains',
-    icon: <Icon icon="akar-icons:globe"></Icon>,
-    title: 'Domains',
-  },
-  {
     path: "create-form",
     icon: <Icon icon="fluent:form-28-regular"></Icon>,
     title: "Application Forms",
@@ -46,31 +32,6 @@ export const sidebarItems1 = [
     path: "view-applications",
     icon: <Icon icon="akar-icons:globe"></Icon>,
     title: "Applications",
-  },
-  {
-    path: 'Trainee-applicants',
-    icon: <Icon icon="ic:round-people"></Icon>,
-    title: 'Trainees-Applicants',
-  },
-  {
-    path: 'attendance',
-    icon: <Icon icon="teenyicons:clipboard-tick-solid"></Icon>,
-    title: 'Attendance',
-  },
-  {
-    path: 'performance',
-    icon: <Icon icon="fa6-solid:arrow-trend-up"></Icon>,
-    title: 'Performance',
-  },
-  {
-    path: 'sessions',
-    icon: <Icon icon="fluent:clipboard-bullet-list-ltr-16-filled"></Icon>,
-    title: 'Sessions',
-  },
-  {
-    path: 'coordinators',
-    icon: <Icon icon="fluent:people-team-20-filled"></Icon>,
-    title: 'Coordinators',
   },
   {
     path: 'cohort',
@@ -82,30 +43,11 @@ export const sidebarItems1 = [
     icon: <Icon icon="game-icons:cycle"></Icon>,
     title: 'Application Cycles',
   },
-  {
-    path: 'updatedRatings',
-    icon: <Icon icon="charm:refresh"></Icon>,
-    title: 'Updated Ratings',
-  },
+  
   {
     path: 'grading',
     icon: <Icon icon="bxs:dashboard"></Icon>,
     title: 'Grading System',
-  },
-  {
-    path: 'roles',
-    icon: <Icon icon="heroicons:key-20-solid"></Icon>,
-    title: 'Roles & Access',
-  },
-  {
-    path: 'notifications',
-    icon: <Icon icon="heroicons-solid:inbox-in"></Icon>,
-    title: 'Notifications',
-  },
-  {
-    path: 'calendar',
-    icon: <Icon icon="ant-design:calendar-filled"></Icon>,
-    title: 'Calendar',
   },
   {
     path: 'Trash',
