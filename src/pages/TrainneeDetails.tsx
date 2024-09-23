@@ -13,12 +13,12 @@ import {
 import { toast } from "react-toastify";
 import DetailItem from "../components/TraineeDetail/DetailItem";
 import ProgramItem from "../components/TraineeDetail/ProgramBox";
-<<<<<<< HEAD
+
 import { DownloadPdf } from "../utils/DownloadPdf";
-=======
+
 import jspdf from "jspdf";
 import html2canvas from "html2canvas";
->>>>>>> c8358c6 (handling missing application info, also adding download functionality)
+
 
 const TrainneeDetails = (props: any) => {
   const params = useParams();
@@ -60,8 +60,13 @@ const TrainneeDetails = (props: any) => {
 
   const traineeDetails = oneTraineeDetails.data;
 
-
-
+  const updateManyScoreValues = () => {
+    const scores = scoreValue.map((values: any) => {
+      delete values.test;
+      return values;
+    });
+    props.updateManyScoreValues(scores);
+  };
 
 
   const downloadDivAsPDF = () => {
@@ -98,164 +103,145 @@ const TrainneeDetails = (props: any) => {
 
   return (
     <>
-      <div className="w-full flex items-center bg-white overflow-auto dark:bg-dark-frame-bg">
-        <div className="block w-[100%] pl-20 h-max md:pl-0 mx-auto dark:bg-dark-frame-bg pb-10  pt-[80px]">
-          <div className="" id="trainee-info">
-            {traineeDetails && (
-              <div className="w-full bg-slate-200 mx-16 rounded-xl shadow-md overflow-hidden md:max-w-2xl mb-6 lg:flex lg:max-w-3xl dark:bg-[#192432] dark:text-white">
-                <div className=" md:flex ">
-                  <h2 className="top-5 m-5 font-medium md:m-3">
-                    <span className="pl-5 text-lg text-[#56C870] uppercase">
-                      Trainee Applicant Information
-                    </span>
-                  </h2>
-                  <div className="m-5 sm:mt-20 sm:ml-[-12rem] md:shrink-0 lg:ml-10 lg:mt-10">
-                    <DetailItem
-                      title="FirstName"
-                      value={traineeDetails?.trainee_id?.firstName}
-                    />
-                    <DetailItem title="Gender" value={traineeDetails.gender} />
-                    <DetailItem
-                      title="Address"
-                      value={traineeDetails.Address}
-                    />
-                    <DetailItem
-                      title="Phone Number"
-                      value={traineeDetails.phone}
-                    />
-                    <DetailItem
-                      title="Field of Study"
-                      value={traineeDetails.field_of_study}
-                    />
-                    <DetailItem
-                      title="Education Level"
-                      value={traineeDetails.education_level}
-                    />
-                    <DetailItem
-                      title="Is Student"
-                      value={traineeDetails.isStudent}
-                    />
-                    <DetailItem
-                      title="Is Employed"
-                      value={traineeDetails.isEmployed}
-                    />
-                    <DetailItem
-                      title="Email"
-                      value={traineeDetails?.trainee_id?.email}
-                    />
-                  </div>
-                </div>
-                <div className="m-5 sm:ml-[20rem] md:ml-2 lg:mt-20 lg:ml-[5rem]">
+
+      <Navbar />
+      <div className="flex items-center overflow-auto dark:bg-dark-frame-bg">
+        <div className="block w-[100%] pl-[16rem] h-max md:pl-0 mx-auto dark:bg-dark-frame-bg pb-10 mt-10 pt-[80px]">
+          {traineeDetails && (
+            <div className="w-full mx-16 bg-slate-200 rounded-xl shadow-md overflow-hidden md:max-w-2xl mb-6 lg:flex lg:max-w-3xl dark:bg-[#192432] dark:text-white">
+              <div className="md:flex">
+                <h2 className="top-5 m-5 font-medium md:m-3">
+                  <span className="pl-5 text-lg text-[#56C870] uppercase">
+                    Trainee Applicant Information
+                  </span>
+                </h2>
+                <div className="m-5 sm:mt-20 sm:ml-[-12rem] md:shrink-0 lg:ml-10 lg:mt-10">
+
                   <DetailItem
-                    title="LastName"
-                    value={traineeDetails?.trainee_id?.lastName}
+                    title="FirstName"
+                    value={traineeDetails?.trainee_id?.firstName}
+                  />
+                  <DetailItem title="Gender" value={traineeDetails.gender} />
+                  <DetailItem title="Address" value={traineeDetails.Address} />
+                  <DetailItem
+                    title="Phone Number"
+                    value={traineeDetails.phone}
                   />
                   <DetailItem
-                    title="Province"
-                    value={traineeDetails.province}
+                    title="Field of Study"
+                    value={traineeDetails.field_of_study}
                   />
                   <DetailItem
-                    title="District"
-                    value={traineeDetails.district}
-                  />
-                  <DetailItem title="Sector" value={traineeDetails.sector} />
-                  <DetailItem
-                    title="Interview decision"
-                    value={traineeDetails.interview_decision}
+                    title="Education Level"
+                    value={traineeDetails.education_level}
                   />
                   <DetailItem
-                    title="Hackerrank Score"
-                    value={traineeDetails.Hackerrank_score}
+                    title="Is Student"
+                    value={traineeDetails.isStudent}
                   />
                   <DetailItem
-                    title="English Score"
-                    value={traineeDetails.english_score}
+                    title="Is Employed"
+                    value={traineeDetails.isEmployed}
                   />
                   <DetailItem
-                    title="Date of Birth"
-                    value={new Intl.DateTimeFormat("en-CA", {
-                      year: "numeric",
-                      month: "2-digit",
-                      day: "2-digit",
-                    }).format(traineeDetails.birth_date)}
+                    title="Email"
+                    value={traineeDetails?.trainee_id?.email}
                   />
                 </div>
               </div>
-            )}
+              <div className="m-5 sm:ml-[20rem] md:ml-2 lg:mt-20 lg:ml-[5rem]">
+                <DetailItem
+                  title="LastName"
+                  value={traineeDetails?.trainee_id?.lastName}
+                />
+                <DetailItem title="Province" value={traineeDetails.province} />
+                <DetailItem title="District" value={traineeDetails.district} />
+                <DetailItem title="Sector" value={traineeDetails.sector} />
+                <DetailItem
+                  title="Interview decision"
+                  value={traineeDetails.interview_decision}
+                />
+                <DetailItem
+                  title="Hackerrank Score"
+                  value={traineeDetails.Hackerrank_score}
+                />
+                <DetailItem
+                  title="English Score"
+                  value={traineeDetails.english_score}
+                />
+                <DetailItem
+                  title="Date of Birth"
+                  value={new Intl.DateTimeFormat("en-CA", {
+                    year: "numeric",
+                    month: "2-digit",
+                    day: "2-digit",
+                  }).format(traineeDetails.birth_date)}
+                />
+              </div>
+            </div>
+          )}
+          {traineeDetails && (
+            <div className="w-full mx-16 bg-slate-200 rounded-xl shadow-md overflow-hidden md:max-w-2xl mb-6 lg:flex lg:max-w-3xl dark:bg-[#192432] dark:text-white">
+              <div className="">
+                <h2 className="top-5 m-5 font-medium">
+                  <span className="pl-3 text-lg text-[#56C870] uppercase">
+                    Application Information
+                  </span>
+                </h2>
+                <div className="flex flex-col gap-7 m-5 lg:my-14">
+                  <ProgramItem
+                    title="Application Cycle"
+                    value={traineeDetails.trainee_id?.cycle_id?.name}
+                    Icon={FaRecycle}
+                  />
 
-            {traineeDetails && (
-              <div className="w-full mx-16 bg-slate-200 rounded-xl shadow-md overflow-hidden md:max-w-2xl mb-6 lg:flex lg:max-w-3xl dark:bg-[#192432] dark:text-white">
-                <div className="">
-                  <h2 className="top-5 m-5 font-medium">
-                    <span className="pl-3 text-lg text-[#56C870] uppercase">
-                      Application Information
-                    </span>
-                  </h2>
-                  <div className="flex flex-col gap-7 m-5 lg:my-14">
-                    <ProgramItem
-                      title="Application Cycle"
-                      value={traineeDetails.trainee_id?.cycle_id?.name}
-                      Icon={FaRecycle}
-                    />
-
-                    <ProgramItem
-                      title="Program"
-                      value="Andela Technical Leadership Program"
-                      Icon={FaRecycle}
-                    />
-                  </div>
-                </div>
-                <div className="mt-12">
-                  <div className="flex flex-col gap-7 m-5 lg:my-14">
-                    <ProgramItem
-                      title="Application start date"
-                      value={traineeDetails.trainee_id?.cycle_id?.startDate}
-                      Icon={LuCalendarDays}
-                    />
-                    <ProgramItem
-                      title="Expected program end Date"
-                      value={traineeDetails.trainee_id?.cycle_id?.endDate}
-                      Icon={LuCalendarDays}
-                    />
-                  </div>
+                  <ProgramItem
+                    title="Program"
+                    value="Andela Technical Leadership Program"
+                    Icon={FaRecycle}
+                  />
                 </div>
               </div>
-            )}
-          </div>
+              <div className="mt-12">
+                <div className="flex flex-col gap-7 m-5 lg:my-14">
+                  <ProgramItem
+                    title="Application start date"
+                    value={traineeDetails.trainee_id?.cycle_id?.startDate}
+                    Icon={LuCalendarDays}
+                  />
+                  <ProgramItem
+                    title="Expected program end Date"
+                    value={traineeDetails.trainee_id?.cycle_id?.endDate}
+                    Icon={LuCalendarDays}
+                  />
+                </div>
+              </div>
+            </div>
+          )}
 
-          <div className="w-full py-7 flex flex-col  mx-16  bg-slate-200 rounded-xl shadow-md overflow-hidden md:max-w-2xl  lg:flex lg:max-w-3xl dark:bg-[#192432] dark:text-white">
-            <h2 className="font-bold text-lg text-[#56C870] top-5  ml-5 mt-[-10px] pb-2 uppercase">
+          <div className="w-full flex flex-col mx-16 pb-2 bg-slate-200 rounded-xl shadow-md overflow-hidden md:max-w-2xl mb-6 lg:flex lg:max-w-3xl dark:bg-[#192432] dark:text-white">
+            <h2 className="font-bold text-lg text-[#56C870] top-5 pb-7 ml-5 mt-5 uppercase">
               Status
             </h2>
-            <div className="h-16 flex  items-center mt-[-8px] gap-5  ">
-              <div>
-                {traineeDetails.interview_decision === "Passed" ? (
-                  <div className="py-10 btn ml-5 mt-[-10%] mb-3">
-                    <button className="btn-Aprov bg-[#56C870] hover:bg-[#67dc82] dark:hover:bg-[#1f544cef] text-white font-bold py-2 px-4 rounded mt-7 mr-4 dark:bg-[#56C870]">
-                      Passed
-                    </button>
-                  </div>
-                ) : traineeDetails.interview_decision === "Relegated" ? (
-                  <div className="py-10 btn ml-5 mt-[-10%] mb-3">
-                    <button className="btn-Aprov3 bg-yellow-400 hover:text-white hover:bg-yellow-300 text-white font-bold mt-7 py-2 px-2 rounded">
-                      Relegated
-                    </button>
-                  </div>
-                ) : (
-                  <div className="py-10 btn ml-5 mt-[-10%] mb-3">
-                    <button className="btn-Aprov3 bg-red-800 hover:text-white hover:bg-red-500 text-white font-bold mt-7 py-2 px-2 rounded">
-                      Failed
-                    </button>
-                  </div>
-                )}
+            {traineeDetails.interview_decision === "Passed" ? (
+              <div className="py-10 btn ml-5 mt-[-10%] mb-3">
+                <button className="btn-Aprov bg-[#56C870] hover:bg-[#67dc82] dark:hover:bg-[#1f544cef] text-white font-bold py-2 px-4 rounded mt-7 mr-4 dark:bg-[#56C870]">
+                  Passed
+                </button>
               </div>
-              <button
-                onClick={() => DownloadPdf("trainee-info")}
-                className="btn-Aprov  h-11 bg-blue-700 hover:bg-blue-600 dark:hover:bg-blue-600 text-white font-bold py-2 px-2 rounded   dark:bg-blue-700"
-              >
-                Download PDF
-              </button>
-            </div>
+            ) : traineeDetails.interview_decision === "Relegated" ? (
+              <div className="py-10 btn ml-5 mt-[-10%] mb-3">
+                <button className="btn-Aprov3 bg-yellow-400 hover:text-white hover:bg-yellow-300 text-white font-bold mt-7 py-2 px-2 rounded">
+                  Relegated
+                </button>
+              </div>
+            ) : (
+              <div className="py-10 btn ml-5 mt-[-10%] mb-3">
+                <button className="btn-Aprov3 bg-red-800 hover:text-white hover:bg-red-500 text-white font-bold mt-7 py-2 px-2 rounded">
+                  Failed
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>
