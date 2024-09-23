@@ -35,11 +35,7 @@ export const managementSectionItems = [
     icon: <Icon icon="ic:round-people" />,
     title: 'Admins',
   },
-  {
-    path: '/coordinators',
-    icon: <Icon icon="fluent:people-team-20-filled" />,
-    title: 'Coordinators',
-  },
+ 
 ];
 
 export const applicationsSectionItems = [
@@ -52,11 +48,6 @@ export const applicationsSectionItems = [
     path: '/view-applications',
     icon: <Icon icon="akar-icons:globe" />,
     title: 'Applications',
-  },
-  {
-    path: '/Trainee-applicants',
-    icon: <Icon icon="ic:round-people" />,
-    title: 'Trainees-Applicants',
   },
   {
     path: '/programs',
@@ -87,45 +78,22 @@ export const performanceSectionItems = [
     icon: <Icon icon="teenyicons:clipboard-tick-solid" />,
     title: 'Attendance',
   },
-  {
-    path: '/performance',
-    icon: <Icon icon="fa6-solid:arrow-trend-up" />,
-    title: 'Performance',
-  },
+  
   {
     path: '/grading',
     icon: <Icon icon="bxs:dashboard" />,
     title: 'Grading System',
-  },
-  {
-    path: '/updatedRatings',
-    icon: <Icon icon="charm:refresh" />,
-    title: 'Updated Ratings',
-  },
+  }
 ];
 
 // Admin Section
 export const adminSectionItems = [
-  {
-    path: '/rolesandaccess',
-    icon: <Icon icon="heroicons:key-20-solid" />,
-    title: 'Roles & Access',
-  },
-  {
-    path: '/sessions',
-    icon: <Icon icon="fluent:clipboard-bullet-list-ltr-16-filled" />,
-    title: 'Sessions',
-  },
+  
   {
     path: '/Trash',
     icon: <Icon icon="fa-solid:trash" />,
     title: 'Trash',
-  },
-  {
-    path: '/domains',
-    icon: <Icon icon="akar-icons:globe" />,
-    title: 'Domains',
-  },
+  }
 ];
 
 // Applicant Sidebar Items
