@@ -1,42 +1,24 @@
-import React, { useState } from "react";
+import React from "react";
 import { Icon } from "@iconify/react";
 import { Link, useNavigate } from "react-router-dom";
 import {
-  generalSectionItems,
-  managementSectionItems,
-  applicationsSectionItems,
-  performanceSectionItems,
-  adminSectionItems,
+  sidebarItems1,
+  sidebarItems2,
+  sidebarItems3,
   applicantSidebarItems,
-  additionalSidebarItems,
 } from "./sidebarItems";
 import "./navslide.css";
 
 const Sidebar = ({ expanded, setExpanded }) => {
   const navigate = useNavigate();
-  const [openSections, setOpenSections] = useState({
-    general: true,
-    management: true,
-    applications: true,
-    performance: true,
-    admin: true,
-    additional: true,
-  });
   const roleName = localStorage.getItem("roleName");
-  const sections =
-    roleName === "applicant"
-      ? [{ title: "Applicant Section", items: applicantSidebarItems }]
-      : [
-          { title: "General", items: generalSectionItems },
-          { title: "Management", items: managementSectionItems },
-          { title: "Applications", items: applicationsSectionItems },
-          { title: "Performance", items: performanceSectionItems },
-          { title: "Admin", items: adminSectionItems },
-          { title: "Additional", items: additionalSidebarItems },
-        ];
 
-  const toggleSection = (section) =>
-    setOpenSections((prev) => ({ ...prev, [section]: !prev[section] }));
+  // Select items based on the role
+  const items =
+    roleName === "applicant"
+      ? applicantSidebarItems
+      : [...sidebarItems1, ...sidebarItems2];
+
   const handleLogout = () => {
     localStorage.clear();
     navigate("/login");
@@ -58,40 +40,38 @@ const Sidebar = ({ expanded, setExpanded }) => {
         />
       </button>
       <div className="pt-12 pb-12 mb-20">
-        {sections.map((section, idx) => (
-          <div key={idx}>
-            <div
-              onClick={() => toggleSection(section.title.toLowerCase())}
-              className="cursor-pointer p-2 flex items-center justify-between text-white"
+        <ul className="pl-4">
+          {items.map((item, index) => (
+            <li
+              key={index}
+              className="flex items-center text-white hover:text-[#56c770]"
             >
-              {expanded && <span className="font-bold">{section.title}</span>}
-              <Icon
-                icon={
-                  openSections[section.title.toLowerCase()]
-                    ? "akar-icons:chevron-down"
-                    : "akar-icons:chevron-right"
-                }
-              />
-            </div>
-            {openSections[section.title.toLowerCase()] && (
-              <ul className="pl-4 mt-2">
-                {section.items.map((item, index) => (
-                  <li key={index} className="flex items-center text-white">
-                    <Link to={item.path} className="p-1 flex items-center">
-                      <span className="mr-3">{item.icon}</span>
-                      {expanded && <span>{item.title}</span>}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-        ))}
+              <Link to={item.path} className="p-1 flex items-center">
+                <span className="mr-3">{item.icon}</span>
+                {expanded && <span>{item.title}</span>}
+              </Link>
+            </li>
+          ))}
+        </ul>
+        {/* Render sidebarItems3 at the bottom */}
+        <ul className="px-4 mt-4">
+          {sidebarItems3.map((item, index) => (
+            <li
+              key={index}
+              className="flex items-center text-white hover:text-[#56c770]"
+            >
+              <Link to={item.path} className="p-1 flex items-center">
+                <span className="mr-3">{item.icon}</span>
+                {expanded && <span>{item.title}</span>}
+              </Link>
+            </li>
+          ))}
+        </ul>
         <button
           onClick={handleLogout}
-          className="flex items-center p-1 font-semibold hover:font-bold text-white focus:outline-none"
+          className="flex items-center p-1 font-semibold hover:font-bold text-white focus:outline-none hover:text-[#56c770] mt-4 ml-4 mt-3"
         >
-          <Icon icon="nimbus:arrow-left" className="mr-3" />
+          <Icon icon="hugeicons:logout-circle-02" className="mr-3" />
           {expanded && <span>Logout</span>}
         </button>
       </div>
