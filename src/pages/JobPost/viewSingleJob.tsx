@@ -68,7 +68,7 @@ const SingleJobPostDetails = (props: any) => {
           </div>
         </div>
       </div>
-      <NavBar />
+      
     </>
   );
 };

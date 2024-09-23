@@ -44,13 +44,13 @@ const ListApplications = () => {
 
   return (
     <>
-      <div className='flex flex-col h-screen absolute w-full'>
+      <div className='flex flex-col h-screen w-full'>
         <div className='flex flex-row'>
           <div className='w-full'>
             <div>
-              <div className='bg-light-bg dark:bg-dark-frame-bg min-h-screen overflow-y-hidden overflow-x-hidden lg:ml-[3rem]'>
-                <div className='flex items-left px-7 lg:px-64 pt-24'>
-                  <div className='flex px-5 py-2 pb-8 w-fit'>
+              <div className='bg-light-bg dark:bg-dark-frame-bg min-h-screen overflow-y-hidden overflow-x-hidden'>
+                <div className='flex items-left px-8'>
+                  <div className='flex py-2 pb-8 w-fit'>
                     <Link to='/filter-applications'>
                       <button className='flex bg-primary dark:bg-[#56C870] rounded-md py-2 mt-2 px-4 text-white font-medium cursor-pointer'>
                         Search
@@ -59,8 +59,8 @@ const ListApplications = () => {
                     <div></div>
                   </div>
                 </div>
-                <div className='px-3 md:px-8'>
-                  <div className='bg-white dark:bg-dark-bg shadow-lg px-5 py-8 rounded-md w-full mx-auto lg:w-[80%] lg:ml-60 mb-10'>
+                <div className='px-8'>
+                  <div className='bg-white dark:bg-dark-bg shadow-lg px-5 py-8 rounded-md w-full'>
                     <div>
                       <div className='-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto'>
                         <div className='inline-block w-full h-[55vh] lg:min-w-full shadow rounded-lg overflow-y-scroll'>
@@ -217,7 +217,7 @@ const ListApplications = () => {
           </div>
         </div>
       </div>
-      <NavBar />
+      
     </>
   );
 };

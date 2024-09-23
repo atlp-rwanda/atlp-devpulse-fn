@@ -59,7 +59,6 @@ const TrainneeDetails = (props: any) => {
 
 
   return (
-    <>
       <Navbar />
       <div className="flex items-center overflow-auto dark:bg-dark-frame-bg">
         <div className="block w-[100%] pl-[16rem] h-max md:pl-0 mx-auto dark:bg-dark-frame-bg pb-10 mt-10 pt-[80px]">
@@ -106,7 +105,7 @@ const TrainneeDetails = (props: any) => {
                       title="Email"
                       value={traineeDetails?.trainee_id?.email}
                     />
-                  </div>
+                  </div> 
                 </div>
                 <div className="m-5 sm:ml-[20rem] md:ml-2 lg:mt-20 lg:ml-[5rem]">
                   <DetailItem

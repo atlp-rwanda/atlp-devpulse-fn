@@ -34,9 +34,9 @@ const SelectField: React.FC<SelectFieldProps> = ({
       className={`dark:bg-dark-tertiary dark:text-white shadow appearance-none py-2 px-3 rounded w-full leading-tight focus:outline-none focus:shadow-outline ${className}`}
       onBlur={(e: React.FocusEvent<HTMLSelectElement>) => onBlur?.(e)}
     >
-      {options.map((option) => (
-        <option key={option.value} value={option.value}>
-          {option.label}
+      {options?.map((option) => (
+        <option key={option?.value} value={option?.value}>
+          {option?.label}
         </option>
       ))}
     </select>

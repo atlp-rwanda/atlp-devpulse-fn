@@ -1,26 +1,26 @@
-import { useEffect, useState } from 'react';
-import NavBar from '../../components/sidebar/navHeader';
-import * as BsIcons from 'react-icons/bs';
-import * as BsFillGrid3X3GapFill from 'react-icons/bs';
-import { HiDotsVertical } from 'react-icons/hi';
-import * as icons from 'react-icons/ai';
-import { BrowserRouter as Router, Link, useNavigate } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
-import { fetchJobPost } from '../../redux/actions/fetchJobPost';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import Select from 'react-select';
-import { connect, useSelector } from 'react-redux';
-import { createJobPostAction } from '../../redux/actions/createJobPostAction';
+import { useEffect, useState } from "react";
+import NavBar from "../../components/sidebar/navHeader";
+import * as BsIcons from "react-icons/bs";
+import * as BsFillGrid3X3GapFill from "react-icons/bs";
+import { HiDotsVertical } from "react-icons/hi";
+import * as icons from "react-icons/ai";
+import { BrowserRouter as Router, Link, useNavigate } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
+import { fetchJobPost } from "../../redux/actions/fetchJobPost";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Select from "react-select";
+import { connect, useSelector } from "react-redux";
+import { createJobPostAction } from "../../redux/actions/createJobPostAction";
 import {
   DOTS,
   useCustomPagination,
-} from '../../components/Pagination/useCustomPagination';
-import * as AiIcons from 'react-icons/ai';
-import { getAllPrograms } from '../../redux/actions/programsActions';
-import { getAllCycles } from '../../redux/actions/cyclesActions';
-import { getAllCohorts } from '../../redux/actions/cohortActions';
-import { deleteJobPostAction } from '../../redux/actions/deleteJobPostAction';
+} from "../../components/Pagination/useCustomPagination";
+import * as AiIcons from "react-icons/ai";
+import { getAllPrograms } from "../../redux/actions/programsActions";
+import { getAllCycles } from "../../redux/actions/cyclesActions";
+import { getAllCohorts } from "../../redux/actions/cohortActions";
+import { deleteJobPostAction } from "../../redux/actions/deleteJobPostAction";
 
 const Jobs = (props: any) => {
   const [addNewTraineeModel, setAddNewTraineeModel] = useState(false);
@@ -31,11 +31,11 @@ const Jobs = (props: any) => {
     let newState = !addNewTraineeModel;
     setAddNewTraineeModel(newState);
   };
-  const [title, setTitle] = useState('');
-  const [program, setProgram] = useState('');
-  const [cycle, setCycle] = useState('');
-  const [cohort, setCohort] = useState('');
-  const [description, setDescription] = useState('');
+  const [title, setTitle] = useState("");
+  const [program, setProgram] = useState("");
+  const [cycle, setCycle] = useState("");
+  const [cohort, setCohort] = useState("");
+  const [description, setDescription] = useState("");
   const { cycles, programs, cohorts } = props;
 
   //FETCH PROGRAMS
@@ -51,10 +51,10 @@ const Jobs = (props: any) => {
   useEffect(() => {
     dispatch(fetchJobPost());
   }, []);
-  const [moredrop, setmoredrop] = useState('');
+  const [moredrop, setmoredrop] = useState("");
   const onSubmitHandler = (userid: any) => {
     if (!moredrop) setmoredrop(userid);
-    if (moredrop) setmoredrop('');
+    if (moredrop) setmoredrop("");
   };
   const navigate = useNavigate();
   const [page, setPage] = useState(0);
@@ -72,20 +72,20 @@ const Jobs = (props: any) => {
   }, []);
 
   const validation = () => {
-    if (program === '') {
-      toast.error('select a program');
+    if (program === "") {
+      toast.error("select a program");
       return;
     }
-    if (cycle === '') {
-      toast.error('select a cycle');
+    if (cycle === "") {
+      toast.error("select a cycle");
       return;
     }
-    if (cohort === '') {
-      toast.error('select a cohort');
+    if (cohort === "") {
+      toast.error("select a cohort");
       return;
     }
-    if (description === '') {
-      toast.error('Enter your description');
+    if (description === "") {
+      toast.error("Enter your description");
       return;
     } else {
       createNewJobPost();
@@ -100,11 +100,11 @@ const Jobs = (props: any) => {
       description: description,
     };
     if (props.createJobPostAction(data)) {
-      setTitle('');
-      setProgram('');
-      setCycle('');
-      setCohort('');
-      setDescription('');
+      setTitle("");
+      setProgram("");
+      setCycle("");
+      setCohort("");
+      setDescription("");
       setAddNewTraineeModel(false);
     }
   };
@@ -123,9 +123,9 @@ const Jobs = (props: any) => {
   }, [page, itemsPerPage]);
 
   console.log(
-    'Here',
+    "Here",
     Math.ceil(jobs?.pagination.totalItems / itemsPerPage),
-    page,
+    page
   );
 
   const paginationRange = useCustomPagination({
@@ -135,124 +135,133 @@ const Jobs = (props: any) => {
   return (
     <>
       <ToastContainer />
+      <div className="h-screen w-[100%]">
       {/* =========================== Start:: addnewJobPostModel =============================== */}
-      <div
-        className={`h-screen w-full z-20 bg-black bg-opacity-30 backdrop-blur-sm absolute flex items-center justify-center  px-4 overflow-y-hidden  ${
-          addNewTraineeModel === true ? 'block' : 'hidden'
-        }`}
-      >
-        <div className="bg-white dark:bg-dark-bg w-full mt-48 mb-9 max-h-[900px] sm_:mt-40 sm_:mb-10 md_:max-h-full overflow-auto md_:w-[40%] md-sm:w-[95%] rounded-lg p-4 pb-8">
-          <div className="card-title w-full flex  flex-wrap justify-center items-center  ">
-            <h3 className="font-bold text-sm dark:text-white text-center w-11/12 ">
-              <icons.AiOutlineClose
-                className="float-right text-3xl cursor-pointer"
-                onClick={() => removeModel()}
-              />
+      <div className="relative">
+        <div
+          className={`h-screen w-[100%] z-20 bg-black bg-opacity-30 backdrop-blur-sm absolute flex justify-center items-center  px-4  ${
+            addNewTraineeModel === true ? "block" : "hidden"
+          }`}
+        >
+          <div className="bg-white dark:bg-dark-bg w-full max-h-[900px] sm_:mt-40 sm_:mb-10 md_:max-h-full md_:w-[40%] md-sm:w-[95%] rounded-lg p-4 pb-8">
+            <div className="card-title w-full flex  flex-wrap justify-center items-center  ">
+              <h3 className="font-bold text-sm dark:text-white text-center w-11/12 ">
+                <icons.AiOutlineClose
+                  className="float-right text-3xl cursor-pointer"
+                  onClick={() => removeModel()}
+                />
 
-              {'New Job Post'}
-            </h3>
-            <hr className=" bg-primary border-b my-3 w-full" />
-          </div>
-          <div className="card-body">
-            <section className=" py-3 px-8">
-              <div className="input my-3 h-9 ">
-                <div className="grouped-input flex items-center h-full w-full rounded-md">
-                  <input
-                    type="text"
-                    name="title"
-                    className=" dark:bg-dark-tertiary border dark:text-white border-primary rounded outline-none px-5 font-sans text-xs py-2 w-full pt-4"
-                    placeholder={'Job Title'}
-                    value={title}
-                    onChange={(e) => {
-                      setTitle(e.target.value);
-                    }}
-                  />
+                {"New Job Post"}
+              </h3>
+              <hr className=" bg-primary border-b my-3 w-full" />
+            </div>
+            <div className="card-body">
+              <section className=" py-3 px-8">
+                <div className="input my-3 h-9 ">
+                  <div className="grouped-input flex items-center h-full w-full rounded-md">
+                    <input
+                      type="text"
+                      name="title"
+                      className=" dark:bg-dark-tertiary border dark:text-white border-primary rounded outline-none px-5 font-sans text-xs py-2 w-full pt-4"
+                      placeholder={"Job Title"}
+                      value={title}
+                      onChange={(e) => {
+                        setTitle(e.target.value);
+                      }}
+                    />
+                  </div>
                 </div>
-              </div>
-              <div className="input my-3 h-9 ">
-                <div className="grouped-input flex items-center h-full w-full rounded-md">
-                  <select
-                    name="program"
-                    id="program"
-                    className=" dark:bg-dark-tertiary border dark:text-white border-primary py-2 rounded outline-none px-5 font-sans text-xs w-full pt-4"
-                    onChange={(e) => setProgram(e.target.value)}
-                  >
-                    <option className="dark:text-white " value="">
-                      --Please choose a program--
-                    </option>
-                    {programs.data?.map((program: any) => (
-                      <option className="dark:text-white " value={program._id}>
-                        {program?.title}
+                <div className="input my-3 h-9 ">
+                  <div className="grouped-input flex items-center h-full w-full rounded-md">
+                    <select
+                      name="program"
+                      id="program"
+                      className=" dark:bg-dark-tertiary border dark:text-white border-primary py-2 rounded outline-none px-5 font-sans text-xs w-full pt-4"
+                      onChange={(e) => setProgram(e.target.value)}
+                    >
+                      <option className="dark:text-white " value="">
+                        --Please choose a program--
                       </option>
-                    ))}
-                  </select>
+                      {programs.data?.map((program: any) => (
+                        <option
+                          className="dark:text-white "
+                          value={program._id}
+                        >
+                          {program?.title}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                 </div>
-              </div>
-              <div className="input my-3 h-9 ">
-                <div className="grouped-input flex items-center h-full w-full rounded-md">
-                  <select
-                    name="cycle"
-                    id="cycle"
-                    className=" dark:bg-dark-tertiary border dark:text-white border-primary py-2 rounded outline-none px-5 font-sans text-xs w-full pt-4"
-                    onChange={(e) => setCycle(e.target.value)}
-                  >
-                    <option className="dark:text-white " value="">
-                      --Please choose a cycle--
-                    </option>
-                    {cycles.data?.map((cycle: any) => (
-                      <option className="dark:text-white " value={cycle.id}>
-                        {cycle?.name}
+                <div className="input my-3 h-9 ">
+                  <div className="grouped-input flex items-center h-full w-full rounded-md">
+                    <select
+                      name="cycle"
+                      id="cycle"
+                      className=" dark:bg-dark-tertiary border dark:text-white border-primary py-2 rounded outline-none px-5 font-sans text-xs w-full pt-4"
+                      onChange={(e) => setCycle(e.target.value)}
+                    >
+                      <option className="dark:text-white " value="">
+                        --Please choose a cycle--
                       </option>
-                    ))}
-                  </select>
+                      {cycles.data?.map((cycle: any) => (
+                        <option className="dark:text-white " value={cycle.id}>
+                          {cycle?.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                 </div>
-              </div>
-              <div className="input my-3 h-9 ">
-                <div className="grouped-input flex items-center h-full w-full rounded-md">
-                  <select
-                    name="cohort"
-                    id="cohort"
-                    className=" dark:bg-dark-tertiary border dark:text-white border-primary py-2 rounded outline-none px-5 font-sans text-xs w-full pt-4"
-                    onChange={(e) => setCohort(e.target.value)}
-                  >
-                    <option className="dark:text-white " value="">
-                      --Please choose a cohort--
-                    </option>
-                    {cohorts.data?.map((cohrt: any) => (
-                      <option className="dark:text-white " value={cohrt.id}>
-                        {cohrt?.title}
+                <div className="input my-3 h-9 ">
+                  <div className="grouped-input flex items-center h-full w-full rounded-md">
+                    <select
+                      name="cohort"
+                      id="cohort"
+                      className=" dark:bg-dark-tertiary border dark:text-white border-primary py-2 rounded outline-none px-5 font-sans text-xs w-full pt-4"
+                      onChange={(e) => setCohort(e.target.value)}
+                    >
+                      <option className="dark:text-white " value="">
+                        --Please choose a cohort--
                       </option>
-                    ))}
-                  </select>
+                      {cohorts.data?.map((cohrt: any) => (
+                        <option className="dark:text-white " value={cohrt.id}>
+                          {cohrt?.title}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                 </div>
-              </div>
-              <div className="input my-3 h-9 ">
-                <div className="grouped-input flex items-center h-full w-full rounded-md">
-                  <textarea
-                    name="description"
-                    className=" dark:bg-dark-tertiary border dark:text-white border-primary h-35 py-2 rounded outline-none px-5 font-sans text-xs w-full mt-4"
-                    placeholder={'Program Description'}
-                    onChange={(e) => setDescription(e.target.value)}
-                  />
+                <div className="input my-3 h-9 ">
+                  <div className="grouped-input flex items-center h-full w-full rounded-md">
+                    <textarea
+                      name="description"
+                      className=" dark:bg-dark-tertiary border dark:text-white border-primary h-35 py-2 rounded outline-none px-5 font-sans text-xs w-full mt-4"
+                      placeholder={"Program Description"}
+                      onChange={(e) => setDescription(e.target.value)}
+                    />
+                  </div>
                 </div>
-              </div>
-              <button
-                className="flex justify-self-start self-start rounded w-15 px-5 py-1 mt-10 bg-green ml-56 text-white transition-colors hover:bg-dark-frame-bg hover:text-green hover:border hover:border-green"
-                onClick={validation}
-              >
-                Submit
-              </button>
-            </section>
+                <div className="flex items-start justify-end">
+                <button
+                  className=" rounded w-15 px-5 py-1 mt-10 bg-green ml-56 text-white transition-colors hover:bg-dark-frame-bg hover:text-green hover:border hover:border-green"
+                  onClick={validation}
+                >
+                  Submit
+                </button>
+                </div>
+              </section>
+            </div>
           </div>
         </div>
       </div>
+
       {/* =========================== End:: addnewJobPostModel =============================== */}
-      <div className="flex flex-col  h-screen absolute w-[100%]">
+      <div className="flex flex-col  h-screen w-[100%]">
         <div className="flex flex-row">
           <div className="w-full">
-            <div className="bg-light-bg dark:bg-dark-frame-bg min-h-screen overflow-x-hidden lg:ml-[3rem]">
-              <div className="flex items-left px-7 lg:px-64 pt-24">
-                <div className="flex px-5 py-2 pb-8 w-fit">
+            <div className="bg-light-bg dark:bg-dark-frame-bg min-h-screen overflow-x-hidden">
+              <div className="flex items-left px-8">
+                <div className="flex py-2 pb-8 w-fit">
                   <button
                     onClick={Open}
                     className="flex bg-primary dark:bg-[#56C870] rounded-md py-2 px-4 text-white font-medium cursor-pointer"
@@ -262,8 +271,8 @@ const Jobs = (props: any) => {
                   </button>
                 </div>
               </div>
-              <div className="px-3 md:px-8">
-                <div className="bg-white  dark:bg-dark-bg shadow-lg px-5 py-8 rounded-md w-[100%] mx-auto lg:w-[80%] lg:ml-60 mb-10">
+              <div className="px-8">
+                <div className="bg-white  dark:bg-dark-bg shadow-lg px-5 py-8 rounded-md w-[100%]">
                   <div>
                     <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
                       <div className="hidden md_:inline-block w-full h-auto lg:min-w-full shadow rounded-lg overflow-y-hidden">
@@ -358,8 +367,8 @@ const Jobs = (props: any) => {
                                     <div
                                       className={`${
                                         actionsList === item.id
-                                          ? 'block'
-                                          : 'hidden'
+                                          ? "block"
+                                          : "hidden"
                                       } absolute  bg-white dark:bg-dark-tertiary  dark:text-white text-base z-50 list-none divide-y divide-gray-100 rounded shadow my-4`}
                                       id="dropdown"
                                     >
@@ -474,7 +483,7 @@ const Jobs = (props: any) => {
                                   View
                                 </Link>
                                 <Link
-                                  to={'#'}
+                                  to={"#"}
                                   className="text-white bg-red-700 border border-solid border-red-700 rounded-md px-2 text-xs"
                                   onClick={() => handleDelete(item.id)}
                                 >
@@ -495,13 +504,13 @@ const Jobs = (props: any) => {
                           menuPlacement="top"
                           className="sm:text-sm  w-13 rounded-bt-rd absolute active dark:bg-dark-frame-bg"
                           options={[
-                            { value: '10', label: '10' },
-                            { value: '50', label: '50' },
-                            { value: '100', label: '100' },
-                            { value: '500', label: '500' },
-                            { value: '1000', label: '1000' },
+                            { value: "10", label: "10" },
+                            { value: "50", label: "50" },
+                            { value: "100", label: "100" },
+                            { value: "500", label: "500" },
+                            { value: "1000", label: "1000" },
                           ]}
-                          defaultValue={{ value: '', label: '10' }}
+                          defaultValue={{ value: "", label: "10" }}
                           onChange={(e: any) =>
                             setItemsPerPage(Number(e?.value))
                           }
@@ -546,8 +555,8 @@ const Jobs = (props: any) => {
                                 <button
                                   key={idx}
                                   className={`border-solid border-[1px] cursor-pointer border-[#a8a8a8] bg-[#fff] min-w-[35px] h-[38px]  active:bg-[#333] active:text-[#fff]-500 rounded-[2px] md:hidden
-                        ${page && 'bg-[#d6dfdf] text-black'} 
-                        ${page === 0 && 'bg-[#d6dfdf] text-black'} 
+                        ${page && "bg-[#d6dfdf] text-black"} 
+                        ${page === 0 && "bg-[#d6dfdf] text-black"} 
                           `}
                                   onClick={() => setPage(pageNumber - 1)}
                                 >
@@ -572,7 +581,7 @@ const Jobs = (props: any) => {
                             disabled={
                               page >=
                               Math.ceil(
-                                jobs?.pagination.totalItems / itemsPerPage,
+                                jobs?.pagination.totalItems / itemsPerPage
                               ) -
                                 1
                             }
@@ -584,14 +593,14 @@ const Jobs = (props: any) => {
                             onClick={() =>
                               setPage(
                                 Math.ceil(
-                                  jobs?.pagination.totalItems / itemsPerPage,
-                                ) - 1,
+                                  jobs?.pagination.totalItems / itemsPerPage
+                                ) - 1
                               )
                             }
                             disabled={
                               page >=
                               Math.ceil(
-                                jobs?.pagination.totalItems / itemsPerPage,
+                                jobs?.pagination.totalItems / itemsPerPage
                               ) -
                                 1
                             }
@@ -608,7 +617,7 @@ const Jobs = (props: any) => {
           </div>
         </div>
       </div>
-      <NavBar />
+      </div>
     </>
   );
 };
