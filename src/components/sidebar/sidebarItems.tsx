@@ -4,53 +4,53 @@ import { Icon } from '@iconify/react';
 
 export const sidebarItems1 = [
   {
-    path: '/dashboard',
+    path: '/admin',
     icon: <Icon icon="fontisto:pie-chart-1"></Icon>,
     title: 'Dashboard',
   },
   {
-    path: '/roles',
+    path: 'users',
     icon: <Icon icon="fluent:people-team-20-filled"></Icon>,
     title: 'Members',
   },
   {
-    path: '/programs',
+    path: 'programs',
     icon: <Icon icon="ic:round-maps-home-work"></Icon>,
     title: 'Programs',
   },
   {
-    path: '/job-post',
+    path: 'job-post',
     icon: <Icon icon="ic:round-maps-home-work"></Icon>,
     title: 'View Job Post',
   },
   {
-    path: "/create-form",
+    path: "create-form",
     icon: <Icon icon="fluent:form-28-regular"></Icon>,
     title: "Application Forms",
   },
   {
-    path: "/view-applications",
+    path: "view-applications",
     icon: <Icon icon="akar-icons:globe"></Icon>,
     title: "Applications",
   },
   {
-    path: '/cohort',
+    path: 'cohort',
     icon: <Icon icon="fa6-solid:graduation-cap"></Icon>,
     title: 'Cohorts',
   },
   {
-    path: '/cycles',
+    path: 'cycles',
     icon: <Icon icon="game-icons:cycle"></Icon>,
     title: 'Application Cycles',
   },
   
   {
-    path: '/grading',
+    path: 'grading',
     icon: <Icon icon="bxs:dashboard"></Icon>,
     title: 'Grading System',
   },
   {
-    path: '/Trash',
+    path: 'Trash',
     icon: <Icon icon="fa-solid:trash"></Icon>,
     title: 'Trash',
   },
@@ -58,29 +58,29 @@ export const sidebarItems1 = [
 
 export const applicantSidebarItems = [
   {
-    path: '/myApplications',
+    path: 'myApplications',
     icon: <Icon icon="material-symbols:wysiwyg-rounded"></Icon>,
     title: 'My Applications',
   },
   {
-    path: '/interviewScheduler',
+    path: 'interviewScheduler',
     icon: (
       <Icon icon="material-symbols:interpreter-mode-outline-rounded"></Icon>
     ),
     title: 'Schedule Interview',
   },
   {
-    path: '/notifications',
+    path: 'notifications',
     icon: <Icon icon="heroicons-solid:inbox-in"></Icon>,
     title: 'Notifications',
   },
   {
-    path: '/calendar',
+    path: 'calendar',
     icon: <Icon icon="ant-design:calendar-filled"></Icon>,
     title: 'Calendar',
   },
   {
-    path: '/job/Post/view',
+    path: 'available-jobs',
     icon: <Icon icon="ant-design:calendar-filled"></Icon>,
     title: 'Job Post ',
   },

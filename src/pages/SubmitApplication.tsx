@@ -20,13 +20,13 @@ const SubmitApplication = (props: any) => {
 
   return (
     <>
-      <div className="flex flex-col  h-screen absolute w-[100%]">
+      <div className="flex flex-col w-[100%]">
         <div className="flex flex-row">
           <div className="w-full">
             <div>
-              <div className="bg-light-bg dark:bg-dark-frame-bg  min-h-screen overflow-y-hidden overflow-x-hidden flex justify-center lg:ml-[5rem] md:ml-0 ">
+              <div className="bg-light-bg dark:bg-dark-frame-bg  min-h-screen overflow-y-hidden overflow-x-hidden flex justify-center ">
                 {/* form */}
-                <div className="flex flex-col w-[60%] dark:bg-dark-tertiary ml-[7rem] mt-[7rem]  mb-[5rem] rounded-lg p-5 md:ml-0 md:w-[90%] ">
+                <div className="flex flex-col w-[60%] dark:bg-dark-tertiary rounded-lg p-5 md:w-[90%] ">
                   {/* TITLE */}
                   <div className="flex justify-center">
                     <p className="text-white  font-semibold underline font-size-10">
@@ -57,7 +57,7 @@ const SubmitApplication = (props: any) => {
                     <iframe
                       src={fetchSingleJobPostStates?.data?.link}
                       width="640"
-                      height="1000"
+                      height="100"
                     >
                       Loading…
                     </iframe>
@@ -68,7 +68,6 @@ const SubmitApplication = (props: any) => {
           </div>
         </div>
       </div>
-      <NavBar />
     </>
   );
 };

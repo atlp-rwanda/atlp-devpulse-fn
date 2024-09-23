@@ -160,9 +160,8 @@ const ListAllUsersPage: FunctionComponent = (props: any) => {
 
   return (
     <>
-      <NavBar />
-      <div className=" p-5  dark:bg-dark-frame-bg">
-        <div className=" lg:p-[40px] dark:bg-dark-frame-bg lg:ml-[230px] semi-md:ml-[230px] semi-md:p-[60px] py-[30px]">
+      <div className="dark:bg-dark-frame-bg w-full h-screen">
+        <div className=" dark:bg-dark-frame-bg semi-md:px-[30px] semi-md:py-[10px]">
           <div>
             <div>
               <ul className=" flex dark:text-white semi-md:space-x-5 p-5 px-0 text-sm semi-md:flex-row sm:flex-col ">
@@ -206,61 +205,65 @@ const ListAllUsersPage: FunctionComponent = (props: any) => {
                         <AiIcons.AiOutlineDown />
                       )}
                     </div>
-                    <div
-                      className={`${
-                        moredrp === true ? "block" : "hidden"
-                      } absolute  bg-white dark:bg-dark-tertiary  dark:text-white text-base z-50 list-none divide-y divide-gray-100 rounded shadow my-4`}
-                      id="dropdown"
-                    >
-                      <ul className="py-1" aria-labelledby="dropdown">
-                        {roles?.message !== null &&
-                          rolesArrange?.map(
-                            (role: any, index) =>
-                              index > 2 && (
-                                <li
-                                  key={index}
-                                  className={` ${
-                                    underline === role.roleName
-                                      ? "underline underline-offset-8 decoration-green"
-                                      : ""
-                                  } text-sm hover:bg-gray-100 text-gray-700  dark:hover:bg-gray-500 dark:text-white  block px-4 py-2 cursor-pointer`}
-                                  onClick={() => memberFiltering(role.roleName)}
-                                >
-                                  {role.roleName}
-                                </li>
-                              )
-                          )}
-                        <li>
-                          <div
-                            className={` ${
-                              underline === "Active"
-                                ? "underline underline-offset-8 decoration-green"
-                                : ""
-                            } text-sm hover:bg-gray-100 text-gray-700  dark:hover:bg-gray-500 dark:text-white  block px-4 py-2 cursor-pointer`}
-                            onClick={(e: any) => {
-                              e.preventDefault();
-                              memberFiltering("Active");
-                            }}
-                          >
-                            Active
-                          </div>
-                        </li>
-                        <li>
-                          <div
-                            className={` ${
-                              underline === "Inactive"
-                                ? "underline underline-offset-8 decoration-green"
-                                : ""
-                            } text-sm hover:bg-gray-100 text-gray-700  dark:hover:bg-gray-500 dark:text-white  block px-4 py-2 cursor-pointer`}
-                            onClick={(e: any) => {
-                              e.preventDefault();
-                              memberFiltering("Inactive");
-                            }}
-                          >
-                            Inactive
-                          </div>
-                        </li>
-                      </ul>
+                    <div className="relative">
+                      <div
+                        className={`${
+                          moredrp === true ? "block" : "hidden"
+                        } absolute w-[100%] h-screen bg-white dark:bg-dark-tertiary  dark:text-white text-base z-20 list-none divide-y divide-gray-100 rounded shadow my-4`}
+                        id="dropdown"
+                      >
+                        <ul className="py-1" aria-labelledby="dropdown">
+                          {roles?.message !== null &&
+                            rolesArrange?.map(
+                              (role: any, index) =>
+                                index > 2 && (
+                                  <li
+                                    key={index}
+                                    className={` ${
+                                      underline === role.roleName
+                                        ? "underline underline-offset-8 decoration-green"
+                                        : ""
+                                    } text-sm hover:bg-gray-100 text-gray-700  dark:hover:bg-gray-500 dark:text-white  block px-4 py-2 cursor-pointer`}
+                                    onClick={() =>
+                                      memberFiltering(role.roleName)
+                                    }
+                                  >
+                                    {role.roleName}
+                                  </li>
+                                )
+                            )}
+                          <li>
+                            <div
+                              className={` ${
+                                underline === "Active"
+                                  ? "underline underline-offset-8 decoration-green"
+                                  : ""
+                              } text-sm hover:bg-gray-100 text-gray-700  dark:hover:bg-gray-500 dark:text-white  block px-4 py-2 cursor-pointer`}
+                              onClick={(e: any) => {
+                                e.preventDefault();
+                                memberFiltering("Active");
+                              }}
+                            >
+                              Active
+                            </div>
+                          </li>
+                          <li>
+                            <div
+                              className={` ${
+                                underline === "Inactive"
+                                  ? "underline underline-offset-8 decoration-green"
+                                  : ""
+                              } text-sm hover:bg-gray-100 text-gray-700  dark:hover:bg-gray-500 dark:text-white  block px-4 py-2 cursor-pointer`}
+                              onClick={(e: any) => {
+                                e.preventDefault();
+                                memberFiltering("Inactive");
+                              }}
+                            >
+                              Inactive
+                            </div>
+                          </li>
+                        </ul>
+                      </div>
                     </div>
                   </li>
                 )}
