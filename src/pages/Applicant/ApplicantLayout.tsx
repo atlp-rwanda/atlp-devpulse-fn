@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import Applicant from "../../components/sidebar/navHeader";
 import Sidebar from "../../components/sidebar/sidebar";
 import { Outlet } from "react-router";
 const ApplicantLayout = () => {
+  const [sidebarExpanded, setSidebarExpanded] = useState(true);
   return (
     <>
       <div className="bg-slate-400 h-screen">
@@ -10,12 +11,17 @@ const ApplicantLayout = () => {
           <Applicant />
         </div>
         <div className="flex w-full">
-          <div className="w-[16rem] h-full">
-            <Sidebar />
+          <div
+            className={`${sidebarExpanded ? "w-[16rem]" : "w-[4rem]"} h-full`}
+          >
+            <Sidebar
+              expanded={sidebarExpanded}
+              setExpanded={setSidebarExpanded}
+            />
           </div>
-            <main className="flex w-[100%] justify-center items-center flex-1">
-              <Outlet />
-            </main>
+          <main className="flex w-[100%] justify-center items-center flex-1">
+            <Outlet />
+          </main>
         </div>
       </div>
     </>
