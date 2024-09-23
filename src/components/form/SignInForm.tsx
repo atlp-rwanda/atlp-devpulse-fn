@@ -18,6 +18,7 @@ import { useNavigate, Navigate } from "react-router-dom";
 import { request, GraphQLClient } from "graphql-request";
 import { loginAction } from "../../redux/actions/login";
 import { toast } from "react-toastify";
+import { Token } from '../../utils/utils';
 
 const googleIcn: string = require("../../assets/assets/googleIcon.jpg").default;
 
@@ -80,23 +81,42 @@ function LoginForm() {
     resolver: zodResolver(loginSchema),
   });
 
+  const redirectAfterLogin = async () => {
+    const lastAttemptedRoute = localStorage.getItem('lastAttemptedRoute');
+    if (lastAttemptedRoute) {
+      localStorage.removeItem('lastAttemptedRoute');
+      navigate(lastAttemptedRoute);
+    } else {
+      await Token();
+      const role = localStorage.getItem("roleName") as string;
+      if (role === "applicant") {
+        navigate("/applicant");
+      } else if (role === "superAdmin") {
+        navigate("/admin");
+      } else {
+        const searchParams = new URLSearchParams(location.search);
+        const returnUrl = searchParams.get('returnUrl') || '/';
+        navigate(returnUrl);
+      }
+    }
+  }
+
+
   const onSubmit = async (data: any) => {
 
     setIsLoading(true);
 
     try {
-      const parsedData = loginSchema.parse(data);
-      const response = await loginAction(parsedData.email, parsedData.password);
+      const validatedData = loginSchema.parse(data);
+      const response = await loginAction(validatedData.email, validatedData.password);
 
-      const validate = (token) => {
-        localStorage.setItem("access_token", response?.data?.data?.login?.token);
-        navigate("/");
-        setIsLoading(false);
-      };
-
-      (response?.data?.data?.login !== null) ? validate(response?.data?.data?.login?.token) : toast.error(response?.data?.errors[0].message)
-
-
+      const token = response?.data?.data?.login?.token;
+      if (token) {
+        localStorage.setItem("access_token", token);
+        await redirectAfterLogin();
+      } else {
+        toast.error(response?.data?.errors[0].message);
+      }
     } catch (error: any) {
       toast.error("something went wrong!!")
     }
