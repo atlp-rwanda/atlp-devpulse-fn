@@ -66,9 +66,10 @@ function SignupForm() {
     setTimeout(() => {
       setError(null);
     }, 3000);
-  };
+  }
 
   const onSubmit = async (data: any) => {
+
     setIsLoading(true);
     if (data.password !== data.confirmPassword) {
       showToast("Passwords doesn't match!", "error");
@@ -128,7 +129,7 @@ function SignupForm() {
           showToast(error, "error");
         }
       } else {
-        setIsSuccess(true);
+        setIsSuccess(true)
       }
     } catch (error: any) {
       showToast("An error occurred.", "error");
@@ -147,11 +148,7 @@ function SignupForm() {
     <>
       <div className="flex items-center  justify-center mx-auto bg-[#374151] h-screen">
         {isAnError && (
-          <Toasty
-            message={isAnError}
-            type="error"
-            onClose={() => setError(null)}
-          />
+          <Toasty message={isAnError} type="error" onClose={() => setError(null)} />
         )}
         {isSuccess ? (
           <div className="bg-[#1F2A37] w-[30vw]  flex h-[70vh] flex-col items-center justify-center rounded-sm sm:w-5/6 lg:w-[45vw]">
@@ -351,11 +348,7 @@ function SignupForm() {
                   </Button>
                 </>
               ) : (
-                <Button
-                  type="submit"
-                  label="Signup"
-                  className="my-1  mb-4 sm:w-full w-5/6 "
-                />
+                <Button type="submit" label="Signup" className="my-1  mb-4 sm:w-full w-5/6 " />
               )}
             </div>
           </form>
