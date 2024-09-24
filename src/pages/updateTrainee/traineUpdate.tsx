@@ -508,6 +508,7 @@ const TraineeUpdate = (props: any) => {
                     />
                   </div>
 
+
                    <div className="mb-4">
                 <label className="block text-sm font-bold mb-2">Education Level</label>
                 <SelectField
@@ -525,6 +526,7 @@ const TraineeUpdate = (props: any) => {
                   }
                 />
               </div>
+
 
                   <div className="mb-4">
                     <div className="lg:flex sm:block">
@@ -572,6 +574,7 @@ const TraineeUpdate = (props: any) => {
                   </div>
 
                   <div className="mb-4">
+
                 <label className="block text-sm font-bold mb-2">Interview decision</label>
                 <SelectField
                   defaultValue={traineeData.interview_decision}
