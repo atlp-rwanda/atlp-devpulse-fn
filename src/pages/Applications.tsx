@@ -3,7 +3,6 @@ import { ToastContainer } from 'react-toastify';
 import * as icons from 'react-icons/ai';
 import { Link } from 'react-router-dom';
 import Select from 'react-select';
-import NavBar from '../components/sidebar/navHeader';
 import * as AiIcons from 'react-icons/ai';
 import {
   deleteApplication,
@@ -71,12 +70,12 @@ const Applications = (props: any) => {
   return (
     <>
       <ToastContainer />
-      <div className="flex flex-col  h-screen absolute w-[100%]">
+      <div className="flex flex-col  h-screen w-[100%]">
         <div className="flex flex-row">
           <div className="w-full">
             <div>
-              <div className="bg-light-bg dark:bg-dark-frame-bg  min-h-screen overflow-y-hidden overflow-x-hidden lg:ml-[3rem]">
-                <div className="flex items-left px-7 lg:px-64 pt-24">
+              <div className="bg-light-bg dark:bg-dark-frame-bg  min-h-screen overflow-y-hidden overflow-x-hidden">
+                <div className="flex items-left px-8 pt-1">
                   <Link to="/filter_trainee-applicants">
                     <button className="flex bg-primary dark:bg-[#56C870] rounded-md py-2 mt-2 px-4 text-white font-medium cursor-pointer" disabled>
                       <icons.AiOutlineSearch className="mt-1 mr-1 font-bold" />{' '}
@@ -86,7 +85,7 @@ const Applications = (props: any) => {
                 </div>
                 {/* Filter Bar */}
                 <div>
-                  <ul className=" flex dark:text-white semi-md:space-x-5 p-5  text-sm  lg:px-64 semi-md:flex-row sm:flex-col ">
+                  <ul className=" flex dark:text-white semi-md:space-x-5 p-5  text-sm  lg:px-8 semi-md:flex-row sm:flex-col ">
                     <li
                       className={`${
                         filter === 'submitted'
@@ -110,8 +109,8 @@ const Applications = (props: any) => {
                   </ul>
                 </div>
 
-                <div className="px-3 md:px-8">
-                  <div className="bg-white  dark:bg-dark-bg shadow-lg px-5 py-8 rounded-md w-[100%] mx-auto lg:w-[80%] lg:ml-60 mb-10">
+                <div className="px-8">
+                  <div className="bg-white  dark:bg-dark-bg shadow-lg px-7 py-8 rounded-md w-[100%] mx-auto">
                     <div>
                       <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
                         <div className="inline-block w-full h-[55vh] lg:min-w-full shadow rounded-lg overflow-y-scroll">
@@ -534,8 +533,6 @@ const Applications = (props: any) => {
           </div>
         </div>
       </div>
-
-      <NavBar />
     </>
   );
 };

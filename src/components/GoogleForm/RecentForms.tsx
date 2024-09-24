@@ -132,7 +132,7 @@ const RecentForms = () => {
   return (
     <div>
       <div className='pl-4 md:pl-8'>
-        <Link to={'/create-form'}>
+        <Link to={'/admin/create-form'}>
           <button className='flex bg-primary dark:bg-[#56C870] rounded-md py-2 mt-2 px-4 text-white font-medium cursor-pointer'>
             <icons.AiOutlinePlus className='mt-1 mr-1 font-bold' /> Create New
             Form

@@ -11,9 +11,11 @@ import { formData } from "../validation/Register";
 import { AiOutlineCheck } from "react-icons/ai";
 import { AiOutlineClose } from "react-icons/ai";
 import { Link } from "react-router-dom";
-import { HiOutlineExclamationCircle } from "react-icons/hi";
+import { HiOutlineExclamationCircle } from "react-icons/hi"
 import { Toasty } from "../Toasty/Toasty";
 import axios from "axios";
+import Datalist from "../ReusableComponents/DataList";
+import { showErrorToast } from "utils/toast";
 
 interface Country {
   name: string;
@@ -116,6 +118,12 @@ function SignupForm() {
           error.includes("email_1 dup key")
         ) {
           showToast("Email already exists. Please sign in.", "error");
+        } else if (
+          error.includes(
+            "Telephone number already exists. Please use a different number."
+          )
+        ) {
+          showToast("This telephone number is already in use.", "error");
         } else {
           showToast(error, "error");
         }
@@ -148,18 +156,15 @@ function SignupForm() {
         {isSuccess ? (
           <div className="bg-[#1F2A37] w-[30vw]  flex h-[70vh] flex-col items-center justify-center rounded-sm sm:w-5/6 lg:w-[45vw]">
             <div
-              className={`rounded-full flex items-center justify-center  ${
-                isAnError ? "bg-white" : "bg-green"
-              } p-4 mx-auto mb-4`}
+              className={`rounded-full flex items-center justify-center  ${isAnError ? "bg-white" : "bg-green"
+                } p-4 mx-auto mb-4`}
             >
               <AiOutlineCheck className="text-white text-4xl" />
             </div>
             <div className="text-[#afb1b4] text-lg mb-4 font-inter">
               <p>Your account has been succefully created !</p>
             </div>
-            <Link to="/login">
-              <Button label="Continue" className="w-[80px]" />
-            </Link>
+            <Link to="/login" ><Button label="Continue" className="w-[80px]" /></Link>
           </div>
         ) : (
           <form
@@ -242,35 +247,35 @@ function SignupForm() {
               <div className="flex items-center w-[25vw] gap-10   sm:w-5/6 lg:w-[25vw] justify-between">
                 <div className="w-[50%]">
                   <InputField
+                    placeholder="Country"
                     type="text"
-                    placeholder="country"
                     {...register("country")}
-                    className="w-full rounded-md px-2 py-3 border border-white placeholder:text-gray-400 text-white sm:text-[12px] outline-none autofill:bg-transparent autofill:text-white bg-[#1F2A37]"
                     list="country"
                     error={errors?.country}
                   />
-                  <datalist id="country">
-                    {filteredCountries.map((country) => (
-                      <option key={country.code} value={country.name}>
-                        {country.name}
-                      </option>
-                    ))}
-                  </datalist>
+                  <Datalist
+                    id="country"
+                    options={filteredCountries.map((country) => ({
+                      value: country.name,
+                    }))}
+                  />
                 </div>
                 <div className="w-[50%] ">
                   <InputField
+                    placeholder="Gender"
                     type="text"
-                    placeholder="gender"
                     {...register("gender")}
-                    className="w-full rounded-md   px-2 py-3 border border-white placeholder:text-gray-400 text-white sm:text-[12px] outline-none autofill:bg-transparent autofill:text-white bg-[#1F2A37]"
                     list="gender"
                     error={errors?.gender}
                   />
-                  <datalist id="gender">
-                    <option>female</option>
-                    <option>male</option>
-                    <option>other</option>
-                  </datalist>
+                  <Datalist
+                    id="gender"
+                    options={[
+                      { value: "female" },
+                      { value: "male" },
+                      { value: "other" },
+                    ]}
+                  />
                 </div>
               </div>
 
@@ -284,14 +289,12 @@ function SignupForm() {
                     list="countryCodes"
                     error={errors?.countryCode}
                   />
-                  <datalist id="countryCodes" style={{ cursor: "pointer" }}>
-                    {filteredCountries.map((country) => (
-                      <option key={country.code}>
-                        {country.phone}
-                        {country.suffix}
-                      </option>
-                    ))}
-                  </datalist>
+                  <Datalist
+                    id="countryCodes" options={filteredCountries.map((country) => ({
+                      value: country.name
+                    }))}
+                    style={{ cursor: "pointer" }}
+                  />
                 </div>
                 <div className=" w-[65%]">
                   <InputField

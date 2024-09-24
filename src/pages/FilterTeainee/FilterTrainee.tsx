@@ -433,10 +433,10 @@ const FilterTrainee = (props: any) => {
 
   return (
     <>
-      <div className="flex bg-[#F9F9FB] dark:bg-dark-bg  min-h-[100vh]">
-        <NavBar />
-        <div className="min-h-[50vh] w-[100%] block mt-10 md:w-[100%] md:mt-0 pl-[16rem] md:pl-0">
-          <div className=" table table-fixed mt-[5rem] w-[100%] top-[20%] md:top-[10%] pb-10 md:relative px-[10%] md:px-[10px]">
+      <div className="flex bg-[#F9F9FB] dark:bg-dark-frame-bg  min-h-[100vh]">
+        
+        <div className="min-h-[50vh] w-[100%] block md:w-[100%] md:mt-0 md:pl-0 px-8 pt-4">
+          <div className=" table table-fixed w-[100%] top-[20%] md:top-[10%] pb-10 md:relative md:px-[10px]">
             <div className="">
               <Select
                 className="sm:text-sm w-40 rounded-bt-rd dark:text-ltb"
@@ -504,7 +504,7 @@ const FilterTrainee = (props: any) => {
                   ADD INTERVIEWER
                 </button> */}
 
-                <Link to="/import_trainee-aplicants">
+                <Link to="/admin/import_trainee-aplicants">
                   <button className="bg-button-color dark:bg-green text-ltb text-fb font-medium ml-8 mt-2 pl-3 pr-3 py-1 rounded-bt-rd semi-sm:ml-2">
                     IMPORT FROM
                   </button>
@@ -579,14 +579,14 @@ const FilterTrainee = (props: any) => {
               <div className=" w-[100%] max-h-[70vh] m-auto bg-[#fff] dark:bg-dark-bg shadow-md rounded-[10px] relative pb-[20px]  overflow-x-auto  overflow-y-scroll md:w-[100%]">
                 <table
                   {...getTableProps()}
-                  className="border-collapse w-[100%] m-auto rounded-[15px] whitespace-nowrap"
+                  className="border-collapse w-[100%] m-auto rounded-[15px] whitespace-nowrap "
                 >
                   <thead className=" w-full px-32 sticky top-0">
                     {headerGroups?.map((headerGroup: any, index: number) => (
                       <tr
                         key={index}
                         {...headerGroup.getHeaderGroupProps()}
-                        className="border-solid border-[1px] border-white dark:border-[#abb8c3] dark:border-opacity-10 even:bg-[#eef1f1] first:w-[20px]"
+                        className="border-solid border-[1px] border-white dark:border-[#abb8c3] dark:border-opacity-10 even:bg-[#eef1f1] first:w-[20px] bg-gray-100 dark:bg-dark-tertiary"
                       >
                         {headerGroup.headers.map(
                           (column: any, index: number) => (

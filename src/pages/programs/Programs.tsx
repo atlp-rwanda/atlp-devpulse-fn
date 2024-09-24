@@ -146,6 +146,7 @@ const Programs = (props: any) => {
       };
       if (validateForm(submitData, programSchema)) {
         await dispatch(createProgramAction(obj));
+        removeModal();
       }
     } catch (error) {
       console.log(error);
@@ -181,11 +182,11 @@ const Programs = (props: any) => {
     <>
       <ToastContainer />
       <div
-        className={`h-screen w-full z-20 bg-black bg-opacity-30 backdrop-blur-sm absolute flex items-center justify-center  px-4 overflow-y-hidden ${
+        className={`h-svh w-max z-20 bg-opacity-30 backdrop-blur-sm absolute flex  justify-center ${
           addNewProgramModal === true ? "block" : "hidden"
         }`}
       >
-        <div className="bg-white dark:bg-dark-bg w-full mt-48 mb-9 max-h-[900px] sm_:mt-40 sm_:mb-10 md_:max-h-full overflow-auto md_:w-[65%] md-sm:w-[95%] rounded-lg p-4 pb-8">
+        <div className="bg-white dark:bg-dark-bg w-full max-h-[500px]  overflow-auto md_:w-[65%] md-sm:w-[95%] rounded-lg p-4 pb-8">
           <div className="card-title w-full flex flex-wrap justify-center items-center">
             <h3 className="font-bold text-sm dark:text-white text-center w-11/12 ">
               <icons.AiOutlineClose
@@ -198,7 +199,7 @@ const Programs = (props: any) => {
             <div className="flex flex-col w-full mt-14 md_:mt-5">
               <form
                 onSubmit={handleSubmit}
-                className="flex flex-col md_:flex-row justify-center space-y-7 md_:space-x-7 md_:space-y-0"
+                className="flex flex-col md_:flex-row  space-y-7 md_:space-x-7 md_:space-y-0"
               >
                 <div className="flex flex-col w-full md_:w-[300px] space-y-3">
                   <div className="flex flex-col justify-center items-start space-y-2">
@@ -272,7 +273,10 @@ const Programs = (props: any) => {
                       </span>
                     )}
                   </div>
-                  <div className="flex flex-col items-start space-y-2">
+                  
+                </div>
+              <div className="flex flex-col md_:justify-start md_:items-center w-full md_:w-[500px] space-y-3">
+                <div className="flex flex-col items-start space-y-2 mr-11">
                     <label className="font-bold text-black-text dark:text-white text-left">
                       Duration
                     </label>
@@ -290,8 +294,6 @@ const Programs = (props: any) => {
                       </span>
                     )}
                   </div>
-                </div>
-                <div className="flex flex-col md_:justify-start md_:items-center w-full md_:w-[300px] space-y-3">
                   <div className="flex flex-col items-start space-y-2">
                     <label className="font-bold text-black-text dark:text-white text-left">
                       Entry requirements
@@ -336,7 +338,7 @@ const Programs = (props: any) => {
                               </label>
                               <button
                                 type="button"
-                                className="flex items-center justify-center bg-white text-dark-frame-bg rounded transition-colors border border-black dark:border-transparent hover:bg-dark-frame-bg hover:text-white hover:border hover:border-white font-extrabold px-2 h-4"
+                                className="bg-green-500 text-white px-4 py-2 rounded w-full md:w-auto self-start"
                                 onClick={() => removeEntry(item)}
                               >
                                 -
@@ -360,11 +362,11 @@ const Programs = (props: any) => {
           </div>
         </div>
       </div>
-      <div className="flex flex-col  h-screen absolute w-[100%]">
+      <div className="flex flex-col w-[100%]">
         <div className="flex flex-row">
           <div className="w-full">
-            <div className="bg-light-bg dark:bg-dark-frame-bg min-h-screen overflow-x-hidden lg:ml-[3rem]">
-              <div className="flex items-left px-7 lg:px-64 pt-24">
+            <div className="bg-light-bg dark:bg-dark-frame-bg h-screen">
+              <div className="flex items-left px-7">
                 <div className="flex px-5 py-2 pb-8 w-fit">
                   <button
                     onClick={Open}
@@ -375,8 +377,8 @@ const Programs = (props: any) => {
                   </button>
                 </div>
               </div>
-              <div className="px-3 md:px-8">
-                <div className="bg-white  dark:bg-dark-bg shadow-lg px-5 py-8 rounded-md w-[100%] mx-auto lg:w-[80%] lg:ml-60 mb-10">
+              <div className="px-8">
+                <div className="bg-white  dark:bg-dark-bg shadow-lg px-5 py-8 rounded-md w-[100%] mx-auto">
                   <div>
                     <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
                       <div className="hidden md_:inline-block w-full h-auto lg:min-w-full shadow rounded-lg overflow-y-hidden">
@@ -754,7 +756,6 @@ const Programs = (props: any) => {
           </div>
         </div>
       </div>
-      <NavBar />
     </>
   );
 };
