@@ -528,6 +528,7 @@ const TraineeUpdate = (props: any) => {
                 />
               </div>
 
+
                   <div className="mb-4">
                     <div className="lg:flex sm:block">
                       <div className="mr-2">

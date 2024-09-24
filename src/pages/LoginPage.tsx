@@ -50,7 +50,7 @@ const LoginPage = (props: any) => {
   `;
 
   return authenticated && roleName === "applicant" ? 
-    <Navigate to="/applicant" /> : authenticated && roleName === "supperAdmin" ? <Navigate to="/" />
+    <Navigate to="/applicant" /> : authenticated && roleName === "superAdmin" ? <Navigate to="/" />
    : 
   (
     <>
