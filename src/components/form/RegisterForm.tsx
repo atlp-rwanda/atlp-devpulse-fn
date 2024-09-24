@@ -15,6 +15,7 @@ import { HiOutlineExclamationCircle } from "react-icons/hi"
 import { Toasty } from "../Toasty/Toasty";
 import axios from "axios";
 import Datalist from "../ReusableComponents/DataList";
+import { showErrorToast } from "utils/toast";
 
 interface Country {
   name: string;
@@ -118,6 +119,12 @@ function SignupForm() {
           error.includes("email_1 dup key")
         ) {
           showToast("Email already exists. Please sign in.", "error");
+        } else if (
+          error.includes(
+            "Telephone number already exists. Please use a different number."
+          )
+        ) {
+          showToast("This telephone number is already in use.", "error");
         } else {
           showToast(error, "error");
         }

@@ -1,145 +1,108 @@
-import React from 'react';
-import { Icon } from '@iconify/react';
+/* eslint-disable  */
+import React from "react";
+import { Icon } from "@iconify/react";
+import { title } from "process";
 
-export const generalSectionItems = [
+export const sidebarItems1 = [
   {
-    path: '/dashboard',
-    icon: <Icon icon="fontisto:pie-chart-1" />,
-    title: 'Dashboard',
+    path: "/admin",
+    icon: <Icon icon="fontisto:pie-chart-1"></Icon>,
+    title: "Dashboard",
   },
   {
-    path: '/calendar',
-    icon: <Icon icon="ant-design:calendar-filled" />,
-    title: 'Calendar',
+    path: "users",
+    icon: <Icon icon="fluent:people-team-20-filled"></Icon>,
+    title: "Members",
   },
   {
-    path: '/notifications',
-    icon: <Icon icon="heroicons-solid:inbox-in" />,
-    title: 'Notifications',
+    path: "programs",
+    icon: <Icon icon="ic:round-maps-home-work"></Icon>,
+    title: "Programs",
+  },
+  {
+    path: "job-post",
+    icon: <Icon icon="ic:round-maps-home-work"></Icon>,
+    title: "View Job Post",
+  },
+  {
+    path: "create-form",
+    icon: <Icon icon="fluent:form-28-regular"></Icon>,
+    title: "Application Forms",
+  },
+  {
+    path: "view-applications",
+    icon: <Icon icon="akar-icons:globe"></Icon>,
+    title: "Applications",
+  },
+  {
+    path: "cohort",
+    icon: <Icon icon="fa6-solid:graduation-cap"></Icon>,
+    title: "Cohorts",
+  },
+  {
+    path: "cycles",
+    icon: <Icon icon="game-icons:cycle"></Icon>,
+    title: "Application Cycles",
+  },
+
+  {
+    path: "grading",
+    icon: <Icon icon="bxs:dashboard"></Icon>,
+    title: "Grading System",
+  },
+  {
+    path: "Trash",
+    icon: <Icon icon="fa-solid:trash"></Icon>,
+    title: "Trash",
   },
 ];
 
-export const managementSectionItems = [
-  {
-    path: '/organisations',
-    icon: <Icon icon="fluent:people-team-20-filled" />,
-    title: 'Organisations',
-  },
-  {
-    path: '/roles',
-    icon: <Icon icon="fluent:people-team-20-filled" />,
-    title: 'Members',
-  },
-  {
-    path: '/admins',
-    icon: <Icon icon="ic:round-people" />,
-    title: 'Admins',
-  },
- 
-];
-
-export const applicationsSectionItems = [
-  {
-    path: '/create-form',
-    icon: <Icon icon="fluent:form-28-regular" />,
-    title: 'Application Forms',
-  },
-  {
-    path: '/view-applications',
-    icon: <Icon icon="akar-icons:globe" />,
-    title: 'Applications',
-  },
-  {
-    path: '/programs',
-    icon: <Icon icon="ic:round-maps-home-work" />,
-    title: 'Programs',
-  },
-  {
-    path: '/job-post',
-    icon: <Icon icon="ic:round-maps-home-work" />,
-    title: 'View Job Post',
-  },
-  {
-    path: '/cohort',
-    icon: <Icon icon="fa6-solid:graduation-cap" />,
-    title: 'Cohorts',
-  },
-  {
-    path: '/cycles',
-    icon: <Icon icon="game-icons:cycle" />,
-    title: 'Application Cycles',
-  },
-];
-
-// Performance and Grading Section
-export const performanceSectionItems = [
-  {
-    path: '/attendance',
-    icon: <Icon icon="teenyicons:clipboard-tick-solid" />,
-    title: 'Attendance',
-  },
-  
-  {
-    path: '/grading',
-    icon: <Icon icon="bxs:dashboard" />,
-    title: 'Grading System',
-  }
-];
-
-// Admin Section
-export const adminSectionItems = [
-  
-  {
-    path: '/Trash',
-    icon: <Icon icon="fa-solid:trash" />,
-    title: 'Trash',
-  }
-];
-
-// Applicant Sidebar Items
 export const applicantSidebarItems = [
   {
-    path: '/myApplications',
-    icon: <Icon icon="material-symbols:wysiwyg-rounded" />,
-    title: 'My Applications',
+    path: "myApplications",
+    icon: <Icon icon="material-symbols:wysiwyg-rounded"></Icon>,
+    title: "My Applications",
   },
   {
-    path: '/interviewScheduler',
-    icon: <Icon icon="material-symbols:interpreter-mode-outline-rounded" />,
-    title: 'Schedule Interview',
+    path: "interviewScheduler",
+    icon: (
+      <Icon icon="material-symbols:interpreter-mode-outline-rounded"></Icon>
+    ),
+    title: "Schedule Interview",
   },
   {
-    path: '/job/Post/view',
-    icon: <Icon icon="ant-design:calendar-filled" />,
-    title: 'Job Post',
+    path: "notifications",
+    icon: <Icon icon="heroicons-solid:inbox-in"></Icon>,
+    title: "Notifications",
+  },
+  {
+    path: "calendar",
+    icon: <Icon icon="ant-design:calendar-filled"></Icon>,
+    title: "Calendar",
+  },
+  {
+    path: "available-jobs",
+    icon: <Icon icon="ant-design:calendar-filled"></Icon>,
+    title: "Job Post ",
+  },
+];
+export const sidebarItems2 = [
+  {
+    path: "/documents",
+    icon: <Icon icon="heroicons:document-20-solid"></Icon>,
+    title: "Docs",
+  },
+  {
+    path: "/help",
+    icon: <Icon icon="nimbus:globe"></Icon>,
+    title: "Help",
   },
 ];
 
-// Additional Sidebar Items
-export const additionalSidebarItems = [
+export const sidebarItems3 = [
   {
-    path: '/documents',
-    icon: <Icon icon="heroicons:document-20-solid" />,
-    title: 'Docs',
+    path: "/settings",
+    icon: <Icon icon="eva:settings-2-outline"></Icon>,
+    title: "Settings",
   },
-  {
-    path: '/help',
-    icon: <Icon icon="nimbus:globe" />,
-    title: 'Help',
-
-  },
-  {
-    path: '/settings',
-    icon: <Icon icon="akar-icons:settings-vertical" />,
-    title: 'settings',
-  }
-];
-
-// Settings Sidebar Items
-export const settingsSidebarItems = [
-  {
-    path: '/Logout',
-    icon: <Icon icon="nimbus:arrow-left" />,
-    title: 'Logout',
-  }
 ];

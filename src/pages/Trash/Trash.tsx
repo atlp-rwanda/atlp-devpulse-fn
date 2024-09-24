@@ -139,10 +139,10 @@ const Trash = (props: any) => {
   };
   return (
     <>
-      <NavBar />
-      <div className="flex bg-[#F9F9FB] min-h-[100vh] dark:bg-dark-bg dark:text-white">
-        <div className="min-h-[50vh] w-[100%] block  md:w-[100%] md:mt-0  pl-[16rem] pt-[80px] md:pl-0">
-          <div className=" w-[100%] top-[20%] md:top-[10%] md:relative px-[10%] md:px-[10px]">
+      
+      <div className="flex bg-[#F9F9FB] min-h-[100vh] dark:bg-dark-frame-bg dark:text-white w-full">
+        <div className="min-h-[50vh] w-[100%] block  md:w-[100%] md:mt-0 md:pl-0 pt-4">
+          <div className=" w-[100%] top-[20%] md:top-[10%] md:relative px-8 md:px-[10px]">
             <div className="flex justify-between align-center mb-5 relative md:block">
               <div className="absolute bottom-0 right-0 md:relative md:mb-3">
                 <button
