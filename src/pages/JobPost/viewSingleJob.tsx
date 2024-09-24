@@ -19,37 +19,35 @@ const SingleJobPostDetails = (props: any) => {
     dispatch(fetchSingleJobPost(jobPostId));
   }, [jobPostId]);
 
-  const shareMessage = `Check out this job opportunity: ${fetchSingleJobPostStates?.data?.title}\n${window.location.href}`;
+  const clickableText = "Click here to view the job post";
+  const shareMessage = `Check out this job opportunity: ${fetchSingleJobPostStates?.data?.title}\n${clickableText}`;
 
   const shareOnTwitterDM = () => {
-    const url = `https://twitter.com/messages/compose?text=${encodeURIComponent(
-      shareMessage
-    )}`;
+    const url = `https://twitter.com/messages/compose?text=${encodeURIComponent(shareMessage)}&url=${encodeURIComponent(window.location.href)}`;
     window.open(url, "_blank", "width=600,height=400");
   };
 
   const shareOnWhatsApp = () => {
-    const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(
-      shareMessage
-    )}`;
+    const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareMessage)}&url=${encodeURIComponent(window.location.href)}`;
     window.open(url, "_blank", "width=600,height=400");
   };
 
   const shareOnTelegram = () => {
-    const url = `https://t.me/share/url?url=${encodeURIComponent(window.location.href)}`;
+    const url = `https://t.me/share/url?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(shareMessage)}`;
     window.open(url, "_blank", "width=600,height=400");
   };
 
   const shareOnLinkedIn = () => {
-    const url = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(
-      window.location.href
-    )}`;
+    const url = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.href)}`;
     window.open(url, "_blank");
   };
 
   const shareOnGmail = () => {
     const subject = encodeURIComponent("Interesting Job Opportunity");
-    const body = encodeURIComponent(shareMessage);
+    const body = encodeURIComponent(
+      `Check out this job opportunity: ${fetchSingleJobPostStates?.data?.title}\n\n` +
+      `Click here to view the job post: ${window.location.href}`
+    );
     const url = `https://mail.google.com/mail/?view=cm&fs=1&to=&su=${subject}&body=${body}`;
     window.open(url, "_blank");
   }
