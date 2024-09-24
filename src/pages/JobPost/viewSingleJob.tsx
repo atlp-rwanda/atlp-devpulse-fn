@@ -10,7 +10,6 @@ import { FcGoogle } from 'react-icons/fc';
 
 const SingleJobPostDetails = (props: any) => {
   const { fetchSingleJobPostStates } = props;
-  console.log("fetchSingleJobPostStates:", fetchSingleJobPostStates);
   const dispatch = useAppDispatch();
   const params = useParams();
   const [jobPostId, setjobPostId] = useState(params.id);
@@ -22,16 +21,12 @@ const SingleJobPostDetails = (props: any) => {
   const shareMessage = `Check out this job opportunity: ${fetchSingleJobPostStates?.data?.title}\n${window.location.href}`;
 
   const shareOnTwitterDM = () => {
-    const url = `https://twitter.com/messages/compose?text=${encodeURIComponent(
-      shareMessage
-    )}`;
+    const url = `https://twitter.com/messages/compose?text=${encodeURIComponent(shareMessage)}`;
     window.open(url, "_blank", "width=600,height=400");
   };
 
   const shareOnWhatsApp = () => {
-    const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(
-      shareMessage
-    )}`;
+    const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareMessage)}`;
     window.open(url, "_blank", "width=600,height=400");
   };
 
@@ -41,9 +36,7 @@ const SingleJobPostDetails = (props: any) => {
   };
 
   const shareOnLinkedIn = () => {
-    const url = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(
-      window.location.href
-    )}`;
+    const url = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.href)}`;
     window.open(url, "_blank");
   };
 
@@ -67,64 +60,39 @@ const SingleJobPostDetails = (props: any) => {
               <>
                 <div className="flex flex-col">
                   <h3 className="text-white">Job title</h3>
-                  <p className="text-gray-500 text-sm dark:text-gray-400">
-                    {fetchSingleJobPostStates.data.title}
-                  </p>
+                  <p className="text-gray-500 text-sm dark:text-gray-400">{fetchSingleJobPostStates.data.title}</p>
                 </div>
                 <div className="flex flex-col">
                   <h3 className="text-white">Program</h3>
-                  <p className="text-gray-500 text-sm dark:text-gray-400">
-                    {fetchSingleJobPostStates.data.program.title}
-                  </p>
+                  <p className="text-gray-500 text-sm dark:text-gray-400">{fetchSingleJobPostStates.data.program.title}</p>
                 </div>
                 <div className="flex flex-col">
                   <h3 className="text-white">Cycle</h3>
-                  <p className="text-gray-500 text-sm dark:text-gray-400">
-                    {fetchSingleJobPostStates.data.cycle.name}
-                  </p>
+                  <p className="text-gray-500 text-sm dark:text-gray-400">{fetchSingleJobPostStates.data.cycle.name}</p>
                 </div>
                 <div className="flex flex-col">
                   <h3 className="text-white">Cohort</h3>
-                  <p className="text-gray-500 text-sm dark:text-gray-400">
-                    {fetchSingleJobPostStates.data.cohort.title}
-                  </p>
+                  <p className="text-gray-500 text-sm dark:text-gray-400">{fetchSingleJobPostStates.data.cohort.title}</p>
                 </div>
                 <div className="flex flex-col">
                   <h3 className="text-white">Program description</h3>
-                  <p className="text-gray-500 text-sm dark:text-gray-400">
-                    {fetchSingleJobPostStates.data.description}
-                  </p>
+                  <p className="text-gray-500 text-sm dark:text-gray-400">{fetchSingleJobPostStates.data.description}</p>
                 </div>
                 <div className="text-white">Share Job Post</div>
                 <div className="flex fle gap-4 mt-6">
-                  <button
-                    onClick={shareOnTwitterDM}
-                    className="flex items-center gap-2 px-4 py-2 bg-blue-400 text-white rounded hover:bg-blue-500 transition-colors"
-                  >
+                  <button onClick={shareOnTwitterDM} className="flex items-center gap-2 px-4 py-2 bg-blue-400 text-white rounded hover:bg-blue-500 transition-colors">
                     <FaTwitter />
                   </button>
-                  <button
-                    onClick={shareOnWhatsApp}
-                    className="flex items-center gap-2 px-4 py-2 bg-green text-white rounded hover:bg-green-600 transition-colors"
-                  >
+                  <button onClick={shareOnWhatsApp} className="flex items-center gap-2 px-4 py-2 bg-green text-white rounded hover:bg-green-600 transition-colors">
                     <FaWhatsapp />
                   </button>
-                  <button
-                    onClick={shareOnTelegram}
-                    className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
-                  >
+                  <button onClick={shareOnTelegram} className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors">
                     <FaTelegram />
                   </button>
-                  <button
-                    onClick={shareOnLinkedIn}
-                    className="flex items-center gap-2 px-4 py-2 bg-blue-800 text-white rounded hover:bg-blue-900 transition-colors"
-                  >
+                  <button onClick={shareOnLinkedIn} className="flex items-center gap-2 px-4 py-2 bg-blue-800 text-white rounded hover:bg-blue-900 transition-colors">
                     <FaLinkedin />
                   </button>
-                  <button
-                    onClick={shareOnGmail}
-                    className="flex items-center justify-center gap-2 px-4 py-2 bg-white text-gray-700 rounded hover:bg-gray-100 transition-colors"
-                  >
+                  <button onClick={shareOnGmail} className="flex items-center justify-center gap-2 px-4 py-2 bg-white text-gray-700 rounded hover:bg-gray-100 transition-colors">
                     <FcGoogle size={20} />
                   </button>
                 </div>
@@ -132,8 +100,7 @@ const SingleJobPostDetails = (props: any) => {
             )}
           </div>
         </div>
-      </div>
-      
+      </div>     
     </>
   );
 };
