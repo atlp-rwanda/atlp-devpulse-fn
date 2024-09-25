@@ -7,11 +7,13 @@ import InputField from "./InputField";
 import Button from "./Button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginFormData } from "../validation/login";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import { GraphQLClient } from "graphql-request";
 import { loginAction } from "../../redux/actions/login";
-import { Token } from "../../utils/utils";
+import { Token } from '../../utils/utils';
+
+const googleIcn: string = require("../../assets/assets/googleIcon.jpg").default;
 
 const MY_QUERY = `
   {
@@ -38,6 +40,7 @@ const LoginForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const {
     register,
@@ -46,6 +49,26 @@ const LoginForm = () => {
   } = useForm<loginFormData>({
     resolver: zodResolver(loginSchema),
   });
+
+  const redirectAfterLogin = async () => {
+    const lastAttemptedRoute = localStorage.getItem('lastAttemptedRoute');
+    if (lastAttemptedRoute) {
+      localStorage.removeItem('lastAttemptedRoute');
+      navigate(lastAttemptedRoute);
+    } else {
+      await Token();
+      const role = localStorage.getItem("roleName") as string;
+      if (role === "applicant") {
+        navigate("/applicant");
+      } else if (role === "superAdmin") {
+        navigate("/admin");
+      } else {
+        const searchParams = new URLSearchParams(location.search);
+        const returnUrl = searchParams.get('returnUrl') || '/';
+        navigate(returnUrl);
+      }
+    }
+  }
 
   const onSubmit = async (data: loginFormData) => {
     setIsLoading(true);
@@ -56,15 +79,7 @@ const LoginForm = () => {
       const token = response?.data?.data?.login?.token;
       if (token) {
         localStorage.setItem("access_token", token);
-        await Token()
-        const role = localStorage.getItem("roleName") as string;
-        if(role === "applicant"){
-          navigate("/applicant")
-        }
-        else if (role === "superAdmin") {
-          navigate("/admin");
-        }
-        toast.success("Logged in successfully!");
+        await redirectAfterLogin();
       } else {
         toast.error(response?.data?.errors[0].message);
       }
@@ -188,3 +203,4 @@ const LoginForm = () => {
 };
 
 export default LoginForm;
+

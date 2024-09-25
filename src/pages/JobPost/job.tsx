@@ -386,7 +386,7 @@ const Jobs = (props: any) => {
                                         </li>
                                         <li>
                                           <Link
-                                            to={`/Job/Post/${item.id}`}
+                                            to={`/admin/Job/Post/${item.id}`}
                                             className="text-sm hover:bg-gray-100 text-gray-700  dark:text-white   dark:hover:bg-gray-500 block px-4 py-2"
                                           >
                                             View
@@ -477,7 +477,7 @@ const Jobs = (props: any) => {
                                   Edit
                                 </Link>
                                 <Link
-                                  to={`/Job/Post/${item.id}`}
+                                  to={`/admin/Job/Post/${item.id}`}
                                   className="text-white bg-green border border-solid border-green rounded-md px-2 text-xs"
                                 >
                                   View
