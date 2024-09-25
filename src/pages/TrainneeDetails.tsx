@@ -1,16 +1,9 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { LuCalendarDays } from "react-icons/lu";
 import { FaRecycle } from "react-icons/fa6";
-import { GoChecklist } from "react-icons/go";
 import { getOneTraineeAllDetails } from "../redux/actions/trainnee";
 import { connect } from "react-redux";
-import Navbar from "./../components/sidebar/navHeader";
 import { useParams } from "react-router";
-import {
-  getAllScoreValues,
-  updateManyScoreValues,
-} from "../redux/actions/scoreValueActions";
-import { toast } from "react-toastify";
 import DetailItem from "../components/TraineeDetail/DetailItem";
 import ProgramItem from "../components/TraineeDetail/ProgramBox";
 import { DownloadPdf } from "../utils/DownloadPdf";
@@ -18,39 +11,12 @@ import { DownloadPdf } from "../utils/DownloadPdf";
 const TrainneeDetails = (props: any) => {
   const params = useParams();
   const [key, setKey] = useState(params.traineeId);
-  const { oneTraineeDetails, scoreValues } = props;
-
-  const urlId = window.location.href.substring(
-    window.location.href.lastIndexOf("/") + 1
-  );
-
-  const availableScores = scoreValues.data?.filter((values: any) => {
-    return values.attr_id?.trainee_id._id === urlId;
-  });
-
-  const [scoreValue, setScoreValue] = useState<any>();
-  const values = availableScores?.map((values: any) => ({
-    test: values.score_id.score_type,
-    value: values.score_value,
-  }));
-
-  const attrValues = availableScores?.map((values: any) => ({
-    attr_id: values.attr_id._id,
-    id: values.id,
-    score_id: values.score_id.id,
-    score_value: values.score_value,
-  }));
+  const { oneTraineeDetails } = props;
 
   const [ID, setId] = useState(key);
-  const [open, setOpen] = useState<boolean>(false);
-
-  useEffect(() => {
-    setScoreValue(values);
-  }, [scoreValues]);
 
   useEffect(() => {
     props.getOneTraineeAllDetails({ id: ID });
-    props.getAllScoreValues();
   }, [ID]);
 
   const traineeDetails = oneTraineeDetails.data;
@@ -188,22 +154,24 @@ const TrainneeDetails = (props: any) => {
             </h2>
             <div className="h-16 flex  items-center mt-[-8px] gap-5  ">
               <div>
-                {traineeDetails.interview_decision === "Passed" ? (
+                {traineeDetails.interview_decision === "Passed" ||
+                traineeDetails.interview_decision === "Approved" ? (
                   <div className="py-10 btn ml-5 mt-[-10%] mb-3">
                     <button className="btn-Aprov bg-[#56C870] hover:bg-[#67dc82] dark:hover:bg-[#1f544cef] text-white font-bold py-2 px-4 rounded mt-7 mr-4 dark:bg-[#56C870]">
                       Passed
                     </button>
                   </div>
-                ) : traineeDetails.interview_decision === "Relegated" ? (
+                ) : traineeDetails.interview_decision === "Failed" ||
+                  traineeDetails.interview_decision === "Rejected" ? (
                   <div className="py-10 btn ml-5 mt-[-10%] mb-3">
-                    <button className="btn-Aprov3 bg-yellow-400 hover:text-white hover:bg-yellow-300 text-white font-bold mt-7 py-2 px-2 rounded">
-                      Relegated
+                    <button className="btn-Aprov3 bg-red-800 hover:text-white hover:bg-red-500 text-white font-bold mt-7 py-2 px-2 rounded">
+                      Failed
                     </button>
                   </div>
                 ) : (
                   <div className="py-10 btn ml-5 mt-[-10%] mb-3">
-                    <button className="btn-Aprov3 bg-red-800 hover:text-white hover:bg-red-500 text-white font-bold mt-7 py-2 px-2 rounded">
-                      Failed
+                    <button className="btn-Aprov3 bg-gray-400 text-white font-bold mt-7 py-2 px-2 rounded">
+                      No Decision
                     </button>
                   </div>
                 )}
@@ -215,8 +183,11 @@ const TrainneeDetails = (props: any) => {
                 Download PDF
               </button>
               <button className="btn-Aprov   h-11 bg-blue-500 hover:bg-blue-600 dark:hover:bg-blue-600 text-white font-bold py-2 px-8 rounded   dark:bg-blue-500">
-                <a href="https://mail.google.com/" target="_blank">
-                  {" "}
+                <a
+                  href={`https://mail.google.com/mail/?view=cm&fs=1&to=${traineeDetails?.trainee_id?.email}&su=Your%20ATLP%20Application%20Email&body=Dear%20${traineeDetails?.trainee_id?.lastName} ${traineeDetails?.trainee_id?.firstName},`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   Email
                 </a>
               </button>
@@ -230,11 +201,8 @@ const TrainneeDetails = (props: any) => {
 
 const mapState = (state: any) => ({
   oneTraineeDetails: state.traineeAllDetails,
-  scoreValues: state.scoreValues,
 });
 
 export default connect(mapState, {
   getOneTraineeAllDetails,
-  getAllScoreValues,
-  updateManyScoreValues,
 })(TrainneeDetails);
