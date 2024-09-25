@@ -266,6 +266,7 @@ const TraineeUpdate = (props: any) => {
                   </div>
 
                   <div className="mb-4">
+
                 <label className="block text-sm font-bold mb-2">Province</label>
                 <SelectField
                   id="province"
