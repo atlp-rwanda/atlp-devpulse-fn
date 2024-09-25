@@ -9,6 +9,7 @@ import { useAppSelector, useAppDispatch } from "../../hooks/hooks";
 import { toast } from "react-hot-toast";
 import NavBar from "../../components/sidebar/navHeader";
 import { useParams } from "react-router";
+import { useNavigate } from "react-router-dom";
 import options from "./traineeInputs";
 import { Link } from "react-router-dom";
 import { ThreeDots } from "react-loader-spinner";
@@ -21,6 +22,7 @@ const TraineeUpdate = (props: any) => {
   const params = useParams();
   const [ID, setId] = useState(params.traineeId);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const traineeData = useAppSelector(
     (state: any) => state.getOneTraineeReducer?.data
   );
@@ -201,6 +203,13 @@ const TraineeUpdate = (props: any) => {
       await dispatch(updateTraine(inputTrainee));
       await dispatch(updateTraineeAttributes(inputAttributes));
       toast.success("Trainee updated successfully");
+
+      const timer = setTimeout(() => {
+        navigate("/admin/Trainee-applicants");
+    }, 4000);
+
+    return () => clearTimeout(timer);
+
     } catch (err) {
       console.log(err);
       toast.error("Updating trainee failed");
