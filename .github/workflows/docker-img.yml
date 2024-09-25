@@ -1,0 +1,32 @@
+name: Login to Digital Ocean and create a directory
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Login to docker
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+      - name: Build and Push docker image
+        uses: docker/build-push-action@v4
+        with:
+          push: true
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/atlp-devpulse-fn:latest
+      - name: Login to DO
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.DO_HOST }}
+          username: ${{ secrets.DO_USERNAME }}
+          key: ${{ secrets.DO_KEY }}
+          port: ${{ secrets.DO_PORT }}
+          script: |
+            docker pull devpulse/atlp-pulse-fn:latest
+            docker ps | grep 4004 | cut -f1 -d' ' | xargs docker stop
+            docker run -p 4004:80 -d --add-host=devpulse-backend:161.35.150.208 devpulse/atlp-pulse-fn:latest
