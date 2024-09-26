@@ -126,6 +126,22 @@ function RolePermission(props: any) {
     );
   };
 
+  const handleEntityChange = (index, newEntity) => {
+    const updatedPermissions = (singleRoleData?.permissions || []).map(
+      (permission, idx) => {
+        if (idx === index) {
+          return { ...permission, entity: newEntity };
+        }
+        return permission;
+      }
+    );
+
+    setSingleRoleData({
+      ...singleRoleData,
+      permissions: updatedPermissions,
+    });
+  };
+
   const onSubmit = async (data: any) => {
     setIsLoading(true);
     const finalPermission = [
@@ -319,13 +335,13 @@ function RolePermission(props: any) {
     }
   };
 
-const handleInputChange = (e) => {
-  setSingleRoleData({
-    ...singleRoleData,
-    [e.target.name]: e.target.value,
-  });
+  const handleInputChange = (e) => {
+    setSingleRoleData({
+      ...singleRoleData,
+      [e.target.name]: e.target.value,
+    });
   };
-  
+
   const handlePermissionChange = (entity, field, checked) => {
     setUpdatePermissionData((prevState) => ({
       ...prevState,
@@ -447,7 +463,7 @@ const handleInputChange = (e) => {
     setIsSingleRole(false);
     setSingleRoleData(null);
   };
-  
+
   const handleUpdateRole = async (e) => {
     e.preventDefault();
     try {
@@ -455,7 +471,7 @@ const handleInputChange = (e) => {
         console.error("Role ID is null");
         return;
       }
-  
+
       const permissionsToUpdate = Object.keys(updatePermissionData).map(
         (entity) => ({
           entity,
@@ -464,13 +480,13 @@ const handleInputChange = (e) => {
             .map((key) => key),
         })
       );
-  
+
       const updatedData = {
         roleName: singleRoleData?.roleName,
         description: singleRoleData?.description,
         permissions: permissionsToUpdate,
       };
-  
+
       const response = await axios.post("/", {
         query: `
           mutation UpdateRole($updateRoleId: ID!, $input: UpdateRoleInput!) {
@@ -508,20 +524,19 @@ const handleInputChange = (e) => {
           Authorization: `${token}`,
         },
       });
-  
+
       const updatedRole = response.data.data.updateRole;
-  
+
       setRoles((prevRoles) =>
-        prevRoles.map((role) =>
-          role._id === getRoleId ? updatedRole : role
-        )
+        prevRoles.map((role) => (role._id === getRoleId ? updatedRole : role))
       );
 
       setOpenUpdateModel(false);
     } catch (error) {
       console.error("Error updating role:", error);
     }
-  };  
+  };
+
   const COLS: Column<SingleRole>[] = [
     {
       Header: "Role Name",
@@ -543,7 +558,7 @@ const handleInputChange = (e) => {
       ),
     },
   ];
-  
+
   const columns = useMemo(() => COLS, []);
   const {
     getTableProps,
@@ -563,7 +578,9 @@ const handleInputChange = (e) => {
   }: any = useTable(
     {
       columns,
-      data: roles,
+      data: roles.sort((a: any, b: any) =>
+        a.roleName.localeCompare(b.roleName)
+      ),
     },
     usePagination
   );
@@ -1068,117 +1085,154 @@ const handleInputChange = (e) => {
           open={openUpdateModal}
         >
           <div>
-          <Box className="absolute w-[70%] h-[80%] top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] md:w-[90%]">
-            <form className="relative rounded-[5px] w-[100%] h-[100%] m-auto p-[10px] pt-[5px] dark:bg-dark-bg bg-[#f0f0f0] overflow-y-auto">
-              <h1 className="text-center dark:text-white font-bold text-[24px] m-[20px]">
-                Update
-              </h1>
-              <IoIcons.IoClose
-                onClick={handleCloseUpdateModal}
-                style={{
-                  position: "absolute",
-                  top: "20px",
-                  right: "20px",
-                  fontSize: "35px",
-                  cursor: "pointer",
-                }}
-              />
-              <hr style={{ marginBottom: "40px" }} />
-              <input
-                className="mt-3 bg-lime cursor-pointer text-[18px] self-center py-1 rounded-[5px] h-[50px] my-[20px] mx-auto w-[80%] block border-[2px] border-[#a8a8a8] px-[10px] md:w-[90%]"
-                name="roleName"
-                type="text"
-                value={singleRoleData?.roleName}
-                onChange={handleInputChange}
-              />
-              <input
-                className="mt-3 bg-lime cursor-pointer text-[18px] self-center py-1 rounded-[5px] h-[50px] my-[20px] mx-auto w-[80%] block border-[2px] border-[#a8a8a8] px-[10px] md:w-[90%]"
-                name="description"
-                type="text"
-                value={singleRoleData?.description}
-                onChange={handleInputChange}
-              />
-            <div className="modal-body mt-5 flex flex-col bg-lime p-4 space-y-6">
-              {singleRoleData?.permissions?.map((permission, index) => {
-                const isOpen = openEntities.includes(permission.entity); 
+            <Box className="absolute w-[70%] h-[80%] top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] md:w-[90%]">
+              <form className="relative rounded-[5px] w-[100%] h-[100%] m-auto p-[10px] pt-[5px] dark:bg-dark-bg bg-[#f0f0f0] overflow-y-auto">
+                <h1 className="text-center dark:text-white font-bold text-[24px] m-[20px]">
+                  Update Role
+                </h1>
+                <IoIcons.IoClose
+                  onClick={handleCloseUpdateModal}
+                  style={{
+                    position: "absolute",
+                    top: "20px",
+                    right: "20px",
+                    fontSize: "35px",
+                    cursor: "pointer",
+                  }}
+                />
+                <hr style={{ marginBottom: "40px" }} />
 
-                return (
-                  <div key={index}>
-                    <div className="p-3 flex justify-between items-center">
-                      <h2 className="text-white text-lg font-semibold">
-                        {permission.entity}
-                      </h2>
-                      <BsIcons.BsChevronDown
-                        className={`cursor-pointer text-xl bg-white transition-transform ${
-                          isOpen ? "rotate-180" : ""
-                        }`}
-                        onClick={() => toggleEntityPermissions(permission.entity)}
-                      />
-                    </div>
+                <label
+                  htmlFor="roleName"
+                  className="dark:text-white text-[24px] font-semibold ml-[10%] block"
+                >
+                  Role Name
+                </label>
+                <input
+                  className="mt-1 bg-lime cursor-pointer text-[18px] self-center py-1 rounded-[5px] h-[50px] my-[10px] mx-auto w-[80%] block border-[2px] border-[#a8a8a8] px-[10px] md:w-[90%]"
+                  name="roleName"
+                  type="text"
+                  value={singleRoleData?.roleName}
+                  onChange={handleInputChange}
+                />
 
-                    {isOpen && (
-                      <div className="grid grid-cols-3 gap-2 md:grid-cols-4">
-                        {[
-                          "create",
-                          "viewOwn",
-                          "viewMultiple",
-                          "viewOne",
-                          "updateOwn",
-                          "updateMultiple",
-                          "updateOne",
-                          "deleteOwn",
-                          "deleteMultiple",
-                          "deleteOne",
-                        ].map((field) => (
-                          <div
-                            key={field}
-                            className="flex items-center space-x-1 p-1 bg-gray-100 rounded-lg text-xs"
+                <label
+                  htmlFor="description"
+                  className="dark:text-white text-[24px] font-semibold ml-[10%] block"
+                >
+                  Description
+                </label>
+                <input
+                  className="mt-1 bg-lime cursor-pointer text-[18px] self-center py-1 rounded-[5px] h-[50px] my-[10px] mx-auto w-[80%] block border-[2px] border-[#a8a8a8] px-[10px] md:w-[90%]"
+                  name="description"
+                  type="text"
+                  value={singleRoleData?.description}
+                  onChange={handleInputChange}
+                />
+                <label
+                  htmlFor="roleName"
+                  className="dark:text-white text-[24px] font-semibold ml-[10%] block"
+                >
+                  Permissions
+                </label>
+                <div className="modal-body ml-[10%]  w-[80%] flex flex-col bg-lime">
+                  {singleRoleData?.permissions?.map((permission, index) => {
+                    const isOpen = openEntities.includes(permission.entity);
+
+                    return (
+                      <div key={index}>
+                        <div className="p-2 flex justify-between items-center">
+                          <select
+                            value={permission.entity}
+                            onChange={(e) =>
+                              handleEntityChange(index, e.target.value)
+                            }
+                            className="bg-white text-lg font-semibold p-2 rounded-lg"
                           >
-                            <label
-                              htmlFor={field}
-                              className="text-gray-700 text-xs capitalize"  
-                            >
-                              {field}
-                            </label>
-                            <input
-                              type="checkbox"
-                              checked={
-                                updatePermissionData[permission.entity]?.[field] || false
-                              }
-                              onChange={(e) =>
-                                handlePermissionChange(
-                                  permission.entity,
-                                  field,
-                                  e.target.checked
-                                )
-                              }
-                              className="h-3 w-3 text-blue-600 border-gray-300 rounded focus:ring-blue-500"  // Reduced checkbox size
-                            />
+                            <option value="">Select Entity</option>
+                            {roleEntities.map((entity, idx) => (
+                              <option key={idx} value={entity}>
+                                {entity}
+                              </option>
+                            ))}
+                          </select>
+
+                          <BsIcons.BsChevronDown
+                            className={`cursor-pointer text-xl bg-white transition-transform ${
+                              isOpen ? "rotate-180" : ""
+                            }`}
+                            onClick={() =>
+                              toggleEntityPermissions(permission.entity)
+                            }
+                          />
+                        </div>
+
+                        {isOpen && (
+                          <div className="ml-[5%] grid grid-cols-3 gap-2 md:grid-cols-4">
+                            {[
+                              "create",
+                              "viewOwn",
+                              "viewMultiple",
+                              "viewOne",
+                              "updateOwn",
+                              "updateMultiple",
+                              "updateOne",
+                              "deleteOwn",
+                              "deleteMultiple",
+                              "deleteOne",
+                            ].map((field) => (
+                              <div
+                                key={field}
+                                className="flex items-center space-x-1 p-1 bg-gray-100 rounded-lg text-xs"
+                              >
+                                <label
+                                  htmlFor={field}
+                                  className="text-gray-700 text-xs capitalize"
+                                >
+                                  {field}
+                                </label>
+                                <input
+                                  type="checkbox"
+                                  checked={
+                                    updatePermissionData[permission.entity]?.[
+                                      field
+                                    ] || false
+                                  }
+                                  onChange={(e) =>
+                                    handlePermissionChange(
+                                      permission.entity,
+                                      field,
+                                      e.target.checked
+                                    )
+                                  }
+                                  className="h-3 w-3 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                                />
+                              </div>
+                            ))}
                           </div>
-                        ))}
+                        )}
                       </div>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
+                    );
+                  })}
+                </div>
 
-            <div className="modal-footer flex justify-center mt-6">
-              <button
-                className={`text-white h-[40px] w-[120px] rounded-lg bg-[#173b3f] 
-                  ${isLoading ? "bg-gray-400 cursor-not-allowed" : "hover:bg-[#145a58]"}
-                  transition-all duration-300 ease-in-out`}
-                type="submit"
-                onClick={handleUpdateRole}
-                disabled={isLoading}
-              >
-                {isLoading ? "Updating..." : "Update"}
-              </button>
-            </div>
-
-            </form>
+                <div className="modal-footer flex justify-center mt-6">
+                  <button
+                    className={`text-white h-[40px] w-[120px] rounded-lg bg-[#173b3f] ${
+                      isLoading
+                        ? "bg-gray-400 cursor-not-allowed"
+                        : "hover:bg-[#145a58]"
+                    } transition-all duration-300 ease-in-out`}
+                    type="submit"
+                    onClick={handleUpdateRole}
+                    disabled={isLoading}
+                  >
+                    {isLoading ? "Updating..." : "Update"}
+                  </button>
+                </div>
+              </form>
             </Box>
-            </div>
+          </div>
         </Modal>
       </div>
     </>
