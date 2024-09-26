@@ -32,7 +32,7 @@ const Sidebar = ({ expanded, setExpanded }) => {
     >
       <button
         onClick={() => setExpanded(!expanded)}
-        className="p-1.5 rounded-lg bg-gray-50 absolute top-2 right-2 z-20"
+        className="p-1.5 rounded-lg bg-gray-50 absolute top-2 right-2 z-20 fixed"
       >
         <Icon
           icon={expanded ? "material-symbols:menu-open" : "mdi:menu-close"}
