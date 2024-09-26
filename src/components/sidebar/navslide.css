@@ -27,3 +27,7 @@
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background-color: #555; /* Thumb color on hover */
 }
+.active-link {
+  font-weight: bold;
+  color: #56c770; /* Active color */
+}
