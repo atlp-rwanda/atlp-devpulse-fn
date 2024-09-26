@@ -51,23 +51,18 @@ const LoginForm = () => {
   });
 
   const redirectAfterLogin = async () => {
-    const lastAttemptedRoute = localStorage.getItem('lastAttemptedRoute');
-    if (lastAttemptedRoute) {
-      localStorage.removeItem('lastAttemptedRoute');
-      navigate(lastAttemptedRoute);
-    } else {
       await Token();
       const role = localStorage.getItem("roleName") as string;
+      
       if (role === "applicant") {
         navigate("/applicant");
-      } else if (role === "superAdmin" || role === "admin") {
+      } else if (role === "superAdmin" || "Admin") {
         navigate("/admin");
       } else {
         const searchParams = new URLSearchParams(location.search);
         const returnUrl = searchParams.get('returnUrl') || '/';
         navigate(returnUrl);
       }
-    }
   }
 
   const onSubmit = async (data: loginFormData) => {
@@ -188,7 +183,7 @@ const LoginForm = () => {
         </div>
         <p className="text-sm mt-3 mb-2 text-[#616161] dark:text-gray-300">
           Don't have an account?{" "}
-          <Link to="/register" className="text-[#56C870]">
+          <Link to={'/signup'} className="text-[#56C870]">
             Sign up
           </Link>
         </p>
