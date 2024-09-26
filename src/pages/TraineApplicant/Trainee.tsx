@@ -228,7 +228,7 @@ const AddTrainee = (props: any) => {
             <div className="w-full">
               <div>
                 <div className="bg-light-bg dark:bg-dark-frame-bg  min-h-screen overflow-y-hidden overflow-x-hidden">
-                  <div className="flex items-left px-8 gap-2">
+                  <div className="flex items-left px-8 py-8 gap-2">
                     <div className="flex py-2 pb-8 w-fit">
                       <button
                         onClick={Open}
@@ -346,7 +346,7 @@ const AddTrainee = (props: any) => {
                                                   >
                                                     <li>
                                                       <Link
-                                                        to={`/trainee-applicant/${item._id}/edit`}
+                                                        to={`/admin/trainee-applicant/${item._id}/edit`}
                                                         className="text-sm hover:bg-gray-100 text-gray-700 dark:hover:bg-gray-500 dark:text-white  block px-4 py-2"
                                                       >
                                                         Edit
@@ -354,7 +354,7 @@ const AddTrainee = (props: any) => {
                                                     </li>
                                                     <li>
                                                       <Link
-                                                        to={`/trainee-applicant-details/${item._id}`}
+                                                        to={`/admin/trainee-applicant-details/${item._id}`}
                                                         className="text-sm hover:bg-gray-100 text-gray-700  dark:text-white   dark:hover:bg-gray-500 block px-4 py-2"
                                                       >
                                                         View
