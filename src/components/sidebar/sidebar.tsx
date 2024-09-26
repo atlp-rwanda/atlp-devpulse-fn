@@ -28,7 +28,7 @@ const Sidebar = ({ expanded, setExpanded }) => {
     <div
       className={`${
         expanded ? "w-[16rem]" : "w-[4rem]"
-      } fixed dark:bg-dark-bg bg-white border-r transition-width duration-300 h-full`}
+      } fixed dark:bg-dark-bg bg-white border-r transition-width duration-300 h-full overflow-y-auto`}
     >
       <button
         onClick={() => setExpanded(!expanded)}
