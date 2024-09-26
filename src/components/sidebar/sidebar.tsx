@@ -36,7 +36,7 @@ const Sidebar = ({ expanded, setExpanded }) => {
       >
         <Icon
           icon={expanded ? "material-symbols:menu-open" : "mdi:menu-close"}
-          color={expanded ? "#000" : "#FFF"}
+          color={expanded ? "#000" : "#000"}
         />
       </button>
       <div className="pt-12 pb-12 mb-20">
