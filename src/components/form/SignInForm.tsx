@@ -57,7 +57,7 @@ const LoginForm = () => {
       navigate(lastAttemptedRoute);
     } else {
       await Token();
-      const role = localStorage.getItem("roleName") as string;
+      const role = localStorage.getItem("roleName");
       if (role === "applicant") {
         navigate("/applicant");
       } else if (role === "superAdmin") {

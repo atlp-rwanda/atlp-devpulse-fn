@@ -41,7 +41,7 @@ import ApplicationDetails from "../pages/Applications/ViewSingleApplication";
 import Dashboard from "../pages/Dashboard";
 import ApplicantLayout from "../pages/Applicant/ApplicantLayout";
 import AdminLayout from "../components/Layout/Admins/AdminLayout";
-
+import Profile from "../pages/Profile/ApplicantProfile"
 function Navigation() {
   const roleName = localStorage.getItem("roleName");
   return (
@@ -269,6 +269,7 @@ function Navigation() {
             </PrivateRoute>
           }
         />
+        <Route path="profile" element={<Profile />} />
         <Route
           path="available-jobs"
           element={
