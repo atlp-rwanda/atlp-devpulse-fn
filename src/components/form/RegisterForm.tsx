@@ -311,6 +311,7 @@ function SignupForm() {
                     {...register("gender")}
                     list="gender"
                     error={errors?.gender}
+                    className="w-full rounded-md px-2 py-3 border border-white placeholder:text-gray-400 text-white sm:text-[12px] outline-none autofill:bg-transparent autofill:text-white bg-[#1F2A37]"
                   />
                   <Datalist
                     id="gender"
