@@ -16,6 +16,7 @@ import { Toasty } from "../Toasty/Toasty";
 import axios from "axios";
 import Datalist from "../ReusableComponents/DataList";
 import { showErrorToast } from "utils/toast";
+import { useNavigate } from "react-router-dom";
 
 interface Country {
   name: string;
@@ -33,6 +34,7 @@ function SignupForm() {
   const [fetchedCountries, setFetchedCountries] = useState<Country[]>([]);
   const [filteredCountries, setFilteredCountries] = useState<Country[]>([]);
   const [selectedCountry, setSelectedCountry] = useState<string>("");
+  const [countdown, setCountdown] = useState(3);
 
   const handleCountrySearch = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const searchTerm = event.target.value.toLowerCase();
@@ -41,6 +43,25 @@ function SignupForm() {
     );
     setFilteredCountries(filtered);
   };
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isSuccess) {
+      const timer = setInterval(() => {
+        setCountdown((prevCount) => prevCount - 1);
+      }, 1000);
+
+      const redirectTimer = setTimeout(() => {
+        navigate('/login');
+      }, 5000);
+
+      return () => {
+        clearInterval(timer);
+        clearTimeout(redirectTimer);
+      };
+    }
+  }, [isSuccess, navigate]);
 
   useEffect(() => {
     async function fetchCountriesData() {
@@ -183,6 +204,7 @@ function SignupForm() {
             </div>
             <div className="text-[#afb1b4] text-lg mb-4 font-inter">
               <p>Your account has been succefully created !</p>
+              {/* <p>Redirecting to login page in {countdown} seconds...</p> */}
             </div>
             <Link to="/login" ><Button label="Continue" className="w-[80px]" /></Link>
           </div>

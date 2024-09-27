@@ -41,6 +41,7 @@ import ApplicationDetails from "../pages/Applications/ViewSingleApplication";
 import Dashboard from "../pages/Dashboard";
 import ApplicantLayout from "../pages/Applicant/ApplicantLayout";
 import AdminLayout from "../components/Layout/Admins/AdminLayout";
+import Notifications from "../pages/ApplicationCycle/Notifications";
 
 function Navigation() {
   const roleName = localStorage.getItem("roleName");
@@ -266,6 +267,14 @@ function Navigation() {
           element={
             <PrivateRoute>
               <Applications />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="notifications"
+          element={
+            <PrivateRoute>
+              <Notifications/>
             </PrivateRoute>
           }
         />
