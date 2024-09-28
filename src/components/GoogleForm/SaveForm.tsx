@@ -47,9 +47,9 @@ function SaveFormDetails() {
         if (response.data.data && response.data.data.getAllJobApplication) {
           setjobposts(response.data.data.getAllJobApplication);
         }
-      } catch (error: any) {
-        console.error('An error occurred:', error);
-        setError(`Error fetching job posts: ${error}`);
+      } catch (err: any) {
+        console.error('An error occurred:', err);
+        setError(`Error fetching job posts: ${err.message}`);
       }
     };
 
@@ -92,53 +92,36 @@ function SaveFormDetails() {
           variables,
         });
 
-        if (response.data.errors) {
-          throw new Error(response.data.errors[0].message);
-        }
-
-        if (response.data.data && response.data.data.createApplication) {
-          setSuccess(true);
-
-          console.log('Application created successfully');
-          formik.resetForm();
-          showSuccessToast('Application created successfully!');
-        } else {
-          setError(
-            `Error creating application: ${response.data.errors[0].message}`
-          );
-        }
-        window.location.href = '/#/view-forms';
-      } catch (error: any) {
-        console.error('An error occurred:', error);
-        if (error.response) {
-          if (error.response.status === 403) {
-            setError('You do not have permission to perform this action');
-          } else if (error.response.status === 400) {
-            setError('Invalid request');
-          } else if (error.response.status === 500) {
-            setError('Server error');
+        if (response.data.errors && response.data.errors.length > 0) {
+          const errorMessage = response.data.errors[0].error;
+          if (errorMessage.toLowerCase().includes("a record with link")) {
+            showErrorToast('The link is already in use');
           } else {
-            setError('An error occurred while submitting the form.');
+            console.log(errorMessage);
           }
+        } else if (response.data.data && response.data.data.createApplication) {
+          setSuccess(true);
+          showSuccessToast('Application created successfully!');
+          formik.resetForm();
+          window.location.href = '/#/admin/view-forms';
         } else {
-          setError(`Error creating application: ${error}`);
+          setError('An error occurred while submitting the form.');
         }
+      } catch (err: any) {
+        console.error('An error occurred:', err);
+        setError('An error occurred while submitting the form.');
+        showErrorToast(err.message || 'An error occurred');
       } finally {
         setLoading(false);
-        if (success) {
-          showSuccessToast('Application created successfully!');
-        } else if (error) {
-          showErrorToast(error);
-        }
       }
     },
   });
 
   return (
-    <div className='overflow-hidden'>
-      <div className='relative mx-auto max-w-xl'>
+    <div className='overflow-auto'>
+      <div className='relative max-w-xl mx-auto'>
         <div className='text-center'>
-          <h2 className='text-3xl font-bold tracking-tight text-primary dark:text-secondary sm:text-4xl'>
+          <h2 className='text-2xl font-bold tracking-tight text-primary dark:text-secondary sm:text-4xl'>
             Save Application Form
           </h2>
 
@@ -147,11 +130,12 @@ function SaveFormDetails() {
           </p>
         </div>
 
-        <div className='mt-12'>
+        <div className='mt-10'>
           <form
-            className='grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-8'
+            className='grid grid-cols-1 gap-y-3 sm:grid-cols-2 sm:gap-x-8'
             onSubmit={formik.handleSubmit}>
-            <div className='sm:col-span-2'>
+
+            <div className='sm:col-span-1'>
               <label
                 className='block text-sm font-medium text-primary dark:text-secondary'
                 htmlFor='title'>
@@ -161,7 +145,7 @@ function SaveFormDetails() {
               <div className='mt-1'>
                 <input
                   autoComplete='title'
-                  className={`block w-full text-primary rounded-md border-gray-300 py-3 px-4 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 ${formik.touched.title && formik.errors.title
+                  className={`block w-full dark:text-white dark:bg-dark-tertiary rounded-md border-gray-300 py-2 px-4 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 ${formik.touched.title && formik.errors.title
                     ? 'border-red-500'
                     : ''
                     }`}
@@ -178,44 +162,36 @@ function SaveFormDetails() {
               </div>
             </div>
 
-            <div className='sm:col-span-2'>
+            <div className='sm:col-span-1'>
               <label
-                className='block pb-8 font-medium text-primary dark:text-secondary'
+                className='block pb-1 text-sm font-medium text-primary dark:text-secondary'
                 htmlFor='jobpost'>
                 Select Job Post
               </label>
 
-              <div className='relative pb-4 rounded-md shadow-sm'>
-                <div className='absolute inset-y-0 left-0 flex items-center'>
-                  <label className='sr-only' htmlFor='jobpost'>
-                    Job Post
-                  </label>
-                  <SelectField
-                    className={`block w-full text-primary rounded-md border-gray-300 py-3 px-4 pl-20 focus:border-indigo-500 focus:ring-indigo-500 ${formik.touched.jobpost && formik.errors.jobpost
-                      ? 'border-red-500'
-                      : ''
-                      }`}
-                    id='jobpost'
-                    name='jobpost'
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    value={formik.values.jobpost}
-                    options={
-                      jobposts.map((jobpost) => (
-                        <option key={jobpost.id} value={jobpost.id}>
-                          {jobpost.title}
-                        </option>
-                      ))
-                    }
-                  />
-                </div>
+              <div className='relative rounded-md shadow-sm'>
+                <SelectField
+                  className={`${formik.touched.jobpost && formik.errors.jobpost ? 'border-red-500' : ''}`}
+                  id='jobpost'
+                  name='jobpost'
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.jobpost}
+                  options={[
+                    { value: '', label: 'Select job title' },
+                    ...jobposts.map((jobpost: any) => ({
+                      value: jobpost.id,
+                      label: jobpost.title,
+                    })),
+                  ]}
+                />
                 {formik.touched.jobpost && formik.errors.jobpost && (
-                  <div className='text-red-500'>{formik.errors.jobpost}</div>
+                  <div className='relative text-red-500'>{formik.errors.jobpost}</div>
                 )}
               </div>
             </div>
 
-            <div className='sm:col-span-2 pt-4'>
+            <div className='pt-2 sm:col-span-2'>
               <label
                 className='block text-sm font-medium text-primary dark:text-secondary'
                 htmlFor='link'>
@@ -225,7 +201,7 @@ function SaveFormDetails() {
               <div className='mt-1'>
                 <input
                   autoComplete='link'
-                  className={`block w-full text-primary rounded-md border-gray-300 py-3 px-4 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 ${formik.touched.link && formik.errors.link
+                  className={`block w-full dark:bg-dark-tertiary dark:text-white da rounded-md border-gray-300 py-2 px-4 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 ${formik.touched.link && formik.errors.link
                     ? 'border-red-500'
                     : ''
                     }`}
@@ -251,16 +227,15 @@ function SaveFormDetails() {
 
               <div className='mt-1'>
                 <textarea
-                  className={`block w-full text-primary rounded-md border-gray-300 py-3 px-4 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 ${formik.touched.description && formik.errors.description
+                  className={`block w-full text-primary dark:bg-dark-tertiary rounded-md border-gray-300 py-3 px-4 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 ${formik.touched.description && formik.errors.description
                     ? 'border-red-500'
                     : ''
                     }`}
-                  defaultValue=''
                   id='description'
                   name='description'
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  rows={4}
+                  rows={2}
                   value={formik.values.description}
                 />
                 {formik.touched.description && formik.errors.description && (
@@ -273,7 +248,7 @@ function SaveFormDetails() {
 
             <div className='sm:col-span-2'>
               <button
-                className='inline-flex w-full items-center justify-center rounded-md border border-transparent bg-primary dark:bg-[#56C870] px-6 py-3 text-base font-medium text-secondary dark:text-primary shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2'
+                className='inline-flex dark:text-white w-full items-center justify-center rounded-md border border-transparent bg-primary dark:bg-[#56C870] px-6 py-3 text-base font-medium text-secondary shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2'
                 disabled={loading}
                 type='submit'>
                 {loading ? 'Submitting...' : 'Save the Form'}
