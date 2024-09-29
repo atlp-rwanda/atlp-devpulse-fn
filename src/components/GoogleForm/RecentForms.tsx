@@ -5,8 +5,11 @@ import { Link } from 'react-router-dom';
 import CustomModal from './customModal';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { toast } from 'react-toastify';
+import ViewApplicationModal from './ViewApplicationModal';
+import DeleteConfirmationModal from './DeleteConfirmationModal';
 
-interface Application {
+export interface Application {
   id: string;
   link: string;
   title: string;
@@ -20,11 +23,13 @@ const RecentForms = () => {
   const [updateLoading, setUpdateLoading] = useState(false)
   const [jobposts, setJobPosts] = useState<any>([]);
   const [error, setError] = useState('');
+  const [viewApplicationModalIsOpen, setViewApplicationModalIsOpen] = useState(false);
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [applicationToDelete, setApplicationToDelete] = useState<string | null>(null);
   const [modalIsOpen, setIsOpen] = useState(false);
   const [selectedApplication, setSelectedApplication] = useState<Application | null>(null);
+  const [viewedApplication, setViewedApplication] = useState<Application | null>(null);
 
   useEffect(() => {
     const fetchJobPosts = async () => {
@@ -93,7 +98,8 @@ const RecentForms = () => {
     fetchApplications();
   }, []);
 
-  const handleDelete = async (id: string) => {
+
+  const handleDelete= async (id: string) : Promise<void> => {
     try {
       await axios.post(`${process.env.BACKEND_URL}`, {
         query: `
@@ -115,6 +121,36 @@ const RecentForms = () => {
     }
   };
 
+  const openViewApplicationModal = async (id: string) => {
+    try {
+      const response = await axios.post(`${process.env.BACKEND_URL}`, {
+        query: `
+          query GetApplication($id: ID!) {
+            getApplication(id: $id) {
+              id
+              link
+              title
+              jobpost
+              description
+            }
+          }
+        `,
+        variables: { id },
+      });
+
+      const applicationData = response.data?.data?.getApplication;
+      setViewedApplication(applicationData);
+      setViewApplicationModalIsOpen(true);
+    } catch (error) {
+      console.error('Error fetching application:', error);
+    }
+  };
+
+  const closeViewApplicationModal = () => {
+    setViewedApplication(null);
+    setViewApplicationModalIsOpen(false);
+  };
+
   const showDeleteConfirmation = (id: string) => {
     setApplicationToDelete(id);
     setShowDeleteModal(true);
@@ -131,60 +167,6 @@ const RecentForms = () => {
   }
 
   const reversedApplications = [...applications].reverse();
-
-  const openModal = (application: Application) => {
-    setSelectedApplication(application);
-    setIsOpen(true);
-  };
-
-  const closeModal = () => {
-    setSelectedApplication(null);
-    setIsOpen(false);
-  };
-
-  const handleUpdate = async (values: Application) => {
-    try {
-      setUpdateLoading(true);
-      await axios.post(`${process.env.BACKEND_URL}`, {
-        query: `
-          mutation {
-            updateApplication(id: "${selectedApplication?.id}", link: "${values.link}", title: "${values.title}", jobpost: "${values.jobpost}", description: "${values.description}") {
-              _id
-            }
-          }
-        `,
-      });
-
-      setApplications((prevApplications) =>
-        prevApplications.map((app) =>
-          app.id === selectedApplication?.id ? { ...app, ...values } : app
-        )
-      );
-
-      closeModal();
-      setUpdateLoading(false);
-    } catch (error) {
-      console.error('Error updating application:', error);
-    }
-  };
-
-  const formik = useFormik({
-    initialValues: {
-      id: selectedApplication ? selectedApplication.id : '',
-      title: selectedApplication ? selectedApplication.title : '',
-      jobpost: selectedApplication ? selectedApplication.jobpost : '',
-      link: selectedApplication ? selectedApplication.link : '',
-      description: selectedApplication ? selectedApplication.description : '',
-    },
-    enableReinitialize: true,
-    validationSchema: Yup.object({
-      title: Yup.string().required('Title is required'),
-      description: Yup.string().required('Description is required'),
-      link: Yup.string().url('Must be a valid URL').required('Link is required'),
-      jobpost: Yup.string().required('Job post is required'),
-    }),
-    onSubmit: handleUpdate,
-  });
 
   return (
     <div>
@@ -214,7 +196,9 @@ const RecentForms = () => {
                       </h3>
                       <dl className='flex flex-col justify-between flex-grow mt-1'>
                         <dd className='text-sm text-gray-500'>
-                          {application.description}
+                          {application.description.length > 155
+                            ? `${application.description.substring(0, 155)}...`
+                            : application.description}
                         </dd>
                         <dd className='mt-3'>
                           <span className='px-2 py-1 text-sm font-medium text-green-800 rounded-full bg-green'>
@@ -227,18 +211,18 @@ const RecentForms = () => {
                       <div className='flex -mt-px divide-x divide-gray-200'>
                         <div className='flex flex-1 w-0 -ml-px'>
                           <button
-                            onClick={() => openModal(application)}
+                            onClick={() => openViewApplicationModal(application.id)}
                             rel='noopener noreferrer'
                             className='relative inline-flex items-center justify-center flex-1 w-0 py-4 text-sm font-bold border border-transparent rounded-br-lg text-green hover:text-blue-800'>
-                            <p className='ml-3'>View Form</p>
+                            <p className='ml-3'>View</p>
                           </button>
                         </div>
                         <div className='flex flex-1 w-0'>
-                          <button
-                            onClick={() => openModal(application)}
+                          <a
+                            href={`/#/admin/update-saved-form/${application.id}`}
                             className='relative inline-flex items-center justify-center flex-1 w-0 py-4 -mr-px text-sm font-medium text-gray-700 border border-transparent rounded-bl-lg hover:text-gray-500'>
                             <span className='ml-3'>Update</span>
-                          </button>
+                          </a>
                         </div>
                         <div className='flex flex-1 w-0'>
                           <button
@@ -257,132 +241,20 @@ const RecentForms = () => {
             )}
           </div>
           {showDeleteModal && (
-            <div>
-              <div>
-                <div className='fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75' />
-              </div>
-              <div className='fixed inset-0 z-10 overflow-y-auto'>
-                <div className='flex items-end justify-center min-h-full p-4 text-center sm:items-center sm:p-0'>
-                  <div className='relative overflow-hidden text-left transition-all transform bg-white rounded-lg shadow-xl sm:my-8 sm:w-full sm:max-w-lg'>
-                    <div className='px-4 pt-5 pb-4 bg-white sm:p-6 sm:pb-4'>
-                      <div className='sm:flex sm:items-start'>
-                        <div className='flex items-center justify-center flex-shrink-0 w-12 h-12 mx-auto bg-red-100 rounded-full sm:mx-0 sm:h-10 sm:w-10'>
-                          <icons.AiOutlineExclamation className='w-6 h-6 text-red-600' />
-                        </div>
-                        <div className='mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left'>
-                          <div className='text-lg font-medium leading-6 text-gray-900'>
-                            Delete the Form
-                          </div>
-                      <div className='mt-2'>
-                        <p className='text-sm text-gray-500'>
-                              Are you sure you want to delete this item? All of
-                              the form data will be permanently removed. This
-                              action cannot be undone.
-                        </p>
-                      </div>
-                    </div>
-                      </div>
-                    </div>
-                    <div className='px-4 py-3 bg-gray-50 sm:flex sm:flex-row-reverse sm:px-6'>
-                      <button
-                        type='button'
-                        className='inline-flex justify-center w-full px-4 py-2 text-base font-medium text-white bg-red-600 border border-transparent rounded-md shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm'
-                        onClick={() => handleDelete(applicationToDelete!)}>
-                        Delete
-                      </button>
-                      <button
-                        type='button'
-                        className='inline-flex justify-center w-full px-4 py-2 mt-3 text-base font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm'
-                        onClick={closeDeleteConfirmation}>
-                        Cancel
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <DeleteConfirmationModal
+              isOpen={showDeleteModal}
+              onClose={closeDeleteConfirmation}
+              onDelete={() => handleDelete(applicationToDelete!)}
+            />
           )}
         </div>
       </div>
-      <CustomModal
-        isOpen={modalIsOpen}
-        onRequestClose={closeModal}
-        contentLabel="Update Application Modal"
-        className="fixed inset-0 z-50 flex items-center justify-center "
-      >
-        <div className="p-6 rounded-lg dark:bg-dark-tertiary w-[500px]">
-          <h2 className="mb-4 text-2xl font-semibold text-white">Update Application Form</h2>
-          <form onSubmit={formik.handleSubmit}>
-            <div className="mb-4">
-              <label htmlFor='title' className="block text-sm font-medium text-gray-700">Title</label>
-              <input
-                id='title'
-                name='title'
-                type='text'
-                value={formik.values.title}
-                onChange={formik.handleChange}
-                className={`block w-full p-2 mt-1 border dark:text-white dark:bg-dark-tertiary ${formik.errors.title ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm`}
-              />
-              {formik.errors.title && <div className="text-sm text-red-500">{formik.errors.title}</div>}
-            </div>
-            <div className="mb-4">
-              <label htmlFor='description' className="block text-sm font-medium text-gray-700">Description</label>
-              <textarea
-                id='description'
-                name='description'
-                value={formik.values.description}
-                onChange={formik.handleChange}
-                className={`block w-full p-2 dark:text-white dark:bg-dark-tertiary mt-1 border ${formik.errors.description ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm`}
-              />
-              {formik.errors.description && <div className="text-sm text-red-500">{formik.errors.description}</div>}
-            </div>
-            <div className="mb-4">
-              <label htmlFor='link' className="block text-sm font-medium text-gray-700">Link</label>
-              <input
-                id='link'
-                name='link'
-                type='text'
-                value={formik.values.link}
-                onChange={formik.handleChange}
-                className={`block w-full dark:text-white dark:bg-dark-tertiary p-2 mt-1 border ${formik.errors.link ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm`}
-              />
-              {formik.errors.link && <div className="text-sm text-red-500">{formik.errors.link}</div>}
-            </div>
-            <div className="mb-4">
-              <label htmlFor='jobpost' className="block text-sm font-medium text-gray-700">Job Post</label>
-              <select
-                id='jobpost'
-                name='jobpost'
-                value={formik.values.jobpost}
-                onChange={formik.handleChange}
-                className={`block w-full dark:text-white dark:bg-dark-tertiary p-2 mt-1 border ${formik.errors.jobpost ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm`}
-              >
-                {jobposts.map((jobpost: any) => (
-                  <option key={jobpost.id} value={jobpost.id}>
-                    {jobpost.title}
-                  </option>
-                ))}
-              </select>
-              {formik.errors.jobpost && <div className="text-sm text-red-500">{formik.errors.jobpost}</div>}
-            </div>
-            <div className="flex justify-end">
-              <button
-                type='button'
-                onClick={closeModal}
-                className='px-4 py-2 mr-2 text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300'
-              >
-                Cancel
-              </button>
-              <button
-                type='submit'
-                className='px-4 py-2 text-white bg-[#56C870] rounded-md hover:bg-[#358247]'
-              >
-                {updateLoading ? "Submitting..." :"Save Changes"}
-              </button>
-            </div>
-          </form>
-        </div>
-      </CustomModal>
+      <ViewApplicationModal
+        isOpen={viewApplicationModalIsOpen}
+        onClose={closeViewApplicationModal}
+        application={viewedApplication}
+        jobPostTitle={viewedApplication ? findJobPostTitle(viewedApplication) : ''}
+      />
     </div>
   );
 };
