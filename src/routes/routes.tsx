@@ -6,6 +6,7 @@ import TrainneeDetailsB from "./../pages/TrainneDetailsB";
 import "./../index.css";
 import Sidebar from "./../components/sidebar/sidebar";
 import NavBar from "./../components/sidebar/navHeader";
+import ForgotPasswordPage from "./../pages/forgetpassword";
 import Trainee from "./../pages/TraineApplicant/Trainee";
 import FilterTrainee from "./../pages/FilterTeainee/FilterTrainee";
 import Table from "./../pages/Table";
@@ -48,8 +49,12 @@ function Navigation() {
     <Routes>
       <Route path="/test_tailwind" element={<TestTailwind />} />
       <Route path="/login" element={<LoginPage />} />
+
       <Route path="/signup" element={<SignupForm />} />
+      <Route path="/forget" element={<ForgotPasswordPage />} />
       <Route path="/admin" element={<AdminLayout />}>
+      
+      
       <Route index element={<PrivateRoute><Dashboard /></PrivateRoute>} />
         <Route
           path="trainee-applicant-details/:traineeId"
