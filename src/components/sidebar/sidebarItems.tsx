@@ -69,6 +69,11 @@ export const sidebarItems1 = [
 
 export const applicantSidebarItems = [
   {
+    path: "/applicant",
+    icon: <Icon icon="fontisto:pie-chart-1"></Icon>,
+    title: "Dashboard",
+  },
+  {
     path: "myApplications",
     icon: <Icon icon="material-symbols:wysiwyg-rounded"></Icon>,
     title: "My Applications",
