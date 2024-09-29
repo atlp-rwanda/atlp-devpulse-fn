@@ -16,6 +16,7 @@ import { Toasty } from "../Toasty/Toasty";
 import axios from "axios";
 import Datalist from "../ReusableComponents/DataList";
 import { showErrorToast } from "utils/toast";
+import { toast } from "react-toastify";
 
 interface Country {
   name: string;
@@ -33,6 +34,8 @@ function SignupForm() {
   const [fetchedCountries, setFetchedCountries] = useState<Country[]>([]);
   const [filteredCountries, setFilteredCountries] = useState<Country[]>([]);
   const [selectedCountry, setSelectedCountry] = useState<string>("");
+
+  const [emailToVerify, setEmailToVerify] = useState<string>("");
 
   const handleCountrySearch = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const searchTerm = event.target.value.toLowerCase();
@@ -58,14 +61,12 @@ function SignupForm() {
   const handleCountryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
     setSelectedCountry(value);
-  
-    // Filter countries based on the input
+
     const filtered = fetchedCountries.filter((country) =>
       country.name.toLowerCase().startsWith(value.toLowerCase())
     );
     setFilteredCountries(filtered);
-  
-    // If a valid country is selected, update the country code
+
     const selectedCountryObj = fetchedCountries.find(
       (country) => country.name.toLowerCase() === value.toLowerCase()
     );
@@ -73,13 +74,13 @@ function SignupForm() {
       setValue("countryCode", `${selectedCountryObj.phone}${selectedCountryObj.suffix}`);
     }
   };
-  
+
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-    setValue, 
+    setValue,
   } = useForm<formData>({
     resolver: zodResolver(registerSchema),
   });
@@ -99,6 +100,8 @@ function SignupForm() {
       setIsLoading(false);
       return;
     }
+    localStorage.setItem("emailToVerify", data.email);
+    setEmailToVerify(data.email)
     try {
       const parsedData = registerSchema.parse(data);
       const response = await axios.post(`${process.env.BACKEND_URL}`, {
@@ -167,6 +170,36 @@ function SignupForm() {
       return updatedShowPassword;
     });
   };
+  const [isVerifyLoading, setIsVerifyLoading] = useState(false)
+  const handleResendVerificationEmail = async (email) => {
+    try {
+      setIsVerifyLoading(true);
+      const response = await axios.post(`${process.env.BACKEND_URL}`, {
+        query: `
+        mutation ResendVerificationEmail($userInput: EmailInput!) {
+          resendVerifcationEmail(userInput: $userInput)
+        }
+        `,
+        variables: {
+          userInput: {
+            email: email
+          }
+        }
+      });
+      console.log("RRR", response)
+      if (response.data.data.resendVerifcationEmail) {
+        toast.success("Verification email has been sent again.");
+      }
+      else {
+        toast.error("User not found!");
+      }
+    } catch (error) {
+      console.error('Error sending verification email:', error);
+    }
+    finally {
+      setIsVerifyLoading(false);
+    }
+  };
   return (
     <>
       <div className="flex items-center  justify-center mx-auto bg-[#374151] h-screen">
@@ -181,10 +214,22 @@ function SignupForm() {
             >
               <AiOutlineCheck className="text-white text-4xl" />
             </div>
-            <div className="text-[#afb1b4] text-lg mb-4 font-inter">
-              <p>Your account has been succefully created !</p>
+            <div className="text-[#afb1b4] text-lg mb-4 font-inter w-[70%] mx-auto text-center">
+              <p>
+                Your account has been successfully created. Check your email ({emailToVerify}) for verification.
+                <br />
+                If you didn't receive the email, you can resend it.
+              </p>
             </div>
-            <Link to="/login" ><Button label="Continue" className="w-[80px]" /></Link>
+            {isVerifyLoading ? (
+              <Button className="spinner mt-4 w-[80px] h-[40px] flex items-center justify-center" disabled={true}>
+                <svg className="animate-spin h-5 w-5 text-gray-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                </svg>
+              </Button>
+            ) : (
+              <Button label="Resend Link" className="w-[80px]" onClick={() => handleResendVerificationEmail(emailToVerify)} />)}
           </div>
         ) : (
           <form
@@ -266,19 +311,19 @@ function SignupForm() {
               </div>
               <div className="flex items-center w-[25vw] gap-10   sm:w-5/6 lg:w-[25vw] justify-between">
                 <div className="w-[50%]">
-                <InputField
-                  placeholder="Country"
-                  list="countries"
-                  className="w-full rounded-md px-2 py-3 border border-white placeholder:text-gray-400 text-white sm:text-[12px] outline-none autofill:bg-transparent autofill:text-white bg-[#1F2A37]"
-                  {...register("country", {
-                  onChange: (e) => handleCountryChange(e),
-                   })} 
-                  error={errors?.country}
+                  <InputField
+                    placeholder="Country"
+                    list="countries"
+                    className="w-full rounded-md px-2 py-3 border border-white placeholder:text-gray-400 text-white sm:text-[12px] outline-none autofill:bg-transparent autofill:text-white bg-[#1F2A37]"
+                    {...register("country", {
+                      onChange: (e) => handleCountryChange(e),
+                    })}
+                    error={errors?.country}
                   />
                   <datalist id="countries">
-                  {filteredCountries.map((country) => (
-                   <option key={country.code} value={country.name} />
-                  ))}
+                    {filteredCountries.map((country) => (
+                      <option key={country.code} value={country.name} />
+                    ))}
                   </datalist>
 
                 </div>
@@ -303,13 +348,13 @@ function SignupForm() {
 
               <div className="flex items-center w-[25vw] sm:w-5/6 lg:w-[25vw]  justify-between">
                 <div className="w-[20%] ">
-                <InputField
-                  placeholder="Country Code"
-                  type="text"
-                  className="w-full rounded-md px-2 py-3 border border-white placeholder:text-gray-400 text-white sm:text-[12px] outline-none autofill:bg-transparent autofill:text-white bg-[#1F2A37]"
-                  {...register("countryCode")}
-                  error={errors?.countryCode}
-                />
+                  <InputField
+                    placeholder="Country Code"
+                    type="text"
+                    className="w-full rounded-md px-2 py-3 border border-white placeholder:text-gray-400 text-white sm:text-[12px] outline-none autofill:bg-transparent autofill:text-white bg-[#1F2A37]"
+                    {...register("countryCode")}
+                    error={errors?.countryCode}
+                  />
                 </div>
                 <div className=" w-[65%]">
                   <InputField
