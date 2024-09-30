@@ -86,7 +86,8 @@ const ForgotPasswordPage = () => {
       </div>
 
       <div className="flex flex-col justify-center items-center h-screen dark:bg-zinc-800">
-        <h1 className="text-3xl font-bold mb-4 dark:text-white">Forgot Password</h1>
+      <div className="border border-gray-400 py-3 bg-gray-300 dark:bg-[#1F2A37] shadow-lg sm:fixed w-[45vw] flex max-h-[90%] sm:mt-[70px] sm:max-h-[100%] flex-col items-center justify-center rounded-sm sm:w-[90%] lg:w-[45vw]">
+        <h1 className=" text-3xl text-[#1F2A37] dark:text-white font-bold py-4" >Forgot Password</h1>
 
         {emailSent ? (
           <p className="text-green-500 dark:text-green-400">
@@ -103,18 +104,13 @@ const ForgotPasswordPage = () => {
             onSubmit={handleSubmit}
           >
             {({ isSubmitting }) => (
-              <Form className="bg-gray-300 dark:bg-dark-bg p-6 rounded-lg shadow-md w-80">
+              <Form className=" w-1/2">
                 <div className="mb-4">
-                  <label
-                    htmlFor="email"
-                    className="block text-sm font-bold mb-2 dark:text-white"
-                  >
-                    Email
-                  </label>
+                 
                   <Field
                     name="email"
                     type="email"
-                    className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
+                    className="w-full rounded-md px-2 py-3 border border-white placeholder:text-gray-400 text-black dark:text-white sm:text-[12px] outline-none autofill:bg-transparent autofill:text-black dark:autofill:text-white bg-gray-100 dark:bg-[#1F2A37]"
                     placeholder="Enter your email"
                   />
                   <ErrorMessage
@@ -135,13 +131,14 @@ const ForgotPasswordPage = () => {
             )}
           </Formik>
         )}
-
         <p className="mt-4 text-sm dark:text-white">
           Remembered your password?{" "}
           <Link to="/login" className="text-blue-600 dark:text-blue-400">
             Login here
           </Link>
         </p>
+</div>
+        
       </div>
     </>
   );
