@@ -1,49 +1,44 @@
-import axios from "./axiosconfig";
-import {
-  SINGLE_USER,
-  SINGLE_USER_FAIL,
-  USER_TO_UPDATE,
-  USER_TO_UPDATE_FAIL,
-} from "..";
+import {SINGLE_USER,SINGLE_USER_FAIL, USER_TO_UPDATE, USER_TO_UPDATE_FAIL } from "..";
 import { fetchUser } from "../actiontypes/deleteactiontype";
+import axios from "./axiosconfig";
 import creator from "./creator";
-
 
 export const getAllMembers = () => async (dispatch: any) => {
   try {
-    const { data } = await axios.post("/", {
+    const data = await axios.post("/", {
       query: `
-        query getMembers {
-          getUsers_Logged {
-            firstname
-            lastname
-            gender
-            country
-            code
-            email
-            id
-            createdAt
-            isActive
-            picture
-            role {
-              _id
-              description
-              permissions {
-                _id
+             query getMembers {
+                getUsers_Logged {
+                  firstname
+                  lastname
+                  gender
+                  country
+                  code
+                  email
+                  id
+                  createdAt
+                  isActive
+                  picture
+                  role {
+                    _id
+                    description
+                    permissions {
+                      _id
+                    }
+                    roleName
+                  }
+                  
+                  telephone
+                }
               }
-              roleName
-            }
-            telephone
-          }
-        }
-      `,
+            `,
     });
     dispatch({
       type: fetchUser.fetchMembers,
-      data: data,
+      data: data.data,
     });
 
-    return data;
+    return data.data;
   } catch (err) {
     console.log(err);
     return err;
@@ -156,39 +151,5 @@ export const assignMemberRoles = async (userId, roleId) => {
   } catch (err) {
     console.log(err);
     return err;
-  }
-};
-export const getAllCoordinators = () => async (dispatch: any) => {
-  try {
-    const data = await axios.post("/", {
-      query: `
-        query getMembers {
-          getUsers_Logged {
-            firstname
-            lastname
-            email
-            role {
-              roleName
-            }
-          }
-        }
-      `,
-    });
-
-    const members = data.data.data.getUsers_Logged;
-    const coordinators = members.filter(
-      (member: any) =>
-        member.role.roleName === "superAdmin" ||
-        member.role.roleName === "admin"
-    );
-
-    dispatch({
-      type: "FETCH_COORDINATORS",
-      data: coordinators,
-    });
-
-    return coordinators.length;
-  } catch (err) {
-    return 0;
   }
 };
