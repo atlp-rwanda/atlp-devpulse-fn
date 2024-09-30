@@ -1,13 +1,12 @@
-import { query } from "express";
+import {SINGLE_USER,SINGLE_USER_FAIL, USER_TO_UPDATE, USER_TO_UPDATE_FAIL } from "..";
 import { fetchUser } from "../actiontypes/deleteactiontype";
 import axios from "./axiosconfig";
+import creator from "./creator";
 
-
-export const getAllMembers=() => async (dispatch: any) => {
-
-   try {
-     const data = await axios.post("/",
-           { query: `
+export const getAllMembers = () => async (dispatch: any) => {
+  try {
+    const data = await axios.post("/", {
+      query: `
              query getMembers {
                 getUsers_Logged {
                   firstname
@@ -32,28 +31,76 @@ export const getAllMembers=() => async (dispatch: any) => {
                   telephone
                 }
               }
-            `
-        }
-    );
+            `,
+    });
     dispatch({
       type: fetchUser.fetchMembers,
-      data: data.data
-      ,
+      data: data.data,
     });
-    
+
     return data.data;
-} catch (err){
+  } catch (err) {
     console.log(err);
     return err;
-    
-}
-}
+  }
+};
 
-export const assignMemberRoles= async (userId, roleId)  => {
-
+export const getSingleUser = (userId: any) => async (dispatch: any) => {
   try {
-    const data = await axios.post("/",
-          { query: `
+    const data = await axios.post("/", {
+      query: `
+          query getuser($id: ID!){
+          user_Logged(ID: $id) {
+          firstname
+          lastname
+          }
+      }
+      `,
+      variables: {
+          id: userId,
+      },
+    });
+
+    const response = await data.data.data.user_Logged;
+    return dispatch(creator(SINGLE_USER, response));
+  } catch (error) {
+    console.log(error);
+    return dispatch(creator(SINGLE_USER_FAIL, error));
+  }
+};
+
+
+export const update_User =
+  ({ id, editUserInput: { lastname, firstname } }: any) =>
+  async (dispatch: any) => {
+    try {
+      const datas = await axios.post("/", {
+        query: `
+           mutation update_User($id: ID!, $editUserInput: EditUserInput_Logged) {
+           updateUser_Logged(ID: $id,editUserInput: $editUserInput)
+           }
+        `,
+        variables: {
+          id,
+          editUserInput: {
+            lastname,
+            firstname,
+          },
+        },
+      });
+
+      const response = await datas.data.data.updateUser_Logged;
+      dispatch(creator(USER_TO_UPDATE, response));
+    } catch (error) {
+      console.log(error);
+      return dispatch(creator(USER_TO_UPDATE_FAIL, error));
+    }
+  };
+
+export const assignMemberRoles = async (userId, roleId) => {
+  try {
+    const data = await axios.post("/", {
+      query: `
           mutation Mutation( $assignRoleToUserId2: ID!, $roleId: ID!) {
             assignRoleToUser(ID: $assignRoleToUserId2, roleID: $roleId) {
               role {
@@ -173,20 +220,9 @@ export const getAllCoordinators = () => async (dispatch: any) => {
       `,
     });
 
-    const members = data.data.data.getUsers_Logged;
-    const coordinators = members.filter(
-      (member: any) =>
-        member.role.roleName === "superAdmin" ||
-        member.role.roleName === "admin"
-    );
-
-    dispatch({
-      type: "FETCH_COORDINATORS",
-      data: coordinators,
-    });
-
-    return coordinators.length;
+    return data.data;
   } catch (err) {
-    return 0; 
+    console.log(err);
+    return err;
   }
 };
