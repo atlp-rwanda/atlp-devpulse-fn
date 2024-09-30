@@ -1,10 +1,12 @@
 import React from "react";
+import { useState } from "react";
 import NavBar from "components/sidebar/navHeader";
 const calendar: string = require("../../assets/assets/calendar.svg").default;
 const collaboration: string =
   require("../../assets/assets/collaborative-learning.svg").default;
 const performance: string = require("../../assets/assets/performance.svg").default;
 const strategy: string = require("../../assets/assets/strategy.svg").default;
+import { getAllCohorts } from "../../redux/actions/cohortActions";
 
 const DashboardCard = ({ title, value, change, img }) => {
   return (
@@ -19,20 +21,28 @@ const DashboardCard = ({ title, value, change, img }) => {
             <p className="text-white text-2xl font-bold">{value}</p>
           </div>
         </div>
-        <div
+        {/* <div
           className={`text-sm font-medium ${
             change >= 0 ? "text-green-500" : "text-red-500"
           }`}
         >
           {change >= 0 ? "↑" : "↓"} {Math.abs(change)}%
-          {/* <p className="text-gray-400 text-xs">For this year</p> */}
-        </div>
+          <p className="text-gray-400 text-xs">For this year</p>
+        </div> */}
       </div>
     </>
   );
 };
 
-const ApplicantDashboard = () => {
+const ApplicantDashboard = (props: any) => {
+  const [cohort, setCohort] = useState('');
+  const [currentPhase, setCurrentPhase] = useState('');
+//   const [performance, setPerformance] = useState('');
+  const [attendance, setAttendance] = useState('');
+
+
+  
+
   return (
     <>
       <div className="bg-[#374151] w-full h-screen p-8">
