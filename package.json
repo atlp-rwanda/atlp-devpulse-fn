@@ -87,6 +87,7 @@
     "@types/react-i18next": "^8.1.0",
     "@types/react-router": "^5.1.19",
     "@types/react-router-dom": "^5.3.3",
+    "antd": "^5.21.2",
     "axios": "^1.1.2",
     "bootstrap": "^5.2.2",
     "browser": "^0.2.6",
