@@ -19,15 +19,14 @@ const ForgotPasswordPage = () => {
 
   const handleSubmit = async (values: { email: string }) => {
     const RESET_PASSWORD_MUTATION = `
-      mutation SendPasswordResetEmail($email: String!) {
-        sendPasswordResetEmail(email: $email) {
-          message
-        }
-      }
+     mutation ForgetPassword($email: String!) {
+  forgetPassword(email: $email)
+}
     `;
 
     try {
-      const response = await request("/graphql", RESET_PASSWORD_MUTATION, {
+      const API_URL = process.env.BACKEND_URL
+      const response = await request(`${API_URL}/graphql`, RESET_PASSWORD_MUTATION, {
         email: values.email,
       });
       console.log(response);

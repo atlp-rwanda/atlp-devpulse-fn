@@ -42,6 +42,7 @@ import ApplicationDetails from "../pages/Applications/ViewSingleApplication";
 import Dashboard from "../pages/Dashboard";
 import ApplicantLayout from "../pages/Applicant/ApplicantLayout";
 import AdminLayout from "../components/Layout/Admins/AdminLayout";
+import ResetPasswordPage from "../pages/ResetPasswordPage";
 
 function Navigation() {
   const roleName = localStorage.getItem("roleName");
@@ -49,9 +50,11 @@ function Navigation() {
     <Routes>
       <Route path="/test_tailwind" element={<TestTailwind />} />
       <Route path="/login" element={<LoginPage />} />
+      
 
       <Route path="/signup" element={<SignupForm />} />
       <Route path="/forget" element={<ForgotPasswordPage />} />
+      <Route path="/reset-password" element={<ResetPasswordPage />} />
       <Route path="/admin" element={<AdminLayout />}>
       
       
