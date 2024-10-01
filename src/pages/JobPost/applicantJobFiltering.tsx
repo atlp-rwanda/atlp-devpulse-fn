@@ -67,7 +67,7 @@ const input= {
   filterAttribute:"title",
 }
 
-const FilterJobPost = (props: any) => {
+const ApplicantSeachJobPost = (props: any) => {
   const { theme, setTheme } = useTheme();
   console.log("props:",props);
   const [filterAttribute, setFilterAttribute] = useState("");
@@ -233,39 +233,7 @@ const FilterJobPost = (props: any) => {
         return <div>{row.original.cohort.title}</div>;
       },
     },
-    // {
-      //   Header: "Status",
-      //   accessor: "",
-      //   Cell: ({ row }: any) => {
-      //     return (
-      //       <select
-      //         defaultValue={row.original}
-      //         id="status"
-      //         className="dark:text-[#dbdee6] border bg-row-gray dark:bg-[#293647] border-solid border-bdr dark:border-cg dark:border-opacity-5 shadow-sm px-4 py-4px rounded-bt-rd focus:outline-none sm:text-sm"
-      //         onChange={(e) => {
-      //           traineeStatusUpdate(
-      //             row.original.trainee_id._id,
-      //             e.target.value,
-      //             row.original.trainee_id.cycle_id.id
-      //           );
-      //         }}
-      //       >
-      //         <option value="">Active</option>
-      //         <option value="">Not Active</option>
-      //       </select>
-      //     );
-      //   },
-      // },
-
-      // {
-      //   Header: "Actions",
-      //   accessor: "",
-      //   Cell: ({ row }: any) => {
-      //     return (
-      //       <Threedots useParentFx={() => handleMe()} min={row.original._id} />
-      //     );
-      //   },
-      // },
+    
   ];
   const columns = useMemo(() => COLS, []);
   const data = useMemo(() => nonDeletedJobPost, [allfilteredjobPosts]);
@@ -294,14 +262,6 @@ const FilterJobPost = (props: any) => {
     getTableProps,
     getTableBodyProps,
     headerGroups,
-    // page,
-    // nextPage,
-    // previousPage,
-    // canNextPage,
-    // canPreviousPage,
-    // pageOptions,
-    // gotoPage,
-    // pageCount,
     setPageSize,
     state,
     prepareRow,
@@ -331,6 +291,17 @@ const FilterJobPost = (props: any) => {
             ),
           },
           ...columns,
+          {
+            id: "action",
+            Header: "Action",
+            Cell: ({ row }: any) => (
+              <Link to={`/applicant/available-job/${row.original.id}/apply`} replace>
+              <button className="flex bg-primary dark:bg-[#56C870] rounded-md py-2 px-4 text-white font-medium cursor-pointer">
+                Apply
+              </button>
+            </Link>
+            ),
+          },
         ];
       });
     }
@@ -398,30 +369,7 @@ const FilterJobPost = (props: any) => {
                 />
               </div>
 
-              <div className="mx-auto order-2 semi-sm:mt-2 lg:mr-0 block semi-md:mr-0">
-                {/* <button className="bg-button-color dark:bg-green text-ltb text-fb font-medium ml-8 mt-2 pl-3 pr-3 py-1 rounded-bt-rd semi-sm:ml-0">
-                  ADD INTERVIEWER
-                </button> */}
-
-                <Link to="/import_trainee-aplicants">
-                  <button className="bg-button-color dark:bg-green text-ltb text-fb font-medium ml-8 mt-2 pl-3 pr-3 py-1 rounded-bt-rd semi-sm:ml-2">
-                    IMPORT FROM
-                  </button>
-                </Link>
-                {/* <button className="bg-button-color dark:bg-green text-ltb text-fb font-medium ml-8 mt-2 pl-3 pr-3 py-1 rounded-bt-rd semi-sm:ml-2">
-                  EXPORT TO
-                </button> */}
-                <button
-                  style={{
-                    backgroundColor: isActive ? "#293647" : "#dbdee6",
-                    color: isActive ? "white" : "#293647",
-                  }}
-                  onClick={() => handleOpenSendModel()}
-                  className="text-fb font-medium ml-8 mt-2 pl-3 pr-3 py-1 rounded-bt-rd semi-sm:ml-2"
-                >
-                  BULK EMAIL
-                </button>
-              </div>
+              
             </div>
             <div>
               <div className="relative block">
@@ -550,111 +498,7 @@ const FilterJobPost = (props: any) => {
               />
             </div>
           </div>
-          <Modal
-            open={openSendModal}
-            onClose={handleCloseSendModel}
-            aria-labelledby="parent-modal-title"
-            aria-describedby="parent-modal-description"
-          >
-            <Box className="absolute w-[50%] top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] md:w-[90%]">
-              <form
-                action=""
-                onSubmit={handleSendEmail}
-                className=" relative w-[100%] rounded-[5px] h-[555px] m-auto p-[10px] pt-[5px] dark:bg-dark-bg bg-[#f0f0f0] "
-              >
-                <h1 className="text-center font-bold dark:text-white text-[22px] m-[20px]">
-                  New Email
-                </h1>
-                <IoIcons.IoClose
-                  className="absolute top-[20px] right-[20px] text-[35px] cursor-pointer"
-                  onClick={handleCloseSendModel}
-                />
-                <hr style={{ marginBottom: "4px" }} />
-                <div>
-                  <input
-                    type="text"
-                    name="to"
-                    placeholder="To whom (Email...)"
-                    value={to}
-                    onChange={(e) => {
-                      // setTo(rowsSelected);
-                      setTo([...e.target.value.split(",")]);
-                    }}
-                    className=" mt-1 bg-lime cursor-pointer text-[18px] self-center py-1 rounded-[5px] h-[50px] my-[20px] mx-auto w-[80%] block border-[2px] border-[#a8a8a8]  px-[10px] md:w-[90%]"
-                  />
-                </div>
-                <div>
-                  <input
-                    type="text"
-                    name="subject"
-                    placeholder="Subject"
-                    value={subject}
-                    onChange={(e) => {
-                      setSubject(e.target.value);
-                    }}
-                    className=" mt-1 bg-lime cursor-pointer text-[18px] self-center py-1 rounded-[5px] h-[50px] my-[20px] mx-auto w-[80%] block border-[2px] border-[#a8a8a8]  px-[10px] md:w-[90%]"
-                  />
-                </div>
-                <div>
-                  <div className=" mt-1 cursor-pointer text-[18px] self-center py-0 h-[10rem] my-[50px] mx-auto w-[90%] block px-[5px] md:w-[100%]">
-                    <Editor
-                      value={html}
-                      onEditorChange={(Editorcontent) => {
-                        setHtml(Editorcontent);
-                      }}
-                      init={{
-                        height: 220,
-                        //menubar: false,
-                        placeholder: "Write your Email Here.....",
-                        plugins: [
-                          "advlist",
-                          "autolink",
-                          "lists",
-                          "link",
-                          "image",
-                          "charmap",
-                          "preview",
-                          "anchor",
-                          "searchreplace",
-                          "visualblocks",
-                          "code",
-                          "fullscreen",
-                          "insertdatetime",
-                          "media",
-                          "table",
-                          "code",
-                          "help",
-                          "wordcount",
-                        ],
-                        toolbar:
-                          "undo redo | blocks | " +
-                          "bold italic forecolor | alignleft aligncenter " +
-                          "alignright alignjustify | bullist numlist outdent indent | " +
-                          "removeformat | help",
-                        content_style:
-                          "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
-                      }}
-                    />
-                  </div>
-                  {/* <input
-                    type="text"
-                    name="message"
-                    value={html}
-                    onChange={(e) => {
-                      setHtml(e.target.value);
-                    }}
-                    className=" mt-2 bg-lime cursor-pointer text-[18px] self-center py-1 rounded-[5px] h-[50px] my-[20px] mx-auto w-[80%] block border-[2px] border-[#a8a8a8]  px-[10px] md:w-[90%]"
-                  /> */}
-                </div>
-                <button
-                  type="submit"
-                  className="text-white border-[1px] border-[#a8a8a8] dark:bg-[#56C870] h-[40px] w-[100px] block rounded-[5px] my-[2px] mt-[5rem]  mx-[auto] bg-[#173b3f]"
-                >
-                  Send
-                </button>
-              </form>
-            </Box>
-          </Modal>
+        
           <div></div>
         </div>
       </div>
@@ -673,4 +517,4 @@ export default connect(mapState, {
   updateTraineeStatus: updateTraineeStatus,
   getAllJobPosts: getAllJobPosts,
   sendBulkyEmail: sendBulkyEmail,
-})(FilterJobPost);
+})(ApplicantSeachJobPost);

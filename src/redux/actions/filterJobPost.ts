@@ -9,7 +9,7 @@ export const getAllFilteredJobPosts =
   async (dispatch: any) => {
     try {
       if(filterAttribute==='' || filterAttribute===null){
-        toast.error("Please insert a filter attribute")
+       return; 
       }
     
       const response = await axios.post("/", {

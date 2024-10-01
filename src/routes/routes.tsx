@@ -10,6 +10,7 @@ import Trainee from "./../pages/TraineApplicant/Trainee";
 import FilterTrainee from "./../pages/FilterTeainee/FilterTrainee";
 import FilterProgram from '../pages/programs/filterPrograms';
 import FilterJobPost from '../pages/JobPost/fiterJopPost';
+import ApplicantSeachJobPost from "../pages/JobPost/applicantJobFiltering"
 import FilterRole from '../pages/roles&permissions/filterRolesAccess';
 import Table from "./../pages/Table";
 import UpdateTraine from "./../pages/updateTrainee/traineUpdate";
@@ -334,6 +335,14 @@ function Navigation() {
             </PrivateRoute>
           }
         />
+        <Route
+        path="filter_job_post"
+        element={
+          <PrivateRoute>
+            <ApplicantSeachJobPost/>
+          </PrivateRoute>
+        }
+      />
         <Route
           path="available-job/:id/apply"
           element={
