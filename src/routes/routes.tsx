@@ -41,7 +41,7 @@ import ApplicationDetails from "../pages/Applications/ViewSingleApplication";
 import Dashboard from "../pages/Dashboard";
 import ApplicantLayout from "../pages/Applicant/ApplicantLayout";
 import AdminLayout from "../components/Layout/Admins/AdminLayout";
-import Settings from '../components/Settings/settings';
+import Settings from '../components/settings';
 
 function Navigation() {
   const roleName = localStorage.getItem("roleName");
@@ -51,7 +51,7 @@ function Navigation() {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/signup" element={<SignupForm />} />
       <Route path="/admin" element={<AdminLayout />}>
-      <Route path="/settings" element={<Settings />} />
+      <Route path="settings" element={<Settings />} />
       <Route index element={<PrivateRoute><Dashboard /></PrivateRoute>} />
         <Route
           path="trainee-applicant-details/:traineeId"
