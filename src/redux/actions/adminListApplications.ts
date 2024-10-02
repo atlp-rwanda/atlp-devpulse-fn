@@ -3,74 +3,81 @@ import { toast } from 'react-toastify';
 
 
 export const fetchApplications = async () => {
-  const response = await axios({
-    url: process.env.BACKEND_URL,
-    method: 'post',
-    data: {
-      query: `
-          query AdminViewApplications {
-            adminViewApplications {
-              applications {
-                _id
-                firstName
-                lastName
-                email
-                telephone
-                availability_for_interview
-                gender
-                resume
-                comments
-                address
-                status
-                formUrl
-                dateOfSubmission
-                associatedFormData {
+  try{
+
+    const response = await axios({
+      url: process.env.BACKEND_URL,
+      method: 'post',
+      data: {
+        query: `
+            query AdminViewApplications {
+              adminViewApplications {
+                applications {
                   _id
-                  title
-                  description
-                  link
-                  jobpost {
+                  firstName
+                  lastName
+                  email
+                  telephone
+                  availability_for_interview
+                  gender
+                  resume
+                  comments
+                  address
+                  status
+                  formUrl
+                  dateOfSubmission
+                  associatedFormData {
                     _id
                     title
-                    cycle {
-                      id
-                      name
-                      startDate
-                      endDate
-                    }
-                    program {
+                    description
+                    link
+                    jobpost {
                       _id
                       title
+                      cycle {
+                        id
+                        name
+                        startDate
+                        endDate
+                      }
+                      program {
+                        _id
+                        title
+                        description
+                        mainObjective
+                        requirements
+                        modeOfExecution
+                        duration
+                      }
+                      cohort {
+                        id
+                        title
+                        start
+                        end
+                      }
+                      link
                       description
-                      mainObjective
-                      requirements
-                      modeOfExecution
-                      duration
+                      label
                     }
-                    cohort {
-                      id
-                      title
-                      start
-                      end
-                    }
-                    link
-                    description
-                    label
                   }
                 }
               }
             }
-          }
-          `,
-    },
-  });
-
-  if (response.data.errors) {
-    toast.error('Error fetching applications');
-    return;
+            `,
+      },
+    });
+  
+    if (response.data.errors) {
+      console.log(response.data.errors);
+      toast.error(response.data.errors[0].error);
+      return {data: null, error:response.data.errors[0].error };
+    }
+  
+    return { data: response.data.data.adminViewApplications, error: null };
+  } catch (error: any) {
+    toast.error("An unexpected error occurred");
+    return { data: null, error: error.message };
   }
-
-  return response.data.data.adminViewApplications;
 };
 
 type Status = {

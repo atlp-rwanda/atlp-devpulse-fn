@@ -10,6 +10,7 @@ import {
   getSingleApplication,
 } from '../redux/actions/applications';
 import { useAppDispatch } from '../hooks/hooks';
+import { useNavigate } from 'react-router-dom'
 import { connect, useSelector } from 'react-redux';
 import { HiDotsVertical } from 'react-icons/hi';
 import Box from '@mui/material/Box';
@@ -23,7 +24,11 @@ interface Update {
 }
 const Applications = (props: any) => {
   const dispatch = useAppDispatch();
-  const { myApplications, currentApplication } = props;
+  const navigate = useNavigate();
+
+  const { myApplications, currentApplication, loading } = props;
+  console.log('My Applications:', myApplications);
+
 
   const [moredrop, setmoredrop] = useState('');
   const [filter, setFilter] = useState('submitted');
@@ -64,7 +69,13 @@ const Applications = (props: any) => {
     return datePart;
   };
   useEffect(() => {
-    dispatch(getMyApplications(filter, pagination));
+    const result = dispatch(getMyApplications(filter, pagination));
+
+    if(result.error === 'Oops! You must be logged in to proceed' || result.error === 'Session expired. Please login again to continue.'){
+      setTimeout(() => {
+        navigate('login');
+      }, 5000);
+    }
   }, [filter, pagination, dispatch]);
 
   return (
@@ -139,7 +150,13 @@ const Applications = (props: any) => {
                               </tr>
                             </thead>
                             <tbody className="overflow-y-auto">
-                              {myApplications.data?.applications != null
+                              { loading ? (
+                                <tr>
+                                <td colSpan={4} className="text-center px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-lg text-gray-500">
+                                  Processing...
+                                </td>
+                              </tr>
+                              ) : myApplications.data?.applications != null
                                 ? myApplications.data?.applications.map(
                                     (item: any) => (
                                       <tr key={item._id}>
@@ -246,7 +263,12 @@ const Applications = (props: any) => {
                                       </tr>
                                     ),
                                   )
-                                : null}
+                                : (
+                                  <tr>
+                                    <td colSpan={4} className="text-center px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-lg text-[#fff]">
+                                      Found 0 applications.
+                                    </td>
+                                  </tr>)}
                             </tbody>
                           </table>
                           {deleteWarn.open && (
@@ -542,6 +564,7 @@ const Applications = (props: any) => {
 const mapState = (state: any) => ({
   myApplications: state.myApplications,
   currentApplication: state.currentApplication,
+  loading: state.myApplications.loading
 });
 
 export default connect(mapState, {

@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import NavBar from '../../components/sidebar/navHeader';
 import { fetchApplications } from '../../redux/actions/adminListApplications';
 import { HiDotsVertical } from 'react-icons/hi';
 import { Pagination } from 'flowbite-react';
 
 const ListApplications = () => {
+  const navigate = useNavigate();
   const [applications, setApplications]: any = useState();
 
   const [activePage, setActivePage] = useState(1);
@@ -20,8 +21,15 @@ const ListApplications = () => {
 
   useEffect(() => {
     const applicationsData = async () => {
-      const data = await fetchApplications();
-      const slicedData = data?.applications.slice(
+      const { data, error } = await fetchApplications();
+      console.log(error);
+      if(error){
+        setTimeout(() => {
+          navigate('login');
+        }, 5000);
+        return;
+      }
+      const slicedData = data?.data?.applications.slice(
         (activePage - 1) * itemsCountPerPage,
         activePage * itemsCountPerPage
       );
