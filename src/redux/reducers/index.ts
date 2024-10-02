@@ -41,11 +41,14 @@ import {
   singleApplicationReducer,
 } from './applicationReducer';
 import { assessmentsReducer } from './assessmentReducer';
+
 import { attendanceReducer } from './attendanceReducer';
 import { performanceReducer } from './performanceReducer';
 import filterProgramsReducer from './filterProgramsReducer';
 import filterRoleReducer from './filterRoleReducer';
 import fetchSearchDataReducer from './fetchSearchDataReducer';
+import userUpdateReducer from './getUser';
+
 
 const allReducers = combineReducers({
   counter: counterReducer,

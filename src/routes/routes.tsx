@@ -97,7 +97,7 @@ function Navigation() {
           }
         />
         <Route
-          path="profile"
+          path="update-profile"
           element={
             <PrivateRoute allowedRoles={["Admin", "superAdmin"]}>
               <Profile />
@@ -371,6 +371,14 @@ function Navigation() {
           element={
             <PrivateRoute allowedRoles={["applicant"]}>
               <PageNotFound />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="update-profile"
+          element={
+            <PrivateRoute allowedRoles={["applicant"]}>
+              <Profile />
             </PrivateRoute>
           }
         />
