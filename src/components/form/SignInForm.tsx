@@ -11,7 +11,7 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import { GraphQLClient } from "graphql-request";
 import { loginAction } from "../../redux/actions/login";
-import { Token } from '../../utils/utils';
+import { Token } from "../../utils/utils";
 
 const googleIcn: string = require("../../assets/assets/googleIcon.jpg").default;
 
@@ -51,9 +51,9 @@ const LoginForm = () => {
   });
 
   const redirectAfterLogin = async () => {
-    const lastAttemptedRoute = localStorage.getItem('lastAttemptedRoute');
+    const lastAttemptedRoute = localStorage.getItem("lastAttemptedRoute");
     if (lastAttemptedRoute) {
-      localStorage.removeItem('lastAttemptedRoute');
+      localStorage.removeItem("lastAttemptedRoute");
       navigate(lastAttemptedRoute);
     } else {
       await Token();
@@ -64,29 +64,30 @@ const LoginForm = () => {
         navigate("/admin");
       } else {
         const searchParams = new URLSearchParams(location.search);
-        const returnUrl = searchParams.get('returnUrl') || '/';
+        const returnUrl = searchParams.get("returnUrl") || "/";
         navigate(returnUrl);
       }
     }
-  }
+  };
 
   const onSubmit = async (data: loginFormData) => {
     setIsLoading(true);
     try {
       const validatedData = loginSchema.parse(data);
-      const response = await loginAction(validatedData.email, validatedData.password);
+      const response = await loginAction(
+        validatedData.email,
+        validatedData.password
+      );
 
       const token = response?.data?.data?.login?.token;
       if (token) {
-        localStorage.setItem("access_token", token);
+        localStorage.setItem("access_token", JSON.stringify(token));
         await redirectAfterLogin();
       } else {
         toast.error(response?.data?.errors[0].message);
       }
     } catch (error: any) {
-      
-        toast.error("Login failed, please try again.");
-
+      toast.error("Login failed, please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -124,7 +125,9 @@ const LoginForm = () => {
         onSubmit={handleSubmit(onSubmit)}
         className="border border-gray-400 bg-gray-300 dark:bg-[#1F2A37] shadow-lg sm:fixed w-[45vw] flex max-h-[90%] sm:mt-[70px] sm:max-h-[100%] flex-col items-center justify-center rounded-sm sm:w-[90%] lg:w-[45vw]"
       >
-        <h1 className="text-3xl text-[#1F2A37] dark:text-white font-bold py-4">Login</h1>
+        <h1 className="text-3xl text-[#1F2A37] dark:text-white font-bold py-4">
+          Login
+        </h1>
         <div className="sm:w-full sm:flex sm:flex-col sm:justify-center sm:items-center lg:w-auto">
           <div className="w-[25vw] sm:w-5/6 lg:w-[25vw]">
             <InputField
@@ -145,11 +148,21 @@ const LoginForm = () => {
               error={errors?.password}
               onCopy={(e) => e.preventDefault()}
             />
-            <div onClick={handleClickShowPassword} className="absolute right-4 top-4" aria-label="Toggle password visibility">
+            <div
+              onClick={handleClickShowPassword}
+              className="absolute right-4 top-4"
+              aria-label="Toggle password visibility"
+            >
               {showPassword ? (
-                <FontAwesomeIcon icon={faEye} className="text-gray-400 dark:text-white" />
+                <FontAwesomeIcon
+                  icon={faEye}
+                  className="text-gray-400 dark:text-white"
+                />
               ) : (
-                <FontAwesomeIcon icon={faEyeSlash} className="text-gray-400 dark:text-white" />
+                <FontAwesomeIcon
+                  icon={faEyeSlash}
+                  className="text-gray-400 dark:text-white"
+                />
               )}
             </div>
           </div>
@@ -180,7 +193,11 @@ const LoginForm = () => {
               </svg>
             </Button>
           ) : (
-            <Button type="submit" label="Login" className="my-1 mb-4 sm:w-full w-5/6" />
+            <Button
+              type="submit"
+              label="Login"
+              className="my-1 mb-4 sm:w-full w-5/6"
+            />
           )}
         </div>
         <div className="flex items-center justify-center gap-2 sm:w-[35vw] lg:w-[20vw] w-[20vw]">
@@ -203,4 +220,3 @@ const LoginForm = () => {
 };
 
 export default LoginForm;
-
