@@ -1,14 +1,19 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import NavBar from "components/sidebar/navHeader";
+import { getTraineeApplicant } from "../../redux/actions/TraineeAction";
+import { getTraineeAttendance } from "../../redux/actions/attendanceAction";
+import { getTraineePerformance } from "../../redux/actions/performanceAction";
+import { useDispatch, useSelector } from "react-redux";
+
 const calendar: string = require("../../assets/assets/calendar.svg").default;
 const collaboration: string =
   require("../../assets/assets/collaborative-learning.svg").default;
-const performance: string = require("../../assets/assets/performance.svg").default;
+const performanceIcon: string =
+  require("../../assets/assets/performance.svg").default;
 const strategy: string = require("../../assets/assets/strategy.svg").default;
-import { getAllCohorts } from "../../redux/actions/cohortActions";
 
-const DashboardCard = ({ title, value, change, img }) => {
+const DashboardCard = ({ title, value, img }) => {
   return (
     <>
       <div className="bg-gray-800 rounded-lg p-4 flex items-center justify-between border border-[#DFE3E8] min-w-[260px]  ">
@@ -35,13 +40,42 @@ const DashboardCard = ({ title, value, change, img }) => {
 };
 
 const ApplicantDashboard = (props: any) => {
-  const [cohort, setCohort] = useState('');
-  const [currentPhase, setCurrentPhase] = useState('');
-//   const [performance, setPerformance] = useState('');
-  const [attendance, setAttendance] = useState('');
+  const dispatch = useDispatch();
+  const trainee = useSelector((state: any) => state.currentTrainee);
+  const attendance = useSelector((state: any) => state.traineeAttendance);
+  const performance = useSelector((state: any) => state.traineePerformance);
 
+  useEffect(() => {
+    const traineeId = trainee?.id;
+    if (traineeId) {
+      dispatch(getTraineeApplicant(traineeId));
+      dispatch(getTraineeAttendance(traineeId));
+      dispatch(getTraineePerformance(traineeId));
+    }
+  }, [dispatch, trainee?.id]);
 
-  
+  const dashboardData = [
+    {
+      title: "Cohort",
+      value: trainee?.cohort?.title || "N/A",
+      img: collaboration,
+    },
+    {
+      title: "Current Phase",
+      value: trainee?.cohort?.phase || "N/A",
+      img: strategy,
+    },
+    {
+      title: "Performance",
+      value: performance?.averageScore?.toFixed(2) || "N/A",
+      img: performanceIcon,
+    },
+    {
+      title: "Attendance",
+      value: attendance?.attendanceRatio || "N/A",
+      img: calendar,
+    },
+  ];
 
   return (
     <>
@@ -50,30 +84,14 @@ const ApplicantDashboard = (props: any) => {
           <div className="mt-6">
             <div>
               <div className="flex flex-wrap gap-4">
-                <DashboardCard
-                  title="Cohort"
-                  value="5"
-                  change={-5}
-                  img={collaboration}
-                />
-                <DashboardCard
-                  title="Current Phase"
-                  value="2"
-                  change={20}
-                  img={strategy}
-                />
-                <DashboardCard
-                  title="Performance"
-                  value="3"
-                  change={-10}
-                  img={performance}
-                />
-                <DashboardCard
-                  title="Attendance"
-                  value="2"
-                  change={15}
-                  img={calendar}
-                />
+                {dashboardData.map((item, index) => (
+                  <DashboardCard
+                    key={index}
+                    title={item.title}
+                    value={item.value}
+                    img={item.img}
+                  />
+                ))}
               </div>
             </div>
           </div>

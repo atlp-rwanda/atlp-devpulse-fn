@@ -108,3 +108,38 @@ export const createTrainee =
       return dispatch(creator(CREATE_CYCLE_ERROR, error));
     }
   };
+
+
+export const getTraineeApplicant = (traineeId: string) => async(dispatch: any) => {
+  try{
+    const response = await axios.post('/', {
+      query: `
+        query GetOneTrainee($ID: ID!) {
+          getOneTrainee(ID: $ID) {
+            _id
+            firstName
+            lastName
+            email
+            status
+            applicationPhase
+            cohort {
+              id
+              title
+              program
+              cycle
+              start
+              end
+              phase
+            }
+          }
+        }
+      `,
+      variables: { ID: traineeId }
+    });
+    const trainee = response.data.data.getOneTrainee;
+    dispatch(creator(GET_TRAINEE, trainee));
+
+  }catch (error) {
+    console.error('Error fetching trainee:', error);
+  }
+}

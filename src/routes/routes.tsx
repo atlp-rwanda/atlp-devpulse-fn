@@ -254,7 +254,7 @@ function Navigation() {
         />
       </Route>
       <Route path="/applicant" element={<ApplicantLayout />}>
-      <Route index element={<PrivateRoute><ApplicantDashboard /></PrivateRoute>} />
+      <Route index element={<PrivateRoute><ApplicantDashboard/></PrivateRoute>} />
         {/* <Route
           index
           element={

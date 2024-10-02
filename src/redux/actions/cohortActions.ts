@@ -15,7 +15,13 @@ export const getAllCohorts = () => async (dispatch: any) => {
             id
             end
             cycle
-        }
+            phase
+            trainees {
+            id
+            firstName
+            lastName
+            }
+          }
         }
       `,
     });
