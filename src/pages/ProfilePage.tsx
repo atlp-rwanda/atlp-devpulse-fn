@@ -1,84 +1,71 @@
+import React, { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FieldValues, useForm } from "react-hook-form";
-import { ThreeDots } from "react-loader-spinner";
+import { useAppDispatch, useAppSelector } from "../hooks/hooks";
 import { toast } from "react-toastify";
-import { z } from "zod";
+import { TuserSchema, userSchema } from "../utils/userSchema";
+import {
+  fetchUser,
+  updateUser,
+  getUserIdFromToken,
+} from "../utils/profileUtils";
+import ProfileForm from "../components/updateUserProfile/ProfileForm";
+import ImageUpload from "../components/updateUserProfile/ImageUpload";
+import { ThreeDots } from "react-loader-spinner";
+const coverImage: string = require("../assets/cover.png").default;
 
-const userSchema = z.object({
-  firstName: z.string().min(2, "First name is required"),
-  lastName: z.string().min(2, "Last name is required"),
-});
-type TuserSchema = z.infer<typeof userSchema>;
-
-const Profile = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-    reset,
-  } = useForm<TuserSchema>({
+const ProfileUpdate: React.FC = () => {
+  const dispatch = useAppDispatch();
+  const [loading, setLoading] = useState(true);
+  const userData = useAppSelector((state: any) => state.updateUser?.data);
+  const form = useForm<TuserSchema>({
     resolver: zodResolver(userSchema),
+    defaultValues: {
+      firstname: "-",
+      lastname: "-",
+      email: "-",
+      telephone: "-",
+      code: "-",
+      password: "-",
+      picture: "-",
+    },
   });
+  const { reset } = form;
+  const userId = getUserIdFromToken();
 
-  const onSubmit = async (data: FieldValues) => {
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    toast.success("user updated successfully");
-    reset();
+  useEffect(() => {
+    if (userId) {
+      fetchUser(userId, dispatch, setLoading);
+    }
+  }, [userId, dispatch]);
+
+  useEffect(() => {
+    if (userData) {
+      reset({ ...userData, password: "" });
+    }
+  }, [userData, reset]);
+
+  const onSubmit = async (data: TuserSchema) => {
+    if (!userId) {
+      toast.error("User ID not found");
+      return;
+    }
+    await updateUser(data, userId, dispatch, userData);
   };
-  const token = localStorage.getItem("access_token");
-
-  if (token) {
-    const payload = token.split(".")[1];
-    const decodedPayload = JSON.parse(atob(payload));
-
-    const userId = decodedPayload.data.userId;
-    // console.log("User ID:", userId);
-  } else {
-    console.log("No token found in localStorage");
-  }
 
   return (
     <>
-      <div className="w-full flex flex-col  items-center mt-10">
-        <h2 className="text-2xl text-green font-semibold pb-3 ">
-          Update Your Profile
-        </h2>
-        <form
-          className="w-[35%] flex flex-col gap-2"
-          onSubmit={handleSubmit(onSubmit)}
-        >
-          <input
-            type="text"
-            {...register("firstName")}
-            placeholder="First Name"
-            className="pl-4 py-2 rounded"
-          />
-          {errors.firstName && (
-            <p className="text-sm text-red-600">{errors.firstName.message}</p>
-          )}
-          <input
-            type="text"
-            {...register("lastName")}
-            placeholder="Last name"
-            className="pl-4 py-2 rounded"
-          />
-          {errors.lastName && (
-            <p className="text-sm text-red-600">{errors.lastName.message}</p>
-          )}
-          <button
-            className="py-2 bg-green rounded flex justify-center "
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? (
-              <ThreeDots height="20" width="30" color="#ffffff" />
-            ) : (
-              "Update"
-            )}
-          </button>
-        </form>
-      </div>
+      {userData && (
+        <div className="w-full h-[900px] flex flex-col mt-10 z-20">
+          <div className=" mt-[-40px] relative ">
+            <img src={coverImage} alt="coverimage" className="w-full h-60" />
+            <ImageUpload form={form} />
+          </div>
+          <ProfileForm form={form} onSubmit={onSubmit} />
+        </div>
+      )}
     </>
   );
 };
 
-export default Profile;
+export default ProfileUpdate;

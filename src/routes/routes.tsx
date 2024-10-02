@@ -55,7 +55,9 @@ import UpdateJobPost from "../pages/JobPost/updateJobPost";
 import VerifyEmail from "../pages/verifyEmail";
 import Search from "./../pages/search";
 import Settings from '../components/settings';
-import Profile from "../pages/ProfilePage";
+import ProfileUpdate from "../pages/ProfilePage";
+import Profile from "../pages/profile";
+
 
 function Navigation() {
   const roleName = localStorage.getItem("roleName");
@@ -102,7 +104,15 @@ function Navigation() {
           }
         />
         <Route
-          path="profile"
+          path="update-profile"
+          element={
+            <PrivateRoute allowedRoles={["Admin", "superAdmin"]}>
+              <ProfileUpdate />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="dashboard/profile"
           element={
             <PrivateRoute allowedRoles={["Admin", "superAdmin"]}>
               <Profile />
@@ -408,6 +418,22 @@ function Navigation() {
           element={
             <PrivateRoute allowedRoles={['applicant']}>
               <ApplicantNotifications />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="update-profile"
+          element={
+            <PrivateRoute allowedRoles={["applicant"]}>
+              <ProfileUpdate />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="dashboard/profile"
+          element={
+            <PrivateRoute allowedRoles={["applicant"]}>
+              <Profile />
             </PrivateRoute>
           }
         />
