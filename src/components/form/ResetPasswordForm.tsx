@@ -50,7 +50,7 @@ const SubmitButton: React.FC<{ isSubmitting: boolean }> = ({ isSubmitting }) => 
     disabled={isSubmitting}
     className="w-full py-2 px-4 text-white rounded-md bg-[#56C870] focus:outline-none disabled:opacity-50"
   >
-    {isSubmitting ? "Submitting..." : "Set New Password"}
+    {isSubmitting ? "Submitting..." : "New Password"}
   </button>
 );
 
