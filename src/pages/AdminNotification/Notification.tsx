@@ -1,5 +1,5 @@
 import React from "react";
-import { FaCheck, FaTrash } from "react-icons/fa"; // Icons for read and delete
+import { FaArchive, FaTrash } from "react-icons/fa"; // Icons for read and delete
 import { formatDistanceToNow } from "date-fns";
 type NotificationProps = {
   notification: {
@@ -41,7 +41,7 @@ const Notification: React.FC<NotificationProps> = ({
             className="text-green-500 hover:text-green-300"
             onClick={() => onMarkAsRead(notification.id)}
           >
-            <FaCheck size={16} />
+            <FaArchive size={16} />
           </button>
         )}
         <button

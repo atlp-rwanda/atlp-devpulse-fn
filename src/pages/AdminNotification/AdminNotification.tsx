@@ -1,7 +1,6 @@
 import React, { ChangeEvent, useState } from "react";
 import Notification from "./Notification";
 import SelectField from "../../components/ReusableComponents/Select";
-
 const AdminNotification = () => {
   const [notifications, setNotifications] = useState([
     {
@@ -31,7 +30,6 @@ const AdminNotification = () => {
   ]);
   const [filter, setFilter] = useState<"all" | "unread">("all");
   const [orderBy, setOrderBy] = useState<"recent" | "oldest">("recent");
-
   const handleMarkAsRead = (id: string) => {
     setNotifications((prevNotifications) =>
       prevNotifications.map((notification) =>
@@ -39,27 +37,22 @@ const AdminNotification = () => {
       )
     );
   };
-
   const handleDelete = (id: string) => {
     setNotifications((prevNotifications) =>
       prevNotifications.filter((notification) => notification.id !== id)
     );
   };
-
   const handleOrderChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setOrderBy(e.target.value as "recent" | "oldest");
   };
-
   const filteredNotifications = notifications.filter((notification) =>
     filter === "all" ? true : !notification.read
   );
-
   const sortedNotifications = [...filteredNotifications].sort((a, b) =>
     orderBy === "recent"
       ? new Date(b.time).getTime() - new Date(a.time).getTime()
       : new Date(a.time).getTime() - new Date(b.time).getTime()
   );
-
   return (
     <div className="h-screen w-full px-4 md:px-8">
       <div className="flex mt-10 space-x-6 mb-10 items-center">
@@ -98,7 +91,6 @@ const AdminNotification = () => {
           />
         </div>
       </div>
-
       <div className="space-y-4">
         {sortedNotifications.length ? (
           sortedNotifications.map((notification) => (
@@ -116,5 +108,4 @@ const AdminNotification = () => {
     </div>
   );
 };
-
 export default AdminNotification;
