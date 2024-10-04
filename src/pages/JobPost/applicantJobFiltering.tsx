@@ -188,8 +188,8 @@ const ApplicantSeachJobPost = (props: any) => {
     filterAttribute:filterAttribute,
   };
   useEffect(() => {
-    props.getAllFilteredJobPosts(input);
     props.getAllJobPosts()
+    props.getAllFilteredJobPosts(input);
   }, [enteredWord, filterAttribute]);
 
   const [me, setMe] = useState("Keroity");
@@ -372,19 +372,7 @@ const ApplicantSeachJobPost = (props: any) => {
               
             </div>
             <div>
-              <div className="relative block">
-                <button
-                  onClick={(event) => {
-                    setAnchorEl(event.currentTarget as unknown as HTMLElement);
-                  }}
-                  className="flex items-center mb-4 py-2 px-7 w-50 rounded-bt-rd border bg-row-gray dark:bg-[#293647] border-solid border-bdr dark:border-cg dark:border-opacity-5 shadow-sm text-button-color dark:text-[#dbdee6]  text-fb font-medium"
-                >
-                  <h4>CHOOSE COLUMN</h4>
-                  <span className="pl-3">
-                    <FaCaretDown />
-                  </span>
-                </button>
-              </div>
+           
               <Menu
                 // id="basic-menu"
                 anchorEl={anchorEl}

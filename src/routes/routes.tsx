@@ -132,30 +132,7 @@ function Navigation() {
             </PrivateRoute>
           }
         />
-        <Route
-        path="filter_programs"
-        element={
-          <PrivateRoute>
-            <FilterProgram/>
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="filter_job_post"
-        element={
-          <PrivateRoute>
-            <FilterJobPost/>
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="filter_roles_access"
-        element={
-          <PrivateRoute>
-            <FilterRole/>
-          </PrivateRoute>
-        }
-      />
+        
         <Route
           path="import_trainee-aplicants"
           element={
@@ -331,18 +308,18 @@ function Navigation() {
           path="available-jobs"
           element={
             <PrivateRoute allowedRoles={['applicant']}>
-              <SharedPosts />
+              <ApplicantSeachJobPost />
             </PrivateRoute>
           }
         />
-        <Route
+        {/* <Route
         path="filter_job_post"
         element={
           <PrivateRoute>
             <ApplicantSeachJobPost/>
           </PrivateRoute>
         }
-      />
+      /> */}
         <Route
           path="available-job/:id/apply"
           element={
