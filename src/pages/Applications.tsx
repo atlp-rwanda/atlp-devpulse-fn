@@ -75,12 +75,17 @@ const Applications = (props: any) => {
           <div className="w-full">
             <div>
               <div className="bg-light-bg dark:bg-dark-frame-bg  min-h-screen overflow-y-hidden overflow-x-hidden">
-                <div className="flex items-left px-8 pt-1">
+                <div className="flex items-left px-8 pt-1 gap-5">
                   <Link to="/filter_trainee-applicants">
                     <button className="flex bg-primary dark:bg-[#56C870] rounded-md py-2 mt-2 px-4 text-white font-medium cursor-pointer" disabled>
                       <icons.AiOutlineSearch className="mt-1 mr-1 font-bold" />{' '}
                       Search
                     </button>
+                  </Link>
+                  <Link to="trainee-apply">
+                     <button className="flex bg-primary dark:bg-[#56C870] rounded-md py-2 mt-2 px-4 text-white font-medium cursor-pointer">
+                          Become Trainee
+                     </button>
                   </Link>
                 </div>
                 {/* Filter Bar */}

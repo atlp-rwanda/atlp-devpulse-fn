@@ -41,6 +41,9 @@ import ApplicationDetails from "../pages/Applications/ViewSingleApplication";
 import Dashboard from "../pages/Dashboard";
 import ApplicantLayout from "../pages/Applicant/ApplicantLayout";
 import AdminLayout from "../components/Layout/Admins/AdminLayout";
+import TraineeApply from "../pages/TraineeApply";
+import TraineeAttribute from '../pages/TraineeAttribute'
+import TraineeSuccessPage from "../pages/TraineSuccessPage";
 
 function Navigation() {
   const roleName = localStorage.getItem("roleName");
@@ -298,6 +301,30 @@ function Navigation() {
           element={
             <PrivateRoute>
               <PageNotFound />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="trainee-apply"
+          element={
+            <PrivateRoute>
+              <TraineeApply />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="trainee-apply/trainee-success/trainee-add-attributes"
+          element={
+            <PrivateRoute>
+              <TraineeAttribute />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="trainee-apply/trainee-success"
+          element={
+            <PrivateRoute>
+              <TraineeSuccessPage />
             </PrivateRoute>
           }
         />
