@@ -13,45 +13,58 @@ import {
   DELETE_TRAINEE_FAILURE,
   CREATE_TRAINEE_ATTRIBUTE_REQUEST,
   CREATE_TRAINEE_ATTRIBUTE_SUCCESS,
-  CREATE_TRAINEE_ATTRIBUTE_FAILURE
+  CREATE_TRAINEE_ATTRIBUTE_FAILURE,
+  SET_CURRENT_TRAINEE_ID
 } from "..";
 
 interface TraineeState {
   loading: boolean;
   error: string | null;
-  data: any[];
+  data: TraineeApplicant[];
   totalItems: number;
   page: number;
   itemsPerPage: number;
+  currentTraineeId: string | null;
+}
+
+interface TraineeApplicant {
+  _id: string;
+  lastName: string;
+  firstName: string;
+  email: string;
+  cycle_id: any; 
+  delete_at: boolean;
+  status: string;
+  attributes?: TraineeAttribute;
 }
 
 interface TraineeAttribute {
-  gender: String
-    birth_date: String
-    Address: String
-    phone: String
-    field_of_study: String
-    education_level: String
-    currentEducationLevel: String
-    province: String
-    district: String
-    sector: String
-    isEmployed: Boolean
-    haveLaptop: Boolean
-    isStudent: Boolean
-    Hackerrank_score: String
-    english_score: String
-    interview_decision: String
-    past_andela_programs: String
-    applicationPost: String
-    otherApplication: String
-    andelaPrograms: String
-    otherPrograms: String
-    understandTraining: Boolean
-    discipline: String
-    _id: String
-    trainee_id: String
-  
+  _id: string;
+  gender?: string;
+  birth_date?: string;
+  address?: string;
+  phone?: string;
+  study?: boolean;
+  education_level?: string;
+  currentEducationLevel?: string;
+  nationality?: string;
+  province?: string;
+  district?: string;
+  sector?: string;
+  isEmployed?: boolean;
+  haveLaptop?: boolean;
+  isStudent?: boolean;
+  Hackerrank_score?: string;
+  english_score?: string;
+  interview?: number;
+  interview_decision?: string;
+  applicationPost?: string;
+  otherApplication?: string;
+  andelaPrograms?: string;
+  otherPrograms?: string;
+  understandTraining?: boolean;
+  discipline?: string;
+  trainee_id: string;
 }
 
 interface Action {
@@ -59,13 +72,14 @@ interface Action {
   payload?: any;
 }
 
-const initialState = {
+const initialState: TraineeState = {
   loading: false,
   error: null,
   data: [],
   totalItems: 0,
   page: 1,
   itemsPerPage: 10,
+  currentTraineeId: null,
 };
 
 export default (state = initialState, action: Action): TraineeState => {
@@ -101,11 +115,17 @@ export default (state = initialState, action: Action): TraineeState => {
         error: null,
       };
 
+    case SET_CURRENT_TRAINEE_ID:
+      return {
+        ...state,
+        currentTraineeId: action.payload,
+      };  
+
     case UPDATE_TRAINEE_SUCCESS:
       return {
         ...state,
         loading: false,
-        data: state.data.map((trainee: any) =>
+        data: state.data.map((trainee) =>
           trainee._id === action.payload._id ? action.payload : trainee
         ),
         error: null,
@@ -115,7 +135,7 @@ export default (state = initialState, action: Action): TraineeState => {
       return {
         ...state,
         loading: false,
-        data: state.data.filter((trainee: any) => trainee._id !== action.payload),
+        data: state.data.filter((trainee) => trainee._id !== action.payload),
         totalItems: state.totalItems - 1,
         error: null,
       };
@@ -124,14 +144,15 @@ export default (state = initialState, action: Action): TraineeState => {
       return {
         ...state,
         loading: false,
-        data: state.data.map((trainee: any) =>
-          trainee._id === (action.payload as TraineeAttribute).trainee_id
+        data: state.data.map((trainee) =>
+          trainee?._id === action.payload?.trainee_id
             ? { ...trainee, attributes: action.payload }
             : trainee
-        ),
-        error: null,
-      };
-
+          ),
+          error: null,
+        };
+      
+    
     case CREATE_CYCLE_ERROR:
     case FETCH_TRAINEES_FAILURE:
     case UPDATE_TRAINEE_FAILURE:

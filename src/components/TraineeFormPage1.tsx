@@ -1,93 +1,142 @@
 import InputField from './form/InputField';
+import { fetchCountries } from "./country/country";
+import { useEffect, useState } from 'react';
+
+interface Country {
+  name: string;
+  code: string;
+  phone: string;
+  suffix: string;
+}
 
 const TraineeFormPage1 = ({ formData, setFormData, onNext }) => {
-    const handleInputChange = (e) => {
-      const { name, value, type, checked } = e.target;
+  const [fetchedCountries, setFetchedCountries] = useState<Country[]>([]);
+  const [filteredCountries, setFilteredCountries] = useState<Country[]>([]);
+  const [selectedCountry, setSelectedCountry] = useState<string>("");
+
+  useEffect(() => {
+    async function fetchCountriesData() {
+      const countriesData = await fetchCountries();
+      const sortedFiltered = countriesData.sort((a: Country, b: Country) =>
+        a.name.localeCompare(b.name)
+      );
+      setFetchedCountries(sortedFiltered);
+      setFilteredCountries(sortedFiltered);
+    }
+    fetchCountriesData();
+  }, []);
+
+  const handleInputChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData(prevData => ({
+      ...prevData,
+      [name]: type === 'checkbox' ? checked : value
+    }));
+  };
+
+  const handleCountryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    setSelectedCountry(value);
+  
+    // Filter countries based on the input
+    const filtered = fetchedCountries.filter((country) =>
+      country.name.toLowerCase().startsWith(value.toLowerCase())
+    );
+    setFilteredCountries(filtered);
+  
+    // If a valid country is selected, update the country code and nationality
+    const selectedCountryObj = fetchedCountries.find(
+      (country) => country.name.toLowerCase() === value.toLowerCase()
+    );
+    if (selectedCountryObj) {
       setFormData(prevData => ({
         ...prevData,
-        [name]: type === 'checkbox' ? checked : value
+        nationality: selectedCountryObj.name,
+        countryCode: `${selectedCountryObj.phone}${selectedCountryObj.suffix[0] || ''}`
       }));
-    };
+    }
+  };
   
     return (
       <div className='grid grid-cols-2 gap-52 pt-5 pb-10'>
         <div className='space-y-8'>    
           <InputField
-            name="firstName"
-            placeholder="First name"
-            label='First name'
+            name="address"
+            placeholder="Address"
+            label='Address'
             type="text"
-            value={formData.firstName}
+            value={formData.address}
             onChange={handleInputChange}
             className="w-52 md:w-2/3 rounded-md px-2 py-2 border border-white placeholder:text-gray-400 text-white sm:text-[12px] outline-none autofill:bg-transparent autofill:text-white bg-[#1F2A37]"
           />
+          
           <InputField
-            name="email"
-            placeholder="Email"
-            label='Email'
-            type="email"
-            value={formData.email}
+            name="phone"
+            placeholder="Phone"
+            label='Phone'
+            type="text"
+            value={formData.phone}
             onChange={handleInputChange}
             className="w-52 md:w-2/3 px-2 py-2 rounded-md border border-white placeholder:text-gray-400 text-white sm:text-[12px] outline-none autofill:bg-transparent autofill:text-white bg-[#1F2A37]"
           />
   
           <div className='flex flex-col space-y-3'>
-            <label htmlFor="Studying">Are you currently Studying</label>
+            <label htmlFor="isStudent">Are you currently Studying</label>
             <div>
               <input 
                 type="radio" 
-                name="studying" 
+                name="isStudent" 
                 value="yes"
-                checked={formData.studying === "yes"}
+                checked={formData.isStudent === "yes"}
                 onChange={handleInputChange}
               /> Yes
             </div>
             <div>
               <input 
                 type="radio" 
-                name="studying" 
+                name="study" 
                 value="no"
-                checked={formData.studying === "no"}
+                checked={formData.study === "no"}
                 onChange={handleInputChange}
               /> No
             </div>
           </div>
         
           <div className='space-y-3'>
-            <label htmlFor="Studying">What's your highest level of education?</label>
+            <label htmlFor="education_level">What's your highest level of education?</label>
             <div>
               <input 
                 type="radio" 
-                name="educationLevel" 
+                name="education_level" 
                 value="high school"
-                checked={formData.educationLevel === "high school"}
+                checked={formData.education_level === "high school"}
                 onChange={handleInputChange}
               /> Secondary school
             </div>
             <div>
               <input 
                 type="radio" 
-                name="educationLevel" 
-                value="bachelors"
-                checked={formData.educationLevel === "university"}
+                name="education_level" 
+                value="university"
+                checked={formData.education_level === "university"}
                 onChange={handleInputChange}
               /> Bachelor's Degree
             </div>
             <div>
               <input 
                 type="radio" 
-                name="educationLevel" 
+                name="education_level" 
                 value="masters"
-                checked={formData.educationLevel === "masters"}
+                checked={formData.education_level === "masters"}
                 onChange={handleInputChange}
               /> Master's Degree
             </div>
             <div>
               <input 
                 type="radio" 
-                name="educationLevel" 
+                name="education_level" 
                 value="phd"
-                checked={formData.educationLevel === "phd"}
+                checked={formData.education_level === "phd"}
                 onChange={handleInputChange}
               /> PhD
             </div>
@@ -95,14 +144,19 @@ const TraineeFormPage1 = ({ formData, setFormData, onNext }) => {
           </div>
   
           <InputField
-            name="nationality"
-            placeholder="Nationality"
-            label='Nationality'
-            type="text"
-            value={formData.nationality}
-            onChange={handleInputChange}
-            className="w-52 md:w-2/3 rounded-md px-2 py-2 border border-white placeholder:text-gray-400 text-white sm:text-[12px] outline-none autofill:bg-transparent autofill:text-white bg-[#1F2A37]"
-          />
+          name="nationality"
+          placeholder="Nationality"
+          label='Nationality'
+          list="countries"
+          value={selectedCountry}
+          onChange={handleCountryChange}
+          className="w-52 md:w-2/3 rounded-md px-2 py-2 border border-white placeholder:text-gray-400 text-white sm:text-[12px] outline-none autofill:bg-transparent autofill:text-white bg-[#1F2A37]"
+        />
+        <datalist id="countries">
+          {filteredCountries.map((country) => (
+            <option key={country.code} value={country.name} />
+          ))}
+        </datalist>
   
           <InputField
             name="province"
@@ -137,21 +191,11 @@ const TraineeFormPage1 = ({ formData, setFormData, onNext }) => {
   
         <div className='space-y-8'>
           <InputField
-            name="lastName"
-            placeholder="Last name"
-            label='Last name'
-            type="text"
-            value={formData.lastName}
-            onChange={handleInputChange}
-            className="w-52 md:w-2/3 rounded-md px-2 py-2 border border-white placeholder:text-gray-400 text-white sm:text-[12px] outline-none autofill:bg-transparent autofill:text-white bg-[#1F2A37]"
-          />
-  
-          <InputField
-            name="dateOfBirth"
+            name="birth_date"
             placeholder="Date of birth"
             label='Choose date'
             type="date"
-            value={formData.dateOfBirth}
+            value={formData.birth_date}
             onChange={handleInputChange}
             className="w-52 md:w-2/3 rounded-md px-2 py-2 border border-white placeholder:text-gray-400 text-white sm:text-[12px] outline-none autofill:bg-transparent autofill:text-white bg-[#1F2A37]"
           />
@@ -168,7 +212,7 @@ const TraineeFormPage1 = ({ formData, setFormData, onNext }) => {
               <option value="highschool">Highschool</option>
               <option value="university">University</option>
               <option value="masters">Masters</option>
-              <option value="tvt">PhD candidate</option>
+              <option value="phd">PhD candidate</option>
             </select>
           </div>
         

@@ -313,18 +313,18 @@ function Navigation() {
           }
         />
         <Route
-          path="trainee-apply/trainee-success/trainee-add-attributes"
+          path="trainee-apply/trainee-success/:traineeId"
           element={
             <PrivateRoute>
-              <TraineeAttribute />
+              <TraineeSuccessPage />
             </PrivateRoute>
           }
         />
         <Route
-          path="trainee-apply/trainee-success"
+          path="trainee-apply/trainee-success/trainee-add-attributes/:traineeId?"
           element={
             <PrivateRoute>
-              <TraineeSuccessPage />
+              <TraineeAttribute />
             </PrivateRoute>
           }
         />
