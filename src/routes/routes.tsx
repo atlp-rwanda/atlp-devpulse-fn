@@ -306,6 +306,14 @@ function Navigation() {
           }
         />
         <Route
+          path="settings"
+          element={
+            <PrivateRoute>
+              <Settings />
+            </PrivateRoute>
+          }
+        />
+        <Route
           path="*"
           element={
             <PrivateRoute allowedRoles={['applicant']}>
