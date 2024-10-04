@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, redirect } from 'react-router-dom';
 import axios from '../../redux/actions/axiosconfig';
 import { showSuccessToast, showErrorToast } from './../../utils/toast';
 
@@ -126,6 +126,7 @@ const UpdateSavedForm = () => {
 
       if (response.status === 200) {
         showSuccessToast('Application updated successfully!');
+        window.location.href = '/#/admin/view-forms'; 
       } else {
         showErrorToast('Error updating application!');
       }

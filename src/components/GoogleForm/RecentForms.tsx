@@ -181,7 +181,7 @@ const RecentForms = () => {
       <div className='flex flex-col items-center justify-center'>
         <div className='container max-w-5xl py-6 mx-auto md:mx-auto'>
           <h2 className='py-4 mb-4 text-3xl font-semibold text-center text-primary dark:text-secondary'>
-            Saved Application Forms
+            Application Forms
           </h2>
           <div className='flex items-center content-center justify-center max-auto'>
             {!loading && (
@@ -189,13 +189,13 @@ const RecentForms = () => {
                 {reversedApplications.map((application) => (
                   <li
                     key={application.link}
-                    className='flex flex-col col-span-1 text-center bg-white divide-y divide-gray-200 rounded-lg shadow'>
+                    className='flex flex-col col-span-1 text-center bg-white divide-y divide-gray-200 rounded-lg shadow dark:bg-dark-tertiary'>
                     <div className='flex flex-col flex-1 p-8'>
-                      <h3 className='mt-2 text-xl font-bold text-primary'>
+                      <h3 className='mt-2 text-xl font-bold text-primary dark:text-white'>
                         {application.title}
                       </h3>
                       <dl className='flex flex-col justify-between flex-grow mt-1'>
-                        <dd className='text-sm text-gray-500'>
+                        <dd className='text-sm text-gray-500 dark:text-gray-200'>
                           {application.description.length > 155
                             ? `${application.description.substring(0, 155)}...`
                             : application.description}
@@ -213,14 +213,14 @@ const RecentForms = () => {
                           <button
                             onClick={() => openViewApplicationModal(application.id)}
                             rel='noopener noreferrer'
-                            className='relative inline-flex items-center justify-center flex-1 w-0 py-4 text-sm font-bold border border-transparent rounded-br-lg text-green hover:text-blue-800'>
+                            className='relative inline-flex items-center justify-center flex-1 w-0 py-4 text-sm font-bold border border-transparent rounded-br-lg text-green hover:text-[#317836]'>
                             <p className='ml-3'>View</p>
                           </button>
                         </div>
                         <div className='flex flex-1 w-0'>
                           <a
                             href={`/#/admin/update-saved-form/${application.id}`}
-                            className='relative inline-flex items-center justify-center flex-1 w-0 py-4 -mr-px text-sm font-medium text-gray-700 border border-transparent rounded-bl-lg hover:text-gray-500'>
+                            className='relative inline-flex items-center justify-center flex-1 w-0 py-4 -mr-px text-sm font-medium text-gray-700 border border-transparent rounded-bl-lg dark:hover:text-gray-500 hover:text-gray-500 dark:text-gray-200'>
                             <span className='ml-3'>Update</span>
                           </a>
                         </div>
