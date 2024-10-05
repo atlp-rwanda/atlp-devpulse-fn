@@ -48,6 +48,7 @@ const AdminNotification: React.FC = () => {
         "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541",
     },
   ]);
+
   const [filter, setFilter] = useState<FilterOptions>(FilterOptions.All);
   const [orderBy, setOrderBy] = useState<OrderOptions>(OrderOptions.Recent);
 
@@ -67,15 +68,8 @@ const AdminNotification: React.FC = () => {
     setOrderBy(e.target.value as OrderOptions);
   };
 
-  const filteredNotifications = notifications.filter((n) =>
-    filter === FilterOptions.All ? true : !n.read
-  );
-
-  const sortedNotifications = [...filteredNotifications].sort((a, b) =>
-    orderBy === OrderOptions.Recent
-      ? new Date(b.time).getTime() - new Date(a.time).getTime()
-      : new Date(a.time).getTime() - new Date(b.time).getTime()
-  );
+  const filteredNotifications = getFilteredNotifications(notifications, filter);
+  const sortedNotifications = sortNotifications(filteredNotifications, orderBy);
 
   return (
     <div className="h-screen w-full px-4 md:px-8">
@@ -94,6 +88,29 @@ const AdminNotification: React.FC = () => {
   );
 };
 
+// Helper function to filter notifications
+const getFilteredNotifications = (
+  notifications: NotificationType[],
+  filter: FilterOptions
+) => {
+  return notifications.filter((n) =>
+    filter === FilterOptions.All ? true : !n.read
+  );
+};
+
+// Helper function to sort notifications
+const sortNotifications = (
+  notifications: NotificationType[],
+  orderBy: OrderOptions
+) => {
+  return [...notifications].sort((a, b) =>
+    orderBy === OrderOptions.Recent
+      ? new Date(b.time).getTime() - new Date(a.time).getTime()
+      : new Date(a.time).getTime() - new Date(b.time).getTime()
+  );
+};
+
+// NotificationFilter component
 const NotificationFilter: React.FC<{
   filter: FilterOptions;
   setFilter: (filter: FilterOptions) => void;
@@ -113,7 +130,7 @@ const NotificationFilter: React.FC<{
         All
       </button>
       <button
-        className={`rounded-e-md w-20 py-2 px-4 border transition-colors ${
+        className={`rounded-e-md w-20 py-2 px-4 dark:bg-[#56C870] transition-colors ${
           filter === FilterOptions.Unread
             ? "text-white bg-primary dark:bg-[#56C870] dark:text-white"
             : "bg-white text-primary dark:bg-white dark:text-primary"
@@ -123,7 +140,7 @@ const NotificationFilter: React.FC<{
         Unread
       </button>
     </div>
-    <div className="ml-8 flex flex-row gap-5 items-center">
+    <div className="ml-8 flex flex-row gap-2 items-center">
       <span className="text-primary mr-3 dark:text-white">OrderBy:</span>
       <SelectField
         value={orderBy}
@@ -132,12 +149,13 @@ const NotificationFilter: React.FC<{
           { value: OrderOptions.Recent, label: "Most Recent" },
           { value: OrderOptions.Oldest, label: "Oldest" },
         ]}
-        className="rounded py-2 px-4 bg-primary dark:bg-[#56C870] text-white focus:outline-none cursor-pointer ml-5"
+        className="rounded py-2 px-4 bg-primary dark:bg-[#56C870] text-white focus:outline-none cursor-pointer"
       />
     </div>
   </div>
 );
 
+// NotificationList component
 const NotificationList: React.FC<{
   notifications: NotificationType[];
   onMarkAsRead: (id: string) => void;
