@@ -31,6 +31,7 @@ import Tinymce from "../../components/tinymce/Tinymce";
 import { Editor } from "@tinymce/tinymce-react";
 import { Editor as TinyMCEEditor } from "tinymce";
 import { toast } from "react-toastify";
+import * as icons from "react-icons/ai";
 export const customTheme = (theme: any) => {
   return {
     ...theme,
@@ -327,6 +328,7 @@ const ApplicantSeachJobPost = (props: any) => {
         <div className="">
           <div className=" table table-fixed mt-[5rem] w-[100%] top-[20%] md:top-[10%] pb-10 md:relative px-[10%] md:px-[10px]">
             <div className="">
+              
               <Select
                 className="sm:text-sm w-40 rounded-bt-rd dark:text-ltb"
                 options={[

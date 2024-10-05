@@ -8,9 +8,6 @@ export const getAllFilteredJobPosts =
   ({ page, itemsPerPage, All, wordEntered, filterAttribute }: any) =>
   async (dispatch: any) => {
     try {
-      if(filterAttribute==='' || filterAttribute===null){
-       return; 
-      }
     
       const response = await axios.post("/", {
         query: `
