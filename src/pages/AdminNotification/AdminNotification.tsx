@@ -58,7 +58,7 @@ const AdminNotification = () => {
       <div className="flex mt-10 space-x-6 mb-10 items-center">
         <div className="flex">
           <button
-            className={`rounded-s-md w-20 py-2 px-4 bg-white text-green border transition-colors ${
+            className={`rounded-s-md w-20 py-2 px-4 bg-white text-[#56C870]  border transition-colors ${
               filter === "all"
                 ? "bg-green text-black"
                 : "hover:bg-green hover:text-white"
@@ -68,10 +68,10 @@ const AdminNotification = () => {
             All
           </button>
           <button
-            className={`rounded-e-md w-20 py-2 px-4 bg-green text-white transition-colors ${
+            className={`rounded-e-md w-20 py-2 px-4 bg-primary dark:bg-[#56C870]  text-white transition-colors ${
               filter === "unread"
-                ? "bg-dark-frame-bg text-green border-green"
-                : "hover:bg-dark-frame-bg hover:text-green"
+                ? " text-green bg-primary dark:bg-[#56C870] "
+                : "hover:bg-dark-frame-bg hover:text-white"
             }`}
             onClick={() => setFilter("unread")}
           >
@@ -79,7 +79,7 @@ const AdminNotification = () => {
           </button>
         </div>
         <div className="ml-8 flex flex-row gap-2 items-center">
-          <span className="text-white  mr-3">OrderBy:</span>
+          <span className="text-primary mr-3 dark:text-white">OrderBy:</span>
           <SelectField
             value={orderBy}
             onChange={handleOrderChange}
@@ -87,7 +87,7 @@ const AdminNotification = () => {
               { value: "recent", label: "Most Recent" },
               { value: "oldest", label: "Oldest" },
             ]}
-            className="rounded py-2 px-4 bg-green text-white focus:outline-none cursor-pointer"
+            className="rounded py-2 px-4 bg-primary dark:bg-[#56C870]  text-white focus:outline-none cursor-pointer "
           />
         </div>
       </div>

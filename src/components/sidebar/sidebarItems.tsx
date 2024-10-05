@@ -55,12 +55,6 @@ export const sidebarItems1 = [
     title: "Application Cycles",
   },
   {
-    path: "Trainee-applicants",
-    icon: <Icon icon="ic:round-people"></Icon>,
-    title: "Trainees/Applicants",
-  },
-
-  {
     path: "grading",
     icon: <Icon icon="bxs:dashboard"></Icon>,
     title: "Grading System",
