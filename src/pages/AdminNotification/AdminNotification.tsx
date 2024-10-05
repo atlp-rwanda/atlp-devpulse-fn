@@ -11,6 +11,16 @@ interface NotificationType {
   image: string;
 }
 
+enum FilterOptions {
+  All = "all",
+  Unread = "unread",
+}
+
+enum OrderOptions {
+  Recent = "recent",
+  Oldest = "oldest",
+}
+
 const AdminNotification: React.FC = () => {
   const [notifications, setNotifications] = useState<NotificationType[]>([
     {
@@ -38,8 +48,8 @@ const AdminNotification: React.FC = () => {
         "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541",
     },
   ]);
-  const [filter, setFilter] = useState<"all" | "unread">("all");
-  const [orderBy, setOrderBy] = useState<"recent" | "oldest">("recent");
+  const [filter, setFilter] = useState<FilterOptions>(FilterOptions.All);
+  const [orderBy, setOrderBy] = useState<OrderOptions>(OrderOptions.Recent);
 
   const handleMarkAsRead = (id: string) => {
     setNotifications((prev) =>
@@ -54,15 +64,15 @@ const AdminNotification: React.FC = () => {
   };
 
   const handleOrderChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    setOrderBy(e.target.value as "recent" | "oldest");
+    setOrderBy(e.target.value as OrderOptions);
   };
 
   const filteredNotifications = notifications.filter((n) =>
-    filter === "all" ? true : !n.read
+    filter === FilterOptions.All ? true : !n.read
   );
 
   const sortedNotifications = [...filteredNotifications].sort((a, b) =>
-    orderBy === "recent"
+    orderBy === OrderOptions.Recent
       ? new Date(b.time).getTime() - new Date(a.time).getTime()
       : new Date(a.time).getTime() - new Date(b.time).getTime()
   );
@@ -85,44 +95,44 @@ const AdminNotification: React.FC = () => {
 };
 
 const NotificationFilter: React.FC<{
-  filter: "all" | "unread";
-  setFilter: (filter: "all" | "unread") => void;
-  orderBy: "recent" | "oldest";
+  filter: FilterOptions;
+  setFilter: (filter: FilterOptions) => void;
+  orderBy: OrderOptions;
   onOrderChange: (e: ChangeEvent<HTMLSelectElement>) => void;
 }> = ({ filter, setFilter, orderBy, onOrderChange }) => (
   <div className="flex mt-10 space-x-6 mb-10 items-center">
     <div className="flex">
       <button
-        className={`rounded-s-md w-20 py-2 px-4  border transition-colors ${
-          filter === "all"
-            ? " bg-primary text-white dark:bg-[#56C870] dark:text-white"
+        className={`rounded-s-md w-20 py-2 px-4 border transition-colors ${
+          filter === FilterOptions.All
+            ? "bg-primary text-white dark:bg-[#56C870] dark:text-white"
             : "bg-white text-primary dark:bg-white dark:text-primary"
         }`}
-        onClick={() => setFilter("all")}
+        onClick={() => setFilter(FilterOptions.All)}
       >
         All
       </button>
       <button
-        className={`rounded-e-md w-20 py-2 px-4  dark:bg-[#56C870] transition-colors ${
-          filter === "unread"
+        className={`rounded-e-md w-20 py-2 px-4 border transition-colors ${
+          filter === FilterOptions.Unread
             ? "text-white bg-primary dark:bg-[#56C870] dark:text-white"
-            : "bg-white text-primary  dark:bg-white dark:text-primary"
+            : "bg-white text-primary dark:bg-white dark:text-primary"
         }`}
-        onClick={() => setFilter("unread")}
+        onClick={() => setFilter(FilterOptions.Unread)}
       >
         Unread
       </button>
     </div>
-    <div className="ml-8 flex flex-row gap-2 items-center">
+    <div className="ml-8 flex flex-row gap-5 items-center">
       <span className="text-primary mr-3 dark:text-white">OrderBy:</span>
       <SelectField
         value={orderBy}
         onChange={onOrderChange}
         options={[
-          { value: "recent", label: "Most Recent" },
-          { value: "oldest", label: "Oldest" },
+          { value: OrderOptions.Recent, label: "Most Recent" },
+          { value: OrderOptions.Oldest, label: "Oldest" },
         ]}
-        className="rounded py-2 px-4 bg-primary dark:bg-[#56C870] text-white focus:outline-none cursor-pointer"
+        className="rounded py-2 px-4 bg-primary dark:bg-[#56C870] text-white focus:outline-none cursor-pointer ml-5"
       />
     </div>
   </div>
