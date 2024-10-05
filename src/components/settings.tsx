@@ -65,21 +65,6 @@ const ThemeSettings: React.FC<{ theme: boolean; setTheme: (theme: boolean) => vo
     close();
   };
 
-  const renderThemeDropdown = () => (
-    isOpen && (
-      <div className={`absolute mt-2 right-0 bg-gray-200 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md shadow-lg`}>
-        <ul className={`text-sm ${theme ? "text-black" : "text-white"}`}>
-          <li className={`px-4 py-2 cursor-pointer bg-gray-200 dark:bg-gray-800`} onClick={() => handleThemeChange("Dark Theme")}>
-            Light Theme
-          </li>
-          <li className={`px-4 py-2 cursor-pointer bg-gray-200 dark:bg-gray-800`} onClick={() => handleThemeChange("Light Theme")}>
-            Dark Theme
-          </li>
-        </ul>
-      </div>
-    )
-  );
-
   return (
     <div className="mb-4">
       <h2 className="text-xl font-medium">Appearance</h2>
@@ -133,24 +118,6 @@ const LanguageSettings: React.FC<{ theme: boolean }> = ({ theme }) => {
     localStorage.setItem("language", newLanguage);
     close();
   };
-
-  const renderLanguageDropdown = () => (
-    isOpen && (
-      <div className="absolute mt-2 right-0 bg-gray-800 border border-gray-600 rounded-md shadow-lg">
-        <ul className={`text-sm ${theme ? "text-black" : "text-white"}`}>
-          <li className={`px-4 py-2 cursor-pointer ${theme ? "bg-gray-200" : "bg-gray-800"}`} onClick={() => handleLanguageChange("English")}>
-            English
-          </li>
-          <li className={`px-4 py-2 cursor-pointer ${theme ? "bg-gray-200" : "bg-gray-800"}`} onClick={() => handleLanguageChange("French")}>
-            French
-          </li>
-          <li className={`px-4 py-2 cursor-pointer ${theme ? "bg-gray-200" : "bg-gray-800"}`} onClick={() => handleLanguageChange("Kinyarwanda")}>
-            Kinyarwanda
-          </li>
-        </ul>
-      </div>
-    )
-  );
 
   return (
     <div className="mb-4">
