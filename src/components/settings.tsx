@@ -67,7 +67,7 @@ const ThemeSettings: React.FC<{ theme: boolean; setTheme: (theme: boolean) => vo
 
   return (
     <div className="mb-4">
-      <h2 className="text-md font-medium">Appearance</h2>
+      <h2 className="text-xl font-medium">Appearance</h2>
       <div className="relative flex justify-between items-center mt-0 pb-0">
         <p className="opacity-70 text-xs">Theme preferences</p>
         <button
@@ -121,7 +121,7 @@ const LanguageSettings: React.FC<{ theme: boolean }> = ({ theme }) => {
 
   return (
     <div className="mb-4">
-      <h2 className="text-md font-medium">Language</h2>
+      <h2 className="text-xl font-medium">Language</h2>
       <div className="relative flex justify-between items-center mt-0 pb-0">
         <p className="opacity-70 text-xs">Language, hearing, ...</p>
         <button
@@ -141,7 +141,7 @@ const LanguageSettings: React.FC<{ theme: boolean }> = ({ theme }) => {
 
 const AccountSettings: React.FC<{ theme: boolean }> = ({ theme }) => (
   <div className="mb-4">
-    <h2 className="text-md font-medium">My Account</h2>
+    <h2 className="text-xl font-medium">My Account</h2>
     <div className="flex justify-between items-center">
       <p className="opacity-70 text-xs">Edit profile, export account data, …</p>
       <button className="text-sm">Change settings</button>
@@ -157,7 +157,7 @@ const NotificationSettings: React.FC<{ theme: boolean }> = ({ theme }) => {
   return (
     <div>
       <div className="mb-4">
-        <h2 className="text-md font-medium">Email Notifications</h2>
+        <h2 className="text-xl font-medium">Email Notifications</h2>
         <div className="flex justify-between items-center mt-2">
           <p className="opacity-70 text-xs">Feedback emails, reminder emails, news emails</p>
           <button onClick={toggleEmailNotifications} className="p-1 rounded">
@@ -167,7 +167,7 @@ const NotificationSettings: React.FC<{ theme: boolean }> = ({ theme }) => {
       </div>
       <hr className={`border-t ${theme ? "border-gray-500" : "border-gray-600"} my-4`} />
       <div className="mb-4">
-        <h2 className="text-md font-medium">Push Notifications</h2>
+        <h2 className="text-xl font-medium">Push Notifications</h2>
         <div className="flex justify-between items-center mt-2">
           <p className="opacity-70 text-xs">Grade updates, session reminders, performance, comments</p>
           <button onClick={togglePushNotifications} className="p-1 rounded">
@@ -182,7 +182,7 @@ const NotificationSettings: React.FC<{ theme: boolean }> = ({ theme }) => {
 
 const PrivacySecurity: React.FC<{ theme: boolean }> = ({ theme }) => (
   <div className="mb-4">
-    <h2 className="text-md font-medium">Privacy and Security</h2>
+    <h2 className="text-xl font-medium">Privacy and Security</h2>
     <div className="flex justify-between items-center">
       <p className="opacity-70 text-xs">Privacy and Security</p>
       <button className="text-sm">Change settings</button>
@@ -193,10 +193,10 @@ const PrivacySecurity: React.FC<{ theme: boolean }> = ({ theme }) => (
 
 const LoginActivity: React.FC<{ theme: boolean }> = ({ theme }) => (
   <div className="mb-4">
-    <h2 className="text-md font-medium">Login Activity</h2>
+    <h2 className="text-xl font-medium">Login Activity</h2>
     <div className="flex justify-between items-center">
-      <p className="opacity-70 text-xs">Session history</p>
-      <button className="text-sm">Manage</button>
+      <p className="opacity-70 text-xs">History of your login sessions</p>
+      <button className="text-sm">View</button>
     </div>
     <hr className={`border-t ${theme ? "border-gray-500" : "border-gray-600"} my-4`} />
   </div>
