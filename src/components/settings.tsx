@@ -144,7 +144,7 @@ const LanguageSettings: React.FC<{ theme: boolean }> = ({ theme }) => {
 
 const AccountSettings: React.FC<{ theme: boolean }> = ({ theme }) => (
   <div className="mb-4">
-    <h2 className="text-md font-medium">My Account</h2>
+    <h2 className="text-xl font-medium">My Account</h2>
     <div className="flex justify-between items-center">
       <p className="opacity-70 text-xs">Edit profile, export account data, …</p>
       <button className="text-sm">Change settings</button>
@@ -200,10 +200,10 @@ const PrivacySecurity: React.FC<{ theme: boolean }> = ({ theme }) => (
 
 const LoginActivity: React.FC<{ theme: boolean }> = ({ theme }) => (
   <div className="mb-4">
-    <h2 className="text-md font-medium">Login Activity</h2>
+    <h2 className="text-xl font-medium">Login Activity</h2>
     <div className="flex justify-between items-center">
-      <p className="opacity-70 text-xs">Session history</p>
-      <button className="text-sm">Manage</button>
+      <p className="opacity-70 text-xs">History of your login sessions</p>
+      <button className="text-sm">View</button>
     </div>
     <hr className={`border-t ${theme ? "border-gray-500" : "border-gray-600"} my-4`} />
   </div>
