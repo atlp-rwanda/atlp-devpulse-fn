@@ -8,12 +8,40 @@ const RESET_PASSWORD_MUTATION = `
 `;
 
 interface ResetPasswordResponse {
-  resetPassword: string
+  resetPassword: string;
 }
 
 interface ResetPasswordValues {
   password: string;
 }
+
+const extractErrorMessage = (error: ClientError): string => {
+  const graphqlError = error.response.errors?.[0];
+  return graphqlError?.message || "An error occurred while resetting your password.";
+};
+
+const handleGraphQLError = (error: ClientError, setSuccessMessage: (msg: string) => void, setError: (msg: string) => void) => {
+  const graphqlError = error.response.errors?.[0];
+
+  if (graphqlError?.message.includes("Boolean cannot represent a non boolean value")) {
+    const extractedMessage = graphqlError?.message.match(/message: "(.*?)"/)?.[1];
+    if (extractedMessage) {
+      setSuccessMessage(extractedMessage);
+    } else {
+      setError("An unexpected error occurred while resetting your password.");
+    }
+  } else {
+    setError(extractErrorMessage(error));
+  }
+};
+
+const getApiUrl = (): string => {
+  const API_URL = process.env.BACKEND_URL;
+  if (!API_URL) {
+    throw new Error("Backend URL is not defined");
+  }
+  return API_URL;
+};
 
 export const useResetPassword = (token: string | null) => {
   const [successMessage, setSuccessMessage] = useState("");
@@ -30,11 +58,7 @@ export const useResetPassword = (token: string | null) => {
     }
 
     try {
-      const API_URL = process.env.BACKEND_URL;
-      if (!API_URL) {
-        throw new Error("Backend URL is not defined");
-      }
-
+      const API_URL = getApiUrl();
       const response = await request<ResetPasswordResponse>(
         `${API_URL}/graphql`,
         RESET_PASSWORD_MUTATION,
@@ -52,21 +76,7 @@ export const useResetPassword = (token: string | null) => {
       setError("");
     } catch (error) {
       if (error instanceof ClientError) {
-        const graphqlError = error.response.errors?.[0];
-
-        if (graphqlError?.message.includes("Boolean cannot represent a non boolean value")) {
-         
-          const extractedMessage = graphqlError?.message.match(/message: "(.*?)"/)?.[1];
-          if (extractedMessage) {
-           
-            setSuccessMessage(extractedMessage);
-            setError("");
-          } else {
-            setError("An unexpected error occurred while resetting your password.");
-          }
-        } else {
-          setError(graphqlError?.message || "An error occurred while resetting your password.");
-        }
+        handleGraphQLError(error, setSuccessMessage, setError);
       } else if (error instanceof Error) {
         setError(error.message);
       } else {
