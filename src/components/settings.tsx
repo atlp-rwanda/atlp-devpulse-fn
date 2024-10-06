@@ -198,7 +198,6 @@ const LoginActivity: React.FC<{ theme: boolean }> = ({ theme }) => (
       <p className="opacity-70 text-xs">History of your login sessions</p>
       <button className="text-sm">View</button>
     </div>
-    <hr className={`border-t ${theme ? "border-gray-500" : "border-gray-600"} my-4`} />
   </div>
 );
 
@@ -208,9 +207,9 @@ const SettingsPage: React.FC = () => {
   return (
     <div className={`p-6 ${theme ? "bg-gray-100 text-black" : "bg-gray-800 text-white"} w-full ml-24 mr-24 mt-6 rounded-2xl`}>
       <h1 className="text-2xl font-semibold mb-6">Settings</h1>
+      <AccountSettings theme={theme} />
       <ThemeSettings theme={theme} setTheme={setTheme} />
       <LanguageSettings theme={theme} />
-      <AccountSettings theme={theme} />
       <NotificationSettings theme={theme} />
       <PrivacySecurity theme={theme} />
       <LoginActivity theme={theme} />
