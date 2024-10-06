@@ -1,10 +1,10 @@
 import axios from "axios";
-import { GET_TRAINEE_PERFORMANCE } from "redux";
+import { GET_TRAINEE_PERFORMANCE } from "..";
 import creator from "./creator";
 
 export const getTraineePerformance = (traineeId: any) => async (dispatch: any) => {
     try{
-        const response = await axios.post('/', {
+        const response = await axios.post(`${process.env.BACKEND_URL}`, {
             query: `
                 query GetTraineePerformance($traineeId: ID!) {
                     getTraineePerformance(traineeId: $traineeId) {
@@ -22,6 +22,7 @@ export const getTraineePerformance = (traineeId: any) => async (dispatch: any) =
             `,
             variables: { traineeId }
         })
+        
         const performanceData = response.data.data.getTraineePerformance;
         dispatch(creator(GET_TRAINEE_PERFORMANCE, performanceData));
 

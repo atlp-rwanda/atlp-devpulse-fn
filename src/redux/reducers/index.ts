@@ -40,6 +40,8 @@ import {
   singleApplicationReducer,
 } from './applicationReducer';
 import { assessmentsReducer } from './assessmentReducer';
+import { attendanceReducer } from './attendanceReducer';
+import { performanceReducer } from './performanceReducer';
 
 const allReducers = combineReducers({
   counter: counterReducer,
@@ -78,6 +80,9 @@ const allReducers = combineReducers({
   myApplications: applicationsReducer,
   currentApplication: singleApplicationReducer,
   assessments: assessmentsReducer,
+  traineeApplicant: traineeReducer,
+  traineeAttendance: attendanceReducer,
+  traineePerformance: performanceReducer
 });
 
 export type RootState = ReturnType<typeof allReducers>;

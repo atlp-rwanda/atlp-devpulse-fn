@@ -1,5 +1,5 @@
 import creator from "./creator";
-import { GET_TRAINEE, CREATE_TRAINEES, CREATE_CYCLE_ERROR } from "..";
+import { GET_TRAINEE, CREATE_TRAINEES, CREATE_CYCLE_ERROR, SET_TRAINEE } from "..";
 import { toast } from "react-toastify";
 import axios from "axios";
 
@@ -112,34 +112,46 @@ export const createTrainee =
 
 export const getTraineeApplicant = (traineeId: string) => async(dispatch: any) => {
   try{
-    const response = await axios.post('/', {
+    const response = await axios.post(`${process.env.BACKEND_URL}`, {
       query: `
         query GetOneTrainee($ID: ID!) {
           getOneTrainee(ID: $ID) {
             _id
-            firstName
-            lastName
-            email
-            status
             applicationPhase
-            cohort {
-              id
-              title
-              program
-              cycle
-              start
-              end
-              phase
-            }
+            cohort
           }
         }
       `,
       variables: { ID: traineeId }
     });
+    console.log('Trainee applicant response:', response.data);
+    if (response.data.errors) {
+      console.error('GraphQL Errors:', response.data.errors);
+      return;
+    }
     const trainee = response.data.data.getOneTrainee;
     dispatch(creator(GET_TRAINEE, trainee));
 
-  }catch (error) {
+  }catch (error: any) {
     console.error('Error fetching trainee:', error);
+    console.error('Error response:', error.response?.data);
   }
 }
+
+export const getTraineeByUserId = (userId: string) => async (dispatch: any) => {
+  try {
+    const response = await axios.post(`${process.env.BACKEND_URL}`, {
+      query: `
+        query GetTraineeByUserId($userId: ID!) {
+          getTraineeByUserId(userId: $userId)
+        }
+      `,
+      variables: { userId },
+    });
+
+    const traineeData = response.data.data.getTraineeByUserId;
+    dispatch(creator(SET_TRAINEE, traineeData));
+  } catch (error) {
+    console.error("Error fetching trainee:", error);
+  }
+};
