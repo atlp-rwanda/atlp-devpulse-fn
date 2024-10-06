@@ -19,7 +19,7 @@ export const SuccessMessage: React.FC<SuccessMessageProps> = ({ message, onNavig
 
   return (
     <div className="text-center">
-      <p className="text-xl font-bold text-green-300 dark:text-green-400">{message}</p>
+      <p className="text-xl font-bold text-green-600 dark:text-gray-300">{message}</p>
       <p className="mt-2 text-gray-200 dark:text-gray-300">
         Redirecting to login in 3 seconds...
       </p>
