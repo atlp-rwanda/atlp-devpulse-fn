@@ -6,6 +6,7 @@ import { MoonIcon } from "@heroicons/react/solid";
 import ProfileDropdown from "../profileDropdown";
 import { IoClose } from "react-icons/io5";
 import * as icon from "react-icons/hi2";
+import * as icons from "react-icons/ai";
 import { AiOutlineBell } from "react-icons/ai";
 import { useTheme } from "../../hooks/darkmode";
 const logo: string = require("../../assets/logo.svg").default;
@@ -13,6 +14,7 @@ const profile: string = require("../../assets/avatar.png").default;
 const LogoWhite: string = require("../../assets/logoWhite.svg").default;
 import jwtDecode from "jwt-decode";
 import {destination} from '../../utils/utils'
+import SearchResults from "../../components/SearchResults";
 
 const placeholderImage = profile;
 
@@ -38,6 +40,13 @@ function NavBar() {
     setShowprofileDropdown(!showProfileDropdown);
 
   
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filterAttribute, setFilterAttribute] = useState('');
+  const [triggerSearch, setTriggerSearch] = useState(false);
+
+  const handleSearch = () => {
+    setTriggerSearch(true);
+  };
 
   return (
     
@@ -87,6 +96,34 @@ function NavBar() {
           </span>
 
         </div>
+        
+        {/* Add Search Bar */}
+        <div className="flex items-center">
+        <div className="flex bg-gray-100 dark:bg-dark-tertiary rounded-xl h-10 items-center border-2 ">
+          <select
+            className="bg-transparent border-none text-gray-500 dark:text-gray-300 outline-none px-3 rounded-l-full"
+            value={filterAttribute}
+            onChange={(e) => setFilterAttribute(e.target.value)}
+          >
+            <option value="all">All</option>
+            <option value="category1">Cat 1</option>
+            <option value="category2">Cat 2</option>
+          </select>
+          <input
+            type="text"
+            placeholder="Search devpulse"
+            className="bg-transparent outline-none px-2 text-gray-700 dark:text-gray-300"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          <button className="px-4" onClick={handleSearch}>
+            <icons.AiOutlineSearch className="text-gray-600 cursor-pointer hover:text-cyan-300" />
+          </button>
+        </div>
+      </div>
+
+      {triggerSearch && <SearchResults searchTerm={searchTerm} filterAttribute={filterAttribute} />}
+
         <div className="flex items-center mr-4">
           <span className="flex items-center">
             {" "}
