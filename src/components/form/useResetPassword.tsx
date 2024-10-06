@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { request } from "graphql-request";
+import { request, ClientError } from "graphql-request";
 
 const RESET_PASSWORD_MUTATION = `
   mutation ResetPassword($token: String!, $newPassword: String!) {
@@ -7,11 +7,22 @@ const RESET_PASSWORD_MUTATION = `
   }
 `;
 
+interface ResetPasswordResponse {
+  resetPassword: string
+}
+
+interface ResetPasswordValues {
+  password: string;
+}
+
 export const useResetPassword = (token: string | null) => {
-  const [passwordChanged, setPasswordChanged] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
   const [error, setError] = useState("");
 
-  const handleSubmit = async (values: { password: string }, { setSubmitting }) => {
+  const handleSubmit = async (
+    values: ResetPasswordValues,
+    { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }
+  ) => {
     if (!token) {
       setError("Invalid or missing token");
       setSubmitting(false);
@@ -20,18 +31,51 @@ export const useResetPassword = (token: string | null) => {
 
     try {
       const API_URL = process.env.BACKEND_URL;
-      await request(`${API_URL}/graphql`, RESET_PASSWORD_MUTATION, {
-        token,
-        newPassword: values.password,
-      });
-      setPasswordChanged(true);
+      if (!API_URL) {
+        throw new Error("Backend URL is not defined");
+      }
+
+      const response = await request<ResetPasswordResponse>(
+        `${API_URL}/graphql`,
+        RESET_PASSWORD_MUTATION,
+        {
+          token,
+          newPassword: values.password,
+        }
+      );
+
+      if (!response.resetPassword) {
+        throw new Error("Failed to reset password");
+      }
+
+      setSuccessMessage(response.resetPassword);
       setError("");
     } catch (error) {
-      setError("An error occurred while resetting your password");
+      if (error instanceof ClientError) {
+        const graphqlError = error.response.errors?.[0];
+
+        if (graphqlError?.message.includes("Boolean cannot represent a non boolean value")) {
+         
+          const extractedMessage = graphqlError?.message.match(/message: "(.*?)"/)?.[1];
+          if (extractedMessage) {
+           
+            setSuccessMessage(extractedMessage);
+            setError("");
+          } else {
+            setError("An unexpected error occurred while resetting your password.");
+          }
+        } else {
+          setError(graphqlError?.message || "An error occurred while resetting your password.");
+        }
+      } else if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError("An unexpected error occurred");
+      }
     } finally {
       setSubmitting(false);
     }
   };
 
-  return { passwordChanged, error, handleSubmit };
+  return { successMessage, error, handleSubmit };
 };

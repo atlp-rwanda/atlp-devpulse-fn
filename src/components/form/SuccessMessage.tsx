@@ -1,20 +1,28 @@
-
-import React from "react";
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface SuccessMessageProps {
+  message: string;
   onNavigate: () => void;
 }
 
-export const SuccessMessage: React.FC<SuccessMessageProps> = ({ onNavigate }) => (
-  <div className="text-center">
-    <p className="text-green-500 dark:text-green-400 mb-4">
-      Your password has been successfully changed!
-    </p>
-    <button
-      onClick={onNavigate}
-      className="py-2 px-4 text-white rounded-md bg-[#56C870] focus:outline-none"
-    >
-      Go to Login
-    </button>
-  </div>
-);
+export const SuccessMessage: React.FC<SuccessMessageProps> = ({ message, onNavigate }) => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      onNavigate();
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, [onNavigate]);
+
+  return (
+    <div className="text-center">
+      <p className="text-xl font-bold text-green-300 dark:text-green-400">{message}</p>
+      <p className="mt-2 text-gray-200 dark:text-gray-300">
+        Redirecting to login in 3 seconds...
+      </p>
+    </div>
+  );
+};

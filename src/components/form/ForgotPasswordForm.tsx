@@ -12,7 +12,7 @@ interface ForgotPasswordFormProps {
 export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({ emailSent, error, onSubmit }) => {
   if (emailSent) {
     return (
-      <p className="text-green-300 dark:text-green-400 text-center">
+      <p className="text-white dark:text-green-400 text-center">
         An email with password reset instructions has been sent to your email address.
       </p>
     );
