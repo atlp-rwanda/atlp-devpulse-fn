@@ -15,16 +15,42 @@ interface ResetPasswordValues {
   password: string;
 }
 
+interface SubmittingHelpers {
+  setSubmitting: (isSubmitting: boolean) => void;
+}
+
+const extractMessageFromError = (error: ClientError): string | null => {
+  const graphqlError = error.response.errors?.[0];
+  if (graphqlError?.message.includes("Boolean cannot represent a non boolean value")) {
+    return graphqlError.message.match(/message: "(.*?)"/)?.[1] || null;
+  }
+  return null;
+};
+
+const handleGraphQLError = (error: ClientError): { success: string } | { error: string } => {
+  const extractedMessage = extractMessageFromError(error);
+  if (extractedMessage) {
+    return { success: extractedMessage };
+  }
+  const errorMessage = error.response.errors?.[0]?.message || "An error occurred while resetting your password.";
+  return { error: errorMessage };
+};
+
 export const useResetPassword = (token: string | null) => {
   const [successMessage, setSuccessMessage] = useState("");
   const [error, setError] = useState("");
 
+  const resetStates = (success: string = "", errorMsg: string = "") => {
+    setSuccessMessage(success);
+    setError(errorMsg);
+  };
+
   const handleSubmit = async (
     values: ResetPasswordValues,
-    { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }
+    { setSubmitting }: SubmittingHelpers
   ) => {
     if (!token) {
-      setError("Invalid or missing token");
+      resetStates("", "Invalid or missing token");
       setSubmitting(false);
       return;
     }
@@ -48,30 +74,22 @@ export const useResetPassword = (token: string | null) => {
         throw new Error("Failed to reset password");
       }
 
-      setSuccessMessage(response.resetPassword);
-      setError("");
+      resetStates(response.resetPassword);
     } catch (error) {
+      let errorMessage = "An unexpected error occurred";
+      
       if (error instanceof ClientError) {
-        const graphqlError = error.response.errors?.[0];
-
-        if (graphqlError?.message.includes("Boolean cannot represent a non boolean value")) {
-         
-          const extractedMessage = graphqlError?.message.match(/message: "(.*?)"/)?.[1];
-          if (extractedMessage) {
-           
-            setSuccessMessage(extractedMessage);
-            setError("");
-          } else {
-            setError("An unexpected error occurred while resetting your password.");
-          }
-        } else {
-          setError(graphqlError?.message || "An error occurred while resetting your password.");
+        const result = handleGraphQLError(error);
+        if ('success' in result) {
+          resetStates(result.success);
+          return;
         }
+        errorMessage = result.error;
       } else if (error instanceof Error) {
-        setError(error.message);
-      } else {
-        setError("An unexpected error occurred");
+        errorMessage = error.message;
       }
+      
+      resetStates("", errorMessage);
     } finally {
       setSubmitting(false);
     }
