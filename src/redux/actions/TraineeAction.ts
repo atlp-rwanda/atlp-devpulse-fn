@@ -124,7 +124,6 @@ export const getTraineeApplicant = (traineeId: string) => async(dispatch: any) =
       `,
       variables: { ID: traineeId }
     });
-    console.log('Trainee applicant response:', response.data);
     if (response.data.errors) {
       console.error('GraphQL Errors:', response.data.errors);
       return;

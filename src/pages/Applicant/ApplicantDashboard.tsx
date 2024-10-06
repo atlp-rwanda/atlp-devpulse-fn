@@ -47,15 +47,11 @@ const ApplicantDashboard = (props: any) => {
   const traineeId = useSelector(
     (state: any) => state.traineeApplicant.currentTrainee
   );
-  console.log("applicant trainee id", traineeId);
+  
   const traineeData = useSelector((state: any) => state.traineeApplicant.data);
-  console.log("traineeData", traineeData);
   const attendance = useSelector((state: any) => state.traineeAttendance);
   const performance = useSelector((state: any) => state.traineePerformance);
   const cohort = useSelector((state: any) => state.cohorts);
-  console.log("performance", performance);
-  console.log("attendance", attendance);
-  console.log("cohort", cohort);
 
   useEffect(() => {
     const userId = localStorage.getItem("userId");

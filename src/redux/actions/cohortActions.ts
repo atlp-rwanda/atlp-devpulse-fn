@@ -53,9 +53,7 @@ export const getCohort =(getCohortId: any) => async (dispatch: any) => {
       `,
       variables: { getCohortId }
     });
-    console.log('GraphQL Response:', response.data);
     const cohortData = await response.data.data.getCohort;
-    console.log("cohort data" , cohortData)
     dispatch(creator(GET_TRAINEE_COHORT, cohortData));
   } catch (error) {
     if (error) {
