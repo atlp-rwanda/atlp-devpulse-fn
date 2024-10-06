@@ -112,7 +112,7 @@ export const sidebarItems2 = [
 
 export const sidebarItems3 = [
   {
-    path: "/settings",
+    path: "settings",
     icon: <Icon icon="eva:settings-2-outline"></Icon>,
     title: "Settings",
   },
