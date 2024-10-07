@@ -12,6 +12,7 @@ const logo: string = require("../../assets/logo.svg").default;
 const profile: string = require("../../assets/avatar.png").default;
 const LogoWhite: string = require("../../assets/logoWhite.svg").default;
 import jwtDecode from "jwt-decode";
+import {destination} from '../../utils/utils'
 
 const placeholderImage = profile;
 
@@ -20,6 +21,7 @@ const onImageError = (e) => {
 }
 
 function NavBar() {
+  const userDestination = destination();
   const access_token = localStorage.getItem("access_token");
   //@ts-ignore
   const user = access_token ? jwtDecode(access_token).picture : profile;
@@ -35,7 +37,10 @@ function NavBar() {
   const handleShowProfileDropdown = () =>
     setShowprofileDropdown(!showProfileDropdown);
 
+  
+
   return (
+    
     <div className="flex items-center dark:bg-zinc-800 ">
       {showProfileDropdown && (
         <ProfileDropdown
@@ -59,8 +64,9 @@ function NavBar() {
               <IoClose className="w-7 text-9xl dark:text-dark-text-fill" />
             )}
           </span>
+          
           <span>
-            <Link to="/" className="flex items-center">
+            <Link to={userDestination} className="flex items-center">
               {theme ? (
                 <img
                   className="cursor-pointer mx-2 fill-[blue]"
@@ -79,6 +85,7 @@ function NavBar() {
               </h1>
             </Link>
           </span>
+
         </div>
         <div className="flex items-center mr-4">
           <span className="flex items-center">
