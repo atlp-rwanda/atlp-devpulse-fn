@@ -11,11 +11,7 @@ const Dropdown = ({ isOpen, handleChange, items, theme }) => {
       <ul className={`text-sm ${theme ? "text-black" : "text-white"}`}>
         {items.map((item) => (
           <li
-            key={item}
-            className={`px-4 py-2 cursor-pointer ${theme ? 'bg-gray-200' : 'bg-gray-800'}`}
-            onClick={() => handleChange(item)}
-          >
-            {item}
+            key={item} className={`px-4 py-2 cursor-pointer ${theme ? 'bg-gray-200' : 'bg-gray-800'}`} onClick={() => handleChange(item)}> {item}
           </li>
         ))}
       </ul>
@@ -23,11 +19,11 @@ const Dropdown = ({ isOpen, handleChange, items, theme }) => {
   );
 };
 
-const Section = ({ title, children, theme }) => (
+interface SectionProps { title: string; children: React.ReactNode; theme: boolean; isLast?: boolean; }
+
+const Section: React.FC<SectionProps> = ({ title, children, theme, isLast }) => (
   <div className="mb-4">
-    <h2 className="text-xl font-medium">{title}</h2>
-    {children}
-    <hr className={`border-t ${theme ? "border-gray-500" : "border-gray-600"} my-4`} />
+    <h2 className="text-xl font-medium">{title}</h2> {children} {!isLast && <hr className={`border-t ${theme ? "border-gray-500" : "border-gray-600"} my-4`} />}
   </div>
 );
 
@@ -98,11 +94,9 @@ const SettingsPage: React.FC = () => {
       <Section title="Language" theme={theme}>
         <div className="relative flex justify-between items-center mt-0 pb-0">
           <p className="opacity-70 text-xs">Language, hearing, ...</p>
-          <DropdownButton
-            label={languageLabel} isOpen={isOpen} toggle={toggle} theme={theme} ariaLabel="Toggle Language Dropdown"
+          <DropdownButton label={languageLabel} isOpen={isOpen} toggle={toggle} theme={theme} ariaLabel="Toggle Language Dropdown"
           />
-          <Dropdown
-            isOpen={isOpen} handleChange={handleLanguageChange} items={["English", "French", "Kinyarwanda"]} theme={theme}
+          <Dropdown isOpen={isOpen} handleChange={handleLanguageChange} items={["English", "French", "Kinyarwanda"]} theme={theme}
           />
         </div>
       </Section>
@@ -150,8 +144,8 @@ const SettingsPage: React.FC = () => {
     </Section>
   );
 
-  const LoginActivity = () => (
-    <Section title="Login Activity" theme={theme}>
+  const LoginActivity: React.FC<{ isLast?: boolean }> = ({ isLast }) => (
+    <Section title="Login Activity" theme={theme} isLast={isLast}>
       <div className="flex justify-between items-center">
         <p className="opacity-70 text-xs">History of your login sessions</p> <button className="text-sm">View</button>
       </div>
@@ -161,7 +155,7 @@ const SettingsPage: React.FC = () => {
   return (
     <div className={`p-6 ${theme ? "bg-gray-100 text-black" : "bg-gray-800 text-white"} w-full ml-24 mr-24 mt-6 rounded-2xl`}>
       <h1 className="text-2xl font-semibold mb-6">Settings</h1>
-      <AccountSettings /> <ThemeSettings /> <LanguageSettings /> <NotificationSettings /> <PrivacySecurity /> <LoginActivity />
+      <AccountSettings /> <ThemeSettings /> <LanguageSettings /> <NotificationSettings /> <PrivacySecurity /> <LoginActivity isLast />
     </div>
   );
 };

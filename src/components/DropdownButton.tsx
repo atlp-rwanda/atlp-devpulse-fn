@@ -18,7 +18,7 @@ const DropdownButton: React.FC<DropdownButtonProps> = ({
   return (
     <button
       onClick={toggle}
-      className={`relative inline-flex items-center px-3 py-2 border rounded transition-colors focus:outline-none ${
+      className={`relative inline-flex items-center text-sm px-3 py-2 border rounded transition-colors focus:outline-none ${
         theme ? "bg-gray-200 border-gray-300" : "bg-gray-800 border-gray-600"
       }`}
       aria-expanded={isOpen}
