@@ -8,7 +8,6 @@ export const getAllFilteredJobPosts =
   ({ page, itemsPerPage, All, wordEntered, filterAttribute }: any) =>
   async (dispatch: any) => {
     try {
-    
       const response = await axios.post("/", {
         query: `
         query FilterJobDetails($input: FilterOptions) {
