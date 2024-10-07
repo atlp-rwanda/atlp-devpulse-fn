@@ -101,6 +101,7 @@ export const applicantSidebarItems = [
     title: "Job Post ",
   },
 ];
+
 export const sidebarItems2 = [
   {
     path: "/documents",

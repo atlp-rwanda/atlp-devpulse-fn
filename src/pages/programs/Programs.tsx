@@ -488,7 +488,7 @@ const Programs = (props: any) => {
                                         >
                                           <li>
                                             <Link
-                                              to={`/program/${item._id}/edit`}
+                                              to={`/admin/program/${item._id}/edit`}
                                               className="text-sm hover:bg-gray-100 text-gray-700 dark:hover:bg-gray-500 dark:text-white  block px-4 py-2"
                                             >
                                               Edit
@@ -496,7 +496,7 @@ const Programs = (props: any) => {
                                           </li>
                                           <li>
                                             <Link
-                                              to={`/program/${item._id}`}
+                                              to={`/admin/program/${item._id}`}
                                               className="text-sm hover:bg-gray-100 text-gray-700  dark:text-white   dark:hover:bg-gray-500 block px-4 py-2"
                                             >
                                               View
