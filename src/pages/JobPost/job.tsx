@@ -378,7 +378,7 @@ const Jobs = (props: any) => {
                                       >
                                         <li>
                                           <Link
-                                            to={`#`}
+                                            to={`/admin/job/post/edit/${item.id}`}
                                             className="text-sm hover:bg-gray-100 text-gray-700 dark:hover:bg-gray-500 dark:text-white  block px-4 py-2"
                                           >
                                             Edit

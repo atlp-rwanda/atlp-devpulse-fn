@@ -41,6 +41,7 @@ import ApplicationDetails from "../pages/Applications/ViewSingleApplication";
 import Dashboard from "../pages/Dashboard";
 import ApplicantLayout from "../pages/Applicant/ApplicantLayout";
 import AdminLayout from "../components/Layout/Admins/AdminLayout";
+import UpdateJobPost from "../pages/JobPost/updateJobPost";
 
 function Navigation() {
   const roleName = localStorage.getItem("roleName");
@@ -224,6 +225,14 @@ function Navigation() {
           element={
             <PrivateRoute>
               <SingleJobPostDetails />
+            </PrivateRoute>
+          }
+        />
+          <Route
+          path="job/post/edit/:programId"
+          element={
+            <PrivateRoute>
+              <UpdateJobPost />
             </PrivateRoute>
           }
         />

@@ -19,17 +19,21 @@ export const fetchSingleJobPost = (JobPostData: any) => {
                 id
                 title
                 program {
+                _id
                 title
                 requirements
                 }
                 cycle {
+                id
                 name
                 }
                 cohort {
+                id
                 title
                 }
                 description
                 link
+                published
             }
             }
             `,

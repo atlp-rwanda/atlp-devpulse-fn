@@ -17,7 +17,7 @@ export const updateJobPostAction = (jobPostData: any) => {
     });
 
     try {
-      const { id, title, program, cycle, cohort, description } = jobPostData;
+      const { id, title, program, cycle, cohort, description,published } = jobPostData;
 
       const response = await axios({
         url: process.env.BACKEND_URL,
@@ -38,17 +38,19 @@ export const updateJobPostAction = (jobPostData: any) => {
                 title
                 }
                 description
+                published
             }
             }
           `,
           variables: {
-            updateJobApplicationId: null,
+            updateJobApplicationId: id,
             jobFields: {
               title,
               program,
               cycle,
               cohort,
               description,
+              published
             },
           },
         },

@@ -30,6 +30,7 @@ export const fetchJobPost = () => async (dispatch: any) => {
                   }
                   description
                   label
+                  published
                 }
         }
             `,

@@ -110,71 +110,74 @@ function SharedJobPosts(props: any) {
                             </tr>
                           </thead>
                           <tbody className="overflow-y-auto">
-                            {fetchJobPostStates?.data?.map((item: any) => (
-                              <tr
-                                className="hover:bg-slate-700 transition-colors"
-                                key={item.id}
-                              >
-                                <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
-                                  <div className="flex">
-                                    <div className="">
-                                      <p className="text-gray-900 text-center dark:text-white whitespace-no-wrap">
-                                        {item?.title}
-                                      </p>
-                                    </div>
-                                  </div>
-                                </td>
-                                <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
-                                  <div className="flex items-center">
-                                    <div className="">
-                                      <p className="text-gray-900 text-center dark:text-white whitespace-no-wrap">
-                                        {item?.program?.title}
-                                      </p>
-                                    </div>
-                                  </div>
-                                </td>
-                                <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
-                                  <div className="flex items-center">
-                                    <div className="">
-                                      {item?.cycle && (
-                                        <p className="text-gray-900 text-center dark:text-white whitespace-no-wrap">
-                                          {item?.cycle?.name}
-                                        </p>
-                                      )}
-                                    </div>
-                                  </div>
-                                </td>
-                                <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
-                                  <div className="flex items-center">
-                                    <div className="">
-                                      <p className="text-gray-900 text-center dark:text-white whitespace-no-wrap">
-                                        {item?.cohort?.title}
-                                      </p>
-                                    </div>
-                                  </div>
-                                </td>
-                                <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
-                                  <div className="flex items-center">
-                                    <div className="">
-                                      <p className="text-gray-900 text-center dark:text-white whitespace-no-wrap">
-                                        {item?.description}
-                                      </p>
-                                    </div>
-                                  </div>
-                                </td>
-                                <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
-                                  <div className="flex items-center">
-                                    <div className="">
-                                      <Link to={`/applicant/available-job/${item?.id}/apply`} replace>
-                                        <button className="flex bg-primary dark:bg-[#56C870] rounded-md py-2 px-4 text-white font-medium cursor-pointer">
-                                          Apply
-                                        </button>
-                                      </Link>
-                                    </div>
-                                  </div>
-                                </td>
-                              </tr>
-                            ))}
+                          {fetchJobPostStates?.data
+  ?.filter((item: any) => item.published) // Filter for published job posts
+  ?.map((item: any) => (
+    <tr
+      className="hover:bg-slate-700 transition-colors"
+      key={item.id}
+    >
+      <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
+        <div className="flex">
+          <div className="">
+            <p className="text-gray-900 text-center dark:text-white whitespace-no-wrap">
+              {item?.title}
+            </p>
+          </div>
+        </div>
+      </td>
+      <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
+        <div className="flex items-center">
+          <div className="">
+            <p className="text-gray-900 text-center dark:text-white whitespace-no-wrap">
+              {item?.program?.title}
+            </p>
+          </div>
+        </div>
+      </td>
+      <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
+        <div className="flex items-center">
+          <div className="">
+            {item?.cycle && (
+              <p className="text-gray-900 text-center dark:text-white whitespace-no-wrap">
+                {item?.cycle?.name}
+              </p>
+            )}
+          </div>
+        </div>
+      </td>
+      <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
+        <div className="flex items-center">
+          <div className="">
+            <p className="text-gray-900 text-center dark:text-white whitespace-no-wrap">
+              {item?.cohort?.title}
+            </p>
+          </div>
+        </div>
+      </td>
+      <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
+        <div className="flex items-center">
+          <div className="">
+            <p className="text-gray-900 text-center dark:text-white whitespace-no-wrap">
+              {item?.description}
+            </p>
+          </div>
+        </div>
+      </td>
+      <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
+        <div className="flex items-center">
+          <div className="">
+            <Link to={`/applicant/available-job/${item?.id}/apply`} replace>
+              <button className="flex bg-primary dark:bg-[#56C870] rounded-md py-2 px-4 text-white font-medium cursor-pointer">
+                Apply
+              </button>
+            </Link>
+          </div>
+        </div>
+      </td>
+    </tr>
+  ))}
+
                           </tbody>
                         </table>
                       </div>
