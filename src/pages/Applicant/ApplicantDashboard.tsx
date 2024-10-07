@@ -41,13 +41,9 @@ const DashboardCard = ({ title, value, img }) => {
   );
 };
 
-const ApplicantDashboard = (props: any) => {
+const useTraineeData = () => {
   const dispatch = useDispatch();
-
-  const traineeId = useSelector(
-    (state: any) => state.traineeApplicant.currentTrainee
-  );
-  
+  const traineeId = useSelector((state: any) => state.traineeApplicant.currentTrainee);
   const traineeData = useSelector((state: any) => state.traineeApplicant.data);
   const attendance = useSelector((state: any) => state.traineeAttendance);
   const performance = useSelector((state: any) => state.traineePerformance);
@@ -63,7 +59,6 @@ const ApplicantDashboard = (props: any) => {
   useEffect(() => {
     const fetchTraineeData = async () => {
       if (!traineeId) return;
-
       try {
         await dispatch(getTraineeApplicant(traineeId));
         await dispatch(getTraineeAttendance(traineeId));
@@ -72,7 +67,6 @@ const ApplicantDashboard = (props: any) => {
         console.error("Failed to fetch trainee details:", err);
       }
     };
-
     fetchTraineeData();
   }, [dispatch, traineeId]);
 
@@ -86,30 +80,41 @@ const ApplicantDashboard = (props: any) => {
         }
       }
     };
-
     fetchCohortData();
   }, [dispatch, traineeData]);
 
-  const cohortData = cohort?.traineeCohort || {};
-  const extractCohortNumber = (cohortTitle: string) => {
+  
+  return { traineeData, attendance, performance, cohort };
+
+}
+
+const formatters = {
+  extractCohortNumber: (cohortTitle: string): string => {
     if (!cohortTitle) return "N/A";
     const match = cohortTitle.match(/\d+/);
     return match ? match[0] : "N/A";
-  };
+  },
 
-  const formatPercentage = (value: number | string | undefined): string => {
+  formatPercentage: (value: number | string | undefined): string => {
     if (typeof value === 'number') {
       return `${value}%`;
     }
     return 'N/A';
-  };
+  },
 
-  const calculateAttendancePercentage = (ratio: string | undefined): string => {
+  calculateAttendancePercentage: (ratio: string | undefined): string => {
     if (!ratio) return 'N/A';
     const [attended, total] = ratio.split('/').map(Number);
     if (isNaN(attended) || isNaN(total) || total === 0) return 'N/A';
-    return formatPercentage(attended / total * 100);
-  };
+    return formatters.formatPercentage(attended / total * 100);
+  }
+}
+
+const ApplicantDashboard = (props: any) => {
+
+  const { cohort, performance, attendance } = useTraineeData();
+  const cohortData = cohort?.traineeCohort || {};
+  const { extractCohortNumber, formatPercentage, calculateAttendancePercentage } = formatters;
 
   const dashboardData = [
     {
