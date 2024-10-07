@@ -177,8 +177,6 @@ const UpdateJobPost: React.FC<Props> = ({
         id: programId,
         ...formData,
       };
-
-      console.log("++++++++++++++++++++",submitData);
       
       await updateJobPostAction(submitData);
       toast.success('Job post updated successfully');
@@ -194,8 +192,8 @@ const UpdateJobPost: React.FC<Props> = ({
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-white dark:bg-dark-tertiary">
-      <div className="max-w-4xl mx-auto w-full px-4 py-8">
+    <div className="flex flex-col min-h-screen bg-white dark:bg-dark-tertiary p-8">
+      <div className="w-[500px] mx-auto  px-4 py-8">
         <h1 className="text-2xl font-bold text-center text-gray-600 dark:text-white mb-8">
           Update Job Post
         </h1>
