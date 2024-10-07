@@ -46,6 +46,7 @@ import Dashboard from "../pages/Dashboard";
 import ApplicantLayout from "../pages/Applicant/ApplicantLayout";
 import AdminLayout from "../components/Layout/Admins/AdminLayout";
 import VerifyEmail from "../pages/verifyEmail";
+import Search from "./../pages/search";
 
 function Navigation() {
   const roleName = localStorage.getItem("roleName");
@@ -164,6 +165,14 @@ function Navigation() {
           element={
             <PrivateRoute allowedRoles={['Admin', 'superAdmin']}>
               <ListAllUsersPage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="search"
+          element={
+            <PrivateRoute allowedRoles={['Admin', 'superAdmin']}>
+              <Search />
             </PrivateRoute>
           }
         />
