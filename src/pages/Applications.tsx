@@ -1,21 +1,20 @@
-import React, { useEffect, useState } from "react";
-import { ToastContainer } from "react-toastify";
-import * as icons from "react-icons/ai";
-import { Link } from "react-router-dom";
-import Select from "react-select";
-import * as AiIcons from "react-icons/ai";
+import React, { useEffect, useState } from 'react';
+import { ToastContainer } from 'react-toastify';
+import * as icons from 'react-icons/ai';
+import { Link } from 'react-router-dom';
+import Select from 'react-select';
+import * as AiIcons from 'react-icons/ai';
 import {
   deleteApplication,
   getMyApplications,
   getSingleApplication,
-} from "../redux/actions/applications";
-import { useAppDispatch } from "../hooks/hooks";
-import { useNavigate } from "react-router-dom";
-import { connect, useSelector } from "react-redux";
-import { HiDotsVertical } from "react-icons/hi";
-import Box from "@mui/material/Box";
-import { useCustomPagination } from "components/Pagination/useCustomPagination";
-import { useTheme } from "../hooks/darkmode";
+} from '../redux/actions/applications';
+import { useAppDispatch } from '../hooks/hooks';
+import { connect, useSelector } from 'react-redux';
+import { HiDotsVertical } from 'react-icons/hi';
+import Box from '@mui/material/Box';
+import { useCustomPagination } from 'components/Pagination/useCustomPagination';
+
 type Props = {};
 
 interface Update {
@@ -24,43 +23,17 @@ interface Update {
 }
 const Applications = (props: any) => {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
+  const { myApplications, currentApplication } = props;
 
-  const { myApplications, currentApplication, loading } = props;
-  console.log("My Applications:", myApplications);
-
-  const [moredrop, setmoredrop] = useState("");
-  const [filter, setFilter] = useState("submitted");
+  const [moredrop, setmoredrop] = useState('');
+  const [filter, setFilter] = useState('submitted');
   const [pagination, setPagination] = useState({
     pageSize: 5,
     page: 1,
   });
-  const { theme, setTheme } = useTheme();
-  const customTheme = (theme: any) => {
-    return {
-      ...theme,
-      colors: {
-        ...theme.colors,
-        text: "light-gray",
-        primary25: "#E5E7EB",
-        primary: "#d6dfdf",
-        neutral0: "white",
-      },
-    };
-  };
 
-  const darkTheme = (theme: any) => {
-    return {
-      ...theme,
-      colors: {
-        primary25: "#404657",
-        primary: "#d6dfdf",
-        neutral0: "#293647",
-      },
-    };
-  };
   const [deleteWarn, setDeleteWarn] = useState<Update>({
-    id: "",
+    id: '',
     open: false,
   });
 
@@ -76,7 +49,7 @@ const Applications = (props: any) => {
   };
   const handleMoreOptions = (item_id: any) => {
     if (!moredrop) setmoredrop(item_id);
-    if (moredrop) setmoredrop("");
+    if (moredrop) setmoredrop('');
   };
 
   const handleDeleteApplication = (item_id: any) => {
@@ -87,20 +60,11 @@ const Applications = (props: any) => {
     }
   };
   const handleDateOfSubmission = (dateString: any) => {
-    const datePart = dateString.slice(0, dateString.indexOf("T"));
+    const datePart = dateString.slice(0, dateString.indexOf('T'));
     return datePart;
   };
   useEffect(() => {
-    const result = dispatch(getMyApplications(filter, pagination));
-
-    if (
-      result.error === "Oops! You must be logged in to proceed" ||
-      result.error === "Session expired. Please login again to continue."
-    ) {
-      setTimeout(() => {
-        navigate("/login");
-      }, 5000);
-    }
+    dispatch(getMyApplications(filter, pagination));
   }, [filter, pagination, dispatch]);
 
   return (
@@ -112,63 +76,33 @@ const Applications = (props: any) => {
             <div>
               <div className="bg-light-bg dark:bg-dark-frame-bg  min-h-screen overflow-y-hidden overflow-x-hidden">
                 <div className="flex items-left px-8 pt-1">
-                  <div className="w-full px-4 sm:px-6 lg:px-8 py-4">
-                    <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-4">
-                      <Select
-                        className="sm:text-sm w-full sm:w-40 rounded-bt-rd dark:text-ltb"
-                        options={[{ value: "", label: "Select by" }]}
-                        defaultValue={{ value: "", label: "Select by" }}
-                        theme={theme ? customTheme : darkTheme}
-                      />
-                      <div className="w-full sm:w-auto flex-grow">
-                        <div className="relative">
-                          <input
-                            className="w-full bg-row-gray dark:bg-[#293647] dark:text-ltb border border-bdr dark:border-cg dark:border-opacity-5 rounded-md py-2 pl-9 pr-4 focus:outline-none focus:ring-2 focus:ring-primary dark:focus:ring-[#56C870] text-sm"
-                            placeholder="Search"
-                            type="text"
-                            name="search"
-                          />
-                          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <svg
-                              className="h-5 w-5 text-gray-400"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                              />
-                            </svg>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                  <Link to="/filter_trainee-applicants">
+                    <button className="flex bg-primary dark:bg-[#56C870] rounded-md py-2 mt-2 px-4 text-white font-medium cursor-pointer" disabled>
+                      <icons.AiOutlineSearch className="mt-1 mr-1 font-bold" />{' '}
+                      Search
+                    </button>
+                  </Link>
                 </div>
                 {/* Filter Bar */}
                 <div>
                   <ul className=" flex dark:text-white semi-md:space-x-5 p-5  text-sm  lg:px-8 semi-md:flex-row sm:flex-col ">
                     <li
                       className={`${
-                        filter === "submitted"
-                          ? "underline underline-offset-8 decoration-green"
-                          : ""
+                        filter === 'submitted'
+                          ? 'underline underline-offset-8 decoration-green'
+                          : ''
                       } cursor-pointer`}
-                      onClick={() => setFilter("submitted")}
+                      onClick={() => setFilter('submitted')}
                     >
                       Submitted
                     </li>
                     <li
                       className={`${
-                        filter === "withdrawn"
-                          ? "underline underline-offset-8 decoration-green"
-                          : ""
+                        filter === 'withdrawn'
+                          ? 'underline underline-offset-8 decoration-green'
+                          : ''
                       } cursor-pointer`}
-                      onClick={() => setFilter("withdrawn")}
+                      onClick={() => setFilter('withdrawn')}
                     >
                       Withdrawn
                     </li>
@@ -184,7 +118,7 @@ const Applications = (props: any) => {
                             <thead className=" w-full px-32 sticky top-0">
                               <tr>
                                 <th className="p-6 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
-                                  {"Title"}
+                                  {'Title'}
                                 </th>
 
                                 {/* <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left text-xs font-semibold text-gray-600 dark:text-white uppercase md:table-cell tracking-wider">
@@ -192,116 +126,133 @@ const Applications = (props: any) => {
                                 </th> */}
 
                                 <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
-                                  {"Date of submission"}
+                                  {'Date of submission'}
                                 </th>
                                 {
                                   <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
-                                    {"status"}
+                                    {'status'}
                                   </th>
                                 }
                                 <th className="border-b-2 sm:text-center border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
-                                  {"action"}
+                                  {'action'}
                                 </th>
                               </tr>
                             </thead>
                             <tbody className="overflow-y-auto">
-                              {loading ? (
-                                <tr>
-                                  <td
-                                    colSpan={4}
-                                    className="text-center px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-lg text-gray-500"
-                                  >
-                                    Processing...
-                                  </td>
-                                </tr>
-                              ) : myApplications.data?.totalCount === 0 ? (
-                                <tr>
-                                  <td
-                                    colSpan={4}
-                                    className="text-center px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-lg text-[#fff]"
-                                  >
-                                    Found 0 applications.
-                                  </td>
-                                </tr>
-                              ) : (
-                                myApplications.data?.applications.map(
-                                  (item: any) => (
-                                    <tr key={item._id}>
-                                      <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
-                                        <div className="flex">
-                                          <div className="">
-                                            <p className="text-gray-900 text-center dark:text-white whitespace-no-wrap">
-                                              {item.associatedForm.title}
-                                            </p>
+                              {myApplications.data?.applications != null
+                                ? myApplications.data?.applications.map(
+                                    (item: any) => (
+                                      <tr key={item._id}>
+                                        <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
+                                          <div className="flex">
+                                            <div className="">
+                                              <p className="text-gray-900 text-center dark:text-white whitespace-no-wrap">
+                                                {item.associatedForm.title}
+                                              </p>
+                                            </div>
                                           </div>
-                                        </div>
-                                      </td>
-                                      {/* Other table data cells */}
-                                      <td>
-                                        <div>
-                                          <HiDotsVertical
-                                            className="text-black dark:text-white text-3xl ml-6 font-size-6 cursor-pointer"
-                                            onClick={(e: any) => {
-                                              e.preventDefault();
-                                              handleMoreOptions(item?._id);
-                                            }}
-                                          />
-                                          <div
-                                            className={`${
-                                              moredrop === item?._id
-                                                ? "block"
-                                                : "hidden"
-                                            } absolute bg-white dark:bg-dark-tertiary dark:text-white text-base z-50 list-none divide-y divide-gray-100 rounded shadow my-4`}
-                                            id="dropdown"
-                                          >
-                                            <ul
-                                              className="py-1"
-                                              aria-labelledby="dropdown"
+                                        </td>
+                                        {/* <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
+                                          <div className="flex items-center">
+                                            <div className="">
+                                              <p className="text-gray-900 text-center dark:text-white whitespace-no-wrap">
+                                                {
+                                                  item.associatedForm
+                                                    .description
+                                                }
+                                              </p>
+                                            </div>
+                                          </div>
+                                        </td> */}
+
+                                        <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
+                                          <div className="flex items-center">
+                                            <div className="">
+                                              <p className="text-gray-900 items-center dark:text-white whitespace-no-wrap">
+                                                {handleDateOfSubmission(
+                                                  item.dateOfSubmission,
+                                                )}
+                                              </p>
+                                            </div>
+                                          </div>
+                                        </td>
+
+                                        <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
+                                          <div className="flex items-center">
+                                            <div className="">
+                                              <p className="text-gray-900 items-center dark:text-white whitespace-no-wrap">
+                                                {item.status}
+                                              </p>
+                                            </div>
+                                          </div>
+                                        </td>
+
+                                        <td>
+                                          <div>
+                                            <HiDotsVertical
+                                              className=" text-black dark:text-white text-3xl ml-6 font-size-6 cursor-pointer"
+                                              onClick={(e: any) => {
+                                                e.preventDefault();
+                                                handleMoreOptions(item?._id);
+                                              }}
+                                            />
+                                            <div
+                                              className={`
+                                               ${
+                                                 moredrop === item?._id
+                                                   ? 'block'
+                                                   : 'hidden'
+                                               } absolute  bg-white dark:bg-dark-tertiary  dark:text-white text-base z-50 list-none divide-y divide-gray-100 rounded shadow my-4`}
+                                              id="dropdown"
                                             >
-                                              <li>
-                                                <div
-                                                  className="text-sm hover:bg-gray-100 text-gray-700 dark:hover:bg-gray-500 dark:text-white block px-4 py-2"
-                                                  onClick={(e: any) => {
-                                                    e.preventDefault();
-                                                    setDisplayApplication({
-                                                      open: true,
-                                                    });
-                                                    handleViewApplication(
-                                                      item?._id
-                                                    );
-                                                  }}
-                                                >
-                                                  View
-                                                </div>
-                                              </li>
-                                              <li>
-                                                <div
-                                                  className="text-sm hover:bg-gray-100 text-gray-700 dark:hover:bg-gray-500 dark:text-white block px-4 py-2"
-                                                  onClick={(e: any) => {
-                                                    e.preventDefault();
-                                                    setDeleteWarn({
-                                                      id: item?._id,
-                                                      open: true,
-                                                    });
-                                                  }}
-                                                >
-                                                  Withdraw
-                                                </div>
-                                              </li>
-                                            </ul>
+                                              <ul
+                                                className="py-1"
+                                                aria-labelledby="dropdown"
+                                              >
+                                                <li>
+                                                  <div
+                                                    className="text-sm hover:bg-gray-100 text-gray-700  dark:hover:bg-gray-500 dark:text-white  block px-4 py-2"
+                                                    onClick={(e: any) => {
+                                                      e.preventDefault();
+                                                      setDisplayApplication({
+                                                        open: true,
+                                                      });
+                                                      handleViewApplication(
+                                                        item?._id,
+                                                      );
+                                                    }}
+                                                  >
+                                                    View
+                                                  </div>
+                                                </li>
+                                                <li>
+                                                  <div
+                                                    className="text-sm hover:bg-gray-100 text-gray-700  dark:hover:bg-gray-500 dark:text-white  block px-4 py-2"
+                                                    onClick={(e: any) => {
+                                                      e.preventDefault();
+                                                      setDeleteWarn({
+                                                        id: item?._id,
+                                                        open: true,
+                                                      });
+                                                    }}
+                                                  >
+                                                    Withdraw
+                                                  </div>
+                                                </li>
+                                              </ul>
+                                            </div>
                                           </div>
-                                        </div>
-                                      </td>
-                                    </tr>
+                                        </td>
+                                      </tr>
+                                    ),
                                   )
-                                )
-                              )}
+                                : null}
                             </tbody>
                           </table>
                           {deleteWarn.open && (
                             <div
                               className={`h-screen w-screen z-50 bg-black bg-opacity-10 backdrop-blur-sm absolute flex items-center justify-center  px-4 top-0 left-0 ${
-                                deleteWarn.open === true ? "block" : "hidden"
+                                deleteWarn.open === true ? 'block' : 'hidden'
                               }`}
                             >
                               <Box className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] rounded-[5px] dark:bg-dark-bg bg-[#f0f0f0]">
@@ -323,7 +274,7 @@ const Applications = (props: any) => {
                                           ...deleteWarn,
                                           open: false,
                                         });
-                                        setmoredrop("");
+                                        setmoredrop('');
                                       }}
                                     >
                                       Withdraw
@@ -335,7 +286,7 @@ const Applications = (props: any) => {
                                           ...deleteWarn,
                                           open: false,
                                         });
-                                        setmoredrop("");
+                                        setmoredrop('');
                                       }}
                                     >
                                       Cancel
@@ -349,8 +300,8 @@ const Applications = (props: any) => {
                             <div
                               className={`h-screen w-screen z-50 bg-black bg-opacity-10 backdrop-blur-sm absolute flex items-center justify-center  px-4 top-0 left-0 ${
                                 displayApplication.open === true
-                                  ? "block"
-                                  : "hidden"
+                                  ? 'block'
+                                  : 'hidden'
                               }`}
                             >
                               <Box className="absolute top-[55%] left-[50%] translate-x-[-50%] translate-y-[-50%] rounded-[5px] dark:bg-dark-bg bg-[#f0f0f0]">
@@ -381,7 +332,7 @@ const Applications = (props: any) => {
                                         First Name:
                                       </p>
                                       <p className="font-sans">
-                                        {" "}
+                                        {' '}
                                         {currentApplication.data?.firstName}
                                       </p>
                                     </div>
@@ -391,7 +342,7 @@ const Applications = (props: any) => {
                                         Last Name:
                                       </p>
                                       <p className="font-sans">
-                                        {" "}
+                                        {' '}
                                         {currentApplication.data?.lastName}
                                       </p>
                                     </div>
@@ -399,7 +350,7 @@ const Applications = (props: any) => {
                                     <div className="flex space-x-3">
                                       <p className="font-semibold">Email:</p>
                                       <p className="font-sans">
-                                        {" "}
+                                        {' '}
                                         {currentApplication.data?.email}
                                       </p>
                                     </div>
@@ -407,7 +358,7 @@ const Applications = (props: any) => {
                                     <div className="flex space-x-3">
                                       <p className="font-semibold">Address:</p>
                                       <p className="font-sans">
-                                        {" "}
+                                        {' '}
                                         {currentApplication.data?.address}
                                       </p>
                                     </div>
@@ -424,7 +375,7 @@ const Applications = (props: any) => {
                                     <div className="flex space-x-3">
                                       <p className="font-semibold">Gender:</p>
                                       <p className="font-sans">
-                                        {" "}
+                                        {' '}
                                         {currentApplication.data?.gender}
                                       </p>
                                     </div>
@@ -450,7 +401,7 @@ const Applications = (props: any) => {
                                           ?.dateOfSubmission !== undefined
                                           ? handleDateOfSubmission(
                                               currentApplication.data
-                                                ?.dateOfSubmission
+                                                ?.dateOfSubmission,
                                             )
                                           : null}
                                       </p>
@@ -458,8 +409,8 @@ const Applications = (props: any) => {
                                     <div className="flex space-x-3">
                                       <p className="font-semibold">Status:</p>
                                       <p className="font-sans">
-                                        {" "}
-                                        {currentApplication.data?.status}{" "}
+                                        {' '}
+                                        {currentApplication.data?.status}{' '}
                                       </p>
                                     </div>
                                   </div>
@@ -479,13 +430,13 @@ const Applications = (props: any) => {
                           menuPlacement="top"
                           className="sm:text-sm  w-13 rounded-bt-rd absolute active dark:bg-dark-frame-bg"
                           options={[
-                            { value: "5", label: "5" },
-                            { value: "50", label: "50" },
-                            { value: "100", label: "100" },
-                            { value: "500", label: "500" },
-                            { value: "1000", label: "1000" },
+                            { value: '5', label: '5' },
+                            { value: '50', label: '50' },
+                            { value: '100', label: '100' },
+                            { value: '500', label: '500' },
+                            { value: '1000', label: '1000' },
                           ]}
-                          defaultValue={{ value: "", label: "5" }}
+                          defaultValue={{ value: '', label: '5' }}
                           onChange={(e: any) =>
                             setPagination({
                               page: 1,
@@ -544,7 +495,7 @@ const Applications = (props: any) => {
                               pagination.page >=
                               Math.ceil(
                                 myApplications?.data?.totalCount /
-                                  pagination.pageSize
+                                  pagination.pageSize,
                               )
                             }
                           >
@@ -557,7 +508,7 @@ const Applications = (props: any) => {
                                 pageSize: pagination.pageSize,
                                 page: Math.ceil(
                                   myApplications?.data?.totalCount /
-                                    pagination.pageSize
+                                    pagination.pageSize,
                                 ),
                               })
                             }
@@ -565,7 +516,7 @@ const Applications = (props: any) => {
                               pagination.page >=
                               Math.ceil(
                                 myApplications?.data?.totalCount /
-                                  pagination.pageSize
+                                  pagination.pageSize,
                               )
                             }
                           >
@@ -591,7 +542,6 @@ const Applications = (props: any) => {
 const mapState = (state: any) => ({
   myApplications: state.myApplications,
   currentApplication: state.currentApplication,
-  loading: state.myApplications.loading,
 });
 
 export default connect(mapState, {

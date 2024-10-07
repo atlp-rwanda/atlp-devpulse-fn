@@ -50,6 +50,12 @@ export const sidebarItems1 = [
     title: "Application Cycles",
   },
   {
+    path: 'Trainee-applicants',
+    icon: <Icon icon="ic:round-people"></Icon>,
+    title: 'Trainees/Applicants',
+  },
+  
+  {
     path: "grading",
     icon: <Icon icon="bxs:dashboard"></Icon>,
     title: "Grading System",
@@ -62,11 +68,6 @@ export const sidebarItems1 = [
 ];
 
 export const applicantSidebarItems = [
-  {
-    path: "/applicant",
-    icon: <Icon icon="fontisto:pie-chart-1"></Icon>,
-    title: "Dashboard",
-  },
   {
     path: "myApplications",
     icon: <Icon icon="material-symbols:wysiwyg-rounded"></Icon>,

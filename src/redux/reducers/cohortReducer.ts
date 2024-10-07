@@ -1,11 +1,10 @@
-import { GET_COHORTS, GET_TRAINEE_COHORT } from '..';
+import { GET_COHORTS } from '..';
 
 const initialState = {
   isLoading: true,
   isLoaded: false,
   errors: null,
   data: [],
-  traineeCohort: null,
 };
 
 export default (state = initialState, { type, payload }: any) => {
@@ -16,14 +15,6 @@ export default (state = initialState, { type, payload }: any) => {
         isLoading: false,
         data: payload,
       };
-
-    case GET_TRAINEE_COHORT:
-      return {
-        ...state,
-        isLoading: false,
-        isLoaded: true,
-        traineeCohort: payload,
-        };
 
     default:
       return state;

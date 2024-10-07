@@ -182,7 +182,7 @@ function SignupForm() {
               <AiOutlineCheck className="text-white text-4xl" />
             </div>
             <div className="text-[#afb1b4] text-lg mb-4 font-inter">
-              <p>Account created, Check your email to verify your account !</p>
+              <p>Your account has been succefully created !</p>
             </div>
             <Link to="/login" ><Button label="Continue" className="w-[80px]" /></Link>
           </div>
