@@ -3,6 +3,34 @@ import { useTheme } from "../hooks/darkmode";
 import ToggleSwitch from "./ToggleSwitch";
 import DropdownButton from "./DropdownButton"; 
 
+const Dropdown = ({ isOpen, handleChange, items, theme }) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className={`absolute mt-2 right-0 ${theme ? 'bg-gray-200' : 'bg-gray-800'} border rounded-md shadow-lg`}>
+      <ul className={`text-sm ${theme ? "text-black" : "text-white"}`}>
+        {items.map((item) => (
+          <li
+            key={item}
+            className={`px-4 py-2 cursor-pointer ${theme ? 'bg-gray-200' : 'bg-gray-800'}`}
+            onClick={() => handleChange(item)}
+          >
+            {item}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+
+const Section = ({ title, children, theme }) => (
+  <div className="mb-4">
+    <h2 className="text-xl font-medium">{title}</h2>
+    {children}
+    <hr className={`border-t ${theme ? "border-gray-500" : "border-gray-600"} my-4`} />
+  </div>
+);
+
 const useDropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => setIsOpen((prev) => !prev);
@@ -33,36 +61,16 @@ const handleThemeLabel = (theme: boolean) =>
 const SettingsPage: React.FC = () => {
   const { theme, setTheme } = useTheme();
 
-  const Dropdown = ({ isOpen, handleChange, items, theme }) => {
-    if (!isOpen) return null;
-
-    return (
-      <div className={`absolute mt-2 right-0 ${theme ? 'bg-gray-200' : 'bg-gray-800'} border rounded-md shadow-lg`}>
-        <ul className={`text-sm ${theme ? "text-black" : "text-white"}`}>
-          {items.map((item) => (
-            <li
-              key={item}
-              className={`px-4 py-2 cursor-pointer ${theme ? 'bg-gray-200' : 'bg-gray-800'}`}
-              onClick={() => handleChange(item)}
-            >
-              {item}
-            </li>
-          ))}
-        </ul>
-      </div>
-    );
-  };
-
   const ThemeSettings = () => {
     const { isOpen, toggle, close } = useDropdown();
+
     const handleThemeChange = (selectedTheme: string) => {
       setTheme(selectedTheme === "Light Theme");
       close();
     };
 
     return (
-      <div className="mb-4">
-        <h2 className="text-xl font-medium">Appearance</h2>
+      <Section title="Appearance" theme={theme}>
         <div className="relative flex justify-between items-center mt-0 pb-0">
           <p className="opacity-70 text-xs">Theme preferences</p>
           <DropdownButton
@@ -79,8 +87,7 @@ const SettingsPage: React.FC = () => {
             theme={theme}
           />
         </div>
-        <hr className={`border-t ${theme ? "border-gray-500" : "border-gray-600"} my-4`} />
-      </div>
+      </Section>
     );
   };
 
@@ -97,8 +104,7 @@ const SettingsPage: React.FC = () => {
     const languageLabel = language.charAt(0).toUpperCase() + language.slice(1) || "Choose Language";
 
     return (
-      <div className="mb-4">
-        <h2 className="text-xl font-medium">Language</h2>
+      <Section title="Language" theme={theme}>
         <div className="relative flex justify-between items-center mt-0 pb-0">
           <p className="opacity-70 text-xs">Language, hearing, ...</p>
           <DropdownButton
@@ -115,20 +121,17 @@ const SettingsPage: React.FC = () => {
             theme={theme}
           />
         </div>
-        <hr className={`border-t ${theme ? "border-gray-500" : "border-gray-600"} my-4`} />
-      </div>
+      </Section>
     );
   };
 
   const AccountSettings = () => (
-    <div className="mb-4">
-      <h2 className="text-xl font-medium">My Account</h2>
+    <Section title="My Account" theme={theme}>
       <div className="flex justify-between items-center">
         <p className="opacity-70 text-xs">Edit profile, export account data, …</p>
         <button className="text-sm">Change settings</button>
       </div>
-      <hr className={`border-t ${theme ? "border-gray-500" : "border-gray-600"} my-4`} />
-    </div>
+    </Section>
   );
 
   const NotificationSettings = () => {
@@ -144,45 +147,38 @@ const SettingsPage: React.FC = () => {
 
     return (
       <div>
-        <div className="mb-4">
-          <h2 className="text-xl font-medium">Email Notifications</h2>
+        <Section title="Email Notifications" theme={theme}>
           <div className="flex justify-between items-center mt-2">
             <p className="opacity-70 text-xs">Feedback emails, reminder emails, news emails</p>
             <ToggleSwitch isEnabled={emailNotificationsEnabled} toggle={toggleEmailNotifications} theme={theme} />
           </div>
-        </div>
-        <hr className={`border-t ${theme ? "border-gray-500" : "border-gray-600"} my-4`} />
-        <div className="mb-4">
-          <h2 className="text-xl font-medium">Push Notifications</h2>
+        </Section>
+        <Section title="Push Notifications" theme={theme}>
           <div className="flex justify-between items-center mt-2">
             <p className="opacity-70 text-xs">Grade updates, session reminders, performance, comments</p>
             <ToggleSwitch isEnabled={pushNotificationsEnabled} toggle={togglePushNotifications} theme={theme} />
           </div>
-        </div>
-        <hr className={`border-t ${theme ? "border-gray-500" : "border-gray-600"} my-4`} />
+        </Section>
       </div>
     );
   };
 
   const PrivacySecurity = () => (
-    <div className="mb-4">
-      <h2 className="text-xl font-medium">Privacy and Security</h2>
+    <Section title="Privacy and Security" theme={theme}>
       <div className="flex justify-between items-center">
         <p className="opacity-70 text-xs">Privacy and Security</p>
         <button className="text-sm">Change settings</button>
       </div>
-      <hr className={`border-t ${theme ? "border-gray-500" : "border-gray-600"} my-4`} />
-    </div>
+    </Section>
   );
 
   const LoginActivity = () => (
-    <div className="mb-4">
-      <h2 className="text-xl font-medium">Login Activity</h2>
+    <Section title="Login Activity" theme={theme}>
       <div className="flex justify-between items-center">
         <p className="opacity-70 text-xs">History of your login sessions</p>
         <button className="text-sm">View</button>
       </div>
-    </div>
+    </Section>
   );
 
   return (
