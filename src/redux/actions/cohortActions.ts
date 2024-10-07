@@ -39,15 +39,28 @@ export const getCohort =(getCohortId: any) => async (dispatch: any) => {
     const response= await axios.post(`${process.env.BACKEND_URL}`, {
       query: `
         query GetCohort($getCohortId: ID!) {
-          getCohort(id: $getCohortId) {
-            id
-            title
-            program
-            cycle
-            start
-            end
-            phase
-            trainees
+  getCohort(id: $getCohortId) {
+    title
+    trainees
+    end
+    id
+    phase
+    start
+    cycle {
+      endDate
+      id
+      name
+      startDate
+    }
+    program {
+      _id
+      description
+      duration
+      mainObjective
+      modeOfExecution
+      requirements
+      title
+    }
   }
 }
       `,
