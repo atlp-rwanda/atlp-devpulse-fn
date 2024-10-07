@@ -89,9 +89,7 @@ const SettingsPage: React.FC = () => {
     const [language, setLanguage] = useState<string>(localStorage.getItem("language") || "");
 
     const handleLanguageChange = (newLanguage: string) => {
-      setLanguage(newLanguage);
-      localStorage.setItem("language", newLanguage);
-      close();
+      setLanguage(newLanguage); localStorage.setItem("language", newLanguage); close();
     };
 
     const languageLabel = language.charAt(0).toUpperCase() + language.slice(1) || "Choose Language";
@@ -101,8 +99,7 @@ const SettingsPage: React.FC = () => {
         <div className="relative flex justify-between items-center mt-0 pb-0">
           <p className="opacity-70 text-xs">Language, hearing, ...</p>
           <DropdownButton
-            label={languageLabel} isOpen={isOpen} toggle={toggle} theme={theme}
-            ariaLabel="Toggle Language Dropdown"
+            label={languageLabel} isOpen={isOpen} toggle={toggle} theme={theme} ariaLabel="Toggle Language Dropdown"
           />
           <Dropdown
             isOpen={isOpen} handleChange={handleLanguageChange} items={["English", "French", "Kinyarwanda"]} theme={theme}
@@ -115,22 +112,17 @@ const SettingsPage: React.FC = () => {
   const AccountSettings = () => (
     <Section title="My Account" theme={theme}>
       <div className="flex justify-between items-center">
-        <p className="opacity-70 text-xs">Edit profile, export account data, …</p>
-        <button className="text-sm">Change settings</button>
+        <p className="opacity-70 text-xs">Edit profile, export account data, …</p> <button className="text-sm">Change settings</button>
       </div>
     </Section>
   );
 
   const NotificationSettings = () => {
     const {
-      isEnabled: emailNotificationsEnabled,
-      toggle: toggleEmailNotifications,
-    } = useNotificationToggle("emailNotifications", true);
+      isEnabled: emailNotificationsEnabled, toggle: toggleEmailNotifications, } = useNotificationToggle("emailNotifications", true);
 
     const {
-      isEnabled: pushNotificationsEnabled,
-      toggle: togglePushNotifications,
-    } = useNotificationToggle("pushNotifications", true);
+      isEnabled: pushNotificationsEnabled, toggle: togglePushNotifications, } = useNotificationToggle("pushNotifications", true);
 
     return (
       <div>
@@ -153,8 +145,7 @@ const SettingsPage: React.FC = () => {
   const PrivacySecurity = () => (
     <Section title="Privacy and Security" theme={theme}>
       <div className="flex justify-between items-center">
-        <p className="opacity-70 text-xs">Privacy and Security</p>
-        <button className="text-sm">Change settings</button>
+        <p className="opacity-70 text-xs">Privacy and Security</p> <button className="text-sm">Change settings</button>
       </div>
     </Section>
   );
@@ -162,8 +153,7 @@ const SettingsPage: React.FC = () => {
   const LoginActivity = () => (
     <Section title="Login Activity" theme={theme}>
       <div className="flex justify-between items-center">
-        <p className="opacity-70 text-xs">History of your login sessions</p>
-        <button className="text-sm">View</button>
+        <p className="opacity-70 text-xs">History of your login sessions</p> <button className="text-sm">View</button>
       </div>
     </Section>
   );
