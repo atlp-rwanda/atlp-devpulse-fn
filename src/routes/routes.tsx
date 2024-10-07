@@ -41,6 +41,7 @@ import ApplicationDetails from "../pages/Applications/ViewSingleApplication";
 import Dashboard from "../pages/Dashboard";
 import ApplicantLayout from "../pages/Applicant/ApplicantLayout";
 import AdminLayout from "../components/Layout/Admins/AdminLayout";
+import GoogleSignup from "./../components/form/GoogleSignup";
 
 function Navigation() {
   const roleName = localStorage.getItem("roleName");
@@ -48,6 +49,7 @@ function Navigation() {
     <Routes>
       <Route path="/test_tailwind" element={<TestTailwind />} />
       <Route path="/login" element={<LoginPage />} />
+      <Route path="/google" element={<GoogleSignup />} />
       <Route path="/signup" element={<SignupForm />} />
       <Route path="/admin" element={<AdminLayout />}>
       <Route index element={<PrivateRoute><Dashboard /></PrivateRoute>} />

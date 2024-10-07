@@ -64,7 +64,7 @@ const LoginForm = () => {
         navigate("/admin");
       } else {
         const searchParams = new URLSearchParams(location.search);
-        const returnUrl = searchParams.get('returnUrl') || '/';
+        const returnUrl = searchParams.get('returnUrl') || '/applicant';
         navigate(returnUrl);
       }
     }
