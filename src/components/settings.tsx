@@ -74,17 +74,10 @@ const SettingsPage: React.FC = () => {
         <div className="relative flex justify-between items-center mt-0 pb-0">
           <p className="opacity-70 text-xs">Theme preferences</p>
           <DropdownButton
-            label={handleThemeLabel(theme)}
-            isOpen={isOpen}
-            toggle={toggle}
-            theme={theme}
-            ariaLabel="Toggle Theme Dropdown"
+            label={handleThemeLabel(theme)} isOpen={isOpen} toggle={toggle} theme={theme} ariaLabel="Toggle Theme Dropdown"
           />
           <Dropdown
-            isOpen={isOpen}
-            handleChange={handleThemeChange}
-            items={["Light Theme", "Dark Theme"]}
-            theme={theme}
+            isOpen={isOpen} handleChange={handleThemeChange} items={["Light Theme", "Dark Theme"]} theme={theme}
           />
         </div>
       </Section>
@@ -108,17 +101,11 @@ const SettingsPage: React.FC = () => {
         <div className="relative flex justify-between items-center mt-0 pb-0">
           <p className="opacity-70 text-xs">Language, hearing, ...</p>
           <DropdownButton
-            label={languageLabel}
-            isOpen={isOpen}
-            toggle={toggle}
-            theme={theme}
+            label={languageLabel} isOpen={isOpen} toggle={toggle} theme={theme}
             ariaLabel="Toggle Language Dropdown"
           />
           <Dropdown
-            isOpen={isOpen}
-            handleChange={handleLanguageChange}
-            items={["English", "French", "Kinyarwanda"]}
-            theme={theme}
+            isOpen={isOpen} handleChange={handleLanguageChange} items={["English", "French", "Kinyarwanda"]} theme={theme}
           />
         </div>
       </Section>
@@ -184,12 +171,7 @@ const SettingsPage: React.FC = () => {
   return (
     <div className={`p-6 ${theme ? "bg-gray-100 text-black" : "bg-gray-800 text-white"} w-full ml-24 mr-24 mt-6 rounded-2xl`}>
       <h1 className="text-2xl font-semibold mb-6">Settings</h1>
-      <AccountSettings />
-      <ThemeSettings />
-      <LanguageSettings />
-      <NotificationSettings />
-      <PrivacySecurity />
-      <LoginActivity />
+      <AccountSettings /> <ThemeSettings /> <LanguageSettings /> <NotificationSettings /> <PrivacySecurity /> <LoginActivity />
     </div>
   );
 };
