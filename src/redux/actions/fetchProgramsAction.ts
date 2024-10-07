@@ -43,9 +43,7 @@ export const fetchPrograms = (pageDetails: any) => {
       }
 
       if (response.data.errors) {
-        console.log(response.data.errors)
-        toast.error(response.data.errors[0].message);
-        return {data: null, error:response.data.errors[0].message };
+        toast.error("Programs could not be fetched");
 
         let mess;
         response.data.errors.map((b: any) => {
@@ -57,7 +55,7 @@ export const fetchPrograms = (pageDetails: any) => {
         });
       }
     } catch (error) {
-      toast.error("Oops! unexpected error occured");
+      toast.error("Programs could not be fetched");
 
       dispatch({
         type: fetchProgramType.FETCH_PROGRAM_FAIL,

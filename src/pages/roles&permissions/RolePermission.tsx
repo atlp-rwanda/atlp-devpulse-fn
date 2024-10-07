@@ -6,11 +6,8 @@ import Modal from "@mui/material/Modal";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import * as BsIcons from "react-icons/bs";
-import * as IoIcons from "react-icons/io5";
-import * as icons from "react-icons/ai";
-import { Link } from "react-router-dom";
-import { HiDotsVertical } from "react-icons/hi";
 import * as AiIcons from "react-icons/ai";
+import * as IoIcons from "react-icons/io5";
 import NavBar from "../../components/sidebar/navHeader";
 import { useForm } from "react-hook-form";
 import {
@@ -424,13 +421,6 @@ function RolePermission(props: any) {
             >
               <span>Add new Role</span>
             </button>
-
-            <Link to="/filter_roles_access">
-              <button className="flex bg-primary dark:bg-[#56C870] rounded-md py-2 mt-2 px-4 text-white font-medium cursor-pointer">
-                <icons.AiOutlineSearch className="mt-1 mr-1 font-bold" />{" "}
-                Search
-              </button>
-            </Link>
             <div>
               <div className=" max-h-[70vh] m-auto shadow-md rounded-[10px] relative  overflow-x-auto  overflow-y-scroll 	md:w-[100%] px-8">
                 {isSingleRole && singleRoleData ? (
