@@ -53,7 +53,7 @@ function Navigation() {
       <Route path="/signup" element={<SignupForm />} />
       <Route path="/admin" element={<AdminLayout />}>
       <Route path="settings" element={<Settings />} />
-      <Route index element={<PrivateRoute><Dashboard /></PrivateRoute>} />
+      <Route index element={<PrivateRoute allowedRoles={['Admin', 'superAdmin']}><Dashboard /></PrivateRoute>} />
         <Route
           path="trainee-applicant-details/:traineeId"
           element={
@@ -308,7 +308,7 @@ function Navigation() {
         <Route
           path="settings"
           element={
-            <PrivateRoute>
+            <PrivateRoute allowedRoles={['Admin', 'superAdmin', 'applicant']}>
               <Settings />
             </PrivateRoute>
           }
