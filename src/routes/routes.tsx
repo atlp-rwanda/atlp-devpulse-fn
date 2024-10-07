@@ -117,7 +117,7 @@ function Navigation() {
           }
         />
         <Route
-          path="trainee-applicant/:traineeId/edit"
+          path="/admin/trainee-applicant/:traineeId/edit"
           element={
             <PrivateRoute>
               <UpdateTraine />

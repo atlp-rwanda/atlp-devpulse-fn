@@ -49,7 +49,7 @@ function ProfileDropdown({
           <div
             className="w-full p-3 flex flex-row align-center justify-start text-gray-900 dark:text-black -100 dark:hover:bg-gray-300 dark:hover:text-gray-900  hover:bg-gray-600 hover:rounded-b-[20px] hover:text-gray-100 "
             onClick={() => {
-              localStorage.removeItem("access_token");
+              localStorage.clear();
             }}
           >
             <Link

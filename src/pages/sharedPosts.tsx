@@ -100,9 +100,9 @@ function SharedJobPosts(props: any) {
                                 Cohort
                               </th>
                               {
-                                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
-                                  Description
-                                </th>
+                                // <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
+                                //   Description
+                                // </th>
                               }
                               <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
                                 Action
@@ -226,14 +226,14 @@ function SharedJobPosts(props: any) {
                                 {item?.cohort?.title}
                               </label>
                             </div>
-                            <div className="flex flex-col w-full">
+                            {/* <div className="flex flex-col w-full">
                               <label className="text-left text-gray-400 text-sm">
                                 Description
                               </label>
                               <div className="text-left text-black-text dark:text-white text-base font-normal">
                                 {item?.description}
                               </div>
-                            </div>
+                            </div> */}
                           </div>
                         ))}
                       </div>

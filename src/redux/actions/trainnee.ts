@@ -36,6 +36,12 @@ export const getOneTraineeAllDetails =
                 firstName
                 _id
                 email
+                cycle_id {
+                  id
+                  name
+                 startDate
+                  endDate
+                 }
               }
              
             }
