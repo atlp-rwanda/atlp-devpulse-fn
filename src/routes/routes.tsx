@@ -276,22 +276,8 @@ function Navigation() {
       </Route>
   
       {/* Applicant Routes (Protected) */}
-      <Route
-        path="/applicant"
-        element={
-          <PrivateRoute allowedRoles={['applicant']}>
-            <ApplicantLayout />
-          </PrivateRoute>
-        }
-      >
-        <Route
-          index
-          element={
-            <PrivateRoute allowedRoles={['applicant']}>
-              <Applications />
-            </PrivateRoute>
-          }
-        /> */}
+      <Route path="/applicant" element={<ApplicantLayout />}>
+      <Route index element={<PrivateRoute allowedRoles={['applicant']}><ApplicantDashboard/></PrivateRoute>} />
         <Route
           path="myApplications"
           element={
