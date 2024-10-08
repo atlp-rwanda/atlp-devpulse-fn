@@ -51,14 +51,23 @@ const LoginForm = () => {
   });
 
   const redirectAfterLogin = async () => {
+    const lastAttemptedRoute = localStorage.getItem('lastAttemptedRoute');
+    if (lastAttemptedRoute) {
+      localStorage.removeItem('lastAttemptedRoute');
+      navigate(lastAttemptedRoute);
+    } else {
       await Token();
       const role = localStorage.getItem("roleName") as string;
-      
       if (role === "applicant") {
         navigate("/applicant");
-      } else if (role === "superAdmin" || "Admin") {
+      } else if (role === "superAdmin") {
         navigate("/admin");
+      } else {
+        const searchParams = new URLSearchParams(location.search);
+        const returnUrl = searchParams.get('returnUrl') || '/';
+        navigate(returnUrl);
       }
+    }
   }
 
   const onSubmit = async (data: loginFormData) => {
@@ -151,6 +160,7 @@ const LoginForm = () => {
               type="submit"
               label=""
               className="sm:w-full w-5/6 rounded-md mb-4 px-2 py-3 text-white  focus:bg-[#56C870] bg-[#56C870]"
+              className="sm:w-full w-5/6 rounded-md mb-4 px-2 py-3 text-white  focus:bg-[#56C870] bg-[#56C870]"
               disabled={true}
             >
               <svg
@@ -180,10 +190,12 @@ const LoginForm = () => {
         <p className="text-sm mt-3 mb-2 text-[#616161] dark:text-gray-300">
           Don't have an account?{" "}
           <Link to="/signup" className="text-[#56C870]">
+          <Link to="/signup" className="text-[#56C870]">
             Sign up
           </Link>
         </p>
         <p className="text-sm mt-3 mb-2 text-[#616161] dark:text-gray-300">
+          <Link to="/forget" className="text-blue-500 hover:underline">
           <Link to="/forget" className="text-blue-500 hover:underline">
             Forgot your password?
           </Link>
