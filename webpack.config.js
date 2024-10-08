@@ -3,6 +3,7 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const path = require("path");
 const dotenv = require("dotenv");
 const webpack = require("webpack");
+
 module.exports = () => {
   dotenv.config();
   const prod = process.env.NODE_ENV === "production";
@@ -51,6 +52,12 @@ module.exports = () => {
         {
           test: /\.(png|jp(e*)g|svg|gif)$/,
           use: ["file-loader"],
+        },
+        {
+          test: /\.m?js$/,
+          resolve: {
+            fullySpecified: false,
+          },
         },
       ],
     },

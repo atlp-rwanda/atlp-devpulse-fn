@@ -35,6 +35,11 @@ export const sidebarItems1 = [
     title: "Applications",
   },
   {
+    path: "Trainee-applicants",
+    icon: <Icon icon="ic:round-people"></Icon>,
+    title: "Trainees-Applicants",
+  },
+  {
     path: "cohort",
     icon: <Icon icon="fa6-solid:graduation-cap"></Icon>,
     title: "Cohorts",
@@ -44,7 +49,12 @@ export const sidebarItems1 = [
     icon: <Icon icon="game-icons:cycle"></Icon>,
     title: "Application Cycles",
   },
-
+  {
+    path: 'Trainee-applicants',
+    icon: <Icon icon="ic:round-people"></Icon>,
+    title: 'Trainees/Applicants',
+  },
+  
   {
     path: "grading",
     icon: <Icon icon="bxs:dashboard"></Icon>,
@@ -86,6 +96,7 @@ export const applicantSidebarItems = [
     title: "Job Post ",
   },
 ];
+
 export const sidebarItems2 = [
   {
     path: "/documents",

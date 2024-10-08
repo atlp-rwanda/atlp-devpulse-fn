@@ -1,17 +1,17 @@
-import axios from './axiosconfig';
-import { toast } from 'react-toastify';
-import { Dispatch } from 'react';
+import axios from "./axiosconfig";
+import { toast } from "react-toastify";
+import { Dispatch } from "react";
 import {
   fetchSingleJobPostType,
   Action,
-} from '../actiontypes/fetchSingleJobPostTypes';
+} from "../actiontypes/fetchSingleJobPostTypes";
 
 export const fetchSingleJobPost = (JobPostData: any) => {
   return async (dispatch: Dispatch<Action>) => {
     try {
       const response = await axios({
         url: process.env.BACKEND_URL,
-        method: 'post',
+        method: "post",
         data: {
           query: `
           query GetJobApplication($getJobApplicationId: ID!) {
@@ -19,17 +19,21 @@ export const fetchSingleJobPost = (JobPostData: any) => {
                 id
                 title
                 program {
+                _id
                 title
                 requirements
                 }
                 cycle {
+                id
                 name
                 }
                 cohort {
+                id
                 title
                 }
                 description
                 link
+                published
             }
             }
             `,
@@ -47,7 +51,7 @@ export const fetchSingleJobPost = (JobPostData: any) => {
       }
 
       if (response.data.errors) {
-        toast.error('Job Post could not be fetched');
+        toast.error("Job Post could not be fetched");
 
         let mess;
         response.data.errors.map((b: any) => {
@@ -59,7 +63,7 @@ export const fetchSingleJobPost = (JobPostData: any) => {
         });
       }
     } catch (error) {
-      toast.error('Job Post could not be fetched');
+      toast.error("Job Post could not be fetched");
 
       dispatch({
         type: fetchSingleJobPostType.FETCH_SINGLE_JOB_POST_FAIL,

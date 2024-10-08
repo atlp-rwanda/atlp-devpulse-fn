@@ -32,6 +32,7 @@ function SignupForm() {
 
   const [fetchedCountries, setFetchedCountries] = useState<Country[]>([]);
   const [filteredCountries, setFilteredCountries] = useState<Country[]>([]);
+  const [selectedCountry, setSelectedCountry] = useState<string>("");
 
   const handleCountrySearch = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const searchTerm = event.target.value.toLowerCase();
@@ -53,10 +54,32 @@ function SignupForm() {
     fetchCountriesData();
   }, []);
 
+
+  const handleCountryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    setSelectedCountry(value);
+  
+    // Filter countries based on the input
+    const filtered = fetchedCountries.filter((country) =>
+      country.name.toLowerCase().startsWith(value.toLowerCase())
+    );
+    setFilteredCountries(filtered);
+  
+    // If a valid country is selected, update the country code
+    const selectedCountryObj = fetchedCountries.find(
+      (country) => country.name.toLowerCase() === value.toLowerCase()
+    );
+    if (selectedCountryObj) {
+      setValue("countryCode", `${selectedCountryObj.phone}${selectedCountryObj.suffix}`);
+    }
+  };
+  
+
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setValue, 
   } = useForm<formData>({
     resolver: zodResolver(registerSchema),
   });
@@ -66,9 +89,10 @@ function SignupForm() {
     setTimeout(() => {
       setError(null);
     }, 3000);
-  };
+  }
 
   const onSubmit = async (data: any) => {
+
     setIsLoading(true);
     if (data.password !== data.confirmPassword) {
       showToast("Passwords doesn't match!", "error");
@@ -128,7 +152,7 @@ function SignupForm() {
           showToast(error, "error");
         }
       } else {
-        setIsSuccess(true);
+        setIsSuccess(true)
       }
     } catch (error: any) {
       showToast("An error occurred.", "error");
@@ -147,11 +171,7 @@ function SignupForm() {
     <>
       <div className="flex items-center  justify-center mx-auto bg-[#374151] h-screen">
         {isAnError && (
-          <Toasty
-            message={isAnError}
-            type="error"
-            onClose={() => setError(null)}
-          />
+          <Toasty message={isAnError} type="error" onClose={() => setError(null)} />
         )}
         {isSuccess ? (
           <div className="bg-[#1F2A37] w-[30vw]  flex h-[70vh] flex-col items-center justify-center rounded-sm sm:w-5/6 lg:w-[45vw]">
@@ -162,7 +182,7 @@ function SignupForm() {
               <AiOutlineCheck className="text-white text-4xl" />
             </div>
             <div className="text-[#afb1b4] text-lg mb-4 font-inter">
-              <p>Your account has been succefully created !</p>
+              <p>Account created, Check your email to verify your account !</p>
             </div>
             <Link to="/login" ><Button label="Continue" className="w-[80px]" /></Link>
           </div>
@@ -246,19 +266,21 @@ function SignupForm() {
               </div>
               <div className="flex items-center w-[25vw] gap-10   sm:w-5/6 lg:w-[25vw] justify-between">
                 <div className="w-[50%]">
-                  <InputField
-                    placeholder="Country"
-                    type="text"
-                    {...register("country")}
-                    list="country"
-                    error={errors?.country}
+                <InputField
+                  placeholder="Country"
+                  list="countries"
+                  className="w-full rounded-md px-2 py-3 border border-white placeholder:text-gray-400 text-white sm:text-[12px] outline-none autofill:bg-transparent autofill:text-white bg-[#1F2A37]"
+                  {...register("country", {
+                  onChange: (e) => handleCountryChange(e),
+                   })} 
+                  error={errors?.country}
                   />
-                  <Datalist
-                    id="country"
-                    options={filteredCountries.map((country) => ({
-                      value: country.name,
-                    }))}
-                  />
+                  <datalist id="countries">
+                  {filteredCountries.map((country) => (
+                   <option key={country.code} value={country.name} />
+                  ))}
+                  </datalist>
+
                 </div>
                 <div className="w-[50%] ">
                   <InputField
@@ -281,20 +303,13 @@ function SignupForm() {
 
               <div className="flex items-center w-[25vw] sm:w-5/6 lg:w-[25vw]  justify-between">
                 <div className="w-[20%] ">
-                  <InputField
-                    type="text"
-                    placeholder="+250"
-                    {...register("countryCode")}
-                    className="w-full  rounded-md  px-2 py-3 border border-white placeholder:text-gray-400 text-white sm:text-[12px] outline-none autofill:bg-transparent autofill:text-white bg-[#1F2A37]"
-                    list="countryCodes"
-                    error={errors?.countryCode}
-                  />
-                  <Datalist
-                    id="countryCodes" options={filteredCountries.map((country) => ({
-                      value: country.name
-                    }))}
-                    style={{ cursor: "pointer" }}
-                  />
+                <InputField
+                  placeholder="Country Code"
+                  type="text"
+                  className="w-full rounded-md px-2 py-3 border border-white placeholder:text-gray-400 text-white sm:text-[12px] outline-none autofill:bg-transparent autofill:text-white bg-[#1F2A37]"
+                  {...register("countryCode")}
+                  error={errors?.countryCode}
+                />
                 </div>
                 <div className=" w-[65%]">
                   <InputField
@@ -351,11 +366,7 @@ function SignupForm() {
                   </Button>
                 </>
               ) : (
-                <Button
-                  type="submit"
-                  label="Signup"
-                  className="my-1  mb-4 sm:w-full w-5/6 "
-                />
+                <Button type="submit" label="Signup" className="my-1  mb-4 sm:w-full w-5/6 " />
               )}
             </div>
           </form>

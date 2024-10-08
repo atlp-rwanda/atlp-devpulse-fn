@@ -270,6 +270,12 @@ const Jobs = (props: any) => {
                     Post
                   </button>
                 </div>
+                <Link to="/admin/filter_job_post">
+                  <button className="flex bg-primary dark:bg-[#56C870] rounded-md py-2 mt-2 px-4 text-white font-medium cursor-pointer">
+                    <icons.AiOutlineSearch className="mt-1 mr-1 font-bold" />{" "}
+                    Search
+                  </button>
+                </Link>
               </div>
               <div className="px-8">
                 <div className="bg-white  dark:bg-dark-bg shadow-lg px-5 py-8 rounded-md w-[100%]">
@@ -378,7 +384,7 @@ const Jobs = (props: any) => {
                                       >
                                         <li>
                                           <Link
-                                            to={`#`}
+                                            to={`/admin/job/post/edit/${item.id}`}
                                             className="text-sm hover:bg-gray-100 text-gray-700 dark:hover:bg-gray-500 dark:text-white  block px-4 py-2"
                                           >
                                             Edit
@@ -386,7 +392,7 @@ const Jobs = (props: any) => {
                                         </li>
                                         <li>
                                           <Link
-                                            to={`/Job/Post/${item.id}`}
+                                            to={`/admin/Job/Post/${item.id}`}
                                             className="text-sm hover:bg-gray-100 text-gray-700  dark:text-white   dark:hover:bg-gray-500 block px-4 py-2"
                                           >
                                             View
@@ -477,7 +483,7 @@ const Jobs = (props: any) => {
                                   Edit
                                 </Link>
                                 <Link
-                                  to={`/Job/Post/${item.id}`}
+                                  to={`/admin/Job/Post/${item.id}`}
                                   className="text-white bg-green border border-solid border-green rounded-md px-2 text-xs"
                                 >
                                   View

@@ -1,15 +1,12 @@
-const options ={ 
-    educationOptions:[
-    'Secondary school',
+const options = {
+  educationOptions: [
+    "choose",
+    "Secondary school",
     "Bachelor's Degree",
     "Master's Degree",
-    'PhD',
+    "PhD",
   ],
-  interviewOptions:[
-    'Passed',
-    "Failed",
-    "Rejected"
-  ]
-  };
+  interviewOptions: ["choose", "Approved", "Passed", "Failed", "Rejected"],
+};
 
-  export default options;
+export default options;
