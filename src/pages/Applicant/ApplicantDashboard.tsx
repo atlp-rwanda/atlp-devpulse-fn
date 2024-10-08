@@ -7,6 +7,15 @@ import { getTraineePerformance } from "../../redux/actions/performanceAction";
 import { getTraineeByUserId } from "../../redux/actions/TraineeAction";
 import { getCohort } from "../../redux/actions/cohortActions";
 import { useDispatch, useSelector } from "react-redux";
+import {
+    Area,
+    XAxis,
+    YAxis,
+    Tooltip,
+    ResponsiveContainer,
+    Scatter,
+    ComposedChart
+  } from "recharts";
 
 const calendar: string = require("../../assets/assets/calendar.svg").default;
 const collaboration: string =
@@ -18,7 +27,7 @@ const strategy: string = require("../../assets/assets/strategy.svg").default;
 const DashboardCard = ({ title, value, img }) => {
   return (
     <>
-      <div className="bg-gray-300 dark:bg-gray-800 rounded-lg p-4 flex items-center justify-between border border-[#DFE3E8] min-w-[260px]  ">
+      <div className="bg-gray-300 dark:bg-gray-800 rounded-lg p-4 flex items-center justify-between border border-[#DFE3E8] flex-1 min-w-[250px] ">
         <div className="flex items-center">
           <div className="bg-gray-100 dark:bg-gray-700 p-2 rounded-lg mr-3">
             <img src={img} alt={title} />
@@ -28,18 +37,74 @@ const DashboardCard = ({ title, value, img }) => {
             <p className="text-gray-900 dark:text-white text-2xl font-bold">{value}</p>
           </div>
         </div>
-        {/* <div
-          className={`text-sm font-medium ${
-            change >= 0 ? "text-green-500" : "text-red-500"
-          }`}
-        >
-          {change >= 0 ? "↑" : "↓"} {Math.abs(change)}%
-          <p className="text-gray-400 text-xs">For this year</p>
-        </div> */}
       </div>
     </>
   );
 };
+
+const ApplicantChart = ({ performance }) => {
+  const transformPerformanceData = (performanceData) => {
+      if (!performanceData?.performances) return [];
+      
+      const sortedPerformances = [...performanceData.performances].sort((a, b) => {
+        return parseInt(a.date) - parseInt(b.date);
+      });
+
+        
+        return sortedPerformances.map((performance, index) => ({
+          name: index + 1,
+          score: performance.score || 0,
+          
+        }));
+        
+    };
+  
+    const chartData = transformPerformanceData(performance);
+
+  if (chartData.length === 0) {
+    return <div>No performance data available</div>;
+  }
+
+
+
+  return (
+    <ResponsiveContainer width="100%" height={300}>
+      <ComposedChart
+        data={chartData}
+        margin={{
+          top: 10,
+          right: 30,
+          left: 0,
+          bottom: 0,
+        }}
+      >
+        <XAxis 
+          dataKey="name"
+          tick={{ fill: "white" }}
+          // axisLine={{ stroke: '#666', strokeWidth: 1 }}
+          // tickLine={false}
+        />
+        <YAxis
+          domain={[0, 100]}
+          tick={{ fill: "white" }}
+          // axisLine={{ stroke: '#666', strokeWidth: 1 }}
+          // tickLine={false}
+          // ticks={[0, 25, 50, 75, 100]}
+        />
+        <Tooltip 
+        // contentStyle={{ backgroundColor: '#374151', border: 'none', borderRadius: '4px' }}
+        // itemStyle={{ color: 'white' }}
+        />
+        {chartData.length === 1 ? (
+          <Scatter name="Performance" dataKey="score" fill="#56C870" />
+        ) : (
+          <Area type="monotone" dataKey="score" stroke="#56C870" fill="rgba(86, 200, 112, 0.1)" />
+        )}
+      </ComposedChart>
+    </ResponsiveContainer>
+  );
+  }
+
 
 const useTraineeData = () => {
   const dispatch = useDispatch();
@@ -97,7 +162,7 @@ const formatters = {
 
   formatPercentage: (value: number | string | undefined): string => {
     if (typeof value === 'number') {
-      return `${value}%`;
+      return `${value.toFixed(1)}%`;
     }
     return 'N/A';
   },
@@ -141,7 +206,7 @@ const ApplicantDashboard = (props: any) => {
 
   return (
     <>
-      <div className="bg-white dark:bg-[#374151] w-full h-screen p-8">
+      <div className="bg-white dark:bg-[#374151] w-full min-h-screen p-8">
         <div>
           <div className="mt-6">
             <div>
@@ -155,6 +220,21 @@ const ApplicantDashboard = (props: any) => {
                   />
                 ))}
               </div>
+              <div className="w-full border border-slate-200 py-10 px-7 rounded-2xl dark:bg-dark-bg bg-white mt-10">
+          <div className="w-full flex flex-col mb-8">
+            <h2 className="text-gray-900 dark:text-white font-medium text-xl">
+              My overall performance
+            </h2>
+            <p className="text-gray-900 dark:text-white text-sm">
+            As of {new Date().toLocaleDateString('en-US', { 
+        day: 'numeric', 
+        month: 'long', 
+        year: 'numeric'
+      })}
+            </p>
+          </div>
+          <ApplicantChart performance={performance}  />
+        </div>
             </div>
           </div>
         </div>
