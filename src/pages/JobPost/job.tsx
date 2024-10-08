@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import NavBar from "../../components/sidebar/navHeader";
 import * as BsIcons from "react-icons/bs";
 import * as BsFillGrid3X3GapFill from "react-icons/bs";
@@ -21,6 +21,12 @@ import { getAllPrograms } from "../../redux/actions/programsActions";
 import { getAllCycles } from "../../redux/actions/cyclesActions";
 import { getAllCohorts } from "../../redux/actions/cohortActions";
 import { deleteJobPostAction } from "../../redux/actions/deleteJobPostAction";
+import { useTheme } from "../../hooks/darkmode";
+import { 
+  getAllFilteredJobPosts, 
+  getAllJobPosts} from "../../redux/actions/filterJobPost";
+
+  import { debounce } from "lodash";
 
 const Jobs = (props: any) => {
   const [addNewTraineeModel, setAddNewTraineeModel] = useState(false);
@@ -43,11 +49,35 @@ const Jobs = (props: any) => {
   const [fetchCycle, setfetchCycle] = useState([]);
   const [fetchCohort, setfetchCohort] = useState([]);
   const [actionsList, setActionsList] = useState(null);
+  const { theme, setTheme } = useTheme();
 
   // LIST ALL JOB POST
   const { jobs } = props;
   const dispatch = useAppDispatch();
   const fetchJobPostStates = useAppSelector((state) => state.fetchJobPost);
+  const customTheme = (theme: any) => {
+    return {
+      ...theme,
+      colors: {
+        ...theme.colors,
+        text: "light-gray",
+        primary25: "#E5E7EB",
+        primary: "#d6dfdf",
+        neutral0: "white",
+      },
+    };
+  };
+  
+  const darkTheme = (theme: any) => {
+    return {
+      ...theme,
+      colors: {
+        primary25: "#404657",
+        primary: "#d6dfdf",
+        neutral0: "#293647",
+      },
+    };
+  };
   useEffect(() => {
     dispatch(fetchJobPost());
   }, []);
@@ -60,16 +90,32 @@ const Jobs = (props: any) => {
   const [page, setPage] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState<number>(10);
   const [All, setAll] = useState(false);
+  const [enteredWord,setEnteredWord]=useState('');
+  const [filterAttribute,setFilterAttribute]=useState('')
+  const [enteredsubmitWord, setenteredsubmitWord] = useState("");
   const input = {
     page: page + 1,
     itemsPerPage: itemsPerPage,
     All: All,
   };
+  const input2={
+    page: page + 1,
+    itemsPerPage: itemsPerPage,
+    All: All,
+    filterAttribute:filterAttribute,
+    wordEntered: enteredWord,
+  }
+  const {allfilteredjobPosts, count}=props
   useEffect(() => {
     props.getAllPrograms();
     props.getAllCycles();
     props.getAllCohorts();
   }, []);
+
+  useEffect(() => {
+    props.getAllFilteredJobPosts(input2);
+    props.getAllJobPosts()
+  }, [enteredWord, filterAttribute]);
 
   const validation = () => {
     if (program === "") {
@@ -111,6 +157,36 @@ const Jobs = (props: any) => {
   const toogleActions = (id: any) => {
     setActionsList((prevState) => (!prevState ? id : null));
   };
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      if(filterAttribute==='' || filterAttribute===null){
+        toast.error("Please insert a filter attribute")
+      }
+      setEnteredWord(enteredsubmitWord);
+    }
+  };
+  const handleSearchChange = (e) => {
+    const searchTerm = e.target.value;
+    setenteredsubmitWord(searchTerm); 
+    setEnteredWord(searchTerm); 
+  };
+
+
+  const debouncedSearch = useCallback(
+    debounce(() => {
+      props.getAllFilteredJobPosts(input2);
+    }, 300), 
+    [enteredWord, filterAttribute, page, itemsPerPage]
+  );
+
+  useEffect(() => {
+    debouncedSearch();
+
+    return () => {
+      debouncedSearch.cancel();
+    };
+  }, [debouncedSearch]);
+
   const handleDelete = (id: any) => {
     try {
       props.deleteJobPostAction({ id });
@@ -260,23 +336,48 @@ const Jobs = (props: any) => {
         <div className="flex flex-row">
           <div className="w-full">
             <div className="bg-light-bg dark:bg-dark-frame-bg min-h-screen overflow-x-hidden">
-              <div className="flex items-left px-8">
-                <div className="flex py-2 pb-8 w-fit">
-                  <button
-                    onClick={Open}
-                    className="flex bg-primary dark:bg-[#56C870] rounded-md py-2 px-4 text-white font-medium cursor-pointer"
-                  >
-                    <icons.AiOutlinePlus className="mt-1 mr-1 font-bold" /> Job
-                    Post
-                  </button>
-                </div>
-                <Link to="/admin/filter_job_post">
-                  <button className="flex bg-primary dark:bg-[#56C870] rounded-md py-2 mt-2 px-4 text-white font-medium cursor-pointer">
-                    <icons.AiOutlineSearch className="mt-1 mr-1 font-bold" />{" "}
-                    Search
-                  </button>
-                </Link>
+            <div className="w-full px-4 sm:px-6 lg:px-8 py-4">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-4">
+                <button
+                  onClick={Open}
+                  className="flex items-center bg-primary dark:bg-[#56C870] rounded-md py-2 px-4 text-white font-medium cursor-pointer"
+                >
+                  <icons.AiOutlinePlus className="mr-2" /> Job Post
+                </button>
+                <Select
+                  className="sm:text-sm w-full sm:w-40 rounded-bt-rd dark:text-ltb"
+                  options={[
+                    { value: "title", label: "Job Title" },
+                    { value: "program", label: "Program" },
+                    { value: "cycle", label: "Cycle" },
+                    { value: "cohort", label: "Cohort" },
+                    { value: "description", label: "Description" },
+                    { value: "", label: "Select by" },
+                  ]}
+                  defaultValue={{ value: "", label: "Select by" }}
+                  onChange={(e) => setFilterAttribute(`${e?.value}`)}
+                  theme={theme ? customTheme : darkTheme}
+                />
+                 <div className="w-full sm:w-auto flex-grow">
+                    <div className="relative">
+                      <input
+                        onChange={handleSearchChange}
+                        onKeyDown={(e) => handleKeyDown(e)}
+                        className="w-full bg-row-gray dark:bg-[#293647] dark:text-ltb border border-bdr dark:border-cg dark:border-opacity-5 rounded-md py-2 pl-9 pr-4 focus:outline-none focus:ring-2 focus:ring-primary dark:focus:ring-[#56C870] text-sm"
+                        value={enteredsubmitWord}
+                        placeholder="Search"
+                        type="text"
+                        name="search"
+                      />
+                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
               </div>
+            </div>
               <div className="px-8">
                 <div className="bg-white  dark:bg-dark-bg shadow-lg px-5 py-8 rounded-md w-[100%]">
                   <div>
@@ -422,7 +523,7 @@ const Jobs = (props: any) => {
                         <label className="text-left text-black-text dark:text-white text-lg font-bold">
                           Job POST
                         </label>
-                        {fetchJobPostStates?.data?.map((item: any) => (
+                        {allfilteredjobPosts?.data?.map((item: any) => (
                           <div
                             key={item._id}
                             className="flex flex-col w-full gap-2 border border-solid border-transparent border-t-black dark:border-t-white border-t-4 rounded-t-sm"
@@ -634,6 +735,9 @@ const mapState = (state: any) => ({
   cohorts: state.cohorts,
   deleteJobPostStates: state.deleteJobPost,
   fetchJoPostStates: state.fetchJobPost,
+  allfilteredjobPosts: state.filterJobPost,
+  errors: state.errors,
+  count: state.count,
 });
 
 export default connect(mapState, {
@@ -643,4 +747,6 @@ export default connect(mapState, {
   createJobPostAction,
   deleteJobPostAction,
   fetchJobPost,
+  getAllFilteredJobPosts: getAllFilteredJobPosts,
+  getAllJobPosts: getAllJobPosts,
 })(Jobs);

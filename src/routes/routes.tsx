@@ -6,6 +6,7 @@ import TrainneeDetailsB from "./../pages/TrainneDetailsB";
 import "./../index.css";
 import Sidebar from "./../components/sidebar/sidebar";
 import NavBar from "./../components/sidebar/navHeader";
+import ForgotPasswordPage from "./../pages/forgetpassword";
 import Trainee from "./../pages/TraineApplicant/Trainee";
 import FilterTrainee from "./../pages/FilterTeainee/FilterTrainee";
 import FilterProgram from '../pages/programs/filterPrograms';
@@ -13,6 +14,8 @@ import FilterJobPost from '../pages/JobPost/fiterJopPost';
 import ApplicantSeachJobPost from "../pages/JobPost/applicantJobFiltering"
 import FilterRole from '../pages/roles&permissions/filterRolesAccess';
 import Table from "./../pages/Table";
+import ResetPasswordPage from "../pages/ResetPasswordPage";
+
 import UpdateTraine from "./../pages/updateTrainee/traineUpdate";
 import CreateScoreType from "./../pages/FilterTeainee/createScoreType";
 import ScoreTypesActions from "./../pages/FilterTeainee/ScoreTypesActions";
@@ -55,6 +58,9 @@ function Navigation() {
       {/* Public Routes */}
       <Route path="/test_tailwind" element={<TestTailwind />} />
       <Route path="/login" element={<LoginPage />} />
+      <Route path="/forget" element={<ForgotPasswordPage />} />
+      <Route path="/reset-password" element={<ResetPasswordPage />} />
+
       <Route path="/signup" element={<SignupForm />} />
       <Route path="/verifyEmail" element={<VerifyEmail/>}/>
       <Route path="/pageNotFound" element={<PageNotFound />} />
