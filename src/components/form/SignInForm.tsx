@@ -160,7 +160,7 @@ const LoginForm = () => {
               type="submit"
               label=""
               className="sm:w-full w-5/6 rounded-md mb-4 px-2 py-3 text-white  focus:bg-[#56C870] bg-[#56C870]"
-              className="sm:w-full w-5/6 rounded-md mb-4 px-2 py-3 text-white  focus:bg-[#56C870] bg-[#56C870]"
+             
               disabled={true}
             >
               <svg
