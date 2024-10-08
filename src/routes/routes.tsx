@@ -48,6 +48,7 @@ import ApplicationDetails from "../pages/Applications/ViewSingleApplication";
 import Dashboard from "../pages/Dashboard";
 import ApplicantLayout from "../pages/Applicant/ApplicantLayout";
 import AdminLayout from "../components/Layout/Admins/AdminLayout";
+import UpdateJobPost from "../pages/JobPost/updateJobPost";
 import VerifyEmail from "../pages/verifyEmail";
 
 function Navigation() {
@@ -258,6 +259,14 @@ function Navigation() {
           element={
             <PrivateRoute allowedRoles={['Admin', 'superAdmin']}>
               <SingleJobPostDetails />
+            </PrivateRoute>
+          }
+        />
+          <Route
+          path="job/post/edit/:programId"
+          element={
+            <PrivateRoute allowedRoles={['Admin', 'superAdmin']}>
+              <UpdateJobPost />
             </PrivateRoute>
           }
         />
