@@ -46,7 +46,7 @@ import Dashboard from "../pages/Dashboard";
 import ApplicantLayout from "../pages/Applicant/ApplicantLayout";
 import AdminLayout from "../components/Layout/Admins/AdminLayout";
 import VerifyEmail from "../pages/verifyEmail";
-import Settings from '../components/Settings/settings';
+import Settings from '../components/settings';
 
 function Navigation() {
   const roleName = localStorage.getItem("roleName");
