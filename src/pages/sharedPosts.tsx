@@ -71,7 +71,7 @@ function SharedJobPosts(props: any) {
             <div className="bg-light-bg dark:bg-dark-frame-bg min-h-screen overflow-x-hidden flex flex-col gap-8">
               <div className="flex items-left px-8 pt-1">
                 <div className="flex w-fit">
-                  <Link to="/filter_trainee-applicants">
+                  <Link to="/applicant/filter_job_post">
                     <button className="flex bg-primary dark:bg-[#56C870] rounded-md py-2 mt-2 px-4 text-white font-medium cursor-pointer">
                       <icons.AiOutlineSearch className="mt-1 mr-1 font-bold" />{' '}
                       Search
