@@ -69,8 +69,8 @@ export const fetchApplications = async () => {
   
     if (response.data.errors) {
       console.log(response.data.errors);
-      toast.error(response.data.errors[0].error);
-      return {data: null, error:response.data.errors[0].error };
+      toast.error(response.data.errors[0].message);
+      return {data: null, error:response.data.errors[0].message };
     }
   
     return { data: response.data.data.adminViewApplications, error: null };

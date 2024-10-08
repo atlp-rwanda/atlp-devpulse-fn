@@ -5,7 +5,7 @@ import {
   fetchSingleOwnApplication,
 } from '../actiontypes/applicationTypes';
 import axios from './axiosconfig';
-import { toast } from 'react-hot-toast';
+import { toast } from 'react-toastify';
 import creator from './creator';
 import { MY_APPLICATIONS } from 'redux';
 
@@ -74,7 +74,7 @@ export const getMyApplications =
         return response.data.data;
       }
     } catch (err: any) {
-      toast.error(err.message);
+      console.error(err.message);
     }
   };
 

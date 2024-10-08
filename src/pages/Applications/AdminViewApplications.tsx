@@ -23,12 +23,12 @@ const ListApplications = () => {
     const applicationsData = async () => {
       const { data, error } = await fetchApplications();
       console.log(error);
-      if(error){
-        setTimeout(() => {
-          navigate('login');
-        }, 5000);
-        return;
-      }
+      // if(error){
+      //   setTimeout(() => {
+      //     navigate('/login');
+      //   }, 5000);
+      //   return;
+      // }
       const slicedData = data?.data?.applications.slice(
         (activePage - 1) * itemsCountPerPage,
         activePage * itemsCountPerPage

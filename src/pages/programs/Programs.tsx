@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { createProgramAction } from "../../redux/actions/createProgramAction";
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import programSchema from "../../validation/programSchema";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { HiDotsVertical } from "react-icons/hi";
 import * as AiIcons from "react-icons/ai";
 import Select from "react-select";
@@ -18,6 +18,7 @@ import { deleteProgramAction } from "../../redux/actions/deleteProgramAction";
 import { ToastContainer } from "react-toastify";
 
 const Programs = (props: any) => {
+  const navigate = useNavigate();
   const { createProgramStates, fetchProgramStates, deleteProgramStates } =
     props;
   const [addNewProgramModal, setAddNewProgramModal] = useState(false);
@@ -175,7 +176,13 @@ const Programs = (props: any) => {
   };
 
   useEffect(() => {
-    props.fetchPrograms(input);
+    const { data, error } = props.fetchPrograms(input);
+    // if (error) {
+    //         setTimeout(() => {
+    //           navigate('/login');
+    //         }, 5000);
+    //         return; 
+    //       }
   }, [page, itemsPerPage]);
 
   return (

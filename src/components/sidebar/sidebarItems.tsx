@@ -35,11 +35,6 @@ export const sidebarItems1 = [
     title: "Applications",
   },
   {
-    path: "Trainee-applicants",
-    icon: <Icon icon="ic:round-people"></Icon>,
-    title: "Trainees-Applicants",
-  },
-  {
     path: "cohort",
     icon: <Icon icon="fa6-solid:graduation-cap"></Icon>,
     title: "Cohorts",
