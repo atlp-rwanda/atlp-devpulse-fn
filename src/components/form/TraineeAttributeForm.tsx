@@ -1,13 +1,16 @@
-import React, { useState} from 'react';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { createTraineeAttribute } from '../../redux/actions/traineeAttributes';
 import TraineeFormPage1 from '../../components/TraineeFormPage1';
 import TraineeFormPage2 from '../../components/TraineeFormPage2';
-
+import { useTheme } from '../../hooks/darkmode'; 
 
 const TraineeAttributeForm = ({ traineeId }) => {
   const dispatch = useDispatch();
   const [page, setPage] = useState(1);
+  const { theme } = useTheme(); 
+  const isDarkMode = theme === false; 
+
   const [formData, setFormData] = useState({
     gender: '',
     birth_date: '',
@@ -70,25 +73,28 @@ const TraineeAttributeForm = ({ traineeId }) => {
   };
 
   return (
-    <div className='text-white w-full h-full pt-5 px-4 md:px-8 lg:px-16'>
-      <h2 className='text-center font-semibold text-xl md:text-2xl mb-6'>Fill the form for more information</h2>
-      
-      <form className='max-w-4xl mx-auto'>
-        {page === 1 ? (
-          <TraineeFormPage1 
-            formData={formData} 
-            setFormData={setFormData} 
-            onNext={handleNext} 
-          />
-        ) : (
-          <TraineeFormPage2 
-            formData={formData} 
-            setFormData={setFormData} 
-            onSubmit={handleSubmit}
-            onBack={handleBack}
-          />
-        )}
-      </form>
+    <div className={`p-6 rounded-lg shadow-md ${
+      isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-800'
+    }`}>
+      <h2 className={`text-2xl font-bold mb-4 ${
+        isDarkMode ? 'text-white' : 'text-gray-800'
+      }`}>Fill the form for more information</h2>
+      {page === 1 ? (
+        <TraineeFormPage1
+          formData={formData}
+          setFormData={setFormData}
+          onNext={handleNext}
+          isDarkMode={isDarkMode}
+        />
+      ) : (
+        <TraineeFormPage2
+          formData={formData}
+          setFormData={setFormData}
+          onSubmit={handleSubmit}
+          onBack={handleBack}
+          isDarkMode={isDarkMode}
+        />
+      )}
     </div>
   );
 };
