@@ -58,10 +58,6 @@ const LoginForm = () => {
         navigate("/applicant");
       } else if (role === "superAdmin" || "Admin") {
         navigate("/admin");
-      } else {
-        const searchParams = new URLSearchParams(location.search);
-        const returnUrl = searchParams.get('returnUrl') || '/';
-        navigate(returnUrl);
       }
   }
 

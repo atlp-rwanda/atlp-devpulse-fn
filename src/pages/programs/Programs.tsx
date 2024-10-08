@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import NavBar from "../../components/sidebar/navHeader";
 import * as icons from "react-icons/ai";
 import { connect } from "react-redux";
@@ -8,6 +8,9 @@ import programSchema from "../../validation/programSchema";
 import { Link } from "react-router-dom";
 import { HiDotsVertical } from "react-icons/hi";
 import * as AiIcons from "react-icons/ai";
+import {
+  getAllFilteredPrograms,
+  getAllprograms} from "../../redux/actions/filterProgramActions";
 import Select from "react-select";
 import {
   DOTS,
@@ -15,13 +18,21 @@ import {
 } from "../../components/Pagination/useCustomPagination";
 import { fetchPrograms } from "../../redux/actions/fetchProgramsAction";
 import { deleteProgramAction } from "../../redux/actions/deleteProgramAction";
-import { ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
+import { useTheme } from "../../hooks/darkmode";
+import {debounce} from "lodash"
 
 const Programs = (props: any) => {
   const { createProgramStates, fetchProgramStates, deleteProgramStates } =
     props;
+  const { theme, setTheme } = useTheme();
+  const { allfilteredPrograms,count } = props;
   const [addNewProgramModal, setAddNewProgramModal] = useState(false);
   const [entries, setEntries] = useState<Array<string>>([]);
+  const [filterAttribute, setFilterAttribute] = useState("");
+  const [enteredWord, setEnteredWord] = useState("");
+  const [enteredsubmitWord, setenteredsubmitWord] = useState("");
+  const [All, setAll] = useState(false);
   const [submitData, setSubmitData] = useState({
     title: "",
     description: "",
@@ -47,6 +58,58 @@ const Programs = (props: any) => {
     duration: "",
   });
 
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      if(filterAttribute==='' || filterAttribute===null){
+        toast.error("Please insert a filter attribute")
+      }
+      setEnteredWord(enteredsubmitWord);
+    }
+  };
+  const handleSearchChange = (e) => {
+    const searchTerm = e.target.value;
+    setenteredsubmitWord(searchTerm); 
+    setEnteredWord(searchTerm); 
+  };
+
+
+  const debouncedSearch = useCallback(
+    debounce(() => {
+      props.getAllFilteredPrograms(input2);
+    }, 300), 
+    [enteredWord, filterAttribute, page, itemsPerPage]
+  );
+
+  useEffect(() => {
+    debouncedSearch();
+
+    return () => {
+      debouncedSearch.cancel();
+    };
+  }, [debouncedSearch]);
+
+  const customTheme = (theme: any) => {
+    return {
+      ...theme,
+      colors: {
+        ...theme.colors,
+        text: "light-gray",
+        primary25: "#E5E7EB",
+        primary: "#d6dfdf",
+        neutral0: "white",
+      },
+    };
+  };
+  const darkTheme = (theme: any) => {
+    return {
+      ...theme,
+      colors: {
+        primary25: "#404657",
+        primary: "#d6dfdf",
+        neutral0: "#293647",
+      },
+    };
+  };
   const handleInputChange = (e: any) => {
     e.preventDefault();
 
@@ -154,7 +217,7 @@ const Programs = (props: any) => {
   };
 
   const paginationRange = useCustomPagination({
-    totalPageCount: Math.ceil(fetchProgramStates?.data?.length / itemsPerPage),
+    totalPageCount: Math.ceil(allfilteredPrograms?.data?.length / itemsPerPage),
     currentPage: page,
   });
   const input = {
@@ -162,6 +225,17 @@ const Programs = (props: any) => {
     pageSize: itemsPerPage,
   };
 
+  const input2={
+    page: page + 1,
+    itemsPerPage: itemsPerPage,
+    All: All,
+    filterAttribute:filterAttribute,
+    wordEntered: enteredWord,
+  }
+
+  useEffect(() => {
+    props.getAllFilteredPrograms(input2);
+  }, [enteredWord, filterAttribute]);
   const toogleActions = (id: any) => {
     setActionsList((prevState) => (!prevState ? id : null));
   };
@@ -177,6 +251,7 @@ const Programs = (props: any) => {
   useEffect(() => {
     props.fetchPrograms(input);
   }, [page, itemsPerPage]);
+
 
   return (
     <>
@@ -366,15 +441,50 @@ const Programs = (props: any) => {
         <div className="flex flex-row">
           <div className="w-full">
             <div className="bg-light-bg dark:bg-dark-frame-bg h-screen">
-              <div className="flex items-left px-7">
-                <div className="flex px-5 py-2 pb-8 w-fit">
-                  <button
-                    onClick={Open}
-                    className="flex bg-primary dark:bg-[#56C870] rounded-md py-2 px-4 text-white font-medium cursor-pointer"
-                  >
-                    <icons.AiOutlinePlus className="mt-1 mr-1 font-bold" />{" "}
-                    Program
-                  </button>
+            <div className="w-full px-4 sm:px-6 lg:px-8 py-4">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-4">
+                  <div className="w-full sm:w-auto">
+                    <button
+                      onClick={Open}
+                      className="flex items-center justify-center w-full sm:w-auto bg-primary dark:bg-[#56C870] rounded-md py-2 px-4 text-white font-medium cursor-pointer hover:opacity-90 transition-opacity"
+                    >
+                      <icons.AiOutlinePlus className="mr-2" /> Program
+                    </button>
+                  </div>
+                  <div className="w-full sm:w-40">
+                    <Select
+                      className="w-full text-sm rounded-md dark:text-ltb"
+                      options={[
+                        { value: "title", label: "Program Name" },
+                        { value: "mainObjective", label: "Main Objective" },
+                        { value: "modeOfExecution", label: "Mode Of Execution" },
+                        { value: "description", label: "Program Description" },
+                        { value: "duration", label: "Duration" },
+                        { value: "", label: "Select by" },
+                      ]}
+                      defaultValue={{ value: "", label: "Select by" }}
+                      onChange={(e) => setFilterAttribute(`${e?.value}`)}
+                      theme={theme ? customTheme : darkTheme}
+                    />
+                  </div>
+                  <div className="w-full sm:w-auto flex-grow">
+                    <div className="relative">
+                      <input
+                        onChange={handleSearchChange}
+                        onKeyDown={(e) => handleKeyDown(e)}
+                        className="w-full bg-row-gray dark:bg-[#293647] dark:text-ltb border border-bdr dark:border-cg dark:border-opacity-5 rounded-md py-2 pl-9 pr-4 focus:outline-none focus:ring-2 focus:ring-primary dark:focus:ring-[#56C870] text-sm"
+                        value={enteredsubmitWord}
+                        placeholder="Search"
+                        type="text"
+                        name="search"
+                      />
+                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
               <div className="px-8">
@@ -405,8 +515,8 @@ const Programs = (props: any) => {
                             </tr>
                           </thead>
                           <tbody className="overflow-y-auto">
-                            {fetchProgramStates.data ? (
-                              fetchProgramStates.data.map((item: any) => (
+                            {allfilteredPrograms.data ? (
+                              allfilteredPrograms.data.map((item: any) => (
                                 <tr
                                   className="dark:hover:bg-slate-700 hover:bg-slate-300 transition-colors"
                                   key={item._id}
@@ -535,8 +645,8 @@ const Programs = (props: any) => {
                         <label className="text-left text-black-text dark:text-white text-lg font-bold">
                           Programs
                         </label>
-                        {fetchProgramStates.data &&
-                          fetchProgramStates.data.map((item: any) => (
+                        {allfilteredPrograms.data &&
+                          allfilteredPrograms.data.map((item: any) => (
                             <div
                               key={item._id}
                               className="flex flex-col w-full gap-2 border border-solid border-transparent border-t-black dark:border-t-white border-t-4 rounded-t-sm"
@@ -633,7 +743,7 @@ const Programs = (props: any) => {
                       </div>
                     </div>
                   </div>
-                  {fetchProgramStates.data && (
+                  {allfilteredPrograms.data && (
                     <div className="py-3 flex items-center text-center justify-center pt-10">
                       <div className="pb-1">
                         <label htmlFor="" className="dark:text-zinc-100">
@@ -764,10 +874,15 @@ const mapState = (state: any) => ({
   createProgramStates: state.createProgram,
   fetchProgramStates: state.fetchPrograms,
   deleteProgramStates: state.deleteProgram,
+  allfilteredPrograms: state.filterProgram,
+  errors: state.errors,
+  count: state.count,
 });
 
 export default connect(mapState, {
   fetchPrograms,
   createProgramAction,
   deleteProgramAction,
+  getAllFilteredPrograms: getAllFilteredPrograms,
+  getAllprograms: getAllprograms,
 })(Programs);
