@@ -376,6 +376,13 @@ const Programs = (props: any) => {
                     Program
                   </button>
                 </div>
+
+                <Link to="/admin/filter_programs">
+                  <button className="flex bg-primary dark:bg-[#56C870] rounded-md py-2 mt-2 px-4 text-white font-medium cursor-pointer">
+                    <icons.AiOutlineSearch className="mt-1 mr-1 font-bold" />{" "}
+                    Search
+                  </button>
+                </Link>
               </div>
               <div className="px-8">
                 <div className="bg-white  dark:bg-dark-bg shadow-lg px-5 py-8 rounded-md w-[100%] mx-auto">

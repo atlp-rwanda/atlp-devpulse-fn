@@ -8,6 +8,10 @@ import Sidebar from "./../components/sidebar/sidebar";
 import NavBar from "./../components/sidebar/navHeader";
 import Trainee from "./../pages/TraineApplicant/Trainee";
 import FilterTrainee from "./../pages/FilterTeainee/FilterTrainee";
+import FilterProgram from '../pages/programs/filterPrograms';
+import FilterJobPost from '../pages/JobPost/fiterJopPost';
+import ApplicantSeachJobPost from "../pages/JobPost/applicantJobFiltering"
+import FilterRole from '../pages/roles&permissions/filterRolesAccess';
 import Table from "./../pages/Table";
 import UpdateTraine from "./../pages/updateTrainee/traineUpdate";
 import CreateScoreType from "./../pages/FilterTeainee/createScoreType";
@@ -128,6 +132,7 @@ function Navigation() {
             </PrivateRoute>
           }
         />
+        
         <Route
           path="import_trainee-aplicants"
           element={
@@ -303,10 +308,18 @@ function Navigation() {
           path="available-jobs"
           element={
             <PrivateRoute allowedRoles={['applicant']}>
-              <SharedPosts />
+              <ApplicantSeachJobPost />
             </PrivateRoute>
           }
         />
+        {/* <Route
+        path="filter_job_post"
+        element={
+          <PrivateRoute>
+            <ApplicantSeachJobPost/>
+          </PrivateRoute>
+        }
+      /> */}
         <Route
           path="available-job/:id/apply"
           element={
