@@ -1,14 +1,5 @@
 import React from 'react';
 
-interface SearchResultItemProps {
-  activeItem: string;
-  name: string;
-  length: number;
-  results: any[];
-  Component: React.FC<{ [key: string]: any }>;
-  noResultsMessage: string;
-}
-
 const SearchResultItem= ({ 
   activeItem, 
   name, 
