@@ -19,15 +19,7 @@ const initialState = {
   success: false,
   error: null,
   message: null,
-  data: null,
-};
-
-const applicationState = {
-  loading: false,
-  success: false,
-  error: null,
-  message: null,
-  data: null,
+  data: { applications: [] },
 };
 
 export const applicationsReducer = (
@@ -37,6 +29,7 @@ export const applicationsReducer = (
   switch (action.type) {
     case fetchMyApplications.FETCH_MYAPPLICATIONS_LOADING:
       return {
+        ...state,
         loading: true,
         success: false,
         error: null,

@@ -12,6 +12,7 @@ import updateTraineeReducer from './updateTraineeReducer';
 import getOneTraineeReducer from './getOneTraineeReducer';
 import updateTraineeAttributesReducer from './updateTraineeAttributesReducer';
 import filterTraineeReducer from './filterTraineeReducer';
+import filterJobPostReducer from './filterJobPostReducer';
 //@ts-ignore
 import { combineReducers } from 'redux';
 import traineeReducer from './traineeReducer';
@@ -42,6 +43,8 @@ import {
 import { assessmentsReducer } from './assessmentReducer';
 import { attendanceReducer } from './attendanceReducer';
 import { performanceReducer } from './performanceReducer';
+import filterProgramsReducer from './filterProgramsReducer';
+import filterRoleReducer from './filterRoleReducer';
 
 const allReducers = combineReducers({
   counter: counterReducer,
@@ -56,6 +59,9 @@ const allReducers = combineReducers({
   count: traineCountReducer,
   traine: traineReducer,
   filterTrainee: filterTraineeReducer,
+  filterJobPost: filterJobPostReducer,
+  filterRole:filterRoleReducer,
+  filterProgram:filterProgramsReducer,
   loadData: loadDataReducer,
   getOneTraineeReducer,
   updateTrainee: updateTraineeReducer,

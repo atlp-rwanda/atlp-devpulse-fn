@@ -1,3 +1,4 @@
+import { ViewSingleApplication } from './adminListApplications';
 import {
   fetchMyApplications,
   deleteOwnApplication,
@@ -19,6 +20,7 @@ export const getMyApplications =
       const response = await axios.post('/', {
         query: `query ViewAllOwnApplications($filter: ApplicationFilter, $pagination: PaginationInput) {
   viewAllOwnApplications(filter: $filter, pagination: $pagination) {
+    message
     totalCount
     applications {
       _id
@@ -55,23 +57,24 @@ export const getMyApplications =
         },
       });
       if (response.data.data.viewAllOwnApplications != null) {
+        let toastShown = false
         dispatch({
           type: fetchMyApplications.FETCH_MYAPPLICATIONS_SUCCESS,
           data: response.data.data.viewAllOwnApplications,
-          message: 'success',
+          message: response.data.data.viewAllOwnApplications.message,
         });
+        toast.success(response.data.data.viewAllOwnApplications.message)
         return response.data.data;
       } else {
         dispatch({
           type: fetchMyApplications.FETCH_MYAPPLICATIONS_FAIL,
           error: response.data.errors[0].message,
         });
-        toast.error(response.data.errors[0].message);
-
+        toast.error(response.data.errors[0].message); 
         return response.data.data;
       }
     } catch (err: any) {
-      toast.error(err.message);
+      console.error(err.message);
     }
   };
 
