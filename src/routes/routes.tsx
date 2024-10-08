@@ -57,9 +57,29 @@ function Navigation() {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/signup" element={<SignupForm />} />
       <Route path="/verifyEmail" element={<VerifyEmail/>}/>
-      <Route path="/admin" element={<AdminLayout />}>
       <Route path="settings" element={<Settings />} />
-      <Route index element={<PrivateRoute allowedRoles={['Admin', 'superAdmin']}><Dashboard /></PrivateRoute>} />
+      <Route path="/pageNotFound" element={<PageNotFound />} />
+      <Route path="/" element={
+          roleName === 'Admin' || roleName === 'SuperAdmin' ? <Navigate to="/admin" /> : 
+          roleName === 'Applicant' ? <Navigate to="/applicant" /> : <Navigate to="/login" />
+      } />
+      {/* Admin Routes (Protected) */}
+      <Route
+        path="/admin"
+        element={
+          <PrivateRoute allowedRoles={['Admin', 'superAdmin']}>
+            <AdminLayout />
+          </PrivateRoute>
+        }
+      >
+        <Route
+          index
+          element={
+            <PrivateRoute allowedRoles={['Admin', 'superAdmin']}>
+              <Dashboard />
+            </PrivateRoute>
+          }
+        />
         <Route
           path="trainee-applicant-details/:traineeId"
           element={
@@ -323,15 +343,7 @@ function Navigation() {
         <Route
           path="settings"
           element={
-<<<<<<< HEAD
-<<<<<<< HEAD
             <PrivateRoute allowedRoles={['Admin', 'superAdmin', 'applicant']}>
-=======
-            <PrivateRoute>
->>>>>>> 65031d0 (fixed the styles on both admin and applicant)
-=======
-            <PrivateRoute>
->>>>>>> 82cf8a9 (fixed the styles on both admin and applicant)
               <Settings />
             </PrivateRoute>
           }
