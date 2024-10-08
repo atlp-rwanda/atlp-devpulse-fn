@@ -7,3 +7,5 @@ buildcoverage
 package-lock.json
 .DS_Store
 build/
+yarn.lock
+package.json

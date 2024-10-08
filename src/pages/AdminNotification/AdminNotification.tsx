@@ -1,14 +1,19 @@
-import React, { ChangeEvent, useState } from "react";
-import Notification from "./Notification";
-import SelectField from "../../components/ReusableComponents/Select";
+import React, { ChangeEvent, useEffect, useState } from "react";
+import Notification from "./Notification"; // Ensure this path is correct
+import SelectField from "../../components/ReusableComponents/Select"; // Ensure this path is correct
+import {
+  deleteNotification,
+  fetchAdminNotifications,
+  markNotificationAsRead,
+} from "../../redux/actions/adminNotification"; // Combined imports
+import { toast } from "react-toastify";
 
-// Define the notification type
 interface NotificationType {
-  id: string;
+  _id: string;
   message: string;
-  time: string;
+  createdAt: string;
   read: boolean;
-  image: string;
+  image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ_kSSoomJ9hiFXmiF2RdZlwx72Y23XsT6iwQ&s";
 }
 
 enum FilterOptions {
@@ -22,54 +27,62 @@ enum OrderOptions {
 }
 
 const AdminNotification: React.FC = () => {
-  const [notifications, setNotifications] = useState<NotificationType[]>([
-    {
-      id: "1",
-      message: "New team member joined",
-      time: "2024-10-01T12:00:00Z",
-      read: false,
-      image:
-        "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541",
-    },
-    {
-      id: "2",
-      message: "Server maintenance completed",
-      time: "2023-09-30T08:00:00Z",
-      read: true,
-      image:
-        "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541",
-    },
-    {
-      id: "3",
-      message: "Payment received",
-      time: "2023-09-29T15:00:00Z",
-      read: false,
-      image:
-        "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541",
-    },
-  ]);
-
+  const [notifications, setNotifications] = useState<NotificationType[]>([]);
   const [filter, setFilter] = useState<FilterOptions>(FilterOptions.All);
   const [orderBy, setOrderBy] = useState<OrderOptions>(OrderOptions.Recent);
 
-  const handleMarkAsRead = (id: string) => {
-    setNotifications((prev) =>
-      prev.map((notification) =>
-        notification.id === id ? { ...notification, read: true } : notification
-      )
-    );
+  // Fetch notifications on component mount
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const fetchedNotifications = await fetchAdminNotifications();
+        setNotifications(fetchedNotifications);
+      } catch (error) {
+        toast.error("Failed to fetch notifications");
+      }
+    };
+
+    fetchData();
+  }, []);
+  const handleMarkAsRead = async (id: string) => {
+    try {
+      const updatedNotification = await markNotificationAsRead(id);
+
+      if (updatedNotification) {
+        setNotifications((prev) =>
+          prev.map((notification) =>
+            notification._id === id
+              ? { ...notification, read: true }
+              : notification
+          )
+        );
+        toast.success("Notification marked as read");
+      } else {
+        throw new Error("Failed to mark notification as read");
+      }
+    } catch (error: any) {
+      toast.error(`Error marking notification as read: ${error.message}`); // Enhanced error message
+    }
   };
 
-  const handleDelete = (id: string) => {
-    setNotifications((prev) => prev.filter((n) => n.id !== id));
-  };
+  const handleDelete = async (id: string) => {
+    try {
+      await deleteNotification(id);
 
-  const handleOrderChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    setOrderBy(e.target.value as OrderOptions);
+      setNotifications((prev) =>
+        prev.filter((notification) => notification._id !== id)
+      );
+    } catch (error: any) {
+      toast.error(`Error deleting notification: ${error.message}   ${id}`);
+    }
   };
 
   const filteredNotifications = getFilteredNotifications(notifications, filter);
   const sortedNotifications = sortNotifications(filteredNotifications, orderBy);
+
+  const handleOrderChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    setOrderBy(e.target.value as OrderOptions);
+  };
 
   return (
     <div className="h-screen w-full px-4 md:px-8">
@@ -82,7 +95,7 @@ const AdminNotification: React.FC = () => {
       <NotificationList
         notifications={sortedNotifications}
         onMarkAsRead={handleMarkAsRead}
-        onDelete={handleDelete}
+        onDelete={handleDelete} // Pass the delete handler
       />
     </div>
   );
@@ -93,21 +106,29 @@ const getFilteredNotifications = (
   notifications: NotificationType[],
   filter: FilterOptions
 ) => {
+  if (!Array.isArray(notifications)) return [];
   return notifications.filter((n) =>
     filter === FilterOptions.All ? true : !n.read
   );
 };
 
-// Helper function to sort notifications
 const sortNotifications = (
   notifications: NotificationType[],
   orderBy: OrderOptions
 ) => {
-  return [...notifications].sort((a, b) =>
-    orderBy === OrderOptions.Recent
-      ? new Date(b.time).getTime() - new Date(a.time).getTime()
-      : new Date(a.time).getTime() - new Date(b.time).getTime()
-  );
+  return [...notifications].sort((a, b) => {
+    const dateA = new Date(Number(a.createdAt));
+
+    const dateB = new Date(Number(b.createdAt));
+
+    if (isNaN(dateA.getTime()) || isNaN(dateB.getTime())) {
+      return 0;
+    }
+
+    return orderBy === OrderOptions.Recent
+      ? dateB.getTime() - dateA.getTime()
+      : dateA.getTime() - dateB.getTime();
+  });
 };
 
 // NotificationFilter component
@@ -155,7 +176,6 @@ const NotificationFilter: React.FC<{
   </div>
 );
 
-// NotificationList component
 const NotificationList: React.FC<{
   notifications: NotificationType[];
   onMarkAsRead: (id: string) => void;
@@ -165,7 +185,7 @@ const NotificationList: React.FC<{
     {notifications.length ? (
       notifications.map((notification) => (
         <Notification
-          key={notification.id}
+          key={notification._id}
           notification={notification}
           onMarkAsRead={onMarkAsRead}
           onDelete={onDelete}
