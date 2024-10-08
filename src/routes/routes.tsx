@@ -324,10 +324,14 @@ function Navigation() {
           path="settings"
           element={
 <<<<<<< HEAD
+<<<<<<< HEAD
             <PrivateRoute allowedRoles={['Admin', 'superAdmin', 'applicant']}>
 =======
             <PrivateRoute>
 >>>>>>> 65031d0 (fixed the styles on both admin and applicant)
+=======
+            <PrivateRoute>
+>>>>>>> 82cf8a9 (fixed the styles on both admin and applicant)
               <Settings />
             </PrivateRoute>
           }
