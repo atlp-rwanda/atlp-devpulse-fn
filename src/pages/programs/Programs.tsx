@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { createProgramAction } from "../../redux/actions/createProgramAction";
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import programSchema from "../../validation/programSchema";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { HiDotsVertical } from "react-icons/hi";
 import * as AiIcons from "react-icons/ai";
 import {
@@ -23,6 +23,7 @@ import { useTheme } from "../../hooks/darkmode";
 import {debounce} from "lodash"
 
 const Programs = (props: any) => {
+  const navigate = useNavigate();
   const { createProgramStates, fetchProgramStates, deleteProgramStates } =
     props;
   const { theme, setTheme } = useTheme();
@@ -249,7 +250,13 @@ const Programs = (props: any) => {
   };
 
   useEffect(() => {
-    props.fetchPrograms(input);
+    const { data, error } = props.fetchPrograms(input);
+    // if (error) {
+    //         setTimeout(() => {
+    //           navigate('/login');
+    //         }, 5000);
+    //         return; 
+    //       }
   }, [page, itemsPerPage]);
 
 
@@ -486,13 +493,6 @@ const Programs = (props: any) => {
                     </div>
                   </div>
                 </div>
-
-                <Link to="/admin/filter_programs">
-                  <button className="flex bg-primary dark:bg-[#56C870] rounded-md py-2 mt-2 px-4 text-white font-medium cursor-pointer">
-                    <icons.AiOutlineSearch className="mt-1 mr-1 font-bold" />{" "}
-                    Search
-                  </button>
-                </Link>
               </div>
               <div className="px-8">
                 <div className="bg-white  dark:bg-dark-bg shadow-lg px-5 py-8 rounded-md w-[100%] mx-auto">
