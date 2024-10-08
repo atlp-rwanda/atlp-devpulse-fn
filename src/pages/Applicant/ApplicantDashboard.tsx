@@ -14,7 +14,8 @@ import {
     Tooltip,
     ResponsiveContainer,
     Scatter,
-    ComposedChart
+    ComposedChart,
+    Label
   } from "recharts";
 
 const calendar: string = require("../../assets/assets/calendar.svg").default;
@@ -75,25 +76,23 @@ const ApplicantChart = ({ performance }) => {
           top: 10,
           right: 30,
           left: 0,
-          bottom: 0,
+          bottom: 20,
         }}
       >
         <XAxis 
           dataKey="name"
           tick={{ fill: "white" }}
-          // axisLine={{ stroke: '#666', strokeWidth: 1 }}
-          // tickLine={false}
-        />
+        >
+          <Label value="Sprints" offset={-10} position="insideBottom" fill="white" />
+        </XAxis>
+        
         <YAxis
           domain={[0, 100]}
           tick={{ fill: "white" }}
-          // axisLine={{ stroke: '#666', strokeWidth: 1 }}
-          // tickLine={false}
-          // ticks={[0, 25, 50, 75, 100]}
-        />
+        >
+          <Label value="Performance" angle={-90} position="insideLeft" fill="white" />
+        </YAxis>
         <Tooltip 
-        // contentStyle={{ backgroundColor: '#374151', border: 'none', borderRadius: '4px' }}
-        // itemStyle={{ color: 'white' }}
         />
         {chartData.length === 1 ? (
           <Scatter name="Performance" dataKey="score" fill="#56C870" />
@@ -162,7 +161,7 @@ const formatters = {
 
   formatPercentage: (value: number | string | undefined): string => {
     if (typeof value === 'number') {
-      return `${value.toFixed(1)}%`;
+      return value % 1 === 0 ? `${value}%` : `${value.toFixed(1)}%`;
     }
     return 'N/A';
   },
