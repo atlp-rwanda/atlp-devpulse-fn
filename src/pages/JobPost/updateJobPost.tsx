@@ -1,69 +1,15 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { connect } from 'react-redux';
 import { updateJobPostAction } from '../../redux/actions/updateJobPostAction';
 import { fetchSingleJobPost } from '../../redux/actions/fetchSingleJobPostAction';
-import { getAllPrograms } from "../../redux/actions/programsActions";
-import { getAllCycles } from "../../redux/actions/cyclesActions";
-import { getAllCohorts } from "../../redux/actions/cohortActions";
+import { getAllPrograms } from '../../redux/actions/programsActions';
+import { getAllCycles } from '../../redux/actions/cyclesActions';
+import { getAllCohorts } from '../../redux/actions/cohortActions';
+import { RootState, FormData} from './jobTypes';
 
-interface Program {
-  _id: string;
-  title: string;
-}
-
-interface Cycle {
-  id: string;
-  name: string;
-}
-
-interface Cohort {
-  id: string;
-  title: string;
-}
-
-interface JobPost {
-  _id: string;
-  title: string;
-  program: Program;
-  cycle: Cycle
-  cohort: Cohort;
-  description: string;
-  published: boolean;
-}
-
-interface FormData {
-  title: string;
-  program: string;  // Stores program title
-  cycle: string;    // Stores cycle name
-  cohort: string;   // Stores cohort title
-  description: string;
-  published: boolean;
-}
-
-interface RootState {
-  fetchSingleJobPost: {
-    data: JobPost | null;
-    loading: boolean;
-    serverResponded: boolean;
-  };
-  updateProgram: {
-    loading: boolean;
-    error: string | null;
-  };
-  programs: {
-    data: Program[];
-  };
-  cycles: {
-    data: Cycle[];
-  };
-  cohorts: {
-    data: Cohort[];
-  };
-}
-
-interface Props {
+type Props = {
   fetchSingleJobPostStates: RootState['fetchSingleJobPost'];
   updateJobPostStates: RootState['updateProgram'];
   programs: RootState['programs'];
@@ -74,9 +20,9 @@ interface Props {
   getAllPrograms: () => void;
   getAllCycles: () => void;
   getAllCohorts: () => void;
-}
+};
 
-const UpdateJobPost: React.FC<Props> = ({
+const UpdateJobPost = ({
   fetchSingleJobPostStates,
   updateJobPostStates,
   programs,
@@ -87,103 +33,70 @@ const UpdateJobPost: React.FC<Props> = ({
   getAllPrograms,
   getAllCycles,
   getAllCohorts,
-}): JSX.Element => {
+}: Props) => {
   const { programId } = useParams<{ programId: string }>();
   const navigate = useNavigate();
-
-  const [formData, setFormData] = React.useState<FormData>({
+  const [formData, setFormData] = useState<FormData>({
     title: '',
     program: '',
     cycle: '',
     cohort: '',
     description: '',
-    published: false,
+    published: false
   });
 
-  // Fetch job post data
   useEffect(() => {
-    if (programId) {
-      fetchSingleJobPost(programId).catch((error) => {
-        console.error('Error fetching job post:', error);
-        toast.error('Failed to fetch job post details');
-      });
-    }
-  }, [programId, fetchSingleJobPost]);
+    const loadData = async () => {
+      try {
+        if (programId) {
+          await fetchSingleJobPost(programId);
+          await Promise.all([getAllPrograms(), getAllCycles(), getAllCohorts()]);
+        }
+      } catch (error) {
+        toast.error('Failed to load data');
+      }
+    };
+    loadData();
+  }, [programId]);
 
-  // Update form data when job post data is received
   useEffect(() => {
     if (fetchSingleJobPostStates.data) {
+      const { title, program, cycle, cohort, description, published } = fetchSingleJobPostStates.data;
       setFormData({
-        title: fetchSingleJobPostStates.data.title,
-        program: fetchSingleJobPostStates.data.program._id,
-        cycle: fetchSingleJobPostStates.data.cycle.id,  
-        cohort: fetchSingleJobPostStates.data.cohort.id, 
-        description: fetchSingleJobPostStates.data.description,
-        published: fetchSingleJobPostStates.data.published,
+        title,
+        program: program._id || '',
+        cycle: cycle.id || '',
+        cohort: cohort.id || '',
+        description,
+        published
       });
     }
-    
   }, [fetchSingleJobPostStates.data]);
 
-  // Fetch all necessary data
-  useEffect(() => {
-    getAllPrograms();
-    getAllCycles();
-    getAllCohorts();
-  }, [getAllPrograms, getAllCycles, getAllCohorts]);
-
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
-  ) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value,
-    }));
-    console.log(fetchSingleJobPostStates.data);
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const validateForm = (): boolean => {
-    if (!formData.title.trim()) {
-      toast.error('Title is required');
-      return false;
-    }
-    if (!formData.program) {
-      toast.error('Program is required');
-      return false;
-    }
-    if (!formData.cycle) {
-      toast.error('Cycle is required');
-      return false;
-    }
-    if (!formData.cohort) {
-      toast.error('Cohort is required');
-      return false;
-    }
-    if (!formData.description.trim()) {
-      toast.error('Description is required');
-      return false;
-    }
-    return true;
+  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData(prev => ({ ...prev, published: e.target.checked }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const { title, program, cycle, cohort, description } = formData;
     
-    if (!validateForm()) return;
+    if (!title || !program || !cycle || !cohort || !description) {
+      toast.error('Please fill in all required fields');
+      return;
+    }
 
     try {
-      const submitData = {
-        id: programId,
-        ...formData,
-      };
-      
-      await updateJobPostAction(submitData);
+      await updateJobPostAction({ id: programId, ...formData });
       toast.success('Job post updated successfully');
-    
-    } catch (err) {
+      navigate('/admin/job-post');
+    } catch (error) {
       toast.error('Failed to update job post');
-      console.error(err);
     }
   };
 
@@ -192,122 +105,95 @@ const UpdateJobPost: React.FC<Props> = ({
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-white dark:bg-dark-tertiary p-8">
-      <div className="w-[500px] mx-auto  px-4 py-8">
+    <div className="flex flex-col min-h-screen bg-white dark:bg-dark-tertiary p-10">
+      <div className="w-[500px] mx-auto px-4 py-8">
         <h1 className="text-2xl font-bold text-center text-gray-600 dark:text-white mb-8">
           Update Job Post
         </h1>
-        
         <form onSubmit={handleSubmit} className="bg-white dark:bg-dark-frame-bg rounded-lg shadow-md p-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label htmlFor="title" className="block text-sm font-bold mb-2">Job Title</label>
+              <label className="block text-sm font-bold mb-2 text-white">Job Title</label>
               <input
-                id="title"
                 type="text"
                 name="title"
                 value={formData.title}
-                onChange={handleInputChange}
-                className="w-full p-2 border rounded dark:bg-dark-tertiary"
-                required
+                onChange={handleChange}
+                className="w-full p-2 border rounded dark:bg-dark-tertiary text-white"
               />
             </div>
-
             <div>
-              <label htmlFor="program" className="block text-sm font-bold mb-2">Program</label>
+              <label className="block text-sm font-bold mb-2 text-white">Program</label>
               <select
-                id="program"
                 name="program"
                 value={formData.program}
-                onChange={handleInputChange}
-                className="w-full p-2 border rounded dark:bg-dark-tertiary"
-              
+                onChange={handleChange}
+                className="w-full p-2 border rounded dark:bg-dark-tertiary text-white"
               >
                 <option value="">Select Program</option>
-                {programs.data?.map((program) => (
-                  <option key={program._id} value={program._id}>
-                    {program.title}
-                  </option>
+                {programs.data?.map((item) => (
+                  <option key={item._id} value={item._id}>{item.title}</option>
                 ))}
               </select>
             </div>
-
             <div>
-              <label htmlFor="cycle" className="block text-sm font-bold mb-2">Cycle</label>
+              <label className="block text-sm font-bold mb-2 text-white">Cycle</label>
               <select
-                id="cycle"
                 name="cycle"
                 value={formData.cycle}
-                onChange={handleInputChange}
-                className="w-full p-2 border rounded dark:bg-dark-tertiary"
-                required
+                onChange={handleChange}
+                className="w-full p-2 border rounded dark:bg-dark-tertiary text-white"
               >
                 <option value="">Select Cycle</option>
-                {cycles.data?.map((cycle) => (
-                  <option key={cycle.id} value={cycle.id}>
-                    {cycle.name}
-                  </option>
+                {cycles.data?.map((item) => (
+                  <option key={item.id} value={item.id}>{item.name}</option>
                 ))}
               </select>
             </div>
-
             <div>
-              <label htmlFor="cohort" className="block text-sm font-bold mb-2">Cohort</label>
+              <label className="block text-sm font-bold mb-2 text-white">Cohort</label>
               <select
-                id="cohort"
                 name="cohort"
                 value={formData.cohort}
-                onChange={handleInputChange}
-                className="w-full p-2 border rounded dark:bg-dark-tertiary"
-                required
+                onChange={handleChange}
+                className="w-full p-2 border rounded dark:bg-dark-tertiary text-white"
               >
                 <option value="">Select Cohort</option>
-                {cohorts.data?.map((cohort) => (
-                  <option key={cohort.id} value={cohort.id}>
-                    {cohort.title}
-                  </option>
+                {cohorts.data?.map((item) => (
+                  <option key={item.id} value={item.id}>{item.title}</option>
                 ))}
               </select>
             </div>
-
             <div className="md:col-span-2">
-              <label htmlFor="description" className="block text-sm font-bold mb-2">Description</label>
+              <label className="block text-sm font-bold mb-2 text-white">Description</label>
               <textarea
-                id="description"
                 name="description"
                 value={formData.description}
-                onChange={handleInputChange}
-                className="w-full p-2 border rounded dark:bg-dark-tertiary h-32 resize-none"
-                required
+                onChange={handleChange}
+                className="w-full p-2 border rounded dark:bg-dark-tertiary h-32 resize-none text-white"
               />
             </div>
+            <div className="md:col-span-2 flex items-center">
+              <input
+                type="checkbox"
+                name="published"
+                checked={formData.published}
+                onChange={handleCheckboxChange}
+                className="mr-2"
+              />
+              <span className="text-white">Publish Job Post</span>
+            </div>
           </div>
-
-              <div className="md:col-span-2">
-      <label htmlFor="published" className="block text-sm font-bold mb-2">Publish Job Post</label>
-      <input
-        id="published"
-        type="checkbox"
-        name="published"
-        checked={formData.published}
-        onChange={(e) => setFormData(prev => ({
-          ...prev,
-          published: e.target.checked,
-        }))}
-        className="mr-2 leading-tight"
-      />
-      <span className="text-sm">{formData.published ? 'Published' : 'Unpublished'}</span>
-    </div>
           <div className="flex gap-4 mt-6">
             <button
               type="submit"
               disabled={updateJobPostStates.loading}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md disabled:opacity-50"
+              className="dark:bg-[#56C870] hover:bg-[#56C870] bg-primary text-white px-6 py-2 rounded-md disabled:opacity-50"
             >
               {updateJobPostStates.loading ? 'Updating...' : 'Update'}
             </button>
             <Link
-              to="/programs"
+              to="/admin/job-post"
               className="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-md"
             >
               Cancel
@@ -319,20 +205,19 @@ const UpdateJobPost: React.FC<Props> = ({
   );
 };
 
-const mapStateToProps = (state: RootState) => ({
-  fetchSingleJobPostStates: state.fetchSingleJobPost,
-  updateJobPostStates: state.updateProgram,
-  programs: state.programs,
-  cycles: state.cycles,
-  cohorts: state.cohorts,
-});
-
-const mapDispatchToProps = {
-  updateJobPostAction,
-  fetchSingleJobPost,
-  getAllPrograms,
-  getAllCycles,
-  getAllCohorts,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(UpdateJobPost);
+export default connect(
+  (state: RootState) => ({
+    fetchSingleJobPostStates: state.fetchSingleJobPost,
+    updateJobPostStates: state.updateProgram,
+    programs: state.programs,
+    cycles: state.cycles,
+    cohorts: state.cohorts,
+  }),
+  {
+    updateJobPostAction,
+    fetchSingleJobPost,
+    getAllPrograms,
+    getAllCycles,
+    getAllCohorts,
+  }
+)(UpdateJobPost);

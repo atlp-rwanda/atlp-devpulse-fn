@@ -1,74 +1,58 @@
 import axios from './axiosconfig';
 import { toast } from 'react-toastify';
 import { Dispatch } from 'react';
-import {
-  fetchJobPostType,
-  ActionFetch,
-} from '../actiontypes/fetchJobActionTypes';
+import { fetchJobPostType, ActionFetch } from '../actiontypes/fetchJobActionTypes';
 
-export const fetchJobPost = () => async (dispatch: any) => {
+export const fetchJobPost = () => async (dispatch: Dispatch<ActionFetch>) => {
   try {
-    const response = await axios.post('/', {
-      query: `
-            query ExampleQuery($input: pagination) {
-              getAllJobApplication(input: $input) {
-                  id
-                  title
-                  program {
-                    title
-                    description
-                    requirements
-                  }
-                  cohort {
-                    cycle
-                    end
-                    program
-                    title
-                  }
-                  cycle {
-                    name
-                  }
-                  description
-                  label
-                  published
-                }
-        }
-            `,
-      variables: {
-        input: {
-          page: 1,
-          All: true,
+    const response = await axios({
+      url: process.env.BACKEND_URL,
+      method: 'post',
+      data: {
+        query: `
+          query GetAllJobApplication($input: pagination) {
+            getAllJobApplication(input: $input) {
+              id
+              program { title }
+              cycle { name }
+              cohort { title }
+              link
+              title
+              description
+              label
+              published
+            }
+          }
+        `,
+        variables: {
+          input: { page: 1, All: true },
         },
       },
     });
-    console.log(response);
-    if (response.data.data !== null) {
+
+    const { data, errors } = response.data;
+
+    if (data && data.getAllJobApplication) {
       dispatch({
         type: fetchJobPostType.FETCH_JOB_POST_SUCCESS,
-        data: response.data.data.getAllJobApplication,
+        data: data.getAllJobApplication,
       });
-    }
-
-    if (response.data.errors) {
+    } else if (errors) {
+      const errorMessage = errors.map((error: any) => error.message).join(', ');
       toast.error('Job Post could not be fetched');
-
-      let mess;
-      response.data.errors.map((b: any) => {
-        mess = b.message;
-      });
       dispatch({
         type: fetchJobPostType.FETCH_JOB_POST_FAIL,
-        error: mess,
+        error: errorMessage,
       });
     }
+
     return response;
   } catch (error) {
     toast.error('Job Post could not be fetched');
-
     dispatch({
       type: fetchJobPostType.FETCH_JOB_POST_FAIL,
-      error,
+      error: error instanceof Error ? error.message : 'Unexpected error',
     });
-    console.log(error);
+    console.error(error);
   }
 };

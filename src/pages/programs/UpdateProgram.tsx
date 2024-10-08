@@ -95,7 +95,7 @@ const UpdateProgram = (props: any) => {
     <>
       
       <div className="flex flex-col overflow-x-hidden bg-white dark:bg-dark-tertiary relative mt-10 w-[100%] py-3 min-h-[100vh]">
-        <div className="block text-center text-sm font-bold text-gray-600 relative lg:left-[8rem] dark:text-white text-base lg:max-w-3xl sm:w-[100%] p-4 lg:px-4 m-4 mx-auto text-[24px]">
+        <div className="block text-center  font-bold text-gray-600 relative lg:left-[8rem] dark:text-white text-base lg:max-w-3xl sm:w-[100%] p-4 lg:px-4 m-4 mx-auto text-[24px]">
           <h1 className="p-2">Update Program</h1>
         </div>
         <form
@@ -264,7 +264,7 @@ const UpdateProgram = (props: any) => {
                   {updateProgramStates.loading ? "Updating..." : "Update"}
                 </button>
                 <Link
-                  to="/programs"
+                  to="/admin/programs"
                   className="dark:bg-[#56C870] flex bg-gray-600 rounded-md py-2 px-4 text-white font-medium cursor-pointer"
                 >
                   Cancel

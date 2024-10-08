@@ -57,14 +57,13 @@ export const updateJobPostAction = (jobPostData: any) => {
       });
 
       if (response.data.data !== null) {
-        toast.success('Job Post updated');
         dispatch({
           type: updateJobPostType.UPDATE_JOB_POST_SUCCESS,
           message: response.data.data,
         });
       } else {
         console.log(response.data);
-        toast.error(response.data.errors[0].message);
+
 
         dispatch({
           type: updateJobPostType.UPDATE_JOB_POST_FAIL,
@@ -72,7 +71,6 @@ export const updateJobPostAction = (jobPostData: any) => {
         });
       }
     } catch (error) {
-      toast.error('Job Post not created');
 
       dispatch({
         type: updateJobPostType.UPDATE_JOB_POST_FAIL,
