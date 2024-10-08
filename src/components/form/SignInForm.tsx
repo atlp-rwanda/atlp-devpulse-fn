@@ -159,7 +159,8 @@ const LoginForm = () => {
             <Button
               type="submit"
               label=""
-              className="sm:w-full w-5/6 rounded-md mb-4 px-2 py-3 text-white focus:bg-[#56C870] bg-[#56C870]"
+              className="sm:w-full w-5/6 rounded-md mb-4 px-2 py-3 text-white  focus:bg-[#56C870] bg-[#56C870]"
+             
               disabled={true}
             >
               <svg
@@ -188,12 +189,14 @@ const LoginForm = () => {
         </div>
         <p className="text-sm mt-3 mb-2 text-[#616161] dark:text-gray-300">
           Don't have an account?{" "}
-          <Link to="/register" className="text-[#56C870]">
+          <Link to="/signup" className="text-[#56C870]">
+         
             Sign up
           </Link>
         </p>
         <p className="text-sm mt-3 mb-2 text-[#616161] dark:text-gray-300">
-          <Link to="/forgot-password" className="text-blue-500 hover:underline">
+          <Link to="/forget" className="text-blue-500 hover:underline">
+          
             Forgot your password?
           </Link>
         </p>

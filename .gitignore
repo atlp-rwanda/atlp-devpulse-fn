@@ -5,7 +5,7 @@ coverage
 dist
 buildcoverage
 package-lock.json
+yarn.lock
 .DS_Store
 build/
 yarn.lock
-package.json

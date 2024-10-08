@@ -5,19 +5,30 @@ import { toast } from 'react-toastify';
 
 export const getAllCohorts = () => async (dispatch: any) => {
   try {
-    const datas = await axios.post('/', {
-      query: `
+    const datas = await axios({
+      url: process.env.BACKEND_URL,
+      method: "post",
+      data : {
+        query: `
         query GetAllCohorts {
         getAllCohorts {
             title
             start
-            program
+            program{
+            _id
+            title
+            }
             id
             end
-            cycle
+            cycle {
+            name
+            id
+            }
         }
-        }
-      `,
+      }
+      `
+      }
+   
     });
     const cohorts = await datas.data.data.getAllCohorts;
     dispatch(creator(GET_COHORTS, cohorts));

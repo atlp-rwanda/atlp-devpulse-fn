@@ -34,6 +34,7 @@ const Notification: React.FC<NotificationProps> = ({
           alt="Notification"
           className="w-12 h-12 rounded-full border-green"
         />
+
         <div className="flex flex-col">
           <h1 className="text-lg font-bold">{notification.message}</h1>
           <span className="text-sm text-gray-400">
@@ -42,6 +43,7 @@ const Notification: React.FC<NotificationProps> = ({
                   addSuffix: true,
                 })
               : "Invalid date"}{" "}
+            {/* Handle invalid date */}
           </span>
         </div>
       </div>

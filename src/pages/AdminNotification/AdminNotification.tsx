@@ -31,7 +31,6 @@ const AdminNotification: React.FC = () => {
   const [filter, setFilter] = useState<FilterOptions>(FilterOptions.All);
   const [orderBy, setOrderBy] = useState<OrderOptions>(OrderOptions.Recent);
 
-  // Fetch notifications on component mount
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -61,7 +60,7 @@ const AdminNotification: React.FC = () => {
         throw new Error("Failed to mark notification as read");
       }
     } catch (error: any) {
-      toast.error(`Error marking notification as read: ${error.message}`); // Enhanced error message
+      toast.error(`Error marking notification as read: ${error.message}`);
     }
   };
 
@@ -95,7 +94,7 @@ const AdminNotification: React.FC = () => {
       <NotificationList
         notifications={sortedNotifications}
         onMarkAsRead={handleMarkAsRead}
-        onDelete={handleDelete} // Pass the delete handler
+        onDelete={handleDelete}
       />
     </div>
   );
