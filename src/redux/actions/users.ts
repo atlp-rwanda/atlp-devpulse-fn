@@ -1,3 +1,4 @@
+import { query } from "express";
 import { fetchUser } from "../actiontypes/deleteactiontype";
 import axios from "./axiosconfig";
 
@@ -89,3 +90,40 @@ export const assignMemberRoles= async (userId, roleId)  => {
    
 }
 }
+
+export const getUserbyFilter= async (filter) => {
+  
+  try{
+    const data = await axios.post("/",
+      {
+        query: `
+          query GetByFilter($filter: UserFilterInput!) {
+            getByFilter(filter: $filter) {
+              id
+              firstname
+              lastname
+              email
+              isActive
+              telephone
+              country
+              code
+              gender
+              authMethod
+              isVerified
+              createdAt
+            }
+          }
+
+        `,
+        variables: {
+          filter: {
+            ...filter
+          }
+        }
+      });
+      return data.data;
+    } catch (err){
+      console.log(err);
+      return err;
+    }
+  }

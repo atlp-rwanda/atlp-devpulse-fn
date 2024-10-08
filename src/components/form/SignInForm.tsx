@@ -12,6 +12,8 @@ import { toast } from "react-toastify";
 import { GraphQLClient } from "graphql-request";
 import { loginAction } from "../../redux/actions/login";
 import { Token } from '../../utils/utils';
+import { getUserbyFilter } from "../../redux/actions/users";
+import jwtDecode from "jwt-decode";
 
 const googleIcn: string = require("../../assets/assets/googleIcon.jpg").default;
 
@@ -39,6 +41,8 @@ const fetchUserData = async (token: string) => {
 const LoginForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [isNormalLogin, setIsNormalLogin] = useState(false);
+  const [isFirstTimeUser, setIsFirstTimeUser] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -50,25 +54,34 @@ const LoginForm = () => {
     resolver: zodResolver(loginSchema),
   });
 
-  const redirectAfterLogin = async () => {
-    const lastAttemptedRoute = localStorage.getItem('lastAttemptedRoute');
-    if (lastAttemptedRoute) {
-      localStorage.removeItem('lastAttemptedRoute');
-      navigate(lastAttemptedRoute);
-    } else {
-      await Token();
-      const role = localStorage.getItem("roleName") as string;
-      if (role === "applicant") {
-        navigate("/applicant");
-      } else if (role === "superAdmin") {
-        navigate("/admin");
+  const redirectAfterLogin = async (isNormalLogin = true) => {
+    if (isNormalLogin) {
+      const lastAttemptedRoute = localStorage.getItem('lastAttemptedRoute');
+      if (lastAttemptedRoute) {
+        localStorage.removeItem('lastAttemptedRoute');
+        navigate(lastAttemptedRoute);
       } else {
-        const searchParams = new URLSearchParams(location.search);
-        const returnUrl = searchParams.get('returnUrl') || '/applicant';
-        navigate(returnUrl);
+        await Token();
+        const role = localStorage.getItem("roleName") as string;
+        if (role === "applicant") {
+          navigate("/applicant");
+        } else if (role === "superAdmin") {
+          navigate("/admin");
+        } else {
+          const searchParams = new URLSearchParams(location.search);
+          const returnUrl = searchParams.get('returnUrl') || '/applicant';
+          navigate(returnUrl);
+        }
       }
     }
   }
+
+  const checkAuthMethod = async (filter: any) => {
+    const response = await getUserbyFilter(filter);
+    console.log(response); 
+    const userdata = response?.data?.getByFilter?.[0]; 
+    return userdata?.authMethod;
+  };
 
   const onSubmit = async (data: loginFormData) => {
     setIsLoading(true);
@@ -92,12 +105,56 @@ const LoginForm = () => {
     }
   };
 
+  const checkFirstTimeUser = async (filter: object) => {
+    const response = await getUserbyFilter(filter);
+    const userdata = response?.data?.getByFilter?.[0];
+    console.log(userdata);
+    console.log(userdata.country.length);
+    console.log(userdata.telephone.length);
+    if (userdata.country.length === 0 && userdata.telephone.length === 0) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
   const handleCallBackResponse = async (response: any) => {
     const token = response.credential;
-    localStorage.setItem("access_token", token);
-    const data = await fetchUserData(token);
-    if (data) navigate("/");
+    console.log(response);
+
+    const decodedToken: any = jwtDecode(token);
+    console.log(decodedToken);
+    const useremail = decodedToken.email;
+    console.log(useremail);
+    const data: any = await fetchUserData(token);
+    console.log(data);
+  
+    if (data) {
+      const filter = { email: useremail };
+      const authMethod = await checkAuthMethod(filter);
+      console.log(authMethod);
+
+      if (authMethod === "google") {
+        setIsNormalLogin(false);
+        const user = data.getUsers_Logged[0];
+        const filter = { email: user.email };
+        const firstTimeUserResult: boolean = await checkFirstTimeUser(filter);
+        console.log(firstTimeUserResult);
+        if (firstTimeUserResult) {
+          toast.success("Welcome to our platform! fill in the missing data.");
+          navigate("/google");
+        } else {
+          localStorage.setItem("access_token", token);
+          setIsNormalLogin(true);
+          await redirectAfterLogin(true);
+        }
+      } else {
+        toast.error("This account cannot log in with Google.");
+        navigate("/login");
+      }
+    }
   };
+  
 
   useEffect(() => {
     //@ts-ignore

@@ -2,9 +2,9 @@ import axios from "axios";
 
 export const updateUserSelf = async (id: string, data: Record<string, any>) => {
   try {
-    const response = await axios.post(`${process.env.BACKEND_URL}`, {
+    const response = await axios.post("/", {
       query: `
-        mutation UpdateUserSelf($id: ID!, $editUserInput: EditUserInput!) {
+        mutation UpdateUserSelf($id: ID!, $editUserInput: EditUserSelfInput_Logged!) {
           updateUserSelf(id: $id, editUserInput: $editUserInput) {
             id
             firstName

@@ -77,7 +77,8 @@ function GoogleSignup() {
     }
 
     const onSubmit = async (data: any) => {
-        // setIsLoading(true); 
+        console.log("Data", data);
+        setIsLoading(true); 
         try {
         const token = localStorage.getItem("access_token");
         if (!token) {
@@ -85,7 +86,7 @@ function GoogleSignup() {
           throw new Error("User not authenticated");
         }
         const decodedToken: any = jwtDecode(token);
-        const id = decodedToken?.id || decodedToken?.id;
+        const id = decodedToken?.id;
           
           if (!id) {
             throw new Error("User ID not found in local storage");
@@ -95,9 +96,9 @@ function GoogleSignup() {
           console.log("Update successful", response);
       
         } catch (error: any) {
-          console.error("Error updating user", error);
+          console.log("Error updating user", error);
         } finally {
-        //   setIsLoading(false);
+          setIsLoading(false);
         }
     };
 
@@ -137,6 +138,7 @@ function GoogleSignup() {
         ) : (
           <form
             onSubmit={(event) => {
+              console.log("Form is being submitted")
               handleSubmit(onSubmit)(event);
             }}
             className="bg-[#1F2A37]  sm:fixed w-[45vw] flex max-h-[90%] md:mt-[70px]  sm:mt-[70px] lg:mt-[0px]  sm:max-h-[100%] flex-col items-center justify-center rounded-sm sm:w-[90%] lg:w-[45vw]"
