@@ -30,33 +30,6 @@ const useNotificationToggle = (key: string, defaultValue: boolean) => {
 
 const handleThemeLabel = (theme: boolean) => (theme ? "Light Theme" : "Dark Theme");
 
-const ThemeDropdown: React.FC<{ isOpen: boolean; handleThemeChange: (theme: string) => void; theme: boolean }> = ({
-  isOpen,
-  handleThemeChange,
-  theme,
-}) => {
-  if (!isOpen) return null;
-
-  return (
-    <div className={`absolute mt-2 right-0 bg-gray-200 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md shadow-lg`}>
-      <ul className={`text-sm ${theme ? "text-black" : "text-white"}`}>
-        <li
-          className={`px-4 py-2 cursor-pointer bg-gray-200 dark:bg-gray-800`}
-          onClick={() => handleThemeChange("Dark Theme")}
-        >
-          Light Theme
-        </li>
-        <li
-          className={`px-4 py-2 cursor-pointer bg-gray-200 dark:bg-gray-800`}
-          onClick={() => handleThemeChange("Light Theme")}
-        >
-          Dark Theme
-        </li>
-      </ul>
-    </div>
-  );
-};
-
 const ThemeSettings: React.FC<{ theme: boolean; setTheme: (theme: boolean) => void }> = ({ theme, setTheme }) => {
   const { isOpen, toggle, close } = useDropdown();
 
@@ -64,6 +37,21 @@ const ThemeSettings: React.FC<{ theme: boolean; setTheme: (theme: boolean) => vo
     setTheme(selectedTheme === "Dark Theme");
     close();
   };
+
+  const renderThemeDropdown = () => (
+    isOpen && (
+      <div className={`absolute mt-2 right-0 bg-gray-200 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md shadow-lg`}>
+        <ul className={`text-sm ${theme ? "text-black" : "text-white"}`}>
+          <li className={`px-4 py-2 cursor-pointer bg-gray-200 dark:bg-gray-800`} onClick={() => handleThemeChange("Dark Theme")}>
+            Light Theme
+          </li>
+          <li className={`px-4 py-2 cursor-pointer bg-gray-200 dark:bg-gray-800`} onClick={() => handleThemeChange("Light Theme")}>
+            Dark Theme
+          </li>
+        </ul>
+      </div>
+    )
+  );
 
   return (
     <div className="mb-4">
@@ -73,11 +61,13 @@ const ThemeSettings: React.FC<{ theme: boolean; setTheme: (theme: boolean) => vo
         <button
           onClick={toggle}
           className={`${theme ? "bg-gray-200" : "bg-gray-800"} py-1 pl-3 pr-3 border ${theme ? "border-gray-300" : "border-gray-600"} rounded text-xs flex items-center`}
+          className={`${theme ? "bg-gray-200" : "bg-gray-800"} py-1 pl-3 pr-3 border ${theme ? "border-gray-300" : "border-gray-600"} rounded text-xs flex items-center`}
         >
+          {handleThemeLabel(theme)}
           {handleThemeLabel(theme)}
           <img src={dropDownIcon} alt="Dropdown Icon" className="ml-2" />
         </button>
-        <ThemeDropdown isOpen={isOpen} handleThemeChange={handleThemeChange} theme={theme} />
+        {renderThemeDropdown()}
       </div>
       <hr className={`border-t ${theme ? "border-gray-500" : "border-gray-600"} my-4`} />
     </div>
@@ -119,6 +109,24 @@ const LanguageSettings: React.FC<{ theme: boolean }> = ({ theme }) => {
     close();
   };
 
+  const renderLanguageDropdown = () => (
+    isOpen && (
+      <div className="absolute mt-2 right-0 bg-gray-800 border border-gray-600 rounded-md shadow-lg">
+        <ul className={`text-sm ${theme ? "text-black" : "text-white"}`}>
+          <li className={`px-4 py-2 cursor-pointer ${theme ? "bg-gray-200" : "bg-gray-800"}`} onClick={() => handleLanguageChange("English")}>
+            English
+          </li>
+          <li className={`px-4 py-2 cursor-pointer ${theme ? "bg-gray-200" : "bg-gray-800"}`} onClick={() => handleLanguageChange("French")}>
+            French
+          </li>
+          <li className={`px-4 py-2 cursor-pointer ${theme ? "bg-gray-200" : "bg-gray-800"}`} onClick={() => handleLanguageChange("Kinyarwanda")}>
+            Kinyarwanda
+          </li>
+        </ul>
+      </div>
+    )
+  );
+
   return (
     <div className="mb-4">
       <h2 className="text-xl font-medium">Language</h2>
@@ -127,21 +135,21 @@ const LanguageSettings: React.FC<{ theme: boolean }> = ({ theme }) => {
         <button
           onClick={toggle}
           className={`${theme ? "bg-gray-200" : "bg-gray-800"} py-1 pl-3 pr-3 border ${theme ? "border-gray-300" : "border-gray-600"} rounded text-xs flex items-center`}
+          className={`${theme ? "bg-gray-200" : "bg-gray-800"} py-1 pl-3 pr-3 border ${theme ? "border-gray-300" : "border-gray-600"} rounded text-xs flex items-center`}
         >
           {language ? language.charAt(0).toUpperCase() + language.slice(1) : "Choose Language"}
           <img src={dropDownIcon} alt="Dropdown Icon" className="ml-2" />
         </button>
-        <LanguageDropdown isOpen={isOpen} handleLanguageChange={handleLanguageChange} theme={theme} />
+        {renderLanguageDropdown()}
       </div>
       <hr className={`border-t ${theme ? "border-gray-500" : "border-gray-600"} my-4`} />
     </div>
   );
 };
 
-
 const AccountSettings: React.FC<{ theme: boolean }> = ({ theme }) => (
   <div className="mb-4">
-    <h2 className="text-xl font-medium">My Account</h2>
+    <h2 className="text-md font-medium">My Account</h2>
     <div className="flex justify-between items-center">
       <p className="opacity-70 text-xs">Edit profile, export account data, …</p>
       <button className="text-sm">Change settings</button>
@@ -153,6 +161,8 @@ const AccountSettings: React.FC<{ theme: boolean }> = ({ theme }) => (
 const NotificationSettings: React.FC<{ theme: boolean }> = ({ theme }) => {
   const { isEnabled: emailNotificationsEnabled, toggle: toggleEmailNotifications } = useNotificationToggle("emailNotifications", true);
   const { isEnabled: pushNotificationsEnabled, toggle: togglePushNotifications } = useNotificationToggle("pushNotifications", true);
+  const { isEnabled: emailNotificationsEnabled, toggle: toggleEmailNotifications } = useNotificationToggle("emailNotifications", true);
+  const { isEnabled: pushNotificationsEnabled, toggle: togglePushNotifications } = useNotificationToggle("pushNotifications", true);
 
   return (
     <div>
@@ -161,6 +171,7 @@ const NotificationSettings: React.FC<{ theme: boolean }> = ({ theme }) => {
         <div className="flex justify-between items-center mt-2">
           <p className="opacity-70 text-xs">Feedback emails, reminder emails, news emails</p>
           <button onClick={toggleEmailNotifications} className="p-1 rounded">
+            {emailNotificationsEnabled ? <img src={ToggleOff} alt="Disabled" className="w-12 h-6" /> : <img src={ToggleOn} alt="Enabled" className="w-12 h-6" />}
             {emailNotificationsEnabled ? <img src={ToggleOff} alt="Disabled" className="w-12 h-6" /> : <img src={ToggleOn} alt="Enabled" className="w-12 h-6" />}
           </button>
         </div>
@@ -171,6 +182,7 @@ const NotificationSettings: React.FC<{ theme: boolean }> = ({ theme }) => {
         <div className="flex justify-between items-center mt-2">
           <p className="opacity-70 text-xs">Grade updates, session reminders, performance, comments</p>
           <button onClick={togglePushNotifications} className="p-1 rounded">
+            {pushNotificationsEnabled ? <img src={ToggleOff} alt="Disabled" className="w-12 h-6" /> : <img src={ToggleOn} alt="Enabled" className="w-12 h-6" />}
             {pushNotificationsEnabled ? <img src={ToggleOff} alt="Disabled" className="w-12 h-6" /> : <img src={ToggleOn} alt="Enabled" className="w-12 h-6" />}
           </button>
         </div>
@@ -193,23 +205,25 @@ const PrivacySecurity: React.FC<{ theme: boolean }> = ({ theme }) => (
 
 const LoginActivity: React.FC<{ theme: boolean }> = ({ theme }) => (
   <div className="mb-4">
-    <h2 className="text-xl font-medium">Login Activity</h2>
+    <h2 className="text-md font-medium">Login Activity</h2>
     <div className="flex justify-between items-center">
-      <p className="opacity-70 text-xs">History of your login sessions</p>
-      <button className="text-sm">View</button>
+      <p className="opacity-70 text-xs">Session history</p>
+      <button className="text-sm">Manage</button>
     </div>
+    <hr className={`border-t ${theme ? "border-gray-500" : "border-gray-600"} my-4`} />
   </div>
 );
 
+const SettingsPage: React.FC = () => {
 const SettingsPage: React.FC = () => {
   const { theme, setTheme } = useTheme();
 
   return (
     <div className={`p-6 ${theme ? "bg-gray-100 text-black" : "bg-gray-800 text-white"} w-full ml-24 mr-24 mt-6 rounded-2xl`}>
       <h1 className="text-2xl font-semibold mb-6">Settings</h1>
-      <AccountSettings theme={theme} />
       <ThemeSettings theme={theme} setTheme={setTheme} />
       <LanguageSettings theme={theme} />
+      <AccountSettings theme={theme} />
       <NotificationSettings theme={theme} />
       <PrivacySecurity theme={theme} />
       <LoginActivity theme={theme} />
@@ -217,4 +231,5 @@ const SettingsPage: React.FC = () => {
   );
 };
 
+export default SettingsPage;
 export default SettingsPage;
