@@ -190,13 +190,13 @@ const LoginForm = () => {
         <p className="text-sm mt-3 mb-2 text-[#616161] dark:text-gray-300">
           Don't have an account?{" "}
           <Link to="/signup" className="text-[#56C870]">
-          <Link to="/signup" className="text-[#56C870]">
+         
             Sign up
           </Link>
         </p>
         <p className="text-sm mt-3 mb-2 text-[#616161] dark:text-gray-300">
           <Link to="/forget" className="text-blue-500 hover:underline">
-          <Link to="/forget" className="text-blue-500 hover:underline">
+          
             Forgot your password?
           </Link>
         </p>
