@@ -46,6 +46,7 @@ import Dashboard from "../pages/Dashboard";
 import ApplicantLayout from "../pages/Applicant/ApplicantLayout";
 import AdminLayout from "../components/Layout/Admins/AdminLayout";
 import VerifyEmail from "../pages/verifyEmail";
+import Settings from '../components/Settings/settings';
 
 function Navigation() {
   const roleName = localStorage.getItem("roleName");
@@ -56,28 +57,9 @@ function Navigation() {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/signup" element={<SignupForm />} />
       <Route path="/verifyEmail" element={<VerifyEmail/>}/>
-      <Route path="/pageNotFound" element={<PageNotFound />} />
-      <Route path="/" element={
-          roleName === 'Admin' || roleName === 'SuperAdmin' ? <Navigate to="/admin" /> : 
-          roleName === 'Applicant' ? <Navigate to="/applicant" /> : <Navigate to="/login" />
-      } />
-      {/* Admin Routes (Protected) */}
-      <Route
-        path="/admin"
-        element={
-          <PrivateRoute allowedRoles={['Admin', 'superAdmin']}>
-            <AdminLayout />
-          </PrivateRoute>
-        }
-      >
-        <Route
-          index
-          element={
-            <PrivateRoute allowedRoles={['Admin', 'superAdmin']}>
-              <Dashboard />
-            </PrivateRoute>
-          }
-        />
+      <Route path="/admin" element={<AdminLayout />}>
+      <Route path="/settings" element={<Settings />} />
+      <Route index element={<PrivateRoute allowedRoles={['Admin','applicant','superAdmin']}><Dashboard /></PrivateRoute>} />
         <Route
           path="trainee-applicant-details/:traineeId"
           element={
