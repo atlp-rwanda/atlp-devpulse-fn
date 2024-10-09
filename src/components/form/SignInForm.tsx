@@ -77,10 +77,13 @@ const LoginForm = () => {
       const response = await loginAction(validatedData.email, validatedData.password);
 
       const token = response?.data?.data?.login?.token;
-      const userId = response?.data.data.login.userId;
-      if (token && userId) {
+      const userId = response?.data?.data?.login?.userId;
+      
+      if (token) {
         localStorage.setItem("access_token", token);
-        localStorage.setItem("userId", userId);
+        if (userId) {
+          localStorage.setItem("userId", userId);
+        }
         await redirectAfterLogin();
       } else {
         toast.error(response?.data?.errors[0].message);

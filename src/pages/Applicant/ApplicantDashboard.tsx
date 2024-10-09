@@ -15,7 +15,10 @@ import {
     ResponsiveContainer,
     Scatter,
     ComposedChart,
-    Label
+    Label,
+    Line,
+    AreaChart,
+    CartesianGrid
   } from "recharts";
 
 const calendar: string = require("../../assets/assets/calendar.svg").default;
@@ -63,43 +66,90 @@ const ApplicantChart = ({ performance }) => {
     const chartData = transformPerformanceData(performance);
 
   if (chartData.length === 0) {
-    return <div>No performance data available</div>;
+    return <div className="text-gray-900 dark:text-white ">No performance data available</div>;
   }
 
 
 
   return (
     <ResponsiveContainer width="100%" height={300}>
-      <ComposedChart
-        data={chartData}
-        margin={{
+      {chartData.length === 1 ? (
+        <ComposedChart
+          data={chartData}
+          margin={{
+            top: 10,
+            right: 30,
+            left: 0,
+            bottom: 20,
+          }}
+        >
+          <XAxis
+            dataKey="name"
+            tick={{ fill: "white" }}
+            tickLine={false}
+            axisLine={false}
+          >
+            <Label value="Sprints"  position="insideBottom" fill="white" />
+          </XAxis>
+
+          <YAxis
+            domain={[0, 100]}
+            tick={{ fill: "white" }}
+            axisLine={false}
+            tickLine={false}
+          >
+            <Label value="Performance" angle={-90} position="insideLeft" fill="white" />
+          </YAxis>
+          <Tooltip />
+          <Scatter name="Performance" dataKey="score" fill="#56C870" />
+        </ComposedChart>
+      ) : (
+        <AreaChart data={chartData} margin={{
           top: 10,
           right: 30,
           left: 0,
           bottom: 20,
-        }}
-      >
-        <XAxis 
-          dataKey="name"
-          tick={{ fill: "white" }}
-        >
-          <Label value="Sprints" offset={-10} position="insideBottom" fill="white" />
-        </XAxis>
-        
-        <YAxis
-          domain={[0, 100]}
-          tick={{ fill: "white" }}
-        >
-          <Label value="Performance" angle={-90} position="insideLeft" fill="white" />
-        </YAxis>
-        <Tooltip 
-        />
-        {chartData.length === 1 ? (
-          <Scatter name="Performance" dataKey="score" fill="#56C870" />
-        ) : (
-          <Area type="monotone" dataKey="score" stroke="#56C870" fill="rgba(86, 200, 112, 0.1)" />
-        )}
-      </ComposedChart>
+        }}>
+          <CartesianGrid vertical={false} stroke="#374151" />
+          <XAxis
+            dataKey="name"
+            tick={{ fill: "white" }}
+            tickLine={false}
+            axisLine={false}
+          >
+            <Label value="Sprints" offset={-10} position="insideBottom" fill="white" />
+          </XAxis>
+          <YAxis
+            domain={[0, 100]}
+            tick={{ fill: "white" }}
+            axisLine={false}
+            tickLine={false}
+          >
+            <Label value="Performance" angle={-90} position="insideLeft" fill="white" />
+          </YAxis>
+          <Tooltip />
+          <defs>
+            <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="1%" stopColor="#243A3D" stopOpacity={1} />
+              <stop offset="99%" stopColor="#243A3D" stopOpacity={0} />
+            </linearGradient>
+          </defs>
+          <Area
+            type="monotone"
+            dataKey="score"
+            stroke="#56C870"
+            fillOpacity={1}
+            fill="url(#colorUv)"
+          />
+          <Line
+            type="monotone"
+            dataKey="score"
+            stroke="#56C870"
+            strokeWidth={4}
+            dot={false}
+          />
+        </AreaChart>
+      )}
     </ResponsiveContainer>
   );
   }
