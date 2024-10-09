@@ -19,7 +19,7 @@ import {
 import _ from "lodash"; // lodash for debounce
 import { debounce } from "lodash";
 const ApplicantSeachJobPost = (props: any) => {
-   const { theme } = useTheme();
+  const { theme } = useTheme();
 
   // LIST ALL JOB POST
   const { jobs } = props;
@@ -72,15 +72,14 @@ const ApplicantSeachJobPost = (props: any) => {
 
   const handleSearchChange = (e) => {
     const searchTerm = e.target.value;
-    setenteredsubmitWord(searchTerm); 
-    setEnteredWord(searchTerm); 
+    setenteredsubmitWord(searchTerm);
+    setEnteredWord(searchTerm);
   };
 
-  
   const debouncedSearch = useCallback(
     debounce(() => {
       props.getAllFilteredJobPosts(input2);
-    }, 300), 
+    }, 300),
     [enteredWord, filterAttribute, page, itemsPerPage]
   );
 
@@ -92,9 +91,6 @@ const ApplicantSeachJobPost = (props: any) => {
     };
   }, [debouncedSearch]);
 
-
-
-
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
       if (filterAttribute === "" || filterAttribute === null) {
@@ -104,7 +100,9 @@ const ApplicantSeachJobPost = (props: any) => {
     }
   };
 
-  console.log("props:",props);
+  console.log("propss:", props.fetchJoPostStates.data);
+  console.log("JOB DATA =>>>>>:", props);
+
   useEffect(() => {
     props.fetchJobPost(input);
   }, [page, itemsPerPage]);
@@ -121,6 +119,19 @@ const ApplicantSeachJobPost = (props: any) => {
   });
 
   const { allfilteredjobPosts } = props;
+
+  useEffect(() => {
+    console.log("Current state: =>>>>>>>>>>>>>>>>", {
+      jobs: jobs?.data,
+      filteredJobs: allfilteredjobPosts?.data,
+      input,
+      input2,
+      page,
+      itemsPerPage,
+    });
+  }, [jobs, allfilteredjobPosts, page, itemsPerPage]);
+
+  // console.log("JOB POST DATA =>>>>>: ", fetchJobPost);
 
   return (
     <>
@@ -284,79 +295,79 @@ const ApplicantSeachJobPost = (props: any) => {
                           <label className="text-left text-black-text dark:text-white text-lg font-bold">
                             Job POST
                           </label>
-                          {allfilteredjobPosts?.data && allfilteredjobPosts?.data.length > 0 ? (
-                          allfilteredjobPosts?.data?.map((item: any) => (
-                            <div
-                              key={item._id}
-                              className="flex flex-col w-full gap-2 border border-solid border-transparent border-t-black dark:border-t-white border-t-4 rounded-t-sm"
-                            >
-                              <div className="flex flex-col w-full mt-3">
-                                <label className="text-left text-gray-400 text-sm">
-                                  Job Title
-                                </label>
-                                <label className="text-left text-black-text dark:text-white text-base font-normal">
-                                  {item?.title}
-                                </label>
-                              </div>
-                              <div className="flex flex-col w-full">
-                                <label className="text-left text-gray-400 text-sm">
-                                  Program
-                                </label>
-                                <label className="text-left text-black-text dark:text-white text-base font-normal">
-                                  {item?.program?.title}
-                                </label>
-                              </div>
-                              <div className="flex flex-col w-full">
-                                <label className="text-left text-gray-400 text-sm">
-                                  Cycle
-                                </label>
-                                <label className="text-left text-black-text dark:text-white text-base font-normal">
-                                  {item?.cycle && (
-                                    <p className="text-gray-900  dark:text-white whitespace-no-wrap">
-                                      {item?.cycle?.name}
-                                    </p>
-                                  )}
-                                </label>
-                              </div>
-                              <div className="flex flex-col w-full">
-                                <label className="text-left text-gray-400 text-sm">
-                                  Cohort
-                                </label>
-                                <label className="text-left text-black-text dark:text-white text-base font-normal">
-                                  {item?.cohort?.title}
-                                </label>
-                              </div>
-                              <div className="flex flex-col w-full">
-                                <label className="text-left text-gray-400 text-sm">
-                                  Description
-                                </label>
-                                <div className="text-left text-black-text dark:text-white text-base font-normal">
-                                  {item?.description}
+                          {allfilteredjobPosts?.data &&
+                          allfilteredjobPosts?.data.length > 0 ? (
+                            allfilteredjobPosts?.data?.map((item: any) => (
+                              <div
+                                key={item._id}
+                                className="flex flex-col w-full gap-2 border border-solid border-transparent border-t-black dark:border-t-white border-t-4 rounded-t-sm"
+                              >
+                                <div className="flex flex-col w-full mt-3">
+                                  <label className="text-left text-gray-400 text-sm">
+                                    Job Title
+                                  </label>
+                                  <label className="text-left text-black-text dark:text-white text-base font-normal">
+                                    {item?.title}
+                                  </label>
+                                </div>
+                                <div className="flex flex-col w-full">
+                                  <label className="text-left text-gray-400 text-sm">
+                                    Program
+                                  </label>
+                                  <label className="text-left text-black-text dark:text-white text-base font-normal">
+                                    {item?.program?.title}
+                                  </label>
+                                </div>
+                                <div className="flex flex-col w-full">
+                                  <label className="text-left text-gray-400 text-sm">
+                                    Cycle
+                                  </label>
+                                  <label className="text-left text-black-text dark:text-white text-base font-normal">
+                                    {item?.cycle && (
+                                      <p className="text-gray-900  dark:text-white whitespace-no-wrap">
+                                        {item?.cycle?.name}
+                                      </p>
+                                    )}
+                                  </label>
+                                </div>
+                                <div className="flex flex-col w-full">
+                                  <label className="text-left text-gray-400 text-sm">
+                                    Cohort
+                                  </label>
+                                  <label className="text-left text-black-text dark:text-white text-base font-normal">
+                                    {item?.cohort?.title}
+                                  </label>
+                                </div>
+                                <div className="flex flex-col w-full">
+                                  <label className="text-left text-gray-400 text-sm">
+                                    Description
+                                  </label>
+                                  <div className="text-left text-black-text dark:text-white text-base font-normal">
+                                    {item?.description}
+                                  </div>
+                                </div>
+                                <div className="flex flex-col w-full">
+                                  <label className="text-left text-gray-400 text-sm">
+                                    Action
+                                  </label>
+                                  <div className="flex flex-row gap-2 mt-2">
+                                    <Link
+                                      to={`/applicant/available-job/${item.id}/apply`}
+                                      replace
+                                    >
+                                      <button className="flex bg-primary dark:bg-[#56C870] rounded-md py-2 px-4 text-white font-medium cursor-pointer">
+                                        Apply
+                                      </button>
+                                    </Link>
+                                  </div>
                                 </div>
                               </div>
-                              <div className="flex flex-col w-full">
-                                <label className="text-left text-gray-400 text-sm">
-                                  Action
-                                </label>
-                                <div className="flex flex-row gap-2 mt-2">
-                                  <Link
-                                    to={`/applicant/available-job/${item.id}/apply`}
-                                    replace
-                                  >
-                                    <button className="flex bg-primary dark:bg-[#56C870] rounded-md py-2 px-4 text-white font-medium cursor-pointer">
-                                      Apply
-                                    </button>
-                                  </Link>
-                                </div>
-                              </div>
-                            </div>
-                          ))
-                        ) : (
-                       
+                            ))
+                          ) : (
                             <div className="text-center py-5 text-gray-500 dark:text-gray-300">
                               No Jobs available
                             </div>
-                        )}
+                          )}
                         </div>
                       </div>
                       <div className="py-3 flex items-center text-center justify-center pt-10">
@@ -492,6 +503,13 @@ const mapState = (state: any) => ({
   errors: state.errors,
   count: state.count,
 });
+
+// const mapState = (state: any) => ({
+//   jobs: state.fetchJobPost, // Add this mapping
+//   allfilteredjobPosts: state.filterJobPost,
+//   errors: state.errors,
+//   count: state.count,
+// });
 
 export default connect(mapState, {
   fetchJobPost,
