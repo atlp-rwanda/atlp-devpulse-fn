@@ -11,7 +11,10 @@
   display: none !important;
 }
 body {
-  background: #f4f4f4;
+  background: #262E3D;
+}
+body.light-mode {
+  background: #ffffff;
 }
 
 /* Other existing CSS rules for input and label styles */

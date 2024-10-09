@@ -32,10 +32,9 @@ export const getAllCohorts = () => async (dispatch: any) => {
     });
     const cohorts = await datas.data.data.getAllCohorts;
     dispatch(creator(GET_COHORTS, cohorts));
+    return cohorts.length;
   } catch (error) {
-    if (error) {
-      return console.log(error);
-    }
+    return 0;
   }
 };
 

@@ -45,6 +45,7 @@ import { attendanceReducer } from './attendanceReducer';
 import { performanceReducer } from './performanceReducer';
 import filterProgramsReducer from './filterProgramsReducer';
 import filterRoleReducer from './filterRoleReducer';
+import fetchSearchDataReducer from './fetchSearchDataReducer';
 
 const allReducers = combineReducers({
   counter: counterReducer,
@@ -86,6 +87,7 @@ const allReducers = combineReducers({
   myApplications: applicationsReducer,
   currentApplication: singleApplicationReducer,
   assessments: assessmentsReducer,
+  searchData: fetchSearchDataReducer,
   traineeApplicant: traineeReducer,
   traineeAttendance: attendanceReducer,
   traineePerformance: performanceReducer
