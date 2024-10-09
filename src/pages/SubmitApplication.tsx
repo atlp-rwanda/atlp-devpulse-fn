@@ -1,115 +1,176 @@
-import { useParams } from 'react-router';
-import NavBar from '../components/sidebar/navHeader';
-import React, { useEffect } from 'react';
-import { BsFillPersonLinesFill } from "react-icons/bs";
-import { fetchSingleJobPost } from '../redux/actions/fetchSingleJobPostAction';
-import { connect, useDispatch } from 'react-redux';
-import { useAppSelector } from 'hooks/hooks';
-import { FaLinkedin, FaTelegram, FaTwitter, FaWhatsapp, FaEnvelope } from "react-icons/fa";
-import { FcGoogle } from 'react-icons/fc';
+import { useParams } from "react-router";
+import NavBar from "../components/sidebar/navHeader";
+import React, { useEffect, useState } from "react";
+import { fetchSingleJobPost } from "../redux/actions/fetchSingleJobPostAction";
+import { connect, useDispatch } from "react-redux";
+import { showErrorToast, showSuccessToast } from "../utils/toast";
+import axios from "axios";
 
 type Props = {};
 
 const SubmitApplication = (props: any) => {
-  const { fetchSingleJobPostStates, updateJobPostStates } = props;
+  const { fetchSingleJobPostStates } = props;
   const dispatch = useDispatch();
   const { id } = useParams();
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     dispatch(fetchSingleJobPost(id));
   }, [id]);
 
-  const shareMessage = `Check out this job opportunity: ${fetchSingleJobPostStates?.data?.title}\n${window.location.href}`;
+  const handleSaveApplication = async () => {
+    const { spreadsheetlink, formrange } = fetchSingleJobPostStates?.data || {};
 
-  const shareOnTwitterDM = () => {
-    const url = `https://twitter.com/messages/compose?text=${encodeURIComponent(shareMessage)}`;
-    window.open(url, "_blank", "width=600,height=400");
+    if (!spreadsheetlink || !formrange) {
+      showErrorToast("Missing spreadsheet link or form range");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const response = await axios({
+        url: process.env.BACKEND_URL,
+        method: "POST",
+        data: {
+          query: `
+          mutation SaveSheetData($sheetLink: String!, $range: String!) {
+            saveSheetData(sheetLink: $sheetLink, range: $range)
+          }
+          `,
+          variables: {
+            sheetLink: fetchSingleJobPostStates?.data?.spreadsheetlink,
+            range: fetchSingleJobPostStates?.data?.formrange,
+          },
+        },
+      });
+
+      if (response.data.errors) {
+        throw new Error(response.data.errors[0].message);
+      }
+
+      if (response.data.data?.saveSheetData) {
+        showSuccessToast("Application saved successfully!");
+        window.location.href = "/#/applications";
+      } else {
+        throw new Error("Failed to save application data");
+      }
+    } catch (error: any) {
+      const errorMessage =
+        error.response?.data?.errors?.[0]?.message ||
+        error.message ||
+        "Failed to save application";
+
+      showErrorToast(errorMessage);
+      console.error("Save application error:", error);
+    } finally {
+      setLoading(false);
+    }
   };
-
-  const shareOnWhatsApp = () => {
-    const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareMessage)}`;
-    window.open(url, "_blank", "width=600,height=400");
-  };
-
-  const shareOnTelegram = () => {
-    const url = `https://t.me/share/url?url=${encodeURIComponent(window.location.href)}`;
-    window.open(url, "_blank", "width=600,height=400");
-  };
-
-  const shareOnLinkedIn = () => {
-    const url = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.href)}`;
-    window.open(url, "_blank");
-  };
-
-  const shareOnGmail = () => {
-    const subject = encodeURIComponent("Interesting Job Opportunity");
-    const body = encodeURIComponent(shareMessage);
-    const url = `https://mail.google.com/mail/?view=cm&fs=1&to=&su=${subject}&body=${body}`;
-    window.open(url, "_blank");
-  }
 
   return (
     <>
-      <div className="min-h-screen flex flex-col items-center dark:bg-dark-frame-bg">
-        <div className="flex flex-col justify-start mt-24 items-start p-5 w-[95%] md_:mx-auto overflow-hidden dark:bg-dark-bg">
-          <h2 className="text-white font-bold my-5">
-            <BsFillPersonLinesFill className="float-left m-1" />
-            Job Post information
-          </h2>
-          <div className="flex flex-col justify-center gap-3 mb-8">
-            {fetchSingleJobPostStates?.data != null && (
-              <>
-                <div className="flex flex-col">
-                  <h3 className="text-white">Job title</h3>
-                  <p className="text-gray-500 text-sm dark:text-gray-400">{fetchSingleJobPostStates.data.title}</p>
-                </div>
-                <div className="flex flex-col">
-                  <h3 className="text-white">Program</h3>
-                  <p className="text-gray-500 text-sm dark:text-gray-400">{fetchSingleJobPostStates.data.program.title}</p>
-                </div>
-                <div className="flex flex-col">
-                  <h3 className="text-white">Cycle</h3>
-                  <p className="text-gray-500 text-sm dark:text-gray-400">{fetchSingleJobPostStates.data.cycle.name}</p>
-                </div>
-                <div className="flex flex-col">
-                  <h3 className="text-white">Cohort</h3>
-                  <p className="text-gray-500 text-sm dark:text-gray-400">{fetchSingleJobPostStates.data.cohort.title}</p>
-                </div>
-                <div className="flex flex-col">
-                  <h3 className="text-white">Program description</h3>
-                  <p className="text-gray-500 text-sm dark:text-gray-400">{fetchSingleJobPostStates.data.description}</p>
-                </div>
-                <div className="text-white">Share Job Post</div>
-                <div className="flex fle gap-4 mt-6">
-                  <button onClick={shareOnTwitterDM} className="flex items-center gap-2 px-4 py-2 bg-blue-400 text-white rounded hover:bg-blue-500 transition-colors">
-                    <FaTwitter />
-                  </button>
-                  <button onClick={shareOnWhatsApp} className="flex items-center gap-2 px-4 py-2 bg-green text-white rounded hover:bg-green-600 transition-colors">
-                    <FaWhatsapp />
-                  </button>
-                  <button onClick={shareOnTelegram} className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors">
-                    <FaTelegram />
-                  </button>
-                  <button onClick={shareOnLinkedIn} className="flex items-center gap-2 px-4 py-2 bg-blue-800 text-white rounded hover:bg-blue-900 transition-colors">
-                    <FaLinkedin />
-                  </button>
-                  <button onClick={shareOnGmail} className="flex items-center justify-center gap-2 px-4 py-2 bg-white text-gray-700 rounded hover:bg-gray-100 transition-colors">
-                    <FcGoogle size={20} />
-                  </button>
-                </div>
-              </>
-            )}
-          </div>
+      <div className="min-h-screen flex flex-col items-center dark:bg-dark-frame-bg w-full">
+        <div className="flex flex-col justify-start mt-24 items-start p-5 w-[95%] lg:w-[85%] xl:w-[80%] md_:mx-auto overflow-hidden dark:bg-dark-bg">
+          {fetchSingleJobPostStates?.data && (
+            <div className="w-full">
+              {/* TITLE */}
+              <div className="flex justify-center mb-8">
+                <p className="text-white text-xl font-semibold underline">
+                  {fetchSingleJobPostStates.data.title}
+                </p>
+              </div>
 
-          <div className="flex justify-center round-md mt-5">
-              <iframe src={fetchSingleJobPostStates?.data?.link} width="640" height="100">Loading…</iframe>
-          </div>
+              {/* DESCRIPTION */}
+              <div className="flex justify-start w-full mb-8">
+                <p className="text-gray-500 text-sm dark:text-gray-400">
+                  {fetchSingleJobPostStates.data.description}
+                </p>
+              </div>
+
+              {/* REQUIREMENTS */}
+              <div className="flex flex-col w-full mb-8">
+                <p className="text-white font-semibold mb-4">
+                  Here are the requirements:
+                </p>
+                <ul className="list-disc ml-5">
+                  {fetchSingleJobPostStates.data.program?.requirements?.map(
+                    (item: any, index: number) => (
+                      <li
+                        key={index}
+                        className="text-gray-500 text-sm dark:text-gray-400 mb-2"
+                      >
+                        {item}
+                      </li>
+                    )
+                  )}
+                </ul>
+              </div>
+
+              {/* FORM */}
+              <div className="flex justify-center w-full mb-8">
+                <iframe
+                  src={fetchSingleJobPostStates.data.link}
+                  width="100%"
+                  height="740"
+                  className="w-full"
+                >
+                  Loading…
+                </iframe>
+              </div>
+
+              {/* SAVE BUTTON */}
+              <div className="flex justify-center w-full">
+                <button
+                  onClick={handleSaveApplication}
+                  disabled={loading}
+                  className={`
+                    flex bg-primary dark:bg-[#56C870] rounded-md py-2 px-4 
+                    text-white font-medium transition-opacity duration-200
+                    ${
+                      loading
+                        ? "opacity-50 cursor-not-allowed"
+                        : "cursor-pointer hover:opacity-90"
+                    }
+                  `}
+                >
+                  {loading ? (
+                    <span className="flex items-center">
+                      <svg
+                        className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        ></circle>
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        ></path>
+                      </svg>
+                      Saving...
+                    </span>
+                  ) : (
+                    "Save Application"
+                  )}
+                </button>
+              </div>
+            </div>
+          )}
         </div>
-      </div>     
+      </div>
+      <NavBar />
     </>
   );
 };
-
-// export default SubmitApplication;
 
 const mapState = (state: any) => ({
   fetchSingleJobPostStates: state.fetchSingleJobPost,

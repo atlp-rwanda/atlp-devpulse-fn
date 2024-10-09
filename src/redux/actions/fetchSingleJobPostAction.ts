@@ -34,6 +34,8 @@ export const fetchSingleJobPost = (JobPostData: any) => {
                 description
                 link
                 published
+                spreadsheetlink
+                formrange
             }
             }
             `,
