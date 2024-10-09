@@ -409,7 +409,7 @@ const Jobs = (props: any) => {
                             </tr>
                           </thead>
                           <tbody className="overflow-y-auto">
-                            {allfilteredjobPosts?.data?.map((item: any) => (
+                            {fetchJobPostStates?.data?.map((item: any) => (
                               <tr
                                 className="hover:bg-slate-700 transition-colors"
                                 key={item.id}
@@ -485,7 +485,7 @@ const Jobs = (props: any) => {
                                       >
                                         <li>
                                           <Link
-                                            to={`#`}
+                                            to={`/admin/job/post/edit/${item.id}`}
                                             className="text-sm hover:bg-gray-100 text-gray-700 dark:hover:bg-gray-500 dark:text-white  block px-4 py-2"
                                           >
                                             Edit

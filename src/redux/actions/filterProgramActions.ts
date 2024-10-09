@@ -8,6 +8,9 @@ export const getAllFilteredPrograms =
   ({ page, itemsPerPage, All, wordEntered, filterAttribute }: any) =>
   async (dispatch: any) => {
     try {
+      if(filterAttribute==='' || filterAttribute===null){
+        toast.error("Please insert a filter attribute")
+      }
       const datas = await axios.post("/", {
         query: `
       query Query($input: FilterOptions) {
