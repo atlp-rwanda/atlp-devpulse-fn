@@ -131,6 +131,7 @@
     "react-select": "^5.7.4",
     "react-table": "^7.8.0",
     "react-toastify": "^9.0.8",
+    "recharts": "^2.12.7",
     "redux": "^4.2.0",
     "redux-devtools-extension": "^2.13.9",
     "redux-state-sync": "^3.1.4",
