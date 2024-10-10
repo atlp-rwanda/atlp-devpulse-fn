@@ -1,8 +1,8 @@
 import creator from "./creator";
 import axios from "./axiosconfig";
-import { GET_ALL_FILTERED_TRAINEES } from "..";
-import { fetchtrainapplicantcount} from '../actiontypes/deleteactiontype';
-
+import { GET_ALL_FILTERED_TRAINEES, SEND_EMAIL, SEND_EMAIL_ERROR } from "..";
+import { fetchtrainapplicantcount } from "../actiontypes/deleteactiontype";
+import { toast } from "react-toastify";
 
 export const getAllFilteredTraineess =
   ({ page, itemsPerPage, All, wordEntered, filterAttribute }: any) =>
@@ -82,22 +82,64 @@ export const getAllFilteredTraineess =
 
 export const getAlltraineeapplicants = () => async (dispatch: any) => {
   try {
-   const datas = await axios.post("/", {
-          query: `
+    const datas = await axios.post("/", {
+      query: `
             query GetAlltraineEAttributescount {
                 getAlltraineEAttributescount {
                   total
                 }
               }
               `,
-    },);
-    
-    const totalTraineeApllicants = await datas.data.data.getAlltraineEAttributescount.total;
-    console.log(totalTraineeApllicants)
-    dispatch({type: fetchtrainapplicantcount.fetchtrainapplicantcount_success,data:totalTraineeApllicants});
+    });
+
+    const totalTraineeApllicants = await datas.data.data
+      .getAlltraineEAttributescount.total;
+    console.log(totalTraineeApllicants);
+    dispatch({
+      type: fetchtrainapplicantcount.fetchtrainapplicantcount_success,
+      data: totalTraineeApllicants,
+    });
+    return totalTraineeApllicants;
   } catch (error) {
-    if (error) {
-      return console.log(error);
-    }
+    return 0;
   }
 };
+
+export const sendBulkyEmail =
+  ({ to, subject, html, cc, bcc }: any) =>
+  async (dispatch: any) => {
+    try {
+      const datas = await axios.post("/", {
+        query: `
+        query SendBulkyEmail($params: sendParams) {
+            sendBulkyEmail(params: $params) {
+              status
+              mail_res
+            }
+          }
+      `,
+        variables: {
+          params: {
+            html,
+            subject,
+            to,
+            cc,
+            bcc,
+          },
+        },
+      });
+      const emailResponse = await datas.data.data.sendBulkyEmail;
+
+      if (emailResponse.status === "success") {
+        toast.success(emailResponse.mail_res);
+        dispatch(creator(SEND_EMAIL, emailResponse));
+      } else {
+        toast.error(emailResponse.mail_res);
+        dispatch(creator(SEND_EMAIL_ERROR, emailResponse));
+      }
+    } catch (error) {
+      if (error) {
+        return console.log(error);
+      }
+    }
+  };

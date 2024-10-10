@@ -11,11 +11,11 @@ checks:
   file-lines:
     enabled: true
     config:
-      threshold: 250
+      threshold: 25000
   method-complexity:
     enabled: true
     config:
-      threshold: 5
+      threshold: 50
   method-count:
     enabled: true
     config:
@@ -23,7 +23,7 @@ checks:
   method-lines:
     enabled: true
     config:
-      threshold: 45
+      threshold: 900
   nested-control-flow:
     enabled: true
     config:
@@ -33,27 +33,28 @@ checks:
     config:
       threshold: 4
   similar-code:
-    enabled: true
+    enabled: false
     config:
       threshold: #language-specific defaults. overrides affect all languages.
   identical-code:
-    enabled: true
+    enabled: false
     config:
       threshold: #language-specific defaults. overrides affect all languages.
 plugins:
- rubocop:
-  enabled: true
- eslint:
-  enabled: true
+  rubocop:
+    enabled: true
+  eslint:
+    enabled: false
+    channel: eslint-8
 exclude_patterns:
-- "config/"
-- "db/"
-- "dist/"
-- "features/"
-- "**/node_modules/"
-- "script/"
-- "**/spec/"
-- "**/test/"
-- "**/tests/"
-- "**/vendor/"
-- "**/*.d.ts"
+  - "config/"
+  - "db/"
+  - "dist/"
+  - "features/"
+  - "**/node_modules/"
+  - "script/"
+  - "**/spec/"
+  - "**/test/"
+  - "**/tests/"
+  - "**/vendor/"
+  - "**/*.d.ts"

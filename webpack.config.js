@@ -3,6 +3,7 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const path = require("path");
 const dotenv = require("dotenv");
 const webpack = require("webpack");
+
 module.exports = () => {
   dotenv.config();
   const prod = process.env.NODE_ENV === "production";
@@ -10,20 +11,20 @@ module.exports = () => {
     mode: prod ? "production" : "development",
     entry: "./src/index.tsx",
     output: {
-      path: path.resolve(__dirname, "dist/"),
+      path: path.resolve(__dirname, "build/"),
       publicPath: "/",
     },
     devServer: {
       historyApiFallback: true,
       port: 3000,
       compress: true,
-      allowedHosts: ['all'],
+      allowedHosts: ["all"],
     },
     resolve: {
       fallback: {
         zlib: require.resolve("browserify-zlib"),
         https: require.resolve("https-browserify"),
-        http: require.resolve("stream-http"), 
+        http: require.resolve("stream-http"),
       },
       alias: {
         process: "process/browser",
@@ -51,6 +52,12 @@ module.exports = () => {
         {
           test: /\.(png|jp(e*)g|svg|gif)$/,
           use: ["file-loader"],
+        },
+        {
+          test: /\.m?js$/,
+          resolve: {
+            fullySpecified: false,
+          },
         },
       ],
     },

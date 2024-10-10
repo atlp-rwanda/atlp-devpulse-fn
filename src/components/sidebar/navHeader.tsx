@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-
 import Sidebar from "./sidebar";
 import { SunIcon } from "@heroicons/react/outline";
 import { MoonIcon } from "@heroicons/react/solid";
 import ProfileDropdown from "../profileDropdown";
-import { FaMoon, FaBars } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
 import * as icon from "react-icons/hi2";
 import { AiOutlineBell } from "react-icons/ai";
@@ -13,8 +11,21 @@ import { useTheme } from "../../hooks/darkmode";
 const logo: string = require("../../assets/logo.svg").default;
 const profile: string = require("../../assets/avatar.png").default;
 const LogoWhite: string = require("../../assets/logoWhite.svg").default;
+import jwtDecode from "jwt-decode";
+import {destination} from '../../utils/utils'
+import SearchBar from "../../components/SearchBar";
+
+const placeholderImage = profile;
+
+const onImageError = (e) => {
+  e.target.src = placeholderImage
+}
 
 function NavBar() {
+  const userDestination = destination();
+  const access_token = localStorage.getItem("access_token");
+  //@ts-ignore
+  const user = access_token ? jwtDecode(access_token).picture : profile;
   const [showNotification, setShowNotification] = useState(false);
   const [showProfileDropdown, setShowprofileDropdown] = useState(false);
   const { theme, setTheme } = useTheme();
@@ -28,6 +39,7 @@ function NavBar() {
     setShowprofileDropdown(!showProfileDropdown);
 
   return (
+    
     <div className="flex items-center dark:bg-zinc-800 ">
       {showProfileDropdown && (
         <ProfileDropdown
@@ -51,8 +63,9 @@ function NavBar() {
               <IoClose className="w-7 text-9xl dark:text-dark-text-fill" />
             )}
           </span>
+          
           <span>
-            <Link to="/dashboard/super-admin" className="flex items-center">
+            <Link to={userDestination} className="flex items-center">
               {theme ? (
                 <img
                   className="cursor-pointer mx-2 fill-[blue]"
@@ -71,7 +84,13 @@ function NavBar() {
               </h1>
             </Link>
           </span>
+
         </div>
+        
+        {/* Add Search Bar */}
+        <SearchBar />
+        {/* End of Search Bar */}
+
         <div className="flex items-center mr-4">
           <span className="flex items-center">
             {" "}
@@ -93,19 +112,18 @@ function NavBar() {
           </div>
           <span onClick={handleShowProfileDropdown}>
             <img
-              src={profile}
+              src={user}
               alt="profile"
-              className="w-[30px] cursor-pointer mx-2 "
+              onError={onImageError}
+              className="w-[30px] cursor-pointer mx-2 rounded "
             />
           </span>
         </div>
       </div>
-      <ul className={!nav ? "hidden" : "bg-white  cursor-pointer text-black  "}>
+      {/* <ul className={!nav ? "hidden" : "bg-white  cursor-pointer text-black  "}>
         <Sidebar />
       </ul>
-      <div className="block md:hidden">
-        <Sidebar />
-      </div>
+      <div className="block md:hidden">{<Sidebar />}</div> */}
     </div>
   );
 }

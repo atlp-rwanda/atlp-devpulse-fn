@@ -13,9 +13,9 @@ import { clearTrash } from "../../redux/actions/clearTrash";
 import Select from "react-select";
 import { customTheme, darkTheme } from "../FilterTeainee/FilterTrainee";
 import { useTheme } from "../../hooks/darkmode";
-
+import { TrashSkeleton } from "../../skeletons/skeletonTrash";
 const Trash = (props: any) => {
-  const { allTrainees, restore, clearTrashMessage } = props;
+  const { allTrainees, restore, clearTrashMessage} = props;
   const [pageIdx] = useState(1);
   const [itemsPerPage] = useState(100);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -24,21 +24,27 @@ const Trash = (props: any) => {
   const [wordsEntered, setWordsEntered] = useState("");
   const { theme, setTheme } = useTheme();
   const open = Boolean(anchorEl);
+  const [isLoading, setIsLoading] = useState(true);
   const handleClose = () => {
     setAnchorEl(null);
   };
   const [activeCycle, setActiveCycle] = useState<number | undefined>(undefined);
 
-  useEffect(() => {
-    const data = {
-      page: pageIdx,
-      itemsPerPage,
-      filterAttribute,
-      wordEntered: wordsEntered,
+ useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true); 
+      const data = {
+        page: pageIdx,
+        itemsPerPage,
+        filterAttribute,
+        wordEntered: wordsEntered,
+      };
+      await props.getAllSoftDeletedTrainees(data);
+      setIsLoading(false); 
     };
-
-    props.getAllSoftDeletedTrainees(data);
+    fetchData();
   }, [restore, clearTrashMessage, filterAttribute, wordsEntered]);
+
   const [moredrop, setmoredrop] = useState("");
   const trainees = allTrainees.data;
   const onSubmitHandler = (e: any) => {
@@ -139,12 +145,16 @@ const Trash = (props: any) => {
     setWordsEntered("");
   };
 
+  if (isLoading) {
+    return <TrashSkeleton/>
+  }
+
   return (
     <>
-      <NavBar />
-      <div className="flex bg-[#F9F9FB] min-h-[100vh] dark:bg-dark-bg dark:text-white">
-        <div className="min-h-[50vh] w-[100%] block  md:w-[100%] md:mt-0  pl-[16rem] pt-[80px] md:pl-0">
-          <div className=" w-[100%] top-[20%] md:top-[10%] md:relative px-[10%] md:px-[10px]">
+      
+      <div className="flex bg-[#F9F9FB] min-h-[100vh] dark:bg-dark-frame-bg dark:text-white w-full">
+        <div className="min-h-[50vh] w-[100%] block  md:w-[100%] md:mt-0 md:pl-0 pt-4">
+          <div className=" w-[100%] top-[20%] md:top-[10%] md:relative px-8 md:px-[10px]">
             <div className="flex justify-between align-center mb-5 relative md:block">
               <div className="absolute bottom-0 right-0 md:relative md:mb-3">
                 <button
@@ -350,3 +360,7 @@ export default connect(mapState, {
   restoretraine,
   clearTrash,
 })(Trash);
+function dispatch(arg0: (dispatch: any) => Promise<void>) {
+  throw new Error("Function not implemented.");
+}
+

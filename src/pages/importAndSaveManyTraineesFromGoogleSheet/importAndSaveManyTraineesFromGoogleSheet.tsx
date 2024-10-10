@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Select from "react-select";
 import {
@@ -7,22 +7,57 @@ import {
 } from "../../redux/actions/PerformLoadDataAction";
 import { load_data_request } from "../../redux/actiontypes/load_data_into_db_action";
 import { useAppDispatch, useAppSelector } from "../../redux/app/hook";
+// import { } from "react";
 
 const ImportTraineeDetailsFromGoogleSheet = () => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
+  const [urlInput, setUrlInput] = useState("");
+  const [formData, setFormData] = React.useState({});
+
+  // ==>> begin ----- READING INTO THE REDUX STORE TO FIND THE STATUS OF THE RESPONSE, IF THERE IS ERROR
+  // OR IF THERE IS THE SUCCESS MESSAGE FROM THE BACKEND ------
   const failedStatusMessage = useAppSelector((reduxStore: any) => {
-    // console.log(reduxStore.loadData.error);
     return reduxStore.loadData.error;
   });
-
   const successStatusMessage = useAppSelector((reduxStore: any) => {
     return reduxStore.loadData.message;
   });
-
-  console.log(successStatusMessage);
+  // <<== end.
 
   const errMessageArr = failedStatusMessage.split(",");
 
+  // ==>> begin -----HANDLING THE NAVIGATION TO THE PREVIOUS PAGE IF THE LOADING DATA INTO DATABASE
+  // IS DONE SUCCESSFULLY -------
+  if (
+    successStatusMessage ===
+    "The data mapped has been saved successfully, CONGRATS"
+  ) {
+    navigate("/filter_trainee-applicants");
+    dispatch(load_data_request());
+  }
+  if (successStatusMessage === "Trainees data loaded to db successfully") {
+    navigate("/filter_trainee-applicants");
+    dispatch(load_data_request());
+  }
+  // <<== end.
+
+  // ==>> begin ---- PERTAINS TO THE HANDLING THE LOADING OF THE DATA INTO DATABASE WHEN THE COLUMNS ARE
+  // MATCHING TO THOSE IN THE DATABASE ----
+  const handleChange = (event: any) => {
+    setUrlInput(event.target.value);
+  };
+  const handleSubmit = (event: any) => {
+    event.preventDefault();
+    const url_arr = urlInput.split("/");
+    const Id_goolge_sheet = url_arr[5];
+    dispatch(loadDataIntoDb(Id_goolge_sheet));
+  };
+  // <<== end
+
+  // ==>> begin ---- PERTAINS TO THE HANDLING THE LOADING OF THE DATA INTO DATABASE WHEN THE COLUMNS ARE
+  // "NOT" MATCHING TO THOSE IN THE DATABASE ----
   const createObjectFromArray = (arr: any) => {
     const obj = {};
     arr.forEach((elem: any) => {
@@ -36,87 +71,54 @@ const ImportTraineeDetailsFromGoogleSheet = () => {
   for (let i = 0; i < errMessageArr.length; i++) {
     namingConventionArrays.push(errMessageArr[i]);
   }
-  const dispatch = useAppDispatch();
-  const [urlInput, setUrlInput] = useState("");
-  const handleChange = (event: any) => {
-    setUrlInput(event.target.value);
-  };
-  const handleSubmit = (event: any) => {
-    event.preventDefault();
-    const url_arr = urlInput.split("/");
-    const Id_goolge_sheet = url_arr[5];
-    dispatch(loadDataIntoDb(Id_goolge_sheet));
-  };
-
-  const [formData, setFormData] = React.useState({});
+  // In case the columns name are not matching to those of the database fields.
   useEffect(() => {
     setFormData(createObjectFromArray(errMessageArr));
   }, [failedStatusMessage]);
-
-  // const [cycleName, setCycleName] = useState("");
+  // The actual function which is handling the mapping of the correctFormat of
+  // column to the incorrect one.
   function handleChangeSelect(event: any) {
     const { name, value } = event.target;
     setFormData((prevFormData) => {
       return {
         ...prevFormData,
-        [name === "cycle_name" ? value : name]:
-          name === "cycle_name" ? name : value,
+        // this is dynamic handling of the select input field where by anytime select is hitted it will capture
+        // it currect value along with its name.
+        [name]: value,
       };
     });
   }
-
-  // "Variable "$columnData" got invalid value { firstName: "", lastName: "", email: "", gender: "gender name", birth_date: "date of birth", Address: "", phone: "", field_of_study: "", education_level: "", province: "", district: "", sector: "", isEmployed: "", haveLaptop: "", isStudent: "", Hackerrank_score: "", english_score: "", interview: "", interview_decision: "", past_andela_programs: "", cycle_name: "", spreadsheetId: "1hXUavm_K5BQAOGTx9W4Z84Ttb2_ONfvk_EQZlyOnUPM" }; Field "cycle_id" of required type "String!" was not provided."
-
-  if (
-    successStatusMessage ===
-    "The data mapped has been saved successfully, CONGRATS"
-  ) {
-    navigate("/filter_trainee-applicants");
-    dispatch(load_data_request());
-  }
-
-  if (successStatusMessage === "Trainees data loaded to db successfully") {
-    navigate("filter_trainee-applicants");
-    dispatch(load_data_request());
-  }
-
+  // flip the object keys to become the ojbect values and object values to become the object keys
   const flipObjectKeys = (data: any) =>
     Object.fromEntries(
       Object.entries(data).map(([key, value]) => [value, key])
     );
-  // console.log(flipObjectKeys(formData));
+  // the function handling the submission of the mapped data form the input form.
   function handleSubmitToResend(event: any) {
     event.preventDefault();
     const url_arr = urlInput.split("/");
     const Id_goolge_sheet = url_arr[5];
     setUrlInput("");
-    if (failedStatusMessage === "Wrong cycle name is provided!!!!") {
-      //@ts-ignore
-      const dataRetrieved = JSON.parse(localStorage.getItem("formData"));
-      const Id_goolge_sheet_back = localStorage.getItem("Id_goolge_sheet");
-      const newFormData = {
-        ...dataRetrieved,
-        ...formData,
-      };
-      dispatch(
-        resendMappedDataIntoDb(
-          flipObjectKeys(newFormData),
-          Id_goolge_sheet_back
-        )
-      );
-    } else {
-      localStorage.setItem("formData", JSON.stringify(formData));
-      localStorage.setItem("Id_goolge_sheet", Id_goolge_sheet);
-      dispatch(
-        resendMappedDataIntoDb(flipObjectKeys(formData), Id_goolge_sheet)
-      );
-    }
+    const newFormData = {
+      ...formData,
+    };
+    // As on collecting the mapped fields the value was uses as the properties, this flip function is there
+    // to reverse and bring them to the normal format.
+    const dataObjectInReversedForm = flipObjectKeys(newFormData);
+    const data = {
+      ...dataObjectInReversedForm,
+    };
+    dispatch(resendMappedDataIntoDb(data, Id_goolge_sheet));
   }
+  // <<== end.
 
   return (
-    <div className="ml-[1rem] mr-[1rem]  h-full p-[9rem] flex justify-center flex-col items-center bg-[#aaa] pb-[20rem]">
+    <>
+    <div className="w-full h-screen flex items-center justify-center dark:bg-dark-frame-bg">
+      {/* ==>> begin ---- PERTAINS TO THE HANDLING THE LOADING OF THE DATA INTO DATABASE WHEN THE COLUMNS ARE
+  // MATCHING TO THOSE IN THE DATABASE ----  */}
       {!failedStatusMessage && (
-        <form className="w-[80%] h-1/2 ml-[50rem] border-[#c5c5c5] mr-[50rem] bg-slate-50 p-[2rem]  shadow-2xl shadow-blue-100 hover:shadow-indigo-100/40 ">
+        <form className="w-[80%] h-1/2 border-[#c5c5c5] bg-slate-50 p-[2rem]  shadow-2xl hover:shadow-indigo-100/40 ">
           <div className="mb-6">
             <label
               htmlFor="email"
@@ -134,12 +136,12 @@ const ImportTraineeDetailsFromGoogleSheet = () => {
               required
             />
           </div>
-          <Link to="/filter_trainee-applicants">
+          <Link to="/admin/filter_trainee-applicants">
             <button
               type="submit"
               className="text-gray-300 mr-4 bg-[#6c1313]  hover:bg-[#931a1a]  focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
             >
-              Back to all trainee-applicants
+              Back to all trainees
             </button>
           </Link>
 
@@ -151,145 +153,88 @@ const ImportTraineeDetailsFromGoogleSheet = () => {
           </button>
         </form>
       )}
-      {failedStatusMessage === "Wrong cycle name is provided!!!!" && (
-        <div>
-          {/* <label htmlFor="" className="">Please enter the correct cycle name which is in Database already!!!</label>
-        <input type="text" /> */}
+      {/* <<== end */}
 
-          <form onSubmit={handleSubmitToResend}>
-            <div className="mb-6">
-              <label
-                htmlFor="text"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                Please enter the correct cycle name which is in Database
-                already!!!
-              </label>
-              <input
-                type="text"
-                id="text"
-                onChange={handleChangeSelect}
-                name="cycle_name"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="Enter the correct cycle name!"
-                required
-              />
-            </div>
+      {/* ==>> begin ---- PERTAINS TO THE HANDLING THE LOADING OF THE DATA INTO DATABASE WHEN THE COLUMNS ARE
+  // "NOT" MATCHING TO THOSE IN THE DATABASE ---- */}
+      {failedStatusMessage && (
+        <div className="w-full">
+          <div className="p-5 rounded-xl bg-button-color text-2xl text-white">
+            The columns needs to be matched to the these fields for working!
+          </div>
+          <form
+            onSubmit={handleSubmitToResend}
+            className="bg-[#6c1313] py-4 my-5 w-full"
+          >
+            {namingConventionArrays.map((message, index) => {
+              return (
+                <div
+                  className="bg-blue-100 p-3 text-button-color m-4 shadow-md shadow-blue-100"
+                  key={index}
+                >
+                  <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">
+                    {message}
+                  </label>
+                  <div>
+                    <select
+                      onChange={handleChangeSelect}
+                      name={message}
+                      id="countries"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    >
+                      <option defaultValue="">
+                        Please map this {message.toUpperCase()} to its
+                        corresponding field from the list before sending again!
+                      </option>
+                      <option value="firstName">firstName</option>
+                      <option value="lastName">lastName</option>
+                      <option value="email">email</option>
+                      <option value="gender">gender</option>
+                      <option value="birth_date">birth_date</option>
+                      <option value="phone">phone</option>
+                      <option value="field_of_study">field_of_study</option>
+                      <option value="education_level">education_level</option>
+                      <option value="province">province</option>
+                      <option value="district">district</option>
+                      <option value="isEmployed">isEmployed</option>
+                      <option value="isStudent">isStudent</option>
+                      <option value="Hackerrank_score">Hackerrank_score</option>
+                      <option value="english_score">english_score</option>
+                      <option value="interview">interview</option>
+                      <option value="interview_decision">
+                        interview_decision
+                      </option>
+                      <option value="past_andela_programs">
+                        past_andela_programs
+                      </option>
+                      <option value="Address">Address</option>
+                      <option value="sector">sector</option>
+                      <option value="haveLaptop">haveLaptop</option>
+                    </select>
+                  </div>
+                </div>
+              );
+            })}
             <Link to="/filter_trainee-applicants">
               <button
                 type="submit"
                 className="text-gray-300 mr-4 bg-[#d57878]  hover:bg-[#931a1a]  focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
               >
-                Back to all trainee-applicants
+                Back to all trainees
               </button>
             </Link>
             <button
               type="submit"
               className="text-gray-300 bg-button-color hover:bg-[#255d64] focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-60"
             >
-              Then send your query again!
+              Resend your query
             </button>
-            {/* <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button> */}
           </form>
         </div>
       )}
-      {failedStatusMessage &&
-        failedStatusMessage !== "Wrong cycle name is provided!!!!" && (
-          <div className="w-full">
-            <div className="p-5 rounded-xl bg-button-color text-2xl text-white">
-              The columns needs to be matched to the these fields for working!
-            </div>
-            <form
-              onSubmit={handleSubmitToResend}
-              className="bg-[#6c1313] py-4 my-5 w-full"
-            >
-              {namingConventionArrays.map((message, index) => {
-                return (
-                  <div
-                    className="bg-blue-100 p-3 text-button-color m-4 shadow-md shadow-blue-100"
-                    key={index}
-                  >
-                    <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">
-                      {message}
-                    </label>
-                    <div>
-                      <select
-                        // options={options}
-                        onChange={handleChangeSelect}
-                        name={message}
-                        id="countries"
-                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                      >
-                        <option defaultValue="">
-                          Please map this {message.toUpperCase()} to its
-                          corresponding field from the list before sending
-                          again!
-                        </option>
-                        <option value="firstName">firstName</option>
-                        <option value="lastName">lastName</option>
-                        <option value="email">email</option>
-                        <option value="gender">gender</option>
-                        <option value="birth_date">birth_date</option>
-                        <option value="phone">phone</option>
-                        <option value="field_of_study">field_of_study</option>
-                        <option value="education_level">education_level</option>
-                        <option value="province">province</option>
-                        <option value="district">district</option>
-                        {/* <option value="cycle_id">cycle_id</option> */}
-                        <option value="isEmployed">isEmployed</option>
-                        <option value="isStudent">isStudent</option>
-                        <option value="Hackerrank_score">
-                          Hackerrank_score
-                        </option>
-                        <option value="english_score">english_score</option>
-                        <option value="interview">interview</option>
-                        <option value="interview_decision">
-                          interview_decision
-                        </option>
-                        <option value="past_andela_programs">
-                          past_andela_programs
-                        </option>
-                        <option value="Address">Address</option>
-                        <option value="sector">sector</option>
-                        <option value="haveLaptop">haveLaptop</option>
-                      </select>
-                    </div>
-                  </div>
-                );
-              })}
-              <Link to="/filter_trainee-applicants">
-                <button
-                  type="submit"
-                  className="text-gray-300 mr-4 bg-[#d57878]  hover:bg-[#931a1a]  focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
-                >
-                 Back to all trainee-applicants
-                </button>
-              </Link>
-              <button
-                type="submit"
-                className="text-gray-300 bg-button-color hover:bg-[#255d64] focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-60"
-              >
-                Resend your query
-              </button>
-            </form>
-          </div>
-        )}
-      {successStatusMessage && (
-        <div className="p-3 my-2 bg-gray-400 shadow-md shadow-blue-100 m-4">
-          <div className="text-xl bg-gray-400 shadow-md shadow-blue-100 p-4 my-4">
-            <span className="font-bold text-button-color">
-              IMPORTING DATA INTO DATABASE IS{" "}
-            </span>{" "}
-            <span className="text-button-color bg-slate-500 p-2 font-extrabold ">
-              SUCCESSFULL COMPLETED !!!!{" "}
-            </span>{" "}
-          </div>
-          <div className="text-2xl bg-slate-500 shadow-md shadow-blue-100 p-4 my-5">
-            {successStatusMessage}
-          </div>
-        </div>
-      )}
+      {/* <<== end. */}
     </div>
+    </>
   );
 };
 

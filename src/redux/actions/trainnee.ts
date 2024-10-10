@@ -12,7 +12,7 @@ export const getOneTraineeAllDetails =
         method: "post",
         data: {
           query: `
-          query GetOneTraineeAllDetails($input: one) {
+          query GetOneTraineeAllDetails($input: id) {
             getOneTraineeAllDetails(input: $input) {
               gender
               birth_date
@@ -36,6 +36,12 @@ export const getOneTraineeAllDetails =
                 firstName
                 _id
                 email
+                cycle_id {
+                  id
+                  name
+                 startDate
+                  endDate
+                 }
               }
              
             }
