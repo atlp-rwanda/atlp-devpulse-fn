@@ -5,19 +5,20 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import InputField from "./InputField";
 import SelectField from "./SelectField";
+import RulesModal from "./GoogleRules";
 
 const validationSchema = Yup.object().shape({
   link: Yup.string().required("Please enter a Google Form link"),
   title: Yup.string().required("Please enter a form title"),
   jobpost: Yup.string().required("Please select a job post"),
   spreadsheetlink: Yup.string().required("Please enter a spreadsheetlink link"),
-  formrange: Yup.string().required("Please enter formrange name"),
   description: Yup.string().required("Please enter a description"),
 });
 
 function SaveFormDetails() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
   const [success, setSuccess] = useState(false);
   const [jobposts, setJobposts] = useState<any>([]);
 
@@ -56,21 +57,19 @@ function SaveFormDetails() {
       jobpost: "",
       description: "",
       spreadsheetlink: "",
-      formrange: "",
     },
     validationSchema,
     onSubmit: async (values) => {
       setLoading(true);
       const graphqlQuery = `
-      mutation CreateApplication($link: String!, $title: String!, $jobpost: String!, $description: String!, $spreadsheetlink: String!, $formrange: String!) {
-  createApplication(link: $link, title: $title, jobpost: $jobpost, description: $description, spreadsheetlink: $spreadsheetlink, formrange: $formrange) {
+      mutation CreateApplication($link: String!, $title: String!, $jobpost: String!, $description: String!, $spreadsheetlink: String!) {
+  createApplication(link: $link, title: $title, jobpost: $jobpost, description: $description, spreadsheetlink: $spreadsheetlink) {
     _id
     link
     title
     jobpost
     description
     spreadsheetlink
-    formrange
   }
 }
       `;
@@ -81,7 +80,10 @@ function SaveFormDetails() {
           variables: values,
         });
         console.log("FULL RESPONSE OBJECT =>>>>>>>>>>>>>>> ", response);
-
+        if (response.data.errors.length > 0) {
+          showErrorToast(response.data.errors[0].error);
+          return;
+        }
         if (response.data.errors) {
           const errorMessage = response.data.errors[0].error;
           if (errorMessage.toLowerCase().includes("a record with link"))
@@ -93,8 +95,7 @@ function SaveFormDetails() {
           window.location.href = "/#/admin/view-forms";
         }
       } catch (err: any) {
-        console.error("Error submitting form:", err);
-        showErrorToast("An error occurred");
+        console.error("Error submitting form:", err.message);
       } finally {
         setLoading(false);
       }
@@ -107,10 +108,11 @@ function SaveFormDetails() {
         <h2 className="text-2xl font-bold text-center text-primary dark:text-secondary sm:text-4xl">
           Save Application Form
         </h2>
-        <p className="mt-4 text-lg leading-6 text-center text-primary dark:text-secondary">
+        <p className="mt-4 text-lg leading-6  text-primary dark:text-secondary">
           Copy Google Form URL and paste it in the input field below.
         </p>
-
+        <p className="mb-4 text-lg leading-6 text-red-700">Before creating a form, please review the rules:</p>
+        <RulesModal />
         <form
           className="grid grid-cols-1 mt-10 gap-y-3 sm:grid-cols-2 sm:gap-x-8"
           onSubmit={formik.handleSubmit}
@@ -165,18 +167,7 @@ function SaveFormDetails() {
             error={formik.errors.spreadsheetlink}
             classname="w-[212%]"
           />
-          <br />
-          <InputField
-            id="formrange"
-            name="formrange"
-            label="Form Range Name"
-            value={formik.values.formrange}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            touched={formik.touched.formrange}
-            error={formik.errors.formrange}
-            classname="w-[212%]"
-          />
+
           <div className="sm:col-span-2">
             <label className="block text-sm font-medium text-primary dark:text-secondary">
               Description

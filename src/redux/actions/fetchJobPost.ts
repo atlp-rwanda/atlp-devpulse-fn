@@ -25,7 +25,6 @@ export const fetchJobPost = () => async (dispatch: Dispatch<ActionFetch>) => {
               label
               published
               spreadsheetlink
-              formrange
             }
           }
         `,
