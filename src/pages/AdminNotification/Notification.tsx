@@ -8,7 +8,7 @@ type NotificationProps = {
     message: string;
     createdAt: string;
     read: boolean;
-    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ_kSSoomJ9hiFXmiF2RdZlwx72Y23XsT6iwQ&s";
+    image: string;
   };
   onMarkAsRead: (id: string) => void;
   onDelete: (id: string) => void;
@@ -20,10 +20,8 @@ const Notification: React.FC<NotificationProps> = ({
   onMarkAsRead,
   onDelete,
 }) => {
-  // Convert the createdAt timestamp to a number
   const notificationDate = new Date(Number(notification.createdAt));
 
-  // Check for valid date
   const isDateValid = !isNaN(notificationDate.getTime());
 
   return (

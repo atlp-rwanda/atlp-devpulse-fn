@@ -1,12 +1,18 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
-import Notification from "./Notification"; // Ensure this path is correct
-import SelectField from "../../components/ReusableComponents/Select"; // Ensure this path is correct
+import Notification from "./Notification";
+import * as icons from "react-icons/ai";
+import SelectField from "../../components/ReusableComponents/Select";
+
 import {
   deleteNotification,
   fetchAdminNotifications,
   markNotificationAsRead,
-} from "../../redux/actions/adminNotification"; // Combined imports
+} from "../../redux/actions/adminNotification";
 import { toast } from "react-toastify";
+import {
+  useCustomPagination,
+  DOTS,
+} from "../../components/Pagination/useCustomPagination";
 
 interface NotificationType {
   _id: string;
@@ -26,10 +32,13 @@ enum OrderOptions {
   Oldest = "oldest",
 }
 
+const PAGE_SIZE = 4;
+
 const AdminNotification: React.FC = () => {
   const [notifications, setNotifications] = useState<NotificationType[]>([]);
   const [filter, setFilter] = useState<FilterOptions>(FilterOptions.All);
   const [orderBy, setOrderBy] = useState<OrderOptions>(OrderOptions.Recent);
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -40,13 +49,11 @@ const AdminNotification: React.FC = () => {
         toast.error("Failed to fetch notifications");
       }
     };
-
     fetchData();
   }, []);
   const handleMarkAsRead = async (id: string) => {
     try {
       const updatedNotification = await markNotificationAsRead(id);
-
       if (updatedNotification) {
         setNotifications((prev) =>
           prev.map((notification) =>
@@ -67,20 +74,34 @@ const AdminNotification: React.FC = () => {
   const handleDelete = async (id: string) => {
     try {
       await deleteNotification(id);
-
       setNotifications((prev) =>
         prev.filter((notification) => notification._id !== id)
       );
     } catch (error: any) {
-      toast.error(`Error deleting notification: ${error.message}   ${id}`);
+      toast.error(`Error deleting notification: ${error.message}`);
     }
   };
 
   const filteredNotifications = getFilteredNotifications(notifications, filter);
   const sortedNotifications = sortNotifications(filteredNotifications, orderBy);
+  const totalPageCount = Math.ceil(sortedNotifications.length / PAGE_SIZE);
+  const paginatedNotifications = sortedNotifications.slice(
+    (currentPage - 1) * PAGE_SIZE,
+    currentPage * PAGE_SIZE
+  );
+
+  const paginationRange = useCustomPagination({
+    totalPageCount,
+    siblingCount: 1,
+    currentPage,
+  });
 
   const handleOrderChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setOrderBy(e.target.value as OrderOptions);
+  };
+
+  const onPageChange = (page: number) => {
+    setCurrentPage(page);
   };
 
   return (
@@ -92,20 +113,24 @@ const AdminNotification: React.FC = () => {
         onOrderChange={handleOrderChange}
       />
       <NotificationList
-        notifications={sortedNotifications}
+        notifications={paginatedNotifications}
         onMarkAsRead={handleMarkAsRead}
         onDelete={handleDelete}
+      />
+      <Pagination
+        paginationRange={paginationRange}
+        currentPage={currentPage}
+        totalPageCount={totalPageCount}
+        onPageChange={onPageChange}
       />
     </div>
   );
 };
 
-// Helper function to filter notifications
 const getFilteredNotifications = (
   notifications: NotificationType[],
   filter: FilterOptions
 ) => {
-  if (!Array.isArray(notifications)) return [];
   return notifications.filter((n) =>
     filter === FilterOptions.All ? true : !n.read
   );
@@ -116,28 +141,20 @@ const sortNotifications = (
   orderBy: OrderOptions
 ) => {
   return [...notifications].sort((a, b) => {
-    const dateA = new Date(Number(a.createdAt));
-
-    const dateB = new Date(Number(b.createdAt));
-
-    if (isNaN(dateA.getTime()) || isNaN(dateB.getTime())) {
-      return 0;
-    }
-
-    return orderBy === OrderOptions.Recent
-      ? dateB.getTime() - dateA.getTime()
-      : dateA.getTime() - dateB.getTime();
+    const dateA = new Date(Number(a.createdAt)).getTime();
+    const dateB = new Date(Number(b.createdAt)).getTime();
+    return orderBy === OrderOptions.Recent ? dateB - dateA : dateA - dateB;
   });
 };
 
-// NotificationFilter component
+// Notification Filter component
 const NotificationFilter: React.FC<{
   filter: FilterOptions;
   setFilter: (filter: FilterOptions) => void;
   orderBy: OrderOptions;
   onOrderChange: (e: ChangeEvent<HTMLSelectElement>) => void;
 }> = ({ filter, setFilter, orderBy, onOrderChange }) => (
-  <div className="flex mt-10 space-x-6 mb-10 items-center">
+  <div className="flex mt-10 space-x-6 mb-10 items-center ">
     <div className="flex">
       <button
         className={`rounded-s-md w-20 py-2 px-4 border transition-colors ${
@@ -150,7 +167,7 @@ const NotificationFilter: React.FC<{
         All
       </button>
       <button
-        className={`rounded-e-md w-20 py-2 px-4 dark:bg-[#56C870] transition-colors ${
+        className={`rounded-e-md w-20 py-2 px-4 transition-colors ${
           filter === FilterOptions.Unread
             ? "text-white bg-primary dark:bg-[#56C870] dark:text-white"
             : "bg-white text-primary dark:bg-white dark:text-primary"
@@ -197,5 +214,63 @@ const NotificationList: React.FC<{
     )}
   </div>
 );
+
+// Pagination component
+const Pagination: React.FC<{
+  paginationRange: (number | string)[] | undefined;
+  currentPage: number;
+  totalPageCount: number;
+  onPageChange: (page: number) => void;
+}> = ({ paginationRange, currentPage, onPageChange }) => {
+  if (paginationRange && paginationRange.length < 2) return null;
+
+  const onNext = () => onPageChange(currentPage + 1);
+  const onPrevious = () => onPageChange(currentPage - 1);
+
+  return (
+    <ul className="flex list-none space-x-2 justify-center mt-8 items-center">
+      <li>
+        <button
+          className="bg-primary dark:bg-[#56C870] text-white px-3 py-2 rounded-md "
+          disabled={currentPage === 1}
+          onClick={onPrevious}
+        >
+          <icons.AiOutlineArrowLeft />
+        </button>
+      </li>
+      {paginationRange?.map((pageNumber, idx) =>
+        pageNumber === DOTS ? (
+          <li key={idx} className="text-gray-500 px-2 py-1">
+            {DOTS}
+          </li>
+        ) : (
+          <li key={idx}>
+            <button
+              className={`${
+                pageNumber === currentPage
+                  ? "bg-primary dark:bg-[#56C870] text-white"
+                  : "bg-white text-primary"
+              } px-3 py-1 rounded-md`}
+              onClick={() => onPageChange(Number(pageNumber))}
+            >
+              {pageNumber}
+            </button>
+          </li>
+        )
+      )}
+      <li>
+        <button
+          className="bg-primary dark:bg-[#56C870] text-white px-3 py-2 rounded-md"
+          disabled={
+            currentPage === paginationRange?.[paginationRange.length - 1]
+          }
+          onClick={onNext}
+        >
+          <icons.AiOutlineArrowRight />
+        </button>
+      </li>
+    </ul>
+  );
+};
 
 export default AdminNotification;
