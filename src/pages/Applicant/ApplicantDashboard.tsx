@@ -28,6 +28,7 @@ const performanceIcon: string =
   require("../../assets/assets/performance.svg").default;
 const strategy: string = require("../../assets/assets/strategy.svg").default;
 
+
 const DashboardCard = ({ title, value, img }) => {
   return (
     <>
