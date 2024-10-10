@@ -126,4 +126,33 @@ export const getUserbyFilter= async (filter) => {
       console.log(err);
       return err;
     }
+}
+
+export const updateUserSelf = async (id: string, data: object) => {
+  const query = `
+    mutation UpdateUserSelf($id: ID!, $editUserInput: EditUserSelfInput_Logged) {
+      updateUserSelf(ID: $id, editUserInput: $editUserInput)
+    }
+  `;
+
+  const variables = {
+    id,
+    editUserInput: { ...data },
+  };
+
+  console.log("GraphQL Request:", {
+    query,
+    variables,
+  });
+
+  try {
+    const response = await axios.post("/", {
+      query,
+      variables,
+    });
+    return response;
+  } catch (error: any) {
+    console.error("Error:", error);
+    return error;
   }
+};

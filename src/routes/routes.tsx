@@ -49,7 +49,11 @@ function Navigation() {
     <Routes>
       <Route path="/test_tailwind" element={<TestTailwind />} />
       <Route path="/login" element={<LoginPage />} />
-      <Route path="/google" element={<GoogleSignup />} />
+      <Route path="/google" element={
+        <PrivateRoute>
+          <GoogleSignup />
+        </PrivateRoute>
+        } />
       <Route path="/signup" element={<SignupForm />} />
       <Route path="/admin" element={<AdminLayout />}>
       <Route index element={<PrivateRoute><Dashboard /></PrivateRoute>} />

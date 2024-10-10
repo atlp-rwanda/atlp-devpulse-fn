@@ -31,7 +31,7 @@ const MY_QUERY = `
 
 const CLIENT_ID = process.env.CLIENT_ID;
 
-const fetchUserData = async (token: string) => {
+export const fetchUserData = async (token: string) => {
   const client = new GraphQLClient(process.env.BACKEND_URL as string, {
     headers: { Authorization: token },
   });
@@ -42,7 +42,6 @@ const LoginForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [isNormalLogin, setIsNormalLogin] = useState(false);
-  const [isFirstTimeUser, setIsFirstTimeUser] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -69,16 +68,14 @@ const LoginForm = () => {
           navigate("/admin");
         } else {
           const searchParams = new URLSearchParams(location.search);
-          const returnUrl = searchParams.get('returnUrl') || '/applicant';
+          const returnUrl = searchParams.get('returnUrl') || '/';
           navigate(returnUrl);
         }
       }
     }
   }
-
   const checkAuthMethod = async (filter: any) => {
     const response = await getUserbyFilter(filter);
-    console.log(response); 
     const userdata = response?.data?.getByFilter?.[0]; 
     return userdata?.authMethod;
   };
@@ -104,13 +101,9 @@ const LoginForm = () => {
       setIsLoading(false);
     }
   };
-
   const checkFirstTimeUser = async (filter: object) => {
     const response = await getUserbyFilter(filter);
     const userdata = response?.data?.getByFilter?.[0];
-    console.log(userdata);
-    console.log(userdata.country.length);
-    console.log(userdata.telephone.length);
     if (userdata.country.length === 0 && userdata.telephone.length === 0) {
       return true;
     } else {
@@ -120,37 +113,31 @@ const LoginForm = () => {
 
   const handleCallBackResponse = async (response: any) => {
     const token = response.credential;
-    console.log(response);
+    localStorage.setItem("access_token", token);
 
     const decodedToken: any = jwtDecode(token);
-    console.log(decodedToken);
     const useremail = decodedToken.email;
-    console.log(useremail);
     const data: any = await fetchUserData(token);
-    console.log(data);
   
     if (data) {
       const filter = { email: useremail };
       const authMethod = await checkAuthMethod(filter);
-      console.log(authMethod);
 
       if (authMethod === "google") {
         setIsNormalLogin(false);
         const user = data.getUsers_Logged[0];
         const filter = { email: user.email };
         const firstTimeUserResult: boolean = await checkFirstTimeUser(filter);
-        console.log(firstTimeUserResult);
         if (firstTimeUserResult) {
           toast.success("Welcome to our platform! fill in the missing data.");
           navigate("/google");
         } else {
-          localStorage.setItem("access_token", token);
           setIsNormalLogin(true);
           await redirectAfterLogin(true);
         }
       } else {
-        toast.error("This account cannot log in with Google.");
-        navigate("/login");
+        toast.success("You can now login with both google and normal authentication.");
+        await redirectAfterLogin(true);
       }
     }
   };
@@ -258,6 +245,4 @@ const LoginForm = () => {
     </div>
   );
 };
-
 export default LoginForm;
-

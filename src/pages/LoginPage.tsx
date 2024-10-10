@@ -45,13 +45,12 @@ const LoginPage = (props: any) => {
     firstname
     lastname
     email
-    authMethod
   }
 }
   `;
 
   return authenticated && roleName === "applicant" ? 
-    <Navigate to="/applicant" /> : authenticated && roleName === "superAdmin" ? <Navigate to="/admin" />
+    <Navigate to="/applicant" /> : authenticated && roleName === "superAdmin" ? <Navigate to="/" />
    : 
   (
     <>
