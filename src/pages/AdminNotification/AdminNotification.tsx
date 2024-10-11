@@ -2,7 +2,7 @@ import React, { ChangeEvent, useEffect, useState } from "react";
 import Notification from "./Notification";
 import * as icons from "react-icons/ai";
 import SelectField from "../../components/ReusableComponents/Select";
-
+import Loader from "../../components/ReusableComponents/Loader";
 import {
   deleteNotification,
   fetchAdminNotifications,
@@ -13,6 +13,7 @@ import {
   useCustomPagination,
   DOTS,
 } from "../../components/Pagination/useCustomPagination";
+import { ClassNames } from "@emotion/react";
 
 interface NotificationType {
   _id: string;
@@ -39,15 +40,18 @@ const AdminNotification: React.FC = () => {
   const [filter, setFilter] = useState<FilterOptions>(FilterOptions.All);
   const [orderBy, setOrderBy] = useState<OrderOptions>(OrderOptions.Recent);
   const [currentPage, setCurrentPage] = useState(1);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setLoading(true);
         const fetchedNotifications = await fetchAdminNotifications();
         setNotifications(fetchedNotifications);
       } catch (error) {
         toast.error("Failed to fetch notifications");
       }
+      setLoading(false);
     };
     fetchData();
   }, []);
@@ -105,24 +109,32 @@ const AdminNotification: React.FC = () => {
   };
 
   return (
-    <div className="h-screen w-full px-4 md:px-8">
-      <NotificationFilter
-        filter={filter}
-        setFilter={setFilter}
-        orderBy={orderBy}
-        onOrderChange={handleOrderChange}
-      />
-      <NotificationList
-        notifications={paginatedNotifications}
-        onMarkAsRead={handleMarkAsRead}
-        onDelete={handleDelete}
-      />
-      <Pagination
-        paginationRange={paginationRange}
-        currentPage={currentPage}
-        totalPageCount={totalPageCount}
-        onPageChange={onPageChange}
-      />
+    <div className="h-screen w-full px-4 md:px-8 ">
+      {loading ? (
+        <div className="flex justify-center items-center h-full">
+          <Loader />
+        </div>
+      ) : (
+        <>
+          <NotificationFilter
+            filter={filter}
+            setFilter={setFilter}
+            orderBy={orderBy}
+            onOrderChange={handleOrderChange}
+          />
+          <NotificationList
+            notifications={paginatedNotifications}
+            onMarkAsRead={handleMarkAsRead}
+            onDelete={handleDelete}
+          />
+          <Pagination
+            paginationRange={paginationRange}
+            currentPage={currentPage}
+            totalPageCount={totalPageCount}
+            onPageChange={onPageChange}
+          />
+        </>
+      )}
     </div>
   );
 };
@@ -147,7 +159,6 @@ const sortNotifications = (
   });
 };
 
-// Notification Filter component
 const NotificationFilter: React.FC<{
   filter: FilterOptions;
   setFilter: (filter: FilterOptions) => void;
@@ -215,7 +226,6 @@ const NotificationList: React.FC<{
   </div>
 );
 
-// Pagination component
 const Pagination: React.FC<{
   paginationRange: (number | string)[] | undefined;
   currentPage: number;

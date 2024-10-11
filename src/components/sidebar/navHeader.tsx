@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import Sidebar from "./sidebar";
 import { SunIcon } from "@heroicons/react/outline";
 import { MoonIcon } from "@heroicons/react/solid";
 import ProfileDropdown from "../profileDropdown";
@@ -15,7 +14,6 @@ const LogoWhite: string = require("../../assets/logoWhite.svg").default;
 import jwtDecode from "jwt-decode";
 import { destination } from "../../utils/utils";
 
-// Placeholder for profile image
 const placeholderImage = profile;
 const onImageError = (e) => {
   e.target.src = placeholderImage;
@@ -33,7 +31,6 @@ function NavBar() {
   const { theme, setTheme } = useTheme();
   const [nav, setNav] = useState(false);
 
-  // New state for tracking unread notifications
   const [hasNotification, setHasNotification] = useState(false);
 
   function handleToggleTheme() {
@@ -43,8 +40,8 @@ function NavBar() {
   const handleClick = () => setNav(!nav);
   const handleShowNotification = () => {
     setHasNotification(false);
-    setShowNotification(true); // You can toggle it based on current state if needed
-    // Navigate after a timeout to ensure state is updated
+    setShowNotification(true);
+
     setTimeout(() => {
       navigate("/admin/notifications");
     }, 100);
@@ -52,10 +49,8 @@ function NavBar() {
   const handleShowProfileDropdown = () =>
     setShowprofileDropdown(!showProfileDropdown);
 
-  // Simulating notification being received from <NotificationListener />
-  // In a real app, this should come from actual notification logic
   const handleNewNotification = () => {
-    setHasNotification(true); // Set notification state to true
+    setHasNotification(true);
   };
   return (
     <div className="flex items-center dark:bg-zinc-800 ">

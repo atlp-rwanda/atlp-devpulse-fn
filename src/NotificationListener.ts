@@ -21,7 +21,6 @@ interface NotificationListenerProps {
 export const NotificationListener: React.FC<NotificationListenerProps> = ({
   onNewNotification,
 }) => {
-  // Use the subscription hook
   const { data, error } = useSubscription(NOTIFICATION_SUBSCRIPTION);
 
   if (error) {
@@ -35,7 +34,6 @@ export const NotificationListener: React.FC<NotificationListenerProps> = ({
       // Display the notification in a toast
       // toast.info(`New Notification: ${notificationReceived.message}`);
 
-      // Trigger the callback to update the notification state in NavBar
       onNewNotification();
     }
 
