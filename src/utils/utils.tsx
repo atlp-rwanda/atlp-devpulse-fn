@@ -4,7 +4,7 @@ import { GraphQLClient } from 'graphql-request';
 
 export const destination = () =>{
   const roleName = localStorage.getItem("roleName");
-  const destin =  (roleName === "superAdmin" || roleName === "Admin") ? "/admin" : "/applicant";
+  const destin =  (roleName === "superAdmin" || roleName === "admin") ? "/admin" : "/applicant";
   return destin;
 }
 
