@@ -16,15 +16,23 @@ import * as BsIcons from "react-icons/bs";
 import * as AiIcons from "react-icons/ai";
 import * as IoIcons from "react-icons/io5";
 import NavBar from "../../components/sidebar/navHeader";
+import { CycleSkeleton } from '../../skeletons/cycleSkeleton'
 
 const ApplicationCycle = (props: any) => {
   const { allCycles, errors } = props;
-
+  const [loading, setLoading] = useState(true);
   const cycles = allCycles.data;
+
+  // useEffect(() => {
+  //   props.getAllCycles();
+  // }, []);
 
   useEffect(() => {
     props.getAllCycles();
-  }, []);
+    if (allCycles.data) {
+      setLoading(false);
+    }
+  }, [allCycles.data]);
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -187,6 +195,10 @@ const ApplicationCycle = (props: any) => {
   );
   const { pageIndex, pageSize } = state;
 
+  // return (
+  //   <CycleSkeleton />
+  // )
+
   return (
     <>
       
@@ -202,6 +214,9 @@ const ApplicationCycle = (props: any) => {
             </button>
             <div>
               <div className=" w-[100%] dark:bg-dark-bg max-h-[70vh] m-auto  bg-[#fff] shadow-md rounded-[10px] relative pb-[20px]  overflow-x-auto  overflow-y-scroll 	md:w-[100%]">
+               {loading ? (
+               <CycleSkeleton /> 
+               ) : (
                 <table
                   {...getTableProps()}
                   className="border-collapse w-[100%] m-auto rounded-[15px] whitespace-nowrap "
@@ -251,6 +266,7 @@ const ApplicationCycle = (props: any) => {
                     })}
                   </tbody>
                 </table>
+                 )}
               </div>{" "}
             </div>
 

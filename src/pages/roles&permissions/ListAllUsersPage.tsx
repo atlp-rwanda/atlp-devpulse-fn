@@ -10,6 +10,7 @@ import {
   DOTS,
   useCustomPagination,
 } from "../../components/Pagination/useCustomPagination";
+import { MemberSkeleton } from '../../skeletons/memberSkeleton'
 
 interface User {
   id: string;
@@ -30,6 +31,7 @@ type MemberC = User[];
 
 const ListAllUsersPage: FunctionComponent = (props: any) => {
   const [member, setmembers] = useState(null);
+  const [loading, setLoading] = useState(true); 
   const [underline, setunderline] = useState("All");
   const [filteredMembers, setFilteredMembers] = useState<MemberC>([]);
   const [currentPage, setCurrentPage] = useState(0);
@@ -41,7 +43,11 @@ const ListAllUsersPage: FunctionComponent = (props: any) => {
   const { members, roles } = props;
 
   useEffect(() => {
-    dispatch(getAllMembers());
+    setLoading(true);
+    dispatch(getAllMembers()).then(() => {
+      setLoading(false);
+    });
+    // dispatch(getAllMembers());
     dispatch(getRoles());
   }, [member]);
 
@@ -270,7 +276,9 @@ const ListAllUsersPage: FunctionComponent = (props: any) => {
               </ul>
             </div>
           </div>
-
+          {loading ? (
+                <MemberSkeleton/>
+          ) : (
           <ListAllUsers
             members={currentMembers}
             roles={roles}
@@ -278,6 +286,7 @@ const ListAllUsersPage: FunctionComponent = (props: any) => {
             updateMember={updateMembers}
             handleRemove={handleRemoveMember}
           />
+          )}
           <div
             className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between rounded-b-md py-8  dark:bg-dark-bg"
             aria-label="Pagination"
