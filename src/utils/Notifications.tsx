@@ -1,7 +1,9 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
 import Pusher, { Channel } from "pusher-js";
-import { toast, ToastContainer, ToastOptions } from "react-toastify";
+import { toast, ToastContainer} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { toastOptions } from "./toast";
+import { fetchNotifications, updateNotificationStatus } from "./Notifications";
 
 interface Notification {
   id: string;
@@ -29,26 +31,6 @@ export const useNotifications = () => {
     );
   }
   return context;
-};
-
-const toastOptions: ToastOptions = {
-  position: "bottom-right",
-  autoClose: 5000,
-  hideProgressBar: true,
-  closeOnClick: true,
-  pauseOnHover: true,
-  draggable: true,
-  progress: undefined,
-  className: "small-toast",
-  bodyClassName: "small-toast-body",
-  style: {
-    background: "#01acf0",
-    color: "#ffffff",
-    borderRadius: "10px",
-    padding: "10px",
-    fontSize: "0.875rem",
-    boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
-  },
 };
 
 export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({
@@ -145,59 +127,4 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({
       <ToastContainer />
     </NotificationContext.Provider>
   );
-};
-
-// Function to fetch notifications
-const fetchNotifications = async (userId: string): Promise<Notification[]> => {
-  const response = await fetch(`${process.env.BACKEND_URL}/`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      query: `
-        query GetNotifications($userId: ID!) {
-          getNotifications(userId: $userId) {
-            id
-            message
-            read
-            createdAt
-          }
-        }
-      `,
-      variables: { userId },
-    }),
-  });
-
-  const result = await response.json();
-  if (result.data) {
-    return result.data.getNotifications;
-  }
-  throw new Error("Failed to fetch notifications");
-};
-
-// Function to update notification status
-const updateNotificationStatus = async (id: string, read: boolean) => {
-  const response = await fetch(`${process.env.BACKEND_URL}/`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      query: `
-        mutation MarkNotificationAsRead($id: ID!, $read: Boolean!) {
-          markNotificationAsRead(id: $id, read: $read) {
-            id
-            read
-          }
-        }
-      `,
-      variables: { id, read },
-    }),
-  });
-
-  const result = await response.json();
-  if (!result.data.markNotificationAsRead.read) {
-    throw new Error("Failed to mark notification as read");
-  }
 };
