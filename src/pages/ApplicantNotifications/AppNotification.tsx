@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { IoMdMailOpen, IoMdMailUnread } from "react-icons/io";
 import { useNotifications } from "../../utils/Notifications";
 
@@ -17,39 +17,22 @@ function ApplicantNotifications() {
   const { notifications, markAsRead, markAsUnread, unreadCount } =
     useNotifications();
 
-  const handleToggleRead = (notification: Notification) => {
+  const handleToggleRead = (notification: Notification) =>
     notification.read
       ? markAsUnread(notification.id)
       : markAsRead(notification.id);
-  };
-
-  const handleTabChange = (tab: string) => setActiveTab(tab);
-
-  const handleSortOrder = (order: "new" | "old") => setSortOrder(order);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setSearchQuery(e.target.value);
 
-  const formatDate = (dateString: string) =>
-    new Date(dateString).toLocaleString("en-US", {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: false,
-    });
-
-  const filteredNotifications = notifications.filter(
-    (notification) =>
-      (activeTab === "Unread" ? !notification.read : true) &&
-      notification.message.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredNotifications = filterNotifications(
+    notifications,
+    activeTab,
+    searchQuery
   );
-
-  const sortedNotifications = [...filteredNotifications].sort((a, b) =>
-    sortOrder === "new"
-      ? new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-      : new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+  const sortedNotifications = sortNotifications(
+    filteredNotifications,
+    sortOrder
   );
 
   return (
@@ -57,9 +40,9 @@ function ApplicantNotifications() {
       <Header
         activeTab={activeTab}
         unreadCount={unreadCount}
-        onTabChange={handleTabChange}
+        onTabChange={setActiveTab}
         sortOrder={sortOrder}
-        onSortOrderChange={handleSortOrder}
+        onSortOrderChange={setSortOrder}
         searchQuery={searchQuery}
         onSearchChange={handleSearchChange}
       />
@@ -71,6 +54,37 @@ function ApplicantNotifications() {
     </div>
   );
 }
+
+const filterNotifications = (
+  notifications: Notification[],
+  activeTab: string,
+  searchQuery: string
+) =>
+  notifications.filter(
+    (notification) =>
+      (activeTab === "Unread" ? !notification.read : true) &&
+      notification.message.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+const sortNotifications = (
+  notifications: Notification[],
+  sortOrder: "new" | "old"
+) =>
+  [...notifications].sort((a, b) =>
+    sortOrder === "new"
+      ? new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      : new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+  );
+
+const formatDate = (dateString: string) =>
+  new Date(dateString).toLocaleString("en-US", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  });
 
 const Header = ({
   activeTab,
