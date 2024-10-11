@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Sidebar from "./sidebar";
 import { SunIcon } from "@heroicons/react/outline";
 import { MoonIcon } from "@heroicons/react/solid";
@@ -12,6 +12,7 @@ const logo: string = require("../../assets/logo.svg").default;
 const profile: string = require("../../assets/avatar.png").default;
 const LogoWhite: string = require("../../assets/logoWhite.svg").default;
 import jwtDecode from "jwt-decode";
+import {useNotifications} from "../../utils/Notifications"
 
 const placeholderImage = profile;
 
@@ -31,10 +32,15 @@ function NavBar() {
   }
   const [nav, setNav] = useState(false);
   const handleClick = () => setNav(!nav);
-  const handleShowNotification = () => setShowNotification(!showNotification);
+  const navigate = useNavigate();
+  
+  const handleShowNotification = () => {
+    navigate("/applicant/notifications");
+  };
   const handleShowProfileDropdown = () =>
     setShowprofileDropdown(!showProfileDropdown);
 
+  const { unreadCount } = useNotifications();
   return (
     <div className="flex items-center dark:bg-zinc-800 ">
       {showProfileDropdown && (
@@ -88,6 +94,11 @@ function NavBar() {
               className=" text-[25px] cursor-pointer  dark:text-dark-text-fill  "
               onClick={handleShowNotification}
             />
+            {unreadCount > 0 && (
+              <span className="top-0 bg-orange-600 text-white text-xs rounded-full px-1">
+                {unreadCount}
+              </span>
+            )}
           </span>
           <div
             className={`mx-4 dark:text-zinc-100 rounded-full px-2 text-xl cursor-pointer flex items-center w-9 h-9`}

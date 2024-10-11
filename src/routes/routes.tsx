@@ -41,7 +41,7 @@ import ApplicationDetails from "../pages/Applications/ViewSingleApplication";
 import Dashboard from "../pages/Dashboard";
 import ApplicantLayout from "../pages/Applicant/ApplicantLayout";
 import AdminLayout from "../components/Layout/Admins/AdminLayout";
-import ApplicantNotifications from "../pages/ApplicantNotifications/ApplicantNotifications";
+import ApplicantNotifications from "../pages/ApplicantNotifications/AppNotification";
 
 function Navigation() {
   const roleName = localStorage.getItem("roleName");

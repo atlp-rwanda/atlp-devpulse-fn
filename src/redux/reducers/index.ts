@@ -77,7 +77,7 @@ const allReducers = combineReducers({
   cohorts: cohortReducer,
   myApplications: applicationsReducer,
   currentApplication: singleApplicationReducer,
-  assessments: assessmentsReducer,
+  assessments: assessmentsReducer
 });
 
 export type RootState = ReturnType<typeof allReducers>;

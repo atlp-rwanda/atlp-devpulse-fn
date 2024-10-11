@@ -1,8 +1,8 @@
-import jwtDecode from 'jwt-decode';
-import { GraphQLClient } from 'graphql-request';
+import jwtDecode from "jwt-decode";
+import { GraphQLClient } from "graphql-request";
 
 export const Token = () => {
-  const access_token = localStorage.getItem('access_token');
+  const access_token = localStorage.getItem("access_token");
   const verifyToken = async (token: any) => {
     try {
       const QUERY = `query CheckUserRole($email: String) {
@@ -23,7 +23,8 @@ export const Token = () => {
         await client.request(QUERY, { email }).then((data: any) => {
           if (data) {
             const roleName = data.checkUserRole?.roleName;
-            localStorage.setItem('roleName', roleName);
+            localStorage.setItem("roleName", roleName);
+            localStorage.setItem("userId", decoded.data.userId);
           }
         });
         return decoded;
@@ -33,7 +34,7 @@ export const Token = () => {
       return decoded;
     } catch (error) {
       //@ts-ignore
-      console.error('Error', error.message);
+      console.error("Error", error.message);
     }
   };
   const user = access_token ? verifyToken(access_token) : null;
