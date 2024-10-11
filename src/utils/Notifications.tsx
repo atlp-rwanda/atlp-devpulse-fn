@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
 import Pusher, { Channel } from "pusher-js";
-import { toast, ToastContainer} from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { toastOptions } from "./toast";
 import { fetchNotifications, updateNotificationStatus } from "./Notifications";
@@ -33,41 +33,14 @@ export const useNotifications = () => {
   return context;
 };
 
-export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
+const useNotificationsState = (userId: string | null) => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
-  const [userId, setUserId] = useState<string | null>(
-    localStorage.getItem("userId")
-  );
-  const [channel, setChannel] = useState<Channel | null>(null);
 
   useEffect(() => {
     if (userId) {
       fetchAndSetNotifications(userId);
-      setupPusher(userId);
     }
-    return () => {
-      if (channel) {
-        channel.unbind_all();
-        channel.unsubscribe();
-      }
-    };
-  }, [userId]);
-
-  useEffect(() => {
-    const handleUserChange = () => {
-      const newUserId = localStorage.getItem("userId");
-      if (newUserId !== userId) {
-        setUserId(newUserId);
-      }
-    };
-
-    window.addEventListener("storage", handleUserChange);
-    return () => {
-      window.removeEventListener("storage", handleUserChange);
-    };
   }, [userId]);
 
   const fetchAndSetNotifications = async (userId: string) => {
@@ -80,24 +53,9 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
-  const setupPusher = (userId: string) => {
-    const pusher = new Pusher(process.env.PUSHER_KEY!, {
-      cluster: process.env.PUSHER_CLUSTER!,
-    });
-
-    if (channel) {
-      channel.unbind_all();
-      channel.unsubscribe();
-    }
-
-    const pusherChannel = pusher.subscribe(`notifications-${userId}`);
-    pusherChannel.bind("new-notification", (data: Notification) => {
-      setNotifications((prevNotifications) => [data, ...prevNotifications]);
-      setUnreadCount((prev) => prev + 1);
-      toast.info(`New notification: ${data.message}`, toastOptions);
-    });
-
-    setChannel(pusherChannel);
+  const addNotification = (notification: Notification) => {
+    setNotifications((prev) => [notification, ...prev]);
+    setUnreadCount((prev) => prev + 1);
   };
 
   const markAsRead = async (id: string) => {
@@ -118,6 +76,77 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({
     );
     setUnreadCount((prev) => prev + 1);
   };
+
+  return {
+    notifications,
+    unreadCount,
+    markAsRead,
+    markAsUnread,
+    addNotification,
+  };
+};
+
+const usePusherNotifications = (
+  userId: string | null,
+  addNotification: (notification: Notification) => void
+) => {
+  const [channel, setChannel] = useState<Channel | null>(null);
+
+  useEffect(() => {
+    let pusherChannel: Channel;
+
+    if (userId) {
+      const pusher = new Pusher(process.env.PUSHER_KEY!, {
+        cluster: process.env.PUSHER_CLUSTER!,
+      });
+
+      pusherChannel = pusher.subscribe(`notifications-${userId}`);
+      pusherChannel.bind("new-notification", (data: Notification) => {
+        addNotification(data);
+        toast.info(`New notification: ${data.message}`, toastOptions);
+      });
+
+      setChannel(pusherChannel);
+    }
+
+    return () => {
+      if (pusherChannel) {
+        pusherChannel.unbind_all();
+        pusherChannel.unsubscribe();
+      }
+    };
+  }, [userId, addNotification]);
+};
+
+export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
+  const [userId, setUserId] = useState<string | null>(
+    localStorage.getItem("userId")
+  );
+  const {
+    notifications,
+    unreadCount,
+    markAsRead,
+    markAsUnread,
+    addNotification,
+  } = useNotificationsState(userId);
+
+  usePusherNotifications(userId, addNotification);
+
+  useEffect(() => {
+    const handleUserChange = () => {
+      const newUserId = localStorage.getItem("userId");
+      if (newUserId !== userId) {
+        setUserId(newUserId);
+      }
+    };
+
+    window.addEventListener("storage", handleUserChange);
+    return () => {
+      window.removeEventListener("storage", handleUserChange);
+    };
+  }, [userId]);
 
   return (
     <NotificationContext.Provider
