@@ -14,6 +14,7 @@ import { toast } from "react-toastify";
 import { Toasty } from "../Toasty/Toasty";
 import { fetchUserData } from "./SignInForm";
 import useCountry from "../../hooks/useCountry";
+import { Token } from "../../utils/utils";
 
 const GoogleSignup = () => {
     const [isSuccess, setIsSuccess] = useState(false);
@@ -52,9 +53,6 @@ const GoogleSignup = () => {
         }
         const userData: any = await fetchUserData(token);
         const id = userData.getUsers_Logged[0].id;
-        if (!id) {
-            throw new Error("User ID not found");
-          }
         const parsedData = googleDataSchema.parse(data);
         const response = await updateUserSelf(id, parsedData);
         if (response.status === 200 && response.data.data.updateUserSelf === true) {
@@ -64,7 +62,6 @@ const GoogleSignup = () => {
             toast.error("Error updating user");
         }
       } catch (error: any) {
-          console.error("Error:", error);
           toast.error("Error updating user");
       } finally {
           setTimeout(() => {
@@ -73,6 +70,7 @@ const GoogleSignup = () => {
       }
     };
     useEffect(() => {
+        Token();
         const token = localStorage.getItem("access_token");
         if (!token) {throw new Error("User not authenticated");}
         const decodedToken: any = jwtDecode(token);
@@ -97,7 +95,7 @@ const GoogleSignup = () => {
               <AiOutlineCheck className="text-white text-4xl" />
             </div>
             <div className="text-[#afb1b4] text-lg mb-4 font-inter">
-              <p>Your account has been succefully created !</p>
+              <p>Google account created successfully!!</p>
             </div>
             <Link to="/applicant" ><Button label="Continue" className="w-[80px]" /></Link>
           </div>
