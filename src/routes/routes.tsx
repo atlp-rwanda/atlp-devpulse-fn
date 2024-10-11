@@ -58,6 +58,10 @@ import Notification from "../pages/AdminNotification/Notification";
 import AdminNotification from "../pages/AdminNotification/AdminNotification";
 import UpdateJobPost from "../pages/JobPost/updateJobPost";
 
+import VerifyEmail from "../pages/verifyEmail";
+import Search from "./../pages/search";
+
+
 function Navigation() {
   const roleName = localStorage.getItem("roleName");
   return (
@@ -177,6 +181,14 @@ function Navigation() {
           }
         />
 
+        <Route
+          path="search"
+          element={
+            <PrivateRoute allowedRoles={['Admin', 'superAdmin']}>
+              <Search />
+            </PrivateRoute>
+          }
+        />
         <Route
           path="roles"
           element={

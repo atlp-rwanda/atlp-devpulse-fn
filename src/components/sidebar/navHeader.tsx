@@ -12,6 +12,8 @@ const logo: string = require("../../assets/logo.svg").default;
 const profile: string = require("../../assets/avatar.png").default;
 const LogoWhite: string = require("../../assets/logoWhite.svg").default;
 import jwtDecode from "jwt-decode";
+
+import SearchBar from "../../components/SearchBar";
 import { destination } from "../../utils/utils";
 
 const placeholderImage = profile;
@@ -99,6 +101,11 @@ function NavBar() {
             </Link>
           </span>
         </div>
+
+        {/* Add Search Bar */}
+        <SearchBar />
+        {/* End of Search Bar */}
+
         <div className="flex items-center mr-4">
           <span className="flex items-center relative">
             <AiOutlineBell
