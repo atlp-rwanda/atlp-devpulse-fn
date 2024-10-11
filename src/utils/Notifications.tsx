@@ -1,11 +1,11 @@
-import { Channel } from "pusher-js";
-import React, { createContext, useState, useEffect, useContext } from "react";
+import React, { createContext, useState, useContext } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { initializePusher, unsubscribePusher } from "./applicantNotifications/pusher";
-import { fetchNotifications, updateNotificationStatus } from "./applicantNotifications/NotificationService";
-import { Notification } from "./applicantNotifications/types";
 import { toastOptions } from "./toast";
+import { useFetchNotifications } from "./applicantNotifications/useFetchNotifications";
+import { usePusherNotifications } from "./applicantNotifications/usePusher";
+import { updateNotificationStatus } from "./applicantNotifications/NotificationService";
+import { Notification } from "./applicantNotifications/types";
 
 interface NotificationContextProps {
   notifications: Notification[];
@@ -47,29 +47,15 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({
 const useNotificationsState = (userId: string | null) => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
-  const [channel, setChannel] = useState<Channel | null>(null);
-
-  useEffect(() => {
-    if (userId) {
-      fetchAndSetNotifications(userId);
-      const pusherChannel = initializePusher(userId, addNotification);
-      setChannel(pusherChannel);
-    }
-
-    return () => unsubscribePusher(channel);
-  }, [userId]);
-
-  const fetchAndSetNotifications = async (userId: string) => {
-    const fetchedNotifications = await fetchNotifications(userId);
-    setNotifications(fetchedNotifications);
-    setUnreadCount(fetchedNotifications.filter((n) => !n.read).length);
-  };
 
   const addNotification = (notification: Notification) => {
     setNotifications((prev) => [notification, ...prev]);
     setUnreadCount((prev) => prev + 1);
     toast.info(`New notification: ${notification.message}`, toastOptions);
   };
+
+  useFetchNotifications(userId, setNotifications, setUnreadCount);
+  usePusherNotifications(userId, addNotification);
 
   const markAsRead = async (id: string) => {
     await updateNotificationStatus(id, true);
