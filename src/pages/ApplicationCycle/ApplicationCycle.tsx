@@ -23,10 +23,6 @@ const ApplicationCycle = (props: any) => {
   const [loading, setLoading] = useState(true);
   const cycles = allCycles.data;
 
-  // useEffect(() => {
-  //   props.getAllCycles();
-  // }, []);
-
   useEffect(() => {
     props.getAllCycles();
     if (allCycles.data) {
@@ -102,10 +98,6 @@ const ApplicationCycle = (props: any) => {
 
     props.createCycle(data);
     setOpenCreateModal(false);
-
-    // setTimeout(() => {
-    //   window.location.reload();
-    // }, 3000);
   };
 
   const updateCycle = (e: any) => {
@@ -194,10 +186,6 @@ const ApplicationCycle = (props: any) => {
     usePagination
   );
   const { pageIndex, pageSize } = state;
-
-  // return (
-  //   <CycleSkeleton />
-  // )
 
   return (
     <>

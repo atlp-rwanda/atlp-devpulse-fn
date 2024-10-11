@@ -21,8 +21,6 @@ const TrainneeDetails = (props: any) => {
   }, [ID]);
 
   const traineeDetails = oneTraineeDetails.data;
-  console.log("Trainee: ", traineeDetails);
-
   return (
     <>
       <div className="w-full flex items-center bg-white overflow-auto dark:bg-dark-frame-bg">
