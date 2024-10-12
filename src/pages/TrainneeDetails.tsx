@@ -8,16 +8,22 @@ import DetailItem from "../components/TraineeDetail/DetailItem";
 import ProgramItem from "../components/TraineeDetail/ProgramBox";
 import DecisionSection from "../components/TraineeDetail/decisionSection";
 
+
 const TrainneeDetails = (props: any) => {
-  const params = useParams();
-  const [key, setKey] = useState(params.traineeId);
-  const { oneTraineeDetails } = props;
+    const params = useParams();
+    const [key, setKey] = useState(params.traineeId);
+    const [loading, setLoading] = useState(true);
+    const { oneTraineeDetails } = props;
 
-  const [ID, setId] = useState(key);
+    const [ID, setId] = useState(key);
 
-  useEffect(() => {
-    props.getOneTraineeAllDetails({ id: ID });
-  }, [ID]);
+     useEffect(() => {
+      const fetchData = async () => {
+        await props.getOneTraineeAllDetails({ id: ID });
+        setLoading(false);
+      };
+      fetchData();
+    }, [ID]);
 
   const traineeDetails = oneTraineeDetails.data;
 
