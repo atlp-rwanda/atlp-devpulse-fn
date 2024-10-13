@@ -73,28 +73,32 @@ const TraineeAttributeForm = ({ traineeId }) => {
   };
 
   return (
-    <div className={`p-6 rounded-lg shadow-md ${
+    <div className={`min-h-screen w-full flex flex-col ${
       isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-800'
     }`}>
-      <h2 className={`text-2xl font-bold mb-4 ${
-        isDarkMode ? 'text-white' : 'text-gray-800'
-      }`}>Fill the form for more information</h2>
-      {page === 1 ? (
-        <TraineeFormPage1
-          formData={formData}
-          setFormData={setFormData}
-          onNext={handleNext}
-          isDarkMode={isDarkMode}
-        />
-      ) : (
-        <TraineeFormPage2
-          formData={formData}
-          setFormData={setFormData}
-          onSubmit={handleSubmit}
-          onBack={handleBack}
-          isDarkMode={isDarkMode}
-        />
-      )}
+      <div className="flex-grow flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8">
+        <h2 className={`text-3xl font-bold mb-8 text-center ${
+          isDarkMode ? 'text-white' : 'text-gray-800'
+        }`}>Fill the form for more information</h2>
+        <div className="w-full max-w-4xl">
+          {page === 1 ? (
+            <TraineeFormPage1
+              formData={formData}
+              setFormData={setFormData}
+              onNext={handleNext}
+              isDarkMode={isDarkMode}
+            />
+          ) : (
+            <TraineeFormPage2
+              formData={formData}
+              setFormData={setFormData}
+              onSubmit={handleSubmit}
+              onBack={handleBack}
+              isDarkMode={isDarkMode}
+            />
+          )}
+        </div>
+      </div>
     </div>
   );
 };

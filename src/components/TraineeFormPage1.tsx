@@ -92,7 +92,7 @@ const TraineeFormPage1: React.FC<TraineeFormPage1Props> = ({ formData, setFormDa
   } sm:text-[12px] outline-none`;
 
   return (
-    <div className='grid grid-cols-2 gap-52 pt-5 pb-10'>
+    <div className='grid grid-cols-2 gap-20 pt-5 ml-20 pb-20'>
       <div className='space-y-8'>    
         <InputField
           name="address"
@@ -279,15 +279,15 @@ const TraineeFormPage1: React.FC<TraineeFormPage1Props> = ({ formData, setFormDa
             name="discipline" 
             value={formData.discipline}
             onChange={handleInputChange}
-            className={`py-5 rounded-md ${isDarkMode ? 'bg-dark-bg text-white' : 'border border-gray-500 bg-white text-gray-900'}`}
+            className={`py-5 rounded-md ${isDarkMode ? 'bg-dark-bg text-white border border-white' : 'border border-gray-500 bg-white text-gray-900'}`}
           ></textarea>
         </div>
 
         <div>
           <button onClick={onNext} className={`w-52 md:w-2/3 rounded-md px-2 py-3 text-white sm:text-[12px] my-20 ${
-            isDarkMode
-              
-              
+             isDarkMode
+             ? ' focus:bg-[#56C870] bg-primary dark:bg-[#56C870] hover:bg-primary dark:hover:bg-[#80d293]'
+              :'bg-blue-500 hover:bg-blue-600'      
           } cursor-pointer`}>
             Save and Next
           </button>

@@ -18,7 +18,7 @@ const TraineeFormPage2 = ({ formData, setFormData, onSubmit, onBack, isDarkMode 
   } sm:text-[12px] outline-none`;
 
   return (
-    <div className='grid grid-cols-2 gap-10 pt-5 ml-20 pb-20'>
+    <div className='grid grid-cols-2 gap-1 pt-5 ml-20 pb-20'>
       <div className='space-y-8'>
         <div className='space-y-3 w-2/3'>
           <label htmlFor="isEmployed" className={isDarkMode ? 'text-white' : 'text-gray-800'}>

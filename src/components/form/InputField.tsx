@@ -8,7 +8,7 @@ interface InputFieldProps extends InputHTMLAttributes<HTMLInputElement> {
 }
 
 const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
-  ({ parentClassName, ...props }, ref) => {
+  ({ parentClassName,value, ...props }, ref) => {
     return (
       <div className={`max-h-[50%] mt-2 ${parentClassName}`}>
         <label htmlFor={props.name} className={`${props.className} sr-only`}>
@@ -21,6 +21,7 @@ const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
             placeholder={props.placeholder}
             className={`w-full focus:outline ${props.className}`}
             onChange={props.onChange}
+            value={value}
             {...props}
             autoComplete="off"
           />

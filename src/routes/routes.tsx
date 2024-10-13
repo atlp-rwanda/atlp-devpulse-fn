@@ -48,18 +48,13 @@ import ApplicationDetails from "../pages/Applications/ViewSingleApplication";
 import Dashboard from "../pages/Dashboard";
 import ApplicantLayout from "../pages/Applicant/ApplicantLayout";
 import AdminLayout from "../components/Layout/Admins/AdminLayout";
-<<<<<<< Updated upstream
 import UpdateJobPost from "../pages/JobPost/updateJobPost";
-=======
->>>>>>> Stashed changes
 import TraineeApply from "../pages/TraineeApply";
 import TraineeAttribute from '../pages/TraineeAttribute'
 import TraineeSuccessPage from "../pages/TraineSuccessPage";
 import VerifyEmail from "../pages/verifyEmail";
-<<<<<<< Updated upstream
 import Search from "./../pages/search";
-=======
->>>>>>> Stashed changes
+
 
 
 function Navigation() {

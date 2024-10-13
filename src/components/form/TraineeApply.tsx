@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent, FormEvent, useEffect } from 'react';
+import React, { useState, ChangeEvent, FormEvent, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createTrainee } from '../../redux/actions/TraineeAction';
 import { getAllCycles } from '../../redux/actions/cyclesActions';
@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router';
 import { AppDispatch, RootState } from '../../redux/store';
 import useFormValidation from '../useFormValidation';
 import { useTheme } from '../../hooks/darkmode'; 
-
+import { loggedUserAction } from '../../redux/actions/getLoggedUser';
 interface FormData {
   firstName: string;
   lastName: string;
@@ -72,14 +72,36 @@ const TraineeApplicationForm: React.FC = () => {
 
   const cycles = useSelector((state: RootState) => state.cycles.data);
   const cyclesLoading = useSelector((state: RootState) => state.cycles.isLoading);
+  const loggedUser = useSelector((state: RootState) => state.loggedUser.user);
+  const loggedUserLoading = useSelector((state: RootState) => state.loggedUser.loading);
 
   const { errors, validateForm } = useFormValidation(formData);
   const { theme } = useTheme(); 
   const isDarkMode = theme === false; 
 
+  const isMounted = useRef(true);
+
   useEffect(() => {
     dispatch(getAllCycles());
+    dispatch(loggedUserAction());
+
+    return () => {
+      isMounted.current = false;
+    };
   }, [dispatch]);
+
+  useEffect(() => {
+    if (loggedUser && isMounted.current) {
+      setFormData(prevData => ({
+        ...prevData,
+        firstName: loggedUser.firstName || '',
+        lastName: loggedUser.lastName || '',
+        email: loggedUser.email || ''
+      }));
+    }
+  }, [loggedUser]);
+
+  console.log('Updating form data with logged user:', loggedUser);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -89,10 +111,13 @@ const TraineeApplicationForm: React.FC = () => {
     }));
   };
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (validateForm()) {
       setSubmitError(null);
+      setIsSubmitting(true);
       try {
         const newTraineeId = await dispatch(createTrainee(formData));
         console.log('Trainee created successfully');
@@ -100,9 +125,15 @@ const TraineeApplicationForm: React.FC = () => {
       } catch (error) {
         console.error('Error submitting form:', error);
         setSubmitError('An error occurred while submitting the form. Please try again.');
+      } finally {
+        setIsSubmitting(false);
       }
     }
   };
+
+  if (loggedUserLoading) {
+    return <div>Loading user data...</div>;
+  }
 
   return (
     <div className='w-full max-w-[500px] min-h-screen'>
@@ -139,12 +170,14 @@ const TraineeApplicationForm: React.FC = () => {
           />
           <Button
             type="submit"
-            label="Submit Application"
+            label={isSubmitting ? "Submitting..." : "Submit Application"}
             className={`w-full ${
               isDarkMode ? 'bg-blue-600 hover:bg-blue-700' : 'bg-blue-500 hover:bg-blue-600'
             } text-white`}
+            disabled={isSubmitting}
           />
         </form>
+        {submitError && <p className="text-red-500 mt-2">{submitError}</p>}
       </div>
     </div>
   );
