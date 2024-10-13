@@ -57,19 +57,20 @@ const useNotificationsState = (userId: string | null) => {
   useFetchNotifications(userId, setNotifications, setUnreadCount);
   usePusherNotifications(userId, addNotification);
 
+  const updateNotificationReadStatus = (id: string, read: boolean) => {
+    setNotifications((prev) =>
+      prev.map((n) => (n.id === id ? { ...n, read } : n))
+    );
+    setUnreadCount((prev) => prev + (read ? -1 : 1));
+  };
+
   const markAsRead = async (id: string) => {
     await updateNotificationStatus(id, true);
-    setNotifications((prev) =>
-      prev.map((n) => (n.id === id ? { ...n, read: true } : n))
-    );
-    setUnreadCount((prev) => prev - 1);
+    updateNotificationReadStatus(id, true);
   };
 
   const markAsUnread = (id: string) => {
-    setNotifications((prev) =>
-      prev.map((n) => (n.id === id ? { ...n, read: false } : n))
-    );
-    setUnreadCount((prev) => prev + 1);
+    updateNotificationReadStatus(id, false);
   };
 
   return {
