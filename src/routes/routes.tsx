@@ -52,9 +52,9 @@ import UpdateJobPost from "../pages/JobPost/updateJobPost";
 import TraineeApply from "../pages/TraineeApply";
 import TraineeAttribute from '../pages/TraineeAttribute'
 import TraineeSuccessPage from "../pages/TraineSuccessPage";
+
 import VerifyEmail from "../pages/verifyEmail";
 import Search from "./../pages/search";
-
 
 
 function Navigation() {
