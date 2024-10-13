@@ -25,6 +25,7 @@ const TrainneeDetails = (props: any) => {
       fetchData();
     }, [ID]);
 
+
   const traineeDetails = oneTraineeDetails.data;
 
   return (

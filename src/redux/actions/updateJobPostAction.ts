@@ -17,7 +17,7 @@ export const updateJobPostAction = (jobPostData: any) => {
     });
 
     try {
-      const { id, title, program, cycle, cohort, description } = jobPostData;
+      const { id, title, program, cycle, cohort, description,published } = jobPostData;
 
       const response = await axios({
         url: process.env.BACKEND_URL,
@@ -38,31 +38,32 @@ export const updateJobPostAction = (jobPostData: any) => {
                 title
                 }
                 description
+                published
             }
             }
           `,
           variables: {
-            updateJobApplicationId: null,
+            updateJobApplicationId: id,
             jobFields: {
               title,
               program,
               cycle,
               cohort,
               description,
+              published
             },
           },
         },
       });
 
       if (response.data.data !== null) {
-        toast.success('Job Post updated');
         dispatch({
           type: updateJobPostType.UPDATE_JOB_POST_SUCCESS,
           message: response.data.data,
         });
       } else {
         console.log(response.data);
-        toast.error(response.data.errors[0].message);
+
 
         dispatch({
           type: updateJobPostType.UPDATE_JOB_POST_FAIL,
@@ -70,7 +71,6 @@ export const updateJobPostAction = (jobPostData: any) => {
         });
       }
     } catch (error) {
-      toast.error('Job Post not created');
 
       dispatch({
         type: updateJobPostType.UPDATE_JOB_POST_FAIL,
