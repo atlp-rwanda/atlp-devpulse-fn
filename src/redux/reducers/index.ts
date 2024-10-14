@@ -93,7 +93,8 @@ const allReducers = combineReducers({
   searchData: fetchSearchDataReducer,
   traineeApplicant: traineeReducer,
   traineeAttendance: attendanceReducer,
-  traineePerformance: performanceReducer
+  traineePerformance: performanceReducer,
+  updateUser: userUpdateReducer,
 });
 
 export type RootState = ReturnType<typeof allReducers>;

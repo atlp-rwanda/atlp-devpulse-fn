@@ -3,14 +3,13 @@ import { UseFormReturn } from "react-hook-form";
 import { CiImageOff } from "react-icons/ci";
 import { toast } from "react-toastify";
 import { TuserSchema } from "../../utils/userSchema";
+const DEFAULT_IMAGE: string = require("../../assets/default-image.jpg").default;
 
 interface ImagePreviewProps {
   previewImage: string | null;
   form: UseFormReturn<TuserSchema>;
 }
 
-const DEFAULT_IMAGE =
-  "https://t4.ftcdn.net/jpg/01/24/65/69/360_F_124656969_x3y8YVzvrqFZyv3YLWNo6PJaC88SYxqM.jpg";
 
 const ImagePreview: React.FC<ImagePreviewProps> = ({ previewImage, form }) => {
   const { setValue, watch } = form;
@@ -38,7 +37,7 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({ previewImage, form }) => {
         className="w-36 h-10 self-end flex items-center gap-2 justify-center rounded-md text-white bg-red-700 hover:bg-red-500"
         onClick={deletePreviewImage}
       >
-        <CiImageOff size={22}/>
+        <CiImageOff size={22} />
         Delete Profile
       </button>
     </div>

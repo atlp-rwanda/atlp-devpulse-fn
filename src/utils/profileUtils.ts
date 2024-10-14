@@ -1,7 +1,7 @@
 import { AppDispatch } from "../redux/store";
 import { toast } from "react-toastify";
 import { getSingleUser, update_User } from "../redux/actions/users";
-import { TuserSchema } from "../utils/userSchema";
+import { TuserSchema } from "./userSchema";
 
 // Fetch user data
 export const fetchUser = async (

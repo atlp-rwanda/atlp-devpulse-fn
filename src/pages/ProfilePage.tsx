@@ -8,12 +8,13 @@ import {
   fetchUser,
   updateUser,
   getUserIdFromToken,
-} from "../utils/Profileutils";
+} from "../utils/profileUtils";
 import ProfileForm from "../components/updateUserProfile/ProfileForm";
 import ImageUpload from "../components/updateUserProfile/ImageUpload";
 import { ThreeDots } from "react-loader-spinner";
+const coverImage: string = require("../assets/cover.png").default;
 
-const Profile: React.FC = () => {
+const ProfileUpdate: React.FC = () => {
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(true);
   const userData = useAppSelector((state: any) => state.updateUser?.data);
@@ -49,7 +50,7 @@ const Profile: React.FC = () => {
       toast.error("User ID not found");
       return;
     }
-    await updateUser(data, userId, dispatch,userData);
+    await updateUser(data, userId, dispatch, userData);
   };
 
   return (
@@ -57,11 +58,7 @@ const Profile: React.FC = () => {
       {userData && (
         <div className="w-full h-[900px] flex flex-col mt-10 z-20">
           <div className=" mt-[-40px] relative ">
-            <img
-              src="https://cdn-amkpl.nitrocdn.com/qgEseOkSlljuBSKdCQPXqukeMDwvaGTw/assets/images/optimized/rev-97ef727/www.royalalaskanmovers.com/wp-content/uploads/sites/7/2024/07/ca_featured.png"
-              alt=""
-              className="w-full h-60"
-            />
+            <img src={coverImage} alt="coverimage" className="w-full h-60" />
             <ImageUpload form={form} />
           </div>
           <ProfileForm form={form} onSubmit={onSubmit} />
@@ -71,4 +68,4 @@ const Profile: React.FC = () => {
   );
 };
 
-export default Profile;
+export default ProfileUpdate;
