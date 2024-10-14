@@ -69,7 +69,7 @@ const Sidebar = ({ expanded, setExpanded }) => {
         </ul>
         <button
           onClick={handleLogout}
-          className="flex items-center p-1 font-semibold hover:font-bold text-white focus:outline-none hover:text-[#56c770] mt-4 ml-4 mt-3"
+          className="flex items-center p-1 font-semibold hover:font-bold text-white focus:outline-none hover:text-[#56c770] mt-4 ml-4"
         >
           <Icon icon="hugeicons:logout-circle-02" className="mr-3" />
           {expanded && <span>Logout</span>}

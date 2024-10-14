@@ -14,6 +14,8 @@ import { useNotifications } from "../../utils/Notifications";
 const logo: string = require("../../assets/logo.svg").default;
 const profile: string = require("../../assets/avatar.png").default;
 const LogoWhite: string = require("../../assets/logoWhite.svg").default;
+import {destination} from '../../utils/utils'
+import SearchBar from "../../components/SearchBar";
 
 const placeholderImage = profile;
 
@@ -60,6 +62,7 @@ const ProfileSection = ({ user, onImageError, handleShowProfileDropdown }) => (
 );
 
 function NavBar() {
+  const userDestination = destination();
   const access_token = localStorage.getItem("access_token");
   //@ts-ignore
   const user = access_token ? jwtDecode(access_token).picture : profile;
@@ -101,8 +104,9 @@ function NavBar() {
               <IoClose className="w-7 text-9xl dark:text-dark-text-fill" />
             )}
           </span>
+          
           <span>
-            <Link to="/" className="flex items-center">
+            <Link to={userDestination} className="flex items-center">
               {theme ? (
                 <img className="cursor-pointer mx-2 fill-[blue]" src={logo} />
               ) : (
@@ -117,7 +121,13 @@ function NavBar() {
               </h1>
             </Link>
           </span>
+
         </div>
+        
+        {/* Add Search Bar */}
+        <SearchBar />
+        {/* End of Search Bar */}
+
         <div className="flex items-center mr-4">
           <NotificationBell
             unreadCount={unreadCount}
