@@ -50,7 +50,7 @@ export const markNotificationAsRead = async (id) => {
         }
       `,
       variables: {
-        markNotificationAsReadId: id, // <-- change this
+        markNotificationAsReadId: id,
       },
     },
   });
@@ -80,7 +80,7 @@ export const deleteNotification = async (id) => {
         }
       `,
       variables: {
-        deleteNotificationId: id, // Pass the ID of the notification
+        deleteNotificationId: id,
       },
     },
   });

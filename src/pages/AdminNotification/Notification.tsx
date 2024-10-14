@@ -25,7 +25,16 @@ const Notification: React.FC<NotificationProps> = ({
   const isDateValid = !isNaN(notificationDate.getTime());
 
   return (
-    <div className="flex flex-row gap-4 justify-between items-center border rounded-lg p-4 bg-gray-100 dark:bg-dark-bg text-primary dark:text-white">
+    <div
+      className={`flex flex-row gap-4 justify-between items-center border rounded-lg p-4 
+    ${
+      notification.read ? "bg-gray-300 ext-gray-500" : "bg-gray-500 text-white"
+    } 
+    dark:${
+      notification.read ? "bg-gray-700 text-gray-400" : "bg-dark-bg text-white"
+    }
+  `}
+    >
       <div className="flex flex-row gap-4 items-center">
         <img
           src={DEFAULT_AVATAR_URL}
@@ -34,14 +43,13 @@ const Notification: React.FC<NotificationProps> = ({
         />
 
         <div className="flex flex-col">
-          <h1 className="text-lg font-bold">{notification.message}</h1>
+          <h1 className="text-lg font-bold ">{notification.message}</h1>
           <span className="text-sm text-gray-400">
             {isDateValid
               ? formatDistanceToNow(notificationDate, {
                   addSuffix: true,
                 })
               : "Invalid date"}{" "}
-            {/* Handle invalid date */}
           </span>
         </div>
       </div>

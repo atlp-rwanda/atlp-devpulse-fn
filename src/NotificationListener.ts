@@ -31,7 +31,7 @@ export const NotificationListener: React.FC<NotificationListenerProps> = ({
   useEffect(() => {
     if (data) {
       const { notificationReceived } = data;
-      // Display the notification in a toast
+
       // toast.info(`New Notification: ${notificationReceived.message}`);
 
       onNewNotification();

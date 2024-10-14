@@ -46,6 +46,7 @@ function NavBar() {
 
     setTimeout(() => {
       navigate("/admin/notifications");
+      window.location.reload();
     }, 100);
   };
   const handleShowProfileDropdown = () =>
