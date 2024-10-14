@@ -228,29 +228,7 @@ export const updateUserSelf = async (id: string, data: object) => {
     return error;
   }
 };
-export const getAllCoordinators = () => async (dispatch: any) => {
-  try {
-    const data = await axios.post("/", {
-      query: `
-        query getMembers {
-          getUsers_Logged {
-            firstname
-            lastname
-            email
-            role {
-              roleName
-            }
-          }
-        }
-      `,
-    });
 
-    return data.data;
-  } catch (err) {
-    console.log(err);
-    return err;
-  }
-};
 export const getAllCoordinators = () => async (dispatch: any) => {
   try {
     const data = await axios.post("/", {
