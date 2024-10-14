@@ -33,7 +33,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
       </label>
       <hr className="w-32 mt-[-25px] border-2 border-green " />
       <div className="w-full justify-between flex gap-16 flex-wrap">
-        <div className="flex flex-col flex-1  gap-2">
+        <div className="flex flex-col flex-1  min-w-[200px]">
           <label htmlFor="" className=" dark:text-white">
             First Name
           </label>
@@ -46,7 +46,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
             <p className="text-sm text-red-600">{errors.firstname.message}</p>
           )}
         </div>
-        <div className="flex flex-col flex-1  gap-2">
+        <div className="flex flex-col flex-1  min-w-[200px]">
           <label htmlFor="" className="text-white">
             Last Name
           </label>
@@ -62,7 +62,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
       </div>
 
       <div className="w-full justify-between flex gap-16 flex-wrap">
-        <div className="flex-1 flex flex-col  gap-2">
+        <div className="flex-1 flex flex-col  min-w-[200px]">
           <label htmlFor="" className="text-white">
             Code
           </label>
@@ -75,7 +75,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
             <p className="text-sm text-red-600">{errors.code.message}</p>
           )}
         </div>
-        <div className="flex flex-1 flex-col  gap-2">
+        <div className="flex flex-1 flex-col  min-w-[200px]">
           <label htmlFor="" className="text-white">
             Telephone
           </label>
@@ -90,7 +90,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
         </div>
       </div>
       <div className="w-full flex gap-16  justify-between flex-wrap ">
-        <div className="flex flex-1 flex-col  gap-2">
+        <div className="flex flex-1 flex-col  min-w-[200px]">
           <label htmlFor="" className="text-white">
             Email
           </label>

@@ -6,9 +6,8 @@ import {
 } from "../../utils/imageuploadUtil";
 import { TuserSchema } from "../../utils/userSchema";
 import { toast } from "react-toastify";
+const DEFAULT_IMAGE: string = require("../../assets/default-image.jpg").default;
 
-const DEFAULT_IMAGE =
-  "https://t4.ftcdn.net/jpg/01/24/65/69/360_F_124656969_x3y8YVzvrqFZyv3YLWNo6PJaC88SYxqM.jpg";
 
 const useImageUpload = (form: UseFormReturn<TuserSchema>) => {
   const [previewImage, setPreviewImage] = useState<string | null>(null);
