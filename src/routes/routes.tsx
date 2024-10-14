@@ -48,6 +48,7 @@ import ApplicationDetails from "../pages/Applications/ViewSingleApplication";
 import Dashboard from "../pages/Dashboard";
 import ApplicantLayout from "../pages/Applicant/ApplicantLayout";
 import AdminLayout from "../components/Layout/Admins/AdminLayout";
+import ApplicantDashboard from "../pages/Applicant/ApplicantDashboard";
 import UpdateJobPost from "../pages/JobPost/updateJobPost";
 import VerifyEmail from "../pages/verifyEmail";
 import Search from "./../pages/search";
@@ -306,22 +307,8 @@ function Navigation() {
       </Route>
   
       {/* Applicant Routes (Protected) */}
-      <Route
-        path="/applicant"
-        element={
-          <PrivateRoute allowedRoles={['applicant']}>
-            <ApplicantLayout />
-          </PrivateRoute>
-        }
-      >
-        <Route
-          index
-          element={
-            <PrivateRoute allowedRoles={['applicant']}>
-              <Applications />
-            </PrivateRoute>
-          }
-        />
+      <Route path="/applicant" element={<ApplicantLayout />}>
+      <Route index element={<PrivateRoute allowedRoles={['applicant']}><ApplicantDashboard/></PrivateRoute>} />
         <Route
           path="myApplications"
           element={
