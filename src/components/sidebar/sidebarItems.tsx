@@ -35,6 +35,11 @@ export const sidebarItems1 = [
     title: "Applications",
   },
   {
+    path: "Trainee-applicants",
+    icon: <Icon icon="ic:round-people"></Icon>,
+    title: "Trainees-Applicants",
+  },
+  {
     path: "cohort",
     icon: <Icon icon="fa6-solid:graduation-cap"></Icon>,
     title: "Cohorts",
@@ -43,6 +48,11 @@ export const sidebarItems1 = [
     path: "cycles",
     icon: <Icon icon="game-icons:cycle"></Icon>,
     title: "Application Cycles",
+  },
+  {
+    path: 'Trainee-applicants',
+    icon: <Icon icon="ic:round-people"></Icon>,
+    title: 'Trainees/Applicants',
   },
   
   {
@@ -58,11 +68,6 @@ export const sidebarItems1 = [
 ];
 
 export const applicantSidebarItems = [
-  {
-    path: "/applicant",
-    icon: <Icon icon="fontisto:pie-chart-1"></Icon>,
-    title: "Dashboard",
-  },
   {
     path: "myApplications",
     icon: <Icon icon="material-symbols:wysiwyg-rounded"></Icon>,
