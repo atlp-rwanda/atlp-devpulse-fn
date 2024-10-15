@@ -40,7 +40,7 @@ const DynamicTable: React.FC<TableProps> = ({ headers, data, isLoading }) => {
                 Processing...
               </td>
             </tr>
-          ) : data.length === 0 ? (
+          ) : data?.length === 0 ? (
             <tr>
               <td colSpan={headers.length} className="text-center py-4">
                 No data available

@@ -206,7 +206,7 @@ export const getMyOwnAppliedJob = () => async (dispatch: any) => {
         message: "Success",
       });
     } else {
-      toast.error(response.data.error[0].error);
+      toast.error(response.data.errors[0].message);
     }
     return response.data.data;
   } catch (err: any) {

@@ -10,17 +10,15 @@ export const ApplicantApplication = () => {
     dispatch(getMyOwnAppliedJob());
   }, [dispatch]);
 
-  const { loading, success, data } = useAppSelector((state) => state.myApplications);
+  const { loading, data } = useAppSelector((state) => state.myApplications);
 
   const tableData = Array.isArray(data) ? data : [];
 
   const headers = ["Title", "Date of Submission", "Status", "Action"];
 
-  console.log(tableData);
 
   return (
     <div className="p-4">
-      <h1 className="text-white mb-4">Job Applications</h1>
       <DynamicTable headers={headers} data={tableData} isLoading={loading} />
     </div>
   );

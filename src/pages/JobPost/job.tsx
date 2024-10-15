@@ -333,139 +333,128 @@ const Jobs = (props: any) => {
           </div>
         </div>
 
-        {/* =========================== End:: addnewJobPostModel =============================== */}
-        <div className="flex flex-col  h-screen w-[100%]">
-          <div className="flex flex-row">
-            <div className="w-full">
-              <div className="bg-light-bg dark:bg-dark-frame-bg min-h-screen overflow-x-hidden">
-                <div className="w-full px-4 sm:px-6 lg:px-8 py-4">
-                  <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-4">
-                    <button
-                      onClick={Open}
-                      className="flex items-center bg-primary dark:bg-[#56C870] rounded-md py-2 px-4 text-white font-medium cursor-pointer"
-                    >
-                      <icons.AiOutlinePlus className="mr-2" /> Job Post
-                    </button>
-                    <Select
-                      className="sm:text-sm w-full sm:w-40 rounded-bt-rd dark:text-ltb"
-                      options={[
-                        { value: "title", label: "Job Title" },
-                        { value: "program", label: "Program" },
-                        { value: "cycle", label: "Cycle" },
-                        { value: "cohort", label: "Cohort" },
-                        { value: "description", label: "Description" },
-                        { value: "", label: "Select by" },
-                      ]}
-                      defaultValue={{ value: "", label: "Select by" }}
-                      onChange={(e) => setFilterAttribute(`${e?.value}`)}
-                      theme={theme ? customTheme : darkTheme}
-                    />
-                    <div className="w-full sm:w-auto flex-grow">
-                      <div className="relative">
-                        <input
-                          onChange={handleSearchChange}
-                          onKeyDown={(e) => handleKeyDown(e)}
-                          className="w-full bg-row-gray dark:bg-[#293647] dark:text-ltb border border-bdr dark:border-cg dark:border-opacity-5 rounded-md py-2 pl-9 pr-4 focus:outline-none focus:ring-2 focus:ring-primary dark:focus:ring-[#56C870] text-sm"
-                          value={enteredsubmitWord}
-                          placeholder="Search"
-                          type="text"
-                          name="search"
-                        />
-                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                          <svg
-                            className="h-5 w-5 text-gray-400"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                            />
-                          </svg>
-                        </div>
+      {/* =========================== End:: addnewJobPostModel =============================== */}
+      <div className="flex flex-col  h-screen w-[100%]">
+        <div className="flex flex-row">
+          <div className="w-full">
+            <div className="bg-light-bg dark:bg-dark-frame-bg min-h-screen overflow-x-hidden">
+            <div className="w-full px-4 sm:px-6 lg:px-8 py-4">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-4">
+                <button
+                  onClick={Open}
+                  className="flex items-center bg-primary dark:bg-[#56C870] rounded-md py-2 px-4 text-white font-medium cursor-pointer"
+                >
+                  <icons.AiOutlinePlus className="mr-2" /> Job Post
+                </button>
+                <Select
+                  className="sm:text-sm w-full sm:w-40 rounded-bt-rd dark:text-ltb"
+                  options={[
+                    { value: "title", label: "Job Title" },
+                    { value: "program", label: "Program" },
+                    { value: "cycle", label: "Cycle" },
+                    { value: "cohort", label: "Cohort" },
+                    { value: "description", label: "Description" },
+                    { value: "", label: "Select by" },
+                  ]}
+                  defaultValue={{ value: "", label: "Select by" }}
+                  onChange={(e) => setFilterAttribute(`${e?.value}`)}
+                  theme={theme ? customTheme : darkTheme}
+                />
+                 <div className="w-full sm:w-auto flex-grow">
+                    <div className="relative">
+                      <input
+                        onChange={handleSearchChange}
+                        onKeyDown={(e) => handleKeyDown(e)}
+                        className="w-full bg-row-gray dark:bg-[#293647] dark:text-ltb border border-bdr dark:border-cg dark:border-opacity-5 rounded-md py-2 pl-9 pr-4 focus:outline-none focus:ring-2 focus:ring-primary dark:focus:ring-[#56C870] text-sm"
+                        value={enteredsubmitWord}
+                        placeholder="Search"
+                        type="text"
+                        name="search"
+                      />
+                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
                       </div>
                     </div>
                   </div>
-                </div>
-                <div className="px-8">
-                  <div className="bg-white  dark:bg-dark-bg shadow-lg px-5 py-8 rounded-md w-[100%]">
-                    <div>
-                      <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
-                        <div className="hidden md_:inline-block w-full h-auto lg:min-w-full shadow rounded-lg overflow-y-hidden">
-                          <table className="min-w-full leading-normal">
-                            <thead className=" w-full px-32 sticky top-0">
-                              <tr>
-                                <th className="p-6 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
-                                  Job Title
-                                </th>
-                                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left text-xs font-semibold text-gray-600 dark:text-white uppercase md:table-cell tracking-wider">
-                                  Program
-                                </th>
-                                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
-                                  Cycle
-                                </th>
-                                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
-                                  Cohort
-                                </th>
-                                {
-                                  // <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
-                                  //   Description
-                                  // </th>
-                                }
-                                <th className="border-b-2 sm:text-center border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
-                                  Action
-                                </th>
-                              </tr>
-                            </thead>
-                            <tbody className="overflow-y-auto">
-                              {fetchJobPostStates?.data?.map((item: any) => (
-                                <tr
-                                  className="hover:bg-slate-700 transition-colors"
-                                  key={item.id}
-                                >
-                                  <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
-                                    <div className="flex">
-                                      <div className="">
+              </div>
+            </div>
+              <div className="px-8">
+                <div className="bg-white  dark:bg-dark-bg shadow-lg px-5 py-8 rounded-md w-[100%]">
+                  <div>
+                    <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
+                      <div className="hidden md_:inline-block w-full h-auto lg:min-w-full shadow rounded-lg overflow-y-hidden">
+                        <table className="min-w-full leading-normal">
+                          <thead className=" w-full px-32 sticky top-0">
+                            <tr>
+                              <th className="p-6 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
+                                Job Title
+                              </th>
+                              <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left text-xs font-semibold text-gray-600 dark:text-white uppercase md:table-cell tracking-wider">
+                                Program
+                              </th>
+                              <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
+                                Cycle
+                              </th>
+                              <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
+                                Cohort
+                              </th>
+                              {
+                                // <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
+                                //   Description
+                                // </th>
+                              }
+                              <th className="border-b-2 sm:text-center border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
+                                Action
+                              </th>
+                            </tr>
+                          </thead>
+                          <tbody className="overflow-y-auto">
+                            {allfilteredjobPosts?.data?.map((item: any) => (
+                              <tr
+                                className="hover:bg-slate-700 transition-colors"
+                                key={item.id}
+                              >
+                                <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
+                                  <div className="flex">
+                                    <div className="">
+                                      <p className="text-gray-900 text-center dark:text-white whitespace-no-wrap">
+                                        {item?.title}
+                                      </p>
+                                    </div>
+                                  </div>
+                                </td>
+                                <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
+                                  <div className="flex items-center">
+                                    <div className="">
+                                      <p className="text-gray-900 text-center dark:text-white whitespace-no-wrap">
+                                        {item?.program?.title}
+                                      </p>
+                                    </div>
+                                  </div>
+                                </td>
+                                <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
+                                  <div className="flex items-center">
+                                    <div className="">
+                                      {item?.cycle && (
                                         <p className="text-gray-900 text-center dark:text-white whitespace-no-wrap">
-                                          {item?.title}
+                                          {item?.cycle?.name}
                                         </p>
-                                      </div>
+                                      )}
                                     </div>
-                                  </td>
-                                  <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
-                                    <div className="flex items-center">
-                                      <div className="">
-                                        <p className="text-gray-900 text-center dark:text-white whitespace-no-wrap">
-                                          {item?.program?.title}
-                                        </p>
-                                      </div>
+                                  </div>
+                                </td>
+                                <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
+                                  <div className="flex items-center">
+                                    <div className="">
+                                      <p className="text-gray-900 text-center dark:text-white whitespace-no-wrap">
+                                        {item?.cohort?.title}
+                                      </p>
                                     </div>
-                                  </td>
-                                  <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
-                                    <div className="flex items-center">
-                                      <div className="">
-                                        {item?.cycle && (
-                                          <p className="text-gray-900 text-center dark:text-white whitespace-no-wrap">
-                                            {item?.cycle?.name}
-                                          </p>
-                                        )}
-                                      </div>
-                                    </div>
-                                  </td>
-                                  <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
-                                    <div className="flex items-center">
-                                      <div className="">
-                                        <p className="text-gray-900 text-center dark:text-white whitespace-no-wrap">
-                                          {item?.cohort?.title}
-                                        </p>
-                                      </div>
-                                    </div>
-                                  </td>
-                                  {/* <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
+                                  </div>
+                                </td>
+                                {/* <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
                                   <div className="flex items-center">
                                     <div className="">
                                       <p className="text-gray-900 text-center dark:text-white whitespace-no-wrap">
