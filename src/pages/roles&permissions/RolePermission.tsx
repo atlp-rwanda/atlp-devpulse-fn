@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import "react-toastify/dist/ReactToastify.css";
-import { usePagination, useTable } from "react-table";
+import { Column, usePagination, useTable } from "react-table";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Menu from "@mui/material/Menu";
@@ -24,9 +24,9 @@ import RoleEntity from "../../components/roles&permissions/RoleEntity";
 
 export interface SingleRole {
   _id?: string;
-  roleName: string;
-  description: string;
-  permissions: Permission[];
+  roleName?: string;
+  description?: string;
+  permissions?: Permission[];
 }
 export type Permission = {
   create: boolean;
@@ -68,10 +68,30 @@ function RolePermission(props: any) {
   const [updateRoleId, setUpdateRoleId] = useState<string | null>(null);
   const [isViewingSingleRole, setIsViewSingleRole] = useState(false);
   const [isSingleRole, setIsSingleRole] = useState(false);
-  const [singleRoleData, setSingleRoleData] = useState<SingleRole | null>(null);
+  const [singleRoleData, setSingleRoleData] = useState<
+    SingleRole | null | undefined
+  >({
+    roleName: "",
+    description: "",
+    permissions: [],
+  });
+
   const [currentDropdownIndex, setCurrentDropdownIndex] = useState<
     number | null
   >(null);
+  const [updatePermissionData, setUpdatePermissionData] = useState({
+    create: false,
+    deleteMultiple: false,
+    deleteOne: false,
+    deleteOwn: false,
+    entity: "",
+    updateMultiple: false,
+    updateOne: false,
+    updateOwn: false,
+    viewMultiple: false,
+    viewOne: false,
+    viewOwn: false,
+  });
   const [openUpdateModal, setOpenUpdateModel] = useState(false);
   const [openCreateModal, setOpenCreateModal] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
@@ -82,7 +102,7 @@ function RolePermission(props: any) {
   const [openRole, setOpenRole] = useState(false);
   const [isAnError, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [roles, setRoles] = useState([]);
+  const [roles, setRoles] = useState<SingleRole[]>([]);
   const [userPermissions, setUserPermissions] = useState<any>([]);
   const [appPermissions, setAppPermissions] = useState<any>([]);
   const [cohortPermissions, setCohortPermissions] = useState<any>([]);
@@ -96,6 +116,31 @@ function RolePermission(props: any) {
     top: number;
     left: number;
   } | null>(null);
+  const [openEntities, setOpenEntities] = useState<string[]>([]);
+
+  const toggleEntityPermissions = (entity: string) => {
+    setOpenEntities((prevOpenEntities) =>
+      prevOpenEntities.includes(entity)
+        ? prevOpenEntities.filter((e) => e !== entity)
+        : [...prevOpenEntities, entity]
+    );
+  };
+
+  const handleEntityChange = (index, newEntity) => {
+    const updatedPermissions = (singleRoleData?.permissions || []).map(
+      (permission, idx) => {
+        if (idx === index) {
+          return { ...permission, entity: newEntity };
+        }
+        return permission;
+      }
+    );
+
+    setSingleRoleData({
+      ...singleRoleData,
+      permissions: updatedPermissions,
+    });
+  };
 
   const onSubmit = async (data: any) => {
     setIsLoading(true);
@@ -170,7 +215,6 @@ function RolePermission(props: any) {
           roleName: parsedData.Name,
           description: parsedData.Description,
         };
-        // @ts-expect-error
         setRoles((prevRoles) => [...prevRoles, newRole]);
         handleCloseCreateModel();
       }
@@ -270,7 +314,7 @@ function RolePermission(props: any) {
       }
     };
     getRoles();
-  }, [roles]);
+  }, []);
   const handleIconClick = (event: React.MouseEvent<SVGElement>) => {
     event.preventDefault();
     if (event.currentTarget) {
@@ -281,12 +325,87 @@ function RolePermission(props: any) {
       setAnchorEl(event.currentTarget as unknown as HTMLElement);
     }
   };
+
   const handleAddPermission = () => {
     if (currentDropdownIndex === null) {
       setCurrentDropdownIndex(0);
     } else {
       const nextDropdownIndex = (currentDropdownIndex + 1) % 4;
       setCurrentDropdownIndex(nextDropdownIndex);
+    }
+  };
+
+  const handleInputChange = (e) => {
+    setSingleRoleData({
+      ...singleRoleData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handlePermissionChange = (entity, field, checked) => {
+    setUpdatePermissionData((prevState) => ({
+      ...prevState,
+      [entity]: {
+        ...prevState[entity],
+        [field]: checked,
+      },
+    }));
+  };
+
+  const handleViewUpdateRole = async (getRoleId) => {
+    try {
+      if (!getRoleId) {
+        console.error("Role ID is null");
+        return;
+      }
+      console.log("Role ID is", getRoleId);
+      setAnchorEl(null);
+      setGetRoleId(getRoleId);
+      const response = await axios.post("/", {
+        query: `
+        query GetRole($getRoleId: ID!) {
+          getRole(id: $getRoleId) {
+            _id
+            roleName
+            description
+            permissions {
+              entity
+              _id
+              create
+              viewOwn
+              viewMultiple
+              viewOne
+              updateOwn
+              updateMultiple
+              updateOne
+              deleteOwn
+              deleteMultiple
+              deleteOne
+            }
+          }
+        }
+      `,
+        variables: {
+          getRoleId,
+        },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `${token}`,
+        },
+      });
+      const role = response.data.data.getRole;
+      setSingleRoleData(role);
+      setOpenUpdateModel(true);
+      setIsSingleRole(true);
+
+      const formattedPermissions = role.permissions.reduce((acc, perm) => {
+        acc[perm.entity] = perm;
+        return acc;
+      }, {});
+
+      setUpdatePermissionData(formattedPermissions);
+    } catch (error) {
+      console.error("Error viewing role:", error);
     }
   };
 
@@ -345,7 +464,80 @@ function RolePermission(props: any) {
     setSingleRoleData(null);
   };
 
-  const COLS = [
+  const handleUpdateRole = async (e) => {
+    e.preventDefault();
+    try {
+      if (!getRoleId) {
+        console.error("Role ID is null");
+        return;
+      }
+
+      const permissionsToUpdate = Object.keys(updatePermissionData).map(
+        (entity) => ({
+          entity,
+          permissions: Object.keys(updatePermissionData[entity])
+            .filter((key) => updatePermissionData[entity][key] === true)
+            .map((key) => key),
+        })
+      );
+
+      const updatedData = {
+        roleName: singleRoleData?.roleName,
+        description: singleRoleData?.description,
+        permissions: permissionsToUpdate,
+      };
+
+      const response = await axios.post("/", {
+        query: `
+          mutation UpdateRole($updateRoleId: ID!, $input: UpdateRoleInput!) {
+            updateRole(id: $updateRoleId, input: $input) {
+              _id
+              roleName
+              description
+              permissions {
+                entity
+                _id
+                create
+                viewOwn
+                viewMultiple
+                viewOne
+                updateOwn
+                updateMultiple
+                updateOne
+                deleteOwn
+                deleteMultiple
+                deleteOne
+              }
+            }
+          }
+        `,
+        variables: {
+          updateRoleId: getRoleId,
+          input: {
+            roleName: updatedData?.roleName,
+            description: updatedData?.description,
+            permissions: updatedData?.permissions,
+          },
+        },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `${token}`,
+        },
+      });
+
+      const updatedRole = response.data.data.updateRole;
+
+      setRoles((prevRoles) =>
+        prevRoles.map((role) => (role._id === getRoleId ? updatedRole : role))
+      );
+
+      setOpenUpdateModel(false);
+    } catch (error) {
+      console.error("Error updating role:", error);
+    }
+  };
+
+  const COLS: Column<SingleRole>[] = [
     {
       Header: "Role Name",
       accessor: "roleName",
@@ -356,7 +548,6 @@ function RolePermission(props: any) {
     },
     {
       Header: "Action",
-      accessor: "action",
       Cell: ({ row }: any) => (
         <div>
           <BsIcons.BsThreeDotsVertical
@@ -387,7 +578,9 @@ function RolePermission(props: any) {
   }: any = useTable(
     {
       columns,
-      data: roles,
+      data: roles.sort((a: any, b: any) =>
+        a.roleName.localeCompare(b.roleName)
+      ),
     },
     usePagination
   );
@@ -698,7 +891,7 @@ function RolePermission(props: any) {
             onClose={handleClose}
             open={open}
           >
-            <MenuItem onClick={() => handleOpenUpdateModal()}>
+            <MenuItem onClick={() => handleViewUpdateRole(getRoleId)}>
               <BsIcons.BsPencilFill className="mr-[5px]" />
               Edit
             </MenuItem>
@@ -892,47 +1085,155 @@ function RolePermission(props: any) {
           onClose={handleCloseUpdateModal}
           open={openUpdateModal}
         >
-          <Box className="absolute w-[50%] top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] md:w-[90%]">
-            <form
-              action=""
-              className="relative rounded-[5px] w-[100%] h-[455px] m-auto p-[10px] pt-[5px] dark:bg-dark-bg bg-[#f0f0f0] "
-            >
-              <h1 className="text-center dark:text-white font-bold text-[24px] m-[20px]">
-                Update
-              </h1>
-              <IoIcons.IoClose
-                onClick={handleCloseUpdateModal}
-                style={{
-                  position: "absolute",
-                  top: "20px",
-                  right: "20px",
-                  fontSize: "35px",
-                  cursor: "pointer",
-                }}
-              />
-              <hr style={{ marginBottom: "40px" }} />
-              <input
-                className=" mt-3 bg-lime cursor-pointer text-[18px] self-center py-1 rounded-[5px] h-[50px] my-[20px] mx-auto w-[80%] block border-[2px] border-[#a8a8a8]  px-[10px] md:w-[90%]"
-                name="name"
-                placeholder="Role Name"
-                type="text"
-              />
-              <input
-                className=" mt-3 bg-lime cursor-pointer text-[18px] self-center py-1 rounded-[5px] h-[50px] my-[20px] mx-auto w-[80%] block border-[2px] border-[#a8a8a8]  px-[10px] md:w-[90%]"
-                name="Description"
-                type="text"
-                placeholder="Description"
-              />
-              <div className="flex flex-wrap w-[300px] m-auto">
-                <button
-                  className="text-white border-[1px] dark:bg-[#56C870] h-[40px] w-[100px] block rounded-[5px] my-[10px] mx-[auto] bg-[#173b3f]"
-                  type="submit"
+          <div>
+            <Box className="absolute w-[70%] h-[80%] top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] md:w-[90%]">
+              <form className="relative rounded-[5px] w-[100%] h-[100%] m-auto p-[10px] pt-[5px] dark:bg-dark-bg bg-[#f0f0f0] overflow-y-auto">
+                <h1 className="text-center dark:text-white font-bold text-[24px] m-[20px]">
+                  Update Role
+                </h1>
+                <IoIcons.IoClose
+                  onClick={handleCloseUpdateModal}
+                  style={{
+                    position: "absolute",
+                    top: "20px",
+                    right: "20px",
+                    fontSize: "35px",
+                    cursor: "pointer",
+                  }}
+                />
+                <hr style={{ marginBottom: "40px" }} />
+
+                <label
+                  htmlFor="roleName"
+                  className="dark:text-white text-[24px] font-semibold ml-[10%] block"
                 >
-                  Save
-                </button>
-              </div>
-            </form>
-          </Box>
+                  Role Name
+                </label>
+                <input
+                  className="mt-1 bg-lime cursor-pointer text-[18px] self-center py-1 rounded-[5px] h-[50px] my-[10px] mx-auto w-[80%] block border-[2px] border-[#a8a8a8] px-[10px] md:w-[90%]"
+                  name="roleName"
+                  type="text"
+                  value={singleRoleData?.roleName}
+                  onChange={handleInputChange}
+                />
+
+                <label
+                  htmlFor="description"
+                  className="dark:text-white text-[24px] font-semibold ml-[10%] block"
+                >
+                  Description
+                </label>
+                <input
+                  className="mt-1 bg-lime cursor-pointer text-[18px] self-center py-1 rounded-[5px] h-[50px] my-[10px] mx-auto w-[80%] block border-[2px] border-[#a8a8a8] px-[10px] md:w-[90%]"
+                  name="description"
+                  type="text"
+                  value={singleRoleData?.description}
+                  onChange={handleInputChange}
+                />
+                <label
+                  htmlFor="roleName"
+                  className="dark:text-white text-[24px] font-semibold ml-[10%] block"
+                >
+                  Permissions
+                </label>
+                <div className="modal-body ml-[10%]  w-[80%] flex flex-col bg-lime">
+                  {singleRoleData?.permissions?.map((permission, index) => {
+                    const isOpen = openEntities.includes(permission.entity);
+
+                    return (
+                      <div key={index}>
+                        <div className="p-2 flex justify-between items-center">
+                          <select
+                            value={permission.entity}
+                            onChange={(e) =>
+                              handleEntityChange(index, e.target.value)
+                            }
+                            className="bg-white text-lg font-semibold p-2 rounded-lg"
+                          >
+                            <option value="">Select Entity</option>
+                            {roleEntities.map((entity, idx) => (
+                              <option key={idx} value={entity}>
+                                {entity}
+                              </option>
+                            ))}
+                          </select>
+
+                          <BsIcons.BsChevronDown
+                            className={`cursor-pointer text-xl bg-white transition-transform ${
+                              isOpen ? "rotate-180" : ""
+                            }`}
+                            onClick={() =>
+                              toggleEntityPermissions(permission.entity)
+                            }
+                          />
+                        </div>
+
+                        {isOpen && (
+                          <div className="ml-[5%] grid grid-cols-3 gap-2 md:grid-cols-4">
+                            {[
+                              "create",
+                              "viewOwn",
+                              "viewMultiple",
+                              "viewOne",
+                              "updateOwn",
+                              "updateMultiple",
+                              "updateOne",
+                              "deleteOwn",
+                              "deleteMultiple",
+                              "deleteOne",
+                            ].map((field) => (
+                              <div
+                                key={field}
+                                className="flex items-center space-x-1 p-1 bg-gray-100 rounded-lg text-xs"
+                              >
+                                <label
+                                  htmlFor={field}
+                                  className="text-gray-700 text-xs capitalize"
+                                >
+                                  {field}
+                                </label>
+                                <input
+                                  type="checkbox"
+                                  checked={
+                                    updatePermissionData[permission.entity]?.[
+                                      field
+                                    ] || false
+                                  }
+                                  onChange={(e) =>
+                                    handlePermissionChange(
+                                      permission.entity,
+                                      field,
+                                      e.target.checked
+                                    )
+                                  }
+                                  className="h-3 w-3 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                                />
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+
+                <div className="modal-footer flex justify-center mt-6">
+                  <button
+                    className={`text-white h-[40px] w-[120px] rounded-lg bg-[#173b3f] ${
+                      isLoading
+                        ? "bg-gray-400 cursor-not-allowed"
+                        : "hover:bg-[#145a58]"
+                    } transition-all duration-300 ease-in-out`}
+                    type="submit"
+                    onClick={handleUpdateRole}
+                    disabled={isLoading}
+                  >
+                    {isLoading ? "Updating..." : "Update"}
+                  </button>
+                </div>
+              </form>
+            </Box>
+          </div>
         </Modal>
       </div>
     </>
