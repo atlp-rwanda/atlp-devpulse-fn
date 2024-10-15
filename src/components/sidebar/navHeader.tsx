@@ -13,7 +13,6 @@ const profile: string = require("../../assets/avatar.png").default;
 const LogoWhite: string = require("../../assets/logoWhite.svg").default;
 import jwtDecode from "jwt-decode";
 import {destination} from '../../utils/utils'
-import SearchBar from "../../components/SearchBar";
 
 const placeholderImage = profile;
 
@@ -37,6 +36,8 @@ function NavBar() {
   const handleShowNotification = () => setShowNotification(!showNotification);
   const handleShowProfileDropdown = () =>
     setShowprofileDropdown(!showProfileDropdown);
+
+  
 
   return (
     
@@ -86,11 +87,6 @@ function NavBar() {
           </span>
 
         </div>
-        
-        {/* Add Search Bar */}
-        <SearchBar />
-        {/* End of Search Bar */}
-
         <div className="flex items-center mr-4">
           <span className="flex items-center">
             {" "}
