@@ -1,233 +1,153 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import NavBar from '../../components/sidebar/navHeader';
-import { fetchApplications } from '../../redux/actions/adminListApplications';
-import { HiDotsVertical } from 'react-icons/hi';
-import { Pagination } from 'flowbite-react';
+/* eslint-disable */
+import React, { useState, useEffect } from "react";
+import { fetchApplications } from "../../redux/actions/adminListApplications";
+import { Pagination } from "flowbite-react";
+import ApplicationTable from "../../components/application/ApplicationTable";
+import ApplicationFilter from "../../components/application/ApplicationFilter";
 
-const ListApplications = () => {
-  const navigate = useNavigate();
-  const [applications, setApplications]: any = useState();
+interface Application {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  gender: string;
+  status: string;
+  dateOfSubmission: string;
+}
 
+interface FilterAndSortOptions {
+  applications: Application[];
+  searchTerm: string;
+  filterStatus: string;
+  sortBy: string;
+  sortOrder: string;
+}
+
+const ApplicationList = () => {
+  const [applications, setApplications] = useState<Application[]>([]);
+  const [filteredApplications, setFilteredApplications] = useState<Application[]>([]);
   const [activePage, setActivePage] = useState(1);
   const [itemsCountPerPage, setItemsCountPerPage] = useState(10);
-
-  const [isDrop, setDrop] = useState<String | Number>("");
-
-  const onSubmitHandler = (appId: any) => {
-    if (!isDrop) setDrop(appId);
-    if (isDrop) setDrop("");
-  };
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterStatus, setFilterStatus] = useState("All");
+  const [sortBy, setSortBy] = useState("dateOfSubmission");
+  const [sortOrder, setSortOrder] = useState("desc");
 
   useEffect(() => {
     const applicationsData = async () => {
-      const { data, error } = await fetchApplications();
-      console.log(error);
-      // if(error){
-      //   setTimeout(() => {
-      //     navigate('/login');
-      //   }, 5000);
-      //   return;
-      // }
-      const slicedData = data?.data?.applications.slice(
-        (activePage - 1) * itemsCountPerPage,
-        activePage * itemsCountPerPage
-      );
-      setApplications(slicedData);
+      const data = await fetchApplications();
+      setApplications(data?.applications || []);
     };
     applicationsData();
-  }, [activePage, itemsCountPerPage]);
+  }, []);
+
+  useEffect(() => {
+    const filtered = filterAndSortApplications({
+      applications,
+      searchTerm,
+      filterStatus,
+      sortBy,
+      sortOrder,
+    });
+  
+    setFilteredApplications(
+      filtered.slice((activePage - 1) * itemsCountPerPage, activePage * itemsCountPerPage)
+    );
+  }, [applications, searchTerm, filterStatus, sortBy, sortOrder, activePage, itemsCountPerPage]);
+  
 
   const handlePageChange = (pageNumber) => {
     setActivePage(pageNumber);
   };
 
-  const handleItemsCountPerPageChange = (
-    event: React.ChangeEvent<HTMLSelectElement>
-  ) => {
+  const handleItemsCountPerPageChange = (event) => {
     setItemsCountPerPage(Number(event.target.value));
   };
 
-  const totalApplications = applications?.length;
+  const totalApplications = applications.length;
 
   return (
     <>
-      <div className='flex flex-col h-screen w-full'>
-        <div className='flex flex-row'>
-          <div className='w-full'>
-            <div>
-              <div className='bg-light-bg dark:bg-dark-frame-bg min-h-screen overflow-y-hidden overflow-x-hidden'>
-                <div className='flex items-left px-8'>
-                  <div className='flex py-2 pb-8 w-fit'>
-                    <Link to='/filter-applications'>
-                      <button className='flex bg-primary dark:bg-[#56C870] rounded-md py-2 mt-2 px-4 text-white font-medium cursor-pointer'>
-                        Search
-                      </button>
-                    </Link>
-                    <div></div>
-                  </div>
+      <div className="flex flex-col min-h-screen w-full">
+        <div className="bg-light-bg dark:bg-dark-frame-bg min-h-screen">
+          <div className="px-8 pt-8 pb-0">
+            <ApplicationFilter
+              searchTerm={searchTerm}
+              setSearchTerm={setSearchTerm}
+              filterStatus={filterStatus}
+              setFilterStatus={setFilterStatus}
+              sortBy={sortBy}
+              setSortBy={setSortBy}
+              sortOrder={sortOrder}
+              setSortOrder={setSortOrder}
+            />
+          </div>
+
+          <div className="px-8 pb-6">
+            <div className="bg-white dark:bg-dark-bg shadow-md px-5 py-8 rounded-md w-full">
+              <ApplicationTable
+                filteredApplications={filteredApplications}
+              />
+              <div className="flex items-center justify-between my-4">
+                <div className="flex items-center space-x-2">
+                  <label className="dark:text-white">Items per page:</label>
+                  <select value={itemsCountPerPage} onChange={handleItemsCountPerPageChange}
+                    className='border dark:bg-dark-bg text-sm dark:text-white border-gray-300 rounded-md p-1'>
+                    <option value={5}>5</option>
+                    <option value={10}>10</option>
+                    <option value={20}>20</option>
+                    <option value={50}>50</option>
+                    <option value={100}>100</option>
+                  </select>
                 </div>
-                <div className='px-8'>
-                  <div className='bg-white dark:bg-dark-bg shadow-lg px-5 py-8 rounded-md w-full'>
-                    <div>
-                      <div className='-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto'>
-                        <div className='inline-block w-full h-[55vh] lg:min-w-full shadow rounded-lg overflow-y-scroll'>
-                          <div>
-                            <table className='min-w-full leading-normal'>
-                              <thead className='w-full px-32 sticky top-0'>
-                                <tr>
-                                  <th className='p-6 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider'>
-                                    First Name
-                                  </th>
-                                  <th className='px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider'>
-                                    Last Name
-                                  </th>
-                                  <th className='px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider'>
-                                    Email
-                                  </th>
-
-                                  <th className='px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider'>
-                                    Gender
-                                  </th>
-
-                                  <th className='px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider'>
-                                    Status
-                                  </th>
-
-                                  <th className='px-5 py-3 border-b-2 sm:text-center border-gray-200 bg-gray-100 dark:bg-dark-tertiary text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider'>
-                                    Action
-                                  </th>
-                                </tr>
-                              </thead>
-                              <tbody className='overflow-y-auto'>
-                                {applications &&
-                                  applications.map((item) => (
-                                    <tr
-                                      key={item._id}
-                                      className='hover:bg-slate-300 transition-colors dark:hover:bg-slate-700'>
-                                      <td className='px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary  text-sm'>
-                                        <div className='text-gray-900 dark:text-white whitespace-no-wrap'>
-                                          {item.firstName}
-                                        </div>
-                                      </td>
-                                      <td className='px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm'>
-                                        <div className='text-gray-900 dark:text-white whitespace-no-wrap'>
-                                          {item.lastName}
-                                        </div>
-                                      </td>
-                                      <td className='px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm'>
-                                        <div className='text-gray-900 dark:text-white whitespace-no-wrap'>
-                                          {item.email}
-                                        </div>
-                                      </td>
-
-                                      <td className='px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm'>
-                                        <div className='text-gray-900 dark:text-white whitespace-no-wrap'>
-                                          {item.gender}
-                                        </div>
-                                      </td>
-
-                                      <td className='px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm'>
-                                        <div className='text-gray-900 dark:text-white whitespace-no-wrap'>
-                                          {item.status}
-                                        </div>
-                                      </td>
-
-                                      <td>
-                                        <div>
-                                          <HiDotsVertical
-                                            className='text-black dark:text-white text-3xl ml-6 font-size-6 cursor-pointer'
-                                            onClick={(e: any) => {
-                                              e.preventDefault();
-                                              onSubmitHandler(item._id);
-                                            }}
-                                          />
-                                          <div
-                                            className={`${
-                                             isDrop === item._id
-                                                ? 'block'
-                                                : 'hidden'
-                                            } absolute bg-white dark:bg-dark-tertiary dark:text-white text-base z-50 list-none divide-y divide-gray-100 rounded shadow my-4`}
-                                            id='dropdown'>
-                                            <ul
-                                              className='py-1'
-                                              aria-labelledby='dropdown'>
-                                              <li>
-                                                <Link
-                                                  to={`/application/${item._id}/edit`}
-                                                  className='text-sm hover:bg-gray-100 text-gray-700 dark:hover-bg-gray-500 dark:text-white block px-4 py-2'>
-                                                  Edit
-                                                </Link>
-                                              </li>
-                                              <li>
-                                                <Link
-                                                  to={`/application-details/${item._id}`}
-                                                  className='text-sm hover-bg-gray-100 text-gray-700 dark:text-white dark:hover-bg-gray-500 block px-4 py-2'>
-                                                  View
-                                                </Link>
-                                              </li>
-                                              <li>
-                                                <div className='text-sm hover-bg-gray-100 text-gray-700 dark:text-white block px-4 py-2'>
-                                                  Soft Delete
-                                                </div>
-                                              </li>
-                                              <li>
-                                                <div className='text-sm hover-bg-gray-100 text-gray-700 dark:text-white block px-4 py-2'>
-                                                  Hard Delete
-                                                </div>
-                                              </li>
-                                            </ul>
-                                          </div>
-                                        </div>
-                                      </td>
-                                    </tr>
-                                  ))}
-                              </tbody>
-                            </table>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className='flex items-center justify-between my-4'>
-                      <div className='flex items-center space-x-2'>
-                        <label className='dark:text-zinc-100 flex'>
-                          Items per page:
-                        </label>
-                        <select
-                          className='border border-gray-300 rounded-md p-1'
-                          value={itemsCountPerPage}
-                          onChange={handleItemsCountPerPageChange}>
-                          <option value={5}>5</option>
-                          <option value={10}>10</option>
-                          <option value={20}>20</option>
-                          <option value={50}>50</option>
-                          <option value={100}>100</option>
-                        </select>
-                      </div>
-                      <span className='dark:text-zinc-100 '>
-                        <div className='flex justify-center items-center flex-row flex-wrap'>
-                          <Pagination
-                            layout='navigation'
-                            currentPage={activePage}
-                            totalPages={totalApplications}
-                            onPageChange={handlePageChange}
-                            previousLabel='Prev'
-                            nextLabel='Next'
-                            showIcons
-                          />
-                        </div>
-                      </span>
-                    </div>
-                  </div>
-                </div>
+                <Pagination
+                  currentPage={activePage}
+                  totalPages={Math.ceil(totalApplications / itemsCountPerPage)}
+                  onPageChange={handlePageChange}
+                  previousLabel='Prev'
+                  nextLabel='Next'
+                  showIcons
+                  className="rounded-md"
+                  layout="navigation"
+                />
               </div>
             </div>
           </div>
         </div>
       </div>
-      
     </>
   );
 };
 
-export default ListApplications;
+
+function filterAndSortApplications({
+  applications,
+  searchTerm,
+  filterStatus,
+  sortBy,
+  sortOrder,
+}: FilterAndSortOptions): Application[] {
+  let filtered = applications;
+
+  if (searchTerm) {
+    filtered = filtered.filter((app) =>
+      `${app.firstName} ${app.lastName} ${app.email}`
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase())
+    );
+  }
+
+  if (filterStatus !== "All") {
+    filtered = filtered.filter((app) => app.status === filterStatus);
+  }
+
+  return filtered.sort((a, b) => {
+    if (sortOrder === "asc") {
+      return a[sortBy] > b[sortBy] ? 1 : -1;
+    } else {
+      return a[sortBy] < b[sortBy] ? 1 : -1;
+    }
+  });
+}
+
+export default ApplicationList;

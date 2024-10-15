@@ -10,9 +10,9 @@ const ApplicationForm = () => {
   };
 
   return (
-    <div className='flex justify-center'>
-      <div className='flex justify-between w-[62%]'>
-        <div className='flex py-4 w-fit'>
+    <div>
+      <div className='flex justify-center'>
+        <div className='flex px-5 py-2 w-fit'>
           <button
             onClick={() =>
               window.open('https://docs.google.com/forms/u/0/', '_blank')

@@ -15,7 +15,6 @@ const logo: string = require("../../assets/logo.svg").default;
 const profile: string = require("../../assets/avatar.png").default;
 const LogoWhite: string = require("../../assets/logoWhite.svg").default;
 import {destination} from '../../utils/utils'
-import SearchBar from "../../components/SearchBar";
 
 const placeholderImage = profile;
 
@@ -82,6 +81,8 @@ function NavBar() {
 
   const handleClick = () => setNav(!nav);
 
+  
+
   return (
     <div className="flex items-center dark:bg-zinc-800">
       {showProfileDropdown && (
@@ -123,11 +124,6 @@ function NavBar() {
           </span>
 
         </div>
-        
-        {/* Add Search Bar */}
-        <SearchBar />
-        {/* End of Search Bar */}
-
         <div className="flex items-center mr-4">
           <NotificationBell
             unreadCount={unreadCount}
