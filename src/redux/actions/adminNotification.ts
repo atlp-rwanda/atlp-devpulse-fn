@@ -39,18 +39,20 @@ export const markNotificationAsRead = async (id) => {
     },
     data: {
       query: `
-        mutation MarkNotificationAsRead($markNotificationAsReadId: ID!) {
-          markNotificationAsRead(id: $markNotificationAsReadId) {
-            _id
-            message
-            type
-            createdAt
-            read
-          }
-        }
+        mutation MarkAdminNotificationAsRead($markAdminNotificationAsReadId: ID!) {
+  markAdminNotificationAsRead(id: $markAdminNotificationAsReadId) {
+    _id
+    message
+    type
+    createdAt
+    read
+
+ 
+  }
+}
       `,
       variables: {
-        markNotificationAsReadId: id,
+        markAdminNotificationAsReadId: id,
       },
     },
   });
@@ -63,7 +65,7 @@ export const markNotificationAsRead = async (id) => {
     return null;
   }
 
-  return response.data.data.markNotificationAsRead;
+  return response.data.data.markAdminNotificationAsRead;
 };
 
 export const deleteNotification = async (id) => {
