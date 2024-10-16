@@ -1,21 +1,25 @@
-import { Navigate, useLocation } from "react-router-dom";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { Token } from "../utils/utils";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
-const PrivateRoute = ({ children }) => {
+
+const PrivateRoute = ({ children, allowedRoles }) => {
   const access_token = Token();
+  const roleName = localStorage.getItem('roleName');
   const location = useLocation();
-  const user =
-    //@ts-ignore
-    access_token !== null && access_token !== undefined && access_token !== '';
+  
+  const user = access_token && roleName && allowedRoles.includes(roleName);
+  if (!access_token) {
+    return <Navigate to="/login" />;
+  }
 
-  useEffect(() => {
-    if(!user){
-      localStorage.setItem('lastAttemptedRoute', location.pathname);
-    }
-  }, [user, location])
-  return user ? children : <Navigate to="/login" />;
+  if (!user) {
+    return <Navigate to="/pageNotFound" />;
+  }
+
+  return children; 
 };
 
 
 export default PrivateRoute;
+

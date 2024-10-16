@@ -13,7 +13,7 @@ const PageNotFound = () => {
             <Link to="/applicant">
               <button>Go to Applicant Dashboard</button>
             </Link>
-          ) : role === "superAdmin" ? (
+          ) : role === "superAdmin" || role === "Admin" ?  (
             <Link to="/admin">
             <button>Go back to Homepage</button>
           </Link>

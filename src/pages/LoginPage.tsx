@@ -45,15 +45,15 @@ const LoginPage = (props: any) => {
     firstname
     lastname
     email
-    authMethod
   }
 }
   `;
 
-  return authenticated && roleName === "applicant" ? 
-    <Navigate to="/applicant" /> : authenticated && roleName === "superAdmin" ? <Navigate to="/admin" />
-   : 
-  (
+  return authenticated && roleName === "applicant" ? (
+    <Navigate to="/applicant" />
+  ) : authenticated && (roleName === "superAdmin" || roleName === "admin") ? (
+    <Navigate to="/admin" />
+  ) : (
     <>
       <div className="flex items-center dark:bg-zinc-800 ">
         <div

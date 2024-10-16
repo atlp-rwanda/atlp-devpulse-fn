@@ -1,16 +1,9 @@
+/* eslint-disable */
 import React, { useState, useEffect } from "react";
-import { BsEnvelope } from "react-icons/bs";
-import { TiExportOutline } from "react-icons/ti";
-import { FcApproval } from "react-icons/fc";
-import { AiFillSetting, AiFillCaretDown } from "react-icons/ai";
-import { MdOutlineCancel } from "react-icons/md";
-import { BsFillPersonLinesFill } from "react-icons/bs";
 import { useParams } from "react-router";
-import NavBar from "../../components/sidebar/navHeader";
-import { ViewSingleApplication } from "../../redux/actions/adminListApplications";
-import { fetchApplications } from "../../redux/actions/adminListApplications";
-import { updateApplicationStatus } from "../../redux/actions/adminListApplications";
+import { ViewSingleApplication, fetchApplications, updateApplicationStatus } from "../../redux/actions/adminListApplications";
 import toast, { Toaster } from "react-hot-toast";
+import WarningModal from '../../components/application/WarningModal'
 
 type Status = {
   defaultStatus: string;
@@ -78,386 +71,172 @@ type Programs = {
 
 const ApplicationDetails = () => {
   const params = useParams();
-  const [key, setKey] = useState(params.appId);
   const [statusScope, setStatusScope] = useState<Status | undefined>(undefined);
   const [status, setStatus] = useState("");
   const [currentStatus, setCurrentStatus] = useState<string>("");
-  const [singleApplication, setSingleApplication] = useState<
-    ApplicationData | undefined
-  >(undefined);
-  const [filteredStatusOptions, setFilteredStatusOptions] = useState<string[]>(
-    []
-  );
+  const [singleApplication, setSingleApplication] = useState<ApplicationData | undefined>(undefined);
+  const [filteredStatusOptions, setFilteredStatusOptions] = useState<string[]>([]);
   const [applications, setApplications]: any = useState();
-  const [isInDanger, setIsInDanger] = useState(true);
+  const [showRejectModal, setShowRejectModal] = useState(false);
+  const [selectedStatus, setSelectedStatus] = useState("");
 
   const statusChange = [
     {
       defaultStatus: "submitted",
-      scope: ["Reject", "Shortlisted"],
+      scope: ["Shortlisted", "Rejected"],
     },
     {
       defaultStatus: "Shortlisted",
-      scope: ["English assessment"],
+      scope: ["English assessment", "Rejected"],
     },
     {
       defaultStatus: "English assessment",
-      scope: ["Reject", "Techinical assessment", "Missed English assessment"],
-    },
-
-    {
-      defaultStatus: "Techinical assessment",
-      scope: ["Reject", "Done Techinical assessment", "Missed Techinical assessment"],
+      scope: ["Technical assessment", "Missed English assessment", "Rejected"],
     },
     {
-      defaultStatus: "Done Techinical assessment",
-      scope: ["Invited for Home Challenge"],
+      defaultStatus: "Technical assessment",
+      scope: ["Done Technical assessment", "Rejected"],  
+    },
+    {
+      defaultStatus: "Done Technical assessment",
+      scope: ["Invited for Home Challenge", "Rejected"],
     },
     {
       defaultStatus: "Invited for Home Challenge",
-      scope: ["Missed Home Challenge", "Reject", "Done Home Challenge"],
+      scope: [ "Done Home Challenge", "Rejected"],
     },
     {
       defaultStatus: "Done Home Challenge",
-      scope: ["Invited for Interview"],
+      scope: ["Invited for Interview", "Rejected"],
     },
     {
       defaultStatus: "Invited for Interview",
-      scope: ["Accepted", "Reject", "Missed  Interview"],
+      scope: ["Accepted",  "Rejected"],
     },
+    {
+      defaultStatus: "Rejected",
+      scope: [],
+    },
+    {
+      defaultStatus: "Missed English assessment",
+      scope: ["Rejected"],
+    }
+    
   ];
 
-  const urlId = window.location.href.substring(
-    window.location.href.lastIndexOf("/") + 1
-  );
-
   useEffect(() => {
-    const applicationsData = async () => {
-      const data = await fetchApplications();
-      setApplications(data);
+    const fetchData = async () => {
+      const applicationsData = await fetchApplications();
+      setApplications(applicationsData);
+      
+      const singleAppData = await ViewSingleApplication(params.appId);
+      setSingleApplication(singleAppData);
     };
-    const singleApplicationData = async () => {
-      const data: any = await ViewSingleApplication(urlId);
-      setSingleApplication(data);
-    };
-    applicationsData();
-    singleApplicationData();
-  }, [urlId]);
+    
+    fetchData();
+  }, [params.appId]);
 
   useEffect(() => {
     if (singleApplication) {
-      const matchedStatusChange = statusChange.find(
-        (change) => change.defaultStatus === singleApplication?.status
-      );
-
-      if (matchedStatusChange) {
-        setStatusScope(matchedStatusChange);
-      } else {
-        setStatusScope(undefined);
-      }
+      const matchedStatusChange = statusChange.find(change => change.defaultStatus === singleApplication?.status);
+      setStatusScope(matchedStatusChange || undefined);
     }
   }, [singleApplication]);
 
   useEffect(() => {
     if (statusScope) {
       setFilteredStatusOptions(statusScope.scope);
-      setIsInDanger(false);
     }
     setCurrentStatus(singleApplication?.status || "");
   }, [statusScope, singleApplication]);
 
-  const handleLinkClick = (link: string) => {
-    window.open(link, "_blank");
-  };
-
-  const handleStatusChange = async (
-    event: React.ChangeEvent<HTMLSelectElement>
-  ) => {
+  const handleStatusChange = async (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedStatus = event.target.value;
-    setStatus(selectedStatus);
-    setCurrentStatus(selectedStatus);
-    const selectedStatusChange = statusChange.find(
-      (change) => change.defaultStatus === selectedStatus
-    );
-    await toast.promise(
-      updateApplicationStatus(selectedStatus, singleApplication?._id),
-      {
-        loading: "update statu...",
-        success: <b>status updated successfully!</b>,
-        error: <b>Failed to update status.</b>,
-      }
-    );
-    if (selectedStatusChange) {
-      setFilteredStatusOptions(selectedStatusChange.scope);
+
+    if (selectedStatus === "Rejected") {
+      setShowRejectModal(true);
+      setSelectedStatus(selectedStatus);
     } else {
-      setFilteredStatusOptions([]);
+      await updateStatus(selectedStatus);
     }
   };
+
+  const updateStatus = async (status: string) => {
+    setStatus(status);
+    setCurrentStatus(status);
+    await toast.promise(
+      updateApplicationStatus(status, singleApplication?._id),
+      {
+        loading: "Updating status...",
+        success: "Status updated successfully!",
+        error: "Failed to update status.",
+      }
+    );
+    const selectedStatusChange = statusChange.find(change => change.defaultStatus === status);
+    setFilteredStatusOptions(selectedStatusChange?.scope || []);
+  };
+
+  const confirmRejection = async () => {
+    setShowRejectModal(false);
+    await updateStatus("Rejected");
+  };
+
+  const cancelRejection = () => {
+    setShowRejectModal(false);
+  };
+
   return (
     <>
-      
-      <div className="flex items-center flex-col overflow-auto dark:bg-dark-frame-bg">
-        <div className="min-h-[100vh] dark:bg-dark-frame-bg w-[100%] block mt-10 md:w-[100%] md:mt-0 pl-[16rem] pt-[80px] md:pl-0">
-          <div className="block w-[100%] pl-[16rem] h-max md:pl-0 mx-auto dark:bg-dark-frame-bg pb-10  ">
-            {singleApplication && (
-              <div className="max-w-full   bg-slate-50 dark:text-zinc-100 rounded-xl dark:bg-dark-bg shadow-md overflow-hidden md:w-[100%] mb-6 lg:flex lg:w-[90%]">
-                <div className="md:flex">
-                  <div className="m-5 sm:mt-20  grid grid-col-1 md:gap-4 lg:gap-5 md:grid-cols-4 w-full lg:grid-cols-4 sm:ml-[-12rem] md:shrink-0 lg:ml-10 lg:mt-10">
-                    <div>
-                      <p className="uppercase">candidate infomation</p>
-                      <h3 className="mt-4">Address</h3>
-                      <p className="text-gray-500 text-sm dark:text-gray-400">
-                        {singleApplication?.address}
-                      </p>
-                      <h3>First Name</h3>
-                      <p className="text-gray-500 uppercase text-sm dark:text-gray-400">
-                        {singleApplication?.firstName}
-                      </p>
-                      <h3>Last Name</h3>
-                      <p className="text-gray-500 uppercase text-sm dark:text-gray-400">
-                        {singleApplication?.lastName}
-                      </p>
-                      <h3>Email</h3>
-                      <p className="text-gray-500 text-sm dark:text-gray-400">
-                        {singleApplication?.email}
-                      </p>
-                      <h3>Phone Number</h3>
-                      <p className="text-gray-500 text-sm dark:text-gray-400">
-                        {singleApplication?.telephone}
-                      </p>
-                      <h3>Gender</h3>
-                      <p className="text-gray-500 text-sm dark:text-gray-400">
-                        {singleApplication?.gender}
-                      </p>
-                      <h3>Date of submission</h3>
-                      <p className="text-gray-500 text-sm dark:text-gray-400">
-                        {singleApplication?.dateOfSubmission}
-                      </p>
-                      <h3>Available for interview</h3>
-                      <p className="text-gray-500 text-sm dark:text-gray-400">
-                        {singleApplication?.availability_for_interview}
-                      </p>
-                      <h3>Resume</h3>
-                      <a
-                        href={singleApplication?.resume}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-sm text-blue-500 underline hover:opacity-80"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          handleLinkClick(singleApplication?.resume);
-                        }}
-                      >
-                        {singleApplication?.resume
-                          .split("")
-                          .slice(0, 15)
-                          .map((link) => link)}
-                      </a>
-                      <a
-                        className="text-sm text-blue-500 underline hover:opacity-80"
-                        href={singleApplication?.associatedFormData.link}
-                      >
-                        ....
-                      </a>
-                      <h3>Comment</h3>
-                      <p className="text-gray-500 text-sm dark:text-gray-400">
-                        {singleApplication?.comments}
-                      </p>
+      <div className="flex flex-col items-center dark:bg-dark-frame-bg min-h-screen">
+        <div className="w-full max-w-6xl mt-10 p-6">
+          {singleApplication && (
+            <div className="bg-white dark:bg-dark-bg shadow-lg rounded-lg p-8">
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div className="space-y-4">
+                  <h3 className="uppercase text-gray-800 dark:text-white font-bold">Candidate Information</h3>
+                  <p className="text-gray-500 dark:text-gray-300"> <span className="font-medium"> Address:</span> {singleApplication?.address}</p>
+                  <p className="text-gray-500 dark:text-gray-300"><span className="font-medium"> First Name: </span> {singleApplication?.firstName}</p>
+                  <p className="text-gray-500 dark:text-gray-300"><span className="font-medium">Last Name:</span> {singleApplication?.lastName}</p>
+                  <p className="text-gray-500 dark:text-gray-300"><span className="font-medium">Email: </span> {singleApplication?.email}</p>
+                  <p className="text-gray-500 dark:text-gray-300"><span className="font-medium">Phone Number:</span> {singleApplication?.telephone}</p>
+                  <p className="text-gray-500 dark:text-gray-300"><span className="font-medium">Gender: </span> {singleApplication?.gender}</p>
+                  <p className="text-gray-500 dark:text-gray-300"><span className="font-medium">Date of Submission:</span> {singleApplication?.dateOfSubmission}</p>
+                  <p className="text-gray-500 dark:text-gray-300"><span className="font-medium">Available for Interview:</span> {singleApplication?.availability_for_interview}</p>
+                  <p className="text-gray-500 dark:text-gray-300 font-medium"> Resume:{" "}<a href={singleApplication?.resume} target="_blank" rel="noreferrer noopener" className="text-blue-500 font-normal hover:underline"> View Resume </a> </p>
+                  <p className="text-gray-500 pt-2 dark:text-gray-300"><span className="font-medium">Status:</span>  {currentStatus}</p>
+                </div>
 
-                      <h3>Status</h3>
-                      <p
-                        className="text-gray-500 text-sm dark:text-gray-400"
-                      >
-                        {String(currentStatus)}
-                      </p>
-                    </div>
-                    <div>
-                      <h1 className="uppercase">Form</h1>
-                      <h3 className="mt-4">Title</h3>
-                      <p className="text-gray-500 text-sm dark:text-gray-400">
-                        {singleApplication?.associatedFormData.title}
-                      </p>
-                      <h3>Link</h3>
-                      <a
-                        href={singleApplication?.associatedFormData.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-sm text-blue-500 underline hover:opacity-80"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          handleLinkClick(
-                            singleApplication?.associatedFormData.link
-                          );
-                        }}
-                      >
-                        {singleApplication?.associatedFormData.jobpost.link
-                          .split("")
-                          .slice(0, 15)
-                          .map((link) => link)}
-                      </a>
-                      <a
-                        className="text-sm text-blue-500 underline hover:opacity-80"
-                        href={singleApplication?.associatedFormData.link}
-                      >
-                        ....
-                      </a>
-                    </div>
-                    <div>
-                      <h1 className="uppercase ">JoB Post</h1>
-                      <h3 className="mt-4">Title</h3>
-                      <p className="text-gray-500 text-sm dark:text-gray-400">
-                        {singleApplication?.associatedFormData.jobpost.title}
-                      </p>
-                      <h3>Link</h3>
-                      <a
-                        href={
-                          singleApplication?.associatedFormData.jobpost.link
-                        }
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-sm text-blue-500 underline hover:opacity-80"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          handleLinkClick(
-                            singleApplication?.associatedFormData.jobpost.link
-                          );
-                        }}
-                      >
-                        {singleApplication?.associatedFormData.jobpost.link
-                          .split("")
-                          .slice(0, 15)
-                          .map((link) => link)}
-                      </a>
-                      <a
-                        className="text-sm text-blue-500 underline hover:opacity-80"
-                        href={
-                          singleApplication?.associatedFormData.jobpost.link
-                        }
-                      >
-                        ....
-                      </a>
-                      <h3>Label</h3>
-                      <p className="text-gray-500 text-sm dark:text-gray-400">
-                        {singleApplication?.associatedFormData.jobpost.label}
-                      </p>
-                      <div>
-                        <h1 className="py-4 uppercase">Circle</h1>
-                        <h3>Name</h3>
-                        <p className="text-gray-500 text-sm dark:text-gray-400">
-                          {
-                            singleApplication?.associatedFormData.jobpost.cycle
-                              .name
-                          }
-                        </p>
-                        <h3>Starting Date</h3>
-                        <p className="text-gray-500 text-sm dark:text-gray-400">
-                          {
-                            singleApplication?.associatedFormData.jobpost.cycle
-                              .startDate
-                          }
-                        </p>
-                        <h3>Closed Date</h3>
-                        <p className="text-gray-500 text-sm dark:text-gray-400">
-                          {
-                            singleApplication?.associatedFormData.jobpost.cycle
-                              .endDate
-                          }
-                        </p>
-                      </div>
-                    </div>
-                    <div className="">
-                      <h1 className="uppercase">Cohort</h1>
-                      <h3 className="mt-4">Title</h3>
-                      <p className="text-gray-500 text-sm dark:text-gray-400">
-                        {
-                          singleApplication?.associatedFormData.jobpost.cohort
-                            .title
-                        }
-                      </p>
-                      <h3>Starting Date</h3>
-                      <p className="text-gray-500 text-sm dark:text-gray-400">
-                        {
-                          singleApplication?.associatedFormData.jobpost.cohort
-                            .start
-                        }
-                      </p>
-                      <h3>closed Date</h3>
-                      <p className="text-gray-500 text-sm dark:text-gray-400">
-                        {
-                          singleApplication?.associatedFormData.jobpost.cohort
-                            .end
-                        }
-                      </p>
-
-                      <div>
-                        <h1 className="uppercase py-4">Program</h1>
-                        <h3>Title</h3>
-                        <p className="text-gray-500 text-sm dark:text-gray-400">
-                          {
-                            singleApplication?.associatedFormData.jobpost
-                              .program.title
-                          }
-                        </p>
-                        <h3>Duration</h3>
-                        <p className="text-gray-500 text-sm dark:text-gray-400">
-                          {
-                            singleApplication?.associatedFormData.jobpost
-                              .program.duration
-                          }
-                        </p>
-                        <h3>Main objective</h3>
-                        <p className="text-gray-500 text-sm dark:text-gray-400">
-                          {
-                            singleApplication?.associatedFormData.jobpost
-                              .program.mainObjective
-                          }
-                        </p>
-                        <h3>Mode of excution</h3>
-                        <p className="text-gray-500 text-sm dark:text-gray-400">
-                          {
-                            singleApplication?.associatedFormData.jobpost
-                              .program.modeOfExecution
-                          }
-                        </p>
-                        <h3>Mode of excution</h3>
-                        <p className="text-gray-500 text-sm dark:text-gray-400">
-                          {singleApplication?.associatedFormData.jobpost.program.requirements?.map(
-                            (requirement: any) => {
-                              return <p>{requirement}</p>;
-                            }
-                          )}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
+                <div className="space-y-4">
+                  <h3 className="uppercase text-gray-800 dark:text-white font-bold">Form Information</h3>
+                  <p className="text-gray-500 dark:text-gray-300"><span className="font-medium">Title:</span> {singleApplication?.associatedFormData.title}</p>
+                  <a href={singleApplication?.associatedFormData.link} target="_blank" rel="noreferrer noopener" className="text-blue-500 mt-2 hover:underline">View Form</a>
+                </div>
+                <div className="space-y-4">
+                  <h3 className="uppercase text-gray-800 dark:text-white font-bold">Job Post</h3>
+                  <p className="text-gray-500 dark:text-gray-300"><span className="font-medium">Title:  </span> {singleApplication?.associatedFormData.jobpost.title}</p>
                 </div>
               </div>
-            )}
-          </div>
-          <div className="max-w-md flex justify-between items-center p-4 dark:text-zinc-100 dark:bg-dark-bg bg-slate-50 rounded-xl shadow-md overflow-hidden  lg:mb-10 pb-5 mx-auto">
-            <select
-              name=""
-              id=""
-              className="bg-[#10292C] flex items-center text-white justify-center dark:bg-white hover:bg-[#1f544cef] dark:text-zinc-700 font-bold py-2 px-4 rounded"
-              onChange={handleStatusChange}
-              value={status}
-            >
+            </div>
+          )}
+
+       <div className="mt-8 flex justify-between gap-8 items-center">           
+       <select name="" id=""  value={status}  onChange={handleStatusChange}
+              className="bg-[#10292C] flex items-center text-white justify-center dark:bg-white hover:bg-[#1f544cef] dark:text-zinc-700 font-bold py-2 px-4 rounded" >
               <option value="">Update status</option>
               {filteredStatusOptions.map((option, index) => (
                 <option value={option} key={index}>
                   {option}
                 </option>
               ))}
-            </select>
-            <button
-              className="bg-[#DC5454] hover:text-red-500 hover:bg-[#1f544cef] text-white font-bold py-2 px-2 rounded"
-            >
-              Softdelete
-            </button>
+      </select>     
+      <button className="px-4 py-2 bg-red-600 hover:bg-red-500 text-white rounded-md mt-2"> Soft Delete </button>
           </div>
         </div>
       </div>
-      <Toaster position="top-center" reverseOrder={false} />
+
+      <WarningModal isOpen={showRejectModal} message="Are you sure you want to reject this application? This action is irreversible." onConfirm={confirmRejection} onCancel={cancelRejection} />
+
+      <Toaster position="top-center" />
     </>
   );
 };

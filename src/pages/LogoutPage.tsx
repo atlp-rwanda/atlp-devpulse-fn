@@ -4,7 +4,7 @@ import { Icon } from "@iconify/react";
 const LogoutPage = () => {
   const navigate = useNavigate();
   const handleLogout = async (e: any) => {
-    localStorage.removeItem("access_token");
+    localStorage.clear();
     navigate("/login");
   };
   return (

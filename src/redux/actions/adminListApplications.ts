@@ -53,9 +53,6 @@ export const fetchApplications = async () => {
                       start
                       end
                     }
-                    link
-                    description
-                    label
                   }
                 }
               }
@@ -158,9 +155,6 @@ export const ViewSingleApplication = async(urlId:any) => {
                 start
                 end
               }
-              link
-              description
-              label
             }
           }
         }
