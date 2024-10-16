@@ -89,3 +89,38 @@ export const assignMemberRoles= async (userId, roleId)  => {
    
 }
 }
+
+export const getAllCoordinators = () => async (dispatch: any) => {
+  try {
+    const data = await axios.post("/", {
+      query: `
+        query getMembers {
+          getUsers_Logged {
+            firstname
+            lastname
+            email
+            role {
+              roleName
+            }
+          }
+        }
+      `,
+    });
+
+    const members = data.data.data.getUsers_Logged;
+    const coordinators = members.filter(
+      (member: any) =>
+        member.role.roleName === "superAdmin" ||
+        member.role.roleName === "admin"
+    );
+
+    dispatch({
+      type: "FETCH_COORDINATORS",
+      data: coordinators,
+    });
+
+    return coordinators.length;
+  } catch (err) {
+    return 0;
+  }
+};
