@@ -1,5 +1,15 @@
 import creator from "./creator";
-import { GET_TRAINEE, CREATE_TRAINEES, CREATE_CYCLE_ERROR, SET_TRAINEE } from "..";
+import { AppDispatch } from '../store'; 
+import {
+  GET_TRAINEE,
+  CREATE_TRAINEES,
+  CREATE_CYCLE_ERROR,
+  SET_TRAINEE,
+  FETCH_TRAINEES_REQUEST,
+  FETCH_TRAINEES_SUCCESS,
+  FETCH_TRAINEES_FAILURE,
+  SET_CURRENT_TRAINEE_ID
+} from "..";
 import { toast } from "react-toastify";
 import axios from "axios";
 
@@ -56,58 +66,6 @@ export const getAllTraineess =
     }
   };
 
-export const createTrainee =
-  ({ firstName, lastName, email, cycle_id }: any) =>
-  async (dispatch: any) => {
-    try {
-      const datas = await axios({
-        url: process.env.BACKEND_URL,
-        method: "post",
-        data: {
-          query: `
-          mutation CreateNewTraineeApplicant($input: newTraineeApplicantInput) {
-            createNewTraineeApplicant(input: $input) {
-              lastName
-              firstName
-              email
-              _id
-            }
-          }`,
-          variables: {
-            input: {
-              firstName,
-              lastName,
-              email,
-              cycle_id,
-            },
-          },
-        },
-      })
-        .then((response) => {
-          if (response.data.data !== null) {
-            toast.success("Successfully created.");
-            dispatch(
-              creator(
-                CREATE_TRAINEES,
-                response.data.data.createNewTraineeApplicant
-              )
-            );
-          } else {
-            const err = response.data.errors[0].message;
-
-            toast.error(err);
-            dispatch(creator(CREATE_CYCLE_ERROR, err));
-          }
-        })
-        .catch((error) => {
-          dispatch(creator(CREATE_CYCLE_ERROR, error));
-        });
-    } catch (error) {
-      console.log(error);
-
-      return dispatch(creator(CREATE_CYCLE_ERROR, error));
-    }
-  };
 
 
 export const getTraineeApplicant = (traineeId: string) => async(dispatch: any) => {
@@ -152,5 +110,155 @@ export const getTraineeByUserId = (userId: string) => async (dispatch: any) => {
     dispatch(creator(SET_TRAINEE, traineeData));
   } catch (error) {
     console.error("Error fetching trainee:", error);
+  }
+};
+
+interface PaginationInput {
+  page: number;
+  itemsPerPage: number;
+  All: boolean;
+}
+
+export const setCurrentTraineeId = (traineeId: string) => ({
+  type: SET_CURRENT_TRAINEE_ID,
+  payload: traineeId,
+});
+
+const createTraineeQuery = `
+  mutation CreateNewTraineeApplicant($input: newTraineeApplicantInput!) {
+    createNewTraineeApplicant(input: $input) {
+      _id
+      lastName
+      firstName
+      email
+      cycleApplied {
+        _id
+        cycle {
+          _id
+        }
+      }
+    }
+  }
+`;
+
+const getAllTraineessQuery= `
+  query AllTraineesDetails($input: pagination) {
+    allTraineesDetails(input: $input) {
+      _id
+      gender
+      birth_date
+      Address
+      phone
+      field_of_study
+      education_level
+      currentEducationLevel
+      province
+      district
+      sector
+      isEmployed
+      haveLaptop
+      isStudent
+      Hackerrank_score
+      english_score
+      interview_decision
+      past_andela_programs
+      applicationPost
+      otherApplication
+      andelaPrograms
+      otherPrograms
+      understandTraining
+      discipline
+      trainee_id {
+        firstName
+        lastName
+        email
+        _id
+      }
+    }
+  }
+`;
+                   
+const createTraineeVariables = (traineeData: any) => ({
+  input: {
+    lastName: traineeData.lastName,
+    firstName: traineeData.firstName,
+    email: traineeData.email,
+    cycle_id: traineeData.cycle_id,
+    ...(traineeData.attributes && { attributes: traineeData.attributes }),
+  },
+});
+
+const handleGetAllTraineesSuccess = (dispatch: AppDispatch, response: any) => {
+  const trainees = response.data.data.allTraineesDetails;
+  dispatch({ type: GET_TRAINEE, payload: trainees });
+  dispatch({ type: FETCH_TRAINEES_SUCCESS, payload: trainees });
+};
+
+const handleGetAllTraineesError = (dispatch: AppDispatch, error: any) => {
+  console.error(error);
+  dispatch({ type: FETCH_TRAINEES_FAILURE, payload: error });
+};
+
+const makeGraphQLRequest = async (query: string, variables: any) => {
+  return await axios({
+    url: process.env.BACKEND_URL,
+    method: "post",
+    data: { query, variables },
+  });
+};
+
+const handleSuccessResponse = (dispatch: AppDispatch, data: any) => {
+  toast.success("Trainee successfully created.");
+  dispatch({ type: CREATE_TRAINEES, payload: data });
+};
+
+export const handleErrorResponse = (dispatch: AppDispatch, error: any) => {
+  let errorMessage = "An error occurred while creating the trainee.";
+  if (error.response?.data?.errors?.[0]?.message) {
+    errorMessage = error.response.data.errors[0].message;
+  } else if (error.message) {
+    errorMessage = error.message;
+  }
+  toast.error(errorMessage);
+  dispatch({ type: CREATE_CYCLE_ERROR, payload: errorMessage });
+};
+
+export const getAllTrainees = ({ page, itemsPerPage, All }: PaginationInput) => async (dispatch: AppDispatch) => {
+  dispatch({ type: FETCH_TRAINEES_REQUEST });
+  try {
+    const response = await makeGraphQLRequest(getAllTraineessQuery, { input: { page, itemsPerPage, All } });
+    handleGetAllTraineesSuccess(dispatch, response);
+  } catch (error) {
+    handleGetAllTraineesError(dispatch, error);
+  }
+};
+
+export const createTrainee = (traineeData: any) => async (dispatch: AppDispatch) => {
+  dispatch({ type: CREATE_TRAINEES });
+  try {
+    const response = await makeGraphQLRequest(createTraineeQuery, {
+      input: {
+        lastName: traineeData.lastName,
+        firstName: traineeData.firstName,
+        email: traineeData.email,
+        cycle_id: traineeData.cycle_id,
+        ...(traineeData.attributes && { attributes: traineeData.attributes }),
+      }
+    });
+    const { data, errors } = response.data;
+
+    if (errors && errors.length > 0) {
+      throw new Error(errors[0].message);
+    }
+
+    if (data?.createNewTraineeApplicant) {
+      handleSuccessResponse(dispatch, data.createNewTraineeApplicant);
+      return data.createNewTraineeApplicant._id; 
+    } else {
+      throw new Error("Failed to create trainee");
+    }
+  } catch (error: any) {
+    handleErrorResponse(dispatch, error);
+    throw error; 
   }
 };

@@ -50,8 +50,13 @@ import ApplicantLayout from "../pages/Applicant/ApplicantLayout";
 import AdminLayout from "../components/Layout/Admins/AdminLayout";
 import ApplicantDashboard from "../pages/Applicant/ApplicantDashboard";
 import UpdateJobPost from "../pages/JobPost/updateJobPost";
+import TraineeApply from "../pages/TraineeApply";
+import TraineeAttribute from '../pages/TraineeAttribute'
+import TraineeSuccessPage from "../pages/TraineSuccessPage";
+
 import VerifyEmail from "../pages/verifyEmail";
 import Search from "./../pages/search";
+
 
 function Navigation() {
   const roleName = localStorage.getItem("roleName");
@@ -354,6 +359,30 @@ function Navigation() {
           element={
             <PrivateRoute allowedRoles={['applicant']}>
               <PageNotFound />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="myApplications/trainee-apply"
+          element={
+            <PrivateRoute allowedRoles={['applicant']}>
+              <TraineeApply />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="myApplications/trainee-apply/trainee-success/:traineeId"
+          element={
+            <PrivateRoute allowedRoles={['applicant']}>
+              <TraineeSuccessPage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="myApplications/trainee-apply/trainee-success/trainee-add-attributes/:traineeId?"
+          element={
+            <PrivateRoute allowedRoles={['applicant']}>
+              <TraineeAttribute />
             </PrivateRoute>
           }
         />
