@@ -9,6 +9,7 @@ import { AppDispatch, RootState } from '../../redux/store';
 import useFormValidation from '../useFormValidation';
 import { useTheme } from '../../hooks/darkmode'; 
 import { loggedUserAction } from '../../redux/actions/getLoggedUser';
+import { toast } from "react-toastify";
 interface FormData {
   firstName: string;
   lastName: string;
@@ -69,25 +70,25 @@ const TraineeApplicationForm: React.FC = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState<FormData>(initialFormData);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const cycles = useSelector((state: RootState) => state.cycles.data);
-  const cyclesLoading = useSelector((state: RootState) => state.cycles.isLoading);
-  const loggedUser = useSelector((state: RootState) => state.loggedUser.user);
-  const loggedUserLoading = useSelector((state: RootState) => state.loggedUser.loading);
+  const { cycles, cyclesLoading, loggedUser, loggedUserLoading } = useSelector((state: RootState) => ({
+    cycles: state.cycles.data,
+    cyclesLoading: state.cycles.isLoading,
+    loggedUser: state.loggedUser.user,
+    loggedUserLoading: state.loggedUser.loading,
+  }));
 
   const { errors, validateForm } = useFormValidation(formData);
-  const { theme } = useTheme(); 
-  const isDarkMode = theme === false; 
+  const { theme } = useTheme();
+  const isDarkMode = theme === false;
 
   const isMounted = useRef(true);
 
   useEffect(() => {
     dispatch(getAllCycles());
     dispatch(loggedUserAction());
-
-    return () => {
-      isMounted.current = false;
-    };
+    return () => { isMounted.current = false; };
   }, [dispatch]);
 
   useEffect(() => {
@@ -96,35 +97,27 @@ const TraineeApplicationForm: React.FC = () => {
         ...prevData,
         firstName: loggedUser.firstName || '',
         lastName: loggedUser.lastName || '',
-        email: loggedUser.email || ''
+        email: loggedUser.email || '',
       }));
     }
   }, [loggedUser]);
 
-  console.log('Updating form data with logged user:', loggedUser);
-
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setFormData(prevData => ({
-      ...prevData,
-      [name]: value
-    }));
+    setFormData(prevData => ({ ...prevData, [name]: value }));
   };
 
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (validateForm()) {
       setSubmitError(null);
       setIsSubmitting(true);
       try {
         const newTraineeId = await dispatch(createTrainee(formData));
-        console.log('Trainee created successfully');
-        navigate(`trainee-success/${newTraineeId}`, { replace: true });
-      } catch (error) {
+        navigate(`myApplications/trainee-success/${newTraineeId}`, { replace: true });
+      } catch (error: any) {
         console.error('Error submitting form:', error);
-        setSubmitError('An error occurred while submitting the form. Please try again.');
+        setSubmitError(getErrorMessage(error));
       } finally {
         setIsSubmitting(false);
       }
@@ -137,29 +130,10 @@ const TraineeApplicationForm: React.FC = () => {
 
   return (
     <div className='w-full max-w-[500px] min-h-screen'>
-      <div className={`p-20 border shadow-xl rounded mt-20 ${
-        isDarkMode ? 'border-primary bg-slate-800 text-white' : 'border-gray-300 bg-white text-gray-900'
-      }`}>
-        <h2 className={`text-2xl font-semibold mb-6 text-center ${
-          isDarkMode ? 'text-white' : 'text-gray-900'
-        }`}>Trainee Application</h2>
+      <div className={`p-20 border shadow-xl rounded mt-20 ${isDarkMode ? 'border-primary bg-slate-800 text-white' : 'border-gray-300 bg-white text-gray-900'}`}>
+        <h2 className={`text-2xl font-semibold mb-6 text-center ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Trainee Application</h2>
         <form onSubmit={handleSubmit} className="space-y-4 pt-5">
-          {['firstName', 'lastName', 'email'].map((field) => (
-            <InputField
-              key={field}
-              name={field}
-              type={field === 'email' ? 'email' : 'text'}
-              placeholder={field.charAt(0).toUpperCase() + field.slice(1).replace(/([A-Z])/g, ' $1')}
-              value={formData[field as keyof FormData]}
-              onChange={handleInputChange}
-              error={errors[field as keyof FormErrors]}
-              className={`w-52 md:w-2/3 rounded-md px-2 py-2 border ${
-                isDarkMode 
-                  ? 'border-white placeholder:text-gray-400 text-white bg-[#1F2A37]' 
-                  : 'border-gray-300 placeholder:text-gray-500 text-gray-900 bg-white'
-              } sm:text-[12px] outline-none`}
-            />
-          ))}
+          {renderFormFields()}
           <CycleSelector
             value={formData.cycle_id}
             onChange={handleInputChange}
@@ -171,16 +145,49 @@ const TraineeApplicationForm: React.FC = () => {
           <Button
             type="submit"
             label={isSubmitting ? "Submitting..." : "Submit Application"}
-            className={`w-full ${
-              isDarkMode ? 'bg-blue-600 hover:bg-blue-700' : 'bg-blue-500 hover:bg-blue-600'
-            } text-white`}
+            className={`w-full ${isDarkMode ? 'bg-blue-600 hover:bg-blue-700' : 'bg-blue-500 hover:bg-blue-600'} text-white`}
             disabled={isSubmitting}
           />
         </form>
-        {submitError && <p className="text-red-500 mt-2">{submitError}</p>}
       </div>
     </div>
   );
+
+  function renderFormFields() {
+    return ['firstName', 'lastName', 'email'].map((field) => (
+      <InputField
+        key={field}
+        name={field}
+        type={field === 'email' ? 'email' : 'text'}
+        placeholder={formatFieldName(field)}
+        value={formData[field as keyof FormData]}
+        onChange={handleInputChange}
+        error={errors[field as keyof FormErrors]}
+        className={getInputClassName()}
+      />
+    ));
+  }
+
+  function formatFieldName(field: string) {
+    return field.charAt(0).toUpperCase() + field.slice(1).replace(/([A-Z])/g, ' $1');
+  }
+
+  function getInputClassName() {
+    return `w-52 md:w-2/3 rounded-md px-2 py-2 border ${
+      isDarkMode 
+        ? 'border-white placeholder:text-gray-400 text-white bg-[#1F2A37]' 
+        : 'border-gray-300 placeholder:text-gray-500 text-gray-900 bg-white'
+    } sm:text-[12px] outline-none`;
+  }
 };
+
+function getErrorMessage(error: any): string {
+  if (error.response?.data?.errors?.[0]?.message) {
+    return error.response.data.errors[0].message;
+  } else if (error.message) {
+    return error.message;
+  }
+  return "An error occurred while creating the trainee.";
+}
 
 export default TraineeApplicationForm;

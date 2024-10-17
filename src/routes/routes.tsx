@@ -48,6 +48,7 @@ import ApplicationDetails from "../pages/Applications/ViewSingleApplication";
 import Dashboard from "../pages/Dashboard";
 import ApplicantLayout from "../pages/Applicant/ApplicantLayout";
 import AdminLayout from "../components/Layout/Admins/AdminLayout";
+import ApplicantDashboard from "../pages/Applicant/ApplicantDashboard";
 import UpdateJobPost from "../pages/JobPost/updateJobPost";
 import TraineeApply from "../pages/TraineeApply";
 import TraineeAttribute from '../pages/TraineeAttribute'
@@ -311,22 +312,8 @@ function Navigation() {
       </Route>
   
       {/* Applicant Routes (Protected) */}
-      <Route
-        path="/applicant"
-        element={
-          <PrivateRoute allowedRoles={['applicant']}>
-            <ApplicantLayout />
-          </PrivateRoute>
-        }
-      >
-        <Route
-          index
-          element={
-            <PrivateRoute allowedRoles={['applicant']}>
-              <Applications />
-            </PrivateRoute>
-          }
-        />
+      <Route path="/applicant" element={<ApplicantLayout />}>
+      <Route index element={<PrivateRoute allowedRoles={['applicant']}><ApplicantDashboard/></PrivateRoute>} />
         <Route
           path="myApplications"
           element={
@@ -376,25 +363,25 @@ function Navigation() {
           }
         />
         <Route
-          path="trainee-apply"
+          path="myApplications/trainee-apply"
           element={
-            <PrivateRoute allowedRoles={['Admin', 'applicant','superAdmin']}>
+            <PrivateRoute allowedRoles={['applicant']}>
               <TraineeApply />
             </PrivateRoute>
           }
         />
         <Route
-          path="trainee-apply/trainee-success/:traineeId"
+          path="myApplications/trainee-apply/trainee-success/:traineeId"
           element={
-            <PrivateRoute allowedRoles={['Admin', 'applicant','superAdmin']}>
+            <PrivateRoute allowedRoles={['applicant']}>
               <TraineeSuccessPage />
             </PrivateRoute>
           }
         />
         <Route
-          path="trainee-apply/trainee-success/trainee-add-attributes/:traineeId?"
+          path="myApplications/trainee-apply/trainee-success/trainee-add-attributes/:traineeId?"
           element={
-            <PrivateRoute allowedRoles={['Admin', 'applicant','superAdmin']}>
+            <PrivateRoute allowedRoles={['applicant']}>
               <TraineeAttribute />
             </PrivateRoute>
           }
