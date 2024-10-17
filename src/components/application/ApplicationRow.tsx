@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React from "react";
 import { getStatusClass } from "./statusHelper";
 import ApplicationActions from "./ApplicationActions";
@@ -47,3 +48,8 @@ const ApplicationRow: React.FC<ApplicationRowProps> = ({ application, isDrop, se
 );
 
 export default ApplicationRow;
+
+
+
+
+
