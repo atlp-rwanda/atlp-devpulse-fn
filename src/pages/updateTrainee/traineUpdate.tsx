@@ -206,10 +206,9 @@ const TraineeUpdate = (props: any) => {
 
       const timer = setTimeout(() => {
         navigate("/admin/Trainee-applicants");
-    }, 4000);
+      }, 4000);
 
-    return () => clearTimeout(timer);
-
+      return () => clearTimeout(timer);
     } catch (err) {
       console.log(err);
       toast.error("Updating trainee failed");
@@ -219,7 +218,6 @@ const TraineeUpdate = (props: any) => {
   };
   return (
     <>
-      
       <div className="block bg-white dark:bg-dark-tertiary relative w-[100%] py-3 min-h-[100vh]">
         <div className="block text-center font-bold text-gray-600 lg:left-[8rem] dark:text-white text-base lg:max-w-3xl sm:w-[100%] p-4 lg:px-4 m-4 mx-auto text-[24px]">
           <h1 className="p-2">Update Trainee-applicant</h1>
@@ -611,7 +609,6 @@ const TraineeUpdate = (props: any) => {
                       </div>
                     )}
                   </div>
-
 
                   <div className="mb-4">
                     <div className="lg:flex sm:block">

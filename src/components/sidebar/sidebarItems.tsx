@@ -20,6 +20,11 @@ export const sidebarItems1 = [
     title: "Programs",
   },
   {
+    path: "notifications",
+    icon: <Icon icon="heroicons-solid:inbox-in"></Icon>,
+    title: "Notifications",
+  },
+  {
     path: "job-post",
     icon: <Icon icon="ic:round-maps-home-work"></Icon>,
     title: "View Job Post",
