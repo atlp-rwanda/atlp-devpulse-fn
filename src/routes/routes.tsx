@@ -323,7 +323,7 @@ function Navigation() {
             <ApplicantLayout />
           </PrivateRoute>
         }
-      >
+      />
         <Route
           index
           element={
