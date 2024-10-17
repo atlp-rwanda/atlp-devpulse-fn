@@ -2,6 +2,9 @@ import {
   GET_TRAINEE,
   CREATE_TRAINEES,
   CREATE_CYCLE_ERROR,
+  SET_TRAINEE,
+  GET_TRAINEE_ATTENDANCE,
+  GET_TRAINEE_PERFORMANCE,
   FETCH_TRAINEES_REQUEST,
   FETCH_TRAINEES_SUCCESS,
   FETCH_TRAINEES_FAILURE,
@@ -27,15 +30,33 @@ interface TraineeState {
   currentTraineeId: string | null;
 }
 
+interface CycleApplied {
+  _id: string;
+  cycle: {
+    _id: string;
+    name: string;
+  };
+}
+
 interface TraineeApplicant {
   _id: string;
   lastName: string;
   firstName: string;
   email: string;
-  cycle_id: any; 
+  cycleApplied: CycleApplied[];
+  attributes?: TraineeAttribute;
   delete_at: boolean;
   status: string;
-  attributes?: TraineeAttribute;
+  applicationPhase: ApplicationPhase;
+  cohort?: string;
+  user?: { _id: string };
+}
+
+enum ApplicationPhase {
+  Applied = "Applied",
+  Interviewed = "Interviewed",
+  Accepted = "Accepted",
+  Enrolled = "Enrolled"
 }
 
 interface TraineeAttribute {

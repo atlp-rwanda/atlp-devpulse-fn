@@ -409,7 +409,7 @@ const Jobs = (props: any) => {
                             </tr>
                           </thead>
                           <tbody className="overflow-y-auto">
-                            {fetchJobPostStates?.data?.map((item: any) => (
+                            {allfilteredjobPosts?.data?.map((item: any) => (
                               <tr
                                 className="hover:bg-slate-700 transition-colors"
                                 key={item.id}

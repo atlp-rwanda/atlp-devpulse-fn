@@ -1,42 +1,29 @@
+import creator from "./creator";
 import { AppDispatch } from '../store'; 
 import {
   GET_TRAINEE,
   CREATE_TRAINEES,
-  CREATE_CYCLE_ERROR,
+  SET_TRAINEE,
   FETCH_TRAINEES_REQUEST,
-  FETCH_TRAINEES_SUCCESS,
-  FETCH_TRAINEES_FAILURE,
-  SET_CURRENT_TRAINEE_ID
+  SET_CURRENT_TRAINEE_ID,
+  
 } from "..";
-import { toast } from "react-toastify";
 import axios from "axios";
+import * as traineeUtils from '../../utils/traineActionUtils';
+
+interface TraineeData {
+  lastName: string;
+  firstName: string;
+  email: string;
+  cycle_id: string;
+  attributes?: Record<string, any>;
+}
 
 interface PaginationInput {
   page: number;
   itemsPerPage: number;
   All: boolean;
 }
-
-export const setCurrentTraineeId = (traineeId: string) => ({
-  type: SET_CURRENT_TRAINEE_ID,
-  payload: traineeId,
-});
-
-const createTraineeQuery = `
-  mutation CreateNewTraineeApplicant($input: newTraineeApplicantInput!) {
-    createNewTraineeApplicant(input: $input) {
-      _id
-      lastName
-      firstName
-      email
-      cycle_id {
-        id
-        name
-      }
-      status
-    }
-  }
-`;
 
 const getAllTraineessQuery= `
   query AllTraineesDetails($input: pagination) {
@@ -74,27 +61,89 @@ const getAllTraineessQuery= `
     }
   }
 `;
-                   
-const createTraineeVariables = (traineeData: any) => ({
-  input: {
-    lastName: traineeData.lastName,
-    firstName: traineeData.firstName,
-    email: traineeData.email,
-    cycle_id: traineeData.cycle_id,
-    ...(traineeData.attributes && { attributes: traineeData.attributes }),
-  },
+
+export const getAllTrainees = ({ page, itemsPerPage, All }: any) => async (dispatch: AppDispatch) => {
+  dispatch({ type: FETCH_TRAINEES_REQUEST });
+  try {
+    const response = await makeGraphQLRequest(getAllTraineessQuery, { 
+      input: {
+        page,
+        itemsPerPage,
+        All,
+      }
+    });
+    traineeUtils.handleGetAllTraineesSuccess(dispatch, response);
+  } catch (error) {
+    traineeUtils.handleGetAllTraineesError(dispatch, error);
+  }
+};
+
+export const getTraineeApplicant = (traineeId: string) => async(dispatch: any) => {
+  try{
+    const response = await axios.post(`${process.env.BACKEND_URL}`, {
+      query: `
+        query GetOneTrainee($ID: ID!) {
+          getOneTrainee(ID: $ID) {
+            _id
+            applicationPhase
+            cohort
+          }
+        }
+      `,
+      variables: { ID: traineeId }
+    });
+    if (response.data.errors) {
+      console.error('GraphQL Errors:', response.data.errors);
+      return;
+    }
+    const trainee = response.data.data.getOneTrainee;
+    dispatch(creator(GET_TRAINEE, trainee));
+
+  }catch (error: any) {
+    console.error('Error fetching trainee:', error);
+    console.error('Error response:', error.response?.data);
+  }
+}
+
+export const getTraineeByUserId = (userId: string) => async (dispatch: any) => {
+  try {
+    const response = await axios.post(`${process.env.BACKEND_URL}`, {
+      query: `
+        query GetTraineeByUserId($userId: ID!) {
+          getTraineeByUserId(userId: $userId)
+        }
+      `,
+      variables: { userId },
+    });
+
+    const traineeData = response.data.data.getTraineeByUserId;
+    dispatch(creator(SET_TRAINEE, traineeData));
+  } catch (error) {
+    console.error("Error fetching trainee:", error);
+  }
+};
+
+export const setCurrentTraineeId = (traineeId: string) => ({
+  type: SET_CURRENT_TRAINEE_ID,
+  payload: traineeId,
 });
 
-const handleGetAllTraineesSuccess = (dispatch: AppDispatch, response: any) => {
-  const trainees = response.data.data.allTraineesDetails;
-  dispatch({ type: GET_TRAINEE, payload: trainees });
-  dispatch({ type: FETCH_TRAINEES_SUCCESS, payload: trainees });
-};
-
-const handleGetAllTraineesError = (dispatch: AppDispatch, error: any) => {
-  console.error(error);
-  dispatch({ type: FETCH_TRAINEES_FAILURE, payload: error });
-};
+const createTraineeQuery = `
+  mutation CreateNewTraineeApplicant($input: newTraineeApplicantInput!) {
+    createNewTraineeApplicant(input: $input) {
+      _id
+      lastName
+      firstName
+      email
+      cycleApplied {
+        _id
+        cycle {
+          _id
+        }
+      }
+    }
+  }
+`;
 
 const makeGraphQLRequest = async (query: string, variables: any) => {
   return await axios({
@@ -104,41 +153,19 @@ const makeGraphQLRequest = async (query: string, variables: any) => {
   });
 };
 
-const handleSuccessResponse = (dispatch: AppDispatch, data: any) => {
-  toast.success("Trainee successfully created.");
-  dispatch({ type: CREATE_TRAINEES, payload: data });
-};
 
-const handleErrorResponse = (dispatch: AppDispatch, error: any) => {
-  const errorMessage = error.response?.data?.errors?.[0]?.message || "An error occurred while creating the trainee.";
-  console.error('GraphQL Error:', errorMessage);
-  toast.error(errorMessage);
-  dispatch({ type: CREATE_CYCLE_ERROR, payload: errorMessage });
-};
-
-export const getAllTrainees = ({ page, itemsPerPage, All }: PaginationInput) => async (dispatch: AppDispatch) => {
-  dispatch({ type: FETCH_TRAINEES_REQUEST });
-  try {
-    const response = await makeGraphQLRequest(getAllTraineessQuery, { input: { page, itemsPerPage, All } });
-    handleGetAllTraineesSuccess(dispatch, response);
-  } catch (error) {
-    handleGetAllTraineesError(dispatch, error);
-  }
-};
-
-export const createTrainee = (traineeData: any) => async (dispatch: AppDispatch) => {
+export const createTrainee = (traineeData: TraineeData) => async (dispatch: AppDispatch) => {
   dispatch({ type: CREATE_TRAINEES });
+  
   try {
-    const response = await makeGraphQLRequest(createTraineeQuery, createTraineeVariables(traineeData));
-    const { data } = response.data;
-    if (data?.createNewTraineeApplicant) {
-      handleSuccessResponse(dispatch, data.createNewTraineeApplicant);
-      return data.createNewTraineeApplicant._id; 
-    } else {
-      throw new Error("Failed to create trainee");
-    }
+    const variables = traineeUtils.createTraineeVariables(traineeData);
+    const response = await makeGraphQLRequest(createTraineeQuery, variables);
+    const trainee = traineeUtils.validateResponse(response.data);
+    
+    traineeUtils.handleSuccessResponse(dispatch, trainee);
+    return trainee._id;
   } catch (error: any) {
-    handleErrorResponse(dispatch, error);
-    throw error; 
+    traineeUtils.handleErrorResponse(dispatch, error);
+    throw error;
   }
 };
