@@ -4,12 +4,14 @@ import { createTraineeAttribute } from '../../redux/actions/traineeAttributes';
 import TraineeFormPage1 from '../../components/TraineeFormPage1';
 import TraineeFormPage2 from '../../components/TraineeFormPage2';
 import { useTheme } from '../../hooks/darkmode'; 
+import { useNavigate } from 'react-router-dom'
 
 const TraineeAttributeForm = ({ traineeId }) => {
   const dispatch = useDispatch();
   const [page, setPage] = useState(1);
   const { theme } = useTheme(); 
   const isDarkMode = theme === false; 
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     gender: '',
@@ -70,6 +72,7 @@ const TraineeAttributeForm = ({ traineeId }) => {
     };
     console.log('Attribute data being sent:', attributeData);
     dispatch(createTraineeAttribute(attributeData));
+    navigate('/applicant')
   };
 
   return (

@@ -9,6 +9,7 @@ import { AppDispatch, RootState } from '../../redux/store';
 import useFormValidation from '../useFormValidation';
 import { useTheme } from '../../hooks/darkmode'; 
 import { loggedUserAction } from '../../redux/actions/getLoggedUser';
+import { toast } from "react-toastify";
 interface FormData {
   firstName: string;
   lastName: string;
@@ -121,10 +122,21 @@ const TraineeApplicationForm: React.FC = () => {
       try {
         const newTraineeId = await dispatch(createTrainee(formData));
         console.log('Trainee created successfully');
-        navigate(`trainee-success/${newTraineeId}`, { replace: true });
-      } catch (error) {
+        navigate(`myApplications/trainee-success/${newTraineeId}`, { replace: true });
+      } catch (error:any) {
         console.error('Error submitting form:', error);
-        setSubmitError('An error occurred while submitting the form. Please try again.');
+        console.log('Full error object:', JSON.stringify(error, null, 2));
+        console.log('Error response:', error.response);
+        console.log('Error message:', error.message);
+        
+        let errorMessage = "An error occurred while creating the trainee.";
+        if (error.response?.data?.errors?.[0]?.message) {
+          errorMessage = error.response.data.errors[0].message;
+        } else if (error.message) {
+          errorMessage = error.message;
+        }
+        
+        setSubmitError(errorMessage);
       } finally {
         setIsSubmitting(false);
       }
@@ -177,7 +189,6 @@ const TraineeApplicationForm: React.FC = () => {
             disabled={isSubmitting}
           />
         </form>
-        {submitError && <p className="text-red-500 mt-2">{submitError}</p>}
       </div>
     </div>
   );

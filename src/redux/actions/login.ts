@@ -7,6 +7,7 @@ export const loginAction = async (email, password) => {
             mutation Mutation($email: String!, $password: String!) {
                 login(email: $email, password: $password) {
                     token
+                    userId
                 }
             }
             `,
@@ -21,3 +22,8 @@ export const loginAction = async (email, password) => {
     console.log(error);
   }
 };
+
+export const setUser = (userData) => ({
+  type: 'SET_USER',
+  payload: userData,
+});

@@ -10,36 +10,34 @@ export const getAllFilteredJobPosts =
     try {
       const response = await axios.post("/", {
         query: `
-        query FilterJobDetails($input: FilterOptions) {
-          filterJobDetails(input: $input) {
-            title
-            program {
-              _id
+          query Query($input: FilterOptions) {
+            filterJobDetails(input: $input) {
+              title
+              program {
+                _id
+                title
+                description
+                mainObjective
+                requirements
+                modeOfExecution
+                duration
+              }
+              cycle {
+                id
+                name
+                startDate
+                endDate
+              }
               description
-              duration
-              mainObjective
-              modeOfExecution
-              requirements
-              title
-            }
-            cohort {
-              cycle
-              end
               id
-              program
-              start
-              title
+              label
+              link
+              published
+              cohort {
+                title
+              }
             }
-            cycle {
-              startDate
-              name
-              endDate
-            }
-            description
-            id
-            label
-          }
-        }
+         }
       `,
         variables: {
           input: {
