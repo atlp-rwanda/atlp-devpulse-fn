@@ -99,10 +99,9 @@ export const getAlltraineeapplicants = () => async (dispatch: any) => {
       type: fetchtrainapplicantcount.fetchtrainapplicantcount_success,
       data: totalTraineeApllicants,
     });
+    return totalTraineeApllicants;
   } catch (error) {
-    if (error) {
-      return console.log(error);
-    }
+    return 0;
   }
 };
 
