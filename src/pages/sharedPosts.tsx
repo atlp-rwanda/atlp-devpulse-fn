@@ -1,21 +1,20 @@
-import { useEffect, useState } from 'react';
-import NavBar from '../components/sidebar/navHeader';
-import { BrowserRouter as Router, Link, useNavigate } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from '../hooks/hooks';
-import { fetchJobPost } from '../redux/actions/fetchJobPost';
-import * as icons from 'react-icons/ai';
-import { HiDotsVertical } from 'react-icons/hi';
-import Select from 'react-select';
+import { useEffect, useState } from "react";
+import NavBar from "../components/sidebar/navHeader";
+import { BrowserRouter as Router, Link, useNavigate } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../hooks/hooks";
+import { fetchJobPost } from "../redux/actions/fetchJobPost";
+import * as icons from "react-icons/ai";
+import { HiDotsVertical } from "react-icons/hi";
+import Select from "react-select";
 import {
   DOTS,
   useCustomPagination,
-} from '../components/Pagination/useCustomPagination';
-import * as AiIcons from 'react-icons/ai';
-import { getAllPrograms } from '../redux/actions/programsActions';
-import { getAllCycles } from '../redux/actions/cyclesActions';
-import { getAllCohorts } from '../redux/actions/cohortActions';
-import { connect, useSelector } from 'react-redux';
-
+} from "../components/Pagination/useCustomPagination";
+import * as AiIcons from "react-icons/ai";
+import { getAllPrograms } from "../redux/actions/programsActions";
+import { getAllCycles } from "../redux/actions/cyclesActions";
+import { getAllCohorts } from "../redux/actions/cohortActions";
+import { connect, useSelector } from "react-redux";
 
 function SharedJobPosts(props: any) {
   const [fetchProgram, setfetchProgram] = useState([]);
@@ -28,10 +27,10 @@ function SharedJobPosts(props: any) {
   useEffect(() => {
     dispatch(fetchJobPost());
   }, []);
-  const [moredrop, setmoredrop] = useState('');
+  const [moredrop, setmoredrop] = useState("");
   const onSubmitHandler = (userid: any) => {
     if (!moredrop) setmoredrop(userid);
-    if (moredrop) setmoredrop('');
+    if (moredrop) setmoredrop("");
   };
   const navigate = useNavigate();
   const [page, setPage] = useState(0);
@@ -54,9 +53,9 @@ function SharedJobPosts(props: any) {
     props.fetchJobPost(input);
   }, [page, itemsPerPage]);
   console.log(
-    'Here',
+    "Here",
     Math.ceil(jobs?.pagination.totalItems / itemsPerPage),
-    page,
+    page
   );
 
   const paginationRange = useCustomPagination({
@@ -73,13 +72,13 @@ function SharedJobPosts(props: any) {
                 <div className="flex w-fit">
                   <Link to="/applicant/filter_job_post">
                     <button className="flex bg-primary dark:bg-[#56C870] rounded-md py-2 mt-2 px-4 text-white font-medium cursor-pointer">
-                      <icons.AiOutlineSearch className="mt-1 mr-1 font-bold" />{' '}
+                      <icons.AiOutlineSearch className="mt-1 mr-1 font-bold" />{" "}
                       Search
                     </button>
                   </Link>
                 </div>
               </div>
-              <div className='px-8'>
+              <div className="px-8">
                 <div className="bg-white  dark:bg-dark-bg shadow-lg px-5 py-8 rounded-md w-[100%] mx-auto">
                   <div>
                     <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
@@ -105,79 +104,81 @@ function SharedJobPosts(props: any) {
                                 // </th>
                               }
                               <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
-                                Action
+                                ActionDDDD
                               </th>
                             </tr>
                           </thead>
                           <tbody className="overflow-y-auto">
-                          {fetchJobPostStates?.data
-  ?.filter((item: any) => item.published) // Filter for published job posts
-  ?.map((item: any) => (
-    <tr
-      className="hover:bg-slate-700 transition-colors"
-      key={item.id}
-    >
-      <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
-        <div className="flex">
-          <div className="">
-            <p className="text-gray-900 text-center dark:text-white whitespace-no-wrap">
-              {item?.title}
-            </p>
-          </div>
-        </div>
-      </td>
-      <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
-        <div className="flex items-center">
-          <div className="">
-            <p className="text-gray-900 text-center dark:text-white whitespace-no-wrap">
-              {item?.program?.title}
-            </p>
-          </div>
-        </div>
-      </td>
-      <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
-        <div className="flex items-center">
-          <div className="">
-            {item?.cycle && (
-              <p className="text-gray-900 text-center dark:text-white whitespace-no-wrap">
-                {item?.cycle?.name}
-              </p>
-            )}
-          </div>
-        </div>
-      </td>
-      <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
-        <div className="flex items-center">
-          <div className="">
-            <p className="text-gray-900 text-center dark:text-white whitespace-no-wrap">
-              {item?.cohort?.title}
-            </p>
-          </div>
-        </div>
-      </td>
-      <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
-        <div className="flex items-center">
-          <div className="">
-            <p className="text-gray-900 text-center dark:text-white whitespace-no-wrap">
-              {item?.description}
-            </p>
-          </div>
-        </div>
-      </td>
-      <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
-        <div className="flex items-center">
-          <div className="">
-            <Link to={`/applicant/available-job/${item?.id}/apply`} replace>
-              <button className="flex bg-primary dark:bg-[#56C870] rounded-md py-2 px-4 text-white font-medium cursor-pointer">
-                Apply
-              </button>
-            </Link>
-          </div>
-        </div>
-      </td>
-    </tr>
-  ))}
-
+                            {fetchJobPostStates?.data
+                              ?.filter((item: any) => item.published) // Filter for published job posts
+                              ?.map((item: any) => (
+                                <tr
+                                  className="hover:bg-slate-700 transition-colors"
+                                  key={item.id}
+                                >
+                                  <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
+                                    <div className="flex">
+                                      <div className="">
+                                        <p className="text-gray-900 text-center dark:text-white whitespace-no-wrap">
+                                          {item?.title}
+                                        </p>
+                                      </div>
+                                    </div>
+                                  </td>
+                                  <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
+                                    <div className="flex items-center">
+                                      <div className="">
+                                        <p className="text-gray-900 text-center dark:text-white whitespace-no-wrap">
+                                          {item?.program?.title}
+                                        </p>
+                                      </div>
+                                    </div>
+                                  </td>
+                                  <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
+                                    <div className="flex items-center">
+                                      <div className="">
+                                        {item?.cycle && (
+                                          <p className="text-gray-900 text-center dark:text-white whitespace-no-wrap">
+                                            {item?.cycle?.name}
+                                          </p>
+                                        )}
+                                      </div>
+                                    </div>
+                                  </td>
+                                  <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
+                                    <div className="flex items-center">
+                                      <div className="">
+                                        <p className="text-gray-900 text-center dark:text-white whitespace-no-wrap">
+                                          {item?.cohort?.title}
+                                        </p>
+                                      </div>
+                                    </div>
+                                  </td>
+                                  <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
+                                    <div className="flex items-center">
+                                      <div className="">
+                                        <p className="text-gray-900 text-center dark:text-white whitespace-no-wrap">
+                                          {item?.description}
+                                        </p>
+                                      </div>
+                                    </div>
+                                  </td>
+                                  <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
+                                    <div className="flex items-center">
+                                      <div className="">
+                                        <Link
+                                          to={`/applicant/available-job/${item?.id}/apply`}
+                                          replace
+                                        >
+                                          <button className="flex bg-primary dark:bg-[#56C870] rounded-md py-2 px-4 text-white font-medium cursor-pointer">
+                                            Apply
+                                          </button>
+                                        </Link>
+                                      </div>
+                                    </div>
+                                  </td>
+                                </tr>
+                              ))}
                           </tbody>
                         </table>
                       </div>
@@ -247,13 +248,13 @@ function SharedJobPosts(props: any) {
                           menuPlacement="top"
                           className="sm:text-sm  w-13 rounded-bt-rd absolute active dark:bg-dark-frame-bg"
                           options={[
-                            { value: '10', label: '10' },
-                            { value: '50', label: '50' },
-                            { value: '100', label: '100' },
-                            { value: '500', label: '500' },
-                            { value: '1000', label: '1000' },
+                            { value: "10", label: "10" },
+                            { value: "50", label: "50" },
+                            { value: "100", label: "100" },
+                            { value: "500", label: "500" },
+                            { value: "1000", label: "1000" },
                           ]}
-                          defaultValue={{ value: '', label: '10' }}
+                          defaultValue={{ value: "", label: "10" }}
                           onChange={(e: any) =>
                             setItemsPerPage(Number(e?.value))
                           }
@@ -298,8 +299,8 @@ function SharedJobPosts(props: any) {
                                 <button
                                   key={idx}
                                   className={`border-solid border-[1px] cursor-pointer border-[#a8a8a8] bg-[#fff] min-w-[35px] h-[38px]  active:bg-[#333] active:text-[#fff]-500 rounded-[2px] md:hidden
-                        ${page && 'bg-[#d6dfdf] text-black'} 
-                        ${page === 0 && 'bg-[#d6dfdf] text-black'} 
+                        ${page && "bg-[#d6dfdf] text-black"} 
+                        ${page === 0 && "bg-[#d6dfdf] text-black"} 
                           `}
                                   onClick={() => setPage(pageNumber - 1)}
                                 >
@@ -324,7 +325,7 @@ function SharedJobPosts(props: any) {
                             disabled={
                               page >=
                               Math.ceil(
-                                jobs?.pagination.totalItems / itemsPerPage,
+                                jobs?.pagination.totalItems / itemsPerPage
                               ) -
                                 1
                             }
@@ -336,14 +337,14 @@ function SharedJobPosts(props: any) {
                             onClick={() =>
                               setPage(
                                 Math.ceil(
-                                  jobs?.pagination.totalItems / itemsPerPage,
-                                ) - 1,
+                                  jobs?.pagination.totalItems / itemsPerPage
+                                ) - 1
                               )
                             }
                             disabled={
                               page >=
                               Math.ceil(
-                                jobs?.pagination.totalItems / itemsPerPage,
+                                jobs?.pagination.totalItems / itemsPerPage
                               ) -
                                 1
                             }

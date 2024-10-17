@@ -7,6 +7,7 @@ const UpdateSavedForm = () => {
   const [formData, setFormData] = useState({
     id: '',
     link: '',
+    spreadsheetlink: '',
     title: '',
     jobpost: '',
     description: '',
@@ -67,6 +68,7 @@ const UpdateSavedForm = () => {
                 title
                 jobpost
                 description
+                spreadsheetlink
               }
             }
           `,
@@ -101,13 +103,14 @@ const UpdateSavedForm = () => {
     setLoading(true);
 
     const mutation = `
-      mutation updateApplication($id: String!, $link: String!, $title: String!, $jobpost: String!, $description: String!) {
-        updateApplication(id: $id, link: $link, title: $title, jobpost: $jobpost, description: $description) {
+      mutation updateApplication($id: String!, $link: String!, $title: String!, $jobpost: String!, $description: String!, $spreadsheetlink: String!) {
+        updateApplication(id: $id, link: $link, title: $title, jobpost: $jobpost, description: $description, spreadsheetlink: $spreadsheetlink) {
           id
           link
           title
           jobpost
           description
+          spreadsheetlink
         }
       }
     `;
@@ -121,6 +124,7 @@ const UpdateSavedForm = () => {
           title: formData.title,
           jobpost: formData.jobpost,
           description: formData.description,
+          spreadsheetlink: formData.spreadsheetlink,
         },
       });
 
@@ -172,6 +176,18 @@ const UpdateSavedForm = () => {
             name='link'
             type='text'
             value={formData.link}
+            onChange={handleChange}
+            className={`block w-full dark:text-white dark:bg-dark-tertiary p-2 mt-1 border ${error ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm`}
+          />
+          {error && <div className="text-sm text-red-500">{error}</div>}
+        </div>
+        <div className="mb-4">
+          <label htmlFor='link' className="block text-sm font-medium text-gray-700">SheetLink</label>
+          <input
+            id='link'
+            name='link'
+            type='text'
+            value={formData.spreadsheetlink}
             onChange={handleChange}
             className={`block w-full dark:text-white dark:bg-dark-tertiary p-2 mt-1 border ${error ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm`}
           />

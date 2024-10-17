@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import { BsEnvelope } from 'react-icons/bs';
-import { TiExportOutline } from 'react-icons/ti';
-import { FcApproval } from 'react-icons/fc';
-import { AiFillSetting, AiFillCaretDown } from 'react-icons/ai';
-import { MdOutlineCancel } from 'react-icons/md';
-import { BsFillPersonLinesFill } from 'react-icons/bs';
-import { getOnejobPostAllDetails } from '../redux/actions/jobs';
-import { connect } from 'react-redux';
-import NavSidbar from './../components/sidebar/navHeader';
+import React, { useState, useEffect } from "react";
+import { BsEnvelope } from "react-icons/bs";
+import { TiExportOutline } from "react-icons/ti";
+import { FcApproval } from "react-icons/fc";
+import { AiFillSetting, AiFillCaretDown } from "react-icons/ai";
+import { MdOutlineCancel } from "react-icons/md";
+import { BsFillPersonLinesFill } from "react-icons/bs";
+import { getOnejobPostAllDetails } from "../redux/actions/jobs";
+import { connect } from "react-redux";
+import NavSidbar from "./../components/sidebar/navHeader";
 
 const JobsDetails = (props: any) => {
   const { oneJobDetails } = props;
 
-  const [ID, setId] = useState('634d18e1d82ebebbc0491eae');
+  const [ID, setId] = useState("634d18e1d82ebebbc0491eae");
 
   const [open, setOpen] = useState<boolean>(false);
   const handleDropDown = (state: boolean) => {
@@ -38,7 +38,7 @@ const JobsDetails = (props: any) => {
             <div className="float-left ml-10 text-white">
               <h2 className="font-bold mt-5">Job Post Details</h2>
               <div className="mt-10 ml-7">
-                <h3>Job Title</h3>
+                <h3>Job Titleee</h3>
                 <p className="text-gray-500 text-sm">ATLP</p>
                 <h3>Program</h3>
                 <p className="text-gray-500 text-sm">Andela Program</p>
@@ -70,7 +70,7 @@ const JobsDetails = (props: any) => {
                 <p className="text-gray-500 text-sm">Initial Phase</p>
                 <h3 className="mt-5">Program</h3>
                 <p className="text-gray-500 text-sm">
-                  {' '}
+                  {" "}
                   Andela Technical Leadership Program
                 </p>
               </div>
