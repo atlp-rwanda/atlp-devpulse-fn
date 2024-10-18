@@ -26,6 +26,7 @@ const TraineeUpdate = (props: any) => {
   const traineeData = useAppSelector(
     (state: any) => state.getOneTraineeReducer?.data
   );
+  console.log("aaaaaaaaa", traineeData)
   const cycles = props?.cycles?.cycles?.data;
   const [provinces, setProvinces] = useState<any[]>([]);
   const [districts, setDistricts] = useState<any[]>([]);
@@ -97,17 +98,17 @@ const TraineeUpdate = (props: any) => {
     }
 
     setFormData({
-      firstname: traineeData?.trainee_id?.firstName || "",
-      lastname: traineeData?.trainee_id?.lastName || "",
+      firstname: traineeData?.trainee?.firstName || "",
+      lastname: traineeData?.trainee?.lastName || "",
       gender: traineeData?.gender || "",
       phone: traineeData?.phone || "",
-      address: traineeData?.Address || "",
+      address: traineeData?.address || "",
       birthDate: birthDate,
       province: traineeData?.province || "",
       district: traineeData?.district || "",
       sector: traineeData?.sector || "",
-      field_of_study: traineeData?.field_of_study || "",
-      past_programs: traineeData?.past_andela_programs || "",
+      field_of_study: traineeData?.study || "",
+      past_programs: traineeData?.andelaPrograms || "",
       isStudent: traineeData?.isStudent || false,
       hasLaptop: traineeData?.haveLaptop || false,
       isEmployed: traineeData?.isEmployed || false,
@@ -182,7 +183,7 @@ const TraineeUpdate = (props: any) => {
 
       const inputAttributes = {
         id: ID,
-        past_andela_programs: formData.past_programs,
+        andelaPprograms: formData.past_programs,
         interview_decision: formData.interview_decision,
         english_score: formData.englishScore,
         Hackerrank_score: formData.hackerrankScore,
@@ -193,9 +194,9 @@ const TraineeUpdate = (props: any) => {
         district: formData.district,
         province: formData.province,
         education_level: formData.level_education,
-        field_of_study: formData.field_of_study,
+        study: formData.field_of_study,
         phone: formData.phone,
-        Address: formData.address,
+        address: formData.address,
         birth_date: formData.birthDate,
         gender: formData.gender,
       };
