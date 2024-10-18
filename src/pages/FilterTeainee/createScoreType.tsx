@@ -4,7 +4,7 @@ import {
   getAllScoreTypes,
   getOneScoreType,
 } from "../../redux/actions/scoreTypesActions";
-import { getAllTraineess } from "../../redux/actions/TraineeAction";
+import { getAllTrainees } from "../../redux/actions/TraineeAction";
 import {
   getAllScoreValues,
   createScoreValue,
@@ -105,7 +105,7 @@ const createScoreType = (props: any) => {
       itemsPerPage,
       All,
     };
-    props.getAllTraineess(data);
+    props.getAllTrainees(data);
   }, []);
 
   useEffect(() => {
@@ -546,7 +546,7 @@ export default connect(mapState, {
   getAllScoreValues,
   getOneScoreType,
   createScoreValue,
-  getAllTraineess,
+  getAllTrainees,
   updateScoreValue,
   deleteScoreValue,
 })(createScoreType);

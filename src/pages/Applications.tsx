@@ -114,6 +114,11 @@ const Applications = (props: any) => {
                 <div className="flex items-left px-8 pt-1">
                   <div className="w-full px-4 sm:px-6 lg:px-8 py-4">
                     <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-4">
+                      <Link to="trainee-apply">
+                        <button className="flex bg-primary dark:bg-[#56C870] rounded-md py-2 mt-2 px-4 text-white font-medium cursor-pointer">
+                              Become Trainee
+                        </button>
+                      </Link>
                       <Select
                         className="sm:text-sm w-full sm:w-40 rounded-bt-rd dark:text-ltb"
                         options={[{ value: "", label: "Select by" }]}
