@@ -25,6 +25,7 @@ import {
   useCustomPagination,
 } from "../../components/Pagination/useCustomPagination";
 import * as AiIcons from "react-icons/ai";
+import { ApplicationsSkeleton } from "../../skeletons/applicationsSkeleton";
 
 const AddTrainee = (props: any) => {
   const [addNewTraineeModel, setAddNewTraineeModel] = useState(false);
@@ -52,6 +53,7 @@ const AddTrainee = (props: any) => {
   const [page, setPage] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState<number>(10);
   const [All, setAll] = useState(false);
+  const [loading, setLoading] = useState(false);
   const { theme, setTheme } = useTheme();
 
   const input = {
@@ -66,12 +68,18 @@ const AddTrainee = (props: any) => {
 
   const cycle = cycles.data;
   const traine = traines.message;
+  // useEffect(() => {
+  //   dispatch(fetchtraine(input));
+  // }, [delettraine, softdeletettraine, page, itemsPerPage, itemsPerPage]);
 
-  useEffect(() => {
-    dispatch(fetchtraine(input));
-  }, [delettraine, softdeletettraine, page, itemsPerPage, itemsPerPage]);
+   const [moredrop, setmoredrop] = useState("");
 
-  const [moredrop, setmoredrop] = useState("");
+    useEffect(() => {
+    setLoading(true); 
+    dispatch(fetchtraine(input))
+      .finally(() => setLoading(false));
+  }, [delettraine, softdeletettraine, page, itemsPerPage]);
+
   const onSubmitHandler = (userid: any) => {
     if (!moredrop) setmoredrop(userid);
     if (moredrop) setmoredrop("");
@@ -131,6 +139,10 @@ const AddTrainee = (props: any) => {
     totalPageCount: Math.ceil(traines?.pagination.totalItems / itemsPerPage),
     currentPage: page,
   });
+
+  if (loading) {
+    return <ApplicationsSkeleton/>
+  }
 
   return (
     <>
@@ -230,6 +242,7 @@ const AddTrainee = (props: any) => {
           </div>
         </div>
         {/* =========================== End:: addnewtraineeModel =============================== */}
+       
         <div className="flex flex-col  h-screen w-[100%]">
           <div className="flex flex-row">
             <div className="w-full">
@@ -291,7 +304,7 @@ const AddTrainee = (props: any) => {
                       </div>
                     </div>
                   </div>
-
+                  {loading ? <ApplicationsSkeleton/> : (
                   <div className="px-8">
                     <div className="bg-white  dark:bg-dark-bg shadow-lg px-5 py-8 rounded-md w-[100%] mx-auto">
                       <div>
@@ -573,6 +586,7 @@ const AddTrainee = (props: any) => {
                     </div>
                     {/* //pagination */}
                   </div>
+                  )}
                 </div>
               </div>
             </div>
