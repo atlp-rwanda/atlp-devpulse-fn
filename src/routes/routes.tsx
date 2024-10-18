@@ -48,6 +48,7 @@ import ApplicationDetails from "../pages/Applications/ViewSingleApplication";
 import Dashboard from "../pages/Dashboard";
 import ApplicantLayout from "../pages/Applicant/ApplicantLayout";
 import AdminLayout from "../components/Layout/Admins/AdminLayout";
+import GoogleSignup from "./../components/form/GoogleSignup";
 import ApplicantDashboard from "../pages/Applicant/ApplicantDashboard";
 import UpdateJobPost from "../pages/JobPost/updateJobPost";
 import VerifyEmail from "../pages/verifyEmail";
@@ -60,6 +61,7 @@ function Navigation() {
       {/* Public Routes */}
       <Route path="/test_tailwind" element={<TestTailwind />} />
       <Route path="/login" element={<LoginPage />} />
+      <Route path="/google" element={ <GoogleSignup /> } />
       <Route path="/forget" element={<ForgotPasswordPage />} />
       <Route path="/reset-password" element={<ResetPasswordPage />} />
 

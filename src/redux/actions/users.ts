@@ -1,3 +1,4 @@
+import { query } from "express";
 import { fetchUser } from "../actiontypes/deleteactiontype";
 import axios from "./axiosconfig";
 
@@ -90,6 +91,71 @@ export const assignMemberRoles= async (userId, roleId)  => {
 }
 }
 
+export const getUserbyFilter= async (filter) => {
+  
+  try{
+    const data = await axios.post("/",
+      {
+        query: `
+          query GetByFilter($filter: UserFilterInput!) {
+            getByFilter(filter: $filter) {
+              id
+              firstname
+              lastname
+              email
+              isActive
+              telephone
+              country
+              code
+              gender
+              authMethod
+              isVerified
+              createdAt
+            }
+          }
+
+        `,
+        variables: {
+          filter: {
+            ...filter
+          }
+        }
+      });
+      return data.data;
+    } catch (err){
+      console.log(err);
+      return err;
+    }
+}
+
+export const updateUserSelf = async (id: string, data: object) => {
+  const query = `
+    mutation UpdateUserSelf($id: ID!, $editUserInput: EditUserSelfInput_Logged) {
+      updateUserSelf(ID: $id, editUserInput: $editUserInput)
+    }
+  `;
+
+  const variables = {
+    id,
+    editUserInput: { ...data },
+  };
+
+  console.log("GraphQL Request:", {
+    query,
+    variables,
+  });
+
+  try {
+    const response = await axios.post("/", {
+      query,
+      variables,
+    });
+    return response;
+  } catch (error: any) {
+    console.error("Error:", error);
+    return error;
+  }
+};
 export const getAllCoordinators = () => async (dispatch: any) => {
   try {
     const data = await axios.post("/", {
