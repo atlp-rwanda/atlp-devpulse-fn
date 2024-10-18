@@ -39,7 +39,7 @@ import UpdateProgram from "../pages/programs/UpdateProgram";
 import Jobs from "../pages/JobPost/job";
 import SingleJobPostDetails from "../pages/JobPost/viewSingleJob";
 import SharedPosts from "../pages/sharedPosts";
-import Applications from "../pages/Applications";
+import {ApplicantApplication} from "../pages/Applications/ApplicantApplication";
 import ScheduleInterview from "../pages/ScheduleInterview";
 import SubmitApplication from "../pages/SubmitApplication";
 import GradingSystemPage from "../pages/GradingSystemPage";
@@ -315,7 +315,7 @@ function Navigation() {
           path="myApplications"
           element={
             <PrivateRoute allowedRoles={['applicant']}>
-              <Applications />
+              <ApplicantApplication />
             </PrivateRoute>
           }
         />
