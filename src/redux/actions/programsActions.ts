@@ -27,9 +27,8 @@ export const getAllPrograms = () => async (dispatch: any) => {
     });
     const programs = await datas.data.data.getAll;
     dispatch(creator(GET_PROGRAMS, programs));
+    return programs.length;
   } catch (error) {
-    if (error) {
-      return console.log(error);
-    }
+    return 0;
   }
 };

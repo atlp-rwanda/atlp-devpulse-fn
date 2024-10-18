@@ -6,9 +6,16 @@ import TrainneeDetailsB from "./../pages/TrainneDetailsB";
 import "./../index.css";
 import Sidebar from "./../components/sidebar/sidebar";
 import NavBar from "./../components/sidebar/navHeader";
+import ForgotPasswordPage from "./../pages/forgetpassword";
 import Trainee from "./../pages/TraineApplicant/Trainee";
 import FilterTrainee from "./../pages/FilterTeainee/FilterTrainee";
+import FilterProgram from '../pages/programs/filterPrograms';
+import FilterJobPost from '../pages/JobPost/fiterJopPost';
+import ApplicantSeachJobPost from "../pages/JobPost/applicantJobFiltering"
+import FilterRole from '../pages/roles&permissions/filterRolesAccess';
 import Table from "./../pages/Table";
+import ResetPasswordPage from "../pages/ResetPasswordPage";
+
 import UpdateTraine from "./../pages/updateTrainee/traineUpdate";
 import CreateScoreType from "./../pages/FilterTeainee/createScoreType";
 import ScoreTypesActions from "./../pages/FilterTeainee/ScoreTypesActions";
@@ -41,6 +48,10 @@ import ApplicationDetails from "../pages/Applications/ViewSingleApplication";
 import Dashboard from "../pages/Dashboard";
 import ApplicantLayout from "../pages/Applicant/ApplicantLayout";
 import AdminLayout from "../components/Layout/Admins/AdminLayout";
+import ApplicantDashboard from "../pages/Applicant/ApplicantDashboard";
+import UpdateJobPost from "../pages/JobPost/updateJobPost";
+import VerifyEmail from "../pages/verifyEmail";
+import Search from "./../pages/search";
 import Settings from '../components/settings';
 
 function Navigation() {
@@ -50,7 +61,11 @@ function Navigation() {
       {/* Public Routes */}
       <Route path="/test_tailwind" element={<TestTailwind />} />
       <Route path="/login" element={<LoginPage />} />
+      <Route path="/forget" element={<ForgotPasswordPage />} />
+      <Route path="/reset-password" element={<ResetPasswordPage />} />
+
       <Route path="/signup" element={<SignupForm />} />
+      <Route path="/verifyEmail" element={<VerifyEmail/>}/>
       <Route path="/pageNotFound" element={<PageNotFound />} />
       <Route path="settings" element={<Settings />} />
       <Route path="/" element={
@@ -83,7 +98,7 @@ function Navigation() {
           }
         />
         <Route
-          path="/admin/application-details/:appId"
+          path="application-details/:appId"
           element={
             <PrivateRoute allowedRoles={['Admin', 'superAdmin']}>
               <ApplicationDetails />
@@ -130,6 +145,7 @@ function Navigation() {
             </PrivateRoute>
           }
         />
+        
         <Route
           path="import_trainee-aplicants"
           element={
@@ -159,6 +175,14 @@ function Navigation() {
           element={
             <PrivateRoute allowedRoles={['Admin', 'superAdmin']}>
               <ListAllUsersPage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="search"
+          element={
+            <PrivateRoute allowedRoles={['Admin', 'superAdmin']}>
+              <Search />
             </PrivateRoute>
           }
         />
@@ -250,6 +274,14 @@ function Navigation() {
             </PrivateRoute>
           }
         />
+          <Route
+          path="job/post/edit/:programId"
+          element={
+            <PrivateRoute allowedRoles={['Admin', 'superAdmin']}>
+              <UpdateJobPost />
+            </PrivateRoute>
+          }
+        />
         <Route
           path="grading"
           element={
@@ -322,10 +354,18 @@ function Navigation() {
           path="available-jobs"
           element={
             <PrivateRoute allowedRoles={['applicant']}>
-              <SharedPosts />
+              <ApplicantSeachJobPost />
             </PrivateRoute>
           }
         />
+        {/* <Route
+        path="filter_job_post"
+        element={
+          <PrivateRoute>
+            <ApplicantSeachJobPost/>
+          </PrivateRoute>
+        }
+      /> */}
         <Route
           path="available-job/:id/apply"
           element={
