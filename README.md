@@ -2,6 +2,8 @@
 
 [![Maintainability](https://api.codeclimate.com/v1/badges/2c2cd9c0f847fcbba7a9/maintainability)](https://codeclimate.com/github/atlp-rwanda/atlp-devpulse-fn/maintainability)
 
+[![Coverage Status](https://coveralls.io/repos/github/atlp-rwanda/Dev-Pulse-FN/badge.svg?branch=develop)](https://coveralls.io/github/atlp-rwanda/Dev-Pulse-FN?branch=develop)
+
 
 ## Introduction
 
