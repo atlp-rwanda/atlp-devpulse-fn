@@ -14,13 +14,13 @@ export const getTraineeToUpdate = (Traineid: any) => async (dispatch: any) => {
   try {
     const datas = await axios.post("/", {
       query: `
-      query GetOneTraineeAllDetails($input: one) {
+      query GetOneTraineeAllDetails($input: One) {
         getOneTraineeAllDetails(input: $input) {
           gender
           birth_date
-          Address
+          address
           phone
-          field_of_study
+          study
           education_level
           province
           district
@@ -31,18 +31,17 @@ export const getTraineeToUpdate = (Traineid: any) => async (dispatch: any) => {
           Hackerrank_score
           english_score
           interview_decision
-          past_andela_programs
+          andelaPrograms
           _id
-          trainee_id {
+          trainee {
             lastName
             firstName
             _id
             email
             cycle_id {
-              id
+              _id
               name
-              startDate
-              endDate
+
             }
           }
         }
@@ -56,6 +55,7 @@ export const getTraineeToUpdate = (Traineid: any) => async (dispatch: any) => {
     });
 
     const response = await datas.data.data.getOneTraineeAllDetails;
+    console.log("Response data:", response)
     return dispatch(creator(GET_TRAINEE_TO_UPDATE, response));
   } catch (error) {
     console.log(error);
@@ -99,7 +99,7 @@ export const updateTraine =
 export const updateTraineeAttributes =
   ({
     id,
-    past_andela_programs,
+    andelaPrograms,
     interview_decision,
     english_score,
     Hackerrank_score,
@@ -110,9 +110,9 @@ export const updateTraineeAttributes =
     district,
     province,
     education_level,
-    field_of_study,
+    study,
     phone,
-    Address,
+    address,
     birth_date,
     gender,
   }: any) =>
@@ -124,9 +124,9 @@ export const updateTraineeAttributes =
           updateTraineeAttribute(ID: $id, attributeUpdateInput: $attributeUpdateInput) {
             gender
             birth_date
-            Address
+            address
             phone
-            field_of_study
+            study
             education_level
             province
             district
@@ -137,9 +137,9 @@ export const updateTraineeAttributes =
             Hackerrank_score
             english_score
             interview_decision
-            past_andela_programs
+            andelaPrograms
             _id
-            trainee_id
+            trainee
           }
         }
         `,
@@ -148,9 +148,9 @@ export const updateTraineeAttributes =
           attributeUpdateInput: {
             gender,
             birth_date,
-            Address,
+            address,
             phone,
-            field_of_study,
+            study,
             education_level,
             province,
             district,
@@ -161,7 +161,7 @@ export const updateTraineeAttributes =
             Hackerrank_score,
             english_score,
             interview_decision,
-            past_andela_programs,
+            andelaPrograms,
           },
         },
       });
