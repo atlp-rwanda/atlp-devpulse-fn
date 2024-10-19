@@ -32,13 +32,13 @@ export const updateNotificationStatus = async (id: string, read: boolean) => {
             "Content-Type": "application/json",
         },
         body: JSON.stringify({
-            query: `mutation MarkNotificationAsRead($id: ID!, $read: Boolean!) {
-                markNotificationAsRead(id: $id, read: $read) {
+            query: `mutation MarkNotificationAsRead($id: ID!) {
+                markNotificationAsRead(id: $id) {
                   id
                   read
                 }
               }`,
-            variables: { id, read },
+            variables: { id },
         }),
     });
 

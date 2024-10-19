@@ -12,6 +12,8 @@ interface NotificationContextProps {
   unreadCount: number;
   markAsRead: (id: string) => void;
   markAsUnread: (id: string) => void;
+  userId: string | null;
+  setUserId: (userId: string | null) => void;
 }
 
 const NotificationContext = createContext<NotificationContextProps | undefined>(
@@ -31,12 +33,19 @@ export const useNotifications = () => {
 export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const { notifications, unreadCount, markAsRead, markAsUnread } =
-    useNotificationsState(localStorage.getItem("userId"));
+  const { notifications, unreadCount, markAsRead, markAsUnread,userId, setUserId} =
+    useNotificationsState();
 
   return (
     <NotificationContext.Provider
-      value={{ notifications, unreadCount, markAsRead, markAsUnread }}
+      value={{
+        notifications,
+        unreadCount,
+        markAsRead,
+        markAsUnread,
+        userId,
+        setUserId,
+      }}
     >
       {children}
       <ToastContainer />
@@ -44,9 +53,13 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({
   );
 };
 
-const useNotificationsState = (userId: string | null) => {
+const useNotificationsState = () => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
+  const [userId, setUserId] = useState<string | null>(
+    localStorage.getItem("userId")
+  );
+  
 
   const addNotification = (notification: Notification) => {
     setNotifications((prev) => [notification, ...prev]);
@@ -54,6 +67,7 @@ const useNotificationsState = (userId: string | null) => {
     toast.info(`New notification: ${notification.message}`, toastOptions);
   };
 
+  const channel = usePusherNotifications(userId, addNotification);
   useFetchNotifications(userId, setNotifications, setUnreadCount);
   usePusherNotifications(userId, addNotification);
 
@@ -69,7 +83,8 @@ const useNotificationsState = (userId: string | null) => {
     updateNotificationReadStatus(id, true);
   };
 
-  const markAsUnread = (id: string) => {
+  const markAsUnread = async (id: string) => {
+    await updateNotificationStatus(id, false);
     updateNotificationReadStatus(id, false);
   };
 
@@ -78,5 +93,7 @@ const useNotificationsState = (userId: string | null) => {
     unreadCount,
     markAsRead,
     markAsUnread,
+    userId,
+    setUserId
   };
 };

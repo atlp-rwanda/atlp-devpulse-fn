@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
 import { loginSchema } from "../validation/login";
@@ -12,6 +12,7 @@ import { toast } from "react-toastify";
 import { GraphQLClient } from "graphql-request";
 import { loginAction } from "../../redux/actions/login";
 import { Token } from '../../utils/utils';
+import { useNotifications } from "../../utils/Notifications";
 
 const googleIcn: string = require("../../assets/assets/googleIcon.jpg").default;
 
@@ -41,6 +42,7 @@ const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+  const { setUserId } = useNotifications();
 
   const {
     register,
@@ -83,6 +85,7 @@ const LoginForm = () => {
         localStorage.setItem("access_token", token);
         if (userId) {
           localStorage.setItem("userId", userId);
+          setUserId(userId);
         }
         await redirectAfterLogin();
       } else {
