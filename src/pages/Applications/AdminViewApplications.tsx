@@ -4,10 +4,13 @@ import NavBar from '../../components/sidebar/navHeader';
 import { fetchApplications } from '../../redux/actions/adminListApplications';
 import { HiDotsVertical } from 'react-icons/hi';
 import { Pagination } from 'flowbite-react';
-
+import Select from "react-select";
+import { useTheme } from "../../hooks/darkmode";
+import * as icons from "react-icons/ai";
 const ListApplications = () => {
   const navigate = useNavigate();
   const [applications, setApplications]: any = useState();
+  const { theme, setTheme } = useTheme();
 
   const [activePage, setActivePage] = useState(1);
   const [itemsCountPerPage, setItemsCountPerPage] = useState(10);
@@ -47,7 +50,29 @@ const ListApplications = () => {
   ) => {
     setItemsCountPerPage(Number(event.target.value));
   };
+  const customTheme = (theme: any) => {
+    return {
+      ...theme,
+      colors: {
+        ...theme.colors,
+        text: "light-gray",
+        primary25: "#E5E7EB",
+        primary: "#d6dfdf",
+        neutral0: "white",
+      },
+    };
+  };
 
+  const darkTheme = (theme: any) => {
+    return {
+      ...theme,
+      colors: {
+        primary25: "#404657",
+        primary: "#d6dfdf",
+        neutral0: "#293647",
+      },
+    };
+  };
   const totalApplications = applications?.length;
 
   return (
@@ -57,14 +82,42 @@ const ListApplications = () => {
           <div className='w-full'>
             <div>
               <div className='bg-light-bg dark:bg-dark-frame-bg min-h-screen overflow-y-hidden overflow-x-hidden'>
-                <div className='flex items-left px-8'>
-                  <div className='flex py-2 pb-8 w-fit'>
-                    <Link to='/filter-applications'>
-                      <button className='flex bg-primary dark:bg-[#56C870] rounded-md py-2 mt-2 px-4 text-white font-medium cursor-pointer'>
-                        Search
-                      </button>
-                    </Link>
-                    <div></div>
+              <div className="w-full px-4 sm:px-6 lg:px-8 py-4">
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-4">
+                    <Select
+                      className="sm:text-sm w-full sm:w-40 rounded-bt-rd dark:text-ltb"
+                      options={[
+                        { value: "", label: "Select by" },
+                      ]}
+                      defaultValue={{ value: "", label: "Select by" }}
+                      theme={theme ? customTheme : darkTheme}
+                    />
+                    <div className="w-full sm:w-auto flex-grow">
+                      <div className="relative">
+                        <input
+                          className="w-full bg-row-gray dark:bg-[#293647] dark:text-ltb border border-bdr dark:border-cg dark:border-opacity-5 rounded-md py-2 pl-9 pr-4 focus:outline-none focus:ring-2 focus:ring-primary dark:focus:ring-[#56C870] text-sm"
+                          placeholder="Search"
+                          type="text"
+                          name="search"
+                        />
+                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                          <svg
+                            className="h-5 w-5 text-gray-400"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                            />
+                          </svg>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <div className='px-8'>

@@ -41,6 +41,8 @@ import {
   singleApplicationReducer,
 } from './applicationReducer';
 import { assessmentsReducer } from './assessmentReducer';
+import { attendanceReducer } from './attendanceReducer';
+import { performanceReducer } from './performanceReducer';
 import filterProgramsReducer from './filterProgramsReducer';
 import filterRoleReducer from './filterRoleReducer';
 import fetchSearchDataReducer from './fetchSearchDataReducer';
@@ -86,6 +88,9 @@ const allReducers = combineReducers({
   currentApplication: singleApplicationReducer,
   assessments: assessmentsReducer,
   searchData: fetchSearchDataReducer,
+  traineeApplicant: traineeReducer,
+  traineeAttendance: attendanceReducer,
+  traineePerformance: performanceReducer
 });
 
 export type RootState = ReturnType<typeof allReducers>;

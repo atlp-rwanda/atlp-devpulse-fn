@@ -45,5 +45,38 @@
 // export type add = addactionPending  | addactionSuccess | addactionFail;
 // export type view = viewactionPending | viewactionSuccess | viewactionFail;
 
+interface User {
+    id: string;
+    email: string;
+    firstName: string;
+    lastName: string;
+  }
 
+export interface Trainee {
+    id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    status: string;
+    applicationPhase: string;
+    user?: User;
+    cohort?: {
+      id: string;
+      title: string;
+      program: string;
+      cycle: string;
+      start: string;
+      end: string;
+      phase: string;
+    };
+  }
 
+export const setTrainee = (traineeData) => ({
+    type: 'SET_TRAINEE',
+    payload: traineeData
+  });
+
+  export const setUser = (userData) => ({
+    type: 'SET_USER',
+    payload: userData
+  });
