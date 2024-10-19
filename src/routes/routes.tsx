@@ -45,7 +45,7 @@ import UpdateProgram from "../pages/programs/UpdateProgram";
 import Jobs from "../pages/JobPost/job";
 import SingleJobPostDetails from "../pages/JobPost/viewSingleJob";
 import SharedPosts from "../pages/sharedPosts";
-import {ApplicantApplication} from "../pages/Applications/ApplicantApplication";
+import { ApplicantApplication } from "../pages/Applications/ApplicantApplication";
 import ScheduleInterview from "../pages/ScheduleInterview";
 import SubmitApplication from "../pages/SubmitApplication";
 import GradingSystemPage from "../pages/GradingSystemPage";
@@ -66,7 +66,6 @@ import UpdateJobPost from "../pages/JobPost/updateJobPost";
 import VerifyEmail from "../pages/verifyEmail";
 import Search from "./../pages/search";
 
-
 function Navigation() {
   const roleName = localStorage.getItem("roleName");
   return (
@@ -74,7 +73,7 @@ function Navigation() {
       {/* Public Routes */}
       <Route path="/test_tailwind" element={<TestTailwind />} />
       <Route path="/login" element={<LoginPage />} />
-      <Route path="/google" element={ <GoogleSignup /> } />
+      <Route path="/google" element={<GoogleSignup />} />
       <Route path="/forget" element={<ForgotPasswordPage />} />
       <Route path="/reset-password" element={<ResetPasswordPage />} />
 
@@ -190,7 +189,7 @@ function Navigation() {
         <Route
           path="search"
           element={
-            <PrivateRoute allowedRoles={['Admin', 'superAdmin']}>
+            <PrivateRoute allowedRoles={["Admin", "superAdmin"]}>
               <Search />
             </PrivateRoute>
           }
@@ -319,11 +318,18 @@ function Navigation() {
 
       {/* Applicant Routes (Protected) */}
       <Route path="/applicant" element={<ApplicantLayout />}>
-      <Route index element={<PrivateRoute allowedRoles={['applicant']}><ApplicantDashboard/></PrivateRoute>} />
+        <Route
+          index
+          element={
+            <PrivateRoute allowedRoles={["applicant"]}>
+              <ApplicantDashboard />
+            </PrivateRoute>
+          }
+        />
         <Route
           path="myApplications"
           element={
-            <PrivateRoute allowedRoles={['applicant']}>
+            <PrivateRoute allowedRoles={["applicant"]}>
               <ApplicantApplication />
             </PrivateRoute>
           }

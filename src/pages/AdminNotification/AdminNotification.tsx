@@ -14,7 +14,6 @@ import {
   DOTS,
 } from "../../components/Pagination/useCustomPagination";
 import { ClassNames } from "@emotion/react";
-
 interface NotificationType {
   _id: string;
   message: string;
@@ -22,26 +21,21 @@ interface NotificationType {
   read: boolean;
   image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ_kSSoomJ9hiFXmiF2RdZlwx72Y23XsT6iwQ&s";
 }
-
 enum FilterOptions {
   All = "all",
   Unread = "unread",
 }
-
 enum OrderOptions {
   Recent = "recent",
   Oldest = "oldest",
 }
-
 const PAGE_SIZE = 4;
-
 const AdminNotification: React.FC = () => {
   const [notifications, setNotifications] = useState<NotificationType[]>([]);
   const [filter, setFilter] = useState<FilterOptions>(FilterOptions.All);
   const [orderBy, setOrderBy] = useState<OrderOptions>(OrderOptions.Recent);
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(false);
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -74,7 +68,6 @@ const AdminNotification: React.FC = () => {
       toast.error(`Error marking notification as read: ${error.message}`);
     }
   };
-
   const handleDelete = async (id: string) => {
     try {
       await deleteNotification(id);
@@ -85,7 +78,6 @@ const AdminNotification: React.FC = () => {
       toast.error(`Error deleting notification: ${error.message}`);
     }
   };
-
   const filteredNotifications = getFilteredNotifications(notifications, filter);
   const sortedNotifications = sortNotifications(filteredNotifications, orderBy);
   const totalPageCount = Math.ceil(sortedNotifications.length / PAGE_SIZE);
@@ -93,21 +85,17 @@ const AdminNotification: React.FC = () => {
     (currentPage - 1) * PAGE_SIZE,
     currentPage * PAGE_SIZE
   );
-
   const paginationRange = useCustomPagination({
     totalPageCount,
     siblingCount: 1,
     currentPage,
   });
-
   const handleOrderChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setOrderBy(e.target.value as OrderOptions);
   };
-
   const onPageChange = (page: number) => {
     setCurrentPage(page);
   };
-
   return (
     <div className="h-screen w-full px-4 md:px-8 ">
       {loading ? (
@@ -138,7 +126,6 @@ const AdminNotification: React.FC = () => {
     </div>
   );
 };
-
 const getFilteredNotifications = (
   notifications: NotificationType[],
   filter: FilterOptions
@@ -147,7 +134,6 @@ const getFilteredNotifications = (
     filter === FilterOptions.All ? true : !n.read
   );
 };
-
 const sortNotifications = (
   notifications: NotificationType[],
   orderBy: OrderOptions
@@ -158,7 +144,6 @@ const sortNotifications = (
     return orderBy === OrderOptions.Recent ? dateB - dateA : dateA - dateB;
   });
 };
-
 const NotificationFilter: React.FC<{
   filter: FilterOptions;
   setFilter: (filter: FilterOptions) => void;
@@ -202,7 +187,6 @@ const NotificationFilter: React.FC<{
     </div>
   </div>
 );
-
 const NotificationList: React.FC<{
   notifications: NotificationType[];
   onMarkAsRead: (id: string) => void;
@@ -225,7 +209,6 @@ const NotificationList: React.FC<{
     )}
   </div>
 );
-
 const Pagination: React.FC<{
   paginationRange: (number | string)[] | undefined;
   currentPage: number;
@@ -236,7 +219,6 @@ const Pagination: React.FC<{
 
   const onNext = () => onPageChange(currentPage + 1);
   const onPrevious = () => onPageChange(currentPage - 1);
-
   return (
     <ul className="flex list-none space-x-2 justify-center mt-8 items-center">
       <li>
@@ -282,5 +264,4 @@ const Pagination: React.FC<{
     </ul>
   );
 };
-
 export default AdminNotification;
