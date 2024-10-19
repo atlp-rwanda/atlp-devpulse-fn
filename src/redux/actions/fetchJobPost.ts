@@ -1,13 +1,16 @@
-import axios from './axiosconfig';
-import { toast } from 'react-toastify';
-import { Dispatch } from 'react';
-import { fetchJobPostType, ActionFetch } from '../actiontypes/fetchJobActionTypes';
+import axios from "./axiosconfig";
+import { toast } from "react-toastify";
+import { Dispatch } from "react";
+import {
+  fetchJobPostType,
+  ActionFetch,
+} from "../actiontypes/fetchJobActionTypes";
 
 export const fetchJobPost = () => async (dispatch: Dispatch<ActionFetch>) => {
   try {
     const response = await axios({
       url: process.env.BACKEND_URL,
-      method: 'post',
+      method: "post",
       data: {
         query: `
           query GetAllJobApplication($input: pagination) {
@@ -21,6 +24,7 @@ export const fetchJobPost = () => async (dispatch: Dispatch<ActionFetch>) => {
               description
               label
               published
+              spreadsheetlink
             }
           }
         `,
@@ -38,8 +42,8 @@ export const fetchJobPost = () => async (dispatch: Dispatch<ActionFetch>) => {
         data: data.getAllJobApplication,
       });
     } else if (errors) {
-      const errorMessage = errors.map((error: any) => error.message).join(', ');
-      toast.error('Job Post could not be fetched');
+      const errorMessage = errors.map((error: any) => error.message).join(", ");
+      toast.error("Job Post could not be fetched");
       dispatch({
         type: fetchJobPostType.FETCH_JOB_POST_FAIL,
         error: errorMessage,
@@ -48,10 +52,10 @@ export const fetchJobPost = () => async (dispatch: Dispatch<ActionFetch>) => {
 
     return response;
   } catch (error) {
-    toast.error('Job Post could not be fetched');
+    toast.error("Job Post could not be fetched");
     dispatch({
       type: fetchJobPostType.FETCH_JOB_POST_FAIL,
-      error: error instanceof Error ? error.message : 'Unexpected error',
+      error: error instanceof Error ? error.message : "Unexpected error",
     });
     console.error(error);
   }

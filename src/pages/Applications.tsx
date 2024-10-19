@@ -105,7 +105,6 @@ const Applications = (props: any) => {
 
   return (
     <>
-      <ToastContainer />
       <div className="flex flex-col  h-screen w-[100%]">
         <div className="flex flex-row">
           <div className="w-full">

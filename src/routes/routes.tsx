@@ -39,7 +39,7 @@ import UpdateProgram from "../pages/programs/UpdateProgram";
 import Jobs from "../pages/JobPost/job";
 import SingleJobPostDetails from "../pages/JobPost/viewSingleJob";
 import SharedPosts from "../pages/sharedPosts";
-import Applications from "../pages/Applications";
+import {ApplicantApplication} from "../pages/Applications/ApplicantApplication";
 import ScheduleInterview from "../pages/ScheduleInterview";
 import SubmitApplication from "../pages/SubmitApplication";
 import GradingSystemPage from "../pages/GradingSystemPage";
@@ -48,6 +48,7 @@ import ApplicationDetails from "../pages/Applications/ViewSingleApplication";
 import Dashboard from "../pages/Dashboard";
 import ApplicantLayout from "../pages/Applicant/ApplicantLayout";
 import AdminLayout from "../components/Layout/Admins/AdminLayout";
+import GoogleSignup from "./../components/form/GoogleSignup";
 import ApplicantNotifications from "../pages/ApplicantNotifications/AppNotification";
 import ApplicantDashboard from "../pages/Applicant/ApplicantDashboard";
 import UpdateJobPost from "../pages/JobPost/updateJobPost";
@@ -61,6 +62,7 @@ function Navigation() {
       {/* Public Routes */}
       <Route path="/test_tailwind" element={<TestTailwind />} />
       <Route path="/login" element={<LoginPage />} />
+      <Route path="/google" element={ <GoogleSignup /> } />
       <Route path="/forget" element={<ForgotPasswordPage />} />
       <Route path="/reset-password" element={<ResetPasswordPage />} />
 
@@ -337,8 +339,8 @@ function Navigation() {
         <Route
           path="myApplications"
           element={
-            <PrivateRoute allowedRoles={["applicant"]}>
-              <Applications />
+            <PrivateRoute allowedRoles={['applicant']}>
+              <ApplicantApplication />
             </PrivateRoute>
           }
         />
