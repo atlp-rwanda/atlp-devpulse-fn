@@ -194,7 +194,7 @@ const NotificationFilter: React.FC<{
         value={orderBy}
         onChange={onOrderChange}
         options={[
-          { value: OrderOptions.Recent, label: "Most Recent" },
+          { value: OrderOptions.Recent, label: "Newest" },
           { value: OrderOptions.Oldest, label: "Oldest" },
         ]}
         className="rounded py-2 px-4 bg-primary dark:bg-[#56C870] text-white focus:outline-none cursor-pointer"
