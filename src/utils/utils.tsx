@@ -31,6 +31,7 @@ export const Token = () => {
           if (data) {
             const roleName = data.checkUserRole?.roleName;
             localStorage.setItem('roleName', roleName);
+            localStorage.setItem('userId', decoded.data.userId);
           }
         });
         return decoded;
