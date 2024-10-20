@@ -67,7 +67,6 @@ const useNotificationsState = () => {
     toast.info(`New notification: ${notification.message}`, toastOptions);
   };
 
-  const channel = usePusherNotifications(userId, addNotification);
   useFetchNotifications(userId, setNotifications, setUnreadCount);
   usePusherNotifications(userId, addNotification);
 
