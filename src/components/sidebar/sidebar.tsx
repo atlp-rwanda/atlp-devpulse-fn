@@ -1,6 +1,6 @@
 import React from "react";
 import { Icon } from "@iconify/react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import {
   sidebarItems1,
   sidebarItems2,
@@ -11,6 +11,7 @@ import "./navslide.css";
 
 const Sidebar = ({ expanded, setExpanded }) => {
   const navigate = useNavigate();
+  const location = useLocation(); // Get the current path
   const roleName = localStorage.getItem("roleName");
 
   // Select items based on the role
@@ -22,6 +23,15 @@ const Sidebar = ({ expanded, setExpanded }) => {
   const handleLogout = () => {
     localStorage.clear();
     navigate("/login");
+  };
+
+  // Function to check if the current item is active based on the current path
+  const isActive = (path) => {
+    if (path.startsWith("/")) {
+      return location.pathname === path;
+    } else {
+      return location.pathname.endsWith(path);
+    }
   };
 
   return (
@@ -44,7 +54,9 @@ const Sidebar = ({ expanded, setExpanded }) => {
           {items.map((item, index) => (
             <li
               key={index}
-              className="flex items-center text-white hover:text-[#56c770]"
+              className={`flex items-center text-white hover:text-[#56c770] ${
+                isActive(item.path) ? "bg-gray-700 text-[#56c770]" : ""
+              }`} 
             >
               <Link to={item.path} className="p-1 flex items-center">
                 <span className="mr-3">{item.icon}</span>
@@ -58,7 +70,9 @@ const Sidebar = ({ expanded, setExpanded }) => {
           {sidebarItems3.map((item, index) => (
             <li
               key={index}
-              className="flex items-center text-white hover:text-[#56c770]"
+              className={`flex items-center text-white hover:text-[#56c770] ${
+                isActive(item.path) ? "bg-gray-700 text-[#56c770]" : ""
+              }`} 
             >
               <Link to={item.path} className="p-1 flex items-center">
                 <span className="mr-3">{item.icon}</span>
