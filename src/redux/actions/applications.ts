@@ -1,23 +1,23 @@
-import { ViewSingleApplication } from './adminListApplications';
+import { ViewSingleApplication } from "./adminListApplications";
 import {
   fetchMyApplications,
   deleteOwnApplication,
   fetchSingleOwnApplication,
-} from '../actiontypes/applicationTypes';
-import axios from './axiosconfig';
-import { toast } from 'react-toastify';
-import creator from './creator';
-import { MY_APPLICATIONS } from 'redux';
+} from "../actiontypes/applicationTypes";
+import axios from "./axiosconfig";
+import { toast } from "react-toastify";
+import creator from "./creator";
+import { MY_APPLICATIONS } from "redux";
 
 export const getMyApplications =
   (filter: any, pagination: any) => async (dispatch: any) => {
     dispatch({
       type: fetchMyApplications.FETCH_MYAPPLICATIONS_LOADING,
       data: null,
-      message: 'loading',
+      message: "loading",
     });
     try {
-      const response = await axios.post('/', {
+      const response = await axios.post("/", {
         query: `query ViewAllOwnApplications($filter: ApplicationFilter, $pagination: PaginationInput) {
   viewAllOwnApplications(filter: $filter, pagination: $pagination) {
     message
@@ -57,20 +57,20 @@ export const getMyApplications =
         },
       });
       if (response.data.data.viewAllOwnApplications != null) {
-        let toastShown = false
+        let toastShown = false;
         dispatch({
           type: fetchMyApplications.FETCH_MYAPPLICATIONS_SUCCESS,
           data: response.data.data.viewAllOwnApplications,
           message: response.data.data.viewAllOwnApplications.message,
         });
-        toast.success(response.data.data.viewAllOwnApplications.message)
+        toast.success(response.data.data.viewAllOwnApplications.message);
         return response.data.data;
       } else {
         dispatch({
           type: fetchMyApplications.FETCH_MYAPPLICATIONS_FAIL,
           error: response.data.errors[0].message,
         });
-        toast.error(response.data.errors[0].message); 
+        toast.error(response.data.errors[0].message);
         return response.data.data;
       }
     } catch (err: any) {
@@ -84,7 +84,7 @@ export const deleteApplication =
       type: deleteOwnApplication.DELETE_APPLICATION_LOADING,
     });
     try {
-      const response = await axios.post('/', {
+      const response = await axios.post("/", {
         query: `mutation DeleteCandidateApplication($deleteCandidateApplicationId: ID!) {
   deleteCandidateApplication(id: $deleteCandidateApplicationId) {
     message
@@ -99,15 +99,15 @@ export const deleteApplication =
       if (response.data?.data != null) {
         if (
           response.data?.data?.deleteCandidateApplication.message ===
-          'Application has been withdrawn!'
+          "Application has been withdrawn!"
         ) {
           toast.success(
-            response.data?.data?.deleteCandidateApplication.message,
+            response.data?.data?.deleteCandidateApplication.message
           );
         }
         dispatch({
           type: deleteOwnApplication.DELETE_APPLICATION_SUCCESS,
-          message: 'success',
+          message: "success",
           data: response.data?.data?.deleteCandidateApplication,
         });
         // dispatch({
@@ -130,10 +130,10 @@ export const getSingleApplication =
     dispatch({
       type: fetchSingleOwnApplication.FETCH_SINGLE_APPLICATION_LOADING,
       data: null,
-      message: 'loading',
+      message: "loading",
     });
     try {
-      const response = await axios.post('/', {
+      const response = await axios.post("/", {
         query: `query ViewOwnApplication($viewOwnApplicationId: ID!) {
   viewOwnApplication(id: $viewOwnApplicationId) {
       _id
@@ -167,13 +167,49 @@ export const getSingleApplication =
         dispatch({
           type: fetchSingleOwnApplication.FETCH_SINGLE_APPLICATION_SUCCESS,
           data: response.data.data.viewOwnApplication,
-          message: 'Success',
+          message: "Success",
         });
       } else {
-        toast.error('Something went wrong');
+        toast.error("Something went wrong");
       }
       return response.data.data;
     } catch (err: any) {
       toast.error(err.message);
     }
   };
+
+// NEW FUNCTIONALITY FOR GET APPLICATION BY USER
+
+export const getMyOwnAppliedJob = () => async (dispatch: any) => {
+  dispatch({
+    type: fetchMyApplications.FETCH_MYAPPLICATIONS_LOADING,
+    data: [],
+    message: "loading",
+  });
+  try {
+    const response = await axios.post("/", {
+      query: `query GetMyOuwAppliedJob {
+                getMyOwnAppliedJob {
+                 appliedJob {
+                    key
+                    value
+                  }
+                  id
+                  status
+                }
+             }`
+    });
+    if (response.data.data?.getMyOwnAppliedJob != null) {
+      dispatch({
+        type: fetchMyApplications.FETCH_MYAPPLICATIONS_SUCCESS,
+        data: response.data.data.getMyOwnAppliedJob,
+        message: "Success",
+      });
+    } else {
+      toast.error(response.data.errors[0].message);
+    }
+    return response.data.data;
+  } catch (err: any) {
+    toast.error(err.message);
+  }
+};

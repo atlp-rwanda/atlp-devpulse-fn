@@ -25,7 +25,7 @@ import {
   getAllFilteredJobPosts, 
   getAllJobPosts} from "../../redux/actions/filterJobPost";
 
-  import { debounce } from "lodash";
+import { debounce } from "lodash";
 
 const Jobs = (props: any) => {
   const [addNewTraineeModel, setAddNewTraineeModel] = useState(false);
@@ -66,7 +66,7 @@ const Jobs = (props: any) => {
       },
     };
   };
-  
+
   const darkTheme = (theme: any) => {
     return {
       ...theme,
@@ -89,22 +89,22 @@ const Jobs = (props: any) => {
   const [page, setPage] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState<number>(10);
   const [All, setAll] = useState(false);
-  const [enteredWord,setEnteredWord]=useState('');
-  const [filterAttribute,setFilterAttribute]=useState('')
+  const [enteredWord, setEnteredWord] = useState("");
+  const [filterAttribute, setFilterAttribute] = useState("");
   const [enteredsubmitWord, setenteredsubmitWord] = useState("");
   const input = {
     page: page + 1,
     itemsPerPage: itemsPerPage,
     All: All,
   };
-  const input2={
+  const input2 = {
     page: page + 1,
     itemsPerPage: itemsPerPage,
     All: All,
-    filterAttribute:filterAttribute,
+    filterAttribute: filterAttribute,
     wordEntered: enteredWord,
-  }
-  const {allfilteredjobPosts, count}=props
+  };
+  const { allfilteredjobPosts, count } = props;
   useEffect(() => {
     props.getAllPrograms();
     props.getAllCycles();
@@ -113,7 +113,7 @@ const Jobs = (props: any) => {
 
   useEffect(() => {
     props.getAllFilteredJobPosts(input2);
-    props.getAllJobPosts()
+    props.getAllJobPosts();
   }, [enteredWord, filterAttribute]);
 
   const validation = () => {
@@ -158,23 +158,22 @@ const Jobs = (props: any) => {
   };
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
-      if(filterAttribute==='' || filterAttribute===null){
-        toast.error("Please insert a filter attribute")
+      if (filterAttribute === "" || filterAttribute === null) {
+        toast.error("Please insert a filter attribute");
       }
       setEnteredWord(enteredsubmitWord);
     }
   };
   const handleSearchChange = (e) => {
     const searchTerm = e.target.value;
-    setenteredsubmitWord(searchTerm); 
-    setEnteredWord(searchTerm); 
+    setenteredsubmitWord(searchTerm);
+    setEnteredWord(searchTerm);
   };
-
 
   const debouncedSearch = useCallback(
     debounce(() => {
       props.getAllFilteredJobPosts(input2);
-    }, 300), 
+    }, 300),
     [enteredWord, filterAttribute, page, itemsPerPage]
   );
 
@@ -214,124 +213,124 @@ const Jobs = (props: any) => {
     <>
       <ToastContainer />
       <div className="h-screen w-[100%]">
-      {/* =========================== Start:: addnewJobPostModel =============================== */}
-      <div className="relative">
-        <div
-          className={`h-screen w-[100%] z-20 bg-black bg-opacity-30 backdrop-blur-sm absolute flex justify-center items-center  px-4  ${
-            addNewTraineeModel === true ? "block" : "hidden"
-          }`}
-        >
-          <div className="bg-white dark:bg-dark-bg w-full max-h-[900px] sm_:mt-40 sm_:mb-10 md_:max-h-full md_:w-[40%] md-sm:w-[95%] rounded-lg p-4 pb-8">
-            <div className="card-title w-full flex  flex-wrap justify-center items-center  ">
-              <h3 className="font-bold text-sm dark:text-white text-center w-11/12 ">
-                <icons.AiOutlineClose
-                  className="float-right text-3xl cursor-pointer"
-                  onClick={() => removeModel()}
-                />
+        {/* =========================== Start:: addnewJobPostModel =============================== */}
+        <div className="relative">
+          <div
+            className={`h-screen w-[100%] z-20 bg-black bg-opacity-30 backdrop-blur-sm absolute flex justify-center items-center  px-4  ${
+              addNewTraineeModel === true ? "block" : "hidden"
+            }`}
+          >
+            <div className="bg-white dark:bg-dark-bg w-full max-h-[900px] sm_:mt-40 sm_:mb-10 md_:max-h-full md_:w-[40%] md-sm:w-[95%] rounded-lg p-4 pb-8">
+              <div className="card-title w-full flex  flex-wrap justify-center items-center  ">
+                <h3 className="font-bold text-sm dark:text-white text-center w-11/12 ">
+                  <icons.AiOutlineClose
+                    className="float-right text-3xl cursor-pointer"
+                    onClick={() => removeModel()}
+                  />
 
-                {"New Job Post"}
-              </h3>
-              <hr className=" bg-primary border-b my-3 w-full" />
-            </div>
-            <div className="card-body">
-              <section className=" py-3 px-8">
-                <div className="input my-3 h-9 ">
-                  <div className="grouped-input flex items-center h-full w-full rounded-md">
-                    <input
-                      type="text"
-                      name="title"
-                      className=" dark:bg-dark-tertiary border dark:text-white border-primary rounded outline-none px-5 font-sans text-xs py-2 w-full pt-4"
-                      placeholder={"Job Title"}
-                      value={title}
-                      onChange={(e) => {
-                        setTitle(e.target.value);
-                      }}
-                    />
+                  {"New Job Post"}
+                </h3>
+                <hr className=" bg-primary border-b my-3 w-full" />
+              </div>
+              <div className="card-body">
+                <section className=" py-3 px-8">
+                  <div className="input my-3 h-9 ">
+                    <div className="grouped-input flex items-center h-full w-full rounded-md">
+                      <input
+                        type="text"
+                        name="title"
+                        className=" dark:bg-dark-tertiary border dark:text-white border-primary rounded outline-none px-5 font-sans text-xs py-2 w-full pt-4"
+                        placeholder={"Job Title"}
+                        value={title}
+                        onChange={(e) => {
+                          setTitle(e.target.value);
+                        }}
+                      />
+                    </div>
                   </div>
-                </div>
-                <div className="input my-3 h-9 ">
-                  <div className="grouped-input flex items-center h-full w-full rounded-md">
-                    <select
-                      name="program"
-                      id="program"
-                      className=" dark:bg-dark-tertiary border dark:text-white border-primary py-2 rounded outline-none px-5 font-sans text-xs w-full pt-4"
-                      onChange={(e) => setProgram(e.target.value)}
-                    >
-                      <option className="dark:text-white " value="">
-                        --Please choose a program--
-                      </option>
-                      {programs.data?.map((program: any) => (
-                        <option
-                          className="dark:text-white "
-                          value={program._id}
-                        >
-                          {program?.title}
+                  <div className="input my-3 h-9 ">
+                    <div className="grouped-input flex items-center h-full w-full rounded-md">
+                      <select
+                        name="program"
+                        id="program"
+                        className=" dark:bg-dark-tertiary border dark:text-white border-primary py-2 rounded outline-none px-5 font-sans text-xs w-full pt-4"
+                        onChange={(e) => setProgram(e.target.value)}
+                      >
+                        <option className="dark:text-white " value="">
+                          --Please choose a program--
                         </option>
-                      ))}
-                    </select>
+                        {programs.data?.map((program: any) => (
+                          <option
+                            className="dark:text-white "
+                            value={program._id}
+                          >
+                            {program?.title}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
                   </div>
-                </div>
-                <div className="input my-3 h-9 ">
-                  <div className="grouped-input flex items-center h-full w-full rounded-md">
-                    <select
-                      name="cycle"
-                      id="cycle"
-                      className=" dark:bg-dark-tertiary border dark:text-white border-primary py-2 rounded outline-none px-5 font-sans text-xs w-full pt-4"
-                      onChange={(e) => setCycle(e.target.value)}
-                    >
-                      <option className="dark:text-white " value="">
-                        --Please choose a cycle--
-                      </option>
-                      {cycles.data?.map((cycle: any) => (
-                        <option className="dark:text-white " value={cycle.id}>
-                          {cycle?.name}
+                  <div className="input my-3 h-9 ">
+                    <div className="grouped-input flex items-center h-full w-full rounded-md">
+                      <select
+                        name="cycle"
+                        id="cycle"
+                        className=" dark:bg-dark-tertiary border dark:text-white border-primary py-2 rounded outline-none px-5 font-sans text-xs w-full pt-4"
+                        onChange={(e) => setCycle(e.target.value)}
+                      >
+                        <option className="dark:text-white " value="">
+                          --Please choose a cycle--
                         </option>
-                      ))}
-                    </select>
+                        {cycles.data?.map((cycle: any) => (
+                          <option className="dark:text-white " value={cycle.id}>
+                            {cycle?.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
                   </div>
-                </div>
-                <div className="input my-3 h-9 ">
-                  <div className="grouped-input flex items-center h-full w-full rounded-md">
-                    <select
-                      name="cohort"
-                      id="cohort"
-                      className=" dark:bg-dark-tertiary border dark:text-white border-primary py-2 rounded outline-none px-5 font-sans text-xs w-full pt-4"
-                      onChange={(e) => setCohort(e.target.value)}
-                    >
-                      <option className="dark:text-white " value="">
-                        --Please choose a cohort--
-                      </option>
-                      {cohorts.data?.map((cohrt: any) => (
-                        <option className="dark:text-white " value={cohrt.id}>
-                          {cohrt?.title}
+                  <div className="input my-3 h-9 ">
+                    <div className="grouped-input flex items-center h-full w-full rounded-md">
+                      <select
+                        name="cohort"
+                        id="cohort"
+                        className=" dark:bg-dark-tertiary border dark:text-white border-primary py-2 rounded outline-none px-5 font-sans text-xs w-full pt-4"
+                        onChange={(e) => setCohort(e.target.value)}
+                      >
+                        <option className="dark:text-white " value="">
+                          --Please choose a cohort--
                         </option>
-                      ))}
-                    </select>
+                        {cohorts.data?.map((cohrt: any) => (
+                          <option className="dark:text-white " value={cohrt.id}>
+                            {cohrt?.title}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
                   </div>
-                </div>
-                <div className="input my-3 h-9 ">
-                  <div className="grouped-input flex items-center h-full w-full rounded-md">
-                    <textarea
-                      name="description"
-                      className=" dark:bg-dark-tertiary border dark:text-white border-primary h-35 py-2 rounded outline-none px-5 font-sans text-xs w-full mt-4"
-                      placeholder={"Program Description"}
-                      onChange={(e) => setDescription(e.target.value)}
-                    />
+                  <div className="input my-3 h-9 ">
+                    <div className="grouped-input flex items-center h-full w-full rounded-md">
+                      <textarea
+                        name="description"
+                        className=" dark:bg-dark-tertiary border dark:text-white border-primary h-35 py-2 rounded outline-none px-5 font-sans text-xs w-full mt-4"
+                        placeholder={"Program Description"}
+                        onChange={(e) => setDescription(e.target.value)}
+                      />
+                    </div>
                   </div>
-                </div>
-                <div className="flex items-start justify-end">
-                <button
-                  className=" rounded w-15 px-5 py-1 mt-10 bg-green ml-56 text-white transition-colors hover:bg-dark-frame-bg hover:text-green hover:border hover:border-green"
-                  onClick={validation}
-                >
-                  Submit
-                </button>
-                </div>
-              </section>
+                  <div className="flex items-start justify-end">
+                    <button
+                      className=" rounded w-15 px-5 py-1 mt-10 bg-green ml-56 text-white transition-colors hover:bg-dark-frame-bg hover:text-green hover:border hover:border-green"
+                      onClick={validation}
+                    >
+                      Submit
+                    </button>
+                  </div>
+                </section>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
       {/* =========================== End:: addnewJobPostModel =============================== */}
       <div className="flex flex-col  h-screen w-[100%]">
