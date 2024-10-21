@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { LuCalendarDays } from "react-icons/lu";
 import { FaRecycle } from "react-icons/fa6";
@@ -20,7 +21,6 @@ const TrainneeDetails = (props: any) => {
   }, [ID]);
 
   const traineeDetails = oneTraineeDetails.data;
-
   return (
     <>
       <div className="w-full flex items-center bg-white overflow-auto dark:bg-dark-frame-bg">
