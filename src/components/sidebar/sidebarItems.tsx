@@ -94,6 +94,7 @@ export const applicantSidebarItems = [
     icon: <Icon icon="ant-design:calendar-filled"></Icon>,
     title: "Job Post ",
   },
+
 ];
 
 export const sidebarItems2 = [
@@ -103,7 +104,7 @@ export const sidebarItems2 = [
     title: "Docs",
   },
   {
-    path: "/help",
+    path: "help",
     icon: <Icon icon="nimbus:globe"></Icon>,
     title: "Help",
   },
@@ -114,5 +115,10 @@ export const sidebarItems3 = [
     path: "/settings",
     icon: <Icon icon="eva:settings-2-outline"></Icon>,
     title: "Settings",
+  },
+  {
+    path: "help",
+    icon: <Icon icon="nimbus:globe"></Icon>,
+    title: "Help",
   },
 ];

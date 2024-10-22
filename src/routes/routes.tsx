@@ -53,6 +53,7 @@ import ApplicantDashboard from "../pages/Applicant/ApplicantDashboard";
 import UpdateJobPost from "../pages/JobPost/updateJobPost";
 import VerifyEmail from "../pages/verifyEmail";
 import Search from "./../pages/search";
+import TicketPage from "../pages/tickets/ticketPage";
 
 function Navigation() {
   const roleName = localStorage.getItem("roleName");
@@ -348,6 +349,14 @@ function Navigation() {
           element={
             <PrivateRoute allowedRoles={['applicant']}>
               <ScheduleInterview />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="help"
+          element={
+            <PrivateRoute allowedRoles={['applicant']}>
+              <TicketPage/>
             </PrivateRoute>
           }
         />
