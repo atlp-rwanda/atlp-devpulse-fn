@@ -33,7 +33,7 @@ class TokenExpirationHandler {
   private static handleRedirection(message: string) {
     this.showToast(message);
     this.clearAuthData();
-    setTimeout(() => this.redirect(), 1000);
+    setTimeout(() => this.redirect(), 400);
   }
 
   public static isTokenExpired(token: string): boolean {
@@ -50,7 +50,7 @@ class TokenExpirationHandler {
       if (!tokenIat) return false;
 
       const timeElapsedSinceIssue = currentTime - tokenIat;
-      const ExTime = 2 * 60; 
+      const ExTime = 60 * 60; 
 
      
       return timeElapsedSinceIssue > ExTime;
@@ -68,7 +68,7 @@ class TokenExpirationHandler {
     }
 
     if (this.isTokenExpired(token)) {
-      this.handleRedirection('Your session has expired after 1 hour. Please login again');
+      this.handleRedirection('Your session has expired after 3 minutes. Please login again');
       return false;
     }
 
