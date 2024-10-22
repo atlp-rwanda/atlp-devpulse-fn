@@ -68,7 +68,7 @@ class TokenExpirationHandler {
     }
 
     if (this.isTokenExpired(token)) {
-      this.handleRedirection('Your session has expired after 3 minutes. Please login again');
+      this.handleRedirection('Your session has expired after 1 hour. Please login again');
       return false;
     }
 
