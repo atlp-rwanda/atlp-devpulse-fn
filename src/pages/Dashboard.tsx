@@ -70,7 +70,6 @@ const Dashboard = () => {
             count={averagePerformance.toFixed(2)}
           />
         </div>
-
         <PerformanceChart data={performanceData} currentDate={currentDate} />
       </div>
     </>
