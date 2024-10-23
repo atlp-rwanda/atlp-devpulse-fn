@@ -1,143 +1,137 @@
-import React, { useState, ChangeEvent, FormEvent, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { createTrainee } from '../../redux/actions/TraineeAction';
-import { getAllCycles } from '../../redux/actions/cyclesActions';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import Button from './Button';
 import InputField from './InputField';
-import { useNavigate } from 'react-router';
-import { AppDispatch, RootState } from '../../redux/store'; // Adjust the import path as needed
-
-interface FormData {
-  firstName: string;
-  lastName: string;
-  email: string;
-  cycle_id: string;
-}
-
-interface FormErrors {
-  firstName?: string;
-  lastName?: string;
-  email?: string;
-  cycle_id?: string;
-}
+import { useTraineeFormLogic } from '../../hooks/useTraineeFormLogic';
+import { useTheme } from '../../hooks/darkmode';
 
 interface Cycle {
   id: string;
   name: string;
 }
 
+const CycleSelector: React.FC<{
+  value: string,
+  onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void,
+  cycles: Cycle[],
+  cyclesLoading: boolean,
+  error?: string,
+  isDarkMode: boolean 
+}> = ({ value, onChange, cycles, cyclesLoading, error, isDarkMode }) => (
+  <>
+    <select
+      name="cycle_id"
+      value={value}
+      onChange={onChange}
+      className={`w-52 md:w-2/3 rounded-md px-2 py-2 border ${
+        isDarkMode ? 'border-white text-white bg-[#1F2A37]' : 'border-gray-300 text-gray-900 bg-white'
+      } placeholder:text-gray-400 sm:text-[12px] outline-none`}
+      disabled={cyclesLoading}
+    >
+      <option value="">Select Application Cycle</option>
+      {cycles.map((cycle: Cycle) => (
+        <option key={cycle.id} value={cycle.id}>
+          {cycle.name}
+        </option>
+      ))}
+    </select>
+    {error && <p className="text-red-500">{error}</p>}
+  </>
+);
+
 const TraineeApplicationForm: React.FC = () => {
-  const dispatch = useDispatch<AppDispatch>();
-  const navigate = useNavigate();
-  const { loading, error } = useSelector((state: RootState) => state.trainee);
-  const [formData, setFormData] = useState<FormData>({
-    firstName: '',
-    lastName: '',
-    email: '',
-    cycle_id: ''
-  });
-  const [errors, setErrors] = useState<FormErrors>({});
-  const [submitError, setSubmitError] = useState<string | null>(null);
+  const {
+    formData,
+    errors,
+    isSubmitting,
+    submitError,
+    cycles,
+    cyclesLoading,
+    handleInputChange,
+    handleSubmit,
+    isLoading
+  } = useTraineeFormLogic();
 
-  const cycles = useSelector((state: RootState) => state.cycles.data);
-  const cyclesLoading = useSelector((state: RootState) => state.cycles.isLoading);
+  const { theme } = useTheme();
+  const isDarkMode = theme === false;
 
-  useEffect(() => {
-    dispatch(getAllCycles());
-  }, [dispatch]);
-
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setFormData(prevData => ({
-      ...prevData,
-      [name]: value
-    }));
-  };
-
-  const validateForm = (): boolean => {
-    let newErrors: FormErrors = {};
-    if (!formData.firstName.trim()) newErrors.firstName = 'First name is required';
-    if (!formData.lastName.trim()) newErrors.lastName = 'Last name is required';
-    if (!formData.email.trim()) newErrors.email = 'Email is required';
-    else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = 'Email is invalid';
-    if (!formData.cycle_id.trim()) newErrors.cycle_id = 'Cycle ID is required';
-    
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (validateForm()) {
-      setSubmitError(null);
-      dispatch(createTrainee(formData))
-        .then(() => {
-          console.log('Trainee created successfully');
-          navigate('trainee-success', { replace: true });
-        })
-        .catch((error) => {
-          console.error('Error submitting form:', error);
-          setSubmitError('An error occurred while submitting the form. Please try again.');
-        });
-    }
-  };
+  if (isLoading) {
+    return <div>Loading user data...</div>;
+  }
 
   return (
     <div className='w-full max-w-[500px] min-h-screen'>
-      <div className="p-20 border border-primary shadow-xl bg-slate-800 rounded mt-20">
-        <h2 className="text-2xl font-semibold mb-6 text-white text-center">Trainee Application</h2>
+      <div className={getContainerClassName(isDarkMode)}>
+        <h2 className={getTitleClassName(isDarkMode)}>Trainee Application</h2>
         <form onSubmit={handleSubmit} className="space-y-4 pt-5">
-          <InputField
-            name="firstName"
-            type="text"
-            placeholder="First Name"
-            value={formData.firstName}
-            onChange={handleInputChange}
-            error={errors.firstName}
-            className="w-52 md:w-2/3 rounded-md px-2 py-2 border border-white placeholder:text-gray-400 text-white sm:text-[12px] outline-none autofill:bg-transparent autofill:text-white bg-[#1F2A37]"
-          />
-          <InputField
-            name="lastName"
-            type="text"
-            placeholder="Last Name"
-            value={formData.lastName}
-            onChange={handleInputChange}
-            error={errors.lastName}
-            className="w-52 md:w-2/3 rounded-md px-2 py-2 border border-white placeholder:text-gray-400 text-white sm:text-[12px] outline-none autofill:bg-transparent autofill:text-white bg-[#1F2A37]"
-          />
-          <InputField
-            name="email"
-            type="email"
-            placeholder="Email"
-            value={formData.email}
-            onChange={handleInputChange}
-            error={errors.email}
-            className="w-52 md:w-2/3 rounded-md px-2 py-2 border border-white placeholder:text-gray-400 text-white sm:text-[12px] outline-none autofill:bg-transparent autofill:text-white bg-[#1F2A37]"
-          />
-          <select
-            name="cycle_id"
-            value={formData.cycle_id}
-            onChange={handleInputChange}
-            className="w-52 md:w-2/3 rounded-md px-2 py-2 border border-white placeholder:text-gray-400 text-white sm:text-[12px] outline-none autofill:bg-transparent autofill:text-white bg-[#1F2A37]"
-            disabled={cyclesLoading}
-          >
-            <option value="">Select Application Cycle</option>
-            {cycles.map((cycle: Cycle) => (
-              <option key={cycle.id} value={cycle.id}>
-                {cycle.name}
-              </option>
-            ))}
-          </select>
-          {errors.cycle_id && <p className="text-red-500">{errors.cycle_id}</p>}
-          <Button
-            type="submit"
-            label="Submit Application"
-            className="w-full"
-          />
+          {renderFormFields(formData, errors, handleInputChange, isDarkMode)}
+          {renderCycleSelector(formData, errors, handleInputChange, cycles, cyclesLoading, isDarkMode)}
+          {renderSubmitButton(isSubmitting, isDarkMode)}
         </form>
       </div>
     </div>
   );
 };
+
+const renderFormFields = (formData, errors, handleInputChange, isDarkMode) => 
+  ['firstName', 'lastName', 'email'].map((field) => (
+    <InputField
+      key={field}
+      name={field}
+      type={field === 'email' ? 'email' : 'text'}
+      placeholder={formatFieldName(field)}
+      value={formData[field]}
+      onChange={handleInputChange}
+      error={errors[field]}
+      className={getInputClassName(isDarkMode)}
+    />
+  ));
+
+const renderCycleSelector = (formData, errors, handleInputChange, cycles, cyclesLoading, isDarkMode) => (
+  <>
+    <select
+      name="cycle_id"
+      value={formData.cycle_id}
+      onChange={handleInputChange}
+      className={getInputClassName(isDarkMode)}
+      disabled={cyclesLoading}
+    >
+      <option value="">Select Application Cycle</option>
+      {cycles.map((cycle) => (
+        <option key={cycle.id} value={cycle.id}>
+          {cycle.name}
+        </option>
+      ))}
+    </select>
+    {errors.cycle_id && <p className="text-red-500">{errors.cycle_id}</p>}
+  </>
+);
+
+const renderSubmitButton = (isSubmitting, isDarkMode) => (
+  <Button
+    type="submit"
+    label={isSubmitting ? "Submitting..." : "Submit Application"}
+    className={`w-full ${isDarkMode ? 'bg-blue-600 hover:bg-blue-700' : 'bg-blue-500 hover:bg-blue-600'} text-white`}
+    disabled={isSubmitting}
+  />
+);
+
+const formatFieldName = (field: string) =>
+  field.charAt(0).toUpperCase() + field.slice(1).replace(/([A-Z])/g, ' $1');
+
+const getInputClassName = (isDarkMode: boolean) =>
+  `w-52 md:w-2/3 rounded-md px-2 py-2 border ${
+    isDarkMode 
+      ? 'border-white placeholder:text-gray-400 text-white bg-[#1F2A37]' 
+      : 'border-gray-300 placeholder:text-gray-500 text-gray-900 bg-white'
+  } sm:text-[12px] outline-none`;
+
+const getContainerClassName = (isDarkMode: boolean) =>
+  `p-20 border shadow-xl rounded mt-20 ${
+    isDarkMode ? 'border-primary bg-slate-800 text-white' : 'border-gray-300 bg-white text-gray-900'
+  }`;
+
+const getTitleClassName = (isDarkMode: boolean) =>
+  `text-2xl font-semibold mb-6 text-center ${isDarkMode ? 'text-white' : 'text-gray-900'}`;
 
 export default TraineeApplicationForm;

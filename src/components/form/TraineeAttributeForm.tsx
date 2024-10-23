@@ -1,34 +1,33 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { createTraineeAttribute } from '../../redux/actions/traineeAttributes';
-import TraineeFormPage1 from 'components/TraineeFormPage1';
-import TraineeFormPage2 from 'components/TraineeFormPage2';
+import TraineeFormPage1 from '../../components/TraineeFormPage1';
+import TraineeFormPage2 from '../../components/TraineeFormPage2';
+import { useTheme } from '../../hooks/darkmode'; 
+import { useNavigate } from 'react-router-dom'
 
-
-const TraineeAttributeForm = () => {
+const TraineeAttributeForm = ({ traineeId }) => {
   const dispatch = useDispatch();
   const [page, setPage] = useState(1);
+  const { theme } = useTheme(); 
+  const isDarkMode = theme === false; 
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    studying: '',
-    educationLevel: '',
-    nationality: '',
+    gender: '',
+    birth_date: '',
+    Address:'',
+    phone:'',
+    field_of_study:'',
+    education_level: '',
     province: '',
     district: '',
     sector: '',
-    dateOfBirth: '',
-    currentEducationLevel: '',
-    gender: '',
-    discipline: '',
-    employed: '',
-    laptop: '',
-    applicationPost: '',
-    andelaPrograms: '',
-    training: '',
-    otherApplication: '',
-    otherPrograms: '',
+    isEmployed: '',
+    haveLaptop: '',
+    isStudent:'',
+    past_andela_programs: '',
+    understandTraining: '',
   });
 
   const handleNext = () => {
@@ -39,58 +38,57 @@ const TraineeAttributeForm = () => {
     setPage(1);
   };
 
-  const handleSubmit = () => {
-  
+  const handleSubmit = (e) => {
+    e.preventDefault();
     const attributeData = {
       gender: formData.gender,
-      birth_date: formData.dateOfBirth,
-      Address: `${formData.sector}, ${formData.district}, ${formData.province}`,
-      phone: '', 
-      field_of_study: formData.discipline,
-      education_level: formData.educationLevel,
-      currentEducationLevel: formData.currentEducationLevel,
+      birth_date: formData.birth_date,
+      Address: formData.Address,
+      phone: formData.phone,
+      field_of_study:formData.field_of_study, 
+      education_level: formData.education_level,
       province: formData.province,
       district: formData.district,
       sector: formData.sector,
-      isEmployed: formData.employed === 'yes',
-      haveLaptop: formData.laptop === 'yes',
-      isStudent: formData.studying === 'yes',
-      Hackerrank_score: '', 
-      english_score: '', 
-      interview_decision: '', 
-      past_andela_programs: formData.andelaPrograms,
-      applicationPost: formData.applicationPost,
-      otherApplication: formData.otherApplication,
-      andelaPrograms: formData.andelaPrograms,
-      otherPrograms: formData.otherPrograms,
-      understandTraining: formData.training === 'yes',
-      discipline: formData.discipline,
-      trainee_id: '', 
+      isEmployed: formData.isEmployed === 'yes',
+      haveLaptop: formData.haveLaptop === 'yes',
+      isStudent: formData.isStudent === 'yes',
+      past_andela_programs: formData.past_andela_programs,
+      understandTraining: formData.understandTraining === 'yes',
+      trainee_id: traineeId, 
     };
-
+    console.log('Attribute data being sent:', attributeData);
     dispatch(createTraineeAttribute(attributeData));
+    // navigate('/applicant')
   };
 
   return (
-    <div className='text-white w-full h-full pt-5 px-4 md:px-8 lg:px-16'>
-      <h2 className='text-center font-semibold text-xl md:text-2xl mb-6'>Fill the form</h2>
-      
-      <form className='max-w-4xl mx-auto'>
-        {page === 1 ? (
-          <TraineeFormPage1 
-            formData={formData} 
-            setFormData={setFormData} 
-            onNext={handleNext} 
-          />
-        ) : (
-          <TraineeFormPage2 
-            formData={formData} 
-            setFormData={setFormData} 
-            onSubmit={handleSubmit}
-            onBack={handleBack}
-          />
-        )}
-      </form>
+    <div className={`min-h-screen w-full flex flex-col ${
+      isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-800'
+    }`}>
+      <div className="flex-grow flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8">
+        <h3 className={`text-3xl font-semibold mb-8 text-center ${
+          isDarkMode ? 'text-white' : 'text-gray-800'
+        }`}>Fill the form for more information</h3>
+        <div className="w-full max-w-4xl">
+          {page === 1 ? (
+            <TraineeFormPage1
+              formData={formData}
+              setFormData={setFormData}
+              onNext={handleNext}
+              isDarkMode={isDarkMode}
+            />
+          ) : (
+            <TraineeFormPage2
+              formData={formData}
+              setFormData={setFormData}
+              onSubmit={handleSubmit}
+              onBack={handleBack}
+              isDarkMode={isDarkMode}
+            />
+          )}
+        </div>
+      </div>
     </div>
   );
 };

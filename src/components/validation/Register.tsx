@@ -69,3 +69,40 @@ export const roleSchema: ZodType<RolePermission> = z.object({
     .string()
     .min(4, { message: "Description must be at least 4 characters" }),
 });
+
+export type googleFormData = {
+  firstname: string;
+  lastname: string;
+  email: string;
+  telephone: string;
+  code: string;
+  country: string;
+  gender: string;
+};
+
+export const googleDataSchema: ZodType<googleFormData> = z.object({
+  firstname: z.string().min(3, "firstname must be at least 3 characters"),
+  lastname: z
+    .string()
+    .min(3, { message: "lastname must be at least 3 characters" }),
+  email: z.string().toLowerCase().min(3, "email is required").email().trim(),
+  telephone: z
+    .string()
+    .regex(/^(\+\d{1,2}\s?)?1?\-?\.?\s?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/)
+    .trim(),
+  code: z
+    .string()
+    .min(1, { message: "Country code is required" })
+    .regex(/^\+[1-9]{1}[0-9]{1,14}$/),
+  country: z.string().min(1, { message: "Country is required" }).trim(),
+  gender: z
+    .string()
+    .refine(
+      (value) => ["female", "male", "other"].includes(value.toLowerCase()),
+      {
+        message: "gender is required",
+      }
+    ),
+
+});
+

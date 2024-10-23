@@ -1,6 +1,13 @@
 import jwtDecode from 'jwt-decode';
 import { GraphQLClient } from 'graphql-request';
 
+
+export const destination = () =>{
+  const roleName = localStorage.getItem("roleName");
+  const destin =  (roleName === "superAdmin" || roleName === "Admin") ? "/admin" : "/applicant";
+  return destin;
+}
+
 export const Token = () => {
   const access_token = localStorage.getItem('access_token');
   const verifyToken = async (token: any) => {
@@ -24,11 +31,11 @@ export const Token = () => {
           if (data) {
             const roleName = data.checkUserRole?.roleName;
             localStorage.setItem('roleName', roleName);
+            localStorage.setItem('userId', decoded.data.userId);
           }
         });
         return decoded;
       }
-
       // console.log('decoded', decoded.data.email);
       return decoded;
     } catch (error) {
@@ -37,5 +44,5 @@ export const Token = () => {
     }
   };
   const user = access_token ? verifyToken(access_token) : null;
-  return user;
+  return user; 
 };

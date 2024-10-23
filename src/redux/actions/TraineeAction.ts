@@ -1,222 +1,171 @@
 import creator from "./creator";
+import { AppDispatch } from '../store'; 
 import {
   GET_TRAINEE,
   CREATE_TRAINEES,
-  CREATE_CYCLE_ERROR,
+  SET_TRAINEE,
   FETCH_TRAINEES_REQUEST,
-  FETCH_TRAINEES_SUCCESS,
-  FETCH_TRAINEES_FAILURE,
-  UPDATE_TRAINEE_REQUEST,
-  UPDATE_TRAINEE_SUCCESS,
-  UPDATE_TRAINEE_FAILURE,
-  DELETE_TRAINEE_REQUEST,
-  DELETE_TRAINEE_SUCCESS,
-  DELETE_TRAINEE_FAILURE
+  SET_CURRENT_TRAINEE_ID,
+  
 } from "..";
-import { toast } from "react-toastify";
 import axios from "axios";
+import * as traineeUtils from '../../utils/traineActionUtils';
 
-export const getAllTraineess = ({ page, itemsPerPage, All }: any) => async (dispatch: any) => {
+interface TraineeData {
+  lastName: string;
+  firstName: string;
+  email: string;
+  cycle_id: string;
+  attributes?: Record<string, any>;
+}
+
+interface PaginationInput {
+  page: number;
+  itemsPerPage: number;
+  All: boolean;
+}
+
+const getAllTraineessQuery= `
+  query AllTraineesDetails($input: pagination) {
+    allTraineesDetails(input: $input) {
+      _id
+      gender
+      birth_date
+      Address
+      phone
+      field_of_study
+      education_level
+      currentEducationLevel
+      province
+      district
+      sector
+      isEmployed
+      haveLaptop
+      isStudent
+      Hackerrank_score
+      english_score
+      interview_decision
+      past_andela_programs
+      applicationPost
+      otherApplication
+      andelaPrograms
+      otherPrograms
+      understandTraining
+      discipline
+      trainee_id {
+        firstName
+        lastName
+        email
+        _id
+      }
+    }
+  }
+`;
+
+export const getAllTrainees = ({ page, itemsPerPage, All }: any) => async (dispatch: AppDispatch) => {
   dispatch({ type: FETCH_TRAINEES_REQUEST });
   try {
-    const datas = await axios({
-      url: process.env.BACKEND_URL,
-      method: "post",
-      data: {
-        query: `
-        query AllTraineesDetails($input: pagination) {
-          allTraineesDetails(input: $input) {
+    const response = await makeGraphQLRequest(getAllTraineessQuery, { 
+      input: {
+        page,
+        itemsPerPage,
+        All,
+      }
+    });
+    traineeUtils.handleGetAllTraineesSuccess(dispatch, response);
+  } catch (error) {
+    traineeUtils.handleGetAllTraineesError(dispatch, error);
+  }
+};
+
+export const getTraineeApplicant = (traineeId: string) => async(dispatch: any) => {
+  try{
+    const response = await axios.post(`${process.env.BACKEND_URL}`, {
+      query: `
+        query GetOneTrainee($ID: ID!) {
+          getOneTrainee(ID: $ID) {
             _id
-            gender
-            birth_date
-            Address
-            phone
-            field_of_study
-            education_level
-            currentEducationLevel
-            province
-            district
-            sector
-            isEmployed
-            haveLaptop
-            isStudent
-            Hackerrank_score
-            english_score
-            interview_decision
-            past_andela_programs
-            applicationPost
-            otherApplication
-            andelaPrograms
-            otherPrograms
-            understandTraining
-            discipline
-            trainee_id {
-              firstName
-              lastName
-              email
-              _id
-            }
+            applicationPhase
+            cohort
           }
         }
       `,
-        variables: {
-          input: {
-            page,
-            itemsPerPage,
-            All,
-          },
-        },
-      },
+      variables: { ID: traineeId }
     });
-    const trainee = await datas.data.data.allTraineesDetails;
+    if (response.data.errors) {
+      console.error('GraphQL Errors:', response.data.errors);
+      return;
+    }
+    const trainee = response.data.data.getOneTrainee;
     dispatch(creator(GET_TRAINEE, trainee));
-    dispatch({ type: FETCH_TRAINEES_SUCCESS, payload: trainee });
+
+  }catch (error: any) {
+    console.error('Error fetching trainee:', error);
+    console.error('Error response:', error.response?.data);
+  }
+}
+
+export const getTraineeByUserId = (userId: string) => async (dispatch: any) => {
+  try {
+    const response = await axios.post(`${process.env.BACKEND_URL}`, {
+      query: `
+        query GetTraineeByUserId($userId: ID!) {
+          getTraineeByUserId(userId: $userId)
+        }
+      `,
+      variables: { userId },
+    });
+
+    const traineeData = response.data.data.getTraineeByUserId;
+    dispatch(creator(SET_TRAINEE, traineeData));
   } catch (error) {
-    console.log(error);
-    dispatch({ type: FETCH_TRAINEES_FAILURE, payload: error});
+    console.error("Error fetching trainee:", error);
   }
 };
 
-export const createTrainee = (traineeData: any) => async (dispatch: any) => {
+export const setCurrentTraineeId = (traineeId: string) => ({
+  type: SET_CURRENT_TRAINEE_ID,
+  payload: traineeId,
+});
+
+const createTraineeQuery = `
+  mutation CreateNewTraineeApplicant($input: newTraineeApplicantInput!) {
+    createNewTraineeApplicant(input: $input) {
+      _id
+      lastName
+      firstName
+      email
+      cycleApplied {
+        _id
+        cycle {
+          _id
+        }
+      }
+    }
+  }
+`;
+
+const makeGraphQLRequest = async (query: string, variables: any) => {
+  return await axios({
+    url: process.env.BACKEND_URL,
+    method: "post",
+    data: { query, variables },
+  });
+};
+
+
+export const createTrainee = (traineeData: TraineeData) => async (dispatch: AppDispatch) => {
   dispatch({ type: CREATE_TRAINEES });
+  
   try {
-    const response = await axios({
-      url: process.env.BACKEND_URL,
-      method: "post",
-      data: {
-        query: `
-        mutation CreateNewTraineeApplicant($input: newTraineeApplicantInput!) {
-          createNewTraineeApplicant(input: $input) {
-            _id
-            lastName
-            firstName
-            email
-            cycle_id {
-              id
-              name
-            }
-            status
-          }
-        }`,
-        variables: {
-          input: {
-            lastName: traineeData.lastName,
-            firstName: traineeData.firstName,
-            email: traineeData.email,
-            cycle_id: traineeData.cycle_id,
-            ...(traineeData.attributes && { attributes: traineeData.attributes }),
-          },
-        },
-      },
-    });
-
-    if (response.data.data && response.data.data.createNewTraineeApplicant) {
-      toast.success("Trainee successfully created.");
-      dispatch(creator(CREATE_TRAINEES, response.data.data.createNewTraineeApplicant));
-    } else if (response.data.errors) {
-      const err = response.data.errors[0].message;
-      console.error('GraphQL Error:', err);
-      toast.error(err);
-      dispatch(creator(CREATE_CYCLE_ERROR, err));
-    }
-  } catch (error:any) {
-    console.error('Axios Error:', error.response?.data || error.message);
-    const errorMessage = error.response?.data?.errors?.[0]?.message || "An error occurred while creating the trainee.";
-    toast.error(errorMessage);
-    dispatch(creator(CREATE_CYCLE_ERROR, errorMessage));
-  }
-};
-
-export const updateTrainee = (id: string, updateData: any) => async (dispatch: any) => {
-  dispatch({ type: UPDATE_TRAINEE_REQUEST });
-  try {
-    const response = await axios({
-      url: process.env.BACKEND_URL,
-      method: "post",
-      data: {
-        query: `
-        mutation UpdateTraineeApplicant($ID: ID!, $updateInput: traineeApplicantInputUpdate) {
-          updateTraineeApplicant(ID: $ID, updateInput: $updateInput) {
-            _id
-            gender
-            birth_date
-            Address
-            phone
-            field_of_study
-            education_level
-            currentEducationLevel
-            province
-            district
-            sector
-            isEmployed
-            haveLaptop
-            isStudent
-            Hackerrank_score
-            english_score
-            interview_decision
-            past_andela_programs
-            applicationPost
-            otherApplication
-            andelaPrograms
-            otherPrograms
-            understandTraining
-            discipline
-            trainee_id {
-              firstName
-              lastName
-              email
-              _id
-            }
-          }
-        }`,
-        variables: {
-          ID: id,
-          updateInput: updateData,
-        },
-      },
-    });
-
-    if (response.data.data !== null) {
-      toast.success("Successfully updated.");
-      dispatch({ type: UPDATE_TRAINEE_SUCCESS, payload: response.data.data.updateTraineeApplicant });
-    } else {
-      const err = response.data.errors[0].message;
-      toast.error(err);
-      dispatch({ type: UPDATE_TRAINEE_FAILURE, payload: err });
-    }
-  } catch (error) {
-    console.log(error);
-    dispatch({ type: UPDATE_TRAINEE_FAILURE, payload: error });
-  }
-};
-
-export const deleteTrainee = (email: string) => async (dispatch: any) => {
-  dispatch({ type: DELETE_TRAINEE_REQUEST });
-  try {
-    const response = await axios({
-      url: process.env.BACKEND_URL,
-      method: "post",
-      data: {
-        query: `
-        mutation DeleteTraineeApplicant($email: String!) {
-          deleteTraineeApplicant(email: $email)
-        }`,
-        variables: {
-          email,
-        },
-      },
-    });
-
-    if (response.data.data.deleteTraineeApplicant) {
-      toast.success("Successfully deleted.");
-      dispatch({ type: DELETE_TRAINEE_SUCCESS, payload: email });
-    } else {
-      const err = "Failed to delete trainee";
-      toast.error(err);
-      dispatch({ type: DELETE_TRAINEE_FAILURE, payload: err });
-    }
-  } catch (error) {
-    console.log(error);
-    dispatch({ type: DELETE_TRAINEE_FAILURE, payload: error });
+    const variables = traineeUtils.createTraineeVariables(traineeData);
+    const response = await makeGraphQLRequest(createTraineeQuery, variables);
+    const trainee = traineeUtils.validateResponse(response.data);
+    
+    traineeUtils.handleSuccessResponse(dispatch, trainee);
+    return trainee._id;
+  } catch (error: any) {
+    traineeUtils.handleErrorResponse(dispatch, error);
+    throw error;
   }
 };

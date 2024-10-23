@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
 import { loginSchema } from "../validation/login";
@@ -12,6 +12,9 @@ import { toast } from "react-toastify";
 import { GraphQLClient } from "graphql-request";
 import { loginAction } from "../../redux/actions/login";
 import { Token } from '../../utils/utils';
+import { getUserbyFilter } from "../../redux/actions/users";
+import jwtDecode from "jwt-decode";
+import { useNotifications } from "../../utils/Notifications";
 
 const googleIcn: string = require("../../assets/assets/googleIcon.jpg").default;
 
@@ -29,7 +32,7 @@ const MY_QUERY = `
 
 const CLIENT_ID = process.env.CLIENT_ID;
 
-const fetchUserData = async (token: string) => {
+export const fetchUserData = async (token: string) => {
   const client = new GraphQLClient(process.env.BACKEND_URL as string, {
     headers: { Authorization: token },
   });
@@ -39,8 +42,10 @@ const fetchUserData = async (token: string) => {
 const LoginForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [isNormalLogin, setIsNormalLogin] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+  const { setUserId } = useNotifications();
 
   const {
     register,
@@ -50,25 +55,32 @@ const LoginForm = () => {
     resolver: zodResolver(loginSchema),
   });
 
-  const redirectAfterLogin = async () => {
-    const lastAttemptedRoute = localStorage.getItem('lastAttemptedRoute');
-    if (lastAttemptedRoute) {
-      localStorage.removeItem('lastAttemptedRoute');
-      navigate(lastAttemptedRoute);
-    } else {
-      await Token();
-      const role = localStorage.getItem("roleName") as string;
-      if (role === "applicant") {
-        navigate("/applicant");
-      } else if (role === "superAdmin") {
-        navigate("/admin");
+  const redirectAfterLogin = async (isNormalLogin = true) => {
+    if (isNormalLogin) {
+      const lastAttemptedRoute = localStorage.getItem('lastAttemptedRoute');
+      if (lastAttemptedRoute) {
+        localStorage.removeItem('lastAttemptedRoute');
+        navigate(lastAttemptedRoute);
       } else {
-        const searchParams = new URLSearchParams(location.search);
-        const returnUrl = searchParams.get('returnUrl') || '/';
-        navigate(returnUrl);
+        await Token();
+        const role = localStorage.getItem("roleName") as string;
+        if (role === "applicant") {
+          navigate("/applicant");
+        } else if (role === "superAdmin") {
+          navigate("/admin");
+        } else {
+          const searchParams = new URLSearchParams(location.search);
+          const returnUrl = searchParams.get('returnUrl') || '/';
+          navigate(returnUrl);
+        }
       }
     }
   }
+  const checkAuthMethod = async (filter: any) => {
+    const response = await getUserbyFilter(filter);
+    const userdata = response?.data?.getByFilter?.[0]; 
+    return userdata?.authMethod;
+  };
 
   const onSubmit = async (data: loginFormData) => {
     setIsLoading(true);
@@ -77,8 +89,14 @@ const LoginForm = () => {
       const response = await loginAction(validatedData.email, validatedData.password);
 
       const token = response?.data?.data?.login?.token;
+      const userId = response?.data?.data?.login?.userId;
+      
       if (token) {
         localStorage.setItem("access_token", token);
+        if (userId) {
+          localStorage.setItem("userId", userId);
+          setUserId(userId);
+        }
         await redirectAfterLogin();
       } else {
         toast.error(response?.data?.errors[0].message);
@@ -91,13 +109,47 @@ const LoginForm = () => {
       setIsLoading(false);
     }
   };
+  const checkFirstTimeUser = async (filter: object) => {
+    const response = await getUserbyFilter(filter);
+    const userdata = response?.data?.getByFilter?.[0];
+    if (userdata.country.length === 0 && userdata.telephone.length === 0) {
+      return true;
+    } else {
+      return false;
+    }
+  };
 
   const handleCallBackResponse = async (response: any) => {
     const token = response.credential;
     localStorage.setItem("access_token", token);
-    const data = await fetchUserData(token);
-    if (data) navigate("/");
+
+    const decodedToken: any = jwtDecode(token);
+    const useremail = decodedToken.email;
+    const data: any = await fetchUserData(token);
+  
+    if (data) {
+      const filter = { email: useremail };
+      const authMethod = await checkAuthMethod(filter);
+
+      if (authMethod === "google") {
+        setIsNormalLogin(false);
+        const user = data.getUsers_Logged[0];
+        const filter = { email: user.email };
+        const firstTimeUserResult: boolean = await checkFirstTimeUser(filter);
+        if (firstTimeUserResult) {
+          toast.success("Welcome to our platform! fill in the missing data.");
+          navigate("/google");
+        } else {
+          setIsNormalLogin(true);
+          await redirectAfterLogin(true);
+        }
+      } else {
+        toast.success("You can now login with both google and normal authentication.");
+        await redirectAfterLogin(true);
+      }
+    }
   };
+  
 
   useEffect(() => {
     //@ts-ignore
@@ -159,7 +211,8 @@ const LoginForm = () => {
             <Button
               type="submit"
               label=""
-              className="sm:w-full w-5/6 rounded-md mb-4 px-2 py-3 text-white focus:bg-[#56C870] bg-[#56C870]"
+              className="sm:w-full w-5/6 rounded-md mb-4 px-2 py-3 text-white  focus:bg-[#56C870] bg-[#56C870]"
+             
               disabled={true}
             >
               <svg
@@ -188,12 +241,14 @@ const LoginForm = () => {
         </div>
         <p className="text-sm mt-3 mb-2 text-[#616161] dark:text-gray-300">
           Don't have an account?{" "}
-          <Link to="/register" className="text-[#56C870]">
+          <Link to="/signup" className="text-[#56C870]">
+         
             Sign up
           </Link>
         </p>
         <p className="text-sm mt-3 mb-2 text-[#616161] dark:text-gray-300">
-          <Link to="/forgot-password" className="text-blue-500 hover:underline">
+          <Link to="/forget" className="text-blue-500 hover:underline">
+          
             Forgot your password?
           </Link>
         </p>
@@ -201,6 +256,4 @@ const LoginForm = () => {
     </div>
   );
 };
-
 export default LoginForm;
-
