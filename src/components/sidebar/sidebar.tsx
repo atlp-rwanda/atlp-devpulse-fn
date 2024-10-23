@@ -11,7 +11,7 @@ import "./navslide.css";
 
 const Sidebar = ({ expanded, setExpanded }) => {
   const navigate = useNavigate();
-  const location = useLocation(); // Get the current path
+  const location = useLocation(); 
   const roleName = localStorage.getItem("roleName");
 
   // Select items based on the role
@@ -38,7 +38,7 @@ const Sidebar = ({ expanded, setExpanded }) => {
     <div
       className={` ${
         expanded ? "w-[16rem]" : "w-[4rem]"
-      } fixed  dark:bg-dark-bg bg-white border-r transition-width duration-300 h-full`}
+      } fixed dark:bg-dark-bg bg-white border-r transition-width duration-300 h-full overflow-scroll`}
     >
       <button
         onClick={() => setExpanded(!expanded)}
@@ -54,9 +54,12 @@ const Sidebar = ({ expanded, setExpanded }) => {
           {items.map((item, index) => (
             <li
               key={index}
-              className={`flex items-center text-white hover:text-[#56c770] ${
-                isActive(item.path) ? "bg-gray-700 text-[#56c770]" : ""
-              }`} 
+              className={`flex items-center ${
+                isActive(item.path)
+                  ? "bg-gray-700 text-[#56c770]"
+                  : "text-white hover:text-[#56c770]"
+            }`}
+            
             >
               <Link to={item.path} className="p-1 flex items-center">
                 <span className="mr-3">{item.icon}</span>
@@ -70,9 +73,11 @@ const Sidebar = ({ expanded, setExpanded }) => {
           {sidebarItems3.map((item, index) => (
             <li
               key={index}
-              className={`flex items-center text-white hover:text-[#56c770] ${
-                isActive(item.path) ? "bg-gray-700 text-[#56c770]" : ""
-              }`} 
+              className={`flex items-center ${
+                isActive(item.path)
+                  ? "bg-gray-700 text-[#56c770]"
+                  : "text-white hover:text-[#56c770]"
+            }`}
             >
               <Link to={item.path} className="p-1 flex items-center">
                 <span className="mr-3">{item.icon}</span>
