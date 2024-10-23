@@ -1,26 +1,21 @@
 import React from 'react';
+import InputField from './form/InputField';
 
 interface FormData {
     gender: string;
     birth_date: string;
-    address: string;
+    Address: string;
     phone: string;
-    study: string;
+    field_of_study: string;
     education_level: string;
-    currentEducationLevel: string;
-    nationality: string;
     province: string;
     district: string;
     sector: string;
-    discipline: string;
     isEmployed: string;
     haveLaptop: string;
     isStudent: string;
-    applicationPost: string;
-    andelaPrograms: string;
+    past_andela_programs: string;
     understandTraining: string;
-    otherApplication: string;
-    otherPrograms: string;
   }
 
 interface EducationSectionProps {
@@ -30,39 +25,40 @@ interface EducationSectionProps {
 }
 
 const EducationSection: React.FC<EducationSectionProps> = ({ formData, handleInputChange, isDarkMode }) => {
+  const inputClassName = `w-52 md:w-2/3 rounded-md px-2 py-2 border ${
+    isDarkMode
+      ? 'border-white placeholder:text-gray-400 text-white bg-[#1F2A37]'
+      : 'border-gray-300 placeholder:text-gray-500 text-gray-900 bg-white'
+  } sm:text-[12px] outline-none`;
   return (
     <>
       <div className='space-y-3'>
-        <label htmlFor="education_level" className={isDarkMode ? 'text-white' : 'text-gray-800'}>What's your highest level of education?</label>
-        {['Secondary school', 'Bachelor\'s Degree', 'Master\'s Degree', 'PhD'].map((level) => (
-          <div key={level}>
-            <input 
-              type="radio" 
+          <div>
+          <label htmlFor="education_level" className={isDarkMode ? 'text-white' : 'text-gray-800'}>
+          What is your highest level of education?
+        </label>
+            <InputField 
               name="education_level" 
-              value={level.toLowerCase()}
-              checked={formData.education_level === level.toLowerCase()}
+              placeholder="Education level"
+              type="text"
+              value={formData.education_level}
               onChange={handleInputChange}
-            /> {level}
+              className={inputClassName}
+            />
           </div>
-        ))}
-      </div>
-
-      <div className='flex flex-col w-52 space-y-3'>
-        <label htmlFor="Gender" className={isDarkMode ? 'text-white' : 'text-gray-800'}>What's your current education level?</label>
-        <select 
-          name="currentEducationLevel" 
-          value={formData.currentEducationLevel}
-          onChange={handleInputChange}
-          className={`rounded-md py-2 px-2 w-full ${
-            isDarkMode ? ' bg-[#56C870] text-black':'bg-blue-500 text-white' 
-          }`}
-        >
-          <option value="">Education level</option>
-          <option value="highschool">Highschool</option>
-          <option value="university">University</option>
-          <option value="masters">Masters</option>
-          <option value="phd">PhD candidate</option>
-        </select>
+          <div>
+          <label htmlFor="field_of_study" className={isDarkMode ? 'text-white' : 'text-gray-800'}>
+          What is your field of education?
+          </label>
+            <InputField 
+              name="field_of_study" 
+              placeholder="field of study"
+              type="text"
+              value={formData.field_of_study}
+              onChange={handleInputChange}
+              className={inputClassName}
+            />
+          </div>
       </div>
     </>
   );

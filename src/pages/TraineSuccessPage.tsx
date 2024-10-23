@@ -8,7 +8,7 @@ const TraineeSuccessPage: React.FC = () => {
 
   const handleContinue = () => {
     if (traineeId) {
-      navigate(`/applicant/trainee-apply/trainee-success/trainee-add-attributes/${traineeId}`);
+      navigate(`/applicant/myApplications/trainee-apply/trainee-success/trainee-add-attributes/${traineeId}`);
     } else {
       console.error('Trainee ID is missing');
     }

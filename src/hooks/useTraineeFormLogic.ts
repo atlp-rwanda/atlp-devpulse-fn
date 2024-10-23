@@ -67,7 +67,7 @@ export const useTraineeFormLogic = () => {
       setIsSubmitting(true);
       try {
         const newTraineeId = await dispatch(createTrainee(formData));
-        navigate(`myApplications/trainee-success/${newTraineeId}`, { replace: true });
+        navigate(`trainee-success/${newTraineeId}`, { replace: true });
       } catch (error: any) {
         console.error('Error submitting form:', error);
         setSubmitError(getErrorMessage(error));

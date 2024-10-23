@@ -7,38 +7,66 @@ import {
 import { toast } from "react-toastify";
 import axios from "axios";
 
+interface TraineeAttributeInput {
+  gender: string;
+  birth_date: string;
+  Address: string;
+  phone: string;
+  field_of_study: string;
+  education_level: string;
+  province: string;
+  district: string;
+  sector: string;
+  isEmployed: boolean;
+  haveLaptop: boolean;
+  isStudent: boolean;
+  past_andela_programs: string;
+  understandTraining: boolean;
+  trainee_id: string;
+}
 
 const createTraineeAttributeQuery = `
-  mutation CreateTraineeAttribute($attributeInput: TraineeAttributeInput!) {
+  mutation CreateTraineeAttribute($attributeInput: traineeAttributeInput!) {
     createTraineeAttribute(attributeInput: $attributeInput) {
       _id
       gender
       birth_date
-      address
+      Address
       phone
+      field_of_study
       education_level
-      currentEducationLevel
-      nationality
       province
       district
       sector
       isEmployed
       haveLaptop
       isStudent
-      Hackerrank_score
-      english_score
-      interview
-      interview_decision
-      applicationPost
-      otherApplication
-      andelaPrograms
-      otherPrograms
+      past_andela_programs
       understandTraining
-      discipline
       trainee_id
     }
   }
 `;
+
+const transformAttributeData = (data: any): TraineeAttributeInput => {
+  return {
+    gender: data.gender || "",
+    birth_date: data.birth_date || "",
+    Address: data.Address || "",
+    phone: data.phone || "",
+    field_of_study: data.field_of_study || "", 
+    education_level: data.education_level || "",
+    province: data.province || "",
+    district: data.district || "",
+    sector: data.sector || "",
+    isEmployed: Boolean(data.isEmployed),
+    haveLaptop: Boolean(data.haveLaptop),
+    isStudent: Boolean(data.isStudent),
+    past_andela_programs: data.past_andela_programs || "none",
+    understandTraining: Boolean(data.understandTraining),
+    trainee_id: data.trainee_id || "",
+  };
+};
 
 
 const sendCreateTraineeAttributeRequest = async (attributeData: any) => {

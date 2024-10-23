@@ -2,27 +2,21 @@ import React from 'react';
 import InputField from './form/InputField';
 
 interface FormData {
-    gender: string;
-    birth_date: string;
-    address: string;
-    phone: string;
-    study: string;
-    education_level: string;
-    currentEducationLevel: string;
-    nationality: string;
-    province: string;
-    district: string;
-    sector: string;
-    discipline: string;
-    isEmployed: string;
-    haveLaptop: string;
-    isStudent: string;
-    applicationPost: string;
-    andelaPrograms: string;
-    understandTraining: string;
-    otherApplication: string;
-    otherPrograms: string;
-  }
+  gender: string;
+  birth_date: string;
+  Address: string;
+  phone: string;
+  field_of_study: string;
+  education_level: string;
+  province: string;
+  district: string;
+  sector: string;
+  isEmployed: string;
+  haveLaptop: string;
+  isStudent: string;
+  past_andela_programs: string;
+  understandTraining: string;
+}
 
 interface PersonalInfoSectionProps {
     formData: FormData;
@@ -40,11 +34,11 @@ interface PersonalInfoSectionProps {
     return (
       <>
         <InputField
-          name="address"
+          name="Address"
           placeholder="Address"
           label='Address'
           type="text"
-          value={formData.address}
+          value={formData.Address}
           onChange={handleInputChange}
           className={inputClassName}
         />
@@ -75,7 +69,7 @@ interface PersonalInfoSectionProps {
               type="radio" 
               name="study" 
               value="no"
-              checked={formData.study === "no"}
+              checked={formData.isStudent === "no"}
               onChange={handleInputChange}
             /> No
           </div>

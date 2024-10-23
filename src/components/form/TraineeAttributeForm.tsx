@@ -16,24 +16,18 @@ const TraineeAttributeForm = ({ traineeId }) => {
   const [formData, setFormData] = useState({
     gender: '',
     birth_date: '',
-    address:'',
+    Address:'',
     phone:'',
-    study:'',
+    field_of_study:'',
     education_level: '',
-    currentEducationLevel:'',
-    nationality: '',
     province: '',
     district: '',
     sector: '',
-    discipline: '',
     isEmployed: '',
     haveLaptop: '',
     isStudent:'',
-    applicationPost: '',
-    andelaPrograms: '',
+    past_andela_programs: '',
     understandTraining: '',
-    otherApplication: '',
-    otherPrograms: '',
   });
 
   const handleNext = () => {
@@ -49,30 +43,23 @@ const TraineeAttributeForm = ({ traineeId }) => {
     const attributeData = {
       gender: formData.gender,
       birth_date: formData.birth_date,
-      address: formData.address,
+      Address: formData.Address,
       phone: formData.phone,
+      field_of_study:formData.field_of_study, 
       education_level: formData.education_level,
-      currentEducationLevel: formData.currentEducationLevel,
       province: formData.province,
       district: formData.district,
       sector: formData.sector,
       isEmployed: formData.isEmployed === 'yes',
       haveLaptop: formData.haveLaptop === 'yes',
       isStudent: formData.isStudent === 'yes',
-      nationality: formData.nationality, 
-      english_score: '', 
-      interview_decision: '', 
-      andelaPrograms: formData.andelaPrograms,
-      applicationPost: formData.applicationPost,
-      otherApplication: formData.otherApplication,
-      otherPrograms: formData.otherPrograms,
+      past_andela_programs: formData.past_andela_programs,
       understandTraining: formData.understandTraining === 'yes',
-      discipline: formData.discipline,
       trainee_id: traineeId, 
     };
     console.log('Attribute data being sent:', attributeData);
     dispatch(createTraineeAttribute(attributeData));
-    navigate('/applicant')
+    // navigate('/applicant')
   };
 
   return (
@@ -80,9 +67,9 @@ const TraineeAttributeForm = ({ traineeId }) => {
       isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-800'
     }`}>
       <div className="flex-grow flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8">
-        <h2 className={`text-3xl font-bold mb-8 text-center ${
+        <h3 className={`text-3xl font-semibold mb-8 text-center ${
           isDarkMode ? 'text-white' : 'text-gray-800'
-        }`}>Fill the form for more information</h2>
+        }`}>Fill the form for more information</h3>
         <div className="w-full max-w-4xl">
           {page === 1 ? (
             <TraineeFormPage1
