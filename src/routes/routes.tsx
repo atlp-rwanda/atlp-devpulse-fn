@@ -39,7 +39,7 @@ import UpdateProgram from "../pages/programs/UpdateProgram";
 import Jobs from "../pages/JobPost/job";
 import SingleJobPostDetails from "../pages/JobPost/viewSingleJob";
 import SharedPosts from "../pages/sharedPosts";
-import Applications from "../pages/Applications";
+import {ApplicantApplication} from "../pages/Applications/ApplicantApplication";
 import ScheduleInterview from "../pages/ScheduleInterview";
 import SubmitApplication from "../pages/SubmitApplication";
 import GradingSystemPage from "../pages/GradingSystemPage";
@@ -48,6 +48,8 @@ import ApplicationDetails from "../pages/Applications/ViewSingleApplication";
 import Dashboard from "../pages/Dashboard";
 import ApplicantLayout from "../pages/Applicant/ApplicantLayout";
 import AdminLayout from "../components/Layout/Admins/AdminLayout";
+import GoogleSignup from "./../components/form/GoogleSignup";
+import ApplicantNotifications from "../pages/ApplicantNotifications/AppNotification";
 import ApplicantDashboard from "../pages/Applicant/ApplicantDashboard";
 import UpdateJobPost from "../pages/JobPost/updateJobPost";
 import TraineeApply from "../pages/TraineeApply";
@@ -65,16 +67,25 @@ function Navigation() {
       {/* Public Routes */}
       <Route path="/test_tailwind" element={<TestTailwind />} />
       <Route path="/login" element={<LoginPage />} />
+      <Route path="/google" element={ <GoogleSignup /> } />
       <Route path="/forget" element={<ForgotPasswordPage />} />
       <Route path="/reset-password" element={<ResetPasswordPage />} />
 
       <Route path="/signup" element={<SignupForm />} />
       <Route path="/verifyEmail" element={<VerifyEmail/>}/>
       <Route path="/pageNotFound" element={<PageNotFound />} />
-      <Route path="/" element={
-          roleName === 'Admin' || roleName === 'SuperAdmin' ? <Navigate to="/admin" /> : 
-          roleName === 'Applicant' ? <Navigate to="/applicant" /> : <Navigate to="/login" />
-      } />
+      <Route
+        path="/"
+        element={
+          roleName === 'Admin' || roleName === 'SuperAdmin' ? (
+            <Navigate to="/admin" />
+          ) : roleName === 'Applicant' ? (
+            <Navigate to="/applicant" />
+          ) : (
+            <Navigate to="/login" />
+          )
+        }
+      />
       {/* Admin Routes (Protected) */}
       <Route
         path="/admin"
@@ -310,15 +321,31 @@ function Navigation() {
           }
         />
       </Route>
-  
+
       {/* Applicant Routes (Protected) */}
+      <Route
+        path="/applicant"
+        element={
+          <PrivateRoute allowedRoles={['applicant']}>
+            <ApplicantLayout />
+          </PrivateRoute>
+        }
+      />
+        {/* <Route
+          index
+          element={
+            <PrivateRoute allowedRoles={['applicant']}>
+              <Applications />
+            </PrivateRoute>
+          }
+        /> */}
       <Route path="/applicant" element={<ApplicantLayout />}>
       <Route index element={<PrivateRoute allowedRoles={['applicant']}><ApplicantDashboard/></PrivateRoute>} />
         <Route
           path="myApplications"
           element={
             <PrivateRoute allowedRoles={['applicant']}>
-              <Applications />
+              <ApplicantApplication />
             </PrivateRoute>
           }
         />
@@ -355,10 +382,10 @@ function Navigation() {
           }
         />
         <Route
-          path="*"
+          path="notifications"
           element={
             <PrivateRoute allowedRoles={['applicant']}>
-              <PageNotFound />
+              <ApplicantNotifications />
             </PrivateRoute>
           }
         />
@@ -387,12 +414,12 @@ function Navigation() {
           }
         />
       </Route>
-  
+
       {/* Catch-All Route */}
       <Route
         path="*"
         element={
-          <PrivateRoute allowedRoles={['Admin', 'applicant','superAdmin']}>
+          <PrivateRoute allowedRoles={['Admin', 'applicant', 'superAdmin']}>
             <PageNotFound />
           </PrivateRoute>
         }

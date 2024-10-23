@@ -36,6 +36,7 @@ export const getAllFilteredJobPosts =
               cohort {
                 title
               }
+              spreadsheetlink
             }
          }
       `,
@@ -51,12 +52,12 @@ export const getAllFilteredJobPosts =
       });
 
       const jobs = await response.data.data.filterJobDetails;
-      if (jobs.length===0){
-        toast.error("No jobs found! Try again")
+      if (jobs.length === 0) {
+        toast.error("No jobs found! Try again");
       }
-      console.log('response',jobs) 
+      console.log("response", jobs);
       dispatch(creator(GET_ALL_FILTERED_JOB_POST, jobs));
-      return jobs
+      return jobs;
     } catch (error) {
       console.error("Error fetching filtered job posts:", error);
     }
