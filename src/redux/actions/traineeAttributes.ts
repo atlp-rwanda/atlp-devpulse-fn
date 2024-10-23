@@ -7,23 +7,6 @@ import {
 import { toast } from "react-toastify";
 import axios from "axios";
 
-interface TraineeAttributeInput {
-  gender: string;
-  birth_date: string;
-  Address: string;
-  phone: string;
-  field_of_study: string;
-  education_level: string;
-  province: string;
-  district: string;
-  sector: string;
-  isEmployed: boolean;
-  haveLaptop: boolean;
-  isStudent: boolean;
-  past_andela_programs: string;
-  understandTraining: boolean;
-  trainee_id: string;
-}
 
 const createTraineeAttributeQuery = `
   mutation CreateTraineeAttribute($attributeInput: traineeAttributeInput!) {
@@ -48,26 +31,6 @@ const createTraineeAttributeQuery = `
   }
 `;
 
-const transformAttributeData = (data: any): TraineeAttributeInput => {
-  return {
-    gender: data.gender || "",
-    birth_date: data.birth_date || "",
-    Address: data.Address || "",
-    phone: data.phone || "",
-    field_of_study: data.field_of_study || "", 
-    education_level: data.education_level || "",
-    province: data.province || "",
-    district: data.district || "",
-    sector: data.sector || "",
-    isEmployed: Boolean(data.isEmployed),
-    haveLaptop: Boolean(data.haveLaptop),
-    isStudent: Boolean(data.isStudent),
-    past_andela_programs: data.past_andela_programs || "none",
-    understandTraining: Boolean(data.understandTraining),
-    trainee_id: data.trainee_id || "",
-  };
-};
-
 
 const sendCreateTraineeAttributeRequest = async (attributeData: any) => {
   return await axios({
@@ -82,8 +45,6 @@ const sendCreateTraineeAttributeRequest = async (attributeData: any) => {
 
 
 const handleCreateAttributeError = (error: any, dispatch: AppDispatch) => {
-  console.error('Full error object:', error);
-  console.error('Response data:', error.response?.data);
   const errorMessage = error.response?.data?.errors?.[0]?.message || "An error occurred while creating trainee attributes.";
   console.error('GraphQL Error:', errorMessage);
   toast.error(errorMessage);
@@ -95,9 +56,7 @@ const handleCreateAttributeError = (error: any, dispatch: AppDispatch) => {
 export const createTraineeAttribute = (attributeData: any) => async (dispatch: AppDispatch) => {
   dispatch({ type: CREATE_TRAINEE_ATTRIBUTE_REQUEST });
   try {
-    console.log('Sending data:', attributeData);
     const response = await sendCreateTraineeAttributeRequest(attributeData);
-    console.log('Full response:', response);
 
     const { data } = response.data;
     if (data?.createTraineeAttribute) {
@@ -105,7 +64,6 @@ export const createTraineeAttribute = (attributeData: any) => async (dispatch: A
       toast.success("Trainee attributes successfully created.");
       return data.createTraineeAttribute._id;
     } else {
-      console.error('Unexpected response structure:', response.data);
       throw new Error("Failed to create trainee attributes: Unexpected response structure");
     }
   } catch (error: any) {

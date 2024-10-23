@@ -57,9 +57,8 @@ const TraineeAttributeForm = ({ traineeId }) => {
       understandTraining: formData.understandTraining === 'yes',
       trainee_id: traineeId, 
     };
-    console.log('Attribute data being sent:', attributeData);
     dispatch(createTraineeAttribute(attributeData));
-    // navigate('/applicant')
+    navigate('/applicant')
   };
 
   return (
