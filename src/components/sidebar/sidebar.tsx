@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Icon } from "@iconify/react";
 import { Link, useNavigate } from "react-router-dom";
 import {
@@ -8,12 +8,19 @@ import {
   applicantSidebarItems,
 } from "./sidebarItems";
 import "./navslide.css";
+import TokenExpirationHandler from "../../utils/tokenExpirationHandler";
 
 const Sidebar = ({ expanded, setExpanded }) => {
   const navigate = useNavigate();
   const roleName = localStorage.getItem("roleName");
 
-  // Select items based on the role
+  useEffect(() => {
+    const isTokenValid = TokenExpirationHandler.validateToken();
+    if (!isTokenValid) {
+      navigate("/login");
+    }
+  }, [location.pathname, navigate]);
+
   const items =
     roleName === "applicant"
       ? applicantSidebarItems
