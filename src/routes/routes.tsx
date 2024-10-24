@@ -55,6 +55,10 @@ import UpdateJobPost from "../pages/JobPost/updateJobPost";
 import VerifyEmail from "../pages/verifyEmail";
 import Search from "./../pages/search";
 import Settings from '../components/settings';
+import TraineeApply from "../pages/TraineeApply/TraineeApply";
+import TraineeAttribute from '../pages/TraineeApply/TraineeAttribute'
+import TraineeSuccessPage from "../pages/TraineeApply/TraineeSuccess";
+
 
 function Navigation() {
   const roleName = localStorage.getItem("roleName");
@@ -399,6 +403,30 @@ function Navigation() {
           element={
             <PrivateRoute allowedRoles={['applicant']}>
               <ApplicantNotifications />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="available-jobs/trainee-apply"
+          element={
+            <PrivateRoute allowedRoles={['applicant']}>
+              <TraineeApply />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="available-jobs/trainee-apply/trainee-success/:traineeId"
+          element={
+            <PrivateRoute allowedRoles={['applicant']}>
+              <TraineeSuccessPage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="available-jobs/trainee-apply/trainee-success/trainee-add-attributes/:traineeId?"
+          element={
+            <PrivateRoute allowedRoles={['applicant']}>
+              <TraineeAttribute />
             </PrivateRoute>
           }
         />

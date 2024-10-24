@@ -56,11 +56,11 @@ export const getAllTraineess =
     }
   };
 
-export const createTrainee =
+  export const createTrainee =
   ({ firstName, lastName, email, cycle_id }: any) =>
   async (dispatch: any) => {
     try {
-      const datas = await axios({
+      const response = await axios({
         url: process.env.BACKEND_URL,
         method: "post",
         data: {
@@ -82,30 +82,27 @@ export const createTrainee =
             },
           },
         },
-      })
-        .then((response) => {
-          if (response.data.data !== null) {
-            toast.success("Successfully created.");
-            dispatch(
-              creator(
-                CREATE_TRAINEES,
-                response.data.data.createNewTraineeApplicant
-              )
-            );
-          } else {
-            const err = response.data.errors[0].message;
+      });
 
-            toast.error(err);
-            dispatch(creator(CREATE_CYCLE_ERROR, err));
-          }
-        })
-        .catch((error) => {
-          dispatch(creator(CREATE_CYCLE_ERROR, error));
-        });
+      if (response.data.data?.createNewTraineeApplicant) {
+        toast.success("Successfully created.");
+        dispatch(
+          creator(
+            CREATE_TRAINEES,
+            response.data.data.createNewTraineeApplicant
+          )
+        );
+        return response.data;
+      } else {
+        const error = response.data.errors?.[0]?.message || 'An error occurred';
+        toast.error(error);
+        dispatch(creator(CREATE_CYCLE_ERROR, error));
+        return response.data;
+      }
     } catch (error) {
       console.log(error);
-
-      return dispatch(creator(CREATE_CYCLE_ERROR, error));
+      dispatch(creator(CREATE_CYCLE_ERROR, error));
+      throw error; 
     }
   };
 
