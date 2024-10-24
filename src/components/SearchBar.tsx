@@ -27,7 +27,6 @@ const SearchBar = () => {
           <option value="email">Email</option>
           <option value="roleName">Role Name</option>
           <option value="title">Title</option>
-          <option value="phase">Phase</option>
           <option value="name">Name</option>
         </select>
         <input
