@@ -6,6 +6,7 @@ import NavBar from "../../components/sidebar/navHeader";
 import { getAllMembers } from "../../redux/actions/users";
 import { getRoles } from "../../redux/actions/roles";
 import * as AiIcons from "react-icons/ai";
+import { MemberSkeleton } from '../../skeletons/memberSkeleton'
 import {
   DOTS,
   useCustomPagination,
@@ -30,6 +31,7 @@ type MemberC = User[];
 
 const ListAllUsersPage: FunctionComponent = (props: any) => {
   const [member, setmembers] = useState(null);
+   const [loading, setLoading] = useState(true); 
   const [underline, setunderline] = useState("All");
   const [filteredMembers, setFilteredMembers] = useState<MemberC>([]);
   const [currentPage, setCurrentPage] = useState(0);
@@ -40,8 +42,11 @@ const ListAllUsersPage: FunctionComponent = (props: any) => {
   const dispatch = useAppDispatch();
   const { members, roles } = props;
 
-  useEffect(() => {
-    dispatch(getAllMembers());
+   useEffect(() => {
+    setLoading(true);
+    dispatch(getAllMembers()).then(() => {
+      setLoading(false);
+    });
     dispatch(getRoles());
   }, [member]);
 
@@ -270,104 +275,108 @@ const ListAllUsersPage: FunctionComponent = (props: any) => {
               </ul>
             </div>
           </div>
-
-          <ListAllUsers
-            members={currentMembers}
-            roles={roles}
-            searchFilter={searchFilter}
-            updateMember={updateMembers}
-            handleRemove={handleRemoveMember}
-          />
-          <div
-            className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between rounded-b-md py-8  dark:bg-dark-bg"
-            aria-label="Pagination"
-          >
+          {loading ? (
+            <MemberSkeleton />
+          ) : (
+            <ListAllUsers
+              members={currentMembers}
+              roles={roles}
+              searchFilter={searchFilter}
+              updateMember={updateMembers}
+              handleRemove={handleRemoveMember}
+            />)}
+          {!loading &&
             <div
-              className="relative z-0 inline-flex items-center ml-auto mr-auto  rounded-[2px] shadow-sm space-x-2"
+              className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between rounded-b-md py-8  dark:bg-dark-bg"
               aria-label="Pagination"
             >
-              <button
-                className="my-0 mx-[5px] px-[5px] py-0 text-[#333] h-[38px] border-solid border-[1px]  border-[#a8a8a8] dark:disabled:bg-[#485970]  disabled:bg-[#E7E7E7] disabled:text-[#a8a8a8] dark:text-zinc-100"
-                onClick={() => setCurrentPage(0)}
-                disabled={currentPage <= 0}
+              <div
+                className="relative z-0 inline-flex items-center ml-auto mr-auto  rounded-[2px] shadow-sm space-x-2"
+                aria-label="Pagination"
               >
-                <AiIcons.AiOutlineDoubleLeft />
-              </button>
-              <button
-                className=" border-solid border-[1px]  border-[#a8a8a8] py-0 px-[10px] text-[#333] rounded-l-[5px] h-[38px] disabled:bg-[#E7E7E7] disabled:text-[#a8a8a8] dark:text-zinc-100 dark:disabled:bg-[#485970]"
-                onClick={() => previousPage()}
-                disabled={currentPage <= 0}
-              >
-                <AiIcons.AiOutlineLeft />
-              </button>
-              {paginationRange?.map((pageNumber, idx) => {
-                if (pageNumber === DOTS) {
-                  return (
-                    <div key={idx} className="dark:text-zinc-100 md:hidden">
-                      ...
-                    </div>
-                  );
-                }
+                <button
+                  className="my-0 mx-[5px] px-[5px] py-0 text-[#333] h-[38px] border-solid border-[1px]  border-[#a8a8a8] dark:disabled:bg-[#485970]  disabled:bg-[#E7E7E7] disabled:text-[#a8a8a8] dark:text-zinc-100"
+                  onClick={() => setCurrentPage(0)}
+                  disabled={currentPage <= 0}
+                >
+                  <AiIcons.AiOutlineDoubleLeft />
+                </button>
+                <button
+                  className=" border-solid border-[1px]  border-[#a8a8a8] py-0 px-[10px] text-[#333] rounded-l-[5px] h-[38px] disabled:bg-[#E7E7E7] disabled:text-[#a8a8a8] dark:text-zinc-100 dark:disabled:bg-[#485970]"
+                  onClick={() => previousPage()}
+                  disabled={currentPage <= 0}
+                >
+                  <AiIcons.AiOutlineLeft />
+                </button>
+                {paginationRange?.map((pageNumber, idx) => {
+                  if (pageNumber === DOTS) {
+                    return (
+                      <div key={idx} className="dark:text-zinc-100 md:hidden">
+                        ...
+                      </div>
+                    );
+                  }
 
-                if (pageNumber - 1 === currentPage) {
-                  return (
-                    <button
-                      key={idx}
-                      className={`border-solid border-[1px] cursor-pointer border-[#a8a8a8] bg-[#fff] min-w-[35px] h-[38px]  active:bg-[#333] active:text-[#fff]-500 rounded-[2px] md:hidden
+                  if (pageNumber - 1 === currentPage) {
+                    return (
+                      <button
+                        key={idx}
+                        className={`border-solid border-[1px] cursor-pointer border-[#a8a8a8] bg-[#fff] min-w-[35px] h-[38px]  active:bg-[#333] active:text-[#fff]-500 rounded-[2px] md:hidden
                         ${currentPage && "bg-[#d6dfdf] text-black"} 
                         ${currentPage === 0 && "bg-[#d6dfdf] text-black"} 
                           `}
+                        onClick={() => paginate(pageNumber - 1)}
+                      >
+                        {pageNumber}
+                      </button>
+                    );
+                  }
+
+                  return (
+                    <button
+                      key={idx}
+                      className={`border-solid border-[1px]  cursor-pointer border-[#a8a8a8] bg-[#fff] min-w-[35px] h-[38px]  active:bg-[#333] active:text-[#fff]-500 rounded-[2px] md:hidden`}
                       onClick={() => paginate(pageNumber - 1)}
                     >
                       {pageNumber}
                     </button>
                   );
-                }
-
-                return (
-                  <button
-                    key={idx}
-                    className={`border-solid border-[1px]  cursor-pointer border-[#a8a8a8] bg-[#fff] min-w-[35px] h-[38px]  active:bg-[#333] active:text-[#fff]-500 rounded-[2px] md:hidden`}
-                    onClick={() => paginate(pageNumber - 1)}
-                  >
-                    {pageNumber}
-                  </button>
-                );
-              })}
-              <button
-                className=" border-solid border-[1px]  border-[#a8a8a8] py-0 px-[10px] text-[#333] rounded-r-[5px] h-[38px]  disabled:bg-[#E7E7E7] disabled:text-[#a8a8a8] dark:disabled:bg-[#485970] dark:text-zinc-100"
-                onClick={() => nextPage()}
-                disabled={
-                  currentPage >=
-                  Math.ceil(
-                    members?.message?.getUsers_Logged.length / membersPerPage
-                  ) -
-                    1
-                }
-              >
-                <AiIcons.AiOutlineRight />
-              </button>
-              <button
-                className="my-0 mx-[5px] px-[5px] py-0 text-[#333] h-[38px] border-solid border-[1px]  border-[#a8a8a8]  disabled:bg-[#E7E7E7] disabled:text-[#a8a8a8] dark:disabled:bg-[#485970] dark:text-zinc-100"
-                onClick={() =>
-                  setCurrentPage(
+                })}
+                <button
+                  className=" border-solid border-[1px]  border-[#a8a8a8] py-0 px-[10px] text-[#333] rounded-r-[5px] h-[38px]  disabled:bg-[#E7E7E7] disabled:text-[#a8a8a8] dark:disabled:bg-[#485970] dark:text-zinc-100"
+                  onClick={() => nextPage()}
+                  disabled={
+                    currentPage >=
                     Math.ceil(
                       members?.message?.getUsers_Logged.length / membersPerPage
-                    ) - 1
-                  )
-                }
-                disabled={
-                  currentPage >=
-                  Math.ceil(
-                    members?.message?.getUsers_Logged.length / membersPerPage
-                  ) -
+                    ) -
                     1
-                }
-              >
-                <AiIcons.AiOutlineDoubleRight />
-              </button>
+                  }
+                >
+                  <AiIcons.AiOutlineRight />
+                </button>
+                <button
+                  className="my-0 mx-[5px] px-[5px] py-0 text-[#333] h-[38px] border-solid border-[1px]  border-[#a8a8a8]  disabled:bg-[#E7E7E7] disabled:text-[#a8a8a8] dark:disabled:bg-[#485970] dark:text-zinc-100"
+                  onClick={() =>
+                    setCurrentPage(
+                      Math.ceil(
+                        members?.message?.getUsers_Logged.length / membersPerPage
+                      ) - 1
+                    )
+                  }
+                  disabled={
+                    currentPage >=
+                    Math.ceil(
+                      members?.message?.getUsers_Logged.length / membersPerPage
+                    ) -
+                    1
+                  }
+                >
+                  <AiIcons.AiOutlineDoubleRight />
+                </button>
+              </div>
             </div>
-          </div>
+          }
         </div>
       </div>
     </>

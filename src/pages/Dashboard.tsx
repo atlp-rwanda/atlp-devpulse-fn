@@ -1,4 +1,4 @@
-import React, { useEffect }  from "react";
+import React, { useEffect, useState }  from "react";
 import NavBar from "../components/sidebar/navHeader";
 import StatCard from "../components/StatCard";
 import PerformanceChart from "../components/Performance/PerformanceChart";
@@ -10,8 +10,10 @@ import {
 } from "../components/iconss/SvgIcons";
 import { useDashboardData } from "../hooks/useDashboardData";
 import { useTheme } from "../hooks/darkmode";
+import { AdminDashboardSkeleton } from "../skeletons/adminDashboardSkeleton";
 
 const Dashboard = () => {
+
   const {
     traineeCount,
     cohortCount,
@@ -20,6 +22,7 @@ const Dashboard = () => {
     performanceData,
     averagePerformance,
     currentDate,
+    loading
   } = useDashboardData();
   const { theme, setTheme } = useTheme();
     useEffect(() => {
@@ -29,6 +32,10 @@ const Dashboard = () => {
         document.body.classList.remove("light-mode");
       }
     }, [theme]);
+  
+  if (loading) {
+    return <AdminDashboardSkeleton/>
+  }
 
   return (
     <>

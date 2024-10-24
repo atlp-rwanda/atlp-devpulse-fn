@@ -17,6 +17,7 @@ import { connect } from "react-redux";
 import { getAllCycles } from "../../redux/actions/cyclesActions";
 import { locations } from "./locations";
 import SelectField from "../../components/ReusableComponents/Select";
+import { EditApplicantInfoSkeleton } from "../../skeletons/applicantEditFormSkeleton";
 
 const TraineeUpdate = (props: any) => {
   const params = useParams();
@@ -58,7 +59,6 @@ const TraineeUpdate = (props: any) => {
     const provinceList = Object.keys(locations);
     setProvinces(provinceList);
   };
-
   const getDistricts = (provinceName: any) => {
     try {
       const data = locations[provinceName];
@@ -229,7 +229,7 @@ const TraineeUpdate = (props: any) => {
           onSubmit={handleSubmit}
         >
           {Object.keys(traineeData).length === 0 ? (
-            <p className="text-center p-20">Loading data please wait.....</p>
+            <EditApplicantInfoSkeleton/>
           ) : (
             <>
               <div className="flex">

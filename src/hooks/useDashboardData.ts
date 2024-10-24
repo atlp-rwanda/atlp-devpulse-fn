@@ -16,8 +16,11 @@ export const useDashboardData = () => {
   const [coordinatorCount, setCoordinatorCount] = useState(0);
   const [programCount, setProgramCount] = useState(0);
   const [averagePerformance, setAveragePerformance] = useState(0);
-  const [performanceData, setPerformanceData] = useState<PerformanceMetric[]>([]);
+  const [performanceData, setPerformanceData] = useState<PerformanceMetric[]>(
+    []
+  );
   const [currentDate, setCurrentDate] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(true);
   const dispatch = useDispatch();
   useEffect(() => {
     const fetchData = async () => {
@@ -31,17 +34,17 @@ export const useDashboardData = () => {
         setCoordinatorCount(coordinators);
         setProgramCount(programs);
 
-        const performanceMetric: PerformanceMetric[] = [{name: "0",performance: trainees / coordinators,},
-          {name: "1",performance: trainees / programs,},
-          {name: "2",performance: cohorts / programs,},
-          {name: "3",performance: programs / coordinators,},
-          {name: "4",performance: trainees / cohorts,},
-          {name: "5",performance: coordinators / cohorts,
-          },
-          {name: "6",performance: programs / trainees,},
-          {name: "7",performance: coordinators / programs,},
-          {name: "8",performance: programs / cohorts,},
-          {name: "9 Sprint",performance: coordinators / trainees,},
+        const performanceMetric: PerformanceMetric[] = [
+          { name: "0", performance: trainees / coordinators },
+          { name: "1", performance: trainees / programs },
+          { name: "2", performance: cohorts / programs },
+          { name: "3", performance: programs / coordinators },
+          { name: "4", performance: trainees / cohorts },
+          { name: "5", performance: coordinators / cohorts },
+          { name: "6", performance: programs / trainees },
+          { name: "7", performance: coordinators / programs },
+          { name: "8", performance: programs / cohorts },
+          { name: "9 Sprint", performance: coordinators / trainees },
         ];
         setPerformanceData(performanceMetric);
         const totalPerformance = performanceMetric.reduce(
@@ -50,6 +53,8 @@ export const useDashboardData = () => {
         );
         setAveragePerformance(totalPerformance / performanceMetric.length);
       } catch (error) {
+      } finally {
+        setLoading(false);
       }
     };
     const formatDate = () => {
@@ -72,5 +77,6 @@ export const useDashboardData = () => {
     performanceData,
     averagePerformance,
     currentDate,
+    loading,
   };
 };
