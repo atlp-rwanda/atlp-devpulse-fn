@@ -212,7 +212,7 @@ const UpdateSavedForm = () => {
           {error && <div className="text-sm text-red-500">{error}</div>}
         </div>
         <div className="flex justify-end">
-          <Link to={'/view-forms'}>
+          <Link to={'/admin/view-forms'}>
             <button type='button' className='px-4 py-2 mr-2 text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300'>
               Cancel
             </button>

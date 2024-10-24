@@ -63,15 +63,15 @@ function SaveFormDetails() {
       setLoading(true);
       const graphqlQuery = `
       mutation CreateApplication($link: String!, $title: String!, $jobpost: String!, $description: String!, $spreadsheetlink: String!) {
-        createApplication(link: $link, title: $title, jobpost: $jobpost, description: $description, spreadsheetlink: $spreadsheetlink) {
-          _id
-          link
-          title
-          jobpost
-          description
-          spreadsheetlink
-        }
-      }
+  createApplication(link: $link, title: $title, jobpost: $jobpost, description: $description, spreadsheetlink: $spreadsheetlink) {
+    _id
+    link
+    title
+    jobpost
+    description
+    spreadsheetlink
+  }
+}
       `;
 
       try {
