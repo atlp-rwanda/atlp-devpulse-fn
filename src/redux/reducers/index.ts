@@ -48,6 +48,7 @@ import filterRoleReducer from './filterRoleReducer';
 import fetchSearchDataReducer from './fetchSearchDataReducer';
 import userUpdateReducer from './getUser';
 
+import getLoggedUserReducer from './loggedUser'
 
 const allReducers = combineReducers({
   counter: counterReducer,
@@ -93,7 +94,8 @@ const allReducers = combineReducers({
   traineeApplicant: traineeReducer,
   traineeAttendance: attendanceReducer,
   traineePerformance: performanceReducer,
-  updateUser:userUpdateReducer
+  updateUser:userUpdateReducer,
+  loggedUser: getLoggedUserReducer,
 });
 
 export type RootState = ReturnType<typeof allReducers>;
