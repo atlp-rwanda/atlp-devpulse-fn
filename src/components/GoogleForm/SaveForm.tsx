@@ -40,7 +40,7 @@ function SaveFormDetails() {
         if (response.data.data) {
           setJobposts(response.data.data.getAllJobApplication);
         } else {
-          throw new Error(response.data.errors[0].message);
+          throw new Error(response.data.errors?.[0]?.message || "Failed to fetch job posts.");
         }
       } catch (err: any) {
         console.error("Error fetching job posts:", err);
@@ -63,15 +63,15 @@ function SaveFormDetails() {
       setLoading(true);
       const graphqlQuery = `
       mutation CreateApplication($link: String!, $title: String!, $jobpost: String!, $description: String!, $spreadsheetlink: String!) {
-  createApplication(link: $link, title: $title, jobpost: $jobpost, description: $description, spreadsheetlink: $spreadsheetlink) {
-    _id
-    link
-    title
-    jobpost
-    description
-    spreadsheetlink
-  }
-}
+        createApplication(link: $link, title: $title, jobpost: $jobpost, description: $description, spreadsheetlink: $spreadsheetlink) {
+          _id
+          link
+          title
+          jobpost
+          description
+          spreadsheetlink
+        }
+      }
       `;
 
       try {
@@ -79,23 +79,25 @@ function SaveFormDetails() {
           query: graphqlQuery,
           variables: values,
         });
-        console.log("FULL RESPONSE OBJECT =>>>>>>>>>>>>>>> ", response);
-        if (response.data.errors.length > 0) {
-          showErrorToast(response.data.errors[0].error);
-          return;
-        }
-        if (response.data.errors) {
+
+        if (response.data.errors?.length > 0) {
+          showErrorToast(response.data.errors[0].error || "An error occurred.");
+        } else if (response.data.errors) {
           const errorMessage = response.data.errors[0].error;
-          if (errorMessage.toLowerCase().includes("a record with link"))
+          if (errorMessage.toLowerCase().includes("record")) {
             showErrorToast("The link is already in use");
+          }
         } else {
           setSuccess(true);
           showSuccessToast("Application created successfully!");
           formik.resetForm();
-          window.location.href = "/#/admin/view-forms";
+          setTimeout(() => {
+            window.location.href = "/#/admin/view-forms";
+          }, 2000);
         }
       } catch (err: any) {
         console.error("Error submitting form:", err.message);
+        showErrorToast("An error occurred while submitting the form.");
       } finally {
         setLoading(false);
       }
@@ -108,7 +110,7 @@ function SaveFormDetails() {
         <h2 className="text-2xl font-bold text-center text-primary dark:text-secondary sm:text-4xl">
           Save Application Form
         </h2>
-        <p className="mt-4 text-lg leading-6  text-primary dark:text-secondary">
+        <p className="mt-4 text-lg leading-6 text-primary dark:text-secondary">
           Copy Google Form URL and paste it in the input field below.
         </p>
         <p className="mb-4 text-lg leading-6 text-red-700">Before creating a form, please review the rules:</p>
@@ -175,11 +177,10 @@ function SaveFormDetails() {
             <textarea
               id="description"
               name="description"
-              className={`block w-full dark:bg-dark-tertiary rounded-md py-3 px-4 ${
-                formik.touched.description && formik.errors.description
+              className={`block w-full dark:bg-dark-tertiary rounded-md py-3 px-4 ${formik.touched.description && formik.errors.description
                   ? "border-red-500"
                   : ""
-              }`}
+                }`}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               rows={3}
