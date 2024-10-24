@@ -54,6 +54,7 @@ import ApplicantDashboard from "../pages/Applicant/ApplicantDashboard";
 import UpdateJobPost from "../pages/JobPost/updateJobPost";
 import VerifyEmail from "../pages/verifyEmail";
 import Search from "./../pages/search";
+import Settings from '../components/settings';
 
 function Navigation() {
   const roleName = localStorage.getItem("roleName");
@@ -69,6 +70,7 @@ function Navigation() {
       <Route path="/signup" element={<SignupForm />} />
       <Route path="/verifyEmail" element={<VerifyEmail/>}/>
       <Route path="/pageNotFound" element={<PageNotFound />} />
+      <Route path="settings" element={<Settings />} />
       <Route
         path="/"
         element={
@@ -308,6 +310,14 @@ function Navigation() {
           }
         />
         <Route
+          path="settings"
+          element={
+            <PrivateRoute allowedRoles={['Admin', 'superAdmin']}>
+              <Settings />
+            </PrivateRoute>
+          }
+        />
+        <Route
           path="*"
           element={
             <PrivateRoute allowedRoles={['Admin', 'superAdmin']}>
@@ -344,6 +354,14 @@ function Navigation() {
             </PrivateRoute>
           }
         />
+        <Route
+            path="settings"
+            element={
+              <PrivateRoute allowedRoles={['applicant']}>
+                <Settings />
+              </PrivateRoute>
+            }
+          />
         <Route
           path="available-jobs"
           element={
