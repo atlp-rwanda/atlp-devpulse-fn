@@ -4,6 +4,9 @@ import {
   fetchMyApplications,
   deleteOwnApplication,
   fetchSingleOwnApplication,
+  advanceToNextStage,
+  getApplicantStage,
+  addStageMark
 } from '../actiontypes/applicationTypes';
 
 interface State {
@@ -22,6 +25,13 @@ const initialState = {
   data: { applications: [] },
 };
 
+const initial = {
+  loading: false,
+  success: false,
+  error: false,
+  message: null,
+  data: null,
+}
 export const applicationsReducer = (
   state: State = initialState,
   action: Action,
@@ -103,3 +113,93 @@ export const singleApplicationReducer = (
       return state;
   }
 };
+
+export const FetchApplicantStageReducer = (state:State = initial, action:Action) => {
+  switch (action.type) {
+    case getApplicantStage.GET_APPLICANT_STAGE_LOADING:
+      return {
+        loading: true,
+        success: false,
+        error: null,
+        message: null,
+        data: null,
+      };
+    case getApplicantStage.GET_APPLICANT_STAGE_SUCCESS:
+      return {
+        loading: false,
+        success: true,
+        message: action.message,
+        data: action.data,
+      };
+    case getApplicantStage.GET_APPLICANT_STAGE_FAIL:
+      return {
+        loading: false,
+        error: action.error,
+        data: null,
+      };
+
+    default:
+      return state;
+  }
+}
+
+export const advanceToNextStageReducer = (state:State = initial, action:Action) => {
+  switch (action.type) {
+    case advanceToNextStage.ADVANCE_TO_NEXT_STAGE_LOADING:
+      return {
+        loading: true,
+        success: false,
+        error: false,
+        message: null,
+        data: null,
+      };
+    case advanceToNextStage.ADVANCE_TO_NEXT_STAGE_SUCCESS:
+      return {
+        loading: false,
+        success: true,
+        error: false,
+        message: action.message,
+        data: action.data,
+      };
+    case advanceToNextStage.ADVANCE_TO_NEXT_STAGE_FAIL:
+      return {
+        loading: false,
+        error: true,
+        success:false,
+        message: action.message,
+        data: null,
+      };
+
+    default:
+      return state;
+  }
+}
+
+export const AddApplicantScoreReducer = (state:State = initial, action:Action) => {
+  switch (action.type) {
+    case addStageMark.ADD_STAGE_MARK_LOADING:
+      return {
+        loading: true,
+        success: false,
+        error: null,
+        message: null,
+        data: null,
+      };
+    case addStageMark.ADD_STAGE_MARK_SUCCESS:
+      return {
+        loading: false,
+        success: true,
+        message: action.message,
+        data: action.data,
+      };
+    case addStageMark.ADD_STAGE_MARK_FAIL:
+      return {
+        loading: false,
+        error: action.message,
+        data: null,
+      };
+
+    default:
+      return state;
+  }
+}

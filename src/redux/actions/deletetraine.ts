@@ -154,6 +154,8 @@ export const fetchtraine = ({ page, itemsPerPage, All }: any) => {
                     firstName
                     lastName
                     email
+                    applicationPhase
+                    status
                     _id
                     delete_at
                     cycle_id {

@@ -14,6 +14,25 @@ export enum fetchSingleOwnApplication {
   FETCH_SINGLE_APPLICATION_SUCCESS = 'FETCH_SINGLE_APPLICATION_SUCCESS',
   FETCH_SINGLE_APPLICATION_FAIL = 'FETCH_SINGLE_APPLICATION_FAIL',
 }
+
+export enum advanceToNextStage {
+  ADVANCE_TO_NEXT_STAGE_LOADING = 'ADVANCE_TO_NEXT_STAGE_LOADING',
+  ADVANCE_TO_NEXT_STAGE_SUCCESS = 'ADVANCE_TO_NEXT_STAGE_SUCCESS',
+  ADVANCE_TO_NEXT_STAGE_FAIL = 'ADVANCE_TO_NEXT_STAGE_FAIL',
+}
+
+export enum getApplicantStage {
+  GET_APPLICANT_STAGE_LOADING = 'GET_APPLICANT_STAGE_LOADING',
+  GET_APPLICANT_STAGE_SUCCESS = 'GET_APPLICANT_STAGE_SUCCESS',
+  GET_APPLICANT_STAGE_FAIL = 'GET_APPLICANT_STAGE_FAIL',
+}
+
+export enum addStageMark {
+  ADD_STAGE_MARK_LOADING = "ADD_STAGE_MARK_LOADING",
+  ADD_STAGE_MARK_SUCCESS = "ADD_STAGE_MARK_SUCCESS",
+  ADD_STAGE_MARK_FAIL = "ADD_STAGE_MARK_FAIL",
+
+}
 interface actionPending {
   type: fetchMyApplications.FETCH_MYAPPLICATIONS_LOADING;
 }
@@ -60,6 +79,48 @@ interface fetchSingleOwnApplicationActionFail {
   type: fetchSingleOwnApplication.FETCH_SINGLE_APPLICATION_FAIL;
   error: any;
 }
+
+interface advanceToNextStageActionPending {
+  type: advanceToNextStage.ADVANCE_TO_NEXT_STAGE_LOADING;
+}
+interface advanceToNextStageActionSuccess {
+  type: advanceToNextStage.ADVANCE_TO_NEXT_STAGE_SUCCESS;
+  message: string;
+  data: any;
+}
+
+interface advanceToNextStageActionFail {
+  type: advanceToNextStage.ADVANCE_TO_NEXT_STAGE_FAIL;
+  message: any;
+}
+
+interface getApplicantStageActionPending{
+  type: getApplicantStage.GET_APPLICANT_STAGE_LOADING;
+}
+interface getApplicantStageActionSuccess{
+  type: getApplicantStage.GET_APPLICANT_STAGE_SUCCESS;
+  message: string;
+  data: any;
+}
+
+interface getApplicantStageActionFail{
+  type: getApplicantStage.GET_APPLICANT_STAGE_FAIL;
+  error: any;
+}
+
+interface addStageMarkActionPending{
+  type: addStageMark.ADD_STAGE_MARK_LOADING;
+}
+interface addStageMarkActionSuccess{
+  type: addStageMark.ADD_STAGE_MARK_SUCCESS;
+  message: string;
+  data: any;
+}
+
+interface addStageMarkActionFail{
+  type: addStageMark.ADD_STAGE_MARK_FAIL;
+  message: any;
+}
 export type Action =
   | actionPending
   | actionSuccess
@@ -70,4 +131,13 @@ export type Action =
   | deleteOwnApplicationActionSuccess
   | fetchSingleOwnApplicationActionPending
   | fetchSingleOwnApplicationActionFail
-  | fetchSingleOwnApplicationActionSuccess;
+  | fetchSingleOwnApplicationActionSuccess
+  | advanceToNextStageActionPending
+  | advanceToNextStageActionFail
+  | advanceToNextStageActionSuccess
+  | getApplicantStageActionPending
+  | getApplicantStageActionFail
+  | getApplicantStageActionSuccess
+  | addStageMarkActionPending
+  | addStageMarkActionFail
+  | addStageMarkActionSuccess;

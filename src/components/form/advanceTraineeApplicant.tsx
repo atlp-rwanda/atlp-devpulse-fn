@@ -1,8 +1,22 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useAppDispatch,useAppSelector } from "../../hooks/hooks";
+import { AdvanceToNextStage } from "../../redux/actions/applicationStage";
+import toast from "react-hot-toast";
 
-const NextStageModal = () => {
+interface props {
+  applicantId: string;
+}
+const NextStageModal:React.FC<props> = ({applicantId}) => {
+  const dispatch = useAppDispatch();
+  const {data,success,loading,message} = useAppSelector((state)=> state.nextStage)
   const [isOpen, setIsOpen] = useState(false);
   const [selectedStage, setSelectStage] = useState("");
+  const [comments,setComments] = useState("");
+
+  const handleAdvanceToNextStage = async(nextStage:string,comments:string) =>{
+    await dispatch(AdvanceToNextStage(applicantId,nextStage,comments));
+  }
+
   return (
     <div>
       <button
@@ -32,26 +46,12 @@ const NextStageModal = () => {
                   <option value="" disabled>
                     Select next stage
                   </option>
-                  <option value="shortlisted">Shortlisted</option>
-                  <option value="technical">Technical Assessment</option>
-                  <option value="interview">Interview</option>
-                  <option value="admitted">Admitted</option>
+                  <option value="Shortlisted">Shortlisted</option>
+                  <option value="Technical Assessment">Technical Assessment</option>
+                  <option value="Interview Assessment">Interview Assessment</option>
+                  <option value="Admitted">Admitted</option>
                 </select>
               </div>
-              {(selectedStage === "interview" ||
-                selectedStage === "admitted") && (
-                <div>
-                  <label className="block text-sm mb-2 dark:text-white">
-                    Score
-                  </label>
-                  <input
-                    className="w-full p-2 border rounded-md bg-white dark:bg-[#374151] dark:text-white dark:border-gray-600"
-                    type="text"
-                    placeholder="Score for the current stage"
-                  />
-                </div>
-              )}
-
               <div>
                 <label className="block text-sm mb-2 dark:text-white">
                   Comments
@@ -59,6 +59,8 @@ const NextStageModal = () => {
                 <textarea
                   className="w-full p-2 border rounded-md h-24 resize-none bg-white dark:bg-[#374151] dark:text-white dark:border-gray-600"
                   placeholder="Add any comments..."
+                  value={comments}
+                  onChange={(e) => setComments(e.target.value)}
                 />
               </div>
             </div>
@@ -71,7 +73,7 @@ const NextStageModal = () => {
                 Cancel
               </button>
               <button
-                onClick={() => setIsOpen(false)}
+                onClick={() => handleAdvanceToNextStage(selectedStage,comments)}
                 className="px-4 py-2 bg-[#56C870] text-white rounded-md hover:bg-[#4ab862]"
               >
                 Next

@@ -39,6 +39,9 @@ import updateJobPostReducer from './updateJobPostReducer';
 import {
   applicationsReducer,
   singleApplicationReducer,
+  FetchApplicantStageReducer,
+  AddApplicantScoreReducer,
+  advanceToNextStageReducer
 } from './applicationReducer';
 import { assessmentsReducer } from './assessmentReducer';
 import { attendanceReducer } from './attendanceReducer';
@@ -93,7 +96,10 @@ const allReducers = combineReducers({
   traineeApplicant: traineeReducer,
   traineeAttendance: attendanceReducer,
   traineePerformance: performanceReducer,
-  updateUser:userUpdateReducer
+  updateUser:userUpdateReducer,
+  nextStage:advanceToNextStageReducer,
+  fetchApplicantStage: FetchApplicantStageReducer,
+  AddedApplicantScore:AddApplicantScoreReducer,
 });
 
 export type RootState = ReturnType<typeof allReducers>;
