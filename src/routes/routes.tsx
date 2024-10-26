@@ -54,6 +54,8 @@ import UpdateJobPost from "../pages/JobPost/updateJobPost";
 import VerifyEmail from "../pages/verifyEmail";
 import Search from "./../pages/search";
 import TicketPage from "../pages/tickets/ticketPage";
+import AdminTicketPage from "../pages/tickets/adminTicketPage";
+import SingleTicketDetails from "../pages/tickets/singleTicketDetails";
 
 function Navigation() {
   const roleName = localStorage.getItem("roleName");
@@ -296,6 +298,22 @@ function Navigation() {
           element={
             <PrivateRoute allowedRoles={['Admin', 'superAdmin']}>
               <ListApplications />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="tickets"
+          element={
+            <PrivateRoute allowedRoles={['Admin', 'superAdmin']}>
+              <AdminTicketPage/>
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="ticket/:id"
+          element={
+            <PrivateRoute allowedRoles={['Admin', 'superAdmin']}>
+              <SingleTicketDetails/>
             </PrivateRoute>
           }
         />

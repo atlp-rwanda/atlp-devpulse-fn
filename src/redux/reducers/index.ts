@@ -46,6 +46,7 @@ import { performanceReducer } from './performanceReducer';
 import filterProgramsReducer from './filterProgramsReducer';
 import filterRoleReducer from './filterRoleReducer';
 import fetchSearchDataReducer from './fetchSearchDataReducer';
+import { ticketReducer } from './ticketReducer';
 
 const allReducers = combineReducers({
   counter: counterReducer,
@@ -90,7 +91,8 @@ const allReducers = combineReducers({
   searchData: fetchSearchDataReducer,
   traineeApplicant: traineeReducer,
   traineeAttendance: attendanceReducer,
-  traineePerformance: performanceReducer
+  traineePerformance: performanceReducer,
+  tickets: ticketReducer,
 });
 
 export type RootState = ReturnType<typeof allReducers>;

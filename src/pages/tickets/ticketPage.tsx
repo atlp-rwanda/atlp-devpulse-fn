@@ -1,26 +1,42 @@
 import React, { useEffect, useState } from "react";
 import { useTheme } from "../../hooks/darkmode";
 import { ToastContainer, toast } from "react-toastify";
+import { useDispatch, useSelector } from "react-redux";
+import { createTicket } from "../../redux/actions/ticketActions";
 
 const TicketPage = () => {
+  const dispatch = useDispatch();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { theme, setTheme } = useTheme();
   const [ticket, setTicket] = useState({
     title: "",
     body: "",
   });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!ticket.title || !ticket.body) {
+    if (!ticket.title.trim() || !ticket.body.trim()) {
       toast.error("Please fill in all required fields");
       return;
     }
 
-    toast.success("Ticket submitted successfully");
-    setTicket({
-      title: "",
-      body: "",
-    });
+    try {
+      setIsSubmitting(true);
+      await dispatch(createTicket(ticket.title, ticket.body));
+      toast.success("Ticket submitted successfully");
+      setTicket({
+        title: "",
+        body: "",
+      });
+    } catch (error: any) {
+      const errorMessage =
+        error.response?.data?.errors?.[0]?.message ||
+        error.message ||
+        "Failed to submit ticket";
+      toast.error(errorMessage);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   useEffect(() => {
@@ -76,7 +92,10 @@ const TicketPage = () => {
               </div>
 
               <div className="flex space-x-4">
-                <button className="flex bg-primary dark:bg-[#56C870] rounded-md py-2 px-4 text-white font-medium cursor-pointer">
+                <button
+                  className="flex bg-primary dark:bg-[#56C870] rounded-md py-2 px-4 text-white font-medium cursor-pointer"
+                  disabled={isSubmitting}
+                >
                   Submit
                 </button>
                 <button

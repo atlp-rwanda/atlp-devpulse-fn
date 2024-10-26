@@ -104,9 +104,9 @@ export const sidebarItems2 = [
     title: "Docs",
   },
   {
-    path: "help",
+    path: "tickets",
     icon: <Icon icon="nimbus:globe"></Icon>,
-    title: "Help",
+    title: "Tickets",
   },
 ];
 
