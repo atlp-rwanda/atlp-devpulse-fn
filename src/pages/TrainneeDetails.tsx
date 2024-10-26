@@ -7,19 +7,32 @@ import { useParams } from "react-router";
 import DetailItem from "../components/TraineeDetail/DetailItem";
 import ProgramItem from "../components/TraineeDetail/ProgramBox";
 import DecisionSection from "../components/TraineeDetail/decisionSection";
+import { ApplicantInfoSkeleton } from "../skeletons/traineeInfoSkeleton";
 
 const TrainneeDetails = (props: any) => {
   const params = useParams();
   const [key, setKey] = useState(params.traineeId);
   const { oneTraineeDetails } = props;
-
+  const [isLoading, setIsLoading] = useState(true);
   const [ID, setId] = useState(key);
 
-  useEffect(() => {
+    useEffect(() => {
+    setIsLoading(true); 
     props.getOneTraineeAllDetails({ id: ID });
   }, [ID]);
 
+  useEffect(() => {
+    if (oneTraineeDetails?.data) {
+      setIsLoading(false);
+    }
+  }, [oneTraineeDetails]);
+
   const traineeDetails = oneTraineeDetails.data;
+
+  
+  if(isLoading || !traineeDetails || Object.keys(traineeDetails).length === 0){
+    return <ApplicantInfoSkeleton />
+  }
 
   return (
     <>

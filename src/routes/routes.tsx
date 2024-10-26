@@ -49,10 +49,15 @@ import Dashboard from "../pages/Dashboard";
 import ApplicantLayout from "../pages/Applicant/ApplicantLayout";
 import AdminLayout from "../components/Layout/Admins/AdminLayout";
 import GoogleSignup from "./../components/form/GoogleSignup";
+import ApplicantNotifications from "../pages/ApplicantNotifications/AppNotification";
 import ApplicantDashboard from "../pages/Applicant/ApplicantDashboard";
 import UpdateJobPost from "../pages/JobPost/updateJobPost";
 import VerifyEmail from "../pages/verifyEmail";
 import Search from "./../pages/search";
+import Settings from '../components/settings';
+import ProfileUpdate from "../pages/ProfilePage";
+import Profile from "../pages/Profile";
+
 
 function Navigation() {
   const roleName = localStorage.getItem("roleName");
@@ -68,10 +73,19 @@ function Navigation() {
       <Route path="/signup" element={<SignupForm />} />
       <Route path="/verifyEmail" element={<VerifyEmail/>}/>
       <Route path="/pageNotFound" element={<PageNotFound />} />
-      <Route path="/" element={
-          roleName === 'Admin' || roleName === 'SuperAdmin' ? <Navigate to="/admin" /> : 
-          roleName === 'Applicant' ? <Navigate to="/applicant" /> : <Navigate to="/login" />
-      } />
+      <Route path="settings" element={<Settings />} />
+      <Route
+        path="/"
+        element={
+          roleName === 'Admin' || roleName === 'SuperAdmin' ? (
+            <Navigate to="/admin" />
+          ) : roleName === 'Applicant' ? (
+            <Navigate to="/applicant" />
+          ) : (
+            <Navigate to="/login" />
+          )
+        }
+      />
       {/* Admin Routes (Protected) */}
       <Route
         path="/admin"
@@ -86,6 +100,22 @@ function Navigation() {
           element={
             <PrivateRoute allowedRoles={['Admin', 'superAdmin']}>
               <Dashboard />
+            </PrivateRoute>
+          }
+        />
+                <Route
+          path="update-profile"
+          element={
+            <PrivateRoute allowedRoles={["Admin", "superAdmin"]}>
+              <ProfileUpdate />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="dashboard/profile"
+          element={
+            <PrivateRoute allowedRoles={["Admin", "superAdmin"]}>
+              <Profile />
             </PrivateRoute>
           }
         />
@@ -299,6 +329,14 @@ function Navigation() {
           }
         />
         <Route
+          path="settings"
+          element={
+            <PrivateRoute allowedRoles={['Admin', 'superAdmin']}>
+              <Settings />
+            </PrivateRoute>
+          }
+        />
+        <Route
           path="*"
           element={
             <PrivateRoute allowedRoles={['Admin', 'superAdmin']}>
@@ -307,8 +345,24 @@ function Navigation() {
           }
         />
       </Route>
-  
+
       {/* Applicant Routes (Protected) */}
+      <Route
+        path="/applicant"
+        element={
+          <PrivateRoute allowedRoles={['applicant']}>
+            <ApplicantLayout />
+          </PrivateRoute>
+        }
+      />
+        {/* <Route
+          index
+          element={
+            <PrivateRoute allowedRoles={['applicant']}>
+              <Applications />
+            </PrivateRoute>
+          }
+        /> */}
       <Route path="/applicant" element={<ApplicantLayout />}>
       <Route index element={<PrivateRoute allowedRoles={['applicant']}><ApplicantDashboard/></PrivateRoute>} />
         <Route
@@ -319,6 +373,14 @@ function Navigation() {
             </PrivateRoute>
           }
         />
+        <Route
+            path="settings"
+            element={
+              <PrivateRoute allowedRoles={['applicant']}>
+                <Settings />
+              </PrivateRoute>
+            }
+          />
         <Route
           path="available-jobs"
           element={
@@ -352,20 +414,37 @@ function Navigation() {
           }
         />
         <Route
-          path="*"
+          path="notifications"
           element={
             <PrivateRoute allowedRoles={['applicant']}>
-              <PageNotFound />
+              <ApplicantNotifications />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="update-profile"
+          element={
+            <PrivateRoute allowedRoles={["applicant"]}>
+              <ProfileUpdate />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="dashboard/profile"
+          element={
+            <PrivateRoute allowedRoles={["applicant"]}>
+              <Profile />
             </PrivateRoute>
           }
         />
       </Route>
-  
+      
+
       {/* Catch-All Route */}
       <Route
         path="*"
         element={
-          <PrivateRoute allowedRoles={['Admin', 'applicant','superAdmin']}>
+          <PrivateRoute allowedRoles={['Admin', 'applicant', 'superAdmin']}>
             <PageNotFound />
           </PrivateRoute>
         }

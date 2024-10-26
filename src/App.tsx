@@ -1,8 +1,13 @@
-import React from 'react';
-import AppRoutes from './routes/index';
+import React from "react";
+import AppRoutes from "./routes/index";
+import { NotificationProvider } from "./utils/Notifications";
 
 function App() {
-  return <AppRoutes />;
+  return (
+    <NotificationProvider>
+      <AppRoutes />
+    </NotificationProvider>
+  );
 }
 
 export default App;
