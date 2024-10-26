@@ -33,7 +33,7 @@ class TokenExpirationHandler {
   private static handleRedirection(message: string) {
     this.showToast(message);
     this.clearAuthData();
-    setTimeout(() => this.redirect(), 1000);
+    setTimeout(() => this.redirect(), 400);
   }
 
   public static isTokenExpired(token: string): boolean {
@@ -50,7 +50,7 @@ class TokenExpirationHandler {
       if (!tokenIat) return false;
 
       const timeElapsedSinceIssue = currentTime - tokenIat;
-      const ExTime = 2 * 60; 
+      const ExTime = 60 * 60; 
 
      
       return timeElapsedSinceIssue > ExTime;
