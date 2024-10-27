@@ -46,8 +46,7 @@ export const createTicket =
           },
         }
       );
-
-      const ticketData = response.data.data.createTicket;
+      const ticketData = response.data?.data?.createTicket;
       dispatch(creator(CREATE_TICKET, ticketData));
       return ticketData;
     } catch (error) {
@@ -78,7 +77,7 @@ export const updateTicket =
         variables: { id, title, body },
       });
 
-      const updatedTicketData = response.data.data.updateTicket;
+      const updatedTicketData = response.data?.data?.updateTicket;
       dispatch(creator(UPDATE_TICKET, updatedTicketData));
     } catch (error) {
       console.error("Error updating ticket", error);
@@ -115,7 +114,7 @@ export const getUserTickets = () => async (dispatch: any) => {
             `,
     });
 
-    const ticketData = response.data.data.getUserTickets;
+    const ticketData = response.data?.data?.getUserTickets;
     dispatch(creator(GET_USER_TICKETS, ticketData));
   } catch (error) {
     console.error("Error getting user tickets", error);
@@ -167,7 +166,7 @@ export const getAllTickets = () => async (dispatch: any) => {
 
     console.log("response: ", response);
 
-    const ticketData = response.data.data.getAllTickets;
+    const ticketData = response.data?.data?.getAllTickets;
     console.log(ticketData);
     dispatch(creator(GET_ALL_TICKETS, ticketData));
   } catch (error) {
@@ -221,7 +220,7 @@ export const GetTicket = (ticketId: string) => async (dispatch: any) => {
       }
     );
     console.log("response: ", response);
-    const ticketData = response.data.data.getTicketById;
+    const ticketData = response.data?.data?.getTicketById;
     dispatch(creator(GET_TICKET, ticketData));
   } catch (error) {
     console.error("Error getting ticket", error);
