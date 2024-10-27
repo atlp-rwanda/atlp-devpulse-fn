@@ -13,8 +13,10 @@ import { clearTrash } from "../../redux/actions/clearTrash";
 import Select from "react-select";
 import { customTheme, darkTheme } from "../FilterTeainee/FilterTrainee";
 import { useTheme } from "../../hooks/darkmode";
+import { TrashSkeleton } from "../../skeletons/skeletonOfTrash";
+
 const Trash = (props: any) => {
-  const { allTrainees, restore, clearTrashMessage } = props;
+  const { allTrainees, restore, clearTrashMessage} = props;
   const [pageIdx] = useState(1);
   const [itemsPerPage] = useState(100);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -23,21 +25,27 @@ const Trash = (props: any) => {
   const [wordsEntered, setWordsEntered] = useState("");
   const { theme, setTheme } = useTheme();
   const open = Boolean(anchorEl);
+  const [isLoading, setIsLoading] = useState(true);
   const handleClose = () => {
     setAnchorEl(null);
   };
   const [activeCycle, setActiveCycle] = useState<number | undefined>(undefined);
 
-  useEffect(() => {
-    const data = {
-      page: pageIdx,
-      itemsPerPage,
-      filterAttribute,
-      wordEntered: wordsEntered,
+ useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true); 
+      const data = {
+        page: pageIdx,
+        itemsPerPage,
+        filterAttribute,
+        wordEntered: wordsEntered,
+      };
+      await props.getAllSoftDeletedTrainees(data);
+      setIsLoading(false); 
     };
-
-    props.getAllSoftDeletedTrainees(data);
+    fetchData();
   }, [restore, clearTrashMessage, filterAttribute, wordsEntered]);
+
   const [moredrop, setmoredrop] = useState("");
   const trainees = allTrainees.data;
   const onSubmitHandler = (e: any) => {
@@ -137,6 +145,11 @@ const Trash = (props: any) => {
   const clearInput = () => {
     setWordsEntered("");
   };
+
+  if (isLoading) {
+    return <TrashSkeleton/>
+  }
+
   return (
     <>
       
@@ -348,3 +361,7 @@ export default connect(mapState, {
   restoretraine,
   clearTrash,
 })(Trash);
+function dispatch(arg0: (dispatch: any) => Promise<void>) {
+  throw new Error("Function not implemented.");
+}
+

@@ -46,6 +46,8 @@ import { performanceReducer } from './performanceReducer';
 import filterProgramsReducer from './filterProgramsReducer';
 import filterRoleReducer from './filterRoleReducer';
 import fetchSearchDataReducer from './fetchSearchDataReducer';
+import userUpdateReducer from './getUser';
+
 import { ticketReducer } from './ticketReducer';
 
 const allReducers = combineReducers({
@@ -92,6 +94,7 @@ const allReducers = combineReducers({
   traineeApplicant: traineeReducer,
   traineeAttendance: attendanceReducer,
   traineePerformance: performanceReducer,
+  updateUser:userUpdateReducer,
   tickets: ticketReducer,
 });
 

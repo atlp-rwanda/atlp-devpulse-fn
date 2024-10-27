@@ -79,11 +79,11 @@ export const applicantSidebarItems = [
     ),
     title: "Schedule Interview",
   },
-  {
-    path: "notifications",
-    icon: <Icon icon="heroicons-solid:inbox-in"></Icon>,
-    title: "Notifications",
-  },
+  // {
+  //   path: "notifications",
+  //   icon: <Icon icon="heroicons-solid:inbox-in"></Icon>,
+  //   title: "Notifications",
+  // },
   {
     path: "calendar",
     icon: <Icon icon="ant-design:calendar-filled"></Icon>,
@@ -112,7 +112,7 @@ export const sidebarItems2 = [
 
 export const sidebarItems3 = [
   {
-    path: "/settings",
+    path: "settings",
     icon: <Icon icon="eva:settings-2-outline"></Icon>,
     title: "Settings",
   },
