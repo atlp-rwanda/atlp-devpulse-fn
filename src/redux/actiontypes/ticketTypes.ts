@@ -40,3 +40,6 @@ export interface GetTicketResponse {
     ticket: Ticket;
 }
 
+export interface ResolveTicketResponse {
+    ticket: Ticket;
+}

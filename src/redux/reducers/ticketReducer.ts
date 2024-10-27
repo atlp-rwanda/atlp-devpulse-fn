@@ -1,4 +1,4 @@
-import { GET_USER_TICKETS, UPDATE_TICKET, CREATE_TICKET, GET_ALL_TICKETS, GET_TICKET } from "..";
+import { GET_USER_TICKETS, UPDATE_TICKET, CREATE_TICKET, GET_ALL_TICKETS, GET_TICKET, RESOLVE_TICKET } from "..";
 import { Ticket } from "redux/actiontypes/ticketTypes";
 
 interface TicketState {
@@ -61,6 +61,19 @@ export const ticketReducer = (state = initialState, action: any) => {
                     ...action.payload,
                     _id: action.payload.id
                 },
+                loading: false,
+                error: null,
+            }
+
+        case RESOLVE_TICKET:
+            return {
+                ...state,
+                tickets: state.tickets.map(ticket =>
+                    ticket._id === action.payload._id ? action.payload : ticket
+                ),
+                currentTicket: state.currentTicket?._id === action.payload._id 
+                    ? action.payload 
+                    : state.currentTicket,
                 loading: false,
                 error: null,
             }

@@ -5,6 +5,7 @@ import {
   CREATE_TICKET,
   GET_ALL_TICKETS,
   GET_TICKET,
+  RESOLVE_TICKET,
 } from "..";
 import axios from "axios";
 
@@ -174,7 +175,7 @@ export const getAllTickets = () => async (dispatch: any) => {
   }
 };
 
-export const GetTicket = (tickedtId: string) => async (dispatch: any) => {
+export const GetTicket = (ticketId: string) => async (dispatch: any) => {
   try {
     const token = localStorage.getItem("access_token");
 
@@ -210,7 +211,7 @@ export const GetTicket = (tickedtId: string) => async (dispatch: any) => {
 }
       `,
         variables: {
-          getTicketByIdId: tickedtId,
+          getTicketByIdId: ticketId,
         },
       },
       {
@@ -226,3 +227,64 @@ export const GetTicket = (tickedtId: string) => async (dispatch: any) => {
     console.error("Error getting ticket", error);
   }
 };
+
+export const resolveTicket =
+  (ticketId: string, adminResponse: string) => async (dispatch: any) => {
+    try {
+      const token = localStorage.getItem("access_token");
+      if (!token) {
+        throw new Error("Token not found");
+      }
+
+      const response = await axios.post(
+        `${process.env.BACKEND_URL}`,
+        {
+          query: `
+        mutation ResolveTicket($resolveTicketId: ID!, $adminResponse: String!) {
+          resolveTicket(id: $resolveTicketId, adminResponse: $adminResponse) {
+    adminResponse {
+      body
+      id
+      respondedAt
+    }
+    id
+    author {
+      createdAt
+      email
+      firstName
+      id
+      lastName
+    }
+    body
+    createdAt
+    status
+    title
+    updatedAt
+  }
+        
+        }`,
+
+          variables: {
+            resolveTicketId: ticketId,
+            adminResponse,
+          },
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+
+     
+
+      const resolvedTicketData = response.data?.data?.resolveTicket;
+      console.log("resolved: ", resolvedTicketData)
+      dispatch(creator(RESOLVE_TICKET, resolvedTicketData));
+      return resolvedTicketData;
+    } catch (error) {
+      console.error("Error resolving ticket", error);
+      throw error;
+    }
+  };
