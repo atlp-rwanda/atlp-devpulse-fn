@@ -57,6 +57,7 @@ import Search from "./../pages/search";
 import Settings from '../components/settings';
 import ProfileUpdate from "../pages/ProfilePage";
 import Profile from "../pages/Profile";
+import AdminNotification from "../pages/AdminNotifications/AdminNotifications";
 
 
 function Navigation() {
@@ -116,6 +117,14 @@ function Navigation() {
           element={
             <PrivateRoute allowedRoles={["Admin", "superAdmin"]}>
               <Profile />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="notifications"
+          element={
+            <PrivateRoute allowedRoles={["Admin", "superAdmin"]}>
+              <AdminNotification/>
             </PrivateRoute>
           }
         />

@@ -29,6 +29,11 @@ export const sidebarItems1 = [
     icon: <Icon icon="fluent:form-28-regular"></Icon>,
     title: "Application Forms",
   },
+    {
+    path: "notifications",
+    icon: <Icon icon="heroicons-solid:inbox-in"></Icon>,
+    title: "Notifications",
+  },
   {
     path: "view-applications",
     icon: <Icon icon="akar-icons:globe"></Icon>,
