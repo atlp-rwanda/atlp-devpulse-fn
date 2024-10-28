@@ -86,6 +86,12 @@ export const updateTicket =
 
 export const getUserTickets = () => async (dispatch: any) => {
   try {
+    const token = localStorage.getItem("access_token");
+
+    if (!token) {
+      throw new Error("Token not found");
+    }
+
     const response = await axios.post(`${process.env.BACKEND_URL}`, {
       query: `
                 query GetUserTickets {
@@ -93,27 +99,33 @@ export const getUserTickets = () => async (dispatch: any) => {
                         id
                         title
                         body
+                        createdAt
+                        updatedAt
                         status
                         author {
                             email
                             firstName
                             lastName
+                            id
                         }
                         adminResponse {
                             body
-                            respondedBy {
-                                email
-                                lastName
-                                firstName
-                            }
+                            id
+                            respondedAt
                         }
                     
                     }
                 }
 
             `,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     });
 
+    console.log("user tickets", response)
     const ticketData = response.data?.data?.getUserTickets;
     dispatch(creator(GET_USER_TICKETS, ticketData));
   } catch (error) {

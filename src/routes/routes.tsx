@@ -61,6 +61,8 @@ import Profile from "../pages/Profile";
 import TicketPage from "../pages/tickets/ticketPage";
 import AdminTicketPage from "../pages/tickets/adminTicketPage";
 import SingleTicketDetails from "../pages/tickets/singleTicketDetails";
+import ResolveTicketPage from "../pages/tickets/adminTicketResolve";
+import ReplyTicketPage from "../pages/tickets/applicantTicketReply";
 
 function Navigation() {
   const roleName = localStorage.getItem("roleName");
@@ -356,6 +358,14 @@ function Navigation() {
           }
         />
         <Route
+          path="ticket/:id/resolve"
+          element={
+            <PrivateRoute allowedRoles={['Admin', 'superAdmin']}>
+              <ResolveTicketPage/>
+            </PrivateRoute>
+          }
+        />
+        <Route
           path="*"
           element={
             <PrivateRoute allowedRoles={['Admin', 'superAdmin']}>
@@ -433,10 +443,26 @@ function Navigation() {
           }
         />
         <Route
-          path="help"
+          path="tickets"
           element={
             <PrivateRoute allowedRoles={['applicant']}>
               <TicketPage/>
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="ticket/:id"
+          element={
+            <PrivateRoute allowedRoles={['applicant']}>
+              <SingleTicketDetails/>
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="ticket/:id/reply"
+          element={
+            <PrivateRoute allowedRoles={['applicant']}>
+              <ReplyTicketPage/>
             </PrivateRoute>
           }
         />

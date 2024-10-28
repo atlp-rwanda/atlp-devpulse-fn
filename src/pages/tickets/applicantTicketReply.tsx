@@ -2,16 +2,16 @@ import { useParams } from "react-router";
 import NavBar from "../../components/sidebar/navHeader";
 import { BsFillPersonLinesFill } from "react-icons/bs";
 import React, { useEffect, useState } from "react";
-import { GetTicket} from "../../redux/actions/ticketActions";
+import { GetTicket, updateTicket } from "../../redux/actions/ticketActions";
 import { useDispatch, useSelector } from "react-redux";
 import { connect } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
 
-const SingleTicketDetails = (props: any) => {
+const ReplyTicketPage = (props: any) => {
   const dispatch = useDispatch();
   const params = useParams();
   const [ticketId, setTicketId] = useState(params.id);
-  const [adminReply, setAdminReply] = useState("");
+  const [applicantReply, setApplicantReply] = useState("");
   const ticketData = useSelector((state: any) => state.tickets?.currentTicket);
 
   useEffect(() => {
@@ -20,6 +20,24 @@ const SingleTicketDetails = (props: any) => {
     }
   }, [ticketId, dispatch]);
 
+  const handleSubmitReply = async (e) => {
+    e.preventDefault();
+    if (ticketId && applicantReply.trim()) {
+      try {
+        await dispatch(updateTicket(
+            ticketId,
+            ticketData.title,
+            applicantReply
+        ));
+        setApplicantReply("");
+        await dispatch(GetTicket(ticketId));
+        toast.success("Ticket Updated Successfully");
+      } catch (error) {
+        toast.error("Failed to update ticket")
+        console.error("Failed to update ticket:", error);
+      }
+    }
+  };
   return (
     <>
       <div className="h-screen flex flex-col items-center dark:bg-dark-frame-bg w-[50%]">
@@ -70,7 +88,28 @@ const SingleTicketDetails = (props: any) => {
                   </div>
                 )}
 
-                
+
+                  <form onSubmit={handleSubmitReply} className="mt-6">
+                    <div className="space-y-4">
+                      <h3 className="text-lg font-medium dark:text-white text-black">
+                        Reply to Ticket
+                      </h3>
+                      <textarea
+                        value={applicantReply}
+                        onChange={(e) => setApplicantReply(e.target.value)}
+                        className="w-full min-h-[150px] p-3 border rounded-lg dark:bg-gray-800 dark:border-gray-700 dark:text-white resize-none"
+                        placeholder="Enter your response..."
+                      />
+                      <button
+                        type="submit"
+                        disabled={!applicantReply.trim()}
+                        className="px-4 py-2 bg-button-color dark:bg-green text-white rounded-lg "
+                      >
+                        Submit Response
+                      </button>
+                    </div>
+                  </form>
+
                 <ToastContainer />
               </>
             )}
@@ -81,4 +120,4 @@ const SingleTicketDetails = (props: any) => {
   );
 };
 
-export default SingleTicketDetails;
+export default ReplyTicketPage;
