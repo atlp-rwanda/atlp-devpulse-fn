@@ -16,13 +16,15 @@ import { useTheme } from "../../hooks/darkmode";
 import { debounce } from "lodash";
 import {
   createTicket,
+  getAllTickets,
   getUserTickets,
 } from "../../redux/actions/ticketActions";
 import {
   getAllFilteredTickets,
   getAllTicketAttributes,
 } from "../../redux/actions/filterTicketsAction";
-import { IoTicketSharp } from "react-icons/io5";
+import TicketPagination from "./ticketPagination";
+import CreateTicketModal from "./createTicketModal";
 
 const TicketPage = (props: any) => {
   const navigate = useNavigate();
@@ -30,8 +32,6 @@ const TicketPage = (props: any) => {
   const { theme, setTheme } = useTheme();
   const [createTicketModal, setCreateTicketModal] = useState(false);
   const [filterAttribute, setFilterAttribute] = useState("");
-  const [enteredWord, setEnteredWord] = useState("");
-  const [enteredSubmitWord, setEnteredSubmitWord] = useState("");
   const [page, setPage] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [actionsList, setActionsList] = useState(null);
@@ -39,14 +39,10 @@ const TicketPage = (props: any) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [isFiltering, setIsFiltering] = useState(false);
   const [All, setAll] = useState(false);
-  const [ticket, setTicket] = useState({
-    title: "",
-    body: "",
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const tickets = useSelector((state: any) => state.tickets?.tickets || []);
-  const filteredTickets = useSelector((state: any) => state.filteredTickets?.filteredTickets || []);
-  console.log("filtered tickets", filteredTickets)
+  const filteredTickets = useSelector(
+    (state: any) => state.filteredTickets?.filteredTickets || []
+  );
 
   const displayTickets = useMemo(() => {
     if (isFiltering) {
@@ -54,9 +50,7 @@ const TicketPage = (props: any) => {
     }
     return tickets;
   }, [isFiltering, filteredTickets, tickets]);
-  console.log("Display Tickets: ", displayTickets);
 
-  console.log(displayTickets);
   const handleKeyDown = async (e) => {
     if (e.key === "Enter") {
       if (filterAttribute === "" || filterAttribute === null) {
@@ -64,35 +58,18 @@ const TicketPage = (props: any) => {
         return;
       }
       const searchTerm = e.target.value;
-      debouncedSearch(searchTerm)
+      debouncedSearch(searchTerm);
     }
-  };
-
-
-  const Open = () => {
-    setCreateTicketModal(true);
-  };
-
-  const removeModal = () => {
-    let newState = !setCreateTicketModal;
-    setCreateTicketModal(newState);
-
-    setTicket({
-      title: "",
-      body: "",
-    });
-
-    // setEntries([]);
   };
 
   const paginationRange = useCustomPagination({
     totalPageCount: Math.ceil(filteredTickets?.data?.length / itemsPerPage),
     currentPage: page,
   });
-  
+
   const handleSearchChange = (e) => {
     const searchTerm = e.target.value;
-    setEnteredSubmitWord(searchTerm);
+    setSearchTerm(searchTerm);
     debouncedSearch(searchTerm);
   };
   const debouncedSearch = useCallback(
@@ -110,22 +87,21 @@ const TicketPage = (props: any) => {
 
       setIsFiltering(true);
       try {
-        await dispatch(getAllFilteredTickets({
-          page: page + 1,
-          itemsPerPage,
-          All,
-          filterAttribute,
-          wordEntered: term,
-        }));
+        await dispatch(
+          getAllFilteredTickets({
+            page: page + 1,
+            itemsPerPage,
+            All,
+            filterAttribute,
+            wordEntered: term,
+          })
+        );
       } catch (error) {
         toast.error("Failed to fetch filtered tickets");
       }
     }, 300),
     [filterAttribute, page, itemsPerPage, All]
   );
-
-
-
 
   const customTheme = (theme: any) => {
     return {
@@ -150,32 +126,6 @@ const TicketPage = (props: any) => {
     };
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!ticket.title.trim() || !ticket.body.trim()) {
-      toast.error("Please fill in all required fields");
-      return;
-    }
-
-    try {
-      setIsSubmitting(true);
-      await dispatch(createTicket(ticket.title, ticket.body));
-      toast.success("Ticket submitted successfully");
-      setTicket({
-        title: "",
-        body: "",
-      });
-    } catch (error: any) {
-      const errorMessage =
-        error.response?.data?.errors?.[0]?.message ||
-        error.message ||
-        "Failed to submit ticket";
-      toast.error(errorMessage);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
   const fetchTickets = useCallback(async () => {
     if (isFiltering) return;
     setIsLoading(true);
@@ -195,7 +145,9 @@ const TicketPage = (props: any) => {
     };
   }, [fetchTickets]);
 
-
+  const handleCreateTicket = async (ticketData) => {
+    await dispatch(createTicket(ticketData.title, ticketData.body));
+  };
 
   const toggleActions = (id) => {
     setActionsList((prev) => (prev === id ? null : id));
@@ -208,77 +160,11 @@ const TicketPage = (props: any) => {
   return (
     <>
       <ToastContainer />
-      <div
-        className={`h-[80vh] w-[50%] z-20 mt-16 bg-opacity-30 backdrop-blur-sm absolute flex  justify-center ${
-          createTicketModal === true ? "block" : "hidden"
-        }`}
-      >
-        <div className="bg-white dark:bg-dark-bg w-full max-h-[500px]  overflow-auto md_:w-[65%] md-sm:w-[95%] rounded-lg p-4 pb-8">
-          <div className="card-title w-full flex flex-wrap justify-center items-center">
-            <h3 className="font-bold text-sm dark:text-white text-center w-11/12 ">
-              <icons.AiOutlineClose
-                className="float-right text-3xl cursor-pointer"
-                onClick={() => removeModal()}
-              />
-
-              {"CREATE TICKET"}
-            </h3>
-            <div className="flex flex-col w-full mt-14 md_:mt-5">
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
-                    Subject <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    value={ticket.title}
-                    onChange={(e) =>
-                      setTicket((prev) => ({ ...prev, title: e.target.value }))
-                    }
-                    className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-white dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                    placeholder="Enter the subject of your ticket"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
-                    Description <span className="text-red-500">*</span>
-                  </label>
-                  <textarea
-                    value={ticket.body}
-                    onChange={(e) =>
-                      setTicket((prev) => ({
-                        ...prev,
-                        body: e.target.value,
-                      }))
-                    }
-                    className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-white dark:bg-gray-700 dark:border-gray-600 dark:text-white min-h-[200px] resize-none"
-                    placeholder="Please provide a detailed description of your issue"
-                    required
-                  />
-                </div>
-
-                <div className="flex space-x-4">
-                  <button
-                    className="flex bg-primary dark:bg-[#56C870] rounded-md py-2 px-4 text-white font-medium cursor-pointer"
-                    disabled={isSubmitting}
-                  >
-                    Submit
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setTicket({ title: "", body: "" })}
-                    className="px-4 py-2 text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
-                  >
-                    Cancel
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
+      <CreateTicketModal
+        isOpen={createTicketModal}
+        onClose={() => setCreateTicketModal(false)}
+        onSubmit={handleCreateTicket}
+      />
       <div className="flex flex-col w-[100%]">
         <div className="flex flex-row">
           <div className="w-full">
@@ -287,7 +173,7 @@ const TicketPage = (props: any) => {
                 <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-4">
                   <div className="w-full sm:w-auto">
                     <button
-                      onClick={Open}
+                      onClick={() => setCreateTicketModal(true)}
                       className="flex items-center justify-center w-full sm:w-auto bg-primary dark:bg-[#56C870] rounded-md py-2 px-4 text-white font-medium cursor-pointer hover:opacity-90 transition-opacity"
                     >
                       <icons.AiOutlinePlus className="mr-2" /> New Ticket
@@ -518,99 +404,7 @@ const TicketPage = (props: any) => {
                     </div>
                   </div>
                   {tickets && (
-                    <div className="py-3 flex items-center text-center justify-center pt-10">
-                      <div className="pb-1">
-                        <label htmlFor="" className="dark:text-zinc-100">
-                          rows per page
-                        </label>
-                        <Select
-                          menuPlacement="top"
-                          className="sm:text-sm  w-13 rounded-bt-rd absolute active dark:bg-dark-frame-bg"
-                          options={[
-                            { value: "10", label: "10" },
-                            { value: "50", label: "50" },
-                            { value: "100", label: "100" },
-                            { value: "500", label: "500" },
-                            { value: "1000", label: "1000" },
-                          ]}
-                          defaultValue={{ value: "10", label: "10" }}
-                          onChange={(e: any) =>
-                            setItemsPerPage(Number(e?.value))
-                          }
-                        />
-                      </div>
-                      <div
-                        className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between"
-                        aria-label="Pagination"
-                      >
-                        <div
-                          className="relative z-0 inline-flex items-center ml-auto mr-auto  rounded-[2px] shadow-sm space-x-2"
-                          aria-label="Pagination"
-                        >
-                          <button
-                            className="my-0 mx-[5px] px-[5px] py-0 text-[#333] h-[38px] border-solid border-[1px]  border-[#a8a8a8] dark:disabled:bg-[#485970]  disabled:bg-[#E7E7E7] disabled:text-[#a8a8a8] dark:text-zinc-100"
-                            onClick={() => setPage(0)}
-                            disabled={page <= 0}
-                          >
-                            <AiIcons.AiOutlineDoubleLeft />
-                          </button>
-                          <button
-                            className=" border-solid border-[1px]  border-[#a8a8a8] py-0 px-[10px] text-[#333] rounded-l-[5px] h-[38px] disabled:bg-[#E7E7E7] disabled:text-[#a8a8a8] dark:text-zinc-100 dark:disabled:bg-[#485970]"
-                            onClick={() => setPage(page - 1)}
-                            disabled={page <= 0}
-                          >
-                            <AiIcons.AiOutlineLeft />
-                          </button>
-                          {paginationRange?.map((pageNumber, idx) => {
-                              if (pageNumber === DOTS) {
-                                return (
-                                  <div
-                                    key={idx}
-                                    className="dark:text-zinc-100 md:hidden"
-                                  >
-                                    ...
-                                  </div>
-                                );
-                              }
-
-                              if (pageNumber - 1 === page) {
-                                return (
-                                  <button
-                                    key={idx}
-                                    className={`border-solid border-[1px] cursor-pointer border-[#a8a8a8] bg-[#fff] min-w-[35px] h-[38px]  active:bg-[#333] active:text-[#fff]-500 rounded-[2px] md:hidden
-                        ${page && "bg-[#d6dfdf] text-black"} 
-                        ${page === 0 && "bg-[#d6dfdf] text-black"} 
-                          `}
-                                    onClick={() => setPage(pageNumber - 1)}
-                                  >
-                                    {pageNumber}
-                                  </button>
-                                );
-                              }
-
-                              return (
-                                <button
-                                  key={idx}
-                                  className={`border-solid border-[1px]  cursor-pointer border-[#a8a8a8] bg-[#fff] min-w-[35px] h-[38px]  active:bg-[#333] active:text-[#fff]-500 rounded-[2px] md:hidden`}
-                                  onClick={() => setPage(pageNumber - 1)}
-                                >
-                                  {pageNumber}
-                                </button>
-                              );
-                            })}
-
-                          <button
-                            className=" border-solid border-[1px]  border-[#a8a8a8] py-0 px-[10px] text-[#333] rounded-r-[5px] h-[38px]  disabled:bg-[#E7E7E7] disabled:text-[#a8a8a8] dark:disabled:bg-[#485970] dark:text-zinc-100"
-                            onClick={() => setPage(page + 1)}
-                          >
-                            <AiIcons.AiOutlineRight />
-                          </button>
-                          <button className="my-0 mx-[5px] px-[5px] py-0 text-[#333] h-[38px] border-solid border-[1px]  border-[#a8a8a8]  disabled:bg-[#E7E7E7] disabled:text-[#a8a8a8] dark:disabled:bg-[#485970] dark:text-zinc-100">
-                            <AiIcons.AiOutlineDoubleRight />
-                          </button>
-                        </div>
-                      </div>
-                    </div>
+                    <TicketPagination itemsPerPage={itemsPerPage} setItemsPerPage={setItemsPerPage} page={page} setPage={setPage} paginationRange={paginationRange}/>
                   )}
                 </div>
               </div>
@@ -623,13 +417,15 @@ const TicketPage = (props: any) => {
 };
 
 const mapState = (state: any) => ({
-  createTicketStates: state.createTicket,
-  fetchTicketStates: state.fetchTickets,
-  updateTicketStates: state.updateTickets,
+  tickets: state.tickets.tickets,
+  currentTicket: state.tickets.currentTicket,
+  loading: state.tickets.loading,
+  error: state.tickets.error,
 });
 
 export default connect(mapState, {
   getAllFilteredTickets,
   getUserTickets,
   createTicket,
+  getAllTickets,
 })(TicketPage);

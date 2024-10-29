@@ -9,56 +9,62 @@ import {
 } from "..";
 import axios from "axios";
 
+const getToken = () => {
+  const token = localStorage.getItem("access_token");
+  if (!token) throw new Error("Token not found");
+  return token;
+};
+
+const TICKET_FIELDS = `
+  author {
+    createdAt
+    email
+    firstname
+    id
+    lastname
+  }
+  body
+  createdAt
+  id
+  status
+  title
+  updatedAt
+  adminReplies {
+    body
+    createdAt
+    id
+    repliedBy {
+      createdAt
+      email
+      firstname
+      lastname
+      id
+    }
+  }
+  applicantReplies {
+    body
+    createdAt
+    id
+    repliedBy {
+      email
+      firstname
+      lastname
+      id
+    }
+  }
+`;
+
 export const createTicket =
   (title: string, body: string) => async (dispatch: any) => {
     try {
-      const token = localStorage.getItem("access_token");
-
-      if (!token) {
-        throw new Error("Token not found");
-      }
+      const token = getToken();
       const response = await axios.post(
         `${process.env.BACKEND_URL}`,
         {
           query: `
                mutation CreateTicket($title: String!, $body: String!){
                     createTicket(title: $title, body: $body) {
-                        id
-                        title
-                        body
-                        status
-                        author {
-                            id
-                            email
-                            firstname
-                            lastname
-                        }
-                        createdAt
-                        updatedAt
-                        adminReplies{
-                          body
-                          createdAt
-                          id
-                          repliedBy {
-                            createdAt
-                            email
-                            firstname
-                            lastname
-                            id
-                          
-                          }
-                        }
-                        applicantReplies {
-                          body
-                          createdAt
-                          id
-                          repliedBy {
-                            id
-                            email
-                            firstname
-                            lastname
-                          }
-                        }
+                        ${TICKET_FIELDS}
                     }
                 } 
             `,
@@ -82,51 +88,13 @@ export const createTicket =
 export const updateTicket =
   (id: string, body: string) => async (dispatch: any) => {
     try {
-      const token = localStorage.getItem("access_token");
-
-    if (!token) {
-      throw new Error("Token not found");
-    }
+      const token = getToken()
 
       const response = await axios.post(`${process.env.BACKEND_URL}`, {
         query: `
                 mutation UpdateTicket($updateTicketId: ID!, $body: String!) {
                     updateTicket(id: $updateTicketId, body: $body) {
-                        id
-                        title
-                        body
-                        status
-                        author {
-                            email
-                            firstname
-                            lastname
-                        }
-                        createdAt
-                        updatedAt
-                        adminReplies{
-                          body
-                          createdAt
-                          id
-                          repliedBy {
-                            createdAt
-                            email
-                            firstname
-                            lastname
-                            id
-                          }
-                        }
-                        applicantReplies {
-                            body
-                            createdAt
-                            id
-                            repliedBy {
-                              email
-                              firstname
-                              lastname
-                              id
-                            }
-                      
-                      }
+                        ${TICKET_FIELDS}
                     }
                 }
             `,
@@ -145,11 +113,7 @@ export const updateTicket =
 
 export const getUserTickets = () => async (dispatch: any) => {
   try {
-    const token = localStorage.getItem("access_token");
-
-    if (!token) {
-      throw new Error("Token not found");
-    }
+    const token = getToken()
 
     const response = await axios.post(
       `${process.env.BACKEND_URL}`,
@@ -157,41 +121,7 @@ export const getUserTickets = () => async (dispatch: any) => {
         query: `
                 query GetUserTickets {
                     getUserTickets {
-                        id
-                        title
-                        body
-                        createdAt
-                        updatedAt
-                        status
-                        author {
-                            email
-                            firstname
-                            lastname
-                            id
-                        }
-                        adminReplies{
-                          body
-                          createdAt
-                          id
-                          repliedBy {
-                            createdAt
-                            email
-                            firstname
-                            lastname
-                            id
-                          }
-                        }
-                        applicantReplies {
-                          body
-                          createdAt
-                          id
-                          repliedBy {
-                            email
-                            firstname
-                            lastname
-                            id
-                          }
-                        }
+                        ${TICKET_FIELDS}
                     
                     }
                 }
@@ -214,7 +144,7 @@ export const getUserTickets = () => async (dispatch: any) => {
 
 export const getAllTickets = () => async (dispatch: any) => {
   try {
-    const token = localStorage.getItem("access_token");
+    const token = getToken()
 
     if (!token) {
       throw new Error("Token not found");
@@ -226,42 +156,7 @@ export const getAllTickets = () => async (dispatch: any) => {
         query: `
           query GetAllTickets {
             getAllTickets {
-              id
-              title
-              body
-              status
-              createdAt
-              updatedAt
-              author {
-                id
-                email
-                lastname
-                firstname
-                createdAt
-              }
-              adminReplies{
-                          body
-                          createdAt
-                          id
-                          repliedBy {
-                            createdAt
-                            email
-                            firstname
-                            lastname
-                            id
-                          }
-                        }
-                        applicantReplies {
-                          body
-                          createdAt
-                          id
-                          repliedBy {
-                            email
-                            firstname
-                            lastname
-                            id
-                          }
-                        }
+              ${TICKET_FIELDS}
             }
           }
         `,
@@ -284,11 +179,7 @@ export const getAllTickets = () => async (dispatch: any) => {
 
 export const GetTicket = (ticketId: string) => async (dispatch: any) => {
   try {
-    const token = localStorage.getItem("access_token");
-
-    if (!token) {
-      throw new Error("Token not found");
-    }
+    const token = getToken()
 
     const response = await axios.post(
       `${process.env.BACKEND_URL}`,
@@ -296,42 +187,7 @@ export const GetTicket = (ticketId: string) => async (dispatch: any) => {
         query: `
         query GetTicketById($getTicketByIdId: ID!) {
   getTicketById(id: $getTicketByIdId) {
-    author {
-      createdAt
-      email
-      firstname
-      id
-      lastname
-    }
-    body
-    createdAt
-    id
-    status
-    title
-    updatedAt
-    adminReplies{
-                          body
-                          createdAt
-                          id
-                          repliedBy {
-                            createdAt
-                            email
-                            firstname
-                            lastname
-                            id
-                          }
-                        }
-                        applicantReplies {
-                          body
-                          createdAt
-                          id
-                          repliedBy {
-                            email
-                            firstname
-                            lastname
-                            id
-                          }
-                        }
+    ${TICKET_FIELDS}
   }
 }
       `,
@@ -355,10 +211,7 @@ export const GetTicket = (ticketId: string) => async (dispatch: any) => {
 export const resolveTicket =
   (ticketId: string, adminResponse: string) => async (dispatch: any) => {
     try {
-      const token = localStorage.getItem("access_token");
-      if (!token) {
-        throw new Error("Token not found");
-      }
+      const token = getToken()
 
       const response = await axios.post(
         `${process.env.BACKEND_URL}`,
@@ -366,42 +219,7 @@ export const resolveTicket =
           query: `
         mutation ResolveTicket($resolveTicketId: ID!, $adminResponse: String!) {
           resolveTicket(id: $resolveTicketId, adminResponse: $adminResponse) {
-    id
-    author {
-      createdAt
-      email
-      firstname
-      id
-      lastname
-    }
-    body
-    createdAt
-    status
-    title
-    updatedAt
-    adminReplies{
-                          body
-                          createdAt
-                          id
-                          repliedBy {
-                            createdAt
-                            email
-                            firstname
-                            lastname
-                            id
-                          }
-                        }
-                        applicantReplies {
-                          body
-                          createdAt
-                          id
-                          repliedBy {
-                            email
-                            firstname
-                            lastname
-                            id
-                          }
-                        }
+    ${TICKET_FIELDS}
   }
         
         }`,
