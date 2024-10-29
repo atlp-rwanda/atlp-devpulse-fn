@@ -30,11 +30,35 @@ export const createTicket =
                         author {
                             id
                             email
-                            firstName
-                            lastName
+                            firstname
+                            lastname
                         }
                         createdAt
                         updatedAt
+                        adminReplies{
+                          body
+                          createdAt
+                          id
+                          repliedBy {
+                            createdAt
+                            email
+                            firstname
+                            lastname
+                            id
+                          
+                          }
+                        }
+                        applicantReplies {
+                          body
+                          createdAt
+                          id
+                          repliedBy {
+                            id
+                            email
+                            firstname
+                            lastname
+                          }
+                        }
                     }
                 } 
             `,
@@ -56,27 +80,62 @@ export const createTicket =
   };
 
 export const updateTicket =
-  (id: string, title: string, body: string) => async (dispatch: any) => {
+  (id: string, body: string) => async (dispatch: any) => {
     try {
+      const token = localStorage.getItem("access_token");
+
+    if (!token) {
+      throw new Error("Token not found");
+    }
+
       const response = await axios.post(`${process.env.BACKEND_URL}`, {
         query: `
-                mutation UpdateTicket($id: ID!, $title: String!, $body: String!) {
-                    updateTicket(id: $id, title: $title, body: $body) {
+                mutation UpdateTicket($updateTicketId: ID!, $body: String!) {
+                    updateTicket(id: $updateTicketId, body: $body) {
                         id
                         title
                         body
                         status
                         author {
                             email
-                            firstName
-                            lastName
+                            firstname
+                            lastname
                         }
+                        createdAt
+                        updatedAt
+                        adminReplies{
+                          body
+                          createdAt
+                          id
+                          repliedBy {
+                            createdAt
+                            email
+                            firstname
+                            lastname
+                            id
+                          }
+                        }
+                        applicantReplies {
+                            body
+                            createdAt
+                            id
+                            repliedBy {
+                              email
+                              firstname
+                              lastname
+                              id
+                            }
+                      
+                      }
                     }
                 }
             `,
-        variables: { id, title, body },
+        variables: { updateTicketId: id, body: body },
+      },{
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
-
       const updatedTicketData = response.data?.data?.updateTicket;
       dispatch(creator(UPDATE_TICKET, updatedTicketData));
     } catch (error) {
@@ -92,8 +151,10 @@ export const getUserTickets = () => async (dispatch: any) => {
       throw new Error("Token not found");
     }
 
-    const response = await axios.post(`${process.env.BACKEND_URL}`, {
-      query: `
+    const response = await axios.post(
+      `${process.env.BACKEND_URL}`,
+      {
+        query: `
                 query GetUserTickets {
                     getUserTickets {
                         id
@@ -104,28 +165,46 @@ export const getUserTickets = () => async (dispatch: any) => {
                         status
                         author {
                             email
-                            firstName
-                            lastName
+                            firstname
+                            lastname
                             id
                         }
-                        adminResponse {
-                            body
+                        adminReplies{
+                          body
+                          createdAt
+                          id
+                          repliedBy {
+                            createdAt
+                            email
+                            firstname
+                            lastname
                             id
-                            respondedAt
+                          }
+                        }
+                        applicantReplies {
+                          body
+                          createdAt
+                          id
+                          repliedBy {
+                            email
+                            firstname
+                            lastname
+                            id
+                          }
                         }
                     
                     }
                 }
 
             `,
-    },
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
       },
-    });
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
-    console.log("user tickets", response)
     const ticketData = response.data?.data?.getUserTickets;
     dispatch(creator(GET_USER_TICKETS, ticketData));
   } catch (error) {
@@ -156,15 +235,33 @@ export const getAllTickets = () => async (dispatch: any) => {
               author {
                 id
                 email
-                lastName
-                firstName
+                lastname
+                firstname
                 createdAt
               }
-              adminResponse {
-                id
-                body
-                respondedAt
-              }
+              adminReplies{
+                          body
+                          createdAt
+                          id
+                          repliedBy {
+                            createdAt
+                            email
+                            firstname
+                            lastname
+                            id
+                          }
+                        }
+                        applicantReplies {
+                          body
+                          createdAt
+                          id
+                          repliedBy {
+                            email
+                            firstname
+                            lastname
+                            id
+                          }
+                        }
             }
           }
         `,
@@ -176,10 +273,9 @@ export const getAllTickets = () => async (dispatch: any) => {
       }
     );
 
-    console.log("response: ", response);
+
 
     const ticketData = response.data?.data?.getAllTickets;
-    console.log(ticketData);
     dispatch(creator(GET_ALL_TICKETS, ticketData));
   } catch (error) {
     console.error("Error getting all tickets", error);
@@ -200,17 +296,12 @@ export const GetTicket = (ticketId: string) => async (dispatch: any) => {
         query: `
         query GetTicketById($getTicketByIdId: ID!) {
   getTicketById(id: $getTicketByIdId) {
-    adminResponse {
-      body
-      id
-      respondedAt
-    }
     author {
       createdAt
       email
-      firstName
+      firstname
       id
-      lastName
+      lastname
     }
     body
     createdAt
@@ -218,6 +309,29 @@ export const GetTicket = (ticketId: string) => async (dispatch: any) => {
     status
     title
     updatedAt
+    adminReplies{
+                          body
+                          createdAt
+                          id
+                          repliedBy {
+                            createdAt
+                            email
+                            firstname
+                            lastname
+                            id
+                          }
+                        }
+                        applicantReplies {
+                          body
+                          createdAt
+                          id
+                          repliedBy {
+                            email
+                            firstname
+                            lastname
+                            id
+                          }
+                        }
   }
 }
       `,
@@ -231,7 +345,6 @@ export const GetTicket = (ticketId: string) => async (dispatch: any) => {
         },
       }
     );
-    console.log("response: ", response);
     const ticketData = response.data?.data?.getTicketById;
     dispatch(creator(GET_TICKET, ticketData));
   } catch (error) {
@@ -253,24 +366,42 @@ export const resolveTicket =
           query: `
         mutation ResolveTicket($resolveTicketId: ID!, $adminResponse: String!) {
           resolveTicket(id: $resolveTicketId, adminResponse: $adminResponse) {
-    adminResponse {
-      body
-      id
-      respondedAt
-    }
     id
     author {
       createdAt
       email
-      firstName
+      firstname
       id
-      lastName
+      lastname
     }
     body
     createdAt
     status
     title
     updatedAt
+    adminReplies{
+                          body
+                          createdAt
+                          id
+                          repliedBy {
+                            createdAt
+                            email
+                            firstname
+                            lastname
+                            id
+                          }
+                        }
+                        applicantReplies {
+                          body
+                          createdAt
+                          id
+                          repliedBy {
+                            email
+                            firstname
+                            lastname
+                            id
+                          }
+                        }
   }
         
         }`,
@@ -287,11 +418,7 @@ export const resolveTicket =
         }
       );
 
-
-     
-
       const resolvedTicketData = response.data?.data?.resolveTicket;
-      console.log("resolved: ", resolvedTicketData)
       dispatch(creator(RESOLVE_TICKET, resolvedTicketData));
       return resolvedTicketData;
     } catch (error) {

@@ -14,6 +14,25 @@ const ResolveTicketPage = (props: any) => {
   const [adminReply, setAdminReply] = useState("");
   const ticketData = useSelector((state: any) => state.tickets?.currentTicket);
 
+  const getAllReplies = () => {
+    if (!ticketData) return [];
+
+    const adminReplies = (ticketData.adminReplies || []).map(reply => ({
+      ...reply,
+      type: 'Admin',
+      author: reply.repliedBy
+    }));
+
+    const applicantReplies = (ticketData.applicantReplies || []).map(reply => ({
+      ...reply,
+      type: 'Applicant',
+      author: reply.repliedBy
+    }));
+
+    const allReplies = [...adminReplies, ...applicantReplies];
+    return allReplies.sort((a, b) => parseInt(a.createdAt) - parseInt(b.createdAt));
+  };
+
   useEffect(() => {
     if (ticketId) {
       dispatch(GetTicket(ticketId));
@@ -37,12 +56,12 @@ const ResolveTicketPage = (props: any) => {
   return (
     <>
       <div className="h-screen flex flex-col items-center dark:bg-dark-frame-bg w-[50%]">
-        <div className="flex flex-col justify-start mt-24 items-start p-5 w-[95%] overflow-hidden bg-white dark:bg-dark-bg">
-          <h2 className="dark:text-white text-black font-bold my-5">
+        <div className="flex flex-col justify-start mt-24 items-start p-5 w-[95%] bg-white dark:bg-dark-bg">
+          <h2 className="dark:text-white text-black font-bold my-5 w-full overflow-y-auto">
             <BsFillPersonLinesFill className="float-left m-1" />
             Ticket information
           </h2>
-          <div className="flex flex-col justify-center gap-3 mb-8">
+          <div className="flex flex-col justify-center gap-3 mb-8 w-full">
             {ticketData != null && (
               <>
                 <div className="flex flex-col">
@@ -67,22 +86,30 @@ const ResolveTicketPage = (props: any) => {
                   </p>
                 </div>
 
-                {ticketData.adminResponse && (
-                  <div className="flex flex-col">
-                    <h3 className="dark:text-white text-black font-medium">
-                      Admin Response
-                    </h3>
-                    <p className="text-gray-500 text-sm dark:text-gray-400 mt-1">
-                      {ticketData.adminResponse.body}
-                    </p>
-                    <p className="text-gray-400 text-xs mt-1">
-                      Responded at:{" "}
-                      {new Date(
-                        parseInt(ticketData.adminResponse.respondedAt)
-                      ).toLocaleString()}
-                    </p>
-                  </div>
-                )}
+                {getAllReplies().length > 0 && (
+                <div className="flex flex-col w-full">
+                  <h3 className="dark:text-white text-black font-medium">
+                    Responses
+                  </h3>
+                  {getAllReplies().map((reply, index) => (
+                    <div key={reply.id} className="mt-2 w-full">
+                      <div className="flex flex-col w-full">
+                        <p className="text-gray-500 text-sm dark:text-gray-400">
+                          {reply.body}
+                        </p>
+                        <div className="flex gap-2 mt-1 text-xs text-gray-400">
+                          <span>{reply.type}: {reply.author.firstname} {reply.author.lastname}</span>
+                          <span>•</span>
+                          <span>{new Date(parseInt(reply.createdAt)).toLocaleString()}</span>
+                        </div>
+                      </div>
+                      {index < getAllReplies().length - 1 && (
+                        <hr className="my-2 border-gray-200 dark:border-gray-700" />
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
 
 
                   <form onSubmit={handleSubmitReply} className="mt-6">

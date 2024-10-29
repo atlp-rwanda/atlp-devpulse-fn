@@ -1,14 +1,24 @@
 export interface User {
+    id: string;
     email: string;
-    firstName: string;
-    lastName: string;
+    firstname: string;
+    lastname: string;
 }
 
-export interface AdminResponse{
-    body: string;
-    respondedBy: User;
-    respondedAt: String;
+export interface ApplicantReply{
+   id: string;
+   body: string;
+   repliedBy: User;
+   createdAt: string;
 }
+
+export interface AdminReply{
+    id: string;
+    body: string;
+    repliedBy: User;
+    createdAt: string;
+ }
+
 
 export interface Ticket {
     _id: string;
@@ -16,7 +26,10 @@ export interface Ticket {
     body: string;
     status: 'Open' | 'ApplicantReply' | 'AdminReply' | 'Resolved';
     author: User;
-    adminResponse?: AdminResponse;
+    createdAt: string;
+    updatedAt: string;
+    adminReplies?: AdminReply[];
+    applicantReplies?: ApplicantReply[];
 
 }
 

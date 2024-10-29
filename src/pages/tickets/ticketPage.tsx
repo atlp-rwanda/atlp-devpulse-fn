@@ -1,5 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
-import NavBar from "../../components/sidebar/navHeader";
+import React, { useCallback, useEffect, useState, useMemo } from "react";
 import * as icons from "react-icons/ai";
 import { connect, useSelector } from "react-redux";
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
@@ -19,6 +18,11 @@ import {
   createTicket,
   getUserTickets,
 } from "../../redux/actions/ticketActions";
+import {
+  getAllFilteredTickets,
+  getAllTicketAttributes,
+} from "../../redux/actions/filterTicketsAction";
+import { IoTicketSharp } from "react-icons/io5";
 
 const TicketPage = (props: any) => {
   const navigate = useNavigate();
@@ -26,28 +30,44 @@ const TicketPage = (props: any) => {
   const { theme, setTheme } = useTheme();
   const [createTicketModal, setCreateTicketModal] = useState(false);
   const [filterAttribute, setFilterAttribute] = useState("");
-  const [searchTerm, setSearchTerm] = useState("");
-  const [submittedSearchTerm, setSubmittedSearchTerm] = useState("");
+  const [enteredWord, setEnteredWord] = useState("");
+  const [enteredSubmitWord, setEnteredSubmitWord] = useState("");
   const [page, setPage] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [actionsList, setActionsList] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+
+  const [isFiltering, setIsFiltering] = useState(false);
+  const [All, setAll] = useState(false);
   const [ticket, setTicket] = useState({
     title: "",
     body: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const tickets = useSelector((state: any) => state.tickets?.tickets || []);
+  const filteredTickets = useSelector((state: any) => state.filteredTickets?.filteredTickets || []);
+  console.log("filtered tickets", filteredTickets)
 
-  const handleKeyDown = (e) => {
+  const displayTickets = useMemo(() => {
+    if (isFiltering) {
+      return filteredTickets;
+    }
+    return tickets;
+  }, [isFiltering, filteredTickets, tickets]);
+  console.log("Display Tickets: ", displayTickets);
+
+  console.log(displayTickets);
+  const handleKeyDown = async (e) => {
     if (e.key === "Enter") {
-      if (!filterAttribute) {
+      if (filterAttribute === "" || filterAttribute === null) {
         toast.error("Please select a filter attribute");
         return;
       }
-      setSubmittedSearchTerm(searchTerm);
+      const searchTerm = e.target.value;
+      debouncedSearch(searchTerm)
     }
   };
+
 
   const Open = () => {
     setCreateTicketModal(true);
@@ -65,11 +85,47 @@ const TicketPage = (props: any) => {
     // setEntries([]);
   };
 
+  const paginationRange = useCustomPagination({
+    totalPageCount: Math.ceil(filteredTickets?.data?.length / itemsPerPage),
+    currentPage: page,
+  });
+  
   const handleSearchChange = (e) => {
-    const value = e.target.value;
-    setSearchTerm(value);
-    setSubmittedSearchTerm(value);
+    const searchTerm = e.target.value;
+    setEnteredSubmitWord(searchTerm);
+    debouncedSearch(searchTerm);
   };
+  const debouncedSearch = useCallback(
+    debounce(async (term: string) => {
+      if (!filterAttribute) {
+        toast.error("Please select a filter attribute");
+        return;
+      }
+
+      if (!term) {
+        setIsFiltering(false);
+        await fetchTickets();
+        return;
+      }
+
+      setIsFiltering(true);
+      try {
+        await dispatch(getAllFilteredTickets({
+          page: page + 1,
+          itemsPerPage,
+          All,
+          filterAttribute,
+          wordEntered: term,
+        }));
+      } catch (error) {
+        toast.error("Failed to fetch filtered tickets");
+      }
+    }, 300),
+    [filterAttribute, page, itemsPerPage, All]
+  );
+
+
+
 
   const customTheme = (theme: any) => {
     return {
@@ -121,6 +177,7 @@ const TicketPage = (props: any) => {
   };
 
   const fetchTickets = useCallback(async () => {
+    if (isFiltering) return;
     setIsLoading(true);
     try {
       await dispatch(getUserTickets());
@@ -129,11 +186,16 @@ const TicketPage = (props: any) => {
     } finally {
       setIsLoading(false);
     }
-  }, [dispatch]);
+  }, [dispatch, isFiltering]);
 
   useEffect(() => {
     fetchTickets();
+    return () => {
+      debouncedSearch.cancel();
+    };
   }, [fetchTickets]);
+
+
 
   const toggleActions = (id) => {
     setActionsList((prev) => (prev === id ? null : id));
@@ -147,7 +209,7 @@ const TicketPage = (props: any) => {
     <>
       <ToastContainer />
       <div
-        className={`h-svh w-max z-20 bg-opacity-30 backdrop-blur-sm absolute flex  justify-center ${
+        className={`h-[80vh] w-[50%] z-20 mt-16 bg-opacity-30 backdrop-blur-sm absolute flex  justify-center ${
           createTicketModal === true ? "block" : "hidden"
         }`}
       >
@@ -250,7 +312,7 @@ const TicketPage = (props: any) => {
                         onChange={handleSearchChange}
                         onKeyDown={(e) => handleKeyDown(e)}
                         className="w-full bg-row-gray dark:bg-[#293647] dark:text-ltb border border-bdr dark:border-cg dark:border-opacity-5 rounded-md py-2 pl-9 pr-4 focus:outline-none focus:ring-2 focus:ring-primary dark:focus:ring-[#56C870] text-sm"
-                        value={searchTerm}
+                        value={enteredSubmitWord}
                         placeholder="Search"
                         type="text"
                         name="search"
@@ -301,8 +363,8 @@ const TicketPage = (props: any) => {
                             </tr>
                           </thead>
                           <tbody className="overflow-y-auto">
-                            {tickets && tickets.length > 0 ? (
-                              tickets.map((ticket: any) => (
+                            {displayTickets && displayTickets.length > 0 ? (
+                              displayTickets.map((ticket: any) => (
                                 <tr
                                   className="dark:hover:bg-slate-700 hover:bg-slate-300 transition-colors"
                                   key={ticket.id}
@@ -455,7 +517,7 @@ const TicketPage = (props: any) => {
                       </div>
                     </div>
                   </div>
-                  {tickets.data && (
+                  {tickets && (
                     <div className="py-3 flex items-center text-center justify-center pt-10">
                       <div className="pb-1">
                         <label htmlFor="" className="dark:text-zinc-100">
@@ -499,6 +561,43 @@ const TicketPage = (props: any) => {
                           >
                             <AiIcons.AiOutlineLeft />
                           </button>
+                          {paginationRange?.map((pageNumber, idx) => {
+                              if (pageNumber === DOTS) {
+                                return (
+                                  <div
+                                    key={idx}
+                                    className="dark:text-zinc-100 md:hidden"
+                                  >
+                                    ...
+                                  </div>
+                                );
+                              }
+
+                              if (pageNumber - 1 === page) {
+                                return (
+                                  <button
+                                    key={idx}
+                                    className={`border-solid border-[1px] cursor-pointer border-[#a8a8a8] bg-[#fff] min-w-[35px] h-[38px]  active:bg-[#333] active:text-[#fff]-500 rounded-[2px] md:hidden
+                        ${page && "bg-[#d6dfdf] text-black"} 
+                        ${page === 0 && "bg-[#d6dfdf] text-black"} 
+                          `}
+                                    onClick={() => setPage(pageNumber - 1)}
+                                  >
+                                    {pageNumber}
+                                  </button>
+                                );
+                              }
+
+                              return (
+                                <button
+                                  key={idx}
+                                  className={`border-solid border-[1px]  cursor-pointer border-[#a8a8a8] bg-[#fff] min-w-[35px] h-[38px]  active:bg-[#333] active:text-[#fff]-500 rounded-[2px] md:hidden`}
+                                  onClick={() => setPage(pageNumber - 1)}
+                                >
+                                  {pageNumber}
+                                </button>
+                              );
+                            })}
 
                           <button
                             className=" border-solid border-[1px]  border-[#a8a8a8] py-0 px-[10px] text-[#333] rounded-r-[5px] h-[38px]  disabled:bg-[#E7E7E7] disabled:text-[#a8a8a8] dark:disabled:bg-[#485970] dark:text-zinc-100"
@@ -530,6 +629,7 @@ const mapState = (state: any) => ({
 });
 
 export default connect(mapState, {
+  getAllFilteredTickets,
   getUserTickets,
   createTicket,
 })(TicketPage);

@@ -13,6 +13,11 @@ import { HiDotsVertical } from "react-icons/hi";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllTickets } from "../../redux/actions/ticketActions";
 import { ProgramSkeleton } from "../../skeletons/programSkeleton";
+import {
+  getAllFilteredTickets,
+  getAllTicketAttributes,
+} from "../../redux/actions/filterTicketsAction";
+import {debounce} from "lodash"
 
 const AdminTicketPage = (props: any) => {
   const { theme } = useTheme();
@@ -20,21 +25,56 @@ const AdminTicketPage = (props: any) => {
   const tickets = useSelector(
     (state: any) => state.tickets?.tickets || []
   );
-  const [enteredSearchWord, setEnteredSearchWord] = React.useState("");
-  const [currentEntry, setCurrentEntry] = useState<string>("");
-  const [enteredsubmitWord, setenteredsubmitWord] = useState("");
-  const [enteredWord, setEnteredWord] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [actionsList, setActionsList] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [createTicketModal, setCreateTicketModal] = useState(false);
-  const [filterAttribute, setFilterAttribute] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [submittedSearchTerm, setSubmittedSearchTerm] = useState("");
+  const [filterAttribute, setFilterAttribute] = useState("");
+  const [actionsList, setActionsList] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const [page, setPage] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [All, setAll] = useState(false);
+  const { allfilteredTickets, count } = props;
 
 
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      if (!filterAttribute) {
+        toast.error("Please select a filter attribute");
+        return;
+      }
+      setSubmittedSearchTerm(searchTerm);
+    }
+  };
+
+
+  const handleSearchChange = (e) => {
+    const value = e.target.value;
+    setSearchTerm(value);
+    setSubmittedSearchTerm(value);
+  };
+
+  const searchInput = {
+    page: page + 1,
+    itemsPerPage: itemsPerPage,
+    filterAttribute: filterAttribute,
+    wordEntered: submittedSearchTerm,
+    All: All
+  };
+
+  const debouncedSearch = useCallback(
+    debounce(() => {
+      // props.getAllFilteredTickets(searchInput);
+    }, 300),
+    [submittedSearchTerm, filterAttribute, page, itemsPerPage]
+  );
+
+  useEffect(() => {
+    debouncedSearch();
+
+    return () => {
+      debouncedSearch.cancel();
+    };
+  }, [debouncedSearch]);
 
   const fetchTickets = useCallback(async () => {
     setIsLoading(true);
@@ -50,35 +90,6 @@ const AdminTicketPage = (props: any) => {
   useEffect(() => {
     fetchTickets();
   }, [fetchTickets]);
-
-
-  const handleKeyDown = (e) => {
-    if (e.key === "Enter") {
-      if (!filterAttribute) {
-        toast.error("Please select a filter attribute");
-        return;
-      }
-      setSubmittedSearchTerm(searchTerm);
-    }
-  };
-
-  const Open = () => {
-    setCreateTicketModal(true);
-  };
-
-  const removeModal = () => {
-    let newState = !setCreateTicketModal;
-    setCreateTicketModal(newState);
-
-
-    // setEntries([]);
-  };
-
-  const handleSearchChange = (e) => {
-    const value = e.target.value;
-    setSearchTerm(value);
-    setSubmittedSearchTerm(value);
-  };
 
 
   const customTheme = (theme: any) => {
@@ -108,6 +119,11 @@ const AdminTicketPage = (props: any) => {
     setActionsList((prev) => (prev === id ? null : id));
   };
 
+  const paginationRange = useCustomPagination({
+    totalPageCount: Math.ceil(allfilteredTickets?.data?.length / itemsPerPage),
+    currentPage: page,
+  });
+
   if (isLoading) {
     return <ProgramSkeleton />;
   }
@@ -115,27 +131,7 @@ const AdminTicketPage = (props: any) => {
   return (
     <>
       <ToastContainer />
-      <div
-        className={`h-svh w-max z-20 bg-opacity-30 backdrop-blur-sm absolute flex  justify-center ${
-          createTicketModal === true ? "block" : "hidden"
-        }`}
-      >
-        <div className="bg-white dark:bg-dark-bg w-full max-h-[500px]  overflow-auto md_:w-[65%] md-sm:w-[95%] rounded-lg p-4 pb-8">
-          <div className="card-title w-full flex flex-wrap justify-center items-center">
-            <h3 className="font-bold text-sm dark:text-white text-center w-11/12 ">
-              <icons.AiOutlineClose
-                className="float-right text-3xl cursor-pointer"
-                onClick={() => removeModal()}
-              />
-
-              {"CREATE TICKET"}
-            </h3>
-            <div className="flex flex-col w-full mt-14 md_:mt-5">
-              
-            </div>
-          </div>
-        </div>
-      </div>
+      
       <div className="flex flex-col w-[100%]">
         <div className="flex flex-row">
           <div className="w-full">
@@ -232,7 +228,7 @@ const AdminTicketPage = (props: any) => {
                                     <div className="flex">
                                       <div className="">
                                         <p className="text-gray-900 text-center dark:text-white whitespace-no-wrap">
-                                        {ticket.author?.firstName || 'N/A'} {ticket.author?.lastName || ''}
+                                        {ticket.author?.firstname || 'N/A'} {ticket.author?.lastname || ''}
 
                                         </p>
                                       </div>
@@ -351,7 +347,7 @@ const AdminTicketPage = (props: any) => {
                                   Author Name
                                 </label>
                                 <label className="text-left text-black-text dark:text-white text-base font-normal">
-                                  {ticket.author?.firstName || 'N/A'} {ticket.author?.lastName || ''}
+                                  {ticket.author?.firstname || 'N/A'} {ticket.author?.lastname || ''}
                                 </label>
                               </div>
                               <div className="flex flex-col w-full">
@@ -413,7 +409,7 @@ const AdminTicketPage = (props: any) => {
                       </div>
                     </div>
                   </div>
-                  {tickets.data && (
+                  {tickets && (
                     <div className="py-3 flex items-center text-center justify-center pt-10">
                       <div className="pb-1">
                         <label htmlFor="" className="dark:text-zinc-100">
@@ -457,7 +453,43 @@ const AdminTicketPage = (props: any) => {
                           >
                             <AiIcons.AiOutlineLeft />
                           </button>
+                          {paginationRange?.map((pageNumber, idx) => {
+                              if (pageNumber === DOTS) {
+                                return (
+                                  <div
+                                    key={idx}
+                                    className="dark:text-zinc-100 md:hidden"
+                                  >
+                                    ...
+                                  </div>
+                                );
+                              }
 
+                              if (pageNumber - 1 === page) {
+                                return (
+                                  <button
+                                    key={idx}
+                                    className={`border-solid border-[1px] cursor-pointer border-[#a8a8a8] bg-[#fff] min-w-[35px] h-[38px]  active:bg-[#333] active:text-[#fff]-500 rounded-[2px] md:hidden
+                        ${page && "bg-[#d6dfdf] text-black"} 
+                        ${page === 0 && "bg-[#d6dfdf] text-black"} 
+                          `}
+                                    onClick={() => setPage(pageNumber - 1)}
+                                  >
+                                    {pageNumber}
+                                  </button>
+                                );
+                              }
+
+                              return (
+                                <button
+                                  key={idx}
+                                  className={`border-solid border-[1px]  cursor-pointer border-[#a8a8a8] bg-[#fff] min-w-[35px] h-[38px]  active:bg-[#333] active:text-[#fff]-500 rounded-[2px] md:hidden`}
+                                  onClick={() => setPage(pageNumber - 1)}
+                                >
+                                  {pageNumber}
+                                </button>
+                              );
+                            })}
                           <button
                             className=" border-solid border-[1px]  border-[#a8a8a8] py-0 px-[10px] text-[#333] rounded-r-[5px] h-[38px]  disabled:bg-[#E7E7E7] disabled:text-[#a8a8a8] dark:disabled:bg-[#485970] dark:text-zinc-100"
                             onClick={() => setPage(page + 1)}
