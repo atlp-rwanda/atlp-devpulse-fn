@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState, useMemo } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import { useTheme } from "../../hooks/darkmode";
 import {
@@ -18,6 +18,7 @@ import {
   getAllTicketAttributes,
 } from "../../redux/actions/filterTicketsAction";
 import {debounce} from "lodash"
+import { display } from "html2canvas/dist/types/css/property-descriptors/display";
 
 const AdminTicketPage = (props: any) => {
   const { theme } = useTheme();
@@ -26,14 +27,25 @@ const AdminTicketPage = (props: any) => {
     (state: any) => state.tickets?.tickets || []
   );
   const [searchTerm, setSearchTerm] = useState("");
-  const [submittedSearchTerm, setSubmittedSearchTerm] = useState("");
   const [filterAttribute, setFilterAttribute] = useState("");
   const [actionsList, setActionsList] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [page, setPage] = useState(0);
+  const [enteredSubmitWord, setEnteredSubmitWord] = useState("");
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [All, setAll] = useState(false);
   const { allfilteredTickets, count } = props;
+  const [isFiltering, setIsFiltering] = useState(false);
+  const filteredTickets = useSelector((state: any) => state.filteredTickets?.filteredTickets || []);
+
+
+  const displayTickets = useMemo(() => {
+    if (isFiltering) {
+      return filteredTickets;
+    }
+    return tickets;
+  }, [isFiltering, filteredTickets, tickets]);
+  console.log("Display Tickets: ", displayTickets);
 
 
   const handleKeyDown = (e) => {
@@ -42,39 +54,47 @@ const AdminTicketPage = (props: any) => {
         toast.error("Please select a filter attribute");
         return;
       }
-      setSubmittedSearchTerm(searchTerm);
+      const searchTerm = e.target.value;
+      debouncedSearch(searchTerm)
     }
   };
 
 
   const handleSearchChange = (e) => {
-    const value = e.target.value;
-    setSearchTerm(value);
-    setSubmittedSearchTerm(value);
+    const searchTerm = e.target.value;
+    setSearchTerm(searchTerm);
+    debouncedSearch(searchTerm);
   };
 
-  const searchInput = {
-    page: page + 1,
-    itemsPerPage: itemsPerPage,
-    filterAttribute: filterAttribute,
-    wordEntered: submittedSearchTerm,
-    All: All
-  };
 
   const debouncedSearch = useCallback(
-    debounce(() => {
-      // props.getAllFilteredTickets(searchInput);
+    debounce(async (term: string) => {
+      if (!filterAttribute) {
+        toast.error("Please select a filter attribute");
+        return;
+      }
+
+      if (!term) {
+        setIsFiltering(false);
+        await fetchTickets();
+        return;
+      }
+
+      setIsFiltering(true);
+      try {
+        await dispatch(getAllFilteredTickets({
+          page: page + 1,
+          itemsPerPage,
+          All,
+          filterAttribute,
+          wordEntered: term,
+        }));
+      } catch (error) {
+        toast.error("Failed to fetch filtered tickets");
+      }
     }, 300),
-    [submittedSearchTerm, filterAttribute, page, itemsPerPage]
+    [filterAttribute, page, itemsPerPage, All]
   );
-
-  useEffect(() => {
-    debouncedSearch();
-
-    return () => {
-      debouncedSearch.cancel();
-    };
-  }, [debouncedSearch]);
 
   const fetchTickets = useCallback(async () => {
     setIsLoading(true);
@@ -104,6 +124,7 @@ const AdminTicketPage = (props: any) => {
       },
     };
   };
+
   const darkTheme = (theme: any) => {
     return {
       ...theme,
@@ -218,8 +239,8 @@ const AdminTicketPage = (props: any) => {
                             </tr>
                           </thead>
                           <tbody className="overflow-y-auto">
-                            {tickets && tickets.length > 0 ? (
-                              tickets.map((ticket: any) => (
+                            {displayTickets && displayTickets.length > 0 ? (
+                              displayTickets.map((ticket: any) => (
                                 <tr
                                   className="dark:hover:bg-slate-700 hover:bg-slate-300 transition-colors"
                                   key={ticket.id}

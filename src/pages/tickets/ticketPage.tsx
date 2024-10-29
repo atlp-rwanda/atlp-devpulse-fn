@@ -36,7 +36,7 @@ const TicketPage = (props: any) => {
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [actionsList, setActionsList] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-
+  const [searchTerm, setSearchTerm] = useState("");
   const [isFiltering, setIsFiltering] = useState(false);
   const [All, setAll] = useState(false);
   const [ticket, setTicket] = useState({
@@ -312,7 +312,7 @@ const TicketPage = (props: any) => {
                         onChange={handleSearchChange}
                         onKeyDown={(e) => handleKeyDown(e)}
                         className="w-full bg-row-gray dark:bg-[#293647] dark:text-ltb border border-bdr dark:border-cg dark:border-opacity-5 rounded-md py-2 pl-9 pr-4 focus:outline-none focus:ring-2 focus:ring-primary dark:focus:ring-[#56C870] text-sm"
-                        value={enteredSubmitWord}
+                        value={searchTerm}
                         placeholder="Search"
                         type="text"
                         name="search"
@@ -460,8 +460,8 @@ const TicketPage = (props: any) => {
                         <label className="text-left text-black-text dark:text-white text-lg font-bold">
                           Tickets
                         </label>
-                        {tickets &&
-                          tickets.map((ticket: any) => (
+                        {displayTickets &&
+                          displayTickets.map((ticket: any) => (
                             <div
                               key={ticket.id}
                               className="flex flex-col w-full gap-2 border border-solid border-transparent border-t-black dark:border-t-white border-t-4 rounded-t-sm"
