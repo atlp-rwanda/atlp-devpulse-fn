@@ -64,6 +64,8 @@ import Settings from "../components/settings";
 import ProfileUpdate from "../pages/ProfilePage";
 import Profile from "../pages/Profile";
 import ApplicantStages from "./../pages/TraineApplicant/ApplicantStages";
+import AdminNotification from "../pages/AdminNotifications/AdminNotifications";
+
 
 function Navigation() {
   const roleName = localStorage.getItem("roleName");
@@ -122,6 +124,14 @@ function Navigation() {
           element={
             <PrivateRoute allowedRoles={["Admin", "superAdmin"]}>
               <Profile />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="notifications"
+          element={
+            <PrivateRoute allowedRoles={["Admin", "superAdmin"]}>
+              <AdminNotification/>
             </PrivateRoute>
           }
         />
