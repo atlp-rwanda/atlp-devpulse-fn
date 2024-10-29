@@ -2,6 +2,7 @@ import axios from "./axiosconfig";
 import {
   addStageMark,
   advanceToNextStage,
+  filterByStage,
   getApplicantStage,
 } from "../actiontypes/applicationTypes";
 import toast from "react-hot-toast";
@@ -29,11 +30,18 @@ export const AdvanceToNextStage =
         },
       });
       if (response.data.errors && response.data.errors.length > 0) {
-          dispatch({
-            type: advanceToNextStage.ADVANCE_TO_NEXT_STAGE_FAIL,
-            message:response.data.errors[0].message === "something went wrong" ? response.data.errors[0].error : response.data.errors[0].message,
-          })
-          toast.error(response.data.errors[0].message === "something went wrong" ? response.data.errors[0].error : response.data.errors[0].message)
+        dispatch({
+          type: advanceToNextStage.ADVANCE_TO_NEXT_STAGE_FAIL,
+          message:
+            response.data.errors[0].message === "something went wrong"
+              ? response.data.errors[0].error
+              : response.data.errors[0].message,
+        });
+        toast.error(
+          response.data.errors[0].message === "something went wrong"
+            ? response.data.errors[0].error
+            : response.data.errors[0].message
+        );
         return;
       }
       if (
@@ -43,16 +51,18 @@ export const AdvanceToNextStage =
       ) {
         dispatch({
           type: advanceToNextStage.ADVANCE_TO_NEXT_STAGE_SUCCESS,
-          message: response.data.data.message,
+          message: response.data.data.moveToNextStage.message,
         });
-        console.log(response.data)
-        toast.success(response.data.moveToNextStage.message);
-        return
+        toast.success(response.data.data.moveToNextStage?.message);
+        return;
       }
-    } catch (error:any) {
+    } catch (error: any) {
       dispatch({
         type: advanceToNextStage.ADVANCE_TO_NEXT_STAGE_FAIL,
-        message:error.message === "something went wrong" ? error.error : error.message,
+        message:
+          error.message === "something went wrong"
+            ? error.error
+            : error.message,
       });
       console.log(error);
     }
@@ -82,12 +92,12 @@ export const GetApplicantStage =
         },
       });
       if (response.data.errors && response.data.errors.length > 0) {
-        response.data.errors.map(error =>
+        response.data.errors.map((error) =>
           dispatch({
             type: getApplicantStage.GET_APPLICANT_STAGE_FAIL,
-            error:error.error,
+            error: error.error,
           })
-        )
+        );
         return;
       }
       if (response.data.data !== undefined || response.data.data !== null) {
@@ -130,9 +140,7 @@ export const addMarks =
         },
       });
       if (response.data.errors && response.data.errors.length > 0) {
-        response.data.errors.map(error =>
-          toast.error(error.message)
-        )
+        response.data.errors.map((error) => toast.error(error.message));
         return;
       }
       if (response.data.data !== undefined || response.data.data !== null) {
@@ -150,3 +158,43 @@ export const addMarks =
       console.error(error);
     }
   };
+
+export const filterStage = (stage: string) => async (dispatch: any) => {
+  dispatch({
+    type: filterByStage.FILTER_STAGE_LOADING,
+    message: "loading",
+  });
+
+  try {
+    const response = await axios.post("/", {
+      query: `query GetApplicantsByStage($stage: String!) {
+  getApplicantsByStage(stage: $stage) {
+  applicant {
+    _id
+    applicationPhase
+    email
+    firstName
+    lastName
+    status
+  }
+  currentStage
+  }
+}`,
+      variables: {
+        stage: stage,
+      },
+    });
+    if(response.data.data !== undefined || response.data.data !== null){
+      dispatch({
+        type:filterByStage.FILTER_STAGE_SUCCESS,
+        data:response.data.data.getApplicantsByStage
+      })
+    }
+  } catch (error) {
+    dispatch({
+      type: filterByStage.FILTER_STAGE_FAIL,
+      error,
+    });
+    console.error(error);
+  }
+};

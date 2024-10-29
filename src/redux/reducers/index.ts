@@ -41,7 +41,8 @@ import {
   singleApplicationReducer,
   FetchApplicantStageReducer,
   AddApplicantScoreReducer,
-  advanceToNextStageReducer
+  advanceToNextStageReducer,
+  filterApplicantByStageReducer
 } from './applicationReducer';
 import { assessmentsReducer } from './assessmentReducer';
 import { attendanceReducer } from './attendanceReducer';
@@ -100,6 +101,7 @@ const allReducers = combineReducers({
   nextStage:advanceToNextStageReducer,
   fetchApplicantStage: FetchApplicantStageReducer,
   AddedApplicantScore:AddApplicantScoreReducer,
+  filterApplicantByStage: filterApplicantByStageReducer,
 });
 
 export type RootState = ReturnType<typeof allReducers>;

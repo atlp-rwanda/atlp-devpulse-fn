@@ -1,27 +1,53 @@
 import React, { useEffect, useState } from "react";
-import { useAppDispatch,useAppSelector } from "../../hooks/hooks";
+import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import { AdvanceToNextStage } from "../../redux/actions/applicationStage";
 import toast from "react-hot-toast";
 
 interface props {
   applicantId: string;
+  stage: string;
 }
-const NextStageModal:React.FC<props> = ({applicantId}) => {
+const NextStageModal: React.FC<props> = ({ applicantId, stage }) => {
   const dispatch = useAppDispatch();
-  const {data,success,loading,message} = useAppSelector((state)=> state.nextStage)
+  const { data, success, loading, message,error } = useAppSelector(
+    (state) => state.nextStage
+  );
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedStage, setSelectStage] = useState("");
-  const [comments,setComments] = useState("");
+  const [comments, setComments] = useState("");
 
-  const handleAdvanceToNextStage = async(nextStage:string,comments:string) =>{
-    await dispatch(AdvanceToNextStage(applicantId,nextStage,comments));
-  }
+  const handleAdvanceToNextStage = async (
+    currentStage: string,
+    comments: string
+  ) => {
+    const nextStage = handleNextStage(currentStage);
+    await dispatch(AdvanceToNextStage(applicantId, nextStage, comments));
+  };
 
+  const stages = [
+    "Shortlisted",
+    "Technical Assessment",
+    "Interview Assessment",
+    "Admitted",
+  ];
+
+  const handleNextStage = (currentStage: string) => {
+    // check the current stage of applicant and see if it is exist in the list then determine the next stage from the list
+    const currentIndex = stages.indexOf(currentStage);
+    const nextIndex = currentIndex + 1;
+    const nextStage = stages[nextIndex];
+    return nextStage;
+  };
+  useEffect(() => {
+    if(success && !error){
+      setIsOpen(false);
+    }
+  },[success,data]);
   return (
     <div>
       <button
         onClick={() => setIsOpen(true)}
-        className="px-4 py-2 text-sm font-medium text-white bg-green rounded-md hover:bg-emerald-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 cursor-pointer mr-2"
+        disabled = {stage === "Dismissed" || stage === "Admitted" ? true : false}
+        className={`px-4 py-2 text-sm font-medium text-white ${stage === "Dismissed" || stage === "Admitted" ? "bg-gray-400 cursor-not-allowed" : "bg-green hover:bg-emerald-500 cursor-pointer"}  rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 mr-2`}
       >
         Advance
       </button>
@@ -34,27 +60,13 @@ const NextStageModal:React.FC<props> = ({applicantId}) => {
 
             <div className="space-y-4">
               <div>
-                <label className="block text-sm mb-2 dark:text-white">
-                  Next Stage
-                </label>
-                <select
-                  className="w-full p-2 border rounded-md bg-white dark:bg-[#374151] dark:text-white dark:border-gray-600"
-                  defaultValue=""
-                  value={selectedStage}
-                  onChange={(e) => setSelectStage(e.target.value)}
-                >
-                  <option value="" disabled>
-                    Select next stage
-                  </option>
-                  <option value="Shortlisted">Shortlisted</option>
-                  <option value="Technical Assessment">Technical Assessment</option>
-                  <option value="Interview Assessment">Interview Assessment</option>
-                  <option value="Admitted">Admitted</option>
-                </select>
+                <h1 className="dark:text-white text-lg">
+                  The next stage is <span className="text-lg font-bold text-[#4ab862]">{handleNextStage(stage)}</span>
+                </h1>
               </div>
               <div>
                 <label className="block text-sm mb-2 dark:text-white">
-                  Comments
+                  Please provide a comments
                 </label>
                 <textarea
                   className="w-full p-2 border rounded-md h-24 resize-none bg-white dark:bg-[#374151] dark:text-white dark:border-gray-600"
@@ -73,7 +85,7 @@ const NextStageModal:React.FC<props> = ({applicantId}) => {
                 Cancel
               </button>
               <button
-                onClick={() => handleAdvanceToNextStage(selectedStage,comments)}
+                onClick={() => handleAdvanceToNextStage(stage, comments)}
                 className="px-4 py-2 bg-[#56C870] text-white rounded-md hover:bg-[#4ab862]"
               >
                 Next

@@ -6,7 +6,8 @@ import {
   fetchSingleOwnApplication,
   advanceToNextStage,
   getApplicantStage,
-  addStageMark
+  addStageMark,
+  filterByStage
 } from '../actiontypes/applicationTypes';
 
 interface State {
@@ -193,6 +194,35 @@ export const AddApplicantScoreReducer = (state:State = initial, action:Action) =
         data: action.data,
       };
     case addStageMark.ADD_STAGE_MARK_FAIL:
+      return {
+        loading: false,
+        error: action.message,
+        data: null,
+      };
+
+    default:
+      return state;
+  }
+}
+
+export const filterApplicantByStageReducer = (state:State = initial, action:Action) => {
+  switch (action.type) {
+    case filterByStage.FILTER_STAGE_LOADING:
+      return {
+        loading: true,
+        success: false,
+        error: null,
+        message: null,
+        data: null,
+      };
+    case filterByStage.FILTER_STAGE_SUCCESS:
+      return {
+        loading: false,
+        success: true,
+        message: action.message,
+        data: action.data,
+      };
+    case filterByStage.FILTER_STAGE_FAIL:
       return {
         loading: false,
         error: action.message,

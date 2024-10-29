@@ -33,6 +33,12 @@ export enum addStageMark {
   ADD_STAGE_MARK_FAIL = "ADD_STAGE_MARK_FAIL",
 
 }
+
+export enum filterByStage {
+  FILTER_STAGE_LOADING = "FILTER_STAGE_LOADING",
+  FILTER_STAGE_SUCCESS = "FILTER_STAGE_SUCCESS",
+  FILTER_STAGE_FAIL = "FILTER_STAGE_FAIL",
+}
 interface actionPending {
   type: fetchMyApplications.FETCH_MYAPPLICATIONS_LOADING;
 }
@@ -117,6 +123,20 @@ interface addStageMarkActionSuccess{
   data: any;
 }
 
+interface filterByStageActionFail{
+  type: filterByStage.FILTER_STAGE_FAIL;
+  message: any;
+}
+
+interface filterByStageActionPending{
+  type: filterByStage.FILTER_STAGE_LOADING;
+}
+interface filterByStageActionSuccess{
+  type: filterByStage.FILTER_STAGE_SUCCESS;
+  message: string;
+  data: any;
+}
+
 interface addStageMarkActionFail{
   type: addStageMark.ADD_STAGE_MARK_FAIL;
   message: any;
@@ -140,4 +160,7 @@ export type Action =
   | getApplicantStageActionSuccess
   | addStageMarkActionPending
   | addStageMarkActionFail
-  | addStageMarkActionSuccess;
+  | addStageMarkActionSuccess
+  | filterByStageActionPending
+  | filterByStageActionFail
+  | filterByStageActionSuccess
