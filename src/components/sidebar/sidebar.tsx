@@ -51,7 +51,7 @@ const Sidebar = ({ expanded, setExpanded }) => {
           {items.map((item, index) => (
             <li
               key={index}
-              className="flex items-center text-white hover:text-[#56c770]"
+              className="flex items-center dark:text-white text-black hover:text-[#56c770]"
             >
               <Link to={item.path} className="p-1 flex items-center">
                 <span className="mr-3">{item.icon}</span>
@@ -65,7 +65,7 @@ const Sidebar = ({ expanded, setExpanded }) => {
           {sidebarItems3.map((item, index) => (
             <li
               key={index}
-              className="flex items-center text-white hover:text-[#56c770]"
+              className="flex items-center text-black dark:text-white hover:text-[#56c770]"
             >
               <Link to={item.path} className="p-1 flex items-center">
                 <span className="mr-3">{item.icon}</span>
@@ -76,7 +76,7 @@ const Sidebar = ({ expanded, setExpanded }) => {
         </ul>
         <button
           onClick={handleLogout}
-          className="flex items-center p-1 font-semibold hover:font-bold text-white focus:outline-none hover:text-[#56c770] mt-4 ml-4"
+          className="flex items-center p-1 font-semibold hover:font-bold text-black dark:text-white focus:outline-none hover:text-[#56c770] mt-4 ml-4"
         >
           <Icon icon="hugeicons:logout-circle-02" className="mr-3" />
           {expanded && <span>Logout</span>}
