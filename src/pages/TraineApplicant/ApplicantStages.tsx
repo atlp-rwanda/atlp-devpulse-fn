@@ -110,6 +110,14 @@ const ApplicantStages = (props: any) => {
     return stage;
   };
 
+  const uniqueCycles: string[] = Array.from(
+    new Set(
+      traine
+        .map((item: any) => item.cycle_id?.name)
+        .filter((name: any): name is string => Boolean(name))
+    )
+  );
+
   const filteredTrainees = filteredTraines.filter((item: any) => {
     const fieldValue = item[searchField];
     const matchesSearch = fieldValue
