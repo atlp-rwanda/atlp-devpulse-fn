@@ -6,8 +6,9 @@ type props ={
   applicantId: string;
   applicantName: string;
   stage: string;
+  status?: string
 }
-const DismissTraineeApplicant: React.FC<props> = ({applicantId,applicantName,stage}) => {
+const DismissTraineeApplicant: React.FC<props> = ({applicantId,applicantName,stage, status}) => {
   const [isOpen, setIsOpen] = useState(false);
   const [nextStage, setNextStage] = useState("");
   const [comments, setComments] = useState("");
@@ -30,8 +31,8 @@ const DismissTraineeApplicant: React.FC<props> = ({applicantId,applicantName,sta
     <div>
       <button
         onClick={() => setIsOpen(true)}
-        disabled = {stage === "Dismissed" || stage === "Admitted" ? true : false}
-        className={`px-4 py-2 text-sm font-medium text-white ${stage === "Dismissed" || stage === "Admitted" ? "bg-gray-400 cursor-not-allowed" : "bg-red-600 hover:bg-red-700 cursor-pointer"} rounded-md  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 ml-2`}
+        disabled = {stage === "Dismissed" || stage === "Admitted" ? true : status === "Moved" ? true : false}
+        className={`px-4 py-2 text-sm font-medium text-white ${stage === "Dismissed" || stage === "Admitted" ? "bg-gray-400 cursor-not-allowed" : status === "Moved" ? "bg-gray-400 cursor-not-allowed" : "bg-red-600 hover:bg-red-700 cursor-pointer"} rounded-md  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 ml-2`}
       >
         Dismiss
       </button>

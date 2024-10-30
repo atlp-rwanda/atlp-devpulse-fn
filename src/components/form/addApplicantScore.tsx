@@ -14,26 +14,35 @@ const addApplicantScore: React.FC<scoreProps> = ({ applicantId, stage, onClose }
   const [score, setScore] = useState<number>();
   const [isModelOpen, setIsModelOpen] = useState(false);
   const [isError, setIsError] = useState(false);
-  const [Error, setError] = useState<string | null>(null);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
+  const handleOpen = () => {
+    setIsModelOpen(true);
+    setIsError(false);
+    setErrorMsg(null);
+  };
+
+  // Close Modal and Clear State
   const handleClose = () => {
     setIsModelOpen(false);
+    setScore(undefined);
+    setIsError(false);
+    setErrorMsg(null);
     onClose();
-  }
+  };
   const handleAddMarks = async() =>{
     if (!score) {
-      setError("Score is required");
+      setErrorMsg("Score is required");
       setIsError(true);
       return;
     }
     await dispatch(addMarks(applicantId,stage,score))
     if(success && data?.success){
       toast.success(data?.message);
-      setIsModelOpen(false);
-      onClose();
+      handleClose()
     }
     if(!success && error === null){
-      setError(error);
+      setErrorMsg(error);
       setIsError(true)
     }
     setIsError(false);
@@ -41,7 +50,7 @@ const addApplicantScore: React.FC<scoreProps> = ({ applicantId, stage, onClose }
   return (
     <>
       <div>
-        <button className="cursor-pointer" onClick={() => setIsModelOpen(true)}>
+        <button className="cursor-pointer" onClick={handleOpen}>
           Add score
         </button>
         {isModelOpen && (
@@ -55,12 +64,12 @@ const addApplicantScore: React.FC<scoreProps> = ({ applicantId, stage, onClose }
                   className="w-full p-2 border rounded-md bg-white dark:bg-[#374151] dark:text-white dark:border-gray-600"
                   type="text"
                   placeholder="Score for the current stage"
-                  value={score}
+                  value={score || ""}
                   onChange={(e) => setScore(Number(e.target.value))}
                 />
                 {
                   isError && (
-                    <div className="text-red-500 text-sm">{Error}</div>
+                    <div className="text-red-500 text-sm">{errorMsg}</div>
                   )
                 }
               </div>
@@ -75,7 +84,7 @@ const addApplicantScore: React.FC<scoreProps> = ({ applicantId, stage, onClose }
                   onClick={() => handleAddMarks()}
                   className="px-4 py-2 bg-[#56C870] text-white rounded-md hover:bg-[#4ab862]"
                 >
-                  Next
+                   {loading ? "Saving..." : "Next"}
                 </button>
               </div>
             </div>

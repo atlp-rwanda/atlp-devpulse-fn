@@ -6,8 +6,9 @@ import toast from "react-hot-toast";
 interface props {
   applicantId: string;
   stage: string;
+  status?: string;
 }
-const NextStageModal: React.FC<props> = ({ applicantId, stage }) => {
+const NextStageModal: React.FC<props> = ({ applicantId, stage,status }) => {
   const dispatch = useAppDispatch();
   const { data, success, loading, message,error } = useAppSelector(
     (state) => state.nextStage
@@ -46,8 +47,8 @@ const NextStageModal: React.FC<props> = ({ applicantId, stage }) => {
     <div>
       <button
         onClick={() => setIsOpen(true)}
-        disabled = {stage === "Dismissed" || stage === "Admitted" ? true : false}
-        className={`px-4 py-2 text-sm font-medium text-white ${stage === "Dismissed" || stage === "Admitted" ? "bg-gray-400 cursor-not-allowed" : "bg-green hover:bg-emerald-500 cursor-pointer"}  rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 mr-2`}
+        disabled = {stage === "Dismissed" || stage === "Admitted" ? true : status === "Moved" ? true : false}
+        className={`px-4 py-2 text-sm font-medium text-white ${stage === "Dismissed" || stage === "Admitted" ? "bg-gray-400 cursor-not-allowed" :  status === "Moved"? "bg-gray-400 cursor-not-allowed" : "bg-green hover:bg-emerald-500 cursor-pointer"}  rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 mr-2`}
       >
         Advance
       </button>

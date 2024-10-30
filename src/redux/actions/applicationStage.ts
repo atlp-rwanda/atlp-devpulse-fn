@@ -177,7 +177,9 @@ export const filterStage = (stage: string) => async (dispatch: any) => {
     lastName
     status
   }
-  currentStage
+  status
+  comments
+  score
   }
 }`,
       variables: {
