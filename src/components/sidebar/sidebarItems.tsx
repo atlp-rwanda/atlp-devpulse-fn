@@ -29,7 +29,7 @@ export const sidebarItems1 = [
     icon: <Icon icon="fluent:form-28-regular"></Icon>,
     title: "Application Forms",
   },
-    {
+  {
     path: "notifications",
     icon: <Icon icon="heroicons-solid:inbox-in"></Icon>,
     title: "Notifications",
@@ -98,6 +98,11 @@ export const applicantSidebarItems = [
     path: "available-jobs",
     icon: <Icon icon="ant-design:calendar-filled"></Icon>,
     title: "Job Post ",
+  },
+  {
+    path: "cycles",
+    icon: <Icon icon="game-icons:cycle"></Icon>,
+    title: "Application Cycles",
   },
 ];
 
