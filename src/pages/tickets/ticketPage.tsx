@@ -28,6 +28,7 @@ import TicketPagination from "./ticketPagination";
 import CreateTicketModal from "./createTicketModal";
 import SearchFilter from "./ticketSearch";
 import MobileTicketCard from "./mobileTicket";
+import TicketTable from "./ticketTable";
 
 const TicketPage = (props: any) => {
   const navigate = useNavigate();
@@ -50,6 +51,21 @@ const TicketPage = (props: any) => {
     { value: "title", label: "Subject" },
     { value: "status", label: "Status" },
     { value: "", label: "Filter by" },
+  ];
+
+  const columns = [
+    { key: 'title', header: 'Subject' },
+    { key: 'status', header: 'Status' },
+    { 
+      key: 'updatedAt', 
+      header: 'Last Update',
+      render: (ticket: any) => new Date(parseInt(ticket.updatedAt)).toLocaleDateString(),
+    },
+  ];
+
+  const applicantActionLinks = [
+    { label: 'View', to: '/applicant/ticket/{id}' },
+    { label: 'Reply', to: '/applicant/ticket/{id}/reply' },
   ];
 
   const displayTickets = useMemo(() => {
@@ -180,119 +196,13 @@ const TicketPage = (props: any) => {
                   <div>
                     <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
                       <div className="hidden md_:inline-block w-full h-auto lg:min-w-full shadow rounded-lg overflow-y-hidden">
-                        <table className="min-w-full leading-normal">
-                          <thead className=" w-full px-32 sticky top-0">
-                            <tr>
-                              <th className="p-6 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
-                                {"Subject"}
-                              </th>
-
-                              <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left text-xs font-semibold text-gray-600 dark:text-white uppercase md:table-cell tracking-wider">
-                                {"Status"}
-                              </th>
-
-                              <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
-                                {"Last Update"}
-                              </th>
-
-                              <th className="border-b-2 sm:text-center border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
-                                {"action"}
-                              </th>
-                            </tr>
-                          </thead>
-                          <tbody className="overflow-y-auto">
-                            {displayTickets && displayTickets.length > 0 ? (
-                              displayTickets.map((ticket: any) => (
-                                <tr
-                                  className="dark:hover:bg-slate-700 hover:bg-slate-300 transition-colors"
-                                  key={ticket.id}
-                                >
-                                  <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
-                                    <div className="flex">
-                                      <div className="">
-                                        <p className="text-gray-900 text-center dark:text-white whitespace-no-wrap">
-                                          {ticket.title}
-                                        </p>
-                                      </div>
-                                    </div>
-                                  </td>
-                                  <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
-                                    <div className="flex items-center">
-                                      <div className="">
-                                        <p className="text-gray-900 text-center dark:text-white whitespace-no-wrap">
-                                          {ticket.status}
-                                        </p>
-                                      </div>
-                                    </div>
-                                  </td>
-
-                                  <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
-                                    <div className="flex items-center">
-                                      <div className="">
-                                        <p className="text-gray-900 items-center dark:text-white whitespace-no-wrap">
-                                          {new Date(
-                                            parseInt(ticket.updatedAt)
-                                          ).toLocaleDateString()}
-                                        </p>
-                                      </div>
-                                    </div>
-                                  </td>
-                                  <td>
-                                    <div>
-                                      <HiDotsVertical
-                                        size={16}
-                                        onClick={(e: any) => {
-                                          e.preventDefault();
-                                          toggleActions(ticket.id);
-                                        }}
-                                        className="text-black dark:text-white text-3xl ml-6 font-size-6 cursor-pointer"
-                                      />
-                                      <div
-                                        className={`${
-                                          actionsList === ticket.id
-                                            ? "block"
-                                            : "hidden"
-                                        } absolute  bg-white dark:bg-dark-tertiary  dark:text-white text-base z-50 list-none divide-y divide-gray-100 rounded shadow my-4`}
-                                        id="dropdown"
-                                      >
-                                        <ul
-                                          className="py-1"
-                                          aria-labelledby="dropdown"
-                                        >
-                                          <li>
-                                            <Link
-                                              to={`/applicant/ticket/${ticket.id}`}
-                                              className="text-sm hover:bg-gray-100 text-gray-700 dark:hover:bg-gray-500 dark:text-white  block px-4 py-2"
-                                            >
-                                              View
-                                            </Link>
-                                          </li>
-                                          <li>
-                                            <Link
-                                              to={`/applicant/ticket/${ticket.id}/reply`}
-                                              className="text-sm hover:bg-gray-100 text-gray-700  dark:text-white   dark:hover:bg-gray-500 block px-4 py-2"
-                                            >
-                                              Reply
-                                            </Link>
-                                          </li>
-                                          <li></li>
-                                        </ul>
-                                      </div>
-                                    </div>
-                                  </td>
-                                </tr>
-                              ))
-                            ) : (
-                              <tr>
-                                <td></td>
-                                <td className="float-right text-fb p-5 font-normal text-stone-500 dark:text-stone-400">
-                                  No data
-                                </td>
-                                <td></td>
-                              </tr>
-                            )}
-                          </tbody>
-                        </table>
+                        <TicketTable
+                          columns={columns}
+                          data={displayTickets}
+                          actionLinks={applicantActionLinks}
+                          onActionToggle={toggleActions}
+                          actionsList={actionsList}
+                        />
                       </div>
                       <div className="flex md_:hidden flex-col gap-4 w-full rounded-lg">
                         <label className="text-left text-black-text dark:text-white text-lg font-bold">
