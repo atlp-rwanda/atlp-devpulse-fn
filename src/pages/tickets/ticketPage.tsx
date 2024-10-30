@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import React, { useCallback, useEffect, useState, useMemo } from "react";
 import * as icons from "react-icons/ai";
 import { connect, useSelector } from "react-redux";
@@ -25,6 +26,8 @@ import {
 } from "../../redux/actions/filterTicketsAction";
 import TicketPagination from "./ticketPagination";
 import CreateTicketModal from "./createTicketModal";
+import SearchFilter from "./ticketSearch";
+import MobileTicketCard from "./mobileTicket";
 
 const TicketPage = (props: any) => {
   const navigate = useNavigate();
@@ -43,6 +46,11 @@ const TicketPage = (props: any) => {
   const filteredTickets = useSelector(
     (state: any) => state.filteredTickets?.filteredTickets || []
   );
+  const ticketFilterOptions = [
+    { value: "title", label: "Subject" },
+    { value: "status", label: "Status" },
+    { value: "", label: "Filter by" },
+  ];
 
   const displayTickets = useMemo(() => {
     if (isFiltering) {
@@ -103,29 +111,6 @@ const TicketPage = (props: any) => {
     [filterAttribute, page, itemsPerPage, All]
   );
 
-  const customTheme = (theme: any) => {
-    return {
-      ...theme,
-      colors: {
-        ...theme.colors,
-        text: "light-gray",
-        primary25: "#E5E7EB",
-        primary: "#d6dfdf",
-        neutral0: "white",
-      },
-    };
-  };
-  const darkTheme = (theme: any) => {
-    return {
-      ...theme,
-      colors: {
-        primary25: "#404657",
-        primary: "#d6dfdf",
-        neutral0: "#293647",
-      },
-    };
-  };
-
   const fetchTickets = useCallback(async () => {
     if (isFiltering) return;
     setIsLoading(true);
@@ -179,48 +164,15 @@ const TicketPage = (props: any) => {
                       <icons.AiOutlinePlus className="mr-2" /> New Ticket
                     </button>
                   </div>
-                  <div className="w-full sm:w-40">
-                    <Select
-                      className="w-full text-sm rounded-md dark:text-ltb"
-                      options={[
-                        { value: "title", label: "Subject" },
-                        { value: "status", label: "Status" },
-                        { value: "", label: "Filter by" },
-                      ]}
-                      defaultValue={{ value: "", label: "Filter by" }}
-                      onChange={(e) => setFilterAttribute(`${e?.value}`)}
-                      theme={theme ? customTheme : darkTheme}
-                    />
-                  </div>
-                  <div className="w-full sm:w-auto flex-grow">
-                    <div className="relative">
-                      <input
-                        onChange={handleSearchChange}
-                        onKeyDown={(e) => handleKeyDown(e)}
-                        className="w-full bg-row-gray dark:bg-[#293647] dark:text-ltb border border-bdr dark:border-cg dark:border-opacity-5 rounded-md py-2 pl-9 pr-4 focus:outline-none focus:ring-2 focus:ring-primary dark:focus:ring-[#56C870] text-sm"
-                        value={searchTerm}
-                        placeholder="Search"
-                        type="text"
-                        name="search"
-                      />
-                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <svg
-                          className="h-5 w-5 text-gray-400"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                          />
-                        </svg>
-                      </div>
-                    </div>
-                  </div>
+                  <SearchFilter
+                    options={ticketFilterOptions}
+                    filterAttribute={filterAttribute}
+                    setFilterAttribute={setFilterAttribute}
+                    searchTerm={searchTerm}
+                    handleSearchChange={handleSearchChange}
+                    handleKeyDown={handleKeyDown}
+                    theme={theme}
+                  />
                 </div>
               </div>
               <div className="px-8">
@@ -348,63 +300,19 @@ const TicketPage = (props: any) => {
                         </label>
                         {displayTickets &&
                           displayTickets.map((ticket: any) => (
-                            <div
-                              key={ticket.id}
-                              className="flex flex-col w-full gap-2 border border-solid border-transparent border-t-black dark:border-t-white border-t-4 rounded-t-sm"
-                            >
-                              <div className="flex flex-col w-full mt-3">
-                                <label className="text-left text-gray-400 text-sm">
-                                  Subject
-                                </label>
-                                <label className="text-left text-black-text dark:text-white text-base font-normal">
-                                  {ticket.title}
-                                </label>
-                              </div>
-                              <div className="flex flex-col w-full">
-                                <label className="text-left text-gray-400 text-sm">
-                                  Status
-                                </label>
-                                <label className="text-left text-black-text dark:text-white text-base font-normal">
-                                  {ticket.status}
-                                </label>
-                              </div>
-                              <div className="flex flex-col w-full">
-                                <label className="text-left text-gray-400 text-sm">
-                                  Latest Update
-                                </label>
-                                <label className="text-left text-black-text dark:text-white text-base font-normal">
-                                  {new Date(
-                                    parseInt(ticket.updatedAt)
-                                  ).toLocaleDateString()}
-                                </label>
-                              </div>
-
-                              <div className="flex flex-col w-full">
-                                <label className="text-left text-gray-400 text-sm">
-                                  Action
-                                </label>
-                                <div className="flex flex-row gap-2 mt-2">
-                                  <Link
-                                    to={`/applicant/ticket/${ticket.id}`}
-                                    className="text-white bg-yellow-500 border border-solid border-yellow-500 rounded-md px-2 text-xs"
-                                  >
-                                    View
-                                  </Link>
-                                  <Link
-                                    to={`/applicant/ticket/${ticket.id}/reply`}
-                                    className="text-white bg-green border border-solid border-green rounded-md px-2 text-xs"
-                                  >
-                                    Reply
-                                  </Link>
-                                </div>
-                              </div>
-                            </div>
+                            <MobileTicketCard ticket={ticket} />
                           ))}
                       </div>
                     </div>
                   </div>
                   {tickets && (
-                    <TicketPagination itemsPerPage={itemsPerPage} setItemsPerPage={setItemsPerPage} page={page} setPage={setPage} paginationRange={paginationRange}/>
+                    <TicketPagination
+                      itemsPerPage={itemsPerPage}
+                      setItemsPerPage={setItemsPerPage}
+                      page={page}
+                      setPage={setPage}
+                      paginationRange={paginationRange}
+                    />
                   )}
                 </div>
               </div>
@@ -427,5 +335,4 @@ export default connect(mapState, {
   getAllFilteredTickets,
   getUserTickets,
   createTicket,
-  getAllTickets,
 })(TicketPage);
