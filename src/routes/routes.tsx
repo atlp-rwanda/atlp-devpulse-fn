@@ -57,6 +57,7 @@ import Search from "./../pages/search";
 import Settings from '../components/settings';
 import ProfileUpdate from "../pages/ProfilePage";
 import Profile from "../pages/Profile";
+import SignupPage from "./../pages/SignupPage";
 
 
 function Navigation() {
@@ -70,7 +71,7 @@ function Navigation() {
       <Route path="/forget" element={<ForgotPasswordPage />} />
       <Route path="/reset-password" element={<ResetPasswordPage />} />
 
-      <Route path="/signup" element={<SignupForm />} />
+      <Route path="/signup" element={<SignupPage />} />
       <Route path="/verifyEmail" element={<VerifyEmail/>}/>
       <Route path="/pageNotFound" element={<PageNotFound />} />
       <Route path="settings" element={<Settings />} />
