@@ -168,7 +168,7 @@ function Navigation() {
           }
         />
         <Route
-          path="Applicant-Stages"
+          path="cycles/applicant-stages/:cycleName"
           element={
             <PrivateRoute allowedRoles={["Admin", "superAdmin"]}>
               <ApplicantStages />

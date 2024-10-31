@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useAppDispatch,useAppSelector } from "../../hooks/hooks";
 import { addMarks } from "../../redux/actions/applicationStage";
 import toast from "react-hot-toast";
+import Select from "react-select";
 interface scoreProps {
   applicantId: string;
   stage: string;
@@ -11,7 +12,7 @@ interface scoreProps {
 const addApplicantScore: React.FC<scoreProps> = ({ applicantId, stage, onClose }) => {
   const dispatch = useAppDispatch();
   const {data, loading,success, error} = useAppSelector((state)=> state.AddedApplicantScore)
-  const [score, setScore] = useState<number>();
+  const [score, setScore] = useState<number | null>(null);
   const [isModelOpen, setIsModelOpen] = useState(false);
   const [isError, setIsError] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -25,7 +26,7 @@ const addApplicantScore: React.FC<scoreProps> = ({ applicantId, stage, onClose }
   // Close Modal and Clear State
   const handleClose = () => {
     setIsModelOpen(false);
-    setScore(undefined);
+    setScore(null);
     setIsError(false);
     setErrorMsg(null);
     onClose();
@@ -60,13 +61,26 @@ const addApplicantScore: React.FC<scoreProps> = ({ applicantId, stage, onClose }
                 <label className="block text-sm mb-2 dark:text-white">
                   Score
                 </label>
-                <input
+                { stage === "Technical Assessment" ?
+                  <input
                   className="w-full p-2 border rounded-md bg-white dark:bg-[#374151] dark:text-white dark:border-gray-600"
                   type="text"
                   placeholder="Score for the current stage"
                   value={score || ""}
                   onChange={(e) => setScore(Number(e.target.value))}
-                />
+                /> : stage === "Interview Assessment" ? (
+                  <Select
+                    className="w-full p-2 border rounded-md  dark:bg-[#374151] dark:text-primary dark:border-gray-600"
+                    options={[
+                      { value: "0", label: "0" },
+                      { value: "1", label: "1" },
+                      { value: "2", label: "2" },
+                    ]}
+                    placeholder="Select score"
+                    value={score !== null ? { value: score?.toString(), label: score?.toString() } : null}
+                    onChange={(e) => setScore(e ? Number(e.value) : null)}
+                  />
+                ) : null}
                 {
                   isError && (
                     <div className="text-red-500 text-sm">{errorMsg}</div>

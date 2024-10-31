@@ -1,6 +1,6 @@
 import React from "react";
 import { Icon } from "@iconify/react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import {
   sidebarItems1,
   sidebarItems2,
@@ -8,27 +8,32 @@ import {
   applicantSidebarItems,
 } from "./sidebarItems";
 import "./navslide.css";
-
 const Sidebar = ({ expanded, setExpanded }) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const roleName = localStorage.getItem("roleName");
-
   // Select items based on the role
   const items =
     roleName === "applicant"
       ? applicantSidebarItems
       : [...sidebarItems1, ...sidebarItems2];
-
   const handleLogout = () => {
     localStorage.clear();
     navigate("/login");
   };
-
+  // Function to check if the current item is active based on the current path
+  const isActive = (path) => {
+    if (path.startsWith("/")) {
+      return location.pathname === path;
+    } else {
+      return location.pathname.endsWith(path);
+    }
+  };
   return (
     <div
       className={` ${
         expanded ? "w-[16rem]" : "w-[4rem]"
-      } fixed  dark:bg-dark-bg bg-white border-r transition-width duration-300 h-full z-50`}
+      } fixed dark:bg-dark-bg bg-white border-r transition-width duration-300 h-full overflow-scroll`}
     >
       <button
         onClick={() => setExpanded(!expanded)}
@@ -44,7 +49,11 @@ const Sidebar = ({ expanded, setExpanded }) => {
           {items.map((item, index) => (
             <li
               key={index}
-              className="flex items-center dark:text-white text-black hover:text-[#56c770]"
+              className={`flex items-center ${
+                isActive(item.path)
+                  ? "bg-gray-700 text-[#56C770]"
+                  : "dark:text-white text-black hover:text-[#56C770]"
+            }`}
             >
               <Link to={item.path} className="p-1 flex items-center">
                 <span className="mr-3">{item.icon}</span>
@@ -58,7 +67,11 @@ const Sidebar = ({ expanded, setExpanded }) => {
           {sidebarItems3.map((item, index) => (
             <li
               key={index}
-              className="flex items-center text-black dark:text-white hover:text-[#56c770]"
+              className={`flex items-center ${
+                isActive(item.path)
+                  ? "bg-gray-700 text-[#56C770]"
+                  : "dark:text-white text-white hover:text-[#56C770]"
+            }`}
             >
               <Link to={item.path} className="p-1 flex items-center">
                 <span className="mr-3">{item.icon}</span>
@@ -69,7 +82,7 @@ const Sidebar = ({ expanded, setExpanded }) => {
         </ul>
         <button
           onClick={handleLogout}
-          className="flex items-center p-1 font-semibold hover:font-bold text-black dark:text-white focus:outline-none hover:text-[#56c770] mt-4 ml-4"
+          className="flex items-center p-1 font-semibold hover:font-bold text-black dark:text-white focus:outline-none hover:text-[#56C770] mt-4 ml-4"
         >
           <Icon icon="hugeicons:logout-circle-02" className="mr-3" />
           {expanded && <span>Logout</span>}
@@ -78,5 +91,4 @@ const Sidebar = ({ expanded, setExpanded }) => {
     </div>
   );
 };
-
 export default Sidebar;

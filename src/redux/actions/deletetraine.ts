@@ -158,6 +158,7 @@ export const fetchtraine = ({ page, itemsPerPage, All }: any) => {
                     status
                     _id
                     delete_at
+                    createdAt
                     cycle_id {
                         name
                     }

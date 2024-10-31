@@ -10,15 +10,13 @@ type props ={
 }
 const DismissTraineeApplicant: React.FC<props> = ({applicantId,applicantName,stage, status}) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [nextStage, setNextStage] = useState("");
   const [comments, setComments] = useState("");
   const dispatch = useAppDispatch();
   const { data, success, loading, message,error } = useAppSelector(
     (state) => state.nextStage
   );
   const handleDismiss = async () => {
-    setNextStage("Dismissed")
-    await dispatch(AdvanceToNextStage(applicantId, nextStage, comments));
+    await dispatch(AdvanceToNextStage(applicantId, "Dismissed", comments));
     setIsOpen(false);
   };
 
@@ -31,8 +29,8 @@ const DismissTraineeApplicant: React.FC<props> = ({applicantId,applicantName,sta
     <div>
       <button
         onClick={() => setIsOpen(true)}
-        disabled = {stage === "Dismissed" || stage === "Admitted" ? true : status === "Moved" ? true : false}
-        className={`px-4 py-2 text-sm font-medium text-white ${stage === "Dismissed" || stage === "Admitted" ? "bg-gray-400 cursor-not-allowed" : status === "Moved" ? "bg-gray-400 cursor-not-allowed" : "bg-red-600 hover:bg-red-700 cursor-pointer"} rounded-md  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 ml-2`}
+        disabled = {stage === "Dismissed" || stage === "Admitted" ? true : status === "Moved" || status === "Dismissed" ? true : false}
+        className={`px-4 py-2 text-sm font-medium text-white ${stage === "Dismissed" || stage === "Admitted" ? "bg-gray-400 cursor-not-allowed" : status === "Moved" || status === "Dismissed" ? "bg-gray-400 cursor-not-allowed" : "bg-red-600 hover:bg-red-700 cursor-pointer"} rounded-md  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 ml-2`}
       >
         Dismiss
       </button>
@@ -66,7 +64,7 @@ const DismissTraineeApplicant: React.FC<props> = ({applicantId,applicantName,sta
                 Cancel
               </button>
               <button
-                onClick={() => handleDismiss()}
+                onClick={ handleDismiss}
                 className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-500"
               >
                 Dismiss

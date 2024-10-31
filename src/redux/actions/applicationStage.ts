@@ -180,6 +180,8 @@ export const filterStage = (stage: string) => async (dispatch: any) => {
   status
   comments
   score
+  updatedAt
+  createdAt
   }
 }`,
       variables: {

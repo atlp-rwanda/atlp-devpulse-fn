@@ -23,9 +23,13 @@ import DismissTraineeApplicant from "../../components/form/dismissTraineeApplica
 import { HiDotsVertical } from "react-icons/hi";
 import AddApplicantScore from "../../components/form/addApplicantScore";
 import { filterStage } from "../../redux/actions/applicationStage";
+import { TableSkeleton } from "../../skeletons/applicantStageSkeleton";
+import LoadingSkeleton from "../../skeletons/loadingSkeleton";
+import { useParams } from "react-router-dom";
 
 const ApplicantStages = (props: any) => {
   // New state for search input and search field
+  const { cycleName } = useParams<{ cycleName: string | undefined }>();
   const [searchQuery, setSearchQuery] = useState("");
   const [searchField, setSearchField] = useState("firstName");
   const [filterData, setFilterData] = useState<any[]>([]); // Initialize as an empty array
@@ -35,17 +39,18 @@ const ApplicantStages = (props: any) => {
   const { alltrainees, delettraine, softdeletettraine, traines, cycles } =
     props;
   const dispatch = useAppDispatch();
-  const {
-    data: nextStageData,
-    success: nextStageSuccess,
-  } = useAppSelector((state) => state.nextStage);
+  const { data: nextStageData, success: nextStageSuccess } = useAppSelector(
+    (state) => state.nextStage
+  );
+
+  const { data: filteredApplicantData, success: filterSuccess } =
+    useAppSelector((state) => state.filterApplicantByStage);
 
   const {
-    data: filteredApplicantData,
-    success: filterSuccess,
-  } = useAppSelector((state) => state.filterApplicantByStage);
-
-  const {data, loading,success:addedScoreSuccess, error} = useAppSelector((state)=> state.AddedApplicantScore)
+    data,
+    success: addedScoreSuccess,
+    error,
+  } = useAppSelector((state) => state.AddedApplicantScore);
 
   const [page, setPage] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState<number>(10);
@@ -53,7 +58,10 @@ const ApplicantStages = (props: any) => {
   const { theme, setTheme } = useTheme();
   const [isOpen, setIsOpen] = useState(false);
   const [isMore, setIsMore] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [loadingFilter, setLoadingFilter] = useState(true);
   const [filterStages, setFilterStages] = useState("");
+  const [filteredTraines, setFilteredTraines] = useState([]);
 
   const input = {
     page: page + 1,
@@ -64,11 +72,20 @@ const ApplicantStages = (props: any) => {
   useEffect(() => {
     props.getAllCycles();
   }, []);
+  useEffect(()=>{
+    const traine = traines?.message || [];
+    const decodedString = cycleName ? decodeURIComponent(cycleName) : "";
+    const filtered = traine.filter((trainee) => trainee.cycle_id.name === decodedString);
+    setFilteredTraines(filtered);
+  },[traines,cycleName])
 
-  const traine = traines?.message || [];
+  
 
   useEffect(() => {
-    dispatch(fetchtraine(input));
+    setTimeout(() => {
+      setLoading(false);
+      dispatch(fetchtraine(input));
+    }, 2000);
   }, [
     delettraine,
     softdeletettraine,
@@ -88,24 +105,21 @@ const ApplicantStages = (props: any) => {
     return stage;
   };
 
-  const uniqueCycles: string[] = Array.from(
-    new Set(
-      traine
-        .map((item: any) => item.cycle_id?.name)
-        .filter((name: any): name is string => Boolean(name))
-    )
-  );
+  // const uniqueCycles: string[] = Array.from(
+  //   new Set(
+  //     traine
+  //       .map((item: any) => item.cycle_id?.name)
+  //       .filter((name: any): name is string => Boolean(name))
+  //   )
+  // );
 
-  // Filter trainees by selected search field
-  const filteredTrainees = traine.filter((item: any) => {
+  const filteredTrainees = filteredTraines.filter((item: any) => {
     const fieldValue = item[searchField];
     const matchesSearch = fieldValue
       ?.toString()
       .toLowerCase()
       .includes(searchQuery.toLowerCase());
-    const matchesCycle =
-      selectedCycle === "all" ? true : item.cycle_id?.name === selectedCycle;
-    return matchesSearch && matchesCycle;
+    return matchesSearch;
   });
 
   const paginationRange = useCustomPagination({
@@ -123,16 +137,38 @@ const ApplicantStages = (props: any) => {
   };
 
   useEffect(() => {
+    const timer = setTimeout(() => {
+      if (!filterData) {
+        setLoadingFilter(true);
+      }
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, [filterData]);
+
+  useEffect(() => {
     if (filterSuccess && filteredApplicantData) {
+      setLoadingFilter(false);
       setFilterData(filteredApplicantData);
     }
-  }, [filteredApplicantData, filterSuccess, nextStageData]);
+  }, [filterSuccess, filteredApplicantData]);
 
-  useEffect(()=>{
-    if(addedScoreSuccess){
-      setFilterData(filteredApplicantData)
-    }
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false);
+      if (addedScoreSuccess) {
+        setFilterData(filteredApplicantData);
+      }
+    }, 2000);
   }, [addedScoreSuccess]);
+
+  const stages = [
+    { value: "Shortlisted", label: "Shortlisted" },
+    { value: "Technical Assessment", label: "Technical" },
+    { value: "Interview Assessment", label: "Interview" },
+    { value: "admitted", label: "Admitted" },
+    { value: "Dismissed", label: "Dismissed" },
+  ];
   return (
     <>
       <div className="w-full">
@@ -144,29 +180,6 @@ const ApplicantStages = (props: any) => {
                 <div className="bg-light-bg dark:bg-dark-frame-bg  min-h-screen overflow-y-hidden overflow-x-hidden">
                   <div className="w-full px-4 sm:px-6 lg:px-3 py-4">
                     <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-4">
-                      <Select
-                        menuPlacement="auto"
-                        className="text-sm rounded-md dark:text-ltb"
-                        options={[
-                          { value: "admitted", label: "Admitted" },
-                          { value: "Shortlisted", label: "Shortlisted" },
-                          {
-                            value: "Technical Assessment",
-                            label: "Technical",
-                          },
-                          { value: "Interview Assessment", label: "Interview" },
-                          { value: "dismissed", label: "Dismissed" },
-                        ]}
-                        value={{
-                          value: filterStages,
-                          label: filterStages ? filterStages : "Sort by stage",
-                        }}
-                        onChange={(e: any) => {
-                          setFilterStages(e?.value);
-                          handleFilter(e?.value);
-                        }}
-                        theme={theme ? customTheme : darkTheme}
-                      />
                       <Select
                         menuPlacement="auto"
                         className="text-sm rounded-md dark:text-ltb"
@@ -218,31 +231,41 @@ const ApplicantStages = (props: any) => {
                   <div className="px-3">
                     <div className="bg-white  dark:bg-dark-bg shadow-lg px-3 py-8 rounded-md w-[100%] mx-auto">
                       <div className="flex flex-col">
-                        <div className="flex flex-wrap gap-4 mb-4 px-4">
+                        <div
+                          className={`flex space-x-2 overflow-x-auto ${
+                            theme ? customTheme : darkTheme
+                          }`}
+                        >
                           <button
-                            onClick={() => {setSelectedCycle("all"); setFilterStages("")}}
-                            className={`px-6 py-2 rounded-md transition-colors duration-200 ${
-                              selectedCycle === "all"
+                            onClick={() => {
+                              setFilterStages("");
+                              handleFilter(""); // Reset filter
+                            }}
+                            className={`text-sm rounded-md px-3 py-2 transition-colors duration-200 ${
+                              filterStages === ""
                                 ? "bg-[#56C870] text-white"
-                                : "border border-[#293647] bg-transparent text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+                                : "bg-gray-200 text-gray-800 hover:bg-blue-100"
                             }`}
                           >
-                            All Trainees
+                            All Stages
                           </button>
-
-                          {uniqueCycles.map((cycle: string) => (
+                          {stages.map((stage) => (
                             <button
-                              key={cycle}
-                              onClick={() => setSelectedCycle(cycle)}
-                              className={`px-6 py-2 rounded-md transition-colors duration-200 ${
-                                selectedCycle === cycle
-                                  ? "bg-[#56C870] text-white"
-                                  : "border border-[#293647] bg-transparent text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+                              key={stage.value}
+                              className={`text-sm rounded-md px-3 py-2 transition-colors duration-200 ${
+                                filterStages === stage.value
+                                  ? "bg-[#56C870] text-white" // Active stage style
+                                  : "bg-gray-200 text-gray-800 hover:bg-blue-100" // Inactive stage style
                               }`}
+                              onClick={() => {
+                                setFilterStages(stage.value);
+                                handleFilter(stage.value);
+                              }}
                             >
-                              {cycle}
+                              {stage.label}
                             </button>
                           ))}
+                          
                         </div>
                       </div>
                       <div>
@@ -262,6 +285,11 @@ const ApplicantStages = (props: any) => {
                                     {
                                       <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
                                         {"Status"}
+                                      </th>
+                                    }
+                                    {
+                                      <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
+                                        {"Last Update"}
                                       </th>
                                     }
                                     {filterStages &&
@@ -297,48 +325,51 @@ const ApplicantStages = (props: any) => {
                                       <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
                                         {""}
                                       </th>
-                                    ): null}
+                                    ) : null}
                                   </tr>
                                 </thead>
-                                <tbody className="overflow-y-auto">
-                                  {filterStages === "" &&
-                                  filteredTrainees?.length > 0 ? (
-                                    filteredTrainees.map(
-                                      (item: any, index: number) =>
-                                        item?.delete_at == false ? (
-                                          <tr
-                                            key={item._id}
-                                            className={`${
-                                              index % 2 === 0
-                                                ? "bg-white dark:bg-dark-bg"
-                                                : "bg-gray-50 dark:bg-dark-tertiary"
-                                            } hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors duration-200`}
-                                          >
-                                            <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
-                                              <div className="flex">
-                                                <div className="">
-                                                  <p className="text-gray-900 text-center dark:text-white whitespace-no-wrap">
-                                                    {item.firstName +
-                                                      " " +
-                                                      item.lastName}
-                                                  </p>
+                                {loading ? (
+                                  <LoadingSkeleton rows = {5} filterStages={""} />
+                                ) : (
+                                  <tbody className="overflow-y-auto">
+                                    {filterStages === "" &&
+                                    filteredTrainees?.length > 0 ? (
+                                      filteredTrainees.map(
+                                        (item: any, index: number) =>
+                                          item?.delete_at == false ? (
+                                            <tr
+                                              key={item._id}
+                                              className={`${
+                                                index % 2 === 0
+                                                  ? "bg-white dark:bg-dark-bg"
+                                                  : "bg-gray-50 dark:bg-dark-tertiary"
+                                              } hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors duration-200`}
+                                            >
+                                              <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
+                                                <div className="flex">
+                                                  <div className="">
+                                                    <p className="text-gray-900 text-center dark:text-white whitespace-no-wrap">
+                                                      {item.firstName +
+                                                        " " +
+                                                        item.lastName}
+                                                    </p>
+                                                  </div>
                                                 </div>
-                                              </div>
-                                            </td>
+                                              </td>
 
-                                            <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
-                                              <div className="flex items-center">
-                                                <div className="">
-                                                  <p className="text-gray-900 items-center dark:text-white whitespace-no-wrap">
-                                                    {item.email}
-                                                  </p>
+                                              <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
+                                                <div className="flex items-center">
+                                                  <div className="">
+                                                    <p className="text-gray-900 items-center dark:text-white whitespace-no-wrap">
+                                                      {item.email}
+                                                    </p>
+                                                  </div>
                                                 </div>
-                                              </div>
-                                            </td>
+                                              </td>
 
-                                            <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm min-w-52">
-                                              <span
-                                                className={`inline-block px-3 py-1 rounded-full text-sm whitespace-no-wrap
+                                              <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm min-w-52">
+                                                <span
+                                                  className={`inline-block px-3 py-1 rounded-full text-sm whitespace-no-wrap
                         ${
                           item.applicationPhase === "Dismissed"
                             ? "bg-red-200 text-red-500 font-medium"
@@ -346,50 +377,214 @@ const ApplicantStages = (props: any) => {
                             ? "bg-[#1bf84b8d] text-white"
                             : "bg-gray-100 text-gray-800"
                         }`}
-                                              >
-                                                {item.status}
-                                              </span>
-                                            </td>
+                                                >
+                                                  {item.status}
+                                                </span>
+                                              </td>
+                                              <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
+                                                <span className="inline-block px-3 py-1 bg-blue-100 text-blue-800 font-medium rounded-full">
+                                                  {item.createdAt}
+                                                </span>
+                                              </td>
+                                              <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
+                                                <span className="inline-block px-3 py-1 bg-blue-100 text-blue-800 font-medium rounded-full">
+                                                  {getStageText(
+                                                    item.applicationPhase
+                                                  )}
+                                                </span>
+                                              </td>
+                                              <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
+                                                <div className="flex justify-center gap-2">
+                                                  <NextStageModal
+                                                    applicantId={item._id}
+                                                    stage={
+                                                      item.applicationPhase
+                                                    }
+                                                  />
+                                                  <DismissTraineeApplicant
+                                                    applicantId={item._id}
+                                                    applicantName={
+                                                      item.firstName +
+                                                      " " +
+                                                      item.lastName
+                                                    }
+                                                    stage={
+                                                      item.applicationPhase
+                                                    }
+                                                  />
+                                                </div>
+                                              </td>
+                                              <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
+                                                <div className=" flex justify-center">
+                                                  <HiDotsVertical
+                                                    className=" text-black dark:text-white text-3xl cursor-pointer"
+                                                    onClick={(e: any) => {
+                                                      e.preventDefault();
+                                                      handleMoreOptions(
+                                                        item._id
+                                                      );
+                                                    }}
+                                                  />
+                                                  <div
+                                                    className={`${
+                                                      isMore === item._id &&
+                                                      (item.applicationPhase ===
+                                                        "Interview Assessment" ||
+                                                        item.applicationPhase ===
+                                                          "Technical Assessment")
+                                                        ? "block"
+                                                        : "hidden"
+                                                    } absolute  bg-white dark:bg-dark-tertiary  dark:text-white text-base z-50 list-none divide-y divide-gray-100 rounded shadow my-4`}
+                                                    id="dropdown"
+                                                  >
+                                                    <ul
+                                                      className="py-1"
+                                                      aria-labelledby="dropdown"
+                                                    >
+                                                      <li>
+                                                        <div className="text-sm hover:bg-gray-100 text-gray-700  dark:hover:bg-gray-500 dark:text-white  block px-4 py-2">
+                                                          <AddApplicantScore
+                                                            applicantId={
+                                                              item._id
+                                                            }
+                                                            stage={
+                                                              item.applicationPhase
+                                                            }
+                                                            onClose={() =>
+                                                              setIsMore("")
+                                                            }
+                                                          />
+                                                        </div>
+                                                      </li>
+                                                    </ul>
+                                                  </div>
+                                                </div>
+                                              </td>
+                                            </tr>
+                                          ) : null
+                                      )
+                                    ) : filterStages && loadingFilter ? (
+                                      <LoadingSkeleton
+                                      rows={2}
+                                        filterStages={filterStages}
+                                      />
+                                    ) : !loadingFilter &&
+                                      filterStages &&
+                                      filterData &&
+                                      filterData.length > 0 ? (
+                                      filterData?.map((item, index: number) => (
+                                        <tr
+                                          key={item._id}
+                                          className={`${
+                                            index % 2 === 0
+                                              ? "bg-white dark:bg-dark-bg"
+                                              : "bg-gray-50 dark:bg-dark-tertiary"
+                                          } hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors duration-200`}
+                                        >
+                                          <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
+                                            <div className="flex">
+                                              <div className="">
+                                                <p className="text-gray-900 text-center dark:text-white whitespace-no-wrap">
+                                                  {item.applicant.firstName +
+                                                    " " +
+                                                    item.applicant.lastName}
+                                                </p>
+                                              </div>
+                                            </div>
+                                          </td>
 
+                                          <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
+                                            <div className="flex items-center">
+                                              <div className="">
+                                                <p className="text-gray-900 items-center dark:text-white whitespace-no-wrap">
+                                                  {item.applicant.email}
+                                                </p>
+                                              </div>
+                                            </div>
+                                          </td>
+
+                                          <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
+                                            <span
+                                              className={`inline-block px-3 py-1 rounded-full text-sm
+                        ${
+                          item.status === "Dismissed"
+                            ? "bg-red-200 text-red-500 font-medium"
+                            : item.status === "Admitted"
+                            ? "bg-[#1bf84b8d] text-white"
+                            : "bg-gray-100 text-gray-800"
+                        }`}
+                                            >
+                                              {item.status}
+                                            </span>
+                                          </td>
+                                          <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
+                                            <span className="inline-block px-3 py-1 bg-blue-100 text-blue-800 font-medium rounded-full">
+                                              {item.updatedAt}
+                                            </span>
+                                          </td>
+                                          <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
+                                            <span className="inline-block px-3 py-1 bg-blue-100 text-blue-800 font-medium rounded-full">
+                                              {item.comments}
+                                            </span>
+                                          </td>
+                                          {filterStages ===
+                                            "Technical Assessment" ||
+                                          filterStages ===
+                                            "Interview Assessment" ? (
                                             <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
                                               <span className="inline-block px-3 py-1 bg-blue-100 text-blue-800 font-medium rounded-full">
-                                                {getStageText(
-                                                  item.applicationPhase
-                                                )}
+                                                {item.score === null
+                                                  ? "No Score"
+                                                  : item.score}
                                               </span>
                                             </td>
-                                            <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
-                                              <div className="flex justify-center gap-2">
-                                                <NextStageModal
-                                                  applicantId={item._id}
-                                                  stage={item.applicationPhase}
-                                                />
-                                                <DismissTraineeApplicant
-                                                  applicantId={item._id}
-                                                  applicantName={
-                                                    item.firstName +
-                                                    " " +
-                                                    item.lastName
-                                                  }
-                                                  stage={item.applicationPhase}
-                                                />
-                                              </div>
-                                            </td>
+                                          ) : null}
+                                          <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
+                                            <div className="flex justify-center gap-2">
+                                              <NextStageModal
+                                                applicantId={item.applicant._id}
+                                                stage={
+                                                  item.applicant
+                                                    .applicationPhase
+                                                }
+                                                status={item.status}
+                                              />
+                                              <DismissTraineeApplicant
+                                                applicantId={item.applicant._id}
+                                                applicantName={
+                                                  item.applicant.firstName +
+                                                  " " +
+                                                  item.applicant.lastName
+                                                }
+                                                stage={item.currentStage}
+                                                status={item.status}
+                                              />
+                                            </div>
+                                          </td>
+                                          {filterStages ===
+                                            "Technical Assessment" ||
+                                          filterStages ===
+                                            "Interview Assessment" ? (
                                             <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
                                               <div className=" flex justify-center">
                                                 <HiDotsVertical
                                                   className=" text-black dark:text-white text-3xl cursor-pointer"
                                                   onClick={(e: any) => {
                                                     e.preventDefault();
-                                                    handleMoreOptions(item._id);
+                                                    handleMoreOptions(
+                                                      item.applicant._id
+                                                    );
                                                   }}
                                                 />
                                                 <div
                                                   className={`${
-                                                    isMore === item._id &&
-                                                    (item.applicationPhase ===
+                                                    isMore ===
+                                                      item.applicant._id &&
+                                                    (item.applicant
+                                                      .applicationPhase ===
                                                       "Interview Assessment" ||
-                                                      item.applicationPhase ===
+                                                      item.applicant
+                                                        .applicationPhase ===
                                                         "Technical Assessment")
                                                       ? "block"
                                                       : "hidden"
@@ -403,9 +598,12 @@ const ApplicantStages = (props: any) => {
                                                     <li>
                                                       <div className="text-sm hover:bg-gray-100 text-gray-700  dark:hover:bg-gray-500 dark:text-white  block px-4 py-2">
                                                         <AddApplicantScore
-                                                          applicantId={item._id}
+                                                          applicantId={
+                                                            item.applicant._id
+                                                          }
                                                           stage={
-                                                            item.applicationPhase
+                                                            item.applicant
+                                                              .applicationPhase
                                                           }
                                                           onClose={() =>
                                                             setIsMore("")
@@ -417,160 +615,21 @@ const ApplicantStages = (props: any) => {
                                                 </div>
                                               </div>
                                             </td>
-                                          </tr>
-                                        ) : null
-                                    )
-                                  ) : filterStages &&
-                                    filterData &&
-                                    filterData.length > 0 ? (
-                                    filterData?.map((item, index: number) => (
-                                      <tr
-                                        key={item._id}
-                                        className={`${
-                                          index % 2 === 0
-                                            ? "bg-white dark:bg-dark-bg"
-                                            : "bg-gray-50 dark:bg-dark-tertiary"
-                                        } hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors duration-200`}
-                                      >
-                                        <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
-                                          <div className="flex">
-                                            <div className="">
-                                              <p className="text-gray-900 text-center dark:text-white whitespace-no-wrap">
-                                                {item.applicant.firstName +
-                                                  " " +
-                                                  item.applicant.lastName}
-                                              </p>
-                                            </div>
-                                          </div>
+                                          ) : null}
+                                        </tr>
+                                      ))
+                                    ) : (
+                                      <tr>
+                                        <td
+                                          colSpan={5}
+                                          className="text-center text-white"
+                                        >
+                                          No trainees found
                                         </td>
-
-                                        <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
-                                          <div className="flex items-center">
-                                            <div className="">
-                                              <p className="text-gray-900 items-center dark:text-white whitespace-no-wrap">
-                                                {item.applicant.email}
-                                              </p>
-                                            </div>
-                                          </div>
-                                        </td>
-                                        <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
-                                          <span
-                                            className={`inline-block px-3 py-1 rounded-full text-sm
-                        ${
-                          item.status === "Dismissed"
-                            ? "bg-red-200 text-red-500 font-medium"
-                            : item.status === "Admitted"
-                            ? "bg-[#1bf84b8d] text-white"
-                            : "bg-gray-100 text-gray-800"
-                        }`}
-                                          >
-                                            {item.status}
-                                          </span>
-                                        </td>
-
-                                        <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
-                                          <span className="inline-block px-3 py-1 bg-blue-100 text-blue-800 font-medium rounded-full">
-                                            {item.comments}
-                                          </span>
-                                        </td>
-                                        {filterStages ===
-                                          "Technical Assessment" ||
-                                        filterStages ===
-                                          "Interview Assessment" ? (
-                                          <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
-                                            <span className="inline-block px-3 py-1 bg-blue-100 text-blue-800 font-medium rounded-full">
-                                              {item.score === null
-                                                ? "No Score"
-                                                : item.score}
-                                            </span>
-                                          </td>
-                                        ) : null}
-                                        <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
-                                          <div className="flex justify-center gap-2">
-                                            <NextStageModal
-                                              applicantId={item.applicant._id}
-                                              stage={
-                                                item.applicant.applicationPhase
-                                              }
-                                              status={item.status}
-                                            />
-                                            <DismissTraineeApplicant
-                                              applicantId={item.applicant._id}
-                                              applicantName={
-                                                item.applicant.firstName +
-                                                " " +
-                                                item.applicant.lastName
-                                              }
-                                              stage={item.currentStage}
-                                              status={item.status}
-                                            />
-                                          </div>
-                                        </td>
-                                        {filterStages ===
-                                          "Technical Assessment" ||
-                                        filterStages ===
-                                          "Interview Assessment" ? (
-                                          <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
-                                            <div className=" flex justify-center">
-                                              <HiDotsVertical
-                                                className=" text-black dark:text-white text-3xl cursor-pointer"
-                                                onClick={(e: any) => {
-                                                  e.preventDefault();
-                                                  handleMoreOptions(item.applicant._id);
-                                                }}
-                                              />
-                                              <div
-                                                className={`${
-                                                  isMore === item.applicant._id &&
-                                                  (item.applicant
-                                                    .applicationPhase ===
-                                                    "Interview Assessment" ||
-                                                    item.applicant
-                                                      .applicationPhase ===
-                                                      "Technical Assessment")
-                                                    ? "block"
-                                                    : "hidden"
-                                                } absolute  bg-white dark:bg-dark-tertiary  dark:text-white text-base z-50 list-none divide-y divide-gray-100 rounded shadow my-4`}
-                                                id="dropdown"
-                                              >
-                                                <ul
-                                                  className="py-1"
-                                                  aria-labelledby="dropdown"
-                                                >
-                                                  <li>
-                                                    <div className="text-sm hover:bg-gray-100 text-gray-700  dark:hover:bg-gray-500 dark:text-white  block px-4 py-2">
-                                                      <AddApplicantScore
-                                                        applicantId={
-                                                          item.applicant._id
-                                                        }
-                                                        stage={
-                                                          item.applicant
-                                                            .applicationPhase
-                                                        }
-                                                        onClose={() =>
-                                                          setIsMore("")
-                                                        }
-                                                      />
-                                                    </div>
-                                                  </li>
-                                                </ul>
-                                              </div>
-                                            </div>
-                                          </td>
-                                        ) : null}
                                       </tr>
-                                    ))
-                                  ) : (
-                                    <tr>
-                                      <td
-                                        colSpan={5}
-                                        className="text-center text-white"
-                                      >
-                                        No trainees found
-                                      </td>
-                                    </tr>
-                                  )}
-                                </tbody>
+                                    )}
+                                  </tbody>
+                                )}
                               </table>
                             </div>
                           </div>
@@ -704,7 +763,6 @@ const ApplicantStages = (props: any) => {
     </>
   );
 };
-
 const mapState = (state: any) => ({
   delettraine: state.deletetraine,
   softdeletettraine: state.softdeletetraine,

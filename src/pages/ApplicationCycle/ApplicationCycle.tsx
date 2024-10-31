@@ -17,11 +17,13 @@ import * as AiIcons from "react-icons/ai";
 import * as IoIcons from "react-icons/io5";
 import NavBar from "../../components/sidebar/navHeader";
 import { CycleSkeleton } from '../../skeletons/cycleSkeleton'
+import { useNavigate } from "react-router";
 
 const ApplicationCycle = (props: any) => {
   const { allCycles, errors } = props;
   const [loading, setLoading] = useState(true);
   const cycles = allCycles.data;
+  const navigate = useNavigate();
 
   useEffect(() => {
     props.getAllCycles();
@@ -243,7 +245,8 @@ const ApplicationCycle = (props: any) => {
                             return (
                               <td
                                 {...cell.getCellProps()}
-                                className="pl-[30px] text-left max-w-[150px] overflow-x-auto p-4 last:w-[2px] last:pl-[0px]"
+                                onClick={() => navigate(`applicant-stages/${row.original.name}`)}
+                                className="pl-[30px] text-left max-w-[150px] overflow-x-auto p-4 last:w-[2px] last:pl-[0px] cursor-pointer"
                               >
                                 {cell.render("Cell")}
                               </td>
