@@ -25,18 +25,6 @@ export const Token = () => {
 
       const decoded: any = jwtDecode(token);
       const email = decoded.data ? decoded.data.email : decoded.email;
-      console.log('decoded', decoded.data);
-      console.log(decoded);
-      const currentTime = Math.floor(Date.now() / 1000);
-      console.log('currentTime', currentTime);
-      const mockTime = decoded.exp - 3000;
-      console.log('mockTime', mockTime);
-
-      if(decoded.exp < currentTime) {
-        localStorage.removeItem('access_token');
-        toast.error('Session expired, please login again');
-        return null;
-      }
 
       if (process.env.BACKEND_URL) {
         const client = new GraphQLClient(process.env.BACKEND_URL, {
@@ -51,7 +39,7 @@ export const Token = () => {
         });
         return decoded;
       }
-      console.log('decoded', decoded.data);
+      
       return decoded;
     } catch (error) {
       //@ts-ignore
