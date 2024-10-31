@@ -241,9 +241,9 @@ function SignupForm() {
                   className=" absolute right-4 top-4"
                 >
                   {showPassword[0] ? (
-                    <FontAwesomeIcon icon={faEye} className="text-white" />
+                    <FontAwesomeIcon icon={faEye} className="text-black dark:text-white" />
                   ) : (
-                    <FontAwesomeIcon icon={faEyeSlash} className="text-white" />
+                    <FontAwesomeIcon icon={faEyeSlash} className="text-black dark:text-white" />
                   )}
                 </div>
               </div>
@@ -251,7 +251,7 @@ function SignupForm() {
                 <InputField
                   placeholder="confirm Password"
                   type={showPassword[1] ? "text" : "password"}
-                  className="w-full rounded-md   px-2 py-3 border border-white placeholder:text-gray-400 text-white sm:text-[12px] outline-none autofill:bg-transparent autofill:text-white  bg-gray-100 dark:bg-[#1F2A37]"
+                  className="w-full rounded-md   px-2 py-3 border border-white placeholder:text-gray-400 text-black dark:text-white sm:text-[12px] outline-none autofill:bg-transparent autofill:text-white  bg-gray-100 dark:bg-[#1F2A37]"
                   {...register("confirmPassword")}
                   error={errors?.confirmPassword}
                 />
@@ -260,9 +260,9 @@ function SignupForm() {
                   className=" absolute right-4 top-4"
                 >
                   {showPassword[1] ? (
-                    <FontAwesomeIcon icon={faEye} className="text-white" />
+                    <FontAwesomeIcon icon={faEye} className="text-black dark:text-white" />
                   ) : (
-                    <FontAwesomeIcon icon={faEyeSlash} className="text-white" />
+                    <FontAwesomeIcon icon={faEyeSlash} className="text-black dark:text-white" />
                   )}
                 </div>
               </div>
@@ -271,7 +271,7 @@ function SignupForm() {
                 <InputField
                   placeholder="Country"
                   list="countries"
-                  className="w-full rounded-md px-2 py-3 border border-white placeholder:text-gray-400 text-white sm:text-[12px] outline-none autofill:bg-transparent autofill:text-white  bg-gray-100 dark:bg-[#1F2A37]"
+                  className="w-full rounded-md px-2 py-3 border border-white placeholder:text-gray-400 text-black dark:text-white sm:text-[12px] outline-none autofill:bg-transparent autofill:text-white  bg-gray-100 dark:bg-[#1F2A37]"
                   {...register("country", {
                   onChange: (e) => handleCountryChange(e),
                    })} 
