@@ -29,29 +29,94 @@ import CreateTicketModal from "./createTicketModal";
 import SearchFilter from "./ticketSearch";
 import MobileTicketCard from "./mobileTicket";
 import TicketTable from "./ticketTable";
+import { useDispatch } from "react-redux";
 
-const TicketPage = (props: any) => {
-  const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-  const { theme, setTheme } = useTheme();
-  const [createTicketModal, setCreateTicketModal] = useState(false);
+const TicketFilters = ({ onFilterChange, fetchTickets, page, itemsPerPage, theme }) => {
+  const dispatch = useDispatch();
   const [filterAttribute, setFilterAttribute] = useState("");
-  const [page, setPage] = useState(0);
-  const [itemsPerPage, setItemsPerPage] = useState(10);
-  const [actionsList, setActionsList] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const [isFiltering, setIsFiltering] = useState(false);
-  const [All, setAll] = useState(false);
-  const tickets = useSelector((state: any) => state.tickets?.tickets || []);
-  const filteredTickets = useSelector(
-    (state: any) => state.filteredTickets?.filteredTickets || []
-  );
+  const [All] = useState(false);
+
   const ticketFilterOptions = [
     { value: "title", label: "Subject" },
     { value: "status", label: "Status" },
     { value: "", label: "Filter by" },
   ];
+
+  const debouncedSearch = useCallback(
+    debounce(async (term: string) => {
+      if (!filterAttribute) {
+        toast.error("Please select a filter attribute");
+        return;
+      }
+
+      if (!term) {
+        onFilterChange(false);
+        await fetchTickets();
+        return;
+      }
+
+      onFilterChange(true);
+      try {
+        await dispatch(
+          getAllFilteredTickets({
+            page: page + 1,
+            itemsPerPage,
+            All,
+            filterAttribute,
+            wordEntered: term,
+          })
+        );
+      } catch (error) {
+        toast.error("Failed to fetch filtered tickets");
+      }
+    }, 300),
+    [filterAttribute, page, itemsPerPage, All, fetchTickets, onFilterChange]
+  );
+
+  const handleSearchChange = (e) => {
+    const searchTerm = e.target.value;
+    setSearchTerm(searchTerm);
+    debouncedSearch(searchTerm);
+  };
+
+  const handleKeyDown = async (e) => {
+    if (e.key === "Enter") {
+      if (filterAttribute === "" || filterAttribute === null) {
+        toast.error("Please select a filter attribute");
+        return;
+      }
+      const searchTerm = e.target.value;
+      debouncedSearch(searchTerm);
+    }
+  };
+
+  return (
+    <SearchFilter
+      options={ticketFilterOptions}
+      filterAttribute={filterAttribute}
+      setFilterAttribute={setFilterAttribute}
+      searchTerm={searchTerm}
+      handleSearchChange={handleSearchChange}
+      handleKeyDown={handleKeyDown}
+      theme={theme}
+    />
+  );
+};
+
+const TicketPage = (props: any) => {
+  const dispatch = useAppDispatch();
+  const { theme, setTheme } = useTheme();
+  const [createTicketModal, setCreateTicketModal] = useState(false);
+  const [page, setPage] = useState(0);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [actionsList, setActionsList] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isFiltering, setIsFiltering] = useState(false);
+  const tickets = useSelector((state: any) => state.tickets?.tickets || []);
+  const filteredTickets = useSelector(
+    (state: any) => state.filteredTickets?.filteredTickets || []
+  );
 
   const columns = [
     { key: 'title', header: 'Subject' },
@@ -75,57 +140,13 @@ const TicketPage = (props: any) => {
     return tickets;
   }, [isFiltering, filteredTickets, tickets]);
 
-  const handleKeyDown = async (e) => {
-    if (e.key === "Enter") {
-      if (filterAttribute === "" || filterAttribute === null) {
-        toast.error("Please select a filter attribute");
-        return;
-      }
-      const searchTerm = e.target.value;
-      debouncedSearch(searchTerm);
-    }
-  };
+
 
   const paginationRange = useCustomPagination({
     totalPageCount: Math.ceil(filteredTickets?.data?.length / itemsPerPage),
     currentPage: page,
   });
 
-  const handleSearchChange = (e) => {
-    const searchTerm = e.target.value;
-    setSearchTerm(searchTerm);
-    debouncedSearch(searchTerm);
-  };
-  const debouncedSearch = useCallback(
-    debounce(async (term: string) => {
-      if (!filterAttribute) {
-        toast.error("Please select a filter attribute");
-        return;
-      }
-
-      if (!term) {
-        setIsFiltering(false);
-        await fetchTickets();
-        return;
-      }
-
-      setIsFiltering(true);
-      try {
-        await dispatch(
-          getAllFilteredTickets({
-            page: page + 1,
-            itemsPerPage,
-            All,
-            filterAttribute,
-            wordEntered: term,
-          })
-        );
-      } catch (error) {
-        toast.error("Failed to fetch filtered tickets");
-      }
-    }, 300),
-    [filterAttribute, page, itemsPerPage, All]
-  );
 
   const fetchTickets = useCallback(async () => {
     if (isFiltering) return;
@@ -141,9 +162,6 @@ const TicketPage = (props: any) => {
 
   useEffect(() => {
     fetchTickets();
-    return () => {
-      debouncedSearch.cancel();
-    };
   }, [fetchTickets]);
 
   const handleCreateTicket = async (ticketData) => {
@@ -180,13 +198,11 @@ const TicketPage = (props: any) => {
                       <icons.AiOutlinePlus className="mr-2" /> New Ticket
                     </button>
                   </div>
-                  <SearchFilter
-                    options={ticketFilterOptions}
-                    filterAttribute={filterAttribute}
-                    setFilterAttribute={setFilterAttribute}
-                    searchTerm={searchTerm}
-                    handleSearchChange={handleSearchChange}
-                    handleKeyDown={handleKeyDown}
+                  <TicketFilters
+                    onFilterChange={setIsFiltering}
+                    fetchTickets={fetchTickets}
+                    page={page}
+                    itemsPerPage={itemsPerPage}
                     theme={theme}
                   />
                 </div>

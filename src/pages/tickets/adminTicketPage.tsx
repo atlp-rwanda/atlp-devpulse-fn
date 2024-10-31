@@ -18,28 +18,95 @@ import SearchFilter from "./ticketSearch";
 import MobileTicketCard from "./mobileTicket";
 import TicketTable from "./ticketTable";
 
+const TicketFilters = ({ onFilterChange, fetchTickets, page, itemsPerPage, theme }) => {
+  const dispatch = useDispatch();
+  const [filterAttribute, setFilterAttribute] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [All] = useState(false);
+
+  const ticketFilterOptions = [
+    { value: "title", label: "Subject" },
+    { value: "status", label: "Status" },
+    { value: "author", label: "Author" },
+    { value: "", label: "Filter by" },
+  ];
+
+  const debouncedSearch = useCallback(
+    debounce(async (term: string) => {
+      if (!filterAttribute) {
+        toast.error("Please select a filter attribute");
+        return;
+      }
+
+      if (!term) {
+        onFilterChange(false);
+        await fetchTickets();
+        return;
+      }
+
+      onFilterChange(true);
+      try {
+        await dispatch(
+          getAllFilteredTickets({
+            page: page + 1,
+            itemsPerPage,
+            All,
+            filterAttribute,
+            wordEntered: term,
+          })
+        );
+      } catch (error) {
+        toast.error("Failed to fetch filtered tickets");
+      }
+    }, 300),
+    [filterAttribute, page, itemsPerPage, All, fetchTickets, onFilterChange]
+  );
+
+  const handleSearchChange = (e) => {
+    const searchTerm = e.target.value;
+    setSearchTerm(searchTerm);
+    debouncedSearch(searchTerm);
+  };
+
+  const handleKeyDown = async (e) => {
+    if (e.key === "Enter") {
+      if (filterAttribute === "" || filterAttribute === null) {
+        toast.error("Please select a filter attribute");
+        return;
+      }
+      const searchTerm = e.target.value;
+      debouncedSearch(searchTerm);
+    }
+  };
+
+  return (
+    <SearchFilter
+      options={ticketFilterOptions}
+      filterAttribute={filterAttribute}
+      setFilterAttribute={setFilterAttribute}
+      searchTerm={searchTerm}
+      handleSearchChange={handleSearchChange}
+      handleKeyDown={handleKeyDown}
+      theme={theme}
+      placeholder="Search"
+      containerClassName="my-4"
+    />
+  );
+};
+
 const AdminTicketPage = (props: any) => {
   const { theme } = useTheme();
   const dispatch = useDispatch();
   const tickets = useSelector(
     (state: any) => state.tickets?.tickets || []
   );
-  const [searchTerm, setSearchTerm] = useState("");
-  const [filterAttribute, setFilterAttribute] = useState("");
   const [actionsList, setActionsList] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [page, setPage] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(10);
-  const [All, setAll] = useState(false);
   const { allfilteredTickets, count } = props;
   const [isFiltering, setIsFiltering] = useState(false);
   const filteredTickets = useSelector((state: any) => state.filteredTickets?.filteredTickets || []);
-  const filterOptions = [
-    { value: "title", label: "Subject" },
-    { value: "status", label: "Status" },
-    { value: "author", label: "Author" },
-    { value: "", label: "Filter by" },
-  ];
 
   const columns = [
     { key: 'title', header: 'Subject' },
@@ -68,56 +135,6 @@ const AdminTicketPage = (props: any) => {
     }
     return tickets;
   }, [isFiltering, filteredTickets, tickets]);
-  console.log("Display Tickets: ", displayTickets);
-
-
-  const handleKeyDown = (e) => {
-    if (e.key === "Enter") {
-      if (!filterAttribute) {
-        toast.error("Please select a filter attribute");
-        return;
-      }
-      const searchTerm = e.target.value;
-      debouncedSearch(searchTerm)
-    }
-  };
-
-
-  const handleSearchChange = (e) => {
-    const searchTerm = e.target.value;
-    setSearchTerm(searchTerm);
-    debouncedSearch(searchTerm);
-  };
-
-
-  const debouncedSearch = useCallback(
-    debounce(async (term: string) => {
-      if (!filterAttribute) {
-        toast.error("Please select a filter attribute");
-        return;
-      }
-
-      if (!term) {
-        setIsFiltering(false);
-        await fetchTickets();
-        return;
-      }
-
-      setIsFiltering(true);
-      try {
-        await dispatch(getAllFilteredTickets({
-          page: page + 1,
-          itemsPerPage,
-          All,
-          filterAttribute,
-          wordEntered: term,
-        }));
-      } catch (error) {
-        toast.error("Failed to fetch filtered tickets");
-      }
-    }, 300),
-    [filterAttribute, page, itemsPerPage, All]
-  );
 
   const fetchTickets = useCallback(async () => {
     setIsLoading(true);
@@ -157,16 +174,12 @@ const AdminTicketPage = (props: any) => {
             <div className="bg-light-bg dark:bg-dark-frame-bg h-screen">
               <div className="w-full px-4 sm:px-6 lg:px-8 py-4">
                 <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-4">
-                  <SearchFilter
-                    options={filterOptions}
-                    filterAttribute={filterAttribute}
-                    setFilterAttribute={setFilterAttribute}
-                    searchTerm={searchTerm}
-                    handleSearchChange={handleSearchChange}
-                    handleKeyDown={handleKeyDown}
+                <TicketFilters
+                    onFilterChange={setIsFiltering}
+                    fetchTickets={fetchTickets}
+                    page={page}
+                    itemsPerPage={itemsPerPage}
                     theme={theme}
-                    placeholder="Search"
-                    containerClassName="my-4"
                   />
                 </div>
               </div>
