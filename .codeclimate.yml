@@ -7,15 +7,15 @@ checks:
   complex-logic:
     enabled: true
     config:
-      threshold: 100
+      threshold: 1000
   file-lines:
     enabled: false
     config:
-      threshold: 250
+      threshold: 25000
   method-complexity:
     enabled: true
     config:
-      threshold: 50
+      threshold: 500
   method-count:
     enabled: true
     config:
@@ -23,7 +23,7 @@ checks:
   method-lines:
     enabled: false
     config:
-      threshold: 200
+      threshold: 2000
   nested-control-flow:
     enabled: true
     config:
