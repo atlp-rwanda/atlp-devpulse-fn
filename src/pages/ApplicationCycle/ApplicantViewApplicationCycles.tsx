@@ -144,7 +144,7 @@ const ApplicantViewApplicationCycles = (props: any) => {
                                                         <div className="flex justify-center items-center space-x-4">
                                                             {isCycleApplied(cycle.id) ? (
                                                                 <button
-                                                                    className="h-[40px] w-[120px] rounded-[5px] dark:bg-[#56C870] bg-[#173b3f] text-white flex justify-center items-center p-0 px-[10px] mb-[20px]"
+                                                                    className="h-[40px] rounded-[5px] dark:bg-[#56C870] bg-[#173b3f] text-white flex justify-center items-center p-0 px-[10px] mb-[20px]"
                                                                     onClick={() => handleOpenTrackApplication(getApplicationId(cycle.id))}
                                                                 >
                                                                     Track Application
