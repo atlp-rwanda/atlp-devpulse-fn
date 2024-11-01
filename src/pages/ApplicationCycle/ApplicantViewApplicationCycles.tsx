@@ -190,22 +190,50 @@ const ApplicantViewApplicationCycles = (props: any) => {
                             </p>
                         </div>
 
-                        <div> {stageHistory.history.length > 0 && (
-                            <div>
-                                <h5 className="text-lg font-semibold mb-3 dark:text-gray-200">Full History</h5>
-                                <ul className="space-y-2">
-                                    {stageHistory.history.map((stage, index) => (
-                                        <li
-                                            key={index}
-                                            className="flex items-center space-x-2 p-2 rounded-lg bg-gray-100 dark:bg-[#374151] dark:text-gray-200"
-                                        >
-                                            <span className="font-medium">{stage.stage}</span>
-                                            <span className="text-sm text-gray-500 dark:text-gray-400">- {new Date(stage.enteredAt).toLocaleDateString()}</span>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>)}
+                        <div className="p-4 bg-white shadow-md rounded-lg dark:bg-gray-800">
+                            {stageHistory.history.length > 0 && (
+                                <div>
+                                    <h5 className="text-2xl font-bold mb-4 text-blue-600 dark:text-blue-400">Full History</h5>
+                                    <ul className="space-y-4">
+                                        {stageHistory.history.map((stage, index) => (
+                                            <li
+                                                key={index}
+                                                className="flex flex-col p-4 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 transition duration-300 ease-in-out hover:shadow-lg hover:bg-gray-100 dark:hover:bg-gray-600"
+                                            >
+                                                <div className="mb-2">
+                                                    <span className="text-lg font-semibold text-gray-800 dark:text-gray-100">{stage.stage}</span>
+                                                    <span className="text-sm text-gray-500 dark:text-gray-400"></span>
+                                                </div>
+                                                <div className="space-y-1">
+                                                    {stage.enteredAt && (
+                                                        <p className="text-gray-600 dark:text-gray-300">
+                                                            <strong>Entered at:</strong> {new Date(stage.enteredAt).toLocaleDateString()}
+                                                        </p>
+                                                    )}
+                                                    {stage.exitedAt && (
+                                                        <p className="text-gray-600 dark:text-gray-300">
+                                                            <strong>Exited at:</strong> {new Date(stage.exitedAt).toLocaleDateString()}
+                                                        </p>
+                                                    )}
+                                                    {stage.comment && (
+                                                        <p className="text-gray-600 dark:text-gray-300">
+                                                            <strong>Comments:</strong> {stage.comment}
+                                                        </p>
+                                                    )}
+                                                    {stage.score !== undefined && (
+                                                        <p className="text-gray-600 dark:text-gray-300">
+                                                            <strong>Score:</strong> {stage.score}
+                                                        </p>
+                                                    )}
+                                                </div>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            )}
                         </div>
+
+
                     </div>
                 </div>
             )}
