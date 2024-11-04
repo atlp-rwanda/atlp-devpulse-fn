@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useAppDispatch,useAppSelector } from "../../hooks/hooks";
 import { addMarks } from "../../redux/actions/applicationStage";
 import toast from "react-hot-toast";
 import Select from "react-select";
+import { customTheme, darkTheme } from "../../pages/FilterTeainee/FilterTrainee";
+import { useTheme } from "../../hooks/darkmode";
 interface scoreProps {
   applicantId: string;
   stage: string;
@@ -16,6 +18,7 @@ const addApplicantScore: React.FC<scoreProps> = ({ applicantId, stage, onClose }
   const [isModelOpen, setIsModelOpen] = useState(false);
   const [isError, setIsError] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const { theme, setTheme } = useTheme();
 
   const handleOpen = () => {
     setIsModelOpen(true);
@@ -48,6 +51,12 @@ const addApplicantScore: React.FC<scoreProps> = ({ applicantId, stage, onClose }
     }
     setIsError(false);
   }
+
+  useEffect(()=>{
+    if(success){
+      handleClose()
+    }
+  },[success])
   return (
     <>
       <div>
@@ -59,18 +68,19 @@ const addApplicantScore: React.FC<scoreProps> = ({ applicantId, stage, onClose }
             <div className="bg-white dark:bg-[#1F2937] rounded-lg w-full max-w-md p-6">
               <div>
                 <label className="block text-sm mb-2 dark:text-white">
-                  Score
+                  Add score
                 </label>
                 { stage === "Technical Assessment" ?
                   <input
-                  className="w-full p-2 border rounded-md bg-white dark:bg-[#374151] dark:text-white dark:border-gray-600"
+                  className="w-full p-2 border rounded-md  dark:bg-[#374151] dark:text-white dark:border-gray-600"
                   type="text"
                   placeholder="Score for the current stage"
                   value={score || ""}
                   onChange={(e) => setScore(Number(e.target.value))}
                 /> : stage === "Interview Assessment" ? (
                   <Select
-                    className="w-full p-2 border rounded-md  dark:bg-[#374151] dark:text-primary dark:border-gray-600"
+                   menuPlacement="auto"
+                    className="w-full p-2 rounded-md  dark:text-ltb"
                     options={[
                       { value: "0", label: "0" },
                       { value: "1", label: "1" },
@@ -79,6 +89,7 @@ const addApplicantScore: React.FC<scoreProps> = ({ applicantId, stage, onClose }
                     placeholder="Select score"
                     value={score !== null ? { value: score?.toString(), label: score?.toString() } : null}
                     onChange={(e) => setScore(e ? Number(e.value) : null)}
+                    theme={theme ? customTheme : darkTheme}
                   />
                 ) : null}
                 {
@@ -96,7 +107,7 @@ const addApplicantScore: React.FC<scoreProps> = ({ applicantId, stage, onClose }
                 </button>
                 <button
                   onClick={() => handleAddMarks()}
-                  className="px-4 py-2 bg-[#56C870] text-white rounded-md hover:bg-[#4ab862]"
+                  className="px-4 py-2 bg-[#0c6a0c] dark:bg-[#56C870] text-white rounded-md hover:bg-[#4ab862]"
                 >
                    {loading ? "Saving..." : "Next"}
                 </button>

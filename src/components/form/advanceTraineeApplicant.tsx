@@ -7,8 +7,9 @@ interface props {
   applicantId: string;
   stage: string;
   status?: string;
+  onClose: () => void;
 }
-const NextStageModal: React.FC<props> = ({ applicantId, stage,status }) => {
+const NextStageModal: React.FC<props> = ({ applicantId, stage,status, onClose }) => {
   const dispatch = useAppDispatch();
   const { data, success, loading, message,error } = useAppSelector(
     (state) => state.nextStage
@@ -41,6 +42,7 @@ const NextStageModal: React.FC<props> = ({ applicantId, stage,status }) => {
   useEffect(() => {
     if(success && !error){
       setIsOpen(false);
+      onClose()
     }
   },[success,data]);
   return (
@@ -48,7 +50,7 @@ const NextStageModal: React.FC<props> = ({ applicantId, stage,status }) => {
       <button
         onClick={() => setIsOpen(true)}
         disabled = {stage === "Dismissed" || stage === "Admitted" ? true : status === "Moved" ? true : false}
-        className={`px-4 py-2 text-sm font-medium text-white ${stage === "Dismissed" || stage === "Admitted" ? "bg-gray-400 cursor-not-allowed" :  status === "Moved"? "bg-gray-400 cursor-not-allowed" : "bg-green hover:bg-emerald-500 cursor-pointer"}  rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 mr-2`}
+        className={`px-4 py-2 text-sm font-medium text-white ${stage === "Dismissed" || stage === "Admitted" ? "bg-gray-400 cursor-not-allowed" :  status === "Moved"? "bg-gray-400 cursor-not-allowed" : " bg-[#0c6a0c] hover:bg-[#367a4e] dark:bg-green dark:hover:bg-emerald-200 cursor-pointer"}  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500`}
       >
         Advance
       </button>
@@ -62,7 +64,7 @@ const NextStageModal: React.FC<props> = ({ applicantId, stage,status }) => {
             <div className="space-y-4">
               <div>
                 <h1 className="dark:text-white text-lg">
-                  The next stage is <span className="text-lg font-bold text-[#4ab862]">{handleNextStage(stage)}</span>
+                  The next stage is <span className="text-lg font-bold text-[#0c6a0c] dark:text-[#4ab862]">{handleNextStage(stage)}</span>
                 </h1>
               </div>
               <div>
@@ -80,14 +82,14 @@ const NextStageModal: React.FC<props> = ({ applicantId, stage,status }) => {
 
             <div className="mt-6 flex justify-end space-x-3">
               <button
-                onClick={() => setIsOpen(false)}
+                onClick={() => {setIsOpen(false); onClose()}}
                 className="px-4 py-2 border rounded-md hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
               >
                 Cancel
               </button>
               <button
                 onClick={() => handleAdvanceToNextStage(stage, comments)}
-                className="px-4 py-2 bg-[#56C870] text-white rounded-md hover:bg-[#4ab862]"
+                className="px-4 py-2 bg-[#0c6a0c] dark:bg-[#56C870] text-white rounded-md hover:bg-[#4ab862]"
               >
                 Next
               </button>

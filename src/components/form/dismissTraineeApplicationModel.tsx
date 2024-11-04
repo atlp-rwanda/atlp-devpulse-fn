@@ -6,9 +6,10 @@ type props ={
   applicantId: string;
   applicantName: string;
   stage: string;
-  status?: string
+  status?: string;
+  onClose: () => void;
 }
-const DismissTraineeApplicant: React.FC<props> = ({applicantId,applicantName,stage, status}) => {
+const DismissTraineeApplicant: React.FC<props> = ({applicantId,applicantName,stage, status, onClose}) => {
   const [isOpen, setIsOpen] = useState(false);
   const [comments, setComments] = useState("");
   const dispatch = useAppDispatch();
@@ -23,6 +24,7 @@ const DismissTraineeApplicant: React.FC<props> = ({applicantId,applicantName,sta
   useEffect(()=>{
     if(success && data?.success){
       setIsOpen(false);
+      onClose();
     }
   }, [success, data]);
   return (
@@ -30,7 +32,7 @@ const DismissTraineeApplicant: React.FC<props> = ({applicantId,applicantName,sta
       <button
         onClick={() => setIsOpen(true)}
         disabled = {stage === "Dismissed" || stage === "Admitted" ? true : status === "Moved" || status === "Dismissed" ? true : false}
-        className={`px-4 py-2 text-sm font-medium text-white ${stage === "Dismissed" || stage === "Admitted" ? "bg-gray-400 cursor-not-allowed" : status === "Moved" || status === "Dismissed" ? "bg-gray-400 cursor-not-allowed" : "bg-red-600 hover:bg-red-700 cursor-pointer"} rounded-md  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 ml-2`}
+        className={`px-4 py-2 text-sm font-medium text-white ${stage === "Dismissed" || stage === "Admitted" ? "bg-gray-400 cursor-not-allowed" : status === "Moved" || status === "Dismissed" ? "bg-gray-400 cursor-not-allowed" : "bg-red-600 hover:bg-red-700 cursor-pointer"} w-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500`}
       >
         Dismiss
       </button>
@@ -58,8 +60,8 @@ const DismissTraineeApplicant: React.FC<props> = ({applicantId,applicantName,sta
 
             <div className="mt-6 flex justify-center space-x-3">
               <button
-                onClick={() => setIsOpen(false)}
-                className="px-4 py-2 border border-cg text-white rounded-md hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                onClick={() => {setIsOpen(false); onClose()}}
+                className="px-4 py-2 border border-cg rounded-md hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
               >
                 Cancel
               </button>
