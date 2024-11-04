@@ -55,10 +55,15 @@ export const sidebarItems1 = [
     title: "Grading System",
   },
   {
-    path: "Trash",
-    icon: <Icon icon="fa-solid:trash"></Icon>,
-    title: "Trash",
+    path: "tickets",
+    icon: <Icon icon="heroicons-outline:support"></Icon>,
+    title: "Tickets",
   },
+  // {
+  //   path: "Trash",
+  //   icon: <Icon icon="fa-solid:trash"></Icon>,
+  //   title: "Trash",
+  // },
 ];
 
 export const applicantSidebarItems = [
@@ -109,9 +114,9 @@ export const sidebarItems2 = [
     title: "Docs",
   },
   {
-    path: "tickets",
-    icon: <Icon icon="heroicons-outline:support"></Icon>,
-    title: "Tickets",
+    path: "Trash",
+    icon: <Icon icon="fa-solid:trash"></Icon>,
+    title: "Trash",
   },
 ];
 

@@ -16,6 +16,11 @@ const initialState: TicketState = {
 };
 
 export const ticketReducer = (state = initialState, action: any) => {
+    const safeState = {
+        ...state,
+        tickets: Array.isArray(state.tickets) ? state.tickets : []
+    };
+    
     switch (action.type) {
         case GET_USER_TICKETS:
             return {
