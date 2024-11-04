@@ -171,14 +171,11 @@ const ApplicantStages = (props: any) => {
   ];
   return (
     <>
-      <div className="w-full">
-        {/* =========================== End:: addnewtraineeModel =============================== */}
-        <div className="flex flex-col  h-screen w-[100%]">
+        <div className="flex flex-col w-[100%]">
           <div className="flex flex-row">
-            <div className="w-full">
-              <div>
+              <div className="w-full">
                 <div className="bg-light-bg dark:bg-dark-frame-bg  min-h-screen overflow-y-hidden overflow-x-hidden">
-                  <div className="w-full px-4 sm:px-6 lg:px-3 py-4">
+                  <div className="w-full sm:px-3 lg:px-3 py-4">
                     <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-4">
                       <Select
                         menuPlacement="auto"
@@ -195,7 +192,7 @@ const ApplicantStages = (props: any) => {
                         onChange={(e: any) => setSearchField(e?.value)}
                         theme={theme ? customTheme : darkTheme}
                       />
-                      <div className="w-full sm:w-auto flex-grow">
+                      <div className=" sm:w-auto flex-grow">
                         <div className="relative">
                           <input
                             type="text"
@@ -227,8 +224,6 @@ const ApplicantStages = (props: any) => {
                       </div>
                     </div>
                   </div>
-
-                  <div className="px-3">
                     <div className="bg-white  dark:bg-dark-bg shadow-lg px-3 py-8 rounded-md w-[100%] mx-auto">
                       <div className="flex flex-col">
                         <div
@@ -269,13 +264,13 @@ const ApplicantStages = (props: any) => {
                         </div>
                       </div>
                       <div>
-                        <div className="-mx-4 sm:-mx-8 px-3 sm:px-8 py-4 overflow-x-auto">
+                        <div className="mx-4 sm:-mx-8 px-3 sm:px-8 py-4 overflow-x-auto">
                           <div className="inline-block w-full h-[55vh] lg:min-w-full shadow rounded-lg overflow-y-scroll">
                             <div>
                               <table className="min-w-full leading-normal">
-                                <thead className=" w-full px-32 sticky top-0">
+                                <thead className=" w-full sticky top-0">
                                   <tr>
-                                    <th className="p-6 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
+                                    <th className="p-5 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
                                       {"Profile"}
                                     </th>
 
@@ -347,29 +342,27 @@ const ApplicantStages = (props: any) => {
                                             >
                                               <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
                                                 <div className="flex">
-                                                  <div className="">
-                                                    <p className="text-gray-900 text-center dark:text-white whitespace-no-wrap">
+                                                    <p className="text-gray-900 dark:text-white whitespace-no-wrap">
                                                       {item.firstName +
                                                         " " +
                                                         item.lastName}
                                                     </p>
-                                                  </div>
                                                 </div>
                                               </td>
 
                                               <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
-                                                <div className="flex items-center">
-                                                  <div className="">
-                                                    <p className="text-gray-900 items-center dark:text-white whitespace-no-wrap">
+                                                <div className="flex">
+                                                  
+                                                    <p className="text-gray-900  dark:text-white whitespace-no-wrap">
                                                       {item.email}
                                                     </p>
-                                                  </div>
+                                                  
                                                 </div>
                                               </td>
 
-                                              <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm min-w-52">
+                                              <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm ">
                                                 <span
-                                                  className={`inline-block px-3 py-1 rounded-full text-sm whitespace-no-wrap
+                                                  className={`inline-block text-center rounded-full px-1 py-2 min-w-20 max-w-16 whitespace-no-wrap
                         ${
                           item.applicationPhase === "Dismissed"
                             ? "bg-red-200 text-red-500 font-medium"
@@ -382,12 +375,12 @@ const ApplicantStages = (props: any) => {
                                                 </span>
                                               </td>
                                               <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
-                                                <span className="inline-block px-3 py-1 bg-blue-100 text-blue-800 font-medium rounded-full">
+                                                <span className="inline-block px-3 py-1 bg-blue-100 min-w-40 text-blue-800 font-medium rounded-full">
                                                   {item.createdAt}
                                                 </span>
                                               </td>
                                               <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
-                                                <span className="inline-block px-3 py-1 bg-blue-100 text-blue-800 font-medium rounded-full">
+                                                <span className="inline-block px-1 text-center py-1 bg-blue-100 text-blue-800 font-medium rounded-full">
                                                   {getStageText(
                                                     item.applicationPhase
                                                   )}
@@ -757,9 +750,6 @@ const ApplicantStages = (props: any) => {
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
     </>
   );
 };
