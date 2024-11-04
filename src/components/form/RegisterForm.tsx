@@ -287,7 +287,7 @@ function SignupForm() {
                 <div className="relative w-full">
       <select
         {...register("gender")}
-        className="w-full rounded-md px-2 py-3 border border-white 
+        className="w-full rounded-md px-2 py-2 border border-white 
                  placeholder:text-gray-400 text-white sm:text-[12px] 
                  outline-none bg-[#1F2A37] appearance-none"
       >
