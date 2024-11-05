@@ -5,6 +5,7 @@ import { registerSchema } from "../validation/Register";
 import { useForm } from "react-hook-form";
 import InputField from "./InputField";
 import Button from "./Button";
+// import {Header} from "../sidebar/Header"
 import { fetchCountries } from "../country/country";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { formData } from "../validation/Register";
@@ -169,7 +170,9 @@ function SignupForm() {
   };
   return (
     <>
+
       <div className="flex items-center  justify-center mx-auto  bg-white dark:bg-[#374151] h-screen">
+
         {isAnError && (
           <Toasty message={isAnError} type="error" onClose={() => setError(null)} />
         )}
@@ -284,23 +287,31 @@ function SignupForm() {
                   </datalist>
 
                 </div>
-                <div className="w-[50%] ">
-                  <InputField
-                    placeholder="Gender"
-                    type="text"
-                    {...register("gender")}
-                    list="gender"
-                    error={errors?.gender}
-                  />
-                  <Datalist
-                    id="gender"
-                    options={[
-                      { value: "female" },
-                      { value: "male" },
-                      { value: "other" },
-                    ]}
-                  />
-                </div>
+                <div className="relative w-full">
+      <select
+        {...register("gender")}
+        className="w-full rounded-md px-2 py-2 border border-white 
+                 placeholder:text-gray-400 text-white sm:text-[12px] 
+                 outline-none bg-[#1F2A37] appearance-none"
+      >
+        <option value="" disabled selected>Gender</option>
+        <option value="female">female</option>
+        <option value="male">male</option>
+        <option value="other">other</option>
+      </select>
+      
+      {/* Dropdown arrow */}
+      <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+        <svg 
+          className="w-4 h-4 text-white"
+          fill="none" 
+          stroke="currentColor" 
+          viewBox="0 0 24 24"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+        </svg>
+      </div>
+    </div>
               </div>
 
               <div className="flex items-center w-[25vw] sm:w-5/6 lg:w-[25vw]  justify-between">
