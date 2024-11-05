@@ -210,7 +210,7 @@ const ApplicationCycle = (props: any) => {
             ) : (
               <div className="overflow-x-auto">
                 <table className="w-full border-collapse rounded-lg overflow-hidden">
-                  <thead className="bg-gray-700 text-white">
+                  <thead className="bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-white">
                     <tr>
                       <th className="p-4 text-left">Name</th>
                       <th className="p-4 text-left">Starting Date</th>

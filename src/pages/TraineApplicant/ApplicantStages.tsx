@@ -165,7 +165,7 @@ const ApplicantStages = (props: any) => {
     { value: "Technical Assessment", label: "Technical" },
     { value: "Interview Assessment", label: "Interview" },
     { value: "Admitted", label: "Admitted" },
-    { value: "Dismissed", label: "Dismissed" },
+    { value: "Rejected", label: "Rejected" },
   ];
 
   const handleConvertDate = (date: string) => {
@@ -184,6 +184,7 @@ const ApplicantStages = (props: any) => {
     setIsMore("");
     await dispatch(filterStage(filterStages));
   };
+  
   return (
     <>
       <div className=" bg-gray-50 dark:bg-dark-frame-bg flex flex-col w-[100%] h-screen px-4">
@@ -254,29 +255,29 @@ const ApplicantStages = (props: any) => {
           <table className="w-full">
             <thead className="border-b-2 bg-gray-200 dark:bg-dark-tertiary border-gray-200 sticky top-0">
               <tr className="w-full">
-                <th className="p-5  y text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
+                <th className="p-5 py-3 text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
                   {"Profile"}
                 </th>
 
-                <th className="px-5 py-3    text-left text-xs font-semibold text-gray-600 dark:text-white uppercase md:table-cell tracking-wider">
+                <th className="px-5 py-3 text-left text-xs font-semibold text-gray-600 dark:text-white uppercase md:table-cell tracking-wider">
                   {"Email"}
                 </th>
                 {
-                  <th className="px-5 py-3    text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
+                  <th className="px-5 py-3 text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
                     {"Status"}
                   </th>
                 }
                 {
-                  <th className="px-5 py-3    text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
+                  <th className="px-5 py-3 text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
                     {"Last Update"}
                   </th>
                 }
-                {filterStages && filterData && filterData.length > 0 ? (
-                  <th className="px-5 py-3    text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
+                {filterStages && filterStages !== "All" && filterData && filterData.length > 0 ? (
+                  <th className="px-5 py-3 text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
                     {"Comments"}
                   </th>
                 ) : (
-                  <th className="px-5 py-3    text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
+                  <th className="px-5 py-3 text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
                     {"Stage"}
                   </th>
                 )}
@@ -284,11 +285,11 @@ const ApplicantStages = (props: any) => {
                 (filterStages === "Interview Assessment" &&
                   filterData &&
                   filterData.length > 0) ? (
-                  <th className="px-5 py-3    text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
+                  <th className="px-5 py-3 text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
                     {"score"}
                   </th>
                 ) : null}
-                <th className="border-b-2 sm:text-center    text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
+                <th className="border-b-2 sm:text-center text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
                   {"action"}
                 </th>
               </tr>
@@ -311,7 +312,7 @@ const ApplicantStages = (props: any) => {
                         <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-xs">
                           <div className="flex">
                             <p className="text-gray-900 dark:text-white whitespace-no-wrap">
-                              {item.firstName + " " + item.lastName}
+                              {item.firstName.toUpperCase() + " " + item.lastName}
                             </p>
                           </div>
                         </td>
@@ -328,10 +329,10 @@ const ApplicantStages = (props: any) => {
                           <span
                             className={`inline-block text-center rounded-full px-1 py-2 min-w-20 max-w-16 whitespace-no-wrap
                         ${
-                          item.applicationPhase === "Dismissed"
+                          item.applicationPhase === "Rejected"
                             ? "bg-red-200 text-red-500 font-medium"
                             : item.applicationPhase === "Admitted"
-                            ? "bg-[#1bf84b8d] text-white"
+                            ? "bg-[#0c6a0c] dark:bg-[#1bf84b8d] text-white"
                             : "bg-gray-100 text-gray-800"
                         }`}
                           >
@@ -339,19 +340,19 @@ const ApplicantStages = (props: any) => {
                           </span>
                         </td>
                         <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-xs">
-                          <span className="inline-block px-3 py-1 bg-blue-100 text-blue-800 font-medium rounded-full">
+                          <span className="inline-block px-3 py-2 bg-blue-100 text-blue-800 font-medium rounded-full">
                             {handleConvertDate(item.createdAt)}
                           </span>
                         </td>
                         <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-xs">
-                          <span className={`${item.applicationPhase === "Dismissed"
+                          <span className={`${item.applicationPhase === "Rejected"
                             ? "bg-red-200 text-red-500 font-medium"
                             : item.applicationPhase === "Admitted"
-                            ? "bg-[#1bf84b8d] text-white" :"bg-blue-100 text-blue-800"} inline-block px-1 text-center py-1 font-medium rounded-full`}>
+                            ? "bg-[#0c6a0c] dark:bg-[#1bf84b8d] text-white" :"bg-blue-100 text-blue-800"} inline-block px-2 py-2 text-center font-medium rounded-full`}>
                             {getStageText(item.applicationPhase)}
                           </span>
                         </td>
-                        <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-xs">
+                        <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-xs relative">
                           <div className=" flex justify-center">
                             <HiDotsVertical
                               className=" text-black dark:text-white text-3xl cursor-pointer"
@@ -363,7 +364,7 @@ const ApplicantStages = (props: any) => {
                             <div
                               className={`${
                                 isMore === item._id ? "block" : "hidden"
-                              } absolute  bg-white dark:bg-dark-tertiary  dark:text-white text-base z-50 list-none divide-y divide-gray-100 rounded shadow my-4`}
+                              } absolute  bg-white dark:bg-dark-tertiary  dark:text-white text-base z-10 list-none divide-y divide-gray-100 rounded shadow my-4`}
                               id="dropdown"
                             >
                               <ul className="py-1" aria-labelledby="dropdown">
@@ -424,7 +425,7 @@ const ApplicantStages = (props: any) => {
                         <div className="flex">
                           <div className="">
                             <p className="text-gray-900 text-center dark:text-white whitespace-no-wrap">
-                              {item.applicant.firstName +
+                              {item.applicant.firstName.toUpperCase() +
                                 " " +
                                 item.applicant.lastName}
                             </p>
@@ -446,7 +447,7 @@ const ApplicantStages = (props: any) => {
                         <span
                           className={`inline-block text-center px-1 py-2 min-w-20 max-w-16 rounded-full text-xs
                         ${
-                          item.status === "Dismissed"
+                          item.status === "Rejected"
                             ? "bg-red-200 text-red-500 font-medium"
                             : item.status === "Admitted"
                             ? "bg-[#0c6a0c] dark:bg-[#1bf84b8d] text-white"
@@ -472,7 +473,7 @@ const ApplicantStages = (props: any) => {
                           </span>
                         </td>
                       ) : null}
-                      <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-xs">
+                      <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-xs relative">
                         <div className=" flex justify-center">
                           <HiDotsVertical
                             className=" text-black dark:text-white text-3xl cursor-pointer"
@@ -494,10 +495,12 @@ const ApplicantStages = (props: any) => {
                                     filterStages === "Shortlisted" ||
                                     ((filterStages === "Technical Assessment" ||
                                       filterStages ===
-                                        "Interview Assessment") &&
+                                        "Interview Assessment" || filterStages ===
+                                        "Admitted" || filterStages ===
+                                        "Rejected") &&
                                       (item.status === "Moved" ||
                                         item.status === "Admitted" ||
-                                        item.status === "Dismissed"))
+                                        item.status === "Rejected" || item.status === "Passed"))
                                       ? "hidden"
                                       : "block"
                                   } text-xs hover:bg-gray-100 text-gray-700 dark:hover:bg-gray-500 dark:text-white px-4 py-2`}
