@@ -102,8 +102,8 @@ const LoginForm = () => {
         toast.error(response?.data?.errors[0].message);
       }
     } catch (error: any) {
-      
         toast.error("Login failed, please try again.");
+        console.error(error);
 
     } finally {
       setIsLoading(false);
