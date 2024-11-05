@@ -170,8 +170,9 @@ function SignupForm() {
   };
   return (
     <>
-    {/* <Header/> */}
-      <div className="flex items-center  justify-center mx-auto bg-[#374151] h-screen">
+
+      <div className="flex items-center  justify-center mx-auto  bg-white dark:bg-[#374151] h-screen">
+
         {isAnError && (
           <Toasty message={isAnError} type="error" onClose={() => setError(null)} />
         )}
@@ -193,35 +194,37 @@ function SignupForm() {
             onSubmit={(event) => {
               handleSubmit(onSubmit)(event);
             }}
-            className="bg-[#1F2A37]  sm:fixed w-[45vw] flex max-h-[90%] md:mt-[70px]  sm:mt-[70px] lg:mt-[0px]  sm:max-h-[100%] flex-col items-center justify-center rounded-sm sm:w-[90%] lg:w-[45vw]"
+            className="border border-gray-400 bg-gray-300 dark:bg-[#1F2A37] sm:fixed w-[45vw] flex max-h-[90%] md:mt-[70px] sm:mt-[70px] lg:mt-[10px]  sm:max-h-[100%] flex-col items-center justify-center rounded-sm sm:w-[90%] lg:w-[50vw]"
           >
-            <h1 className="text-3xl text-white font-bold py-4">
+            <h1 className="text-3xl text-[#1F2A37] dark:text-white font-bold py-4">
               Create Your Account
             </h1>
             <div className="sm:w-full sm:flex sm:flex-col sm:justify-center sm:items-center  lg:w-auto">
-              <div className="w-[25vw]  sm:w-5/6 lg:w-[25vw]">
-                <InputField
-                  placeholder="firstname"
-                  type="text"
-                  className="w-full rounded-md   px-2 py-3 border border-white placeholder:text-gray-400 text-white sm:text-[12px] outline-none autofill:bg-transparent autofill:text-white bg-[#1F2A37]"
-                  {...register("firstname")}
-                  error={errors?.firstname}
-                />
-              </div>
-              <div className="w-[25vw] sm:w-5/6 lg:w-[25vw]">
-                <InputField
-                  placeholder="lastname"
-                  type="text"
-                  className="w-full rounded-md   px-2 py-3 border border-white placeholder:text-gray-400 text-white sm:text-[12px] outline-none autofill:bg-transparent autofill:text-white bg-[#1F2A37]"
-                  {...register("lastname")}
-                  error={errors?.lastname}
-                />
+              <div className="flex flex-row sm:ml-7 sm:gap-5 lg:ml-0 lg:gap-2 md:ml-0">
+                <div className="w-[12vw] sm:w-5/12 lg:w-[12vw]">
+                  <InputField
+                    placeholder="firstname"
+                    type="text"
+                    className="w-full rounded-md   px-2 py-3 border text-black dark:text-white sm:text-[12px] outline-none autofill:bg-transparent autofill:text-white  bg-gray-100 dark:bg-[#1F2A37]"
+                    {...register("firstname")}
+                    error={errors?.firstname}
+                  />
+                </div>
+                <div className="w-[12vw] sm:w-5/12 lg:w-[12vw]">
+                  <InputField
+                    placeholder="lastname"
+                    type="text"
+                    className="w-full rounded-md   px-2 py-3 border border-white placeholder:text-gray-400 text-black dark:text-white sm:text-[12px] outline-none autofill:bg-transparent autofill:text-white  bg-gray-100 dark:bg-[#1F2A37]"
+                    {...register("lastname")}
+                    error={errors?.lastname}
+                  />
+                </div>
               </div>
               <div className="w-[25vw] sm:w-5/6 lg:w-[25vw]">
                 <InputField
                   placeholder="andela@gmail.com"
                   type="text"
-                  className="w-full rounded-md px-2 py-3 border border-white placeholder:text-gray-400 text-white sm:text-[12px] outline-none autofill:bg-transparent autofill:text-white bg-[#1F2A37]"
+                  className="w-full rounded-md px-2 py-3 border border-white placeholder:text-gray-400 text-black dark:text-white sm:text-[12px] outline-none autofill:bg-transparent autofill:text-white  bg-gray-100 dark:bg-[#1F2A37]"
                   {...register("email")}
                   error={errors?.email}
                   autoComplete="on"
@@ -231,7 +234,7 @@ function SignupForm() {
                 <InputField
                   placeholder="Password"
                   type={showPassword[0] ? "text" : "password"}
-                  className="w-full rounded-md   px-2 py-3 border border-white placeholder:text-gray-400 text-white sm:text-[12px] outline-none autofill:bg-transparent autofill:text-white bg-[#1F2A37]"
+                  className="w-full rounded-md   px-2 py-3 border border-white placeholder:text-gray-400 text-black dark:text-white sm:text-[12px] outline-none autofill:bg-transparent autofill:text-white  bg-gray-100 dark:bg-[#1F2A37]"
                   {...register("password")}
                   error={errors?.password}
                   onCopy={(e) => e.preventDefault()}
@@ -241,9 +244,9 @@ function SignupForm() {
                   className=" absolute right-4 top-4"
                 >
                   {showPassword[0] ? (
-                    <FontAwesomeIcon icon={faEye} className="text-white" />
+                    <FontAwesomeIcon icon={faEye} className="text-black dark:text-white" />
                   ) : (
-                    <FontAwesomeIcon icon={faEyeSlash} className="text-white" />
+                    <FontAwesomeIcon icon={faEyeSlash} className="text-black dark:text-white" />
                   )}
                 </div>
               </div>
@@ -251,7 +254,7 @@ function SignupForm() {
                 <InputField
                   placeholder="confirm Password"
                   type={showPassword[1] ? "text" : "password"}
-                  className="w-full rounded-md   px-2 py-3 border border-white placeholder:text-gray-400 text-white sm:text-[12px] outline-none autofill:bg-transparent autofill:text-white bg-[#1F2A37]"
+                  className="w-full rounded-md   px-2 py-3 border border-white placeholder:text-gray-400 text-black dark:text-white sm:text-[12px] outline-none autofill:bg-transparent autofill:text-white  bg-gray-100 dark:bg-[#1F2A37]"
                   {...register("confirmPassword")}
                   error={errors?.confirmPassword}
                 />
@@ -260,9 +263,9 @@ function SignupForm() {
                   className=" absolute right-4 top-4"
                 >
                   {showPassword[1] ? (
-                    <FontAwesomeIcon icon={faEye} className="text-white" />
+                    <FontAwesomeIcon icon={faEye} className="text-black dark:text-white" />
                   ) : (
-                    <FontAwesomeIcon icon={faEyeSlash} className="text-white" />
+                    <FontAwesomeIcon icon={faEyeSlash} className="text-black dark:text-white" />
                   )}
                 </div>
               </div>
@@ -271,7 +274,7 @@ function SignupForm() {
                 <InputField
                   placeholder="Country"
                   list="countries"
-                  className="w-full rounded-md px-2 py-3 border border-white placeholder:text-gray-400 text-white sm:text-[12px] outline-none autofill:bg-transparent autofill:text-white bg-[#1F2A37]"
+                  className="w-full rounded-md px-2 py-3 border border-white placeholder:text-gray-400 text-black dark:text-white sm:text-[12px] outline-none autofill:bg-transparent autofill:text-white  bg-gray-100 dark:bg-[#1F2A37]"
                   {...register("country", {
                   onChange: (e) => handleCountryChange(e),
                    })} 
@@ -316,7 +319,7 @@ function SignupForm() {
                 <InputField
                   placeholder="Country Code"
                   type="text"
-                  className="w-full rounded-md px-2 py-3 border border-white placeholder:text-gray-400 text-white sm:text-[12px] outline-none autofill:bg-transparent autofill:text-white bg-[#1F2A37]"
+                  className="w-full rounded-md px-2 py-3 border border-white placeholder:text-gray-400 text-black dark:text-white sm:text-[12px] outline-none autofill:bg-transparent autofill:text-white  bg-gray-100 dark:bg-[#1F2A37]"
                   {...register("countryCode")}
                   error={errors?.countryCode}
                 />
@@ -325,7 +328,7 @@ function SignupForm() {
                   <InputField
                     type="text"
                     placeholder="Phone Number"
-                    className=" w-full  rounded-md px-2 py-3 border border-white placeholder:text-gray-400 text-white sm:text-[12px]  outline-none autofill:bg-transparent autofill:text-white bg-[#1F2A37]"
+                    className=" w-full  rounded-md px-2 py-3 border border-white placeholder:text-gray-400 text-black dark:text-white sm:text-[12px]  outline-none autofill:bg-transparent autofill:text-white  bg-gray-100 dark:bg-[#1F2A37]"
                     {...register("phoneNumber")}
                     error={errors?.phoneNumber}
                   />
@@ -341,7 +344,7 @@ function SignupForm() {
                 <div className="ml-[10px]">
                   <label htmlFor="acceptTerms" className="text-white ">
                     I accept the{" "}
-                    <a href="#" className="text-[#56C870]">
+                    <a href="#" className="text-[#1F2A37] dark:text-[#56C870]">
                       Terms & Conditions
                     </a>
                   </label>
