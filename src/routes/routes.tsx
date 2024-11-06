@@ -66,6 +66,7 @@ import Profile from "../pages/Profile";
 import SignupPage from "./../pages/SignupPage";
 import ApplicantStages from "./../pages/TraineApplicant/ApplicantStages";
 import AdminNotification from "../pages/AdminNotifications/AdminNotifications";
+import { MyApplication } from "../pages/ApplicationCycle/myApplication";
 
 import TraineeApply from "../pages/TraineeApply/TraineeApply";
 import TraineeAttribute from '../pages/TraineeApply/TraineeAttribute'
@@ -157,7 +158,7 @@ function Navigation() {
           path="notifications"
           element={
             <PrivateRoute allowedRoles={["admin", "superAdmin"]}>
-              <AdminNotification/>
+              <AdminNotification />
             </PrivateRoute>
           }
         />
@@ -483,6 +484,14 @@ function Navigation() {
           element={
             <PrivateRoute allowedRoles={["applicant"]}>
               <ApplicantApplication />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="myapplication"
+          element={
+            <PrivateRoute allowedRoles={["applicant"]}>
+              <MyApplication />
             </PrivateRoute>
           }
         />
