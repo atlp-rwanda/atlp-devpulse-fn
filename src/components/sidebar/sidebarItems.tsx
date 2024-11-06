@@ -29,7 +29,7 @@ export const sidebarItems1 = [
     icon: <Icon icon="fluent:form-28-regular"></Icon>,
     title: "Application Forms",
   },
-    {
+  {
     path: "notifications",
     icon: <Icon icon="heroicons-solid:inbox-in"></Icon>,
     title: "Notifications",
@@ -86,6 +86,11 @@ export const applicantSidebarItems = [
     path: "myApplications",
     icon: <Icon icon="material-symbols:wysiwyg-rounded"></Icon>,
     title: "My Applications",
+  },
+  {
+    path: "myapplication",
+    icon: <Icon icon="material-symbols:wysiwyg-rounded"></Icon>,
+    title: "My Application",
   },
   {
     path: "interviewScheduler",

@@ -13,17 +13,17 @@ export const MyApplication = () => {
     const { loading, data } = useAppSelector((state) => state.myApplications);
 
     return (
-        <div className="py-4 dark:text-white min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-700">
+        <div className="py-8 px-6 min-h-screen bg-gray-100 dark:bg-[#1E293B] text-gray-900 dark:text-white">
             <h2 className="pl-5 text-3xl font-extrabold text-primary dark:text-[#56C870] sm:text-4xl mb-6">
                 My Application
             </h2>
             <div className="dark:bg-[#1F2A37] p-6 mt-5 rounded-lg shadow-lg">
-                <div className="flex flex-col sm:flex-row border-b border-gray-600 pb-4">
+                <div className="flex flex-col sm:flex-row border-b border-gray-300 dark:border-gray-600 pb-4">
                     <div className="sm:w-1/2 pr-4 mb-4 sm:mb-0">
-                        <h3 className="text-lg font-semibold mb-2 text-[#56C870]">
+                        <h3 className="text-lg font-semibold mb-2 text-green-700 dark:text-[#56C870]">
                             Personal Information
                         </h3>
-                        <ul className="list-disc list-inside space-y-2 text-gray-300">
+                        <ul className="list-disc list-inside space-y-2 text-gray-800 dark:text-gray-300">
                             <li className="list-item">
                                 <strong>Firstname:</strong> John
                             </li>
@@ -32,9 +32,6 @@ export const MyApplication = () => {
                             </li>
                             <li className="list-item">
                                 <strong>Email:</strong> john.doe@example.com
-                            </li>
-                            <li className="list-item">
-                                <strong>Phone:</strong> +250781234567
                             </li>
                             <li className="list-item">
                                 <strong>Application cycle:</strong> Cycle 1
@@ -48,10 +45,10 @@ export const MyApplication = () => {
                         </ul>
                     </div>
                     <div className="sm:w-1/2 pl-4">
-                        <h3 className="text-lg font-semibold mb-2 text-[#56C870]">
+                        <h3 className="text-lg font-semibold mb-2 text-green-700 dark:text-[#56C870]">
                             Address
                         </h3>
-                        <ul className="list-disc list-inside space-y-2 text-gray-300">
+                        <ul className="list-disc list-inside space-y-2 text-gray-800 dark:text-gray-300">
                             <li className="list-item">
                                 <strong>Street:</strong> Niboye
                             </li>
