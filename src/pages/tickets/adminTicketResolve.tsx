@@ -14,23 +14,22 @@ const ResolveTicketPage = (props: any) => {
   const [adminReply, setAdminReply] = useState("");
   const ticketData = useSelector((state: any) => state.tickets?.currentTicket);
 
-  const getAllReplies = () => {
+  const getAdminReplies = () => {
     if (!ticketData) return [];
-
-    const adminReplies = (ticketData.adminReplies || []).map(reply => ({
+    return (ticketData.adminReplies || []).map((reply) => ({
       ...reply,
-      type: 'Admin',
-      author: reply.repliedBy
+      type: "Admin",
+      author: reply.repliedBy,
     }));
+  };
 
-    const applicantReplies = (ticketData.applicantReplies || []).map(reply => ({
+  const getApplicantReplies = () => {
+    if (!ticketData) return [];
+    return (ticketData.applicantReplies || []).map((reply) => ({
       ...reply,
-      type: 'Applicant',
-      author: reply.repliedBy
+      type: "Applicant",
+      author: reply.repliedBy,
     }));
-
-    const allReplies = [...adminReplies, ...applicantReplies];
-    return allReplies.sort((a, b) => parseInt(a.createdAt) - parseInt(b.createdAt));
   };
 
   useEffect(() => {
@@ -86,30 +85,73 @@ const ResolveTicketPage = (props: any) => {
                   </p>
                 </div>
 
-                {getAllReplies().length > 0 && (
-                <div className="flex flex-col w-full">
-                  <h3 className="dark:text-white text-black font-medium">
-                    Responses
-                  </h3>
-                  {getAllReplies().map((reply, index) => (
-                    <div key={reply.id} className="mt-2 w-full">
-                      <div className="flex flex-col w-full">
-                        <p className="text-gray-500 text-sm dark:text-gray-400">
-                          {reply.body}
-                        </p>
-                        <div className="flex gap-2 mt-1 text-xs text-gray-400">
-                          <span>{reply.type}: {reply.author.firstname} {reply.author.lastname}</span>
-                          <span>•</span>
-                          <span>{new Date(parseInt(reply.createdAt)).toLocaleString()}</span>
+                {getAdminReplies().length > 0 && (
+                  <div className="flex flex-col w-full">
+                    <h3 className="dark:text-white text-black font-medium">
+                      Admin Responses
+                    </h3>
+                    {getAdminReplies().map((reply, index) => (
+                      <div
+                        key={reply.id}
+                        className="mt-2 bg-gray-100 dark:bg-gray-700 p-3 rounded"
+                      >
+                        <div className="flex flex-col">
+                          <p className="text-gray-500 text-sm dark:text-gray-400">
+                            {reply.body}
+                          </p>
+                          <div className="flex gap-2 mt-1 text-sm text-gray-400">
+                            <span>
+                              {reply.author.firstname} {reply.author.lastname}
+                            </span>
+                            <span>•</span>
+                            <span>
+                              {new Date(
+                                parseInt(reply.createdAt)
+                              ).toLocaleString()}
+                            </span>
+                          </div>
                         </div>
+                        {index < getAdminReplies().length - 1 && (
+                          <hr className="my-2 border-gray-200 dark:border-gray-700" />
+                        )}
                       </div>
-                      {index < getAllReplies().length - 1 && (
-                        <hr className="my-2 border-gray-200 dark:border-gray-700" />
-                      )}
-                    </div>
-                  ))}
-                </div>
-              )}
+                    ))}
+                  </div>
+                )}
+
+                {getApplicantReplies().length > 0 && (
+                  <div className="flex flex-col w-full">
+                    <h3 className="dark:text-white text-black font-medium">
+                      Applicant Responses
+                    </h3>
+                    {getApplicantReplies().map((reply, index) => (
+                      <div
+                        key={reply.id}
+                        className="mt-2 bg-blue-50 dark:bg-blue-900/20 p-3 rounded"
+                      >
+                        <div className="flex flex-col">
+                          <p className="text-gray-500 text-sm dark:text-gray-400">
+                            {reply.body}
+                          </p>
+                          <div className="flex gap-2 mt-1 text-sm text-gray-400">
+                            <span>
+                              {reply.author.firstname} {reply.author.lastname}
+                            </span>
+                            <span>•</span>
+                            <span>
+                              {new Date(
+                                parseInt(reply.createdAt)
+                              ).toLocaleString()}
+                            </span>
+                          </div>
+                        </div>
+                        {index < getApplicantReplies().length - 1 && (
+                          <hr className="my-2 border-gray-200 dark:border-gray-700" />
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
 
 
                   <form onSubmit={handleSubmitReply} className="mt-6">

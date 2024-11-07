@@ -18,7 +18,7 @@ const CreateTicketModal = ({ isOpen, onClose, onSubmit }) => {
       try {
         setIsSubmitting(true);
         await onSubmit(ticket);
-        toast.success("Ticket submitted successfully");
+        // toast.success("Ticket submitted successfully");
         handleClose();
       } catch (error: any) {
         const errorMessage =

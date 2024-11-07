@@ -131,9 +131,9 @@ const AdminTicketPage = (props: any) => {
 
   const displayTickets = useMemo(() => {
     if (isFiltering) {
-      return filteredTickets;
+      return filteredTickets.sort((a: any, b: any) => b.updatedAt - a.updatedAt);
     }
-    return tickets;
+    return tickets.sort((a: any, b: any) => b.updatedAt - a.updatedAt);
   }, [isFiltering, filteredTickets, tickets]);
 
   const fetchTickets = useCallback(async () => {

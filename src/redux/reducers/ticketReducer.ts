@@ -33,7 +33,7 @@ export const ticketReducer = (state = initialState, action: any) => {
         case CREATE_TICKET:
             return {
                 ...state,
-                tickets: [...state.tickets, action.payload],
+                tickets: Array.isArray(state.tickets) ? [...state.tickets, action.payload] : [action.payload],
                 loading: false,
                 error: null,
             };
