@@ -49,6 +49,7 @@ import fetchSearchDataReducer from './fetchSearchDataReducer';
 import userUpdateReducer from './getUser';
 import filterTicketReducer from './filterTicketReducer';
 
+import getLoggedUserReducer from './loggedUser'
 import { ticketReducer } from './ticketReducer';
 
 const allReducers = combineReducers({
@@ -96,6 +97,7 @@ const allReducers = combineReducers({
   traineeAttendance: attendanceReducer,
   traineePerformance: performanceReducer,
   updateUser:userUpdateReducer,
+  loggedUser: getLoggedUserReducer,,
   tickets: ticketReducer,
   filteredTickets: filterTicketReducer,
 });
