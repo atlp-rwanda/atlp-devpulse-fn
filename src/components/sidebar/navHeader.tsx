@@ -10,7 +10,7 @@ import { AiOutlineBell } from "react-icons/ai";
 import { useTheme } from "../../hooks/darkmode";
 import jwtDecode from "jwt-decode";
 import { useNotifications } from "../../utils/Notifications";
-
+import { useAdminNotifications } from "../../hooks/useAdminNotifications";
 const logo: string = require("../../assets/logo.svg").default;
 const profile: string = require("../../assets/avatar.png").default;
 const LogoWhite: string = require("../../assets/logoWhite.svg").default;
@@ -66,7 +66,7 @@ function NavBar() {
   const access_token = localStorage.getItem("access_token");
   //@ts-ignore
   const user = access_token ? jwtDecode(access_token).picture : profile;
-
+  const roleName = localStorage.getItem("roleName");
   const [nav, setNav] = useState(false);
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
 
@@ -74,11 +74,15 @@ function NavBar() {
   const handleToggleTheme = () => setTheme(!theme);
 
   const navigate = useNavigate();
-  const handleShowNotification = () => navigate("/applicant/notifications");
+  const handleShowNotification = () => {
+    const notificationPath = roleName === "superAdmin"  || roleName === "admin" ? "/admin/notifications" : "/applicant/notifications";
+    navigate(notificationPath);
+      window.location.reload();
+  };
   const handleShowProfileDropdown = () =>
     setShowProfileDropdown(!showProfileDropdown);
-
-  const { unreadCount } = useNotifications();
+  const { unreadCount } = roleName === "superAdmin"|| roleName === "admin" ? useAdminNotifications() : useNotifications();
+  
 
   const handleClick = () => setNav(!nav);
 

@@ -218,12 +218,7 @@ export const updateUserSelf = async (id: string, data: object) => {
     id,
     editUserInput: { ...data },
   };
-
-  console.log("GraphQL Request:", {
-    query,
-    variables,
-  });
-
+  
   try {
     const response = await axios.post("/", {
       query,

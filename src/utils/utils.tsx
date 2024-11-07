@@ -1,10 +1,12 @@
 import jwtDecode from 'jwt-decode';
 import { GraphQLClient } from 'graphql-request';
-
+import { toast } from 'react-toastify';
+import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from 'react';
 
 export const destination = () =>{
   const roleName = localStorage.getItem("roleName");
-  const destin =  (roleName === "superAdmin" || roleName === "Admin") ? "/admin" : "/applicant";
+  const destin =  (roleName === "superAdmin" || roleName === "admin") ? "/admin" : "/applicant";
   return destin;
 }
 
@@ -13,16 +15,17 @@ export const Token = () => {
   const verifyToken = async (token: any) => {
     try {
       const QUERY = `query CheckUserRole($email: String) {
-  checkUserRole(email: $email) {
-    _id
-    roleName
-    description
-  }
-}
-    `;
+          checkUserRole(email: $email) {
+            _id
+            roleName
+            description
+          }
+        } `
+    ;
 
       const decoded: any = jwtDecode(token);
       const email = decoded.data ? decoded.data.email : decoded.email;
+
       if (process.env.BACKEND_URL) {
         const client = new GraphQLClient(process.env.BACKEND_URL, {
           headers: { Authorization: token },
@@ -36,7 +39,7 @@ export const Token = () => {
         });
         return decoded;
       }
-      // console.log('decoded', decoded.data.email);
+      
       return decoded;
     } catch (error) {
       //@ts-ignore

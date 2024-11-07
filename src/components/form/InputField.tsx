@@ -4,7 +4,7 @@ interface InputFieldProps extends InputHTMLAttributes<HTMLInputElement> {
   parentClassName?: string;
   styles?: string;
   label?: string;
-  error: any;
+  error?: any;
 }
 
 const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
