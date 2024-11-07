@@ -97,7 +97,7 @@ const allReducers = combineReducers({
   traineeAttendance: attendanceReducer,
   traineePerformance: performanceReducer,
   updateUser:userUpdateReducer,
-  loggedUser: getLoggedUserReducer,,
+  loggedUser: getLoggedUserReducer,
   tickets: ticketReducer,
   filteredTickets: filterTicketReducer,
 });
