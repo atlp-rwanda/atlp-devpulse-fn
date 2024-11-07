@@ -181,6 +181,7 @@ export const fetchtraine = ({ page, itemsPerPage, All }: any) => {
           }
         )
         .then((res) => {
+          console.log(res)
           if (res.data.data) {
             // toast.success("traine-applicants fetched successfully");
             dispatch({

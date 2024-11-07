@@ -60,6 +60,10 @@ import Profile from "../pages/Profile";
 import SignupPage from "./../pages/SignupPage";
 import AdminNotification from "../pages/AdminNotifications/AdminNotifications";
 
+import TraineeApply from "../pages/TraineeApply/TraineeApply";
+import TraineeAttribute from '../pages/TraineeApply/TraineeAttribute'
+import TraineeSuccessPage from "../pages/TraineeApply/TraineeSuccess";
+
 
 function Navigation() {
   const roleName = localStorage.getItem("roleName");
@@ -102,6 +106,22 @@ function Navigation() {
           element={
             <PrivateRoute allowedRoles={['admin', 'superAdmin']}>
               <Dashboard />
+            </PrivateRoute>
+          }
+        />
+                <Route
+          path="update-profile"
+          element={
+            <PrivateRoute allowedRoles={["admin", "superAdmin"]}>
+              <ProfileUpdate />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="dashboard/profile"
+          element={
+            <PrivateRoute allowedRoles={["admin", "superAdmin"]}>
+              <Profile />
             </PrivateRoute>
           }
         />
@@ -444,6 +464,30 @@ function Navigation() {
           element={
             <PrivateRoute allowedRoles={["applicant"]}>
               <Profile />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="available-jobs/trainee-apply"
+          element={
+            <PrivateRoute allowedRoles={['applicant']}>
+              <TraineeApply />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="available-jobs/trainee-apply/trainee-success/:traineeId"
+          element={
+            <PrivateRoute allowedRoles={['applicant']}>
+              <TraineeSuccessPage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="available-jobs/trainee-apply/trainee-success/trainee-add-attributes/:traineeId?"
+          element={
+            <PrivateRoute allowedRoles={['applicant']}>
+              <TraineeAttribute />
             </PrivateRoute>
           }
         />

@@ -56,58 +56,75 @@ export const getAllTraineess =
     }
   };
 
-export const createTrainee =
-  ({ firstName, lastName, email, cycle_id }: any) =>
-  async (dispatch: any) => {
-    try {
-      const datas = await axios({
-        url: process.env.BACKEND_URL,
-        method: "post",
-        data: {
-          query: `
-          mutation CreateNewTraineeApplicant($input: newTraineeApplicantInput) {
-            createNewTraineeApplicant(input: $input) {
-              lastName
-              firstName
-              email
-              _id
-            }
-          }`,
-          variables: {
-            input: {
-              firstName,
-              lastName,
-              email,
-              cycle_id,
+  export const createTrainee = ({
+    firstName,
+    lastName,
+    email,
+    cycle_id,
+  }: {
+    firstName: string;
+    lastName: string;
+    email: string;
+    cycle_id: string;
+  }) =>
+    async (dispatch: any) => {
+      try {
+        if (!cycle_id) {
+          throw new Error('Application cycle is required');
+        }
+  
+        const response = await axios({
+          url: process.env.BACKEND_URL,
+          method: "post",
+          data: {
+            query: `
+            mutation CreateNewTraineeApplicant($input: newTraineeApplicantInput!) {
+              createNewTraineeApplicant(input: $input) {
+                _id
+                lastName
+                firstName
+                email
+                cycleApplied {
+                  _id
+                  cycle {
+                    _id
+                  }
+                }
+              }
+            }`,
+            variables: {
+              input: {
+                firstName: firstName.trim(),
+                lastName: lastName.trim(),
+                email: email.trim(),
+                cycle_id: cycle_id.trim(),
+              },
             },
           },
-        },
-      })
-        .then((response) => {
-          if (response.data.data !== null) {
-            toast.success("Successfully created.");
-            dispatch(
-              creator(
-                CREATE_TRAINEES,
-                response.data.data.createNewTraineeApplicant
-              )
-            );
-          } else {
-            const err = response.data.errors[0].message;
-
-            toast.error(err);
-            dispatch(creator(CREATE_CYCLE_ERROR, err));
-          }
-        })
-        .catch((error) => {
-          dispatch(creator(CREATE_CYCLE_ERROR, error));
         });
-    } catch (error) {
-      console.log(error);
-
-      return dispatch(creator(CREATE_CYCLE_ERROR, error));
-    }
-  };
+  
+        if (response.data.data?.createNewTraineeApplicant) {
+          dispatch(
+            creator(
+              CREATE_TRAINEES,
+              response.data.data.createNewTraineeApplicant
+            )
+          );
+          return response.data;
+        } else {
+          const error = response.data.errors?.[0]?.message || 'An error occurred';
+          toast.error(error);
+          dispatch(creator(CREATE_CYCLE_ERROR, error));
+          return response.data;
+        }
+      } catch (error: any) {
+        console.error('Error creating trainee:', error);
+        const errorMessage = error.response?.data?.errors?.[0]?.message || error.message;
+        toast.error(errorMessage || 'An error occurred while creating trainee');
+        dispatch(creator(CREATE_CYCLE_ERROR, error));
+        throw error;
+      }
+    };
 
 
 export const getTraineeApplicant = (traineeId: string) => async(dispatch: any) => {
