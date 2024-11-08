@@ -57,6 +57,12 @@ import Search from "./../pages/search";
 import Settings from '../components/settings';
 import ProfileUpdate from "../pages/ProfilePage";
 import Profile from "../pages/Profile";
+import SignupPage from "./../pages/SignupPage";
+import AdminNotification from "../pages/AdminNotifications/AdminNotifications";
+
+import TraineeApply from "../pages/TraineeApply/TraineeApply";
+import TraineeAttribute from '../pages/TraineeApply/TraineeAttribute'
+import TraineeSuccessPage from "../pages/TraineeApply/TraineeSuccess";
 
 import TicketPage from "../pages/tickets/ticketPage";
 import AdminTicketPage from "../pages/tickets/adminTicketPage";
@@ -75,14 +81,14 @@ function Navigation() {
       <Route path="/forget" element={<ForgotPasswordPage />} />
       <Route path="/reset-password" element={<ResetPasswordPage />} />
 
-      <Route path="/signup" element={<SignupForm />} />
+      <Route path="/signup" element={<SignupPage />} />
       <Route path="/verifyEmail" element={<VerifyEmail/>}/>
       <Route path="/pageNotFound" element={<PageNotFound />} />
       <Route path="settings" element={<Settings />} />
       <Route
         path="/"
         element={
-          roleName === 'Admin' || roleName === 'SuperAdmin' ? (
+          roleName === 'admin' || roleName === 'SuperAdmin' ? (
             <Navigate to="/admin" />
           ) : roleName === 'Applicant' ? (
             <Navigate to="/applicant" />
@@ -91,11 +97,11 @@ function Navigation() {
           )
         }
       />
-      {/* Admin Routes (Protected) */}
+      {/* admin Routes (Protected) */}
       <Route
         path="/admin"
         element={
-          <PrivateRoute allowedRoles={['Admin', 'superAdmin']}>
+          <PrivateRoute allowedRoles={['admin', 'superAdmin']}>
             <AdminLayout />
           </PrivateRoute>
         }
@@ -103,7 +109,7 @@ function Navigation() {
         <Route
           index
           element={
-            <PrivateRoute allowedRoles={['Admin', 'superAdmin']}>
+            <PrivateRoute allowedRoles={['admin', 'superAdmin']}>
               <Dashboard />
             </PrivateRoute>
           }
@@ -111,7 +117,7 @@ function Navigation() {
                 <Route
           path="update-profile"
           element={
-            <PrivateRoute allowedRoles={["Admin", "superAdmin"]}>
+            <PrivateRoute allowedRoles={["admin", "superAdmin"]}>
               <ProfileUpdate />
             </PrivateRoute>
           }
@@ -119,15 +125,39 @@ function Navigation() {
         <Route
           path="dashboard/profile"
           element={
-            <PrivateRoute allowedRoles={["Admin", "superAdmin"]}>
+            <PrivateRoute allowedRoles={["admin", "superAdmin"]}>
               <Profile />
+            </PrivateRoute>
+          }
+        />
+                <Route
+          path="update-profile"
+          element={
+            <PrivateRoute allowedRoles={["admin", "superAdmin"]}>
+              <ProfileUpdate />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="dashboard/profile"
+          element={
+            <PrivateRoute allowedRoles={["admin", "superAdmin"]}>
+              <Profile />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="notifications"
+          element={
+            <PrivateRoute allowedRoles={["admin", "superAdmin"]}>
+              <AdminNotification/>
             </PrivateRoute>
           }
         />
         <Route
           path="trainee-applicant-details/:traineeId"
           element={
-            <PrivateRoute allowedRoles={['Admin', 'superAdmin']}>
+            <PrivateRoute allowedRoles={['admin', 'superAdmin']}>
               <TrainneeDetails />
             </PrivateRoute>
           }
@@ -135,7 +165,7 @@ function Navigation() {
         <Route
           path="application-details/:appId"
           element={
-            <PrivateRoute allowedRoles={['Admin', 'superAdmin']}>
+            <PrivateRoute allowedRoles={['admin', 'superAdmin']}>
               <ApplicationDetails />
             </PrivateRoute>
           }
@@ -143,7 +173,7 @@ function Navigation() {
         <Route
           path="traineeb-details"
           element={
-            <PrivateRoute allowedRoles={['Admin', 'superAdmin']}>
+            <PrivateRoute allowedRoles={['admin', 'superAdmin']}>
               <TrainneeDetailsB />
             </PrivateRoute>
           }
@@ -151,7 +181,7 @@ function Navigation() {
         <Route
           path="Trainee-applicants"
           element={
-            <PrivateRoute allowedRoles={['Admin', 'superAdmin']}>
+            <PrivateRoute allowedRoles={['admin', 'superAdmin']}>
               <Trainee />
             </PrivateRoute>
           }
@@ -159,7 +189,7 @@ function Navigation() {
         <Route
           path="cycles"
           element={
-            <PrivateRoute allowedRoles={['Admin', 'superAdmin']}>
+            <PrivateRoute allowedRoles={['admin', 'superAdmin']}>
               <ApplicationCycle />
             </PrivateRoute>
           }
@@ -167,7 +197,7 @@ function Navigation() {
         <Route
           path="trash"
           element={
-            <PrivateRoute allowedRoles={['Admin', 'superAdmin']}>
+            <PrivateRoute allowedRoles={['admin', 'superAdmin']}>
               <Trash />
             </PrivateRoute>
           }
@@ -175,7 +205,7 @@ function Navigation() {
         <Route
           path="filter_trainee-applicants"
           element={
-            <PrivateRoute allowedRoles={['Admin', 'superAdmin']}>
+            <PrivateRoute allowedRoles={['admin', 'superAdmin']}>
               <FilterTrainee />
             </PrivateRoute>
           }
@@ -184,7 +214,7 @@ function Navigation() {
         <Route
           path="import_trainee-aplicants"
           element={
-            <PrivateRoute allowedRoles={['Admin', 'superAdmin']}>
+            <PrivateRoute allowedRoles={['admin', 'superAdmin']}>
               <ImportTraineeDetailsFromGoogleSheet />
             </PrivateRoute>
           }
@@ -192,7 +222,7 @@ function Navigation() {
         <Route
           path="trainee-applicant/:traineeId/edit"
           element={
-            <PrivateRoute allowedRoles={['Admin', 'superAdmin']}>
+            <PrivateRoute allowedRoles={['admin', 'superAdmin']}>
               <UpdateTraine />
             </PrivateRoute>
           }
@@ -200,7 +230,7 @@ function Navigation() {
         <Route
           path="filter_trainee-applicants/:id"
           element={
-            <PrivateRoute allowedRoles={['Admin', 'superAdmin']}>
+            <PrivateRoute allowedRoles={['admin', 'superAdmin']}>
               <CreateScoreType />
             </PrivateRoute>
           }
@@ -208,7 +238,7 @@ function Navigation() {
         <Route
           path="users"
           element={
-            <PrivateRoute allowedRoles={['Admin', 'superAdmin']}>
+            <PrivateRoute allowedRoles={['admin', 'superAdmin']}>
               <ListAllUsersPage />
             </PrivateRoute>
           }
@@ -216,7 +246,7 @@ function Navigation() {
         <Route
           path="search"
           element={
-            <PrivateRoute allowedRoles={['Admin', 'superAdmin']}>
+            <PrivateRoute allowedRoles={['admin', 'superAdmin']}>
               <Search />
             </PrivateRoute>
           }
@@ -224,7 +254,7 @@ function Navigation() {
         <Route
           path="roles"
           element={
-            <PrivateRoute allowedRoles={['Admin', 'superAdmin']}>
+            <PrivateRoute allowedRoles={['admin', 'superAdmin']}>
               <RolePermission />
             </PrivateRoute>
           }
@@ -232,7 +262,7 @@ function Navigation() {
         <Route
           path="admins"
           element={
-            <PrivateRoute allowedRoles={['Admin', 'superAdmin']}>
+            <PrivateRoute allowedRoles={['admin', 'superAdmin']}>
               <ScoreTypesActions />
             </PrivateRoute>
           }
@@ -240,7 +270,7 @@ function Navigation() {
         <Route
           path="program/:programId/edit"
           element={
-            <PrivateRoute allowedRoles={['Admin', 'superAdmin']}>
+            <PrivateRoute allowedRoles={['admin', 'superAdmin']}>
               <UpdateProgram />
             </PrivateRoute>
           }
@@ -248,7 +278,7 @@ function Navigation() {
         <Route
           path="program/:id"
           element={
-            <PrivateRoute allowedRoles={['Admin', 'superAdmin']}>
+            <PrivateRoute allowedRoles={['admin', 'superAdmin']}>
               <SingleProgramDetails />
             </PrivateRoute>
           }
@@ -256,7 +286,7 @@ function Navigation() {
         <Route
           path="programs"
           element={
-            <PrivateRoute allowedRoles={['Admin', 'superAdmin']}>
+            <PrivateRoute allowedRoles={['admin', 'superAdmin']}>
               <Programs />
             </PrivateRoute>
           }
@@ -264,7 +294,7 @@ function Navigation() {
         <Route
           path="jobPost/:id/apply"
           element={
-            <PrivateRoute allowedRoles={['Admin', 'superAdmin']}>
+            <PrivateRoute allowedRoles={['admin', 'superAdmin']}>
               <SubmitApplication />
             </PrivateRoute>
           }
@@ -272,7 +302,7 @@ function Navigation() {
         <Route
           path="create-form"
           element={
-            <PrivateRoute allowedRoles={['Admin', 'superAdmin']}>
+            <PrivateRoute allowedRoles={['admin', 'superAdmin']}>
               <CreateFormPage />
             </PrivateRoute>
           }
@@ -280,7 +310,7 @@ function Navigation() {
         <Route
           path="view-forms"
           element={
-            <PrivateRoute allowedRoles={['Admin', 'superAdmin']}>
+            <PrivateRoute allowedRoles={['admin', 'superAdmin']}>
               <ViewApplicationForms />
             </PrivateRoute>
           }
@@ -288,7 +318,7 @@ function Navigation() {
         <Route
           path="update-saved-form/:id"
           element={
-            <PrivateRoute allowedRoles={['Admin', 'superAdmin']}>
+            <PrivateRoute allowedRoles={['admin', 'superAdmin']}>
               <UpdateSavedFormPage />
             </PrivateRoute>
           }
@@ -296,7 +326,7 @@ function Navigation() {
         <Route
           path="job-Post"
           element={
-            <PrivateRoute allowedRoles={['Admin', 'superAdmin']}>
+            <PrivateRoute allowedRoles={['admin', 'superAdmin']}>
               <Jobs />
             </PrivateRoute>
           }
@@ -304,7 +334,7 @@ function Navigation() {
         <Route
           path="job/Post/:id"
           element={
-            <PrivateRoute allowedRoles={['Admin', 'superAdmin']}>
+            <PrivateRoute allowedRoles={['admin', 'superAdmin']}>
               <SingleJobPostDetails />
             </PrivateRoute>
           }
@@ -312,7 +342,7 @@ function Navigation() {
           <Route
           path="job/post/edit/:programId"
           element={
-            <PrivateRoute allowedRoles={['Admin', 'superAdmin']}>
+            <PrivateRoute allowedRoles={['admin', 'superAdmin']}>
               <UpdateJobPost />
             </PrivateRoute>
           }
@@ -320,7 +350,7 @@ function Navigation() {
         <Route
           path="grading"
           element={
-            <PrivateRoute allowedRoles={['Admin', 'superAdmin']}>
+            <PrivateRoute allowedRoles={['admin', 'superAdmin']}>
               <GradingSystemPage />
             </PrivateRoute>
           }
@@ -328,7 +358,7 @@ function Navigation() {
         <Route
           path="view-applications"
           element={
-            <PrivateRoute allowedRoles={['Admin', 'superAdmin']}>
+            <PrivateRoute allowedRoles={['admin', 'superAdmin']}>
               <ListApplications />
             </PrivateRoute>
           }
@@ -336,7 +366,7 @@ function Navigation() {
         <Route
           path="settings"
           element={
-            <PrivateRoute allowedRoles={['Admin', 'superAdmin']}>
+            <PrivateRoute allowedRoles={['admin', 'superAdmin']}>
               <Settings />
             </PrivateRoute>
           }
@@ -368,7 +398,7 @@ function Navigation() {
         <Route
           path="*"
           element={
-            <PrivateRoute allowedRoles={['Admin', 'superAdmin']}>
+            <PrivateRoute allowedRoles={['admin', 'superAdmin']}>
               <PageNotFound />
             </PrivateRoute>
           }
@@ -490,6 +520,30 @@ function Navigation() {
             </PrivateRoute>
           }
         />
+        <Route
+          path="available-jobs/trainee-apply"
+          element={
+            <PrivateRoute allowedRoles={['applicant']}>
+              <TraineeApply />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="available-jobs/trainee-apply/trainee-success/:traineeId"
+          element={
+            <PrivateRoute allowedRoles={['applicant']}>
+              <TraineeSuccessPage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="available-jobs/trainee-apply/trainee-success/trainee-add-attributes/:traineeId?"
+          element={
+            <PrivateRoute allowedRoles={['applicant']}>
+              <TraineeAttribute />
+            </PrivateRoute>
+          }
+        />
       </Route>
       
 
@@ -497,7 +551,7 @@ function Navigation() {
       <Route
         path="*"
         element={
-          <PrivateRoute allowedRoles={['Admin', 'applicant', 'superAdmin']}>
+          <PrivateRoute allowedRoles={['admin', 'applicant', 'superAdmin']}>
             <PageNotFound />
           </PrivateRoute>
         }
