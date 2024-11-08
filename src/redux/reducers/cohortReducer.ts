@@ -1,4 +1,9 @@
-import { GET_COHORTS, GET_TRAINEE_COHORT } from '..';
+import {
+  CREATE_COHORT_ERROR,
+  GET_COHORTS,
+  GET_TRAINEE_COHORT,
+  CREATE_COHORT_SUCCESS,
+} from "..";
 
 const initialState = {
   isLoading: true,
@@ -15,6 +20,7 @@ export default (state = initialState, { type, payload }: any) => {
         ...state,
         isLoading: false,
         data: payload,
+        errors: null,
       };
 
     case GET_TRAINEE_COHORT:
@@ -23,7 +29,20 @@ export default (state = initialState, { type, payload }: any) => {
         isLoading: false,
         isLoaded: true,
         traineeCohort: payload,
-        };
+        errors: null,
+      };
+    case CREATE_COHORT_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        errors: null,
+      };
+    case CREATE_COHORT_ERROR:
+      return {
+        ...state,
+        isLoading: false,
+        errors: payload,
+      };
 
     default:
       return state;
