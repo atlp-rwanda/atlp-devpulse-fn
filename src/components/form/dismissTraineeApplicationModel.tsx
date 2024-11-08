@@ -18,13 +18,18 @@ const DismissTraineeApplicant: React.FC<props> = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [comments, setComments] = useState("");
+  const [error, setError] = useState<string | null>(null);
   const dispatch = useAppDispatch();
-  const { data, success, loading, message, error } = useAppSelector(
+  const { data, success, loading, message, error:rejectError } = useAppSelector(
     (state) => state.nextStage
   );
   const handleDismiss = async () => {
+    if (!comments.trim()) {
+      setError('Reason are required');
+    } else {
     await dispatch(AdvanceToNextStage(applicantId, "Rejected", comments));
     setIsOpen(false);
+    }
   };
 
   useEffect(() => {
@@ -70,10 +75,11 @@ const DismissTraineeApplicant: React.FC<props> = ({
                 </label>
                 <textarea
                   className="w-full p-2 border rounded-md resize-none bg-white dark:bg-[#374151] dark:text-white dark:border-gray-600"
-                  placeholder="Reasons"
+                  placeholder="Reasons..."
                   value={comments}
                   onChange={(e) => setComments(e.target.value)}
                 />
+                {error && <p className="text-red-500 text-sm">{error}</p>}
               </div>
             </div>
 

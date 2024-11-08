@@ -10,8 +10,9 @@ interface props {
   onClose: () => void;
 }
 const NextStageModal: React.FC<props> = ({ applicantId, stage,status, onClose }) => {
+  const [error,setError] = useState<string>("")
   const dispatch = useAppDispatch();
-  const { data, success, loading, message,error } = useAppSelector(
+  const { data, success, loading, message,error:nextError } = useAppSelector(
     (state) => state.nextStage
   );
   const [isOpen, setIsOpen] = useState(false);
@@ -21,8 +22,14 @@ const NextStageModal: React.FC<props> = ({ applicantId, stage,status, onClose })
     currentStage: string,
     comments: string
   ) => {
+    // Validate that comments are not empty
+    if (!comments.trim()) {
+      setError('Comments are required');
+    } else {
     const nextStage = handleNextStage(currentStage);
     await dispatch(AdvanceToNextStage(applicantId, nextStage, comments));
+    setError("")
+    }
   };
 
   const stages = [
@@ -40,7 +47,7 @@ const NextStageModal: React.FC<props> = ({ applicantId, stage,status, onClose })
     return nextStage;
   };
   useEffect(() => {
-    if(success && !error){
+    if(success && !nextError){
       setIsOpen(false);
       onClose()
     }
@@ -77,6 +84,7 @@ const NextStageModal: React.FC<props> = ({ applicantId, stage,status, onClose })
                   value={comments}
                   onChange={(e) => setComments(e.target.value)}
                 />
+                {error && <p className="text-red-500 text-sm">{error}</p>}
               </div>
             </div>
 

@@ -52,6 +52,7 @@ import filterRoleReducer from './filterRoleReducer';
 import fetchSearchDataReducer from './fetchSearchDataReducer';
 import userUpdateReducer from './getUser';
 
+import getLoggedUserReducer from './loggedUser'
 
 const allReducers = combineReducers({
   counter: counterReducer,
@@ -98,6 +99,7 @@ const allReducers = combineReducers({
   traineeAttendance: attendanceReducer,
   traineePerformance: performanceReducer,
   updateUser:userUpdateReducer,
+  loggedUser: getLoggedUserReducer,
   nextStage:advanceToNextStageReducer,
   fetchApplicantStage: FetchApplicantStageReducer,
   AddedApplicantScore:AddApplicantScoreReducer,
