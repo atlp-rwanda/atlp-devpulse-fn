@@ -88,11 +88,6 @@ export const applicantSidebarItems = [
     title: "My Applications",
   },
   {
-    path: "myapplication",
-    icon: <Icon icon="material-symbols:wysiwyg-rounded"></Icon>,
-    title: "My Application",
-  },
-  {
     path: "interviewScheduler",
     icon: (
       <Icon icon="material-symbols:interpreter-mode-outline-rounded"></Icon>

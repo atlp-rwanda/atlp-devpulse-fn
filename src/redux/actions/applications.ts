@@ -213,3 +213,102 @@ export const getMyOwnAppliedJob = () => async (dispatch: any) => {
     toast.error(err.message);
   }
 };
+
+export const getApplicantCyclesApplications = async () => {
+  const response = await axios.post("/", {
+    query: `
+      query GetTraineeCyclesApplications {
+        getTraineeCyclesApplications {
+          email
+          firstName
+          lastName
+          user
+          applicationPhase
+          status
+          _id
+          cycle_id {
+            name
+            startDate
+            endDate
+            createdAt
+          }
+          createdAt
+        }
+      }
+    `
+  });
+  return response.data;
+};
+
+export const getCyclesApplicationAttributes = async (trainee_id: string) => {
+  const response = await axios.post("/", {
+    query: `
+      query GetApplicationsAttributes($trainee_id: String!) {
+        getApplicationsAttributes(trainee_id: $trainee_id) {
+          gender
+          birth_date
+          Address
+          phone
+          field_of_study
+          education_level
+          province
+          district
+          sector
+          isEmployed
+          haveLaptop
+          isStudent
+          Hackerrank_score
+          interview
+          interview_decision
+          past_andela_programs
+          understandTraining
+          trainee_id
+        }
+      }
+    `,
+    variables: {
+      trainee_id: trainee_id,
+    },
+  });
+  return response.data;
+};
+
+export const getCyclesStages = async (trainee_id: String) => {
+  const response = await axios.post("/", {
+    query: `query GetApplicationStages($trainee_id:String!) {
+    getApplicationStages(trainee_id: $trainee_id) {
+        shortlist {
+            applicantId
+            status
+            comments
+            createdAt
+        }
+        technical {
+            applicantId
+            status
+            score
+            comments
+            createdAt
+        }
+        interview {
+            applicantId
+            status
+            interviewScore
+            comments
+            creatdAt
+        }
+        admitted {
+            applicantId
+            status
+            comments
+            createdAt
+        }
+    }
+}
+` , variables: {
+      trainee_id: trainee_id
+    }
+  });
+
+  return response.data
+}

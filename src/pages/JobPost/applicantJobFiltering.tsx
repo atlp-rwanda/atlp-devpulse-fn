@@ -143,11 +143,12 @@ const ApplicantSeachJobPost = (props: any) => {
               <div className="bg-light-bg dark:bg-dark-frame-bg min-h-screen overflow-x-hidden">
                 <div className="w-full px-4 sm:px-6 lg:px-8 py-4">
                   <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-4">
-                  <Link to="trainee-apply">
-                    <button className="flex bg-primary dark:bg-[#56C870] rounded-md py-2 mt-2 px-4 text-white font-medium cursor-pointer">
-                          Become Trainee
-                    </button>
-                  </Link>
+                    <Link to="trainee-apply" className="flex bg-primary dark:bg-[#56C870] rounded-md py-2 mt-2 px-4 text-white font-medium cursor-pointer">
+                      Become trainee
+                    </Link>
+                    <Link to="/applicant/myapplication" className="flex bg-primary dark:bg-[#56C870] rounded-md py-2 mt-2 px-4 text-white font-medium cursor-pointer" >
+                      Track my application
+                    </Link>
                     <Select
                       className="sm:text-sm w-full sm:w-40 rounded-bt-rd dark:text-ltb"
                       options={[
@@ -225,7 +226,7 @@ const ApplicantSeachJobPost = (props: any) => {
                             </thead>
                             <tbody className="overflow-y-auto">
                               {allfilteredjobPosts?.data &&
-                              allfilteredjobPosts?.data.length > 0 ? (
+                                allfilteredjobPosts?.data.length > 0 ? (
                                 allfilteredjobPosts?.data?.map((item: any) => (
                                   <tr
                                     className="hover:bg-slate-700 transition-colors"
@@ -301,7 +302,7 @@ const ApplicantSeachJobPost = (props: any) => {
                             Job POST
                           </label>
                           {allfilteredjobPosts?.data &&
-                          allfilteredjobPosts?.data.length > 0 ? (
+                            allfilteredjobPosts?.data.length > 0 ? (
                             allfilteredjobPosts?.data?.map((item: any) => (
                               <div
                                 key={item._id}
@@ -463,7 +464,7 @@ const ApplicantSeachJobPost = (props: any) => {
                                 Math.ceil(
                                   jobs?.pagination.totalItems / itemsPerPage
                                 ) -
-                                  1
+                                1
                               }
                             >
                               <AiIcons.AiOutlineRight />
@@ -482,7 +483,7 @@ const ApplicantSeachJobPost = (props: any) => {
                                 Math.ceil(
                                   jobs?.pagination.totalItems / itemsPerPage
                                 ) -
-                                  1
+                                1
                               }
                             >
                               <AiIcons.AiOutlineDoubleRight />
