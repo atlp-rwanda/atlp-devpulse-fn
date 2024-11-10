@@ -54,7 +54,7 @@ export const MyApplication = () => {
                 setIsLoading(true);
                 const response = await getCyclesStages(trainee_id);
                 if (response.data) {
-                    console.log("SS")
+                    console.log("SS", response.data)
                     setStages(response.data.getApplicationStages);
                 } else {
                     throw new Error("An unknown error occurred!");
@@ -102,7 +102,7 @@ export const MyApplication = () => {
     return (
         <>
             <ToastContainer />
-            <div className="py-8 px-6 min-h-screen bg-gray-100 dark:bg-[#1E293B] text-gray-900 dark:text-white">
+            <div className="py-8 px-6 min-h-screen min-w-screen bg-gray-100 dark:bg-[#1E293B] text-gray-900 dark:text-white">
                 <h2 className="pl-5 text-3xl font-extrabold text-primary dark:text-[#56C870] sm:text-4xl mb-6">
                     My Application
                 </h2>
@@ -149,7 +149,47 @@ export const MyApplication = () => {
                             )}
                         </p>
 
-                        {stages && Object.values(stages).length > 0 && (
+                        <div className="bg-gray-100 dark:bg-[#262E3D] p-4 rounded-lg mt-4 shadow">
+                            <h4 className="text-xl font-semibold mb-3">Stages History</h4>
+                            <ul className="space-y-6 list-disc list-inside marker:text-[#56C870] dark:marker:text-green-400">
+                                {stages?.dismissed && (
+                                    <li className="bg-red">
+                                        {stages?.dismissed?.status && (<strong>Dismissed</strong>)}
+                                        {stages?.dismissed?.status && (<p><b>Status:</b> {stages?.dismissed?.status}</p>)}
+                                        {stages?.dismissed?.stageDismissedFrom && (<p><b>Score:</b> {stages?.dismissed?.stageDismissedFrom}</p>)}
+                                        {stages?.dismissed?.comments && (<p><b>Comments:</b> {stages?.dismissed?.comments}</p>)}
+                                        {stages?.dismissed?.createdAt && (<p><b>Created At:</b> {formatDate(stages?.dismissed?.createdAt)}</p>)}
+                                    </li>
+                                )}
+                                {stages?.interview && (
+                                    <li>
+                                        {stages?.interview?.status && (<strong>Interview</strong>)}
+                                        {stages?.interview?.status && (<p><b>Status:</b> {stages?.interview?.status}</p>)}
+                                        {stages?.interview?.interviewScore && (<p><b>Score:</b> {stages?.interview?.interviewScore}</p>)}
+                                        {stages?.interview?.comments && (<p><b>Comments:</b> {stages?.interview?.comments}</p>)}
+                                        {stages?.interview?.createdAt && (<p><b>Created At:</b> {formatDate(stages?.interview?.createdAt)}</p>)}
+                                    </li>
+                                )}
+                                {stages?.technical && (
+                                    <li>
+                                        {stages?.technical?.status && (<strong>Technical assessment</strong>)}
+                                        {stages?.technical?.status && (<p><b>Status:</b> {stages?.technical?.status}</p>)}
+                                        {stages?.technical?.score && (<p><b>Score:</b> {stages?.technical?.score}</p>)}
+                                        {stages?.technical?.comments && (<p><b>Comments:</b> {stages?.technical?.comments}</p>)}
+                                        {stages?.technical?.createdAt && (<p><b>Created At:</b> {formatDate(stages?.technical?.createdAt)}</p>)}
+                                    </li>
+                                )}
+                                {stages?.shortlist && (
+                                    <li>
+                                        {stages?.shortlist?.status && (<strong>Shortlist</strong>)}
+                                        {stages?.shortlist?.status && (<p><b>Status:</b> {stages?.shortlist?.status}</p>)}
+                                        {stages?.shortlist?.comments && (<p><b>Comments:</b> {stages?.shortlist?.comments}</p>)}
+                                        {stages?.shortlist?.createdAt && (<p><b>Created At:</b> {formatDate(stages?.shortlist?.createdAt)}</p>)}
+                                    </li>
+                                )}
+                            </ul>
+                        </div>
+                        {/* {stages && Object.values(stages).length > 0 && (
                             <div className="bg-gray-100 dark:bg-[#262E3D] p-4 rounded-lg mt-4 shadow">
                                 <h4 className="text-xl font-semibold mb-3">Stages History</h4>
                                 <ul className="space-y-6 list-disc list-inside marker:text-[#56C870] dark:marker:text-green-400">
@@ -166,7 +206,7 @@ export const MyApplication = () => {
                                     )}
                                 </ul>
                             </div>
-                        )}
+                        )} */}
 
                     </section>
                 </div>

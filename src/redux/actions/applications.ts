@@ -303,6 +303,12 @@ export const getCyclesStages = async (trainee_id: String) => {
             comments
             createdAt
         }
+        dismissed{
+            applicantId
+            stageDismissedFrom
+            comments
+            status
+        }
     }
 }
 ` , variables: {
