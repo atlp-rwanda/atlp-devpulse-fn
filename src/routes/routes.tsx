@@ -59,6 +59,8 @@ import ProfileUpdate from "../pages/ProfilePage";
 import Profile from "../pages/Profile";
 import SignupPage from "./../pages/SignupPage";
 import AdminNotification from "../pages/AdminNotifications/AdminNotifications";
+import AllBlogs from "../pages/Blogs/allBlogs";
+import SingleBlogView from "../pages/Blogs/singleBlog";
 
 
 function Navigation() {
@@ -263,6 +265,22 @@ function Navigation() {
           element={
             <PrivateRoute allowedRoles={['admin', 'superAdmin']}>
               <Programs />
+            </PrivateRoute>
+          }
+        />
+         <Route
+          path="blogs"
+          element={
+            <PrivateRoute allowedRoles={['admin','applicant','superAdmin']}>
+              <AllBlogs />
+            </PrivateRoute>
+          }
+        />
+          <Route
+          path="blog/:id"
+          element={
+            <PrivateRoute allowedRoles={['admin','applicant','superAdmin']}>
+              <SingleBlogView />
             </PrivateRoute>
           }
         />

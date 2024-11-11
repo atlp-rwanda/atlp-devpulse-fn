@@ -1,53 +1,53 @@
-import counterReducer from './counterReducer';
-import deletetraineReducer from './deletetraineReducer';
+import counterReducer from "./counterReducer";
+import deletetraineReducer from "./deletetraineReducer";
 import {
   softdeletetraineReducer,
   traineReducer,
   traineCountReducer,
-} from './deletetraineReducer';
-import cycleReducer from './cycleReducer';
-import softDeletedTraineeReducer from './softDeletedTraineesReducer';
-import restoretraineReducer from './RestoreReducer';
-import updateTraineeReducer from './updateTraineeReducer';
-import getOneTraineeReducer from './getOneTraineeReducer';
-import updateTraineeAttributesReducer from './updateTraineeAttributesReducer';
-import filterTraineeReducer from './filterTraineeReducer';
-import filterJobPostReducer from './filterJobPostReducer';
+} from "./deletetraineReducer";
+import cycleReducer from "./cycleReducer";
+import softDeletedTraineeReducer from "./softDeletedTraineesReducer";
+import restoretraineReducer from "./RestoreReducer";
+import updateTraineeReducer from "./updateTraineeReducer";
+import getOneTraineeReducer from "./getOneTraineeReducer";
+import updateTraineeAttributesReducer from "./updateTraineeAttributesReducer";
+import filterTraineeReducer from "./filterTraineeReducer";
+import filterJobPostReducer from "./filterJobPostReducer";
 //@ts-ignore
-import { combineReducers } from 'redux';
-import traineeReducer from './traineeReducer';
-import traineesReducer from './traineeReduces';
-import clearTrashReducer from './clearTrashReducer';
-import loadDataReducer from './loadDataReducer';
-import scoreTypesReducers from './scoreTypesReducers';
-import scoreValuesReducer from './scoreValuesReducer';
-import updateStatusReducer from './updateStatusReducer';
-import { membersReducer } from './usersReducer';
-import { rolesReducer } from './rolesReducer';
-import createProgramReducer from './createProgramReducer';
-import fetchProgramsReducer from './fetchProgramsReducer';
-import fetchSingleProgramReducer from './fetchSingleProgramReducer';
-import deleteProgramReducer from './deleteProgramReducer';
-import updateProgramReducer from './updateProgramReducer';
-import fetchJobPostReducer from './fetchJobPostReducer';
-import createJobPostReducer from './createJobPostReducer';
-import fetchSingleJobPostReducer from './fetchSingleJobPostReducer';
-import deleteJobPostReducer from './deleteJobPostReducer';
-import programReducer from './programReducer';
-import cohortReducer from './cohortReducer';
-import updateJobPostReducer from './updateJobPostReducer';
+import { combineReducers } from "redux";
+import traineeReducer from "./traineeReducer";
+import traineesReducer from "./traineeReduces";
+import clearTrashReducer from "./clearTrashReducer";
+import loadDataReducer from "./loadDataReducer";
+import scoreTypesReducers from "./scoreTypesReducers";
+import scoreValuesReducer from "./scoreValuesReducer";
+import updateStatusReducer from "./updateStatusReducer";
+import { membersReducer } from "./usersReducer";
+import { rolesReducer } from "./rolesReducer";
+import createProgramReducer from "./createProgramReducer";
+import fetchProgramsReducer from "./fetchProgramsReducer";
+import fetchSingleProgramReducer from "./fetchSingleProgramReducer";
+import deleteProgramReducer from "./deleteProgramReducer";
+import updateProgramReducer from "./updateProgramReducer";
+import fetchJobPostReducer from "./fetchJobPostReducer";
+import createJobPostReducer from "./createJobPostReducer";
+import fetchSingleJobPostReducer from "./fetchSingleJobPostReducer";
+import deleteJobPostReducer from "./deleteJobPostReducer";
+import programReducer from "./programReducer";
+import cohortReducer from "./cohortReducer";
+import updateJobPostReducer from "./updateJobPostReducer";
 import {
   applicationsReducer,
   singleApplicationReducer,
-} from './applicationReducer';
-import { assessmentsReducer } from './assessmentReducer';
-import { attendanceReducer } from './attendanceReducer';
-import { performanceReducer } from './performanceReducer';
-import filterProgramsReducer from './filterProgramsReducer';
-import filterRoleReducer from './filterRoleReducer';
-import fetchSearchDataReducer from './fetchSearchDataReducer';
-import userUpdateReducer from './getUser';
-
+} from "./applicationReducer";
+import { assessmentsReducer } from "./assessmentReducer";
+import { attendanceReducer } from "./attendanceReducer";
+import { performanceReducer } from "./performanceReducer";
+import filterProgramsReducer from "./filterProgramsReducer";
+import filterRoleReducer from "./filterRoleReducer";
+import fetchSearchDataReducer from "./fetchSearchDataReducer";
+import userUpdateReducer from "./getUser";
+import { blogsReducer } from "./blogsReducers";
 
 const allReducers = combineReducers({
   counter: counterReducer,
@@ -63,8 +63,8 @@ const allReducers = combineReducers({
   traine: traineReducer,
   filterTrainee: filterTraineeReducer,
   filterJobPost: filterJobPostReducer,
-  filterRole:filterRoleReducer,
-  filterProgram:filterProgramsReducer,
+  filterRole: filterRoleReducer,
+  filterProgram: filterProgramsReducer,
   loadData: loadDataReducer,
   getOneTraineeReducer,
   updateTrainee: updateTraineeReducer,
@@ -93,7 +93,8 @@ const allReducers = combineReducers({
   traineeApplicant: traineeReducer,
   traineeAttendance: attendanceReducer,
   traineePerformance: performanceReducer,
-  updateUser:userUpdateReducer
+  updateUser: userUpdateReducer,
+  blogs: blogsReducer,
 });
 
 export type RootState = ReturnType<typeof allReducers>;

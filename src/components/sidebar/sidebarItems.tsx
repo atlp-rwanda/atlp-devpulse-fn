@@ -55,6 +55,11 @@ export const sidebarItems1 = [
     title: "Application Cycles",
   },
   {
+    path: "blogs",
+    icon: <Icon icon="mdi:blogger" />,
+    title: "Blogs",
+  },
+  {
     path: "grading",
     icon: <Icon icon="bxs:dashboard"></Icon>,
     title: "Grading System",
@@ -99,6 +104,11 @@ export const applicantSidebarItems = [
     icon: <Icon icon="ant-design:calendar-filled"></Icon>,
     title: "Job Post ",
   },
+   {
+    path: "blogs",
+    icon: <Icon icon="game-icons:cycle"></Icon>,
+    title: "Blogs",
+  },
 ];
 
 export const sidebarItems2 = [
@@ -117,7 +127,7 @@ export const sidebarItems2 = [
 export const sidebarItems3 = [
   {
     path: "settings",
-    icon: <Icon icon="eva:settings-2-outline"></Icon>,
+    icon: <Icon icon="mdi:blogger" />,
     title: "Settings",
   },
 ];
