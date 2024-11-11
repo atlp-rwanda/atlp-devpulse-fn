@@ -163,6 +163,11 @@ export const MyApplication = () => {
 
                         <div className="bg-gray-100 dark:bg-[#262E3D] p-4 rounded-lg mt-4 shadow">
                             <h4 className="text-xl font-semibold mb-3">Stages History</h4>
+                            {!stages?.dismissed && !stages?.interview && !stages?.shortlist && (
+                                <p className="text-red-500">
+                                    No stages history found
+                                </p>
+                            )}
                             <ul className="space-y-6 list-disc list-inside marker:text-[#56C870] dark:marker:text-green-400">
                                 {stages?.dismissed && (
                                     <li className="bg-red">
@@ -179,6 +184,14 @@ export const MyApplication = () => {
                                         {stages.interview?.status && <p><b>Status:</b> {stages.interview.status}</p>}
                                         {stages.interview?.comments && <p><b>Comments:</b> {stages.interview.comments}</p>}
                                         {stages.interview?.createdAt && <p><b>Created At:</b> {formatDate(stages.interview.createdAt)}</p>}
+                                    </li>
+                                )}
+                                {stages?.shortlist && (
+                                    <li>
+                                        <strong>Shortlist</strong>
+                                        {stages.shortlist?.status && <p><b>Status:</b> {stages.shortlist.status}</p>}
+                                        {stages.shortlist?.comments && <p><b>Comments:</b> {stages.shortlist.comments}</p>}
+                                        {stages.shortlist?.createdAt && <p><b>Created At:</b> {formatDate(stages.shortlist.createdAt)}</p>}
                                     </li>
                                 )}
                             </ul>
