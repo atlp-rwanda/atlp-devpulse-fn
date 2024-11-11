@@ -14,23 +14,28 @@ const ReplyTicketPage = (props: any) => {
   const [applicantReply, setApplicantReply] = useState("");
   const ticketData = useSelector((state: any) => state.tickets?.currentTicket);
 
-  const getAdminReplies = () => {
+  const getAllReplies = () => {
     if (!ticketData) return [];
-    return (ticketData.adminReplies || []).map((reply) => ({
+    
+    const adminReplies = (ticketData.adminReplies || []).map((reply) => ({
       ...reply,
       type: "Admin",
       author: reply.repliedBy,
     }));
-  };
 
-  const getApplicantReplies = () => {
-    if (!ticketData) return [];
-    return (ticketData.applicantReplies || []).map((reply) => ({
+    const applicantReplies = (ticketData.applicantReplies || []).map((reply) => ({
       ...reply,
       type: "Applicant",
       author: reply.repliedBy,
     }));
+
+    const allReplies = [...adminReplies, ...applicantReplies].sort((a, b) => 
+      parseInt(a.createdAt) - parseInt(b.createdAt)
+    );
+
+    return allReplies;
   };
+
 
 
   useEffect(() => {
@@ -49,7 +54,7 @@ const ReplyTicketPage = (props: any) => {
         ));
         setApplicantReply("");
         await dispatch(GetTicket(ticketId));
-        toast.success("Ticket Updated Successfully");
+        // toast.success("Ticket Updated Successfully");
       } catch (error) {
         toast.error("Failed to update ticket")
         console.error("Failed to update ticket:", error);
@@ -89,17 +94,18 @@ const ReplyTicketPage = (props: any) => {
                   </p>
                 </div>
 
-                {getAdminReplies().length > 0 && (
+                {getAllReplies().length > 0 && (
                   <div className="flex flex-col w-full">
                     <h3 className="dark:text-white text-black font-medium">
-                      Admin Responses
+                      Responses
                     </h3>
-                    {getAdminReplies().map((reply, index) => (
+                    {getAllReplies().map((reply, index) => (
                       <div
                         key={reply.id}
-                        className="mt-2 bg-gray-100 dark:bg-gray-700 p-3 rounded"
+                        className={`mt-2 p-3 rounded ${reply.type === "Admin" ? "bg-gray-100 dark:bg-gray-700" : "bg-blue-50 dark:bg-blue-900/20"}`}
                       >
                         <div className="flex flex-col">
+                          <h4 className="font-bold text-sm text-gray-600 dark:text-gray-300">{reply.type === "Admin" ? "Admin Response" : "Applicant Response"}</h4>
                           <p className="text-gray-500 text-sm dark:text-gray-400">
                             {reply.body}
                           </p>
@@ -115,43 +121,6 @@ const ReplyTicketPage = (props: any) => {
                             </span>
                           </div>
                         </div>
-                        {index < getAdminReplies().length - 1 && (
-                          <hr className="my-2 border-gray-200 dark:border-gray-700" />
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                )}
-
-                {getApplicantReplies().length > 0 && (
-                  <div className="flex flex-col w-full">
-                    <h3 className="dark:text-white text-black font-medium">
-                      Applicant Responses
-                    </h3>
-                    {getApplicantReplies().map((reply, index) => (
-                      <div
-                        key={reply.id}
-                        className="mt-2 bg-blue-50 dark:bg-blue-900/20 p-3 rounded"
-                      >
-                        <div className="flex flex-col">
-                          <p className="text-gray-500 text-sm dark:text-gray-400">
-                            {reply.body}
-                          </p>
-                          <div className="flex gap-2 mt-1 text-sm text-gray-400">
-                            <span>
-                              {reply.author.firstname} {reply.author.lastname}
-                            </span>
-                            <span>•</span>
-                            <span>
-                              {new Date(
-                                parseInt(reply.createdAt)
-                              ).toLocaleString()}
-                            </span>
-                          </div>
-                        </div>
-                        {index < getApplicantReplies().length - 1 && (
-                          <hr className="my-2 border-gray-200 dark:border-gray-700" />
-                        )}
                       </div>
                     ))}
                   </div>
