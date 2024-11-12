@@ -9,11 +9,17 @@ import {
   deleteBlog,
 } from "../actiontypes/blogTypes";
 import { toast } from "react-toastify";
+import creator from "./creator";
+import {
+  FETCH_BLOGS_FAIL,
+  FETCH_BLOGS_LOADING,
+  FETCH_BLOGS_SUCCESS,
+} from "../index";
 
 // Fetch all blogs
 export const getAllBlogs = (tag?: string) => async (dispatch: any) => {
   dispatch({
-    type: fetchBlogs.FETCH_BLOGS_LOADING,
+    type: FETCH_BLOGS_LOADING,
   });
 
   try {
@@ -44,16 +50,10 @@ export const getAllBlogs = (tag?: string) => async (dispatch: any) => {
       }`,
       variables: { tag },
     });
-
-    dispatch({
-      type: fetchBlogs.FETCH_BLOGS_SUCCESS,
-      data: response.data.data.getAllBlogs,
-    });
+    const blogsData = response.data.data.getAllBlogs;
+    dispatch(creator(FETCH_BLOGS_SUCCESS, blogsData));
   } catch (err: any) {
-    dispatch({
-      type: fetchBlogs.FETCH_BLOGS_FAIL,
-      error: err.message,
-    });
+    dispatch(creator(FETCH_BLOGS_FAIL, err));
     toast.error(err.message);
   }
 };
@@ -111,11 +111,11 @@ export const createBlogAction = (blogFields: any) => async (dispatch: any) => {
   dispatch({
     type: createBlog.CREATE_BLOG_LOADING,
   });
-
   try {
     const response = await axios.post("/", {
-      query: `mutation CreateBlog($blogFields: BlogInput!) {
-        createBlog(blogFields: $blogFields) {
+      query: `
+        mutation CreateBlog($blogFields: BlogInput!) {
+         createBlog(blogFields: $blogFields) {
           id
           title
           content
@@ -137,8 +137,18 @@ export const createBlogAction = (blogFields: any) => async (dispatch: any) => {
           created_at
           updated_at
         }
-      }`,
-      variables: { blogFields },
+      }
+      `,
+      variables: {
+        blogFields: {
+          title: blogFields.title,
+          content: blogFields.content,
+          coverImage: blogFields.coverImage,
+          author: blogFields.author,
+          images: blogFields.images!,
+          tags: blogFields.tags!,
+        },
+      },
     });
 
     dispatch({
@@ -147,11 +157,11 @@ export const createBlogAction = (blogFields: any) => async (dispatch: any) => {
     });
     toast.success("Blog created successfully!");
   } catch (err: any) {
+    console.log("Request Blog Fields: ", blogFields);
     dispatch({
       type: createBlog.CREATE_BLOG_FAIL,
       error: err.message,
     });
-    toast.error(err.message);
   }
 };
 
@@ -232,4 +242,3 @@ export const deleteBlogAction = (id: string) => async (dispatch: any) => {
     toast.error(err.message);
   }
 };
-

@@ -47,7 +47,7 @@ import filterProgramsReducer from "./filterProgramsReducer";
 import filterRoleReducer from "./filterRoleReducer";
 import fetchSearchDataReducer from "./fetchSearchDataReducer";
 import userUpdateReducer from "./getUser";
-import { blogsReducer } from "./blogsReducers";
+import blogsReducer from "./blogsReducers";
 
 const allReducers = combineReducers({
   counter: counterReducer,

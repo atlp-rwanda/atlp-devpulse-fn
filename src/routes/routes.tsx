@@ -277,7 +277,7 @@ function Navigation() {
           }
         />
           <Route
-          path="blog/:id"
+          path="blogs/:id"
           element={
             <PrivateRoute allowedRoles={['admin','applicant','superAdmin']}>
               <SingleBlogView />
@@ -446,6 +446,22 @@ function Navigation() {
           element={
             <PrivateRoute allowedRoles={['applicant']}>
               <ApplicantNotifications />
+            </PrivateRoute>
+          }
+        />
+         <Route
+          path="blogs"
+          element={
+            <PrivateRoute allowedRoles={['admin','applicant','superAdmin']}>
+              <AllBlogs />
+            </PrivateRoute>
+          }
+        />
+          <Route
+          path="blogs/:id"
+          element={
+            <PrivateRoute allowedRoles={['admin','applicant','superAdmin']}>
+              <SingleBlogView />
             </PrivateRoute>
           }
         />
