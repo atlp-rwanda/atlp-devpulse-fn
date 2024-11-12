@@ -389,7 +389,7 @@ function Navigation() {
         <Route
           path="tickets"
           element={
-            <PrivateRoute allowedRoles={['Admin', 'superAdmin']}>
+            <PrivateRoute allowedRoles={['admin', 'superAdmin']}>
               <AdminTicketPage/>
             </PrivateRoute>
           }
@@ -397,7 +397,7 @@ function Navigation() {
         <Route
           path="ticket/:id"
           element={
-            <PrivateRoute allowedRoles={['Admin', 'superAdmin']}>
+            <PrivateRoute allowedRoles={['admin', 'superAdmin']}>
               <SingleTicketDetails/>
             </PrivateRoute>
           }
@@ -405,7 +405,7 @@ function Navigation() {
         <Route
           path="ticket/:id/resolve"
           element={
-            <PrivateRoute allowedRoles={['Admin', 'superAdmin']}>
+            <PrivateRoute allowedRoles={['admin', 'superAdmin']}>
               <ResolveTicketPage/>
             </PrivateRoute>
           }
