@@ -104,9 +104,9 @@ export const applicantSidebarItems = [
     icon: <Icon icon="ant-design:calendar-filled"></Icon>,
     title: "Job Post ",
   },
-   {
+  {
     path: "blogs",
-    icon: <Icon icon="game-icons:cycle"></Icon>,
+    icon: <Icon icon="mdi:blogger" />,
     title: "Blogs",
   },
 ];

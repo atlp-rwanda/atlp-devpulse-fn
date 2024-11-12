@@ -449,6 +449,14 @@ function Navigation() {
             </PrivateRoute>
           }
         />
+         <Route
+          path="blogs"
+          element={
+            <PrivateRoute allowedRoles={['admin','applicant','superAdmin']}>
+              <AllBlogs />
+            </PrivateRoute>
+          }
+        />
         <Route
           path="update-profile"
           element={

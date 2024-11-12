@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { RootState } from "../../redux/store";
 import { getAllBlogs } from "../../redux/actions/blogActions";
@@ -9,6 +8,7 @@ import * as icons from "react-icons/ai";
 import blogSchema from "../../validation/blogSchema"
 import { Spinner } from "flowbite-react";
 import { handleBlogImageUpload } from "../../utils/imageUploadUtil";
+import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 
  interface Comment {
     _id: String
@@ -49,11 +49,19 @@ import { handleBlogImageUpload } from "../../utils/imageUploadUtil";
     likes: [Like];
     comments: [Comment];
   }
+
+  interface SubmitData {
+  title: string;
+  content: string;
+  tags: string[];
+  coverImage: File | string;
+  images: (File | string)[];
+}
 const AllBlogs = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [addNewBlogModal, setAddNewBlogModal] = useState(false);
-  const [submitData, setSubmitData] = useState({
+  const [submitData, setSubmitData] = useState<SubmitData>({
     title: "",
     content: "",
     tags: [""],
@@ -111,62 +119,44 @@ const AllBlogs = () => {
   },
   ];
   
-  const { loading, error, data = { blogs: [] } } = useSelector((state: RootState) => state.blogs);
-  const blogs = data?.blogs ||mockBlogs;
-
+  const { data ,isLoading} = useAppSelector((state) => ({data:state.blogs.data,isLoading:state.blogs.isLoading}));
+  const blogs = data;
+  console.log("All Blogs: ", data);
    useEffect(() => {
      dispatch(getAllBlogs());
-     console.log("All Blogs: ", blogs);
   }, [dispatch]);
 
-  
-  useEffect(() => {
-    if (error) {
-      toast.error("Failed to load blogs. Please try again later.");
-    }
-  }, [error]);
 
   const handleBlogClick = (blogId: string) => {
     navigate(`blog/${blogId}`);
   };
   
 
-  const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+ const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
   const { name, value } = e.target;
 
   if (e.target instanceof HTMLInputElement && e.target.files) {
     const files = e.target.files;
 
     if (name === "coverImage" && files.length > 0) {
-      // Upload cover image to Cloudinary
-      const file = files[0];
-      await handleBlogImageUpload(file, (url) => {
-        setSubmitData((prevState) => ({ ...prevState, coverImage: url }));
-      }, setIsUploading);
-
-    } else if (name === "images") {
-      // Upload each image and collect URLs
-      const imageUrls = await Promise.all(
-        Array.from(files).map(async (file) => 
-          handleBlogImageUpload(file, (url) => url, setIsUploading)
-        )
-      );
       setSubmitData((prevState) => ({
-  ...prevState,
-  images: imageUrls.filter((url): url is string => url !== null), 
-}));
-      // setSubmitData((prevState) => ({ ...prevState, images: imageUrls }));
+        ...prevState,
+        coverImage: files[0] 
+      }));
+    } else if (name === "images") {
+      setSubmitData((prevState) => ({
+        ...prevState,
+        images: Array.from(files) 
+      }));
     }
+  } else if (name === "tags") {
+    const tagArray = value.split(",").map(tag => tag.trim()).filter(tag => tag !== "");
+    setSubmitData((prevState) => ({ ...prevState, tags: tagArray }));
   } else {
-
-    if (name === "tags") {
-      const tagArray = value.split(",").map(tag => tag.trim()).filter(tag => tag !== "");
-      setSubmitData((prevState) => ({ ...prevState, tags: tagArray }));
-    } else {
-      setSubmitData((prevState) => ({ ...prevState, [name]: value }));
-    }
+    setSubmitData((prevState) => ({ ...prevState, [name]: value }));
   }
 };
+
 
 
    const Open = () => {
@@ -209,27 +199,47 @@ const AllBlogs = () => {
     setErrors(newErrors);
     return false;
   };
-  const handleSubmit = async (e: any) => {
-    e.preventDefault();
-    try {
-      setSubmitData((prevState) => ({ ...prevState}));
 
-      const obj = {
-        title: submitData.title,
-        content: submitData.content,
-        tags: submitData.tags,
-        coverImage: "https://images.pexels.com/photos/262508/pexels-photo-262508.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-        images: submitData.images,
-      };
-      if (validateForm(submitData, blogSchema)) {
-        await dispatch(createBlogAction(obj));
-        removeModal();
-      }
-    } catch (error) {
-      console.log(error);
+ const handleSubmit = async (e: any) => {
+  e.preventDefault();
+  setIsUploading(true);
+
+  try {
+    let coverImageUrl = "";
+    let imageUrls: string[] = [];
+
+    if (submitData.coverImage instanceof File) {
+      await handleBlogImageUpload(submitData.coverImage, (url) => {
+        coverImageUrl = url;
+      }, setIsUploading);
     }
-  };
 
+    if (submitData.images.length > 0) {
+      imageUrls = await Promise.all(
+        submitData.images.map(async (file: File) => 
+          handleBlogImageUpload(file, (url) => url, setIsUploading)
+        )
+      );
+    }
+
+    const obj = {
+      title: submitData.title,
+      content: submitData.content,
+      coverImage: coverImageUrl,
+      images: imageUrls,
+      author: "671a0e9dfb0383b5340d1694",
+      tags: submitData.tags || []
+    };
+
+    await dispatch(createBlogAction(obj));
+    removeModal();
+  } catch (error) {
+    console.log(error);
+  } finally {
+    setIsUploading(false);
+  }
+  };
+  
   return (
     <div className="min-h-screen w-full bg-slate-900 text-white p-6">
 
@@ -317,10 +327,10 @@ const AllBlogs = () => {
 
              <button
                       type="submit"
-                      disabled={loading || isUploading}
+                      disabled={isUploading}
                       className="w-1/3 rounded w-15 px-5 py-1 mt-10 bg-green text-white transition-colors hover:bg-dark-frame-bg hover:text-green hover:border hover:border-green"
                     >
-                      {loading || isUploading ? "Submitting..." : "Submit"}
+                      {isUploading ? "Submitting..." : "Submit"}
                   </button>
             </form>
           </div>
@@ -348,20 +358,21 @@ const AllBlogs = () => {
               </div>
         </div>
 
-        {/* Blog List */}
         <div className="space-y-4">
-          {loading ? (
+           {isLoading ? (
             <div className="text-center py-8">Loading Blogs... <Spinner/></div>
-          ) : error ? (
-            <div className="text-red-500 text-center py-8">{error}</div>
-          ) :blogs?.length ? (
+          )
+            // :
+            // blogs ? (
+            // <div className="text-red-500 text-center py-8">{true}</div>
+            // )
+              : blogs?.length ? (
             blogs.map((blog: any) => (
               <div
                 key={blog.id}
                 onClick={() => handleBlogClick(blog.id)}
                 className="flex items-center gap-4 bg-slate-800 p-4 rounded-lg hover:bg-slate-700 transition-colors cursor-pointer group"
               >
-                {/* Blog Image */}
                 <div className="w-16 h-16 bg-slate-700 rounded-lg overflow-hidden">
                   <img
                     src={blog.image || "https://images.pexels.com/photos/262508/pexels-photo-262508.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"}
@@ -370,17 +381,13 @@ const AllBlogs = () => {
                   />
                 </div>
 
-                {/* Blog Content */}
                 <div className="flex-grow">
                   <h2 className="text-lg font-medium group-hover:text-green-400 transition-colors">
                     {blog.title}
                   </h2>
                   <p className="text-slate-400 text-sm line-clamp-2">{blog.description}</p>
                 </div>
-
-                {/* Author and Date */}
                 <div className="flex flex-col items-end text-sm text-slate-400">
-                  {/* <span>{blog.author}</span> */}
                   <span>{`${blog.author.firstName} ${blog.author.lastName}`}</span>
                   <span>{new Date(blog.createdAt).toLocaleDateString()}</span>
                 </div>
@@ -388,7 +395,7 @@ const AllBlogs = () => {
             ))
           ) : (
             <div className="text-center py-8">No blogs available.</div>
-          )}
+          )} 
         </div>
       </div>
     </div>
