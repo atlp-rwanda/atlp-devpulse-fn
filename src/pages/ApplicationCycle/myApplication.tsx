@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import { toast, ToastContainer } from "react-toastify";
-import { parseISO, format } from "date-fns";
-import dayjs from 'dayjs';
 
 import {
     getApplicantCyclesApplications,
@@ -76,15 +74,26 @@ export const MyApplication = () => {
 
     if (isLoading) {
         return (
-            <div className="animate-pulse space-y-4 p-6 bg-gray-100 dark:bg-[#1E293B] min-h-screen min-w-screen"
-                style={{ width: "70%" }}>
-                <div className="h-10 w-2/3 bg-gray-300 dark:bg-gray-700 rounded"></div>
-                <div className="space-y-2">
-                    <div className="h-6 w-1/2 bg-gray-300 dark:bg-gray-700 rounded"></div>
-                    <div className="h-6 w-1/3 bg-gray-300 dark:bg-gray-700 rounded"></div>
-                    <div className="h-6 w-3/4 bg-gray-300 dark:bg-gray-700 rounded"></div>
+            <>
+                <div className="animate-pulse space-y-4 p-6 bg-gray-100 dark:bg-[#1E293B] min-h-screen min-w-screen"
+                    style={{ width: "70%" }}>
+                    <div className="h-10 w-2/3 bg-gray-300 dark:bg-gray-700 rounded"></div>
+                    <div className="space-y-2">
+                        <div className="h-6 w-1/2 bg-gray-300 dark:bg-gray-700 rounded"></div>
+                        <div className="h-6 w-1/3 bg-gray-300 dark:bg-gray-700 rounded"></div>
+                        <div className="h-6 w-3/4 bg-gray-300 dark:bg-gray-700 rounded"></div>
+                    </div>
                 </div>
-            </div>
+                <div className="animate-pulse space-y-4 p-6 bg-gray-100 dark:bg-[#1E293B] min-h-screen min-w-screen"
+                    style={{ width: "70%" }}>
+                    <div className="h-10 w-2/3 bg-gray-300 dark:bg-gray-700 rounded"></div>
+                    <div className="space-y-2">
+                        <div className="h-6 w-1/2 bg-gray-300 dark:bg-gray-700 rounded"></div>
+                        <div className="h-6 w-1/3 bg-gray-300 dark:bg-gray-700 rounded"></div>
+                        <div className="h-6 w-3/4 bg-gray-300 dark:bg-gray-700 rounded"></div>
+                    </div>
+                </div>
+            </>
         );
     }
 
@@ -179,7 +188,7 @@ export const MyApplication = () => {
                                         )}
 
                                         {stages.dismissed?.createdAt && (
-                                            <p><strong>Created At:</strong> {formatDate(stages.dismissed.createdAt)}</p>
+                                            <p><strong>Date:</strong> {formatDate(stages.dismissed.createdAt)}</p>
                                         )}
                                     </li>
                                 )}
@@ -197,7 +206,7 @@ export const MyApplication = () => {
                                         {stages.admitted?.status && <p><b>Status:</b> {stages.admitted.status}</p>}
                                         {stages.admitted?.stageDismissedFrom && <p><b>Score:</b> {stages.admitted.stageDismissedFrom}</p>}
                                         {stages.admitted?.comments && <p><b>Comments:</b> {stages.admitted.comments}</p>}
-                                        {stages.admitted?.createdAt && <p><b>Created At:</b> {formatDate(stages.admitted.createdAt)}</p>}
+                                        {stages.admitted?.createdAt && <p><b>Date:</b> {formatDate(stages.admitted.createdAt)}</p>}
                                     </li>
                                 )}
                                 {stages?.interview && (
@@ -213,7 +222,7 @@ export const MyApplication = () => {
                                         {stages.interview?.interviewScore && <p><b>Status:</b> {stages.interview.interviewScore}</p>}
                                         {stages.interview?.status && <p><b>Status:</b> {stages.interview.status}</p>}
                                         {stages.interview?.comments && <p><b>Comments:</b> {stages.interview.comments}</p>}
-                                        {stages.interview?.createdAt && <p><b>Created At:</b> {formatDate(stages.interview.createdAt)}</p>}
+                                        {stages.interview?.createdAt && <p><b>Date:</b> {formatDate(stages.interview.createdAt)}</p>}
                                     </li>
                                 )}
                                 {stages?.technical && (
@@ -229,7 +238,7 @@ export const MyApplication = () => {
                                         {stages.technical?.score && <p><b>Score:</b> {stages.technical.score}%</p>}
                                         {stages.technical?.status && <p><b>Status:</b> {stages.technical.status}</p>}
                                         {stages.technical?.comments && <p><b>Comments:</b> {stages.technical.comments}</p>}
-                                        {stages.technical?.createdAt && <p><b>Created At:</b> {formatDate(stages.technical.createdAt)}</p>}
+                                        {stages.technical?.createdAt && <p><b>Date:</b> {formatDate(stages.technical.createdAt)}</p>}
                                     </li>
                                 )}
                                 {stages?.shortlist && (
@@ -244,7 +253,7 @@ export const MyApplication = () => {
                                             ))}
                                         {stages.shortlist?.status && <p><b>Status:</b> {stages.shortlist.status}</p>}
                                         {stages.shortlist?.comments && <p><b>Comments:</b> {stages.shortlist.comments}</p>}
-                                        {stages.shortlist?.createdAt && <p><b>Created At:</b> {formatDate(stages.shortlist.createdAt)}</p>}
+                                        {stages.shortlist?.createdAt && <p><b>Date:</b> {formatDate(stages.shortlist.createdAt)}</p>}
                                     </li>
                                 )}
 
