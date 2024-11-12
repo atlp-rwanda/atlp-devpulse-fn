@@ -1,5 +1,11 @@
 import React from "react";
-import { HashRouter as Router, Routes, Route, Link, Navigate } from "react-router-dom";
+import {
+  HashRouter as Router,
+  Routes,
+  Route,
+  Link,
+  Navigate,
+} from "react-router-dom";
 import TestTailwind from "./../components/TestTailwind";
 import TrainneeDetails from "./../pages/TrainneeDetails";
 import TrainneeDetailsB from "./../pages/TrainneDetailsB";
@@ -9,10 +15,10 @@ import NavBar from "./../components/sidebar/navHeader";
 import ForgotPasswordPage from "./../pages/forgetpassword";
 import Trainee from "./../pages/TraineApplicant/Trainee";
 import FilterTrainee from "./../pages/FilterTeainee/FilterTrainee";
-import FilterProgram from '../pages/programs/filterPrograms';
-import FilterJobPost from '../pages/JobPost/fiterJopPost';
-import ApplicantSeachJobPost from "../pages/JobPost/applicantJobFiltering"
-import FilterRole from '../pages/roles&permissions/filterRolesAccess';
+import FilterProgram from "../pages/programs/filterPrograms";
+import FilterJobPost from "../pages/JobPost/fiterJopPost";
+import ApplicantSeachJobPost from "../pages/JobPost/applicantJobFiltering";
+import FilterRole from "../pages/roles&permissions/filterRolesAccess";
 import Table from "./../pages/Table";
 import ResetPasswordPage from "../pages/ResetPasswordPage";
 
@@ -39,7 +45,7 @@ import UpdateProgram from "../pages/programs/UpdateProgram";
 import Jobs from "../pages/JobPost/job";
 import SingleJobPostDetails from "../pages/JobPost/viewSingleJob";
 import SharedPosts from "../pages/sharedPosts";
-import {ApplicantApplication} from "../pages/Applications/ApplicantApplication";
+import { ApplicantApplication } from "../pages/Applications/ApplicantApplication";
 import ScheduleInterview from "../pages/ScheduleInterview";
 import SubmitApplication from "../pages/SubmitApplication";
 import GradingSystemPage from "../pages/GradingSystemPage";
@@ -54,10 +60,11 @@ import ApplicantDashboard from "../pages/Applicant/ApplicantDashboard";
 import UpdateJobPost from "../pages/JobPost/updateJobPost";
 import VerifyEmail from "../pages/verifyEmail";
 import Search from "./../pages/search";
-import Settings from '../components/settings';
+import Settings from "../components/settings";
 import ProfileUpdate from "../pages/ProfilePage";
 import Profile from "../pages/Profile";
 import SignupPage from "./../pages/SignupPage";
+import ApplicantStages from "./../pages/TraineApplicant/ApplicantStages";
 import AdminNotification from "../pages/AdminNotifications/AdminNotifications";
 
 import TraineeApply from "../pages/TraineeApply/TraineeApply";
@@ -77,7 +84,7 @@ function Navigation() {
       {/* Public Routes */}
       <Route path="/test_tailwind" element={<TestTailwind />} />
       <Route path="/login" element={<LoginPage />} />
-      <Route path="/google" element={ <GoogleSignup /> } />
+      <Route path="/google" element={<GoogleSignup />} />
       <Route path="/forget" element={<ForgotPasswordPage />} />
       <Route path="/reset-password" element={<ResetPasswordPage />} />
 
@@ -90,7 +97,7 @@ function Navigation() {
         element={
           roleName === 'admin' || roleName === 'SuperAdmin' ? (
             <Navigate to="/admin" />
-          ) : roleName === 'Applicant' ? (
+          ) : roleName === "Applicant" ? (
             <Navigate to="/applicant" />
           ) : (
             <Navigate to="/login" />
@@ -114,7 +121,7 @@ function Navigation() {
             </PrivateRoute>
           }
         />
-                <Route
+        <Route
           path="update-profile"
           element={
             <PrivateRoute allowedRoles={["admin", "superAdmin"]}>
@@ -187,6 +194,14 @@ function Navigation() {
           }
         />
         <Route
+          path="cycles/applicant-stages/:cycleName"
+          element={
+            <PrivateRoute allowedRoles={["admin", "superAdmin"]}>
+              <ApplicantStages />
+            </PrivateRoute>
+          }
+        />
+        <Route
           path="cycles"
           element={
             <PrivateRoute allowedRoles={['admin', 'superAdmin']}>
@@ -210,7 +225,7 @@ function Navigation() {
             </PrivateRoute>
           }
         />
-        
+
         <Route
           path="import_trainee-aplicants"
           element={
@@ -339,7 +354,7 @@ function Navigation() {
             </PrivateRoute>
           }
         />
-          <Route
+        <Route
           path="job/post/edit/:programId"
           element={
             <PrivateRoute allowedRoles={['admin', 'superAdmin']}>
@@ -409,12 +424,12 @@ function Navigation() {
       <Route
         path="/applicant"
         element={
-          <PrivateRoute allowedRoles={['applicant']}>
+          <PrivateRoute allowedRoles={["applicant"]}>
             <ApplicantLayout />
           </PrivateRoute>
         }
       />
-        {/* <Route
+      {/* <Route
           index
           element={
             <PrivateRoute allowedRoles={['applicant']}>
@@ -423,27 +438,34 @@ function Navigation() {
           }
         /> */}
       <Route path="/applicant" element={<ApplicantLayout />}>
-      <Route index element={<PrivateRoute allowedRoles={['applicant']}><ApplicantDashboard/></PrivateRoute>} />
+        <Route
+          index
+          element={
+            <PrivateRoute allowedRoles={["applicant"]}>
+              <ApplicantDashboard />
+            </PrivateRoute>
+          }
+        />
         <Route
           path="myApplications"
           element={
-            <PrivateRoute allowedRoles={['applicant']}>
+            <PrivateRoute allowedRoles={["applicant"]}>
               <ApplicantApplication />
             </PrivateRoute>
           }
         />
         <Route
-            path="settings"
-            element={
-              <PrivateRoute allowedRoles={['applicant']}>
-                <Settings />
-              </PrivateRoute>
-            }
-          />
+          path="settings"
+          element={
+            <PrivateRoute allowedRoles={["applicant"]}>
+              <Settings />
+            </PrivateRoute>
+          }
+        />
         <Route
           path="available-jobs"
           element={
-            <PrivateRoute allowedRoles={['applicant']}>
+            <PrivateRoute allowedRoles={["applicant"]}>
               <ApplicantSeachJobPost />
             </PrivateRoute>
           }
@@ -459,7 +481,7 @@ function Navigation() {
         <Route
           path="available-job/:id/apply"
           element={
-            <PrivateRoute allowedRoles={['applicant']}>
+            <PrivateRoute allowedRoles={["applicant"]}>
               <SubmitApplication />
             </PrivateRoute>
           }
@@ -467,7 +489,7 @@ function Navigation() {
         <Route
           path="interviewScheduler"
           element={
-            <PrivateRoute allowedRoles={['applicant']}>
+            <PrivateRoute allowedRoles={["applicant"]}>
               <ScheduleInterview />
             </PrivateRoute>
           }
@@ -499,7 +521,7 @@ function Navigation() {
         <Route
           path="notifications"
           element={
-            <PrivateRoute allowedRoles={['applicant']}>
+            <PrivateRoute allowedRoles={["applicant"]}>
               <ApplicantNotifications />
             </PrivateRoute>
           }
@@ -545,7 +567,6 @@ function Navigation() {
           }
         />
       </Route>
-      
 
       {/* Catch-All Route */}
       <Route

@@ -39,6 +39,10 @@ import updateJobPostReducer from './updateJobPostReducer';
 import {
   applicationsReducer,
   singleApplicationReducer,
+  FetchApplicantStageReducer,
+  AddApplicantScoreReducer,
+  advanceToNextStageReducer,
+  filterApplicantByStageReducer
 } from './applicationReducer';
 import { assessmentsReducer } from './assessmentReducer';
 import { attendanceReducer } from './attendanceReducer';
@@ -98,6 +102,10 @@ const allReducers = combineReducers({
   traineePerformance: performanceReducer,
   updateUser:userUpdateReducer,
   loggedUser: getLoggedUserReducer,
+  nextStage:advanceToNextStageReducer,
+  fetchApplicantStage: FetchApplicantStageReducer,
+  AddedApplicantScore:AddApplicantScoreReducer,
+  filterApplicantByStage: filterApplicantByStageReducer,
   tickets: ticketReducer,
   filteredTickets: filterTicketReducer,
 });
