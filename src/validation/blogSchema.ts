@@ -5,15 +5,9 @@ const blogSchema = joi.object({
     .string()
     .pattern(/^[a-zA-Z0-9\s]+$/)
     .required(),
-  content: joi
-    .string()
-    .pattern(/^[a-zA-Z0-9\s]+$/)
-    .required(),
+  content: joi.string().required(),
   tags: joi.array().required(),
-  coverImage: joi
-    .string()
-    .pattern(/^[a-zA-Z0-9\s]+$/)
-    .required(),
+  coverImage: joi.required(),
   images: joi.array(),
 });
 

@@ -1,19 +1,14 @@
-// actions/blogActions.ts
-
 import axios from "./axiosconfig";
-import {
-  fetchBlogs,
-  fetchSingleBlog,
-  createBlog,
-  updateBlog,
-  deleteBlog,
-} from "../actiontypes/blogTypes";
+import { createBlog, updateBlog, deleteBlog } from "../actiontypes/blogTypes";
 import { toast } from "react-toastify";
 import creator from "./creator";
 import {
   FETCH_BLOGS_FAIL,
   FETCH_BLOGS_LOADING,
   FETCH_BLOGS_SUCCESS,
+  FETCH_SINGLE_BLOG_FAIL,
+  FETCH_SINGLE_BLOG_LOADING,
+  FETCH_SINGLE_BLOG_SUCCESS,
 } from "../index";
 
 // Fetch all blogs
@@ -40,6 +35,7 @@ export const getAllBlogs = (tag?: string) => async (dispatch: any) => {
           isHidden
           author {
             id
+            email
             firstName
             lastName
           }
@@ -61,7 +57,7 @@ export const getAllBlogs = (tag?: string) => async (dispatch: any) => {
 // Fetch a single blog by ID
 export const getBlogById = (id: string) => async (dispatch: any) => {
   dispatch({
-    type: fetchSingleBlog.FETCH_SINGLE_BLOG_LOADING,
+    type: FETCH_SINGLE_BLOG_LOADING,
   });
 
   try {
@@ -78,10 +74,17 @@ export const getBlogById = (id: string) => async (dispatch: any) => {
           }
           comments {
             id
+            likes{
+              id
+            }
+            replies{
+             id
+            }
           }
           isHidden
           author {
             id
+            email
             firstName
             lastName
           }
@@ -92,14 +95,11 @@ export const getBlogById = (id: string) => async (dispatch: any) => {
       }`,
       variables: { id },
     });
-
-    dispatch({
-      type: fetchSingleBlog.FETCH_SINGLE_BLOG_SUCCESS,
-      data: response.data.data.getBlogById,
-    });
+    const blogData = response.data.data.getBlogById;
+    dispatch(creator(FETCH_SINGLE_BLOG_SUCCESS, blogData));
   } catch (err: any) {
     dispatch({
-      type: fetchSingleBlog.FETCH_SINGLE_BLOG_FAIL,
+      type: FETCH_SINGLE_BLOG_FAIL,
       error: err.message,
     });
     toast.error(err.message);
@@ -150,14 +150,12 @@ export const createBlogAction = (blogFields: any) => async (dispatch: any) => {
         },
       },
     });
-
     dispatch({
       type: createBlog.CREATE_BLOG_SUCCESS,
       data: response.data.data.createBlog,
-    });
-    toast.success("Blog created successfully!");
+    }),
+      toast.success("Blog created successfully!");
   } catch (err: any) {
-    console.log("Request Blog Fields: ", blogFields);
     dispatch({
       type: createBlog.CREATE_BLOG_FAIL,
       error: err.message,

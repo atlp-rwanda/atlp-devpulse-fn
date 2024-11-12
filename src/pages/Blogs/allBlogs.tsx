@@ -57,10 +57,12 @@ import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
   coverImage: File | string;
   images: (File | string)[];
 }
+
 const AllBlogs = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [addNewBlogModal, setAddNewBlogModal] = useState(false);
+  const [manyImaages, setManyImages] = useState(false);
   const [submitData, setSubmitData] = useState<SubmitData>({
     title: "",
     content: "",
@@ -76,6 +78,9 @@ const AllBlogs = () => {
     images: [""],
   });
   const [isUploading, setIsUploading] = useState(false);
+   
+  const userId = localStorage.getItem('userId');
+  const role = localStorage.getItem('roleName');
 
    const mockBlogs = [
   {
@@ -130,7 +135,6 @@ const AllBlogs = () => {
     navigate(`${blogId}`);
   };
   
-
  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
   const { name, value } = e.target;
 
@@ -143,18 +147,24 @@ const AllBlogs = () => {
         coverImage: files[0] 
       }));
     } else if (name === "images") {
+        if (files.length > 4) {
+          setManyImages(true);
+        return;
+      }
       setSubmitData((prevState) => ({
         ...prevState,
         images: Array.from(files) 
       }));
+      setManyImages(false);
     }
   } else if (name === "tags") {
     const tagArray = value.split(",").map(tag => tag.trim()).filter(tag => tag !== "");
     setSubmitData((prevState) => ({ ...prevState, tags: tagArray }));
   } else {
     setSubmitData((prevState) => ({ ...prevState, [name]: value }));
-  }
+  } 
 };
+
 
 
 
@@ -203,15 +213,26 @@ const AllBlogs = () => {
   e.preventDefault();
   setIsUploading(true);
 
+   const isValid = validateForm(submitData, blogSchema);
+  if (!isValid) {
+    setIsUploading(false);
+    return;
+  }
+   
   try {
-    let coverImageUrl = "";
+    let coverImageUrl:string|null="";
     let imageUrls: string[] = [];
 
-    if (submitData.coverImage instanceof File) {
-      await handleBlogImageUpload(submitData.coverImage, (url) => {
-        coverImageUrl = url;
-      }, setIsUploading);
+     if (submitData.coverImage instanceof File) {
+      coverImageUrl = await handleBlogImageUpload(
+        submitData.coverImage,
+        (url) => {
+          coverImageUrl = url;
+        },
+        setIsUploading
+      );
     }
+
     if (submitData.images.length > 0) {
       const results = await Promise.all(
         submitData.images.map(async (file) => {
@@ -229,11 +250,11 @@ const AllBlogs = () => {
       content: submitData.content,
       coverImage: coverImageUrl,
       images: imageUrls,
-      author: "671a0e9dfb0383b5340d1694",
+      author: userId,
       tags: submitData.tags || []
     };
-
     await dispatch(createBlogAction(obj));
+    dispatch(getAllBlogs());
     removeModal();
   } catch (error) {
     console.log(error);
@@ -241,7 +262,7 @@ const AllBlogs = () => {
     setIsUploading(false);
   }
   };
-  
+
   return (
     <div className="min-h-screen w-full bg-slate-900 text-white p-6">
 
@@ -319,11 +340,13 @@ const AllBlogs = () => {
                   type="file"
                   name="images"
                   multiple
+                  maxLength={4}
                   accept="image/*"
                   onChange={handleInputChange}
                   className="border rounded bg-black px-4 py-2"
                   placeholder="Upload images"
                 />
+                {manyImaages && <span className="text-red-500 text-xs">Images should not exceed 4</span>}
                 {errors.images && <span className="text-red-500 text-xs">{errors.images}</span>}
               </div>
 
@@ -332,7 +355,7 @@ const AllBlogs = () => {
                       disabled={isUploading}
                       className="w-1/3 rounded w-15 px-5 py-1 mt-10 bg-green text-white transition-colors hover:bg-dark-frame-bg hover:text-green hover:border hover:border-green"
                     >
-                      {isUploading ? "Submitting..." : "Submit"}
+                     {isUploading && <Spinner/> } {isUploading ? "Submitting..." : "Submit"}
                   </button>
             </form>
           </div>
@@ -353,31 +376,29 @@ const AllBlogs = () => {
         {/* Header */}
         <div className="mb-6 w-full flex items-center justify-between">
           <h1 className="text-2xl font-semibold">All Blogs</h1>
-          <div className="w-full sm:w-auto">
+          {userId && role && role == 'applicant' &&
+            <div className="w-full sm:w-auto">
             <button onClick={Open} className="flex items-center justify-center w-full sm:w-auto bg-primary dark:bg-[#56C870] rounded-md py-2 px-4 text-white font-medium cursor-pointer hover:opacity-90 transition-opacity" >
                <icons.AiOutlinePlus className="mr-2" /> Blog
                 </button>
               </div>
+          }
         </div>
 
         <div className="space-y-4">
            {isLoading ? (
             <div className="text-center py-8">Loading Blogs... <Spinner/></div>
           )
-            // :
-            // blogs ? (
-            // <div className="text-red-500 text-center py-8">{true}</div>
-            // )
               : blogs?.length ? (
-            blogs.map((blog: any) => (
+              blogs.map((blog: any) => (
               <div
                 key={blog.id}
                 onClick={() => handleBlogClick(blog.id)}
                 className="flex items-center gap-4 bg-slate-800 p-4 rounded-lg hover:bg-slate-700 transition-colors cursor-pointer group"
               >
-                <div className="w-16 h-16 bg-slate-700 rounded-lg overflow-hidden">
+                <div className="h-fit w-20 bg-slate-700 rounded-lg">
                   <img
-                    src={blog.image || "https://images.pexels.com/photos/262508/pexels-photo-262508.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"}
+                    src={blog.coverImage || "https://images.pexels.com/photos/262508/pexels-photo-262508.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"}
                     alt={blog.title}
                     className="w-full h-full object-cover"
                   />
@@ -387,16 +408,38 @@ const AllBlogs = () => {
                   <h2 className="text-lg font-medium group-hover:text-green-400 transition-colors">
                     {blog.title}
                   </h2>
-                  <p className="text-slate-400 text-sm line-clamp-2">{blog.description}</p>
+                  <p className="text-slate-400 break w-2/3 text-sm line-clamp-2">{blog.content}</p>              
                 </div>
                 <div className="flex flex-col items-end text-sm text-slate-400">
-                  <span>{`${blog.author.firstName} ${blog.author.lastName}`}</span>
+                  <span>{`${blog.author.email} ${blog.author.lastName}`}</span>
                   <span>{new Date(Number(blog.created_at)).toLocaleString()}</span>
                 </div>
               </div>
             ))
           ) : (
-            <div className="text-center py-8">No blogs available.</div>
+           <div className="flex flex-col items-center justify-center py-12 text-gray-500">
+  <div className="bg-gray-100 rounded-full p-6 mb-4 shadow-lg">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      className="h-12 w-12 text-gray-400"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      strokeWidth="2"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M12 8v4l3 3m9-5a9 9 0 11-18 0 9 9 0 0118 0z"
+      />
+    </svg>
+  </div>
+  <h2 className="text-2xl font-semibold text-gray-700 mb-2">No Blogs Available</h2>
+  <p className="text-gray-500 text-sm mb-6">
+    It looks like there are no blog posts yet. Check back soon for updates!
+  </p>
+</div>
+
           )} 
         </div>
       </div>

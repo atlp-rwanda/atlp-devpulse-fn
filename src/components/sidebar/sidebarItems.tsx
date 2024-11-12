@@ -127,7 +127,7 @@ export const sidebarItems2 = [
 export const sidebarItems3 = [
   {
     path: "settings",
-    icon: <Icon icon="mdi:blogger" />,
+    icon: <Icon icon="mdi:settings" />,
     title: "Settings",
   },
 ];
