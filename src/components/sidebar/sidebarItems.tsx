@@ -60,10 +60,15 @@ export const sidebarItems1 = [
     title: "Grading System",
   },
   {
-    path: "Trash",
-    icon: <Icon icon="fa-solid:trash"></Icon>,
-    title: "Trash",
+    path: "tickets",
+    icon: <Icon icon="heroicons-outline:support"></Icon>,
+    title: "Tickets",
   },
+  // {
+  //   path: "Trash",
+  //   icon: <Icon icon="fa-solid:trash"></Icon>,
+  //   title: "Trash",
+  // },
 ];
 
 export const applicantSidebarItems = [
@@ -99,6 +104,12 @@ export const applicantSidebarItems = [
     icon: <Icon icon="ant-design:calendar-filled"></Icon>,
     title: "Job Post ",
   },
+  {
+    path: "tickets",
+    icon: <Icon icon="heroicons-outline:support"></Icon>,
+    title: "Tickets",
+  },
+
 ];
 
 export const sidebarItems2 = [
@@ -108,9 +119,9 @@ export const sidebarItems2 = [
     title: "Docs",
   },
   {
-    path: "/help",
-    icon: <Icon icon="nimbus:globe"></Icon>,
-    title: "Help",
+    path: "Trash",
+    icon: <Icon icon="fa-solid:trash"></Icon>,
+    title: "Trash",
   },
 ];
 
@@ -119,5 +130,10 @@ export const sidebarItems3 = [
     path: "settings",
     icon: <Icon icon="eva:settings-2-outline"></Icon>,
     title: "Settings",
+  },
+  {
+    path: "help",
+    icon: <Icon icon="nimbus:globe"></Icon>,
+    title: "Help",
   },
 ];

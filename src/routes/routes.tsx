@@ -71,6 +71,11 @@ import TraineeApply from "../pages/TraineeApply/TraineeApply";
 import TraineeAttribute from '../pages/TraineeApply/TraineeAttribute'
 import TraineeSuccessPage from "../pages/TraineeApply/TraineeSuccess";
 
+import TicketPage from "../pages/tickets/ticketPage";
+import AdminTicketPage from "../pages/tickets/adminTicketPage";
+import SingleTicketDetails from "../pages/tickets/singleTicketDetails";
+import ResolveTicketPage from "../pages/tickets/adminTicketResolve";
+import ReplyTicketPage from "../pages/tickets/applicantTicketReply";
 
 function Navigation() {
   const roleName = localStorage.getItem("roleName");
@@ -382,6 +387,30 @@ function Navigation() {
           }
         />
         <Route
+          path="tickets"
+          element={
+            <PrivateRoute allowedRoles={['admin', 'superAdmin']}>
+              <AdminTicketPage/>
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="ticket/:id"
+          element={
+            <PrivateRoute allowedRoles={['admin', 'superAdmin']}>
+              <SingleTicketDetails/>
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="ticket/:id/resolve"
+          element={
+            <PrivateRoute allowedRoles={['admin', 'superAdmin']}>
+              <ResolveTicketPage/>
+            </PrivateRoute>
+          }
+        />
+        <Route
           path="*"
           element={
             <PrivateRoute allowedRoles={['admin', 'superAdmin']}>
@@ -462,6 +491,30 @@ function Navigation() {
           element={
             <PrivateRoute allowedRoles={["applicant"]}>
               <ScheduleInterview />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="tickets"
+          element={
+            <PrivateRoute allowedRoles={['applicant']}>
+              <TicketPage/>
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="ticket/:id"
+          element={
+            <PrivateRoute allowedRoles={['applicant']}>
+              <SingleTicketDetails/>
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="ticket/:id/reply"
+          element={
+            <PrivateRoute allowedRoles={['applicant']}>
+              <ReplyTicketPage/>
             </PrivateRoute>
           }
         />
