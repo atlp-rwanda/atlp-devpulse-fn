@@ -57,6 +57,7 @@ import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
   coverImage: File | string;
   images: (File | string)[];
 }
+
 const AllBlogs = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -130,7 +131,6 @@ const AllBlogs = () => {
     navigate(`${blogId}`);
   };
   
-
  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
   const { name, value } = e.target;
 
@@ -153,8 +153,9 @@ const AllBlogs = () => {
     setSubmitData((prevState) => ({ ...prevState, tags: tagArray }));
   } else {
     setSubmitData((prevState) => ({ ...prevState, [name]: value }));
-  }
+  } 
 };
+
 
 
 
@@ -234,6 +235,7 @@ const AllBlogs = () => {
     };
 
     await dispatch(createBlogAction(obj));
+    dispatch(getAllBlogs());
     removeModal();
   } catch (error) {
     console.log(error);
