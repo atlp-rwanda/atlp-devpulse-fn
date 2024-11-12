@@ -80,7 +80,7 @@ const ApplicantStages = (props: any) => {
     const traine = traines?.message || [];
     const decodedString = cycleName ? decodeURIComponent(cycleName) : "";
     const filtered = traine.filter(
-      (trainee) => trainee.cycle_id.name === decodedString
+      (trainee: any) => trainee.cycle_id.name === decodedString
     );
     setFilteredTraines(filtered);
   }, [traines, cycleName]);
@@ -109,14 +109,6 @@ const ApplicantStages = (props: any) => {
     }
     return stage;
   };
-
-  const uniqueCycles: string[] = Array.from(
-    new Set(
-      traine
-        .map((item: any) => item.cycle_id?.name)
-        .filter((name: any): name is string => Boolean(name))
-    )
-  );
 
   const filteredTrainees = filteredTraines.filter((item: any) => {
     const fieldValue = item[searchField];
@@ -158,17 +150,17 @@ const ApplicantStages = (props: any) => {
     }, 2000);
   }, [addedScoreSuccess]);
 
-  useEffect(()=>{
-    const timeOut =setTimeout(()=>{
-      if(filteredTrainees && filterStages === "All"){
+  useEffect(() => {
+    const timeOut = setTimeout(() => {
+      if (filteredTrainees && filterStages === "All") {
         setLoadingFilter(false)
       }
-    },2000)
-    return ()=> clearTimeout(timeOut)
-  },[filteredTrainees]);
+    }, 2000)
+    return () => clearTimeout(timeOut)
+  }, [filteredTrainees]);
 
   const stages = [
-    {value:"All", label:"All Stages"},
+    { value: "All", label: "All Stages" },
     { value: "Shortlisted", label: "Shortlisted" },
     { value: "Technical Assessment", label: "Technical" },
     { value: "Interview Assessment", label: "Interview" },
@@ -192,7 +184,7 @@ const ApplicantStages = (props: any) => {
     setIsMore("");
     await dispatch(filterStage(filterStages));
   };
-  
+
   return (
     <>
       <div className=" bg-gray-50 dark:bg-dark-frame-bg flex flex-col w-[100%] h-screen px-4">
@@ -244,11 +236,10 @@ const ApplicantStages = (props: any) => {
           {stages.map((stage) => (
             <button
               key={stage.value}
-              className={`text-sm rounded-md px-3 py-2 transition-colors duration-200 ${
-                filterStages === stage.value
+              className={`text-sm rounded-md px-3 py-2 transition-colors duration-200 ${filterStages === stage.value
                   ? "bg-[#0c6a0c] dark:bg-[#56C870] text-white" // Active stage style
                   : "bg-gray-200 text-gray-800 hover:bg-blue-100" // Inactive stage style
-              }`}
+                }`}
               onClick={() => {
                 setFilterStages(stage.value);
                 handleFilter(stage.value);
@@ -290,9 +281,9 @@ const ApplicantStages = (props: any) => {
                   </th>
                 )}
                 {filterStages === "Technical Assessment" ||
-                (filterStages === "Interview Assessment" &&
-                  filterData &&
-                  filterData.length > 0) ? (
+                  (filterStages === "Interview Assessment" &&
+                    filterData &&
+                    filterData.length > 0) ? (
                   <th className="px-5 py-3 text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
                     {"score"}
                   </th>
@@ -311,11 +302,10 @@ const ApplicantStages = (props: any) => {
                     item?.delete_at == false ? (
                       <tr
                         key={item._id}
-                        className={`${
-                          index % 2 === 0
+                        className={`${index % 2 === 0
                             ? "bg-white dark:bg-dark-bg"
                             : "bg-gray-50 dark:bg-dark-tertiary"
-                        } hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors duration-200`}
+                          } hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors duration-200`}
                       >
                         <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-xs">
                           <div className="flex">
@@ -336,13 +326,12 @@ const ApplicantStages = (props: any) => {
                         <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-xs ">
                           <span
                             className={`inline-block text-center rounded-full px-1 py-2 min-w-20 max-w-16 whitespace-no-wrap
-                        ${
-                          item.applicationPhase === "Rejected"
-                            ? "bg-red-200 text-red-500 font-medium"
-                            : item.applicationPhase === "Admitted"
-                            ? "bg-[#0c6a0c] dark:bg-[#1bf84b8d] text-white"
-                            : "bg-gray-100 text-gray-800"
-                        }`}
+                        ${item.applicationPhase === "Rejected"
+                                ? "bg-red-200 text-red-500 font-medium"
+                                : item.applicationPhase === "Admitted"
+                                  ? "bg-[#0c6a0c] dark:bg-[#1bf84b8d] text-white"
+                                  : "bg-gray-100 text-gray-800"
+                              }`}
                           >
                             {item.status}
                           </span>
@@ -356,7 +345,7 @@ const ApplicantStages = (props: any) => {
                           <span className={`${item.applicationPhase === "Rejected"
                             ? "bg-red-200 text-red-500 font-medium"
                             : item.applicationPhase === "Admitted"
-                            ? "bg-[#0c6a0c] dark:bg-[#1bf84b8d] text-white" :"bg-blue-100 text-blue-800"} inline-block px-2 py-2 text-center font-medium rounded-full`}>
+                              ? "bg-[#0c6a0c] dark:bg-[#1bf84b8d] text-white" : "bg-blue-100 text-blue-800"} inline-block px-2 py-2 text-center font-medium rounded-full`}>
                             {getStageText(item.applicationPhase)}
                           </span>
                         </td>
@@ -370,23 +359,21 @@ const ApplicantStages = (props: any) => {
                               }}
                             />
                             <div
-                              className={`${
-                                isMore === item._id ? "block" : "hidden"
-                              } absolute  bg-white dark:bg-dark-tertiary  dark:text-white text-base z-10 list-none divide-y divide-gray-100 rounded shadow my-4`}
+                              className={`${isMore === item._id ? "block" : "hidden"
+                                } absolute  bg-white dark:bg-dark-tertiary  dark:text-white text-base z-10 list-none divide-y divide-gray-100 rounded shadow my-4`}
                               id="dropdown"
                             >
                               <ul className="py-1" aria-labelledby="dropdown">
                                 <li>
                                   <div
-                                    className={`${
-                                      isMore === item._id &&
-                                      (item.applicationPhase ===
-                                        "Interview Assessment" ||
-                                        item.applicationPhase ===
+                                    className={`${isMore === item._id &&
+                                        (item.applicationPhase ===
+                                          "Interview Assessment" ||
+                                          item.applicationPhase ===
                                           "Technical Assessment")
                                         ? "block"
                                         : "hidden"
-                                    } block text-xs hover:bg-gray-100 text-gray-700  dark:hover:bg-gray-500 dark:text-white px-4 py-2`}
+                                      } block text-xs hover:bg-gray-100 text-gray-700  dark:hover:bg-gray-500 dark:text-white px-4 py-2`}
                                   >
                                     <AddApplicantScore
                                       applicantId={item._id}
@@ -419,15 +406,14 @@ const ApplicantStages = (props: any) => {
                       </tr>
                     ) : null
                   )
-                ): filterStages && filterData && filterData.length > 0 ? (
+                ) : filterStages && filterData && filterData.length > 0 ? (
                   filterData?.map((item, index: number) => (
                     <tr
                       key={item._id}
-                      className={`${
-                        index % 2 === 0
+                      className={`${index % 2 === 0
                           ? "bg-white dark:bg-dark-bg"
                           : "bg-gray-50 dark:bg-dark-tertiary"
-                      } hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors duration-200`}
+                        } hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors duration-200`}
                     >
                       <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-xs">
                         <div className="flex">
@@ -454,13 +440,12 @@ const ApplicantStages = (props: any) => {
                       <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-xs">
                         <span
                           className={`inline-block text-center px-1 py-2 min-w-20 max-w-16 rounded-full text-xs
-                        ${
-                          item.status === "Rejected"
-                            ? "bg-red-200 text-red-500 font-medium"
-                            : item.status === "Admitted"
-                            ? "bg-[#0c6a0c] dark:bg-[#1bf84b8d] text-white"
-                            : "bg-gray-100 text-gray-800"
-                        }`}
+                        ${item.status === "Rejected"
+                              ? "bg-red-200 text-red-500 font-medium"
+                              : item.status === "Admitted"
+                                ? "bg-[#0c6a0c] dark:bg-[#1bf84b8d] text-white"
+                                : "bg-gray-100 text-gray-800"
+                            }`}
                         >
                           {item.status}
                         </span>
@@ -474,7 +459,7 @@ const ApplicantStages = (props: any) => {
                         {handleTurnCutText(item.comments)}
                       </td>
                       {filterStages === "Technical Assessment" ||
-                      filterStages === "Interview Assessment" ? (
+                        filterStages === "Interview Assessment" ? (
                         <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-xs">
                           <span className="inline-block text-center px-1 py-2 min-w-20 max-w-16 bg-blue-100 text-blue-800 font-medium rounded-full">
                             {item.score === null ? "No Score" : item.score}
@@ -491,27 +476,25 @@ const ApplicantStages = (props: any) => {
                             }}
                           />
                           <div
-                            className={`${
-                              isMore === item.applicant._id ? "block" : "hidden"
-                            } absolute  bg-white dark:bg-dark-tertiary  dark:text-white text-base z-50 list-none divide-y divide-gray-100 rounded shadow my-4`}
+                            className={`${isMore === item.applicant._id ? "block" : "hidden"
+                              } absolute  bg-white dark:bg-dark-tertiary  dark:text-white text-base z-50 list-none divide-y divide-gray-100 rounded shadow my-4`}
                             id="dropdown"
                           >
                             <ul className="py-1" aria-labelledby="dropdown">
                               <li>
                                 <div
-                                  className={`${
-                                    filterStages === "Shortlisted" ||
-                                    ((filterStages === "Technical Assessment" ||
-                                      filterStages ===
+                                  className={`${filterStages === "Shortlisted" ||
+                                      ((filterStages === "Technical Assessment" ||
+                                        filterStages ===
                                         "Interview Assessment" || filterStages ===
                                         "Admitted" || filterStages ===
                                         "Rejected") &&
-                                      (item.status === "Moved" ||
-                                        item.status === "Admitted" ||
-                                        item.status === "Rejected" || item.status === "Passed"))
+                                        (item.status === "Moved" ||
+                                          item.status === "Admitted" ||
+                                          item.status === "Rejected" || item.status === "Passed"))
                                       ? "hidden"
                                       : "block"
-                                  } text-xs hover:bg-gray-100 text-gray-700 dark:hover:bg-gray-500 dark:text-white px-4 py-2`}
+                                    } text-xs hover:bg-gray-100 text-gray-700 dark:hover:bg-gray-500 dark:text-white px-4 py-2`}
                                 >
                                   <AddApplicantScore
                                     applicantId={item.applicant._id}

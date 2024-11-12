@@ -71,7 +71,6 @@ import { MyApplication } from "../pages/ApplicationCycle/myApplication";
 import TraineeApply from "../pages/TraineeApply/TraineeApply";
 import TraineeAttribute from '../pages/TraineeApply/TraineeAttribute'
 import TraineeSuccessPage from "../pages/TraineeApply/TraineeSuccess";
-import ApplicantStages from "./../pages/TraineApplicant/ApplicantStages";
 import TicketPage from "../pages/tickets/ticketPage";
 import AdminTicketPage from "../pages/tickets/adminTicketPage";
 import SingleTicketDetails from "../pages/tickets/singleTicketDetails";

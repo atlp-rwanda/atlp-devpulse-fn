@@ -272,49 +272,60 @@ export const getCyclesApplicationAttributes = async (trainee_id: string) => {
   });
   return response.data;
 };
-
 export const getCyclesStages = async (trainee_id: String) => {
   const response = await axios.post("/", {
-    query: `query GetApplicationStages($trainee_id:String!) {
-    getApplicationStages(trainee_id: $trainee_id) {
-        shortlist {
+    query: `
+      query GetApplicationStages($trainee_id: String!) {
+        getApplicationStages(trainee_id: $trainee_id) {
+          shortlist {
             applicantId
             status
             comments
             createdAt
-        }
-        technical {
+          }
+          technical {
             applicantId
             status
             score
             comments
             createdAt
-        }
-        interview {
+          }
+          interview {
             applicantId
             status
             interviewScore
             comments
-            creatdAt
-        }
-        admitted {
+            createdAt
+          }
+          admitted {
             applicantId
             status
             comments
             createdAt
-        }
-        dismissed{
+          }
+          dismissed {
             applicantId
             stageDismissedFrom
             comments
             status
+          }
+          allStages {
+            applicantId
+            currentStage
+            history {
+              stage
+              comments
+              enteredAt
+              exitedAt
+            }
+          }
         }
-    }
-}
-` , variables: {
-      trainee_id: trainee_id
+      }
+    `,
+    variables: {
+      trainee_id
     }
   });
 
-  return response.data
-}
+  return response.data;
+};

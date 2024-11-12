@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import { toast, ToastContainer } from "react-toastify";
 import { parseISO, format } from "date-fns";
+import dayjs from 'dayjs';
+
 import {
     getApplicantCyclesApplications,
     getCyclesApplicationAttributes,
@@ -21,6 +23,7 @@ export const MyApplication = () => {
                 const response = await getApplicantCyclesApplications();
                 if (response?.data?.getTraineeCyclesApplications) {
                     setApplication(response.data.getTraineeCyclesApplications);
+                    console.log("Appl", response.data.getTraineeCyclesApplications)
                 } else {
                     throw new Error("No applications found");
                 }
@@ -44,6 +47,7 @@ export const MyApplication = () => {
                         }
                         const stagesResponse = await getCyclesStages(application._id);
                         if (stagesResponse?.data?.getApplicationStages) {
+                            console.log(stagesResponse.data.getApplicationStages);
                             setStages(stagesResponse.data.getApplicationStages);
                         }
                     }
@@ -58,29 +62,16 @@ export const MyApplication = () => {
         }
     }, [application]);
 
-    const formatDate = (dateString: string) => {
-        try {
-            const date = parseISO(dateString);
-            if (isNaN(date.getTime())) return dateString;
-            return `${getDayWithSuffix(date.getDate())} ${format(date, "MMM yyyy 'at' HH:mm")}`;
-        } catch (error) {
-            console.error("Error formatting date:", error);
-            return dateString;
-        }
-    };
+    const formatDate = (timestamp) => {
+        const date = new Date(Number(timestamp));
+        console.log("DDD", date)
+        if (isNaN(date.getTime())) return '';
 
-    const getDayWithSuffix = (day: number) => {
-        if (day > 3 && day < 21) return `${day}th`;
-        switch (day % 10) {
-            case 1:
-                return `${day}st`;
-            case 2:
-                return `${day}nd`;
-            case 3:
-                return `${day}rd`;
-            default:
-                return `${day}th`;
-        }
+        return new Intl.DateTimeFormat('en-US', {
+            day: '2-digit',
+            month: 'short',
+            year: 'numeric',
+        }).format(date);
     };
 
     if (isLoading) {
@@ -110,6 +101,7 @@ export const MyApplication = () => {
             </div>
         );
     }
+    console.log("APPJJA", application)
 
     return (
         <>
@@ -154,8 +146,8 @@ export const MyApplication = () => {
                         <h3 className="text-2xl font-bold text-primary dark:text-[#56C870] mb-4">Application Stages</h3>
                         <p className="mb-3">
                             <strong>Current Stage:</strong>
-                            {application?.applicationPhase === "Dismissed" ? (
-                                <span className="text-red-500">Dismissed</span>
+                            {application?.applicationPhase === "Rejected" ? (
+                                <span className="text-red-500">Rejected</span>
                             ) : (
                                 <span className="text-green-500">{application?.applicationPhase}</span>
                             )}
@@ -171,7 +163,7 @@ export const MyApplication = () => {
                             <ul className="space-y-6 list-disc list-inside marker:text-[#56C870] dark:marker:text-green-400">
                                 {stages?.dismissed && (
                                     <li className="bg-red">
-                                        <strong>Dismissed</strong>
+                                        <strong>Rejected</strong>
                                         {stages.dismissed?.status && <p><b>Status:</b> {stages.dismissed.status}</p>}
                                         {stages.dismissed?.stageDismissedFrom && <p><b>Score:</b> {stages.dismissed.stageDismissedFrom}</p>}
                                         {stages.dismissed?.comments && <p><b>Comments:</b> {stages.dismissed.comments}</p>}
@@ -186,14 +178,32 @@ export const MyApplication = () => {
                                         {stages.interview?.createdAt && <p><b>Created At:</b> {formatDate(stages.interview.createdAt)}</p>}
                                     </li>
                                 )}
+                                {stages?.technical && (
+                                    <li>
+                                        <strong>Technical Assessment</strong>
+                                        {stages.technical?.score && <p><b>Score:</b> {stages.technical.score}</p>}
+                                        {stages.technical?.status && <p><b>Status:</b> {stages.technical.status}</p>}
+                                        {stages.technical?.comments && <p><b>Comments:</b> {stages.technical.comments}</p>}
+                                        {stages.technical?.createdAt && <p><b>Created At:</b> {formatDate(stages.technical.createdAt)}</p>}
+                                    </li>
+                                )}
                                 {stages?.shortlist && (
                                     <li>
                                         <strong>Shortlist</strong>
+                                        {stages?.allStages?.history
+                                            .filter((history: any) => history.stage === "Shortlisted")
+                                            .map((history: any, index: any) => (
+                                                <strong key={index}>
+                                                     ({formatDate(history.enteredAt)} - {formatDate(history.exitedAt)})
+                                                </strong>
+                                            ))}
+
                                         {stages.shortlist?.status && <p><b>Status:</b> {stages.shortlist.status}</p>}
                                         {stages.shortlist?.comments && <p><b>Comments:</b> {stages.shortlist.comments}</p>}
                                         {stages.shortlist?.createdAt && <p><b>Created At:</b> {formatDate(stages.shortlist.createdAt)}</p>}
                                     </li>
                                 )}
+
                             </ul>
                         </div>
                     </section>
