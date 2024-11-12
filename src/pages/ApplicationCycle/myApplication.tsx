@@ -130,9 +130,10 @@ export const MyApplication = () => {
                             </ul>
                         </div>
                         <div className="flex-1 pl-4">
-                            <h3 className="text-lg font-semibold mb-2 text-green-700 dark:text-[#56C870]">
-                                Address
-                            </h3>
+                            {attributes?.Address && (
+                                <h3 className="text-lg font-semibold mb-2 text-green-700 dark:text-[#56C870]">
+                                    Address
+                                </h3>)}
                             <ul className="list-disc list-inside space-y-2 text-gray-800 dark:text-gray-300">
                                 {attributes?.province && <li><strong>Province:</strong> {attributes.province}</li>}
                                 {attributes?.district && <li><strong>District:</strong> {attributes.district}</li>}
@@ -147,9 +148,9 @@ export const MyApplication = () => {
                         <p className="mb-3">
                             <strong>Current Stage:</strong>
                             {application?.applicationPhase === "Rejected" ? (
-                                <span className="text-red-500">Rejected</span>
+                                <span className="text-red-500"> Rejected</span>
                             ) : (
-                                <span className="text-green-500">{application?.applicationPhase}</span>
+                                <span className="text-green-500"> {application?.applicationPhase}</span>
                             )}
                         </p>
 
@@ -160,19 +161,56 @@ export const MyApplication = () => {
                                     No stages history found
                                 </p>
                             )}
-                            <ul className="space-y-6 list-disc list-inside marker:text-[#56C870] dark:marker:text-green-400">
+                            <ul className="space-y-6 list-disc list-inside marker:text-[#56C870] dark:marker:text-green-400 bg-red">
                                 {stages?.dismissed && (
-                                    <li className="bg-red">
-                                        <strong>Rejected</strong>
-                                        {stages.dismissed?.status && <p><b>Status:</b> {stages.dismissed.status}</p>}
-                                        {stages.dismissed?.stageDismissedFrom && <p><b>Score:</b> {stages.dismissed.stageDismissedFrom}</p>}
-                                        {stages.dismissed?.comments && <p><b>Comments:</b> {stages.dismissed.comments}</p>}
-                                        {stages.dismissed?.createdAt && <p><b>Created At:</b> {formatDate(stages.dismissed.createdAt)}</p>}
+                                    <li className="bg-red-500 text-white p-6 rounded-lg shadow-md">
+                                        <strong className="font-semibold text-xl mb-3">Rejected</strong>
+
+                                        {stages.dismissed?.status && (
+                                            <p><strong>Status:</strong> {stages.dismissed.status}</p>
+                                        )}
+
+                                        {stages.dismissed?.stageDismissedFrom && (
+                                            <p><strong>Score:</strong> {stages.dismissed.stageDismissedFrom}</p>
+                                        )}
+
+                                        {stages.dismissed?.comments && (
+                                            <p><strong>Comments:</strong> {stages.dismissed.comments}</p>
+                                        )}
+
+                                        {stages.dismissed?.createdAt && (
+                                            <p><strong>Created At:</strong> {formatDate(stages.dismissed.createdAt)}</p>
+                                        )}
+                                    </li>
+                                )}
+
+                                {stages?.admitted && (
+                                    <li className="">
+                                        <strong>Admitted</strong>
+                                        {stages?.allStages?.history
+                                            .filter((history: any) => history.stage === "Admitted")
+                                            .map((history: any, index: any) => (
+                                                <strong key={index}>
+                                                    &nbsp; ({formatDate(history.enteredAt)} - {formatDate(history.exitedAt)})
+                                                </strong>
+                                            ))}
+                                        {stages.admitted?.status && <p><b>Status:</b> {stages.admitted.status}</p>}
+                                        {stages.admitted?.stageDismissedFrom && <p><b>Score:</b> {stages.admitted.stageDismissedFrom}</p>}
+                                        {stages.admitted?.comments && <p><b>Comments:</b> {stages.admitted.comments}</p>}
+                                        {stages.admitted?.createdAt && <p><b>Created At:</b> {formatDate(stages.admitted.createdAt)}</p>}
                                     </li>
                                 )}
                                 {stages?.interview && (
                                     <li>
-                                        <strong>Interview</strong>
+                                        <strong>Interview Assessment</strong>
+                                        {stages?.allStages?.history
+                                            .filter((history: any) => history.stage === "Technical Assessment")
+                                            .map((history: any, index: any) => (
+                                                <strong key={index}>
+                                                    &nbsp; ({formatDate(history.enteredAt)} - {formatDate(history.exitedAt)})
+                                                </strong>
+                                            ))}
+                                        {stages.interview?.interviewScore && <p><b>Status:</b> {stages.interview.interviewScore}</p>}
                                         {stages.interview?.status && <p><b>Status:</b> {stages.interview.status}</p>}
                                         {stages.interview?.comments && <p><b>Comments:</b> {stages.interview.comments}</p>}
                                         {stages.interview?.createdAt && <p><b>Created At:</b> {formatDate(stages.interview.createdAt)}</p>}
@@ -181,7 +219,14 @@ export const MyApplication = () => {
                                 {stages?.technical && (
                                     <li>
                                         <strong>Technical Assessment</strong>
-                                        {stages.technical?.score && <p><b>Score:</b> {stages.technical.score}</p>}
+                                        {stages?.allStages?.history
+                                            .filter((history: any) => history.stage === "Technical Assessment")
+                                            .map((history: any, index: any) => (
+                                                <strong key={index}>
+                                                    &nbsp; ({formatDate(history.enteredAt)} - {formatDate(history.exitedAt)})
+                                                </strong>
+                                            ))}
+                                        {stages.technical?.score && <p><b>Score:</b> {stages.technical.score}%</p>}
                                         {stages.technical?.status && <p><b>Status:</b> {stages.technical.status}</p>}
                                         {stages.technical?.comments && <p><b>Comments:</b> {stages.technical.comments}</p>}
                                         {stages.technical?.createdAt && <p><b>Created At:</b> {formatDate(stages.technical.createdAt)}</p>}
@@ -194,10 +239,9 @@ export const MyApplication = () => {
                                             .filter((history: any) => history.stage === "Shortlisted")
                                             .map((history: any, index: any) => (
                                                 <strong key={index}>
-                                                     ({formatDate(history.enteredAt)} - {formatDate(history.exitedAt)})
+                                                    &nbsp; ({formatDate(history.enteredAt)} - {formatDate(history.exitedAt)})
                                                 </strong>
                                             ))}
-
                                         {stages.shortlist?.status && <p><b>Status:</b> {stages.shortlist.status}</p>}
                                         {stages.shortlist?.comments && <p><b>Comments:</b> {stages.shortlist.comments}</p>}
                                         {stages.shortlist?.createdAt && <p><b>Created At:</b> {formatDate(stages.shortlist.createdAt)}</p>}

@@ -308,6 +308,7 @@ export const getCyclesStages = async (trainee_id: String) => {
             stageDismissedFrom
             comments
             status
+            createdAt
           }
           allStages {
             applicantId
