@@ -154,8 +154,11 @@ export const fetchtraine = ({ page, itemsPerPage, All }: any) => {
                     firstName
                     lastName
                     email
+                    applicationPhase
+                    status
                     _id
                     delete_at
+                    createdAt
                     cycle_id {
                         name
                     }
@@ -181,6 +184,7 @@ export const fetchtraine = ({ page, itemsPerPage, All }: any) => {
           }
         )
         .then((res) => {
+          console.log(res)
           if (res.data.data) {
             // toast.success("traine-applicants fetched successfully");
             dispatch({

@@ -220,7 +220,7 @@ const ApplicantSeachJobPost = (props: any) => {
                             </thead>
                             <tbody className="overflow-y-auto">
                               {allfilteredjobPosts?.data &&
-                              allfilteredjobPosts?.data.length > 0 ? (
+                                allfilteredjobPosts?.data.length > 0 ? (
                                 allfilteredjobPosts?.data?.map((item: any) => (
                                   <tr
                                     className="hover:bg-slate-700 transition-colors"
@@ -296,7 +296,7 @@ const ApplicantSeachJobPost = (props: any) => {
                             Job POST
                           </label>
                           {allfilteredjobPosts?.data &&
-                          allfilteredjobPosts?.data.length > 0 ? (
+                            allfilteredjobPosts?.data.length > 0 ? (
                             allfilteredjobPosts?.data?.map((item: any) => (
                               <div
                                 key={item._id}
@@ -458,7 +458,7 @@ const ApplicantSeachJobPost = (props: any) => {
                                 Math.ceil(
                                   jobs?.pagination.totalItems / itemsPerPage
                                 ) -
-                                  1
+                                1
                               }
                             >
                               <AiIcons.AiOutlineRight />
@@ -477,7 +477,7 @@ const ApplicantSeachJobPost = (props: any) => {
                                 Math.ceil(
                                   jobs?.pagination.totalItems / itemsPerPage
                                 ) -
-                                  1
+                                1
                               }
                             >
                               <AiIcons.AiOutlineDoubleRight />

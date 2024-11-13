@@ -1,6 +1,6 @@
 export const ApplicantsSkeleton = () => {
   return (
-     <div className="space-y-4 mx-10 px-4 ml-4 bg-white dark:bg-dark-bg shadow-lg py-8 rounded-md w-[90%] mx-auto">
+     <div className="space-y-4 px-4 ml-4 bg-white dark:bg-dark-bg shadow-lg py-8 rounded-md w-[90%] mx-auto">
      <div className="w-[95%] ml-8 mb-4 animate-pulse flex items-center space-x-4">
         <div className="bg-gray-600 h-8 rounded w-1/6"></div>
         <div className="bg-gray-600 h-8 rounded w-1/6"></div>

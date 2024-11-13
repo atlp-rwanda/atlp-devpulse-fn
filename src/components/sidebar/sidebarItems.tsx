@@ -29,7 +29,7 @@ export const sidebarItems1 = [
     icon: <Icon icon="fluent:form-28-regular"></Icon>,
     title: "Application Forms",
   },
-    {
+  {
     path: "notifications",
     icon: <Icon icon="heroicons-solid:inbox-in"></Icon>,
     title: "Notifications",
@@ -43,6 +43,11 @@ export const sidebarItems1 = [
     path: "Trainee-applicants",
     icon: <Icon icon="ic:round-people"></Icon>,
     title: "Trainees-Applicants",
+  },
+  {
+    path: "Applicant-Stages",
+    icon: <Icon icon="ic:round-people"></Icon>,
+    title: "Applicant-Stages",
   },
   {
     path: "cohort",
@@ -65,10 +70,15 @@ export const sidebarItems1 = [
     title: "Grading System",
   },
   {
-    path: "Trash",
-    icon: <Icon icon="fa-solid:trash"></Icon>,
-    title: "Trash",
+    path: "tickets",
+    icon: <Icon icon="heroicons-outline:support"></Icon>,
+    title: "Tickets",
   },
+  // {
+  //   path: "Trash",
+  //   icon: <Icon icon="fa-solid:trash"></Icon>,
+  //   title: "Trash",
+  // },
 ];
 
 export const applicantSidebarItems = [
@@ -105,6 +115,12 @@ export const applicantSidebarItems = [
     title: "Job Post ",
   },
   {
+    path: "tickets",
+    icon: <Icon icon="heroicons-outline:support"></Icon>,
+    title: "Tickets",
+  },
+
+  {
     path: "blogs",
     icon: <Icon icon="mdi:blogger" />,
     title: "Blogs",
@@ -118,9 +134,9 @@ export const sidebarItems2 = [
     title: "Docs",
   },
   {
-    path: "/help",
-    icon: <Icon icon="nimbus:globe"></Icon>,
-    title: "Help",
+    path: "Trash",
+    icon: <Icon icon="fa-solid:trash"></Icon>,
+    title: "Trash",
   },
 ];
 
@@ -129,5 +145,10 @@ export const sidebarItems3 = [
     path: "settings",
     icon: <Icon icon="mdi:settings" />,
     title: "Settings",
+  },
+  {
+    path: "help",
+    icon: <Icon icon="nimbus:globe"></Icon>,
+    title: "Help",
   },
 ];

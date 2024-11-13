@@ -731,7 +731,7 @@ const ListAllUsers: FunctionComponent<Props> = (props) => {
                   <div className="flex flex-wrap my-[20px] mx-0">
                     <button
                       className={`block text-white ${
-                        statWarn?.isActive ? "bg-[#f7d456]" : "bg-[#56C870]"
+                        statWarn?.isActive ? "bg-[#f75656]" : "bg-[#56C870]"
                       } my-[10px] mx-auto rounded-[5px] w-[100px] h-[40px]`}
                       onClick={() => {
                         handleChangeStatus(statWarn?.id);
@@ -739,7 +739,7 @@ const ListAllUsers: FunctionComponent<Props> = (props) => {
                         setmoredrop("");
                       }}
                     >
-                      {statWarn?.isActive ? "Disactivate" : "Activate"}
+                      {statWarn?.isActive ? "Deactivate" : "Activate"}
                     </button>
                     <button
                       className="h-[40px] w-[100px] block rounded-[5px] my-[10px] mx-auto bg-[#ABB8C3] text-[#fff]"

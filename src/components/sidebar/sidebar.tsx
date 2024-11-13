@@ -12,7 +12,7 @@ import TokenExpirationHandler from "../../utils/tokenExpirationHandler";
 
 const Sidebar = ({ expanded, setExpanded }) => {
   const navigate = useNavigate();
-  const location = useLocation(); 
+  const location = useLocation();
   const roleName = localStorage.getItem("roleName");
 
   useEffect(() => {
@@ -26,13 +26,10 @@ const Sidebar = ({ expanded, setExpanded }) => {
     roleName === "applicant"
       ? applicantSidebarItems
       : [...sidebarItems1, ...sidebarItems2];
-
   const handleLogout = () => {
     localStorage.clear();
     navigate("/login");
   };
-
-  
   // Function to check if the current item is active based on the current path
   const isActive = (path) => {
     if (path.startsWith("/")) {
@@ -41,12 +38,11 @@ const Sidebar = ({ expanded, setExpanded }) => {
       return location.pathname.endsWith(path);
     }
   };
-
   return (
     <div
       className={` ${
         expanded ? "w-[16rem]" : "w-[4rem]"
-      } fixed dark:bg-dark-bg bg-white border-r transition-width duration-300 h-full overflow-scroll`}
+      } fixed dark:bg-dark-bg bg-white border-r transition-width duration-300 h-full overflow-scroll z-50`}
     >
       <button
         onClick={() => setExpanded(!expanded)}
@@ -64,10 +60,9 @@ const Sidebar = ({ expanded, setExpanded }) => {
               key={index}
               className={`flex items-center ${
                 isActive(item.path)
-                  ? "bg-gray-700 text-[#56c770]"
-                  : "text-white hover:text-[#56c770]"
+                  ? "bg-gray-700 text-[#56C770]"
+                  : "dark:text-white text-black hover:text-[#56C770]"
             }`}
-            
             >
               <Link to={item.path} className="p-1 flex items-center">
                 <span className="mr-3">{item.icon}</span>
@@ -83,8 +78,8 @@ const Sidebar = ({ expanded, setExpanded }) => {
               key={index}
               className={`flex items-center ${
                 isActive(item.path)
-                  ? "bg-gray-700 text-[#56c770]"
-                  : "text-white hover:text-[#56c770]"
+                  ? "bg-gray-700 text-[#56C770]"
+                  : "dark:text-white text-white hover:text-[#56C770]"
             }`}
             >
               <Link to={item.path} className="p-1 flex items-center">
@@ -96,7 +91,7 @@ const Sidebar = ({ expanded, setExpanded }) => {
         </ul>
         <button
           onClick={handleLogout}
-          className="flex items-center p-1 font-semibold hover:font-bold text-black dark:text-white focus:outline-none hover:text-[#56c770] mt-4 ml-4"
+          className="flex items-center p-1 font-semibold hover:font-bold text-black dark:text-white focus:outline-none hover:text-[#56C770] mt-4 ml-4"
         >
           <Icon icon="hugeicons:logout-circle-02" className="mr-3" />
           {expanded && <span>Logout</span>}
@@ -105,5 +100,4 @@ const Sidebar = ({ expanded, setExpanded }) => {
     </div>
   );
 };
-
 export default Sidebar;

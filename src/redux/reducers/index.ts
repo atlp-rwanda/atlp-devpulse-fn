@@ -39,7 +39,15 @@ import updateJobPostReducer from "./updateJobPostReducer";
 import {
   applicationsReducer,
   singleApplicationReducer,
+  FetchApplicantStageReducer,
+  AddApplicantScoreReducer,
+  advanceToNextStageReducer,
+  filterApplicantByStageReducer,
 } from "./applicationReducer";
+import filterTicketReducer from "./filterTicketReducer";
+
+import getLoggedUserReducer from "./loggedUser";
+import { ticketReducer } from "./ticketReducer";
 import { assessmentsReducer } from "./assessmentReducer";
 import { attendanceReducer } from "./attendanceReducer";
 import { performanceReducer } from "./performanceReducer";
@@ -68,7 +76,6 @@ const allReducers = combineReducers({
   filterProgram: filterProgramsReducer,
   loadData: loadDataReducer,
   getOneTraineeReducer,
-  updateTrainee: updateTraineeReducer,
   updateTraineeAttributes: updateTraineeAttributesReducer,
   scoreTypes: scoreTypesReducers,
   scoreValues: scoreValuesReducer,
@@ -94,6 +101,13 @@ const allReducers = combineReducers({
   traineeApplicant: traineeReducer,
   traineeAttendance: attendanceReducer,
   traineePerformance: performanceReducer,
+  loggedUser: getLoggedUserReducer,
+  nextStage: advanceToNextStageReducer,
+  fetchApplicantStage: FetchApplicantStageReducer,
+  AddedApplicantScore: AddApplicantScoreReducer,
+  filterApplicantByStage: filterApplicantByStageReducer,
+  tickets: ticketReducer,
+  filteredTickets: filterTicketReducer,
   updateUser: userUpdateReducer,
   blogs: blogsReducer,
   singleBlog: singleBlogReducer,
