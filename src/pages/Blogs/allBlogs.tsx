@@ -58,6 +58,7 @@ import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
   images: (File | string)[];
 }
 
+
 const AllBlogs = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -81,48 +82,6 @@ const AllBlogs = () => {
    
   const userId = localStorage.getItem('userId');
   const role = localStorage.getItem('roleName');
-
-   const mockBlogs = [
-  {
-    _id: "1",
-    title: "Mock Blog 1",
-    content: "This is a sample blog content for testing purposes.",
-    coverImage: "https://images.pexels.com/photos/262508/pexels-photo-262508.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-    images: ["/path/to/image2.jpg", "/path/to/image3.jpg"],
-    author: { firstName: "John", lastName: "Doe" },
-    tags: ["React", "Testing"],
-    isHidden: false,
-    createdAt: new Date().toString(),
-    likes: [],
-    comments: [],
-  },
-  {
-    _id: "2",
-    title: "Mock Blog 2",
-    content: "Another blog content for UI test.",
-    coverImage: "https://images.pexels.com/photos/262508/pexels-photo-262508.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-    images: ["/path/to/image5.jpg"],
-    author: { firstName: "Jane", lastName: "Doe" },
-    tags: ["UI", "Mock Data"],
-    isHidden: false,
-    createdAt: new Date().toString(),
-    likes: [],
-    comments: [],
-  },
-   {
-    _id: "1",
-    title: "Mock Blog 1",
-    content: "This is a sample blog content for testing purposes.",
-    coverImage: "https://images.pexels.com/photos/262508/pexels-photo-262508.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-    images: ["/path/to/image2.jpg", "/path/to/image3.jpg"],
-    author: { firstName: "John", lastName: "Doe" },
-    tags: ["React", "Testing"],
-    isHidden: false,
-    createdAt: new Date().toString(),
-    likes: [],
-    comments: [],
-  },
-  ];
   
   const { data ,isLoading} = useAppSelector((state) => ({data:state.blogs.data,isLoading:state.blogs.isLoading}));
   const blogs = data;
@@ -134,6 +93,7 @@ const AllBlogs = () => {
   const handleBlogClick = (blogId: string) => {
     navigate(`${blogId}`);
   };
+  
   
  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
   const { name, value } = e.target;
@@ -163,10 +123,7 @@ const AllBlogs = () => {
   } else {
     setSubmitData((prevState) => ({ ...prevState, [name]: value }));
   } 
-};
-
-
-
+  } 
 
    const Open = () => {
     setAddNewBlogModal(true);
@@ -254,6 +211,7 @@ const AllBlogs = () => {
       tags: submitData.tags || []
     };
     await dispatch(createBlogAction(obj));
+    dispatch(getAllBlogs());
     dispatch(getAllBlogs());
     removeModal();
   } catch (error) {
@@ -439,7 +397,6 @@ const AllBlogs = () => {
     It looks like there are no blog posts yet. Check back soon for updates!
   </p>
 </div>
-
           )} 
         </div>
       </div>

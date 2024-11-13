@@ -12,43 +12,6 @@ const SingleBlogView = () => {
   const [isLiked, setIsLiked] = useState(false);
   const dispatch = useAppDispatch();
 
-  // Mock blog data - replace with actual data fetching
-  const mockedBlog = {
-    title: "AI is taking over",
-    content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eu porta arci, nec fermentum ligula. Nullam mollis dolor vitae nulla torrent, quis imperdiet leo pulvinar at. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eu porta arci, nec fermentum ligula. Nullam mollis dolor vitae nulla torrent, quis imperdiet leo",
-    coverImage: "https://images.pexels.com/photos/262508/pexels-photo-262508.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-    images: ["https://images.pexels.com/photos/262508/pexels-photo-262508.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-      "https://images.pexels.com/photos/262508/pexels-photo-262508.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-      "https://images.pexels.com/photos/262508/pexels-photo-262508.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-      "https://images.pexels.com/photos/262508/pexels-photo-262508.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"],
-    comments: [
-      {
-        id: 1,
-        author: "Nyanja Cyane",
-        date: "Friday, 2022-12-03",
-        content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eu porta arci, nec fermentum ligula. Nullam mollis dolor vitae nulla",
-        replies: 5,
-        likes: 20
-      },
-      {
-        id: 2,
-        author: "Nyanja Cyane",
-        date: "Friday, 2022-12-03",
-        content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eu porta arci, nec fermentum ligula. Nullam mollis dolor vitae nulla",
-        replies: 5,
-        likes: 20
-      },
-      {
-        id: 3,
-        author: "Nyanja Cyane",
-        date: "Friday, 2022-12-03",
-        content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eu porta arci, nec fermentum ligula. Nullam mollis dolor vitae nulla",
-        replies: 5,
-        likes: 20
-      }
-    ]
-  };
-
   const handleLike = () => {
     setIsLiked(!isLiked);
     setLikes(isLiked ? likes - 1 : likes + 1);

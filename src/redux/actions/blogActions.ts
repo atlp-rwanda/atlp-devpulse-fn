@@ -50,6 +50,7 @@ export const getAllBlogs = (tag?: string) => async (dispatch: any) => {
     dispatch(creator(FETCH_BLOGS_SUCCESS, blogsData));
   } catch (err: any) {
     dispatch(creator(FETCH_BLOGS_FAIL, err));
+    dispatch(creator(FETCH_BLOGS_FAIL, err));
     toast.error(err.message);
   }
 };
