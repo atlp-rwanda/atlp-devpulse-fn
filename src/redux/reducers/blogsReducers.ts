@@ -3,6 +3,8 @@ import {
   FETCH_BLOGS_SUCCESS,
   FETCH_SINGLE_BLOG_FAIL,
   FETCH_SINGLE_BLOG_SUCCESS,
+  FETCH_USER_BLOGS_FAIL,
+  FETCH_USER_BLOGS_SUCCESS,
 } from "../index";
 
 const initialState = {
@@ -22,6 +24,21 @@ export default (state = initialState, { type, payload }: any) => {
       };
 
     case FETCH_BLOGS_FAIL:
+      return {
+        ...state,
+        isLoading: false,
+        isLoaded: true,
+        error: true,
+      };
+
+    case FETCH_USER_BLOGS_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        data: payload,
+      };
+
+    case FETCH_USER_BLOGS_FAIL:
       return {
         ...state,
         isLoading: false,

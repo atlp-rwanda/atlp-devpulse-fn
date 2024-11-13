@@ -98,12 +98,12 @@ const SingleBlogView = () => {
                     <div className="w-10 h-10 bg-slate-700 rounded-full overflow-hidden">
                       <img
                         src="/api/placeholder/40/40"
-                        alt={comment.user.firstName}
+                        alt={comment.user.firstname}
                         className="w-full h-full object-cover"
                       />
                     </div>
                     <div>
-                      <h3 className="font-medium">{comment.user.firstName}</h3>
+                      <h3 className="font-medium">{comment.user.firstname}</h3>
                       <p className="text-sm text-slate-400">{comment.created_at}</p>
                     </div>
                   </div>

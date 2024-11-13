@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { RootState } from "../../redux/store";
-import { getAllBlogs } from "../../redux/actions/blogActions";
+import { getAllBlogs, getBlogsByAuthor } from "../../redux/actions/blogActions";
 import { createBlogAction } from "../../redux/actions/blogActions";
 import * as icons from "react-icons/ai";
 import blogSchema from "../../validation/blogSchema"
@@ -25,8 +25,8 @@ import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
    interface User {
     _id: String;
     createdAt: String;
-    firstName: String;
-    lastName: String;
+    firstname: String;
+    lastname: String;
     email: String;
     role: String;
     profile: String;
@@ -86,7 +86,12 @@ const AllBlogs = () => {
   const { data ,isLoading} = useAppSelector((state) => ({data:state.blogs.data,isLoading:state.blogs.isLoading}));
   const blogs = data;
    useEffect(() => {
-     dispatch(getAllBlogs());
+    if(role=='applicant'){
+    dispatch(getBlogsByAuthor(String(userId)));
+     }
+     else{
+       dispatch(getAllBlogs());
+     }
   }, [dispatch]);
 
 
@@ -211,8 +216,7 @@ const AllBlogs = () => {
       tags: submitData.tags || []
     };
     await dispatch(createBlogAction(obj));
-    dispatch(getAllBlogs());
-    dispatch(getAllBlogs());
+    dispatch(getBlogsByAuthor(String(userId)));
     removeModal();
   } catch (error) {
     console.log(error);
@@ -223,7 +227,6 @@ const AllBlogs = () => {
 
   return (
     <div className="min-h-screen w-full bg-slate-900 text-white p-6">
-
        {addNewBlogModal && (
         <div className="fixed inset-0 mt-16 p-0 flex items-center justify-center bg-black bg-opacity-40">
           <div className="bg-white dark:bg-dark-bg w-11/12 md:w-3/5 lg:w-2/5 rounded-lg p-6">
@@ -354,14 +357,13 @@ const AllBlogs = () => {
                 onClick={() => handleBlogClick(blog.id)}
                 className="flex items-center gap-4 bg-slate-800 p-4 rounded-lg hover:bg-slate-700 transition-colors cursor-pointer group"
               >
-                <div className="h-fit w-20 bg-slate-700 rounded-lg">
+                <div className="h-fit w-20 rounded-lg">
                   <img
                     src={blog.coverImage || "https://images.pexels.com/photos/262508/pexels-photo-262508.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"}
                     alt={blog.title}
                     className="w-full h-full object-cover"
                   />
-                </div>
-
+               </div>
                 <div className="flex-grow">
                   <h2 className="text-lg font-medium group-hover:text-green-400 transition-colors">
                     {blog.title}
@@ -369,7 +371,7 @@ const AllBlogs = () => {
                   <p className="text-slate-400 break w-2/3 text-sm line-clamp-2">{blog.content}</p>              
                 </div>
                 <div className="flex flex-col items-end text-sm text-slate-400">
-                  <span>{`${blog.author.email} ${blog.author.lastName}`}</span>
+                  <span>{`${blog.author.firstname} ${blog.author.lastname}`}</span>
                   <span>{new Date(Number(blog.created_at)).toLocaleString()}</span>
                 </div>
               </div>

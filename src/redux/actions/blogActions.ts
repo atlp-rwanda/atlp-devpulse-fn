@@ -9,6 +9,9 @@ import {
   FETCH_SINGLE_BLOG_FAIL,
   FETCH_SINGLE_BLOG_LOADING,
   FETCH_SINGLE_BLOG_SUCCESS,
+  FETCH_USER_BLOGS_FAIL,
+  FETCH_USER_BLOGS_LOADING,
+  FETCH_USER_BLOGS_SUCCESS,
 } from "../index";
 
 // Fetch all blogs
@@ -36,8 +39,8 @@ export const getAllBlogs = (tag?: string) => async (dispatch: any) => {
           author {
             id
             email
-            firstName
-            lastName
+            firstname
+            lastname
           }
           tags
           created_at
@@ -51,6 +54,48 @@ export const getAllBlogs = (tag?: string) => async (dispatch: any) => {
   } catch (err: any) {
     dispatch(creator(FETCH_BLOGS_FAIL, err));
     dispatch(creator(FETCH_BLOGS_FAIL, err));
+    toast.error(err.message);
+  }
+};
+
+export const getBlogsByAuthor = (authorId: string) => async (dispatch: any) => {
+  dispatch({
+    type: FETCH_USER_BLOGS_LOADING,
+  });
+
+  try {
+    const response = await axios.post("/", {
+      query: `query($authorId: ID!) {
+        getBlogsByAuthor(authorId: $authorId) {
+          id
+          title
+          content
+          coverImage
+          images
+          likes {
+            id
+          }
+          comments {
+            id
+          }
+          isHidden
+          author {
+            id
+            email
+            firstname
+            lastname
+          }
+          tags
+          created_at
+          updated_at
+        }
+      }`,
+      variables: { authorId },
+    });
+    const blogsData = response.data.data.getBlogsByAuthor;
+    dispatch(creator(FETCH_USER_BLOGS_SUCCESS, blogsData));
+  } catch (err: any) {
+    dispatch(creator(FETCH_USER_BLOGS_FAIL, err));
     toast.error(err.message);
   }
 };
@@ -86,8 +131,8 @@ export const getBlogById = (id: string) => async (dispatch: any) => {
           author {
             id
             email
-            firstName
-            lastName
+            firstname
+            lastname
           }
           tags
           created_at
@@ -131,8 +176,8 @@ export const createBlogAction = (blogFields: any) => async (dispatch: any) => {
           isHidden
           author {
             id
-            firstName
-            lastName
+            firstname
+            lastname
           }
           tags
           created_at
@@ -189,8 +234,8 @@ export const updateBlogAction =
           isHidden
           author {
             id
-            firstName
-            lastName
+            firstname
+            lastname
           }
           tags
           created_at
