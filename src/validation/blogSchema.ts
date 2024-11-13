@@ -1,5 +1,6 @@
 import joi from "joi";
 
+//blogs validations
 const blogSchema = joi.object({
   title: joi
     .string()
