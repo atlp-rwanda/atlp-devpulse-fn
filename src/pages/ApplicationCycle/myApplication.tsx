@@ -180,7 +180,7 @@ export const MyApplication = () => {
                                         )}
 
                                         {stages.dismissed?.stageDismissedFrom && (
-                                            <p><strong>Score:</strong> {stages.dismissed.stageDismissedFrom}</p>
+                                            <p><strong>Stage dismissed from:</strong> {stages.dismissed.stageDismissedFrom}</p>
                                         )}
 
                                         {stages.dismissed?.comments && (
