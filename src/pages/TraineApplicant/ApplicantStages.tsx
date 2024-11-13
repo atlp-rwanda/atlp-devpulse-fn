@@ -80,7 +80,7 @@ const ApplicantStages = (props: any) => {
     const traine = traines?.message || [];
     const decodedString = cycleName ? decodeURIComponent(cycleName) : "";
     const filtered = traine.filter(
-      (trainee) => trainee.cycle_id.name === decodedString
+      (trainee) => trainee?.cycle_id?.name === decodedString
     );
     setFilteredTraines(filtered);
   }, [traines, cycleName]);

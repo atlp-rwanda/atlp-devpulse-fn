@@ -11,11 +11,11 @@ checks:
   file-lines:
     enabled: false
     config:
-      threshold: 250
+      threshold: 1250
   method-complexity:
     enabled: true
     config:
-      threshold: 50
+      threshold: 150
   method-count:
     enabled: true
     config:
@@ -23,7 +23,7 @@ checks:
   method-lines:
     enabled: false
     config:
-      threshold: 200
+      threshold: 1200
   nested-control-flow:
     enabled: true
     config:

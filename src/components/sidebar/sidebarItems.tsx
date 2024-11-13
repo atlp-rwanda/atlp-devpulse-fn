@@ -29,7 +29,7 @@ export const sidebarItems1 = [
     icon: <Icon icon="fluent:form-28-regular"></Icon>,
     title: "Application Forms",
   },
-    {
+  {
     path: "notifications",
     icon: <Icon icon="heroicons-solid:inbox-in"></Icon>,
     title: "Notifications",
@@ -43,6 +43,11 @@ export const sidebarItems1 = [
     path: "Trainee-applicants",
     icon: <Icon icon="ic:round-people"></Icon>,
     title: "Trainees-Applicants",
+  },
+  {
+    path: "Applicant-Stages",
+    icon: <Icon icon="ic:round-people"></Icon>,
+    title: "Applicant-Stages",
   },
   {
     path: "cohort",
