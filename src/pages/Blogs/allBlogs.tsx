@@ -64,6 +64,7 @@ const AllBlogs = () => {
   const navigate = useNavigate();
   const [addNewBlogModal, setAddNewBlogModal] = useState(false);
   const [manyImaages, setManyImages] = useState(false);
+  const [tags, setTags] = useState('');
   const [submitData, setSubmitData] = useState<SubmitData>({
     title: "",
     content: "",
@@ -125,6 +126,7 @@ const AllBlogs = () => {
   } else if (name === "tags") {
     const tagArray = value.split(",").map(tag => tag.trim()).filter(tag => tag !== "");
     setSubmitData((prevState) => ({ ...prevState, tags: tagArray }));
+    setTags(value);
   } else {
     setSubmitData((prevState) => ({ ...prevState, [name]: value }));
   } 
@@ -216,15 +218,16 @@ const AllBlogs = () => {
       tags: submitData.tags || []
     };
     await dispatch(createBlogAction(obj));
-    dispatch(getBlogsByAuthor(String(userId)));
     removeModal();
+    dispatch(getBlogsByAuthor(String(userId)));
   } catch (error) {
     console.log(error);
   } finally {
     setIsUploading(false);
   }
-  };
-
+ };
+  
+  
   return (
     <div className="min-h-screen w-full bg-slate-900 text-white p-6">
        {addNewBlogModal && (
@@ -273,7 +276,7 @@ const AllBlogs = () => {
                 <input
                   type="text"
                   name="tags"
-                  value={submitData.tags}
+                  value={tags}
                   onChange={handleInputChange}
                   className="border rounded bg-black px-4 py-2"
                   placeholder="Tags"
@@ -348,29 +351,29 @@ const AllBlogs = () => {
 
         <div className="space-y-4">
            {isLoading ? (
-            <div className="text-center py-8">Loading Blogs... <Spinner/></div>
+            <div className="text-center py-8 mt-20"><Spinner/></div>
           )
               : blogs?.length ? (
               blogs.map((blog: any) => (
               <div
                 key={blog.id}
                 onClick={() => handleBlogClick(blog.id)}
-                className="flex items-center gap-4 bg-slate-800 p-4 rounded-lg hover:bg-slate-700 transition-colors cursor-pointer group"
+                className="flex items-center gap-4 bg-slate-800 px-4 py-2 rounded-lg hover:bg-slate-700 transition-colors cursor-pointer group"
               >
-                <div className="h-fit w-20 rounded-lg">
+                <div className="h-fit w-1/6 rounded-lg">
                   <img
                     src={blog.coverImage || "https://images.pexels.com/photos/262508/pexels-photo-262508.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"}
                     alt={blog.title}
-                    className="w-full h-full object-cover"
+                    className="w-28 h-28 object-cover rounded-md"
                   />
                </div>
-                <div className="flex-grow">
+                <div className="flex-grow w-4/6">
                   <h2 className="text-lg font-medium group-hover:text-green-400 transition-colors">
                     {blog.title}
                   </h2>
                   <p className="text-slate-400 break w-2/3 text-sm line-clamp-2">{blog.content}</p>              
                 </div>
-                <div className="flex flex-col items-end text-sm text-slate-400">
+                <div className="w-1/6 flex flex-col items-end text-sm text-slate-400">
                   <span>{`${blog.author.firstname} ${blog.author.lastname}`}</span>
                   <span>{new Date(Number(blog.created_at)).toLocaleString()}</span>
                 </div>

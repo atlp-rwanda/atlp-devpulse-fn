@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Heart, MessageCircle } from 'lucide-react';
+import { Heart, MessageCircle,User } from 'lucide-react';
 import { useAppDispatch,useAppSelector } from '../../hooks/hooks';
 import { getBlogById } from "../../redux/actions/blogActions";
 import { Spinner } from 'flowbite-react';
@@ -32,30 +32,53 @@ const SingleBlogView = () => {
 
 
   return (
-    <div className="min-h-screen w-full bg-slate-900 text-white p-6">
+    <div className="min-h-screen pt-8 w-full bg-slate-900 text-white p-6">
       {isLoading ? (
-        <div className="text-center py-8">Loading a Single Blog... <Spinner /></div>
+        <div className="flex items-center mt-20 justify-center"><Spinner /></div>
       ) : (<div>
-        <div className='flex my-4 flex-row items-end gap-0 w-full h-[50vh]'>
-          <div className='w-1/2 flex gap-2 flex-col items-start'>
-            <h1 className="text-3xl text-left font-bold">{blog.title}</h1>
-            <img
-              src={blog.coverImage}
-              alt={blog.title}
-              className="w-4/5 h-3/4 rounded-lg object-cover"
-            />
+        <div className='flex my-4 flex-col items-end gap-0 w-full'>
+          <div className='mb-8 flex flex-row items-start justify-between'>
+            <div className='w-2/5 flex items-center'>
+               <img src={blog.coverImage}  alt={blog.title} className="w-80 h-80 rounded-xl object-cover"/>
+            </div>
+              <div className='w-3/5 '>
+                <p className='text-sm mb-4 rounded-3xl w-fit py-1 px-4 bg-slate-800'>On {new Date(Number(blog.created_at)).toLocaleString()}</p>
+                <p className="text-2xl text-left font-bold">{blog.title}</p>
+                <div className='mt-8 flex gap-4 items-center rounded-3xl w-fit py-1 px-4 bg-slate-800 text-white transition-colors'>
+                   <User size={32} />
+                   <div>
+                       <p className="text-md text-left">{`${blog.author.firstname} ${blog.author.lastname}`}</p>
+                      <span className='text-sm text-left'>Joined on {new Date(Number(blog.author.createdAt)).toLocaleString()} </span>
+                   </div>
+                </div>
+            </div>
           </div>
-          <div className='w-1/2 flex gap-4 flex-col items-start'>
-            <p className="text-slate-300 leading-relaxed">
+          <div className='flex gap-4 flex-col items-start'>
+            <p className="text-slate-300 w-[80%] leading-relaxed">
               {blog.content}
-            </p>
-            <div className="grid grid-cols-4 gap-2">
+              </p>
+              <div className='flex itmes-start gap-4 flex-row'>
+                {blog.tags.length == 1 ?
+                  <span className="text-sm bg-rose-800 px-3 rounded-md">{blog.tags[0]}</span> :
+                  blog.tags.length == 2 ? <div className='flex gap-2'>
+                    <span className="text-sm bg-rose-800 px-3 rounded-md">{blog.tags[0]}</span>
+                    <span className="text-sm bg-emerald-800 px-3 rounded-md">{blog.tags[1]}</span>
+                  </div>
+                    :
+                    blog.tags.length >= 3 && <div className='flex gap-2'>
+                      <span className="text-sm bg-rose-800 px-3 rounded-md">{blog.tags[0]}</span>
+                      <span className="text-sm bg-emerald-800 px-3 rounded-md">{blog.tags[1]}</span>
+                      <span className="text-sm bg-blue-800 px-3 rounded-md">{blog.tags[2]}</span>
+                    </div>
+                }
+              </div>
+            <div className="grid grid-cols-4 mt-2 gap-2">
                {blog.images.map((image, index) => (
                 <img
                   key={index}
                   src={image}
                   alt={`Gallery ${index + 1}`}
-                  className="w-full h-full object-cover rounded-md"
+                  className="w-32 h-32 object-cover rounded-md"
                 />
               ))} 
             </div>
@@ -79,7 +102,7 @@ const SingleBlogView = () => {
             value={comment}
             onChange={(e) => setComment(e.target.value)}
             placeholder="Add your comment here..."
-            className="px-4 py-2 w-1/2 px-2 bg-slate-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400"
+            className="px-4 py-2 w-1/2 bg-slate-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400"
           />
           <button
             onClick={handleComment}

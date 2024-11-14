@@ -133,6 +133,7 @@ export const getBlogById = (id: string) => async (dispatch: any) => {
             email
             firstname
             lastname
+            createdAt
           }
           tags
           created_at
@@ -178,17 +179,19 @@ export const createBlogAction = (blogFields: any) => async (dispatch: any) => {
             id
             firstname
             lastname
+            email
+            createdAt
           }
           tags
           created_at
           updated_at
         }
-      }
-      `,
+       }
+      `, 
       variables: {
         blogFields: {
-          title: blogFields.title,
-          content: blogFields.content,
+           title: blogFields.title,
+           content: blogFields.content,
           coverImage: blogFields.coverImage,
           author: blogFields.author,
           images: blogFields.images!,
@@ -236,6 +239,8 @@ export const updateBlogAction =
             id
             firstname
             lastname
+            email
+            createdAt
           }
           tags
           created_at
