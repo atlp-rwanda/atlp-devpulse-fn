@@ -1,7 +1,7 @@
 name: Login to Digital Ocean and create a directory
 
 on:
-  pull_request:
+  push:
     branches:
       - develop
 
