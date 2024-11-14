@@ -28,5 +28,5 @@ jobs:
           port: ${{ secrets.DO_PORT }}
           script: |
             docker pull devpulse/atlp-pulse-fn:latest
-            docker ps | grep 4004 | cut -f1 -d' ' | xargs docker stop
-            docker run -p 4004:80 -d --add-host=devpulse-backend:161.35.150.208 devpulse/atlp-pulse-fn:latest
+            docker ps | grep 4010 | cut -f1 -d' ' | xargs docker stop
+            docker run -p 4010:81 -d --add-host=devpulse-backend:161.35.150.208 devpulse/atlp-pulse-fn:latest
