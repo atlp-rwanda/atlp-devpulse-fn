@@ -80,6 +80,8 @@ module.exports = {
       backgroundColor: ['active'],
       textColor: ['active'],
     },
-    plugins: [],
+    plugins: [
+      require('flowbite/plugin')
+    ],
   },
 };

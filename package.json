@@ -96,7 +96,7 @@
     "dayjs": "^1.11.6",
     "dotenv": "^16.0.3",
     "express": "^4.21.0",
-    "flowbite": "^1.5.3",
+    "flowbite": "^1.8.1",
     "flowbite-react": "^0.6.4",
     "formik": "^2.4.3",
     "googleapis": "^126.0.1",
