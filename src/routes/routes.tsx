@@ -69,13 +69,15 @@ import AdminNotification from "../pages/AdminNotifications/AdminNotifications";
 import { MyApplication } from "../pages/ApplicationCycle/myApplication";
 
 import TraineeApply from "../pages/TraineeApply/TraineeApply";
-import TraineeAttribute from '../pages/TraineeApply/TraineeAttribute'
+import TraineeAttribute from "../pages/TraineeApply/TraineeAttribute";
 import TraineeSuccessPage from "../pages/TraineeApply/TraineeSuccess";
 import TicketPage from "../pages/tickets/ticketPage";
 import AdminTicketPage from "../pages/tickets/adminTicketPage";
 import SingleTicketDetails from "../pages/tickets/singleTicketDetails";
 import ResolveTicketPage from "../pages/tickets/adminTicketResolve";
 import ReplyTicketPage from "../pages/tickets/applicantTicketReply";
+import CohortPage from "../pages/Cohort/Cohort";
+import CohortsDetailPage from "../pages/Cohort/CohortDetailPage";
 import AllBlogs from "../pages/Blogs/allBlogs";
 import SingleBlogView from "../pages/Blogs/singleBlog";
 
@@ -140,7 +142,7 @@ function Navigation() {
             </PrivateRoute>
           }
         />
-                <Route
+        <Route
           path="update-profile"
           element={
             <PrivateRoute allowedRoles={["admin", "superAdmin"]}>
@@ -196,6 +198,7 @@ function Navigation() {
             </PrivateRoute>
           }
         />
+
         <Route
           path="cycles/applicant-stages/:cycleName"
           element={
@@ -217,6 +220,22 @@ function Navigation() {
           element={
             <PrivateRoute allowedRoles={["admin", "superAdmin"]}>
               <ApplicationCycle />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="cohort"
+          element={
+            <PrivateRoute allowedRoles={["admin", "superAdmin"]}>
+              <CohortPage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="cohort-details/:id"
+          element={
+            <PrivateRoute allowedRoles={["admin", "superAdmin"]}>
+              <CohortsDetailPage />
             </PrivateRoute>
           }
         />
@@ -620,7 +639,7 @@ function Navigation() {
         <Route
           path="available-jobs/trainee-apply"
           element={
-            <PrivateRoute allowedRoles={['applicant']}>
+            <PrivateRoute allowedRoles={["applicant"]}>
               <TraineeApply />
             </PrivateRoute>
           }
@@ -628,7 +647,7 @@ function Navigation() {
         <Route
           path="available-jobs/trainee-apply/trainee-success/:traineeId"
           element={
-            <PrivateRoute allowedRoles={['applicant']}>
+            <PrivateRoute allowedRoles={["applicant"]}>
               <TraineeSuccessPage />
             </PrivateRoute>
           }
@@ -636,7 +655,7 @@ function Navigation() {
         <Route
           path="available-jobs/trainee-apply/trainee-success/trainee-add-attributes/:traineeId?"
           element={
-            <PrivateRoute allowedRoles={['applicant']}>
+            <PrivateRoute allowedRoles={["applicant"]}>
               <TraineeAttribute />
             </PrivateRoute>
           }
