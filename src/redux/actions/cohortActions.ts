@@ -4,6 +4,10 @@ import {
   CREATE_COHORT_SUCCESS,
   GET_COHORTS,
   GET_TRAINEE_COHORT,
+  GET_ALL_TRAINEES,
+  GET_ALL_TRAINEES_ERROR,
+  ADD_TRAINEE_IN_COHORT,
+  ADD_TRAINEE_IN_COHORT_ERROR,
 } from "..";
 import axios from "./axiosconfig";
 import { toast } from "react-toastify";
@@ -217,5 +221,63 @@ mutation($deleteCohortId: ID!){
     dispatch(creator(CREATE_COHORT_SUCCESS, cohortData));
   } catch (error) {
     throw error;
+  }
+};
+
+export const getAllTraineeApplicants = () => async (dispatch: any) => {
+  try {
+    const response = await axios({
+      url: process.env.BACKEND_URL,
+      method: 'post',
+      data: {
+        query: `
+          query GetAllTraineeApplicant {
+            getAllTraineeApplicant {
+              lastName
+              firstName
+              _id
+              email
+              cohort
+            }
+          }
+        `
+      }
+    });
+    const traineeApplicants = await response.data.data.getAllTraineeApplicant;
+    dispatch(creator(GET_ALL_TRAINEES, traineeApplicants));
+  } catch (error) {
+    console.error('Error fetching trainee applicants:', error);
+  }
+};
+
+export const acceptTrainee = (traineeId: any, cohortId: any) => async (dispatch: any) => {
+  try {
+    const response = await axios({
+      url: process.env.BACKEND_URL,
+      method: 'post',
+      data: {
+        query: `
+          mutation AcceptTrainee($traineeId: ID!, $cohortId: ID!) {
+            acceptTrainee(traineeId: $traineeId, cohortId: $cohortId) {
+              success
+              message
+            }
+          }
+        `,
+        variables: {
+          traineeId: traineeId,
+          cohortId: cohortId
+        }
+      }
+    });
+    const result = await response.data.data.acceptTrainee;
+    if (result.success) {
+      toast.success(result.message);
+      dispatch(creator(ADD_TRAINEE_IN_COHORT, { traineeId, cohortId }));
+    } else {
+      toast.error(result.message);
+    }
+  } catch (error) {
+    console.error('Error accepting trainee:', error);
   }
 };
