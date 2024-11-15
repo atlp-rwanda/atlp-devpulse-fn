@@ -5,6 +5,8 @@ import { Heart, MessageCircle,User } from 'lucide-react';
 import { useAppDispatch,useAppSelector } from '../../hooks/hooks';
 import { getBlogById } from "../../redux/actions/blogActions";
 import { Spinner } from 'flowbite-react';
+import SingleBlogSkeleton from '../../skeletons/singleBlogSkeleton';
+
 const SingleBlogView = () => {
   const { id } = useParams();
   const [comment, setComment] = useState('');
@@ -33,8 +35,8 @@ const SingleBlogView = () => {
 
   return (
     <div className="min-h-screen pt-8 w-full bg-slate-900 text-white p-6">
-      {isLoading ? (
-        <div className="flex items-center mt-20 justify-center"><Spinner /></div>
+      {isLoading||!blog? (
+         <SingleBlogSkeleton/>
       ) : (<div>
         <div className='flex my-4 flex-col items-end gap-0 w-full'>
           <div className='mb-8 flex flex-row items-start justify-between'>

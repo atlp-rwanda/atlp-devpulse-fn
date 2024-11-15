@@ -1,11 +1,23 @@
-import { GET_COHORTS, GET_TRAINEE_COHORT } from '..';
+import {
+  CREATE_COHORT_ERROR,
+  GET_COHORTS,
+  GET_TRAINEE_COHORT,
+  CREATE_COHORT_SUCCESS,
+  GET_ALL_TRAINEES,
+  ADD_TRAINEE_IN_COHORT,
+} from "..";
+
+interface TraineeCohort {
+  trainees: string[];
+}
 
 const initialState = {
   isLoading: true,
   isLoaded: false,
   errors: null,
   data: [],
-  traineeCohort: null,
+  traineeCohort: null as TraineeCohort | null,
+  trainees: [],
 };
 
 export default (state = initialState, { type, payload }: any) => {
@@ -15,6 +27,7 @@ export default (state = initialState, { type, payload }: any) => {
         ...state,
         isLoading: false,
         data: payload,
+        errors: null,
       };
 
     case GET_TRAINEE_COHORT:
@@ -23,7 +36,35 @@ export default (state = initialState, { type, payload }: any) => {
         isLoading: false,
         isLoaded: true,
         traineeCohort: payload,
-        };
+        errors: null,
+      };
+    case CREATE_COHORT_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        errors: null,
+      };
+    case CREATE_COHORT_ERROR:
+      return {
+        ...state,
+        isLoading: false,
+        errors: payload,
+      };
+    case GET_ALL_TRAINEES:
+      return {
+        ...state,
+        isLoading: false,
+        trainees: payload,
+      };
+    case ADD_TRAINEE_IN_COHORT:
+      return {
+          ...state,
+          isLoading: false,
+          traineeCohort: {
+            ...state.traineeCohort,
+            trainees: [...(state.traineeCohort?.trainees || []), payload.traineeId],
+          },
+      };
 
     default:
       return state;

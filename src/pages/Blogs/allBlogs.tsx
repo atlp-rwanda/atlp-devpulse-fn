@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-import { RootState } from "../../redux/store";
 import { getAllBlogs, getBlogsByAuthor } from "../../redux/actions/blogActions";
 import { createBlogAction } from "../../redux/actions/blogActions";
 import * as icons from "react-icons/ai";
@@ -9,6 +7,8 @@ import blogSchema from "../../validation/blogSchema"
 import { Spinner } from "flowbite-react";
 import { handleBlogImageUpload } from "../../utils/imageUploadUtil";
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
+import AllBlogsSkeleton from "../../skeletons/allBlogsSkeleton";
+import SingleBlogSkeleton from "skeletons/singleBlogSkeleton";
 
  interface Comment {
     _id: String
@@ -243,7 +243,6 @@ const AllBlogs = () => {
               />
             </div>
             <form onSubmit={handleSubmit} className="space-y-2">
-              {/* Blog Title */}
               <div className="flex flex-col">
                 <label className="font-semibold text-sm">Blog Title</label>
                 <input
@@ -256,8 +255,6 @@ const AllBlogs = () => {
                 />
                 {errors.title && <span className="text-red-500 text-xs">{errors.title}</span>}
               </div>
-
-              {/* Blog Content */}
               <div className="flex flex-col">
                 <label className="font-semibold text-sm">Blog Content</label>
                 <textarea
@@ -269,8 +266,6 @@ const AllBlogs = () => {
                 />
                 {errors.content && <span className="text-red-500 text-xs">{errors.content}</span>}
               </div>
-
-              {/* Blog Tags */}
               <div className="flex flex-col">
                 <label className="font-semibold text-sm">Tags (comma separated)</label>
                 <input
@@ -283,8 +278,6 @@ const AllBlogs = () => {
                 />
                 {errors.tags && <span className="text-red-500 text-xs">{errors.tags}</span>}
               </div>
-
-              {/* Cover Image */}
               <div className="flex flex-col">
                 <label className="font-semibold text-sm">Cover Image</label>
                 <input
@@ -296,8 +289,6 @@ const AllBlogs = () => {
                 />
                 {errors.coverImage && <span className="text-red-500 text-xs">{errors.coverImage}</span>}
               </div>
-
-              {/* Blog Images */}
               <div className="flex flex-col">
                 <label className="font-semibold text-sm">Blog Images</label>
                 <input
@@ -337,7 +328,6 @@ const AllBlogs = () => {
         </button>
       </div>
       <div className="max-w-6xl mt-2 mx-auto">
-        {/* Header */}
         <div className="mb-6 w-full flex items-center justify-between">
           <h1 className="text-2xl font-semibold">All Blogs</h1>
           {userId && role && role == 'applicant' &&
@@ -350,8 +340,8 @@ const AllBlogs = () => {
         </div>
 
         <div className="space-y-4">
-           {isLoading ? (
-            <div className="text-center py-8 mt-20"><Spinner/></div>
+          {isLoading || !blogs || Object.keys(blogs).length === 0 ? (
+           <AllBlogsSkeleton/>
           )
               : blogs?.length ? (
               blogs.map((blog: any) => (
