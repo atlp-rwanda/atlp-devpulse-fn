@@ -12,6 +12,7 @@ import {
 import { Icon } from "@iconify/react";
 const Logo: string = require('../assets/andela-logo.svg').default;
 const coverImage: string = require("../assets/cover.png").default;
+// const DEFAULT_IMAGE: string = require("../../assets/default-image.jpg").default;
 
 const Profile = () => {
   const dispatch = useAppDispatch();
@@ -32,7 +33,10 @@ const Profile = () => {
       {userData && (
         <div className="w-full h-[900px] flex flex-col mt-10 z-20  bg-light-bg dark:bg-dark-frame-bg ">
           <div className=" mt-[-40px] relative">
-            <img src={coverImage} alt="coverimage" className="w-full h-60" />
+            <img src={userData.coverImage || coverImage} alt="coverimage" className="w-full h-60" />
+            <div className="w-full absolute top-20 px-8">
+            
+            </div>
           </div>
           <div className="flex flex-col gap-6 rounded-md px-10 py-12 ">
             <div className="text-xl font-semibold pb-1 dark:text-white">
@@ -41,36 +45,30 @@ const Profile = () => {
             <hr className="w-14 mt-[-25px] border-2 border-green " />
             <div className="flex flex-row gap-5 flex-wrap w-full">
               <div className="bg-white  dark:bg-dark-bg shadow-lg rounded-md dark:text-white p-5 flex flex-col gap-2 flex-1">
-                <h2 className="font-semibold pb-2 text-lg">Jane Doe</h2>
+                <h2 className="font-semibold pb-2 text-lg">{userData.firstname} {userData.lastname}</h2>
                 <div className="flex gap-2 items-center">
                   <Icon
                     icon="material-symbols:mail-outline"
                     className="w-5 h-5"
                   />
-                  <span>johndoe@gmail.com</span>
+                  <span>{userData.email}</span>
                 </div>
                 <div className="flex gap-2 items-center">
                   <Icon icon="mdi:phone-outline" className="w-5 h-5" />
-                  <span>(+250) 787 241 457</span>
+                  <span>({userData.code}) {userData.telephone}</span>
                 </div>
                 <div className="flex gap-2 items-center">
                   <Icon
                     icon="material-symbols:location-on-outline"
                     className="w-5 h-5"
                   />
-                  <span>Kimironko, Kigali</span>
+                  <span>{userData.address || 'No address provided'}</span>
                 </div>
               </div>
               <div className="bg-white  dark:bg-dark-bg shadow-lg rounded-md dark:text-white p-5 flex flex-col gap-2 flex-1">
                 <h2 className="font-semibold pb-2">Biography</h2>
                 <p>
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                  Omnis quasi quis tempora et laudantium obcaecati illum maxime,
-                  quo porro eius aspernatur nisi sint tenetur modi harum saepe
-                  doloribus cum placeat. Animi vel dignissimos est numquam
-                  laboriosam consequuntur totam modi atque iste, in fuga sunt
-                  repudiandae aliquam dolore eum quam. Voluptate error corrupti
-                  incidunt numquam corporis sunt rem laborum fugit nemo!
+                {userData.biography || 'No biography provided'}
                 </p>
               </div>
             </div>
