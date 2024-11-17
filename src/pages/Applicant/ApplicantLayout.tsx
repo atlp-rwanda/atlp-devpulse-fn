@@ -19,7 +19,7 @@ const ApplicantLayout = () => {
               setExpanded={setSidebarExpanded}
             />
           </div>
-          <main className="flex w-[100%] justify-center items-center flex-1 dark:bg-dark-frame-bg">
+          <main className="flex w-[100%] justify-center items-center flex-1 bg-light-bg dark:bg-dark-frame-bg">
             <Outlet />
           </main>
         </div>

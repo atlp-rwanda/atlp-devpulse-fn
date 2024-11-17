@@ -79,7 +79,7 @@ const Sidebar = ({ expanded, setExpanded }) => {
               className={`flex items-center ${
                 isActive(item.path)
                   ? "bg-gray-700 text-[#56C770]"
-                  : "dark:text-white text-white hover:text-[#56C770]"
+                  : "dark:text-white text-black hover:text-[#56C770]"
             }`}
             >
               <Link to={item.path} className="p-1 flex items-center">
