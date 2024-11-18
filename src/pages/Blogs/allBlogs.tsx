@@ -290,7 +290,7 @@ const AllBlogs = () => {
                 {errors.coverImage && <span className="text-red-500 text-xs">{errors.coverImage}</span>}
               </div>
               <div className="flex flex-col">
-                <label className="font-semibold text-sm">Blog Images</label>
+                <label className="font-semibold text-sm">Blog Images(Maximum 4)</label>
                 <input
                   type="file"
                   name="images"
@@ -332,7 +332,7 @@ const AllBlogs = () => {
           <h1 className="text-2xl font-semibold">All Blogs</h1>
           {userId && role && role == 'applicant' &&
             <div className="w-full sm:w-auto">
-            <button onClick={Open} className="flex items-center justify-center w-full sm:w-auto bg-primary dark:bg-[#56C870] rounded-md py-2 px-4 text-white font-medium cursor-pointer hover:opacity-90 transition-opacity" >
+            <button disabled={isLoading} onClick={Open} className="flex items-center justify-center w-full sm:w-auto bg-primary dark:bg-[#56C870] rounded-md py-2 px-4 text-white font-medium cursor-pointer hover:opacity-90 transition-opacity" >
                <icons.AiOutlinePlus className="mr-2" /> Blog
                 </button>
               </div>
@@ -352,7 +352,7 @@ const AllBlogs = () => {
               >
                 <div className="h-fit w-1/6 rounded-lg">
                   <img
-                    src={blog.coverImage || "https://images.pexels.com/photos/262508/pexels-photo-262508.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"}
+                    src={blog.coverImage}
                     alt={blog.title}
                     className="w-28 h-28 object-cover rounded-md"
                   />
