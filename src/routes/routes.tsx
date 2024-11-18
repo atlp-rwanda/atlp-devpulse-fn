@@ -46,7 +46,7 @@ import Jobs from "../pages/JobPost/job";
 import SingleJobPostDetails from "../pages/JobPost/viewSingleJob";
 import SharedPosts from "../pages/sharedPosts";
 import { ApplicantApplication } from "../pages/Applications/ApplicantApplication";
-import ScheduleInterview from "../pages/ScheduleInterview";
+// import ScheduleInterview from "../pages/Schedules";
 import SubmitApplication from "../pages/SubmitApplication";
 import GradingSystemPage from "../pages/GradingSystemPage";
 import ListApplications from "./../pages/Applications/AdminViewApplications";
@@ -78,7 +78,6 @@ import ResolveTicketPage from "../pages/tickets/adminTicketResolve";
 import ReplyTicketPage from "../pages/tickets/applicantTicketReply";
 import CohortPage from "../pages/Cohort/Cohort";
 import CohortsDetailPage from "../pages/Cohort/CohortDetailPage";
-
 function Navigation() {
   const roleName = localStorage.getItem("roleName");
   return (
@@ -197,17 +196,9 @@ function Navigation() {
         />
 
         <Route
-          path="cycles/applicant-stages/:cycleName"
+          path="cycles/application-stages/:cycleName"
           element={
             <PrivateRoute allowedRoles={["admin", "superAdmin"]}>
-              <ApplicantStages />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="Applicant-Stages"
-          element={
-            <PrivateRoute allowedRoles={["Admin", "superAdmin"]}>
               <ApplicantStages />
             </PrivateRoute>
           }
@@ -545,14 +536,14 @@ function Navigation() {
             </PrivateRoute>
           }
         />
-        <Route
+        {/* <Route
           path="interviewScheduler"
           element={
             <PrivateRoute allowedRoles={["applicant"]}>
               <ScheduleInterview />
             </PrivateRoute>
           }
-        />
+        /> */}
         <Route
           path="tickets"
           element={

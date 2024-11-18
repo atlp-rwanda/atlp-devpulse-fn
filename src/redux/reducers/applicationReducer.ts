@@ -7,7 +7,8 @@ import {
   advanceToNextStage,
   getApplicantStage,
   addStageMark,
-  filterByStage
+  filterByStage,
+  sendInvitation
 } from '../actiontypes/applicationTypes';
 
 interface State {
@@ -223,6 +224,35 @@ export const filterApplicantByStageReducer = (state:State = initial, action:Acti
         data: action.data,
       };
     case filterByStage.FILTER_STAGE_FAIL:
+      return {
+        loading: false,
+        error: action.message,
+        data: null,
+      };
+
+    default:
+      return state;
+  }
+}
+
+export const sendInvitationReducer = (state:State = initial, action:Action) => {
+  switch (action.type) {
+    case sendInvitation.SEND_INVITATION_STAGE_LOADING:
+      return {
+        loading: true,
+        success: false,
+        error: null,
+        message: null,
+        data: null,
+      };
+    case sendInvitation.SEND_INVITATION_STAGE_SUCCESS:
+      return {
+        loading: false,
+        success: true,
+        message: action.message,
+        data: action.data,
+      };
+    case sendInvitation.SEND_INVITATION_STAGE_FAIL:
       return {
         loading: false,
         error: action.message,

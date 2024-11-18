@@ -42,7 +42,8 @@ import {
   FetchApplicantStageReducer,
   AddApplicantScoreReducer,
   advanceToNextStageReducer,
-  filterApplicantByStageReducer
+  filterApplicantByStageReducer,
+  sendInvitationReducer
 } from './applicationReducer';
 import { assessmentsReducer } from './assessmentReducer';
 import { attendanceReducer } from './attendanceReducer';
@@ -52,7 +53,6 @@ import filterRoleReducer from './filterRoleReducer';
 import fetchSearchDataReducer from './fetchSearchDataReducer';
 import userUpdateReducer from './getUser';
 import filterTicketReducer from './filterTicketReducer';
-
 import getLoggedUserReducer from './loggedUser'
 import { ticketReducer } from './ticketReducer';
 
@@ -108,6 +108,7 @@ const allReducers = combineReducers({
   filterApplicantByStage: filterApplicantByStageReducer,
   tickets: ticketReducer,
   filteredTickets: filterTicketReducer,
+  sendInvitation: sendInvitationReducer,
 });
 
 export type RootState = ReturnType<typeof allReducers>;

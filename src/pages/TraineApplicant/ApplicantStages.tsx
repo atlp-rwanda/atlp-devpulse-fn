@@ -27,6 +27,7 @@ import { TableSkeleton } from "../../skeletons/applicantStageSkeleton";
 import LoadingSkeleton from "../../skeletons/loadingSkeleton";
 import { useParams } from "react-router-dom";
 import toast from "react-hot-toast";
+import ScheduleTechnical from "../../components/Invitation/ScheduleTechnical";
 
 const ApplicantStages = (props: any) => {
   // New state for search input and search field
@@ -98,7 +99,6 @@ const ApplicantStages = (props: any) => {
     itemsPerPage,
     nextStageData,
     nextStageSuccess,
-
   ]);
 
   const getStageText = (stage: string) => {
@@ -150,17 +150,17 @@ const ApplicantStages = (props: any) => {
     }, 2000);
   }, [addedScoreSuccess]);
 
-  useEffect(()=>{
-    const timeOut =setTimeout(()=>{
-      if(filteredTrainees && filterStages === "All"){
-        setLoadingFilter(false)
+  useEffect(() => {
+    const timeOut = setTimeout(() => {
+      if (filteredTrainees && filterStages === "All") {
+        setLoadingFilter(false);
       }
-    },2000)
-    return ()=> clearTimeout(timeOut)
-  },[filteredTrainees]);
+    }, 2000);
+    return () => clearTimeout(timeOut);
+  }, [filteredTrainees]);
 
   const stages = [
-    {value:"All", label:"All Stages"},
+    { value: "All", label: "All Stages" },
     { value: "Shortlisted", label: "Shortlisted" },
     { value: "Technical Assessment", label: "Technical" },
     { value: "Interview Assessment", label: "Interview" },
@@ -182,9 +182,10 @@ const ApplicantStages = (props: any) => {
 
   const handleReload = async () => {
     setIsMore("");
+    await dispatch(fetchtraine(input));
     await dispatch(filterStage(filterStages));
   };
-  
+
   return (
     <>
       <div className=" bg-gray-50 dark:bg-dark-frame-bg flex flex-col w-[100%] h-screen px-4">
@@ -272,7 +273,10 @@ const ApplicantStages = (props: any) => {
                     {"Last Update"}
                   </th>
                 }
-                {filterStages && filterStages !== "All" && filterData && filterData.length > 0 ? (
+                {filterStages &&
+                filterStages !== "All" &&
+                filterData &&
+                filterData.length > 0 ? (
                   <th className="px-5 py-3 text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
                     {"Comments"}
                   </th>
@@ -295,9 +299,12 @@ const ApplicantStages = (props: any) => {
               </tr>
             </thead>
             {loading || loadingFilter ? (
-              <LoadingSkeleton rows={5} filterStages={(filterStages === "All" || filterStages)} />
+              <LoadingSkeleton
+                rows={5}
+                filterStages={filterStages === "All" || filterStages}
+              />
             ) : (
-              <tbody className="overflow-y-auto">
+              <tbody className="overflow-auto scrollbar-hidden">
                 {filterStages === "All" && filteredTrainees?.length > 0 ? (
                   filteredTrainees.map((item: any, index: number) =>
                     item?.delete_at == false ? (
@@ -312,7 +319,9 @@ const ApplicantStages = (props: any) => {
                         <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-xs">
                           <div className="flex">
                             <p className="text-gray-900 dark:text-white whitespace-no-wrap">
-                              {item.firstName.toUpperCase() + " " + item.lastName}
+                              {item.firstName.toUpperCase() +
+                                " " +
+                                item.lastName}
                             </p>
                           </div>
                         </td>
@@ -345,10 +354,15 @@ const ApplicantStages = (props: any) => {
                           </span>
                         </td>
                         <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-xs">
-                          <span className={`${item.applicationPhase === "Rejected"
-                            ? "bg-red-200 text-red-500 font-medium"
-                            : item.applicationPhase === "Admitted"
-                            ? "bg-[#0c6a0c] dark:bg-[#1bf84b8d] text-white" :"bg-blue-100 text-blue-800"} inline-block px-2 py-2 text-center font-medium rounded-full`}>
+                          <span
+                            className={`${
+                              item.applicationPhase === "Rejected"
+                                ? "bg-red-200 text-red-500 font-medium"
+                                : item.applicationPhase === "Admitted"
+                                ? "bg-[#0c6a0c] dark:bg-[#1bf84b8d] text-white"
+                                : "bg-blue-100 text-blue-800"
+                            } inline-block px-2 py-2 text-center font-medium rounded-full`}
+                          >
                             {getStageText(item.applicationPhase)}
                           </span>
                         </td>
@@ -388,6 +402,24 @@ const ApplicantStages = (props: any) => {
                                   </div>
                                 </li>
                                 <li>
+                                  <div
+                                    className={`${
+                                      isMore === item._id && item.applicationPhase ===
+                                      "Technical Assessment"
+                                        ? "block"
+                                        : "hidden"
+                                    }`}
+                                  >
+                                    <ScheduleTechnical
+                                      applicantId={item._id}
+                                      traineeEmail={item.email}
+                                      onClose={handleReload}
+                                      stage={item.applicationPhase}
+                                      status={item.status}
+                                    />
+                                  </div>
+                                </li>
+                                <li>
                                   <NextStageModal
                                     applicantId={item._id}
                                     stage={item.applicationPhase}
@@ -411,7 +443,7 @@ const ApplicantStages = (props: any) => {
                       </tr>
                     ) : null
                   )
-                ): filterStages && filterData && filterData.length > 0 ? (
+                ) : filterStages && filterData && filterData.length > 0 ? (
                   filterData?.map((item, index: number) => (
                     <tr
                       key={item._id}
@@ -494,13 +526,13 @@ const ApplicantStages = (props: any) => {
                                   className={`${
                                     filterStages === "Shortlisted" ||
                                     ((filterStages === "Technical Assessment" ||
-                                      filterStages ===
-                                        "Interview Assessment" || filterStages ===
-                                        "Admitted" || filterStages ===
-                                        "Rejected") &&
+                                      filterStages === "Interview Assessment" ||
+                                      filterStages === "Admitted" ||
+                                      filterStages === "Rejected") &&
                                       (item.status === "Moved" ||
                                         item.status === "Admitted" ||
-                                        item.status === "Rejected" || item.status === "Passed"))
+                                        item.status === "Rejected" ||
+                                        item.status === "Passed"))
                                       ? "hidden"
                                       : "block"
                                   } text-xs hover:bg-gray-100 text-gray-700 dark:hover:bg-gray-500 dark:text-white px-4 py-2`}
@@ -509,6 +541,21 @@ const ApplicantStages = (props: any) => {
                                     applicantId={item.applicant._id}
                                     stage={item.applicant.applicationPhase}
                                     onClose={handleReload}
+                                  />
+                                </div>
+                                <div
+                                  className={`${
+                                    filterStages === "Technical Assessment"
+                                      ? "block"
+                                      : "hidden"
+                                  }`}
+                                >
+                                  <ScheduleTechnical
+                                    traineeEmail={item.applicant.email}
+                                    applicantId={item.applicant._id}
+                                    stage={item.applicant.applicationPhase}
+                                    onClose={handleReload}
+                                    status={item.status}
                                   />
                                 </div>
                               </li>
