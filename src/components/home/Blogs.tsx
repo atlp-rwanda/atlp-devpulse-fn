@@ -1,0 +1,115 @@
+import React, { useEffect, useState } from 'react';
+import { FaRegThumbsUp, FaCommentDots, FaUser, FaCalendar } from 'react-icons/fa';
+import { CiHeart } from "react-icons/ci";
+import { Link } from 'react-router-dom';
+import { fetchAllBlogs } from '../../redux/actions/blogsActions';
+import { toast } from 'react-toastify';
+
+
+interface Blog {
+  id: string;
+  title: string;
+  content: string;
+  author: { name: string };
+  coverImage: string;
+  created_at: string;
+  likes?: number;
+  comments?: number;
+}
+
+
+const BlogCard = ({ blog }: { blog: Blog }) => (
+  <div key={blog.id} className="bg-gray-200 dark:bg-dark-frame-bg dark:text-white text-primary shadow-lg rounded-lg cursor-pointer hover:shadow-xl transition duration-300">
+    <img src={blog.coverImage} alt={blog.title} className="w-full h-40 object-cover mb-4" />
+    <div className="p-3">
+      <div className="flex justify-between text-sm mb-4 items-center">
+        <div className="flex flex-wrap items-center gap-3">
+          {/* <span className="font-semibold flex flex-row gap-2 items-center">
+            <FaUser size={20} className='dark:text-green' /> {blog.author?.name}
+          </span> */}
+          <span className="ml-2 flex flex-row gap-2 items-center">
+            <span className="ml-2 flex flex-row gap-2 items-center">
+             <FaCalendar size={20} className="dark:text-green" />
+               {blog.created_at
+                ? new Date(Number(blog.created_at)).toLocaleDateString()
+                 : "Unknown Date"}
+             </span>
+          </span>
+          {/* <span className='flex flex-row gap-1 items-center'>
+            <CiHeart size={20} className='dark:text-green' /> {blog.likes || 0}
+          </span>
+          <span className='flex flex-row gap-1 items-center'>
+            <FaCommentDots size={20} className='dark:text-green' /> {blog.comments || 0}
+          </span> */}
+        </div>
+      </div>
+      
+      <h3 className="text-xl font-semibold mb-2">{blog.title}</h3>
+      <p className="mb-4 text-black-text dark:text-white overflow-hidden line-clamp-3">
+        {blog.content}
+      </p>
+      <Link to={`/blogs/${blog.id}`} className="text-green hover:underline">
+        Read More →
+      </Link>
+    </div>
+  </div>
+);
+
+const Blogs = () => {
+  const [blogs, setBlogs] = useState<Blog[]>([]); 
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let isMounted = true;
+    const fetchBlog = async () => {
+      try {
+        setLoading(true);
+        const fetchedBlogs = await fetchAllBlogs();
+        if (isMounted) {
+          const sortedBlogs = fetchedBlogs.sort(
+            (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+          );
+          setBlogs(sortedBlogs.slice(0, 3));
+          setLoading(false);
+        }
+      } catch (error) {
+        toast.error("Error fetching blogs");
+        setLoading(false);
+      }
+    };
+ 
+    fetchBlog();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full" role="status"></div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="p-10 dark:bg-dark-bg bg-white">
+      <div className="flex justify-between items-center mb-6 px-6">
+        <h1 className="text-xl sm:text-4xl md:text-xl font-bold mb-4 leading-tight dark:text-white">
+          Discover Insights from <br /> the <span className='text-primary dark:text-green'>DevPulse</span> Community
+        </h1>
+        <button className="px-6 py-2 dark:bg-green text-white font-semibold rounded-lg hover:bg-green-600 bg-primary">
+          <Link to="/blogs">View All</Link>
+        </button>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-1 gap-6 px-10">
+        {blogs.map((blog) => (
+          <BlogCard key={blog.id} blog={blog} />
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default Blogs;
