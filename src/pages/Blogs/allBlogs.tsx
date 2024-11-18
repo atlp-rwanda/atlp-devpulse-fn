@@ -340,7 +340,7 @@ const AllBlogs = () => {
         </div>
 
         <div className="space-y-4">
-          {isLoading || !blogs || Object.keys(blogs).length === 0 ? (
+          {isLoading ? (
            <AllBlogsSkeleton/>
           )
               : blogs?.length ? (
