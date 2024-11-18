@@ -43,7 +43,7 @@ import {
   AddApplicantScoreReducer,
   advanceToNextStageReducer,
   filterApplicantByStageReducer,
-  sendInvitationReducer
+  sendInvitationReducer,
 } from "./applicationReducer";
 import filterTicketReducer from "./filterTicketReducer";
 

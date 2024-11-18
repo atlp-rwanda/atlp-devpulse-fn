@@ -26,10 +26,10 @@ const ScheduleTechnical: React.FC<props> = ({
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const handleOpenModel = () => {
-    setIsModelOpen((prev)=> !prev);
+    setIsModelOpen((prev) => !prev);
   };
   const handleCloseModel = () => {
-    setIsModelOpen((prev)=> !prev);
+    setIsModelOpen((prev) => !prev);
     onClose();
   };
   const handleFormSubmit = async (event: any) => {
@@ -39,20 +39,22 @@ const ScheduleTechnical: React.FC<props> = ({
       return;
     }
     setIsLoading(true);
-    await dispatch(sendInvitations(applicantId, email, platForm, invitationLink)).then(
-      () => {
+    await dispatch(
+      sendInvitations(applicantId, email, platForm, invitationLink)
+    )
+      .then(() => {
         setIsLoading(false);
         setError(null);
         onClose();
-        setIsModelOpen((prev)=> !prev);
+        setIsModelOpen((prev) => !prev);
         // setEmail("");
         // setInvitationLink("");
         // setPlatForm("");
-      }
-    ).catch((error:any) => {
-      setIsLoading(false);
-      setError(error.message);
-    });
+      })
+      .catch((error: any) => {
+        setIsLoading(false);
+        setError(error.message);
+      });
   };
 
   return (
@@ -67,7 +69,7 @@ const ScheduleTechnical: React.FC<props> = ({
             : false
         }
         className={`px-4 py-2 w-full text-sm font-medium text-white ${
-           status === "Moved"
+          status === "Moved"
             ? "bg-gray-400 cursor-not-allowed"
             : " bg-[#0c6a0c] hover:bg-[#367a4e] dark:bg-[#1bf84b8d] dark:hover:bg-emerald-700 dark:hover:text-gray-800 cursor-pointer"
         }  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500`}

@@ -207,7 +207,12 @@ export const filterStage = (stage: string) => async (dispatch: any) => {
 };
 
 export const sendInvitations =
-  (applicantId: string, email: string, platform:string, invitationLink: string) =>
+  (
+    applicantId: string,
+    email: string,
+    platform: string,
+    invitationLink: string
+  ) =>
   async (dispatch: any) => {
     dispatch({
       type: sendInvitation.SEND_INVITATION_STAGE_LOADING,
@@ -222,12 +227,12 @@ export const sendInvitations =
                          success
                        }
                       }`,
-        variables:{
+        variables: {
           applicantId: applicantId,
           email: email,
           platform: platform,
           invitationLink: invitationLink,
-        }
+        },
       });
       if (response.data.data !== undefined || response.data.data !== null) {
         dispatch({
