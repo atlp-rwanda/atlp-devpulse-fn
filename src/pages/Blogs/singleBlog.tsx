@@ -39,9 +39,9 @@ const SingleBlogView = () => {
          <SingleBlogSkeleton/>
       ) : (<div>
         <div className='flex my-4 flex-col items-end gap-0 w-full'>
-          <div className='mb-8 flex flex-row items-start justify-between'>
+          <div className='mb-8 w-full gap-8 flex flex-row items-start justify-between'>
             <div className='w-2/5 flex items-center'>
-               <img src={blog.coverImage}  alt={blog.title} className="w-96 h-80 rounded-xl object-cover"/>
+               <img src={blog.coverImage}  alt={blog.title} className="w-full h-80 rounded-xl object-cover"/>
             </div>
               <div className='w-3/5 '>
                 <p className='text-sm mb-4 rounded-3xl w-fit py-1 px-4 bg-slate-800'>On {new Date(Number(blog.created_at)).toLocaleString()}</p>
