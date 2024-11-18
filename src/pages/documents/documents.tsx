@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import NavBar from "../../components/sidebar/navHeader";
 import * as icons from "react-icons/ai";
 import { connect } from "react-redux";
-import { createProgramAction } from "../../redux/actions/createProgramAction";
+import { createDocsAction } from "../../redux/actions/createDocsAction";
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import programSchema from "../../validation/programSchema";
 import { Link, useNavigate } from "react-router-dom";
@@ -12,25 +12,26 @@ import { ProgramSkeleton } from "../../skeletons/programSkeleton";
 import {
   getAllFilteredPrograms,
   getAllprograms} from "../../redux/actions/filterProgramActions";
+
+import { getAllDocs } from "../../redux/actions/documentationActions";
 import Select from "react-select";
 import {
   DOTS,
   useCustomPagination,
 } from "../../components/Pagination/useCustomPagination";
-import { fetchPrograms } from "../../redux/actions/fetchProgramsAction";
-import { deleteProgramAction } from "../../redux/actions/deleteProgramAction";
+import { fetchDocs } from "../../redux/actions/fetchDocsAction";
+import { deleteDocsAction } from "../../redux/actions/deleteDocsAction";
 import { toast, ToastContainer } from "react-toastify";
 import { useTheme } from "../../hooks/darkmode";
 import {debounce} from "lodash"
 
-const Programs = (props: any) => {
+const Documents = (props: any) => {
   const navigate = useNavigate();
-  const { createProgramStates, fetchProgramStates, deleteProgramStates } =
+  const { createDocStates, fetchDocsStates, deleteDocsStates } =
     props;
-
-  console.log("Propps:",props)
+  console.log("My props",props)
   const { theme, setTheme } = useTheme();
-  const { allfilteredPrograms,count } = props;
+  const { allDocs } = props;
   const [addNewProgramModal, setAddNewProgramModal] = useState(false);
   const [entries, setEntries] = useState<Array<string>>([]);
   const [filterAttribute, setFilterAttribute] = useState("");
@@ -40,10 +41,6 @@ const Programs = (props: any) => {
   const [submitData, setSubmitData] = useState({
     title: "",
     description: "",
-    mainObjective: "",
-    requirements: [""],
-    modeOfExecution: "",
-    duration: "",
   });
   const [actionsList, setActionsList] = useState(null);
 
@@ -56,10 +53,6 @@ const Programs = (props: any) => {
   const [errors, setErrors] = useState({
     title: "",
     description: "",
-    mainObjective: "",
-    modeOfExecution: "",
-    requirements: "",
-    duration: "",
   });
 
   const handleKeyDown = (e) => {
@@ -77,20 +70,6 @@ const Programs = (props: any) => {
   };
 
 
-  const debouncedSearch = useCallback(
-    debounce(() => {
-      props.getAllFilteredPrograms(input2);
-    }, 300), 
-    [enteredWord, filterAttribute, page, itemsPerPage]
-  );
-
-  useEffect(() => {
-    debouncedSearch();
-
-    return () => {
-      debouncedSearch.cancel();
-    };
-  }, [debouncedSearch]);
 
   const customTheme = (theme: any) => {
     return {
@@ -127,17 +106,6 @@ const Programs = (props: any) => {
         e.target.name === "description"
           ? e.target.value
           : prevState.description,
-      mainObjective:
-        e.target.name === "mainObjective"
-          ? e.target.value
-          : prevState.mainObjective,
-      requirements: prevState.requirements,
-      modeOfExecution:
-        e.target.name === "modeOfExecution"
-          ? e.target.value
-          : prevState.modeOfExecution,
-      duration:
-        e.target.name === "duration" ? e.target.value : prevState.duration,
     }));
   };
 
@@ -151,19 +119,11 @@ const Programs = (props: any) => {
     setSubmitData({
       title: "",
       description: "",
-      mainObjective: "",
-      requirements: [""],
-      modeOfExecution: "",
-      duration: "",
     });
 
     setErrors({
       title: "",
       description: "",
-      mainObjective: "",
-      requirements: "",
-      modeOfExecution: "",
-      duration: "",
     });
 
     setEntries([]);
@@ -206,13 +166,9 @@ const Programs = (props: any) => {
       const obj = {
         title: submitData.title,
         description: submitData.description,
-        mainObjective: submitData.mainObjective,
-        requirements: entries,
-        modeOfExecution: submitData.modeOfExecution,
-        duration: submitData.duration,
       };
       if (validateForm(submitData, programSchema)) {
-        await dispatch(createProgramAction(obj));
+        await dispatch(createDocsAction(obj));
         removeModal();
       }
     } catch (error) {
@@ -220,29 +176,10 @@ const Programs = (props: any) => {
     }
   };
 
-  const paginationRange = useCustomPagination({
-    totalPageCount: Math.ceil(allfilteredPrograms?.data?.length / itemsPerPage),
-    currentPage: page,
-  });
-  const input = {
-    page: page + 1,
-    pageSize: itemsPerPage,
-  };
+  
+  
 
-  const input2={
-    page: page + 1,
-    itemsPerPage: itemsPerPage,
-    All: All,
-    filterAttribute:filterAttribute,
-    wordEntered: enteredWord,
-  }
 
-  useEffect(() => {
-    props.getAllFilteredPrograms(input2);
-  }, [enteredWord, filterAttribute]);
-  const toogleActions = (id: any) => {
-    setActionsList((prevState) => (!prevState ? id : null));
-  };
 
   const handleDelete = (id: any) => {
     try {
@@ -252,12 +189,7 @@ const Programs = (props: any) => {
     }
   };
 
-  useEffect(() => {
-    const { data, error } = props.fetchPrograms(input);
-
-  }, [page, itemsPerPage]);
-
-  const isLoading = fetchProgramStates.loading;
+  const isLoading = fetchDocsStates.loading;
 
   if (isLoading) {
     return <ProgramSkeleton />
@@ -266,8 +198,9 @@ const Programs = (props: any) => {
   return (
     <>
       <ToastContainer />
+      {/* Create New Document */}
       <div
-        className={`h-svh w-max z-20 bg-opacity-30 backdrop-blur-sm absolute flex  justify-center ${
+        className={`h-svh lg:w-full z-20 bg-opacity-0 backdrop-blur-sm absolute flex  justify-center ${
           addNewProgramModal === true ? "block" : "hidden"
         }`}
       >
@@ -279,9 +212,9 @@ const Programs = (props: any) => {
                 onClick={() => removeModal()}
               />
 
-              {"CREATE PROGRAM"}
+              {"CREATE DOCUMENTATION"}
             </h3>
-            <div className="flex flex-col w-full mt-14 md_:mt-5">
+            <div className="flex items-center justify-center w-full mt-14 md_:mt-5">
               <form
                 onSubmit={handleSubmit}
                 className="flex flex-col md_:flex-row  space-y-7 md_:space-x-7 md_:space-y-0"
@@ -289,13 +222,13 @@ const Programs = (props: any) => {
                 <div className="flex flex-col w-full md_:w-[300px] space-y-3">
                   <div className="flex flex-col justify-center items-start space-y-2">
                     <label className="font-bold text-black-text dark:text-white text-left">
-                      Program Title
+                      Documentation Title
                     </label>
                     <input
                       type="text"
                       name="title"
-                      className="dark:bg-dark-tertiary bg-slate-300 text-black dark:text-white border border-white py-2 px-5 rounded outline-none font-sans text-xs w-full"
-                      placeholder={"Program title"}
+                      className="dark:bg-dark-tertiary bg-slate-300 text-black dark:text-white border border-white py-2 px-5 rounded outline-none font-sans text-md w-full"
+                      placeholder={"Documentation title"}
                       value={submitData.title}
                       onChange={handleInputChange}
                     />
@@ -307,12 +240,12 @@ const Programs = (props: any) => {
                   </div>
                   <div className="flex flex-col justify-center items-start space-y-2">
                     <label className="font-bold text-black-text dark:text-white text-left">
-                      Program Description
+                    Documentation Description
                     </label>
                     <textarea
                       name="description"
-                      className=" dark:bg-dark-tertiary bg-slate-300 text-black dark:text-white resize-none h-36 py-2 px-5 rounded outline-none font-sans text-xs w-full"
-                      placeholder={"Program Description"}
+                      className=" dark:bg-dark-tertiary bg-slate-300 text-black dark:text-white resize-none h-36 py-2 px-5 rounded outline-none font-sans text-md w-full"
+                      placeholder={"Documentation Description"}
                       value={submitData.description}
                       onChange={handleInputChange}
                     />
@@ -322,125 +255,16 @@ const Programs = (props: any) => {
                       </span>
                     )}
                   </div>
-                  <div className="flex flex-col items-start space-y-2">
-                    <label className="font-bold text-black-text dark:text-white text-left">
-                      Main objective
-                    </label>
-                    <input
-                      type="text"
-                      name="mainObjective"
-                      className=" dark:bg-dark-tertiary bg-slate-300 text-black dark:text-white py-2 px-5 rounded outline-none font-sans text-xs w-full"
-                      placeholder={"e.g: Web development training..."}
-                      value={submitData.mainObjective}
-                      onChange={handleInputChange}
-                    />
-                    {errors.mainObjective && (
-                      <span className="text-xs text-red-500">
-                        {errors.mainObjective}
-                      </span>
-                    )}
-                  </div>
-                  <div className="flex flex-col items-start space-y-2">
-                    <label className="font-bold text-black-text dark:text-white text-left">
-                      Mode of execution
-                    </label>
-                    <input
-                      type="text"
-                      name="modeOfExecution"
-                      className=" dark:bg-dark-tertiary bg-slate-300 text-black dark:text-white py-2 px-5 rounded outline-none font-sans text-xs w-full"
-                      placeholder={"e.g: self-paced online, in-person..."}
-                      value={submitData.modeOfExecution}
-                      onChange={handleInputChange}
-                    />
-                    {errors.modeOfExecution && (
-                      <span className="text-xs text-red-500">
-                        {errors.modeOfExecution}
-                      </span>
-                    )}
-                  </div>
-                  
-                </div>
-              <div className="flex flex-col md_:justify-start md_:items-center w-full md_:w-[500px] space-y-3">
-                <div className="flex flex-col items-start space-y-2 mr-11">
-                    <label className="font-bold text-black-text dark:text-white text-left">
-                      Duration
-                    </label>
-                    <input
-                      type="text"
-                      name="duration"
-                      className=" dark:bg-dark-tertiary bg-slate-300 text-black dark:text-white py-2 px-5 rounded outline-none font-sans text-xs w-full"
-                      placeholder={"e.g: 6 months..."}
-                      value={submitData.duration}
-                      onChange={handleInputChange}
-                    />
-                    {errors.duration && (
-                      <span className="text-xs text-red-500">
-                        {errors.duration}
-                      </span>
-                    )}
-                  </div>
-                  <div className="flex flex-col items-start space-y-2">
-                    <label className="font-bold text-black-text dark:text-white text-left">
-                      Entry requirements
-                    </label>
-                    <div className="flex flex-row items-center space-x-3 w-full">
-                      <input
-                        type="text"
-                        name="entries"
-                        className=" dark:bg-dark-tertiary bg-slate-300 text-black dark:text-white py-2 px-5 rounded outline-none font-sans text-xs w-full"
-                        placeholder={"Entry requirement"}
-                        value={currentEntry}
-                        onChange={handleInputChange}
-                      />
-                      {errors.requirements && (
-                        <span className="text-xs text-red-500">
-                          {errors.requirements}
-                        </span>
-                      )}
-
-                      <button
-                        type="button"
-                        className="flex items-center justify-center bg-white text-dark-frame-bg transition-colors border border-black dark:border-transparent hover:bg-dark-frame-bg hover:text-white hover:border hover:border-white font-extrabold px-2 rounded"
-                        onClick={() => addEntry(currentEntry)}
-                      >
-                        +
-                      </button>
-                    </div>
-                    <div className="flex flex-col justify-center items-center space-y-2 overflow-auto">
-                      <div className="flex flex-col p-3 max-h-14 md_:max-h-96">
-                        {entries.length > 0 &&
-                          entries.map((item, index) => (
-                            <div
-                              key={index}
-                              className="flex flex-row items-center space-x-1"
-                            >
-                              <icons.AiOutlineArrowRight
-                                size={13}
-                                className="text-black-text dark:text-white"
-                              />
-                              <label className="text-black-text dark:text-white text-sm">
-                                {item}
-                              </label>
-                              <button
-                                type="button"
-                                className="bg-green-500 text-white px-4 py-2 rounded w-full md:w-auto self-start"
-                                onClick={() => removeEntry(item)}
-                              >
-                                -
-                              </button>
-                            </div>
-                          ))}
-                      </div>
-                    </div>
-
-                    <button
+                 
+                  <button
                       type="submit"
-                      disabled={createProgramStates.loading}
+                      disabled={createDocStates.loading}
                       className="flex justify-self-start self-start rounded w-15 px-5 py-1 mt-10 bg-green text-white transition-colors hover:bg-dark-frame-bg hover:text-green hover:border hover:border-green"
                     >
-                      {createProgramStates.loading ? "Submitting..." : "Submit"}
+                      {createDocStates.loading ? "Submitting..." : "Submit"}
                     </button>
-                  </div>
+                 
+                  
                 </div>
               </form>
             </div>
@@ -458,7 +282,7 @@ const Programs = (props: any) => {
                       onClick={Open}
                       className="flex items-center justify-center w-full sm:w-auto bg-primary dark:bg-[#56C870] rounded-md py-2 px-4 text-white font-medium cursor-pointer hover:opacity-90 transition-opacity"
                     >
-                      <icons.AiOutlinePlus className="mr-2" /> Program
+                      <icons.AiOutlinePlus className="mr-2" /> Documentation
                     </button>
                   </div>
                   <div className="w-full sm:w-40">
@@ -506,16 +330,14 @@ const Programs = (props: any) => {
                             <thead className=" w-full px-32 sticky top-0">
                               <tr>
                                 <th className="p-6 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
-                                  {"Program Name"}
+                                  {"Documentation Name"}
                                 </th>
 
                                 <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left text-xs font-semibold text-gray-600 dark:text-white uppercase md:table-cell tracking-wider">
-                                  {"Main objective"}
+                                  {"Description"}
                                 </th>
 
-                                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
-                                  {"Mode of execution"}
-                                </th>
+                                
                                 {/* <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
                                 {"Requirements"}
                               </th> */}
@@ -525,8 +347,8 @@ const Programs = (props: any) => {
                               </tr>
                             </thead>
                             <tbody className="overflow-y-auto">
-                              {allfilteredPrograms.data ? (
-                                allfilteredPrograms.data.map((item: any) => (
+                              {allDocs.data ? (
+                                allDocs.data.map((item: any) => (
                                   <tr
                                     className="dark:hover:bg-slate-700 hover:bg-slate-300 transition-colors"
                                     key={item._id}
@@ -550,23 +372,12 @@ const Programs = (props: any) => {
                                       </div>
                                     </td>
 
-                                    <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
-                                      <div className="flex items-center">
-                                        <div className="">
-                                          <p className="text-gray-900 items-center dark:text-white whitespace-no-wrap">
-                                            {item.modeOfExecution}
-                                          </p>
-                                        </div>
-                                      </div>
-                                    </td>
+                                    
                                     <td>
                                       <div>
                                         <HiDotsVertical
                                           size={16}
-                                          onClick={(e: any) => {
-                                            e.preventDefault();
-                                            toogleActions(item._id);
-                                          }}
+                                          
                                           className="text-black dark:text-white text-3xl ml-6 font-size-6 cursor-pointer"
                                         />
                                         <div
@@ -582,7 +393,7 @@ const Programs = (props: any) => {
                                           >
                                             <li>
                                               <Link
-                                                to={`/admin/program/${item._id}/edit`}
+                                                to={`/admin/documents/${item._id}/edit`}
                                                 className="text-sm hover:bg-gray-100 text-gray-700 dark:hover:bg-gray-500 dark:text-white  block px-4 py-2"
                                               >
                                                 Edit
@@ -590,7 +401,7 @@ const Programs = (props: any) => {
                                             </li>
                                             <li>
                                               <Link
-                                                to={`/admin/program/${item._id}`}
+                                                to={`/admin/documents/${item._id}`}
                                                 className="text-sm hover:bg-gray-100 text-gray-700  dark:text-white   dark:hover:bg-gray-500 block px-4 py-2"
                                               >
                                                 View
@@ -627,17 +438,17 @@ const Programs = (props: any) => {
                         </div>
                         <div className="flex md_:hidden flex-col gap-4 w-full rounded-lg">
                           <label className="text-left text-black-text dark:text-white text-lg font-bold">
-                            Programs
+                          Documentations
                           </label>
-                          {allfilteredPrograms.data &&
-                            allfilteredPrograms.data.map((item: any) => (
+                          {allDocs.data &&
+                            allDocs.data.map((item: any) => (
                               <div
                                 key={item._id}
                                 className="flex flex-col w-full gap-2 border border-solid border-transparent border-t-black dark:border-t-white border-t-4 rounded-t-sm"
                               >
                                 <div className="flex flex-col w-full mt-3">
                                   <label className="text-left text-gray-400 text-sm">
-                                    Program Title
+                                    Documentation Title
                                   </label>
                                   <label className="text-left text-black-text dark:text-white text-base font-normal">
                                     {item.title}
@@ -645,68 +456,27 @@ const Programs = (props: any) => {
                                 </div>
                                 <div className="flex flex-col w-full">
                                   <label className="text-left text-gray-400 text-sm">
-                                    Main objective
+                                    Description
                                   </label>
                                   <label className="text-left text-black-text dark:text-white text-base font-normal">
                                     {item.mainObjective}
                                   </label>
                                 </div>
-                                <div className="flex flex-col w-full">
-                                  <label className="text-left text-gray-400 text-sm">
-                                    Mode of execution
-                                  </label>
-                                  <label className="text-left text-black-text dark:text-white text-base font-normal">
-                                    {item.modeOfExecution}
-                                  </label>
-                                </div>
-                                <div className="flex flex-col w-full">
-                                  <label className="text-left text-gray-400 text-sm">
-                                    Duration
-                                  </label>
-                                  <label className="text-left text-black-text dark:text-white text-base font-normal">
-                                    {item.duration}
-                                  </label>
-                                </div>
-                                <div className="flex flex-col w-full">
-                                  <label className="text-left text-gray-400 text-sm">
-                                    Requirements
-                                  </label>
-                                  <div className="flex flex-row">
-                                    {item.requirements
-                                      .slice(0, 2)
-                                      .map((req: any, index: any) => (
-                                        <div key={req}>
-                                          {index < 1 ? (
-                                            <label className="text-left text-black-text dark:text-white text-xs font-normal">
-                                              {`${req} ${index + 1 !=
-                                                  item.requirements.length
-                                                  ? ","
-                                                  : ""
-                                                }`}
-                                            </label>
-                                          ) : (
-                                            <label className="text-left text-black-text dark:text-white text-xs font-normal">
-                                              {`and ${item.requirements.length - index
-                                                } more`}
-                                            </label>
-                                          )}
-                                        </div>
-                                      ))}
-                                  </div>
-                                </div>
+                                
+                                
                                 <div className="flex flex-col w-full">
                                   <label className="text-left text-gray-400 text-sm">
                                     Action
                                   </label>
                                   <div className="flex flex-row gap-2 mt-2">
                                     <Link
-                                      to={`/program/${item._id}/edit`}
+                                      to={`/admin/documents/${item._id}/edit`}
                                       className="text-white bg-yellow-500 border border-solid border-yellow-500 rounded-md px-2 text-xs"
                                     >
                                       Edit
                                     </Link>
                                     <Link
-                                      to={`/program/${item._id}`}
+                                      to={`/admin/documents/${item._id}`}
                                       className="text-white bg-green border border-solid border-green rounded-md px-2 text-xs"
                                     >
                                       View
@@ -725,7 +495,7 @@ const Programs = (props: any) => {
                         </div>
                       </div>
                     </div>
-                    {allfilteredPrograms.data && (
+                    {allDocs.data && (
                       <div className="py-3 flex items-center text-center justify-center pt-10">
                         <div className="pb-1">
                           <label htmlFor="" className="dark:text-zinc-100">
@@ -769,43 +539,7 @@ const Programs = (props: any) => {
                             >
                               <AiIcons.AiOutlineLeft />
                             </button>
-                            {paginationRange?.map((pageNumber, idx) => {
-                              if (pageNumber === DOTS) {
-                                return (
-                                  <div
-                                    key={idx}
-                                    className="dark:text-zinc-100 md:hidden"
-                                  >
-                                    ...
-                                  </div>
-                                );
-                              }
-
-                              if (pageNumber - 1 === page) {
-                                return (
-                                  <button
-                                    key={idx}
-                                    className={`border-solid border-[1px] cursor-pointer border-[#a8a8a8] bg-[#fff] min-w-[35px] h-[38px]  active:bg-[#333] active:text-[#fff]-500 rounded-[2px] md:hidden
-                        ${page && "bg-[#d6dfdf] text-black"} 
-                        ${page === 0 && "bg-[#d6dfdf] text-black"} 
-                          `}
-                                    onClick={() => setPage(pageNumber - 1)}
-                                  >
-                                    {pageNumber}
-                                  </button>
-                                );
-                              }
-
-                              return (
-                                <button
-                                  key={idx}
-                                  className={`border-solid border-[1px]  cursor-pointer border-[#a8a8a8] bg-[#fff] min-w-[35px] h-[38px]  active:bg-[#333] active:text-[#fff]-500 rounded-[2px] md:hidden`}
-                                  onClick={() => setPage(pageNumber - 1)}
-                                >
-                                  {pageNumber}
-                                </button>
-                              );
-                            })}
+                          
                             <button
                               className=" border-solid border-[1px]  border-[#a8a8a8] py-0 px-[10px] text-[#333] rounded-r-[5px] h-[38px]  disabled:bg-[#E7E7E7] disabled:text-[#a8a8a8] dark:disabled:bg-[#485970] dark:text-zinc-100"
                               onClick={() => setPage(page + 1)}
@@ -832,18 +566,16 @@ const Programs = (props: any) => {
 };
 
 const mapState = (state: any) => ({
-  createProgramStates: state.createProgram,
-  fetchProgramStates: state.fetchPrograms,
-  deleteProgramStates: state.deleteProgram,
-  allfilteredPrograms: state.filterProgram,
+  createDocStates: state.createDocs,
+  fetchDocsStates: state.fetchDocs,
+  deleteDocStates: state.deleteDocs,
+  allDocs: state.fetchDocs,
   errors: state.errors,
-  count: state.count,
 });
 
 export default connect(mapState, {
-  fetchPrograms,
-  createProgramAction,
-  deleteProgramAction,
-  getAllFilteredPrograms: getAllFilteredPrograms,
-  getAllprograms: getAllprograms,
-})(Programs);
+  fetchDocs,
+  createDocsAction ,
+  deleteDocsAction,
+  getAllDocs: getAllDocs,
+})(Documents);

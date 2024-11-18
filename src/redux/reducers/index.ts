@@ -60,6 +60,15 @@ import blogsReducer from "./blogsReducers";
 import singleBlogReducer from "./singleBlogReducer";
 import blogRelatedArticle from "./blogRelatedArticleReducer";
 
+
+import createDocsReducer from './createDocReducer';
+import fetchDocsReducer from './fetchDocsReducer';
+// import fetchSingleDocsReducer from './fetchSingleDocsReducer';
+import deleteDocsReducer from './deleteDocsReducer';
+import updateDocsReducer from './updateDocsReducer';
+
+
+
 const allReducers = combineReducers({
   counter: counterReducer,
   deletetraine: deletetraineReducer,
@@ -89,6 +98,15 @@ const allReducers = combineReducers({
   fetchSingleProgram: fetchSingleProgramReducer,
   deleteProgram: deleteProgramReducer,
   updateProgram: updateProgramReducer,
+
+
+  createDocs: createDocsReducer,
+  fetchDocs: fetchDocsReducer,
+  // fetchSingleDocs: fetchSingleDocsReducer,
+  deleteDocs: deleteDocsReducer,
+  updateDocs: updateDocsReducer,
+
+
   fetchJobPost: fetchJobPostReducer,
   fetchSingleJobPost: fetchSingleJobPostReducer,
   createJobPost: createJobPostReducer,

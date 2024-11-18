@@ -23,12 +23,10 @@ import { toast, ToastContainer } from "react-toastify";
 import { useTheme } from "../../hooks/darkmode";
 import {debounce} from "lodash"
 
-const Programs = (props: any) => {
+const ApplicantDocuments = (props: any) => {
   const navigate = useNavigate();
   const { createProgramStates, fetchProgramStates, deleteProgramStates } =
     props;
-
-  console.log("Propps:",props)
   const { theme, setTheme } = useTheme();
   const { allfilteredPrograms,count } = props;
   const [addNewProgramModal, setAddNewProgramModal] = useState(false);
@@ -266,187 +264,8 @@ const Programs = (props: any) => {
   return (
     <>
       <ToastContainer />
-      <div
-        className={`h-svh w-max z-20 bg-opacity-30 backdrop-blur-sm absolute flex  justify-center ${
-          addNewProgramModal === true ? "block" : "hidden"
-        }`}
-      >
-        <div className="bg-white dark:bg-dark-bg w-full max-h-[500px]  overflow-auto md_:w-[65%] md-sm:w-[95%] rounded-lg p-4 pb-8">
-          <div className="card-title w-full flex flex-wrap justify-center items-center">
-            <h3 className="font-bold text-sm dark:text-white text-center w-11/12 ">
-              <icons.AiOutlineClose
-                className="float-right text-3xl cursor-pointer"
-                onClick={() => removeModal()}
-              />
-
-              {"CREATE PROGRAM"}
-            </h3>
-            <div className="flex flex-col w-full mt-14 md_:mt-5">
-              <form
-                onSubmit={handleSubmit}
-                className="flex flex-col md_:flex-row  space-y-7 md_:space-x-7 md_:space-y-0"
-              >
-                <div className="flex flex-col w-full md_:w-[300px] space-y-3">
-                  <div className="flex flex-col justify-center items-start space-y-2">
-                    <label className="font-bold text-black-text dark:text-white text-left">
-                      Program Title
-                    </label>
-                    <input
-                      type="text"
-                      name="title"
-                      className="dark:bg-dark-tertiary bg-slate-300 text-black dark:text-white border border-white py-2 px-5 rounded outline-none font-sans text-xs w-full"
-                      placeholder={"Program title"}
-                      value={submitData.title}
-                      onChange={handleInputChange}
-                    />
-                    {errors.title && (
-                      <span className="text-xs text-red-500">
-                        {errors.title}
-                      </span>
-                    )}
-                  </div>
-                  <div className="flex flex-col justify-center items-start space-y-2">
-                    <label className="font-bold text-black-text dark:text-white text-left">
-                      Program Description
-                    </label>
-                    <textarea
-                      name="description"
-                      className=" dark:bg-dark-tertiary bg-slate-300 text-black dark:text-white resize-none h-36 py-2 px-5 rounded outline-none font-sans text-xs w-full"
-                      placeholder={"Program Description"}
-                      value={submitData.description}
-                      onChange={handleInputChange}
-                    />
-                    {errors.description && (
-                      <span className="text-xs text-red-500">
-                        {errors.description}
-                      </span>
-                    )}
-                  </div>
-                  <div className="flex flex-col items-start space-y-2">
-                    <label className="font-bold text-black-text dark:text-white text-left">
-                      Main objective
-                    </label>
-                    <input
-                      type="text"
-                      name="mainObjective"
-                      className=" dark:bg-dark-tertiary bg-slate-300 text-black dark:text-white py-2 px-5 rounded outline-none font-sans text-xs w-full"
-                      placeholder={"e.g: Web development training..."}
-                      value={submitData.mainObjective}
-                      onChange={handleInputChange}
-                    />
-                    {errors.mainObjective && (
-                      <span className="text-xs text-red-500">
-                        {errors.mainObjective}
-                      </span>
-                    )}
-                  </div>
-                  <div className="flex flex-col items-start space-y-2">
-                    <label className="font-bold text-black-text dark:text-white text-left">
-                      Mode of execution
-                    </label>
-                    <input
-                      type="text"
-                      name="modeOfExecution"
-                      className=" dark:bg-dark-tertiary bg-slate-300 text-black dark:text-white py-2 px-5 rounded outline-none font-sans text-xs w-full"
-                      placeholder={"e.g: self-paced online, in-person..."}
-                      value={submitData.modeOfExecution}
-                      onChange={handleInputChange}
-                    />
-                    {errors.modeOfExecution && (
-                      <span className="text-xs text-red-500">
-                        {errors.modeOfExecution}
-                      </span>
-                    )}
-                  </div>
-                  
-                </div>
-              <div className="flex flex-col md_:justify-start md_:items-center w-full md_:w-[500px] space-y-3">
-                <div className="flex flex-col items-start space-y-2 mr-11">
-                    <label className="font-bold text-black-text dark:text-white text-left">
-                      Duration
-                    </label>
-                    <input
-                      type="text"
-                      name="duration"
-                      className=" dark:bg-dark-tertiary bg-slate-300 text-black dark:text-white py-2 px-5 rounded outline-none font-sans text-xs w-full"
-                      placeholder={"e.g: 6 months..."}
-                      value={submitData.duration}
-                      onChange={handleInputChange}
-                    />
-                    {errors.duration && (
-                      <span className="text-xs text-red-500">
-                        {errors.duration}
-                      </span>
-                    )}
-                  </div>
-                  <div className="flex flex-col items-start space-y-2">
-                    <label className="font-bold text-black-text dark:text-white text-left">
-                      Entry requirements
-                    </label>
-                    <div className="flex flex-row items-center space-x-3 w-full">
-                      <input
-                        type="text"
-                        name="entries"
-                        className=" dark:bg-dark-tertiary bg-slate-300 text-black dark:text-white py-2 px-5 rounded outline-none font-sans text-xs w-full"
-                        placeholder={"Entry requirement"}
-                        value={currentEntry}
-                        onChange={handleInputChange}
-                      />
-                      {errors.requirements && (
-                        <span className="text-xs text-red-500">
-                          {errors.requirements}
-                        </span>
-                      )}
-
-                      <button
-                        type="button"
-                        className="flex items-center justify-center bg-white text-dark-frame-bg transition-colors border border-black dark:border-transparent hover:bg-dark-frame-bg hover:text-white hover:border hover:border-white font-extrabold px-2 rounded"
-                        onClick={() => addEntry(currentEntry)}
-                      >
-                        +
-                      </button>
-                    </div>
-                    <div className="flex flex-col justify-center items-center space-y-2 overflow-auto">
-                      <div className="flex flex-col p-3 max-h-14 md_:max-h-96">
-                        {entries.length > 0 &&
-                          entries.map((item, index) => (
-                            <div
-                              key={index}
-                              className="flex flex-row items-center space-x-1"
-                            >
-                              <icons.AiOutlineArrowRight
-                                size={13}
-                                className="text-black-text dark:text-white"
-                              />
-                              <label className="text-black-text dark:text-white text-sm">
-                                {item}
-                              </label>
-                              <button
-                                type="button"
-                                className="bg-green-500 text-white px-4 py-2 rounded w-full md:w-auto self-start"
-                                onClick={() => removeEntry(item)}
-                              >
-                                -
-                              </button>
-                            </div>
-                          ))}
-                      </div>
-                    </div>
-
-                    <button
-                      type="submit"
-                      disabled={createProgramStates.loading}
-                      className="flex justify-self-start self-start rounded w-15 px-5 py-1 mt-10 bg-green text-white transition-colors hover:bg-dark-frame-bg hover:text-green hover:border hover:border-green"
-                    >
-                      {createProgramStates.loading ? "Submitting..." : "Submit"}
-                    </button>
-                  </div>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
+      {/* Create New Document */}
+     
       <div className="flex flex-col w-[100%]">
         <div className="flex flex-row">
           <div className="w-full">
@@ -454,12 +273,7 @@ const Programs = (props: any) => {
             <div className="w-full px-4 sm:px-6 lg:px-8 py-4">
               <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-4">
                   <div className="w-full sm:w-auto">
-                    <button
-                      onClick={Open}
-                      className="flex items-center justify-center w-full sm:w-auto bg-primary dark:bg-[#56C870] rounded-md py-2 px-4 text-white font-medium cursor-pointer hover:opacity-90 transition-opacity"
-                    >
-                      <icons.AiOutlinePlus className="mr-2" /> Program
-                    </button>
+                    
                   </div>
                   <div className="w-full sm:w-40">
                     <Select
@@ -506,16 +320,14 @@ const Programs = (props: any) => {
                             <thead className=" w-full px-32 sticky top-0">
                               <tr>
                                 <th className="p-6 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
-                                  {"Program Name"}
+                                  {"Documentation Name"}
                                 </th>
 
                                 <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left text-xs font-semibold text-gray-600 dark:text-white uppercase md:table-cell tracking-wider">
-                                  {"Main objective"}
+                                  {"Description"}
                                 </th>
 
-                                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
-                                  {"Mode of execution"}
-                                </th>
+                                
                                 {/* <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
                                 {"Requirements"}
                               </th> */}
@@ -550,65 +362,17 @@ const Programs = (props: any) => {
                                       </div>
                                     </td>
 
-                                    <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
-                                      <div className="flex items-center">
-                                        <div className="">
-                                          <p className="text-gray-900 items-center dark:text-white whitespace-no-wrap">
-                                            {item.modeOfExecution}
-                                          </p>
-                                        </div>
-                                      </div>
-                                    </td>
+                                    
                                     <td>
-                                      <div>
-                                        <HiDotsVertical
-                                          size={16}
-                                          onClick={(e: any) => {
-                                            e.preventDefault();
-                                            toogleActions(item._id);
-                                          }}
-                                          className="text-black dark:text-white text-3xl ml-6 font-size-6 cursor-pointer"
-                                        />
-                                        <div
-                                          className={`${actionsList === item._id
-                                              ? "block"
-                                              : "hidden"
-                                            } absolute  bg-white dark:bg-dark-tertiary  dark:text-white text-base z-50 list-none divide-y divide-gray-100 rounded shadow my-4`}
-                                          id="dropdown"
+                                      <div className="flex flex-row gap-2 mt-2 justify-center">
+                                        <Link
+                                          to={`/applicant/documents/${item._id}`}
+                                          replace
                                         >
-                                          <ul
-                                            className="py-1"
-                                            aria-labelledby="dropdown"
-                                          >
-                                            <li>
-                                              <Link
-                                                to={`/admin/program/${item._id}/edit`}
-                                                className="text-sm hover:bg-gray-100 text-gray-700 dark:hover:bg-gray-500 dark:text-white  block px-4 py-2"
-                                              >
-                                                Edit
-                                              </Link>
-                                            </li>
-                                            <li>
-                                              <Link
-                                                to={`/admin/program/${item._id}`}
-                                                className="text-sm hover:bg-gray-100 text-gray-700  dark:text-white   dark:hover:bg-gray-500 block px-4 py-2"
-                                              >
-                                                View
-                                              </Link>
-                                            </li>
-                                            <li>
-                                              <Link
-                                                to={`#`}
-                                                onClick={() =>
-                                                  handleDelete(item._id)
-                                                }
-                                                className="text-sm hover:bg-gray-100 text-gray-700  dark:hover:bg-gray-500 dark:text-white  block px-4 py-2"
-                                              >
-                                                Delete
-                                              </Link>
-                                            </li>
-                                          </ul>
-                                        </div>
+                                          <button className="flex bg-primary dark:bg-[#56C870] rounded-md py-2 px-4 text-white font-medium cursor-pointer">
+                                            More Details
+                                          </button>
+                                        </Link>
                                       </div>
                                     </td>
                                   </tr>
@@ -627,7 +391,7 @@ const Programs = (props: any) => {
                         </div>
                         <div className="flex md_:hidden flex-col gap-4 w-full rounded-lg">
                           <label className="text-left text-black-text dark:text-white text-lg font-bold">
-                            Programs
+                          Documentations
                           </label>
                           {allfilteredPrograms.data &&
                             allfilteredPrograms.data.map((item: any) => (
@@ -637,7 +401,7 @@ const Programs = (props: any) => {
                               >
                                 <div className="flex flex-col w-full mt-3">
                                   <label className="text-left text-gray-400 text-sm">
-                                    Program Title
+                                    Documentation Title
                                   </label>
                                   <label className="text-left text-black-text dark:text-white text-base font-normal">
                                     {item.title}
@@ -645,80 +409,28 @@ const Programs = (props: any) => {
                                 </div>
                                 <div className="flex flex-col w-full">
                                   <label className="text-left text-gray-400 text-sm">
-                                    Main objective
+                                    Description
                                   </label>
                                   <label className="text-left text-black-text dark:text-white text-base font-normal">
                                     {item.mainObjective}
                                   </label>
                                 </div>
-                                <div className="flex flex-col w-full">
-                                  <label className="text-left text-gray-400 text-sm">
-                                    Mode of execution
-                                  </label>
-                                  <label className="text-left text-black-text dark:text-white text-base font-normal">
-                                    {item.modeOfExecution}
-                                  </label>
-                                </div>
-                                <div className="flex flex-col w-full">
-                                  <label className="text-left text-gray-400 text-sm">
-                                    Duration
-                                  </label>
-                                  <label className="text-left text-black-text dark:text-white text-base font-normal">
-                                    {item.duration}
-                                  </label>
-                                </div>
-                                <div className="flex flex-col w-full">
-                                  <label className="text-left text-gray-400 text-sm">
-                                    Requirements
-                                  </label>
-                                  <div className="flex flex-row">
-                                    {item.requirements
-                                      .slice(0, 2)
-                                      .map((req: any, index: any) => (
-                                        <div key={req}>
-                                          {index < 1 ? (
-                                            <label className="text-left text-black-text dark:text-white text-xs font-normal">
-                                              {`${req} ${index + 1 !=
-                                                  item.requirements.length
-                                                  ? ","
-                                                  : ""
-                                                }`}
-                                            </label>
-                                          ) : (
-                                            <label className="text-left text-black-text dark:text-white text-xs font-normal">
-                                              {`and ${item.requirements.length - index
-                                                } more`}
-                                            </label>
-                                          )}
-                                        </div>
-                                      ))}
-                                  </div>
-                                </div>
+                                
+                                
                                 <div className="flex flex-col w-full">
                                   <label className="text-left text-gray-400 text-sm">
                                     Action
                                   </label>
                                   <div className="flex flex-row gap-2 mt-2">
-                                    <Link
-                                      to={`/program/${item._id}/edit`}
-                                      className="text-white bg-yellow-500 border border-solid border-yellow-500 rounded-md px-2 text-xs"
-                                    >
-                                      Edit
-                                    </Link>
-                                    <Link
-                                      to={`/program/${item._id}`}
-                                      className="text-white bg-green border border-solid border-green rounded-md px-2 text-xs"
-                                    >
-                                      View
-                                    </Link>
-                                    <Link
-                                      to={"#"}
-                                      className="text-white bg-red-700 border border-solid border-red-700 rounded-md px-2 text-xs"
-                                      onClick={() => handleDelete(item._id)}
-                                    >
-                                      Delete
-                                    </Link>
-                                  </div>
+                                        <Link
+                                          to={`/applicant/documents/${item._id}`}
+                                          replace
+                                        >
+                                          <button className="flex bg-primary dark:bg-[#56C870] rounded-md py-2 px-4 text-white font-medium cursor-pointer">
+                                            More Details
+                                          </button>
+                                        </Link>
+                                      </div>
                                 </div>
                               </div>
                             ))}
@@ -846,4 +558,4 @@ export default connect(mapState, {
   deleteProgramAction,
   getAllFilteredPrograms: getAllFilteredPrograms,
   getAllprograms: getAllprograms,
-})(Programs);
+})(ApplicantDocuments);

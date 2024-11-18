@@ -69,6 +69,11 @@ export const sidebarItems1 = [
     icon: <Icon icon="heroicons-outline:support"></Icon>,
     title: "Tickets",
   },
+  {
+    path: "documents",
+    icon: <Icon icon="heroicons:document-20-solid"></Icon>,
+    title: "Docs",
+  },
   // {
   //   path: "Trash",
   //   icon: <Icon icon="fa-solid:trash"></Icon>,
@@ -158,16 +163,18 @@ export const traineeSidebarItems = [
   },
 ];
 
+
+
 export const sidebarItems2 = [
-  {
-    path: "/documents",
-    icon: <Icon icon="heroicons:document-20-solid"></Icon>,
-    title: "Docs",
-  },
   {
     path: "Trash",
     icon: <Icon icon="fa-solid:trash"></Icon>,
     title: "Trash",
+  },
+  {
+    path: "documents",
+    icon: <Icon icon="heroicons:document-20-solid"></Icon>,
+    title: "Docs",
   },
 ];
 
