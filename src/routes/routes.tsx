@@ -525,7 +525,6 @@ function Navigation() {
           }
         />
       </Route>
-
       {/* Applicant Routes (Protected) */}
       <Route
         path="/applicant"
@@ -719,7 +718,6 @@ function Navigation() {
           }
         />
       </Route>
-
       <Route
         path="/trainee"
         element={
@@ -870,7 +868,6 @@ function Navigation() {
           }
         />
       </Route>
-
       {/* Catch-All Route */}
       <Route
         path="*"
