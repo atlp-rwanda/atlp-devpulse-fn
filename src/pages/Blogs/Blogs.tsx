@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { FaUser, FaCalendar } from "react-icons/fa";
+import { FaRegThumbsUp, FaCommentDots, FaUser, FaCalendar } from 'react-icons/fa';
+import { CiHeart } from "react-icons/ci";
 import { toast } from "react-toastify";
 import Header from "../../components/home/Header";
 import { fetchAllBlogs, Blog } from "../../redux/actions/blogsActions"; 
@@ -69,13 +70,25 @@ const Blogs: React.FC = () => {
                 <div className="p-3">
                   <div className="flex justify-between text-sm text-primary dark:text-white mb-4 items-center">
                     <div className="flex items-center gap-3">
-                    
-                      <span className="flex items-center gap-2">
-                      <FaCalendar size={20} className="dark:text-green" />
-                        {blog.created_at
-                         ? new Date(Number(blog.created_at)).toLocaleDateString()
-                          : "Unknown Date"}
-                      </span>
+                    <div className="flex flex-wrap items-center gap-3">
+          <span className="font-semibold flex flex-row gap-2 items-center">
+            <FaUser size={20} className='dark:text-green' /> {blog.author.firstname}
+          </span>
+          <span className="ml-2 flex flex-row gap-2 items-center">
+             <span className="ml-2 flex flex-row gap-2 items-center">
+             <FaCalendar size={20} className="dark:text-green" />
+               {blog.created_at
+                ? new Date(Number(blog.created_at)).toLocaleDateString()
+                 : "Unknown Date"}
+              </span>
+          </span>
+          <span className='flex flex-row gap-1 items-center'>
+            <CiHeart size={20} className='dark:text-green' /> {blog.likes || 0}
+          </span>
+          <span className='flex flex-row gap-1 items-center'>
+            <FaCommentDots size={20} className='dark:text-green' /> {blog.comments || 0}
+          </span>
+        </div>
                     </div>
                   </div>
                   <h3 className="text-xl font-semibold mb-2">{blog.title}</h3>

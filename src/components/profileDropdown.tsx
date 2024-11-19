@@ -62,7 +62,7 @@ function ProfileDropdown({
             }}
           >
             <Link
-              to="/login"
+              to="/"
               className="font-boldml-1 dark:text-black  cursor-pointer"
             >
               <>{t("Sign out")}</>

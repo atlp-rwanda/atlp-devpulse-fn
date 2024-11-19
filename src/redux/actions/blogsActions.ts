@@ -7,7 +7,10 @@ export interface Blog {
   id: string;
   title: string;
   content: string;
-  author: { name: string };
+  author: {
+    firstname: string;
+    lastname: string;
+};
   coverImage: string;
   images?: string[];
   isHidden?: boolean;
@@ -17,43 +20,45 @@ export interface Blog {
 }
 
 export const fetchAllBlogs = async (tag?: string): Promise<Blog[]> => {
-    try {
-      const response = await axios({
-        url: process.env.BACKEND_URL,
-        method: "post",
-        headers: { "Content-Type": "application/json" },
-        data: {
-          query: `
-            query GetAllBlogs($tag: String) {
-              getAllBlogs(tag: $tag) {
-                id
-                title
-                content
-                coverImage
-                images
-                isHidden
-                tags
-                created_at
-                updated_at
-               
+  try {
+    const response = await axios({
+      url: process.env.BACKEND_URL,
+      method: "post",
+      headers: { "Content-Type": "application/json" },
+      data: {
+        query: `
+          query GetAllBlogs($tag: String) {
+            getAllBlogs(tag: $tag) {
+              id
+              title
+              content
+              coverImage
+              images
+              isHidden
+              tags
+              created_at
+              updated_at
+              author {
+                firstname
+                lastname
               }
             }
-          `,
-          variables: { tag: tag || undefined },
-        },
-      });
-  
-      if (response.data.errors) {
-        console.error("GraphQL errors:", JSON.stringify(response.data.errors, null, 2));
-        toast.error("Error fetching blogs");
-        return [];
-      }
-  
-      return response.data.data.getAllBlogs as Blog[];
-    } catch (error: any) {
-      console.error("Error fetching blogs:", error.response?.data || error.message);
-      toast.error("Error connecting to the server");
+          }
+        `,
+        variables: { tag: tag || undefined },
+      },
+    });
+
+    if (response.data.errors) {
+      console.error("GraphQL errors:", JSON.stringify(response.data.errors, null, 2));
+      toast.error("Error fetching blogs");
       return [];
     }
-  };
-  
+
+    return response.data.data.getAllBlogs as Blog[];
+  } catch (error: any) {
+    console.error("Error fetching blogs:", error.response?.data || error.message);
+    toast.error("Error connecting to the server");
+    return [];
+  }
+};
