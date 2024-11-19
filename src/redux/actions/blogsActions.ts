@@ -34,14 +34,22 @@ export const fetchAllBlogs = async (tag?: string): Promise<Blog[]> => {
               content
               coverImage
               images
+              likes {
+                id
+              }
+              comments {
+                id
+              }
               isHidden
-              tags
-              created_at
-              updated_at
               author {
+                id
+                email
                 firstname
                 lastname
               }
+              tags
+              created_at
+              updated_at
             }
           }
         `,
