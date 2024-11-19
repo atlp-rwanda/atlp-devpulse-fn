@@ -34,18 +34,18 @@ const SingleBlogView = () => {
 
 
   return (
-    <div className="min-h-screen pt-8 w-full bg-slate-900 text-white p-6">
+    <div className="min-h-screen w-full pt-8 z-50 bg-slate-900 text-white p-6">
       {isLoading||!blog? (
          <SingleBlogSkeleton/>
-      ) : (<div>
+      ) : (<div className='min-h-screen w-ful text-white p-6'>
         <div className='flex my-4 flex-col items-end gap-0 w-full'>
           <div className='mb-8 w-full gap-8 flex flex-row items-start justify-between'>
             <div className='w-2/5 flex items-center'>
-               <img src={blog.coverImage}  alt={blog.title} className="w-full h-80 rounded-xl object-cover"/>
+               <img src={blog.coverImage}  alt={blog.author.firstname} className="w-full h-80 rounded-xl object-cover"/>
             </div>
-              <div className='w-3/5 '>
+              <div className='w-[45vw] px-4'>
                 <p className='text-sm mb-4 rounded-3xl w-fit py-1 px-4 bg-slate-800'>On {new Date(Number(blog.created_at)).toLocaleString()}</p>
-                <p className="text-2xl text-left font-bold">{blog.title}</p>
+                <p className=" text-2xl text-left break-words whitespace-normal overflow-wrap-break-word font-bold">{blog.title}</p>
                 <div className='mt-8 flex gap-4 items-center rounded-3xl w-fit py-1 px-4 bg-slate-800 text-white transition-colors'>
                    <User size={32} />
                    <div>

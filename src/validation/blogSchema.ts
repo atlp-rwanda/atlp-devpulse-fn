@@ -4,7 +4,6 @@ import joi from "joi";
 const blogSchema = joi.object({
   title: joi
     .string()
-    .pattern(/^[a-zA-Z0-9\s]+$/)
     .required(),
   content: joi.string().required(),
   tags: joi.array().required(),

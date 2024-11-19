@@ -249,6 +249,7 @@ const AllBlogs = () => {
                   type="text"
                   name="title"
                   value={submitData.title}
+                  maxLength={200}
                   onChange={handleInputChange}
                   className="border bg-black rounded px-4 py-2"
                   placeholder="Enter Blog Title"
@@ -263,6 +264,7 @@ const AllBlogs = () => {
                   onChange={handleInputChange}
                   className="border rounded bg-black px-4 py-2 h-24"
                   placeholder="Enter Blog Content"
+                  maxLength={2000}
                 />
                 {errors.content && <span className="text-red-500 text-xs">{errors.content}</span>}
               </div>
@@ -272,6 +274,7 @@ const AllBlogs = () => {
                   type="text"
                   name="tags"
                   value={tags}
+                  maxLength={100}
                   onChange={handleInputChange}
                   className="border rounded bg-black px-4 py-2"
                   placeholder="Tags"
@@ -357,11 +360,11 @@ const AllBlogs = () => {
                     className="w-28 h-28 object-cover rounded-md"
                   />
                </div>
-                <div className="flex-grow w-4/6">
-                  <h2 className="text-lg font-medium group-hover:text-green-400 transition-colors">
+                <div className="flex-grow w-4/6 px-2">
+                  <p className="text-lg font-medium break-words whitespace-normal overflow-wrap-break-word transition-colors">
                     {blog.title}
-                  </h2>
-                  <p className="text-slate-400 break w-2/3 text-sm line-clamp-2">{blog.content}</p>              
+                  </p>
+                  <p className="text-slate-400 break break-words text-sm line-clamp-2">{blog.content}</p>              
                 </div>
                 <div className="w-1/6 flex flex-col items-end text-sm text-slate-400">
                   <span>{`${blog.author.firstname} ${blog.author.lastname}`}</span>
