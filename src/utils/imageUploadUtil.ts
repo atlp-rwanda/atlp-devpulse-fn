@@ -1,8 +1,7 @@
 import { toast } from "react-toastify";
 import { uploadImageToCloudinary } from "./uploadImageToCloudinary";
 import { FieldValues, UseFormSetValue } from "react-hook-form";
-import { TuserSchema } from "./userSchema"; 
-
+import { TuserSchema } from "./userSchema";
 
 // Function to handle image file preview
 export const handleFilePreview = (
@@ -14,18 +13,33 @@ export const handleFilePreview = (
   reader.readAsDataURL(file);
 };
 
-
-
-
 // Function to upload image to cloudinary
+export const handleBlogImageUpload = async (
+  file: File,
+  setValue: UseFormSetValue<TuserSchema>,
+  setIsUploading: (status: boolean) => void
+): Promise<string | null> => {
+  setIsUploading(true);
+  try {
+    const imageUrl = await uploadImageToCloudinary(file);
+    setValue("picture", imageUrl.url);
+    return imageUrl.url;
+  } catch (error) {
+    console.error("Failed to upload image:", error);
+    toast.error("Failed to upload image. Please try again.");
+    return null;
+  } finally {
+    setIsUploading(false);
+  }
+};
+
 export const handleImageUpload = async (
   file: File,
-  setValue: UseFormSetValue<TuserSchema>, 
+  setValue: UseFormSetValue<TuserSchema>,
   setIsUploading: (status: boolean) => void
 ) => {
   setIsUploading(true);
   try {
-    
     const imageUrl: any = await uploadImageToCloudinary(file);
     setValue("picture", imageUrl.url);
   } catch (error) {
@@ -35,4 +49,3 @@ export const handleImageUpload = async (
     setIsUploading(false);
   }
 };
-
