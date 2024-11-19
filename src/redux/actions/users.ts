@@ -70,6 +70,22 @@ export const getSingleUser = (userId: string) => async (dispatch: any) => {
             telephone
             code
             picture
+            createdAt
+            role {
+              roleName
+            }
+            cohort {
+              id
+              cycle
+              end
+              phase
+              program
+              title
+              start
+
+            
+            }
+            applicationPhase
           }
         }
       `,

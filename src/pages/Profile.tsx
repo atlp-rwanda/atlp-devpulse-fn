@@ -12,7 +12,7 @@ import {
 import { Icon } from "@iconify/react";
 const Logo: string = require('../assets/andela-logo.svg').default;
 const coverImage: string = require("../assets/cover.png").default;
-// const DEFAULT_IMAGE: string = require("../../assets/default-image.jpg").default;
+const DEFAULT_IMAGE: string = require("../assets/default-image.jpg").default;
 
 const Profile = () => {
   const dispatch = useAppDispatch();
@@ -34,6 +34,12 @@ const Profile = () => {
         <div className="w-full h-[900px] flex flex-col mt-10 z-20  bg-light-bg dark:bg-dark-frame-bg ">
           <div className=" mt-[-40px] relative">
             <img src={userData.coverImage || coverImage} alt="coverimage" className="w-full h-60" />
+            <div className="w-full absolute top-20 px-8">
+              <span></span>
+              <div className="flex justify-between flex-wrap mt-5 relative">
+                <img src={DEFAULT_IMAGE} alt="Preview" className="rounded-full w-32 h-32" />
+              </div>
+            </div>
             <div className="w-full absolute top-20 px-8">
             
             </div>
@@ -90,28 +96,30 @@ const Profile = () => {
                   You in the organization
                 </h2>
                 <p>
-                  <span className="font-bold">Joined:</span> 20 July 2022
+                  <span className="font-bold">Joined:</span> {new Date(parseInt(userData.createdAt)).toLocaleDateString()}
                 </p>
                 <p>
-                  <span className="font-bold">Role:</span> Trainee
+                  <span className="font-bold">Role:</span> {userData.role.roleName}
                 </p>
                 <p>
-                  <span className="font-bold">Team:</span> Codebandits
+                  <span className="font-bold">Team:</span> N/A
                 </p>
               </div>
-              <div className="bg-white  dark:bg-dark-bg shadow-lg rounded-md dark:text-white p-5 flex flex-col gap-2 flex-1">
+              {role !== 'admin' && role !== 'superAdmin' && (
+                <div className="bg-white  dark:bg-dark-bg shadow-lg rounded-md dark:text-white p-5 flex flex-col gap-2 flex-1">
                 <h2 className="pb-4 text-green font-semibold">Management</h2>
                 <p>
-                  <span className="font-bold">Program:</span> 20 July 2022
+                  <span className="font-bold">Program:</span> {userData.cohort?.program || 'N/A'}
                 </p>
                 <p>
-                  <span className="font-bold">Current Stage:</span> Core
-                  concepts
+                  <span className="font-bold">Current Stage:</span> {userData.cohort?.phase || userData.applicationPhase || 'N/A'}
                 </p>
                 <p>
-                  <span className="font-bold">Manager:</span>Mukunzi Dodo
+                  <span className="font-bold">Manager:</span>N/A
                 </p>
               </div>
+              )}
+              
             </div>
           </div>
         </div>
