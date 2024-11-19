@@ -71,9 +71,9 @@ const Blogs: React.FC = () => {
                   <div className="flex justify-between text-sm text-primary dark:text-white mb-4 items-center">
                     <div className="flex items-center gap-3">
                     <div className="flex flex-wrap items-center gap-3">
-          <span className="font-semibold flex flex-row gap-2 items-center">
+          {/* <span className="font-semibold flex flex-row gap-2 items-center">
             <FaUser size={20} className='dark:text-green' /> {blog.author.firstname}
-          </span>
+          </span> */}
           <span className="ml-2 flex flex-row gap-2 items-center">
              <span className="ml-2 flex flex-row gap-2 items-center">
              <FaCalendar size={20} className="dark:text-green" />

@@ -10,10 +10,6 @@ interface Blog {
   id: string;
   title: string;
   content: string;
-  author: {
-    firstname: string;
-    lastname: string;
-  };
   coverImage: string;
   created_at: string;
   likes?: number;
@@ -27,9 +23,9 @@ const BlogCard = ({ blog }: { blog: Blog }) => (
     <div className="p-3">
       <div className="flex justify-between text-sm mb-4 items-center">
         <div className="flex flex-wrap items-center gap-3">
-          <span className="font-semibold flex flex-row gap-2 items-center">
+          {/* <span className="font-semibold flex flex-row gap-2 items-center">
             <FaUser size={20} className='dark:text-green' /> {blog.author.firstname}
-          </span>
+          </span> */}
           <span className="ml-2 flex flex-row gap-2 items-center">
              <span className="ml-2 flex flex-row gap-2 items-center">
              <FaCalendar size={20} className="dark:text-green" />
