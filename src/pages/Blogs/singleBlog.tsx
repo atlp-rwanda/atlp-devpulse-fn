@@ -27,6 +27,7 @@ const SingleBlogView = () => {
 
   const { data ,isLoading} = useAppSelector((state) => ({data:state.singleBlog.data,isLoading:state.singleBlog.isLoading}));
   const blog = data;
+  console.log(blog);
   useEffect(() => {
      if(id)
       dispatch(getBlogById(id));
@@ -34,19 +35,19 @@ const SingleBlogView = () => {
 
 
   return (
-    <div className="min-h-screen w-full pt-8 z-50 bg-slate-900 text-white p-6">
+    <div className="min-h-screen w-full pt-8 bg-white dark:bg-slate-900 text-black dark:text-white p-6">
       {isLoading||!blog? (
          <SingleBlogSkeleton/>
-      ) : (<div className='min-h-screen w-ful text-white p-6'>
+      ) : (<div className='min-h-screen w-ful dark:text-white p-6'>
         <div className='flex my-4 flex-col items-end gap-0 w-full'>
           <div className='mb-8 w-full gap-8 flex flex-row items-start justify-between'>
             <div className='w-2/5 flex items-center'>
                <img src={blog.coverImage}  alt={blog.author.firstname} className="w-full h-80 rounded-xl object-cover"/>
             </div>
               <div className='w-[45vw] px-4'>
-                <p className='text-sm mb-4 rounded-3xl w-fit py-1 px-4 bg-slate-800'>On {new Date(Number(blog.created_at)).toLocaleString()}</p>
-                <p className=" text-2xl text-left break-words whitespace-normal overflow-wrap-break-word font-bold">{blog.title}</p>
-                <div className='mt-8 flex gap-4 items-center rounded-3xl w-fit py-1 px-4 bg-slate-800 text-white transition-colors'>
+                <p className='text-sm mb-4 rounded-3xl w-fit py-1 px-4 bg-slate-300 dark:bg-slate-800'>On {new Date(Number(blog.created_at)).toLocaleString()}</p>
+                <p className=" text-2xl text-left break-words whitespace-normal overflow-wrap-break-word font-semibold">{blog.title}</p>
+                <div className='mt-8 flex gap-4 items-center rounded-3xl w-fit py-1 px-4 bg-slate-300 dark:bg-slate-800 dark:text-white transition-colors'>
                    <User size={32} />
                    <div>
                        <p className="text-md text-left">{`${blog.author.firstname} ${blog.author.lastname}`}</p>
@@ -55,8 +56,8 @@ const SingleBlogView = () => {
                 </div>
             </div>
           </div>
-          <div className='flex gap-4 flex-col items-start'>
-            <p className="text-slate-300 w-[80%] leading-relaxed">
+          <div className='flex gap-4 flex-col w-full items-start'>
+            <p className="dark:text-slate-300 w-[80%] leading-relaxed">
               {blog.content}
               </p>
               <div className='flex itmes-start gap-4 flex-row'>
@@ -74,16 +75,13 @@ const SingleBlogView = () => {
                     </div>
                 }
               </div>
-            <div className="grid grid-cols-4 mt-2 gap-2">
-               {blog.images.map((image, index) => (
-                <img
-                  key={index}
-                  src={image}
-                  alt={`Gallery ${index + 1}`}
-                  className="w-32 h-32 object-cover rounded-md"
-                />
-              ))} 
-            </div>
+              {blog.images.length > 0 && (
+                  <div className="grid grid-cols-4 mt-2 gap-2">
+                   {blog.images.map((image, index) => (
+                   <img key={index} src={image} alt={`Gallery ${index + 1}`} className="w-32 h-32 object-cover rounded-md"/>
+                     ))}
+                  </div>
+                )}
           </div>
         </div>
         <div className="flex items-center gap-4">
@@ -92,23 +90,22 @@ const SingleBlogView = () => {
             className="flex items-center gap-2"
           >
             <Heart
-              className={`w-6 h-6 ${isLiked ? 'fill-green-400 text-green-400' : 'text-white'}`}
+              className={`w-6 h-6 ${isLiked ? 'fill-green-400 text-green-400' : 'dark:text-white'}`}
             />
             <span>{blog.likes.length}</span>
           </button>
         </div>
-
         <div className="flex flex-row my-2 gap-4 w-full items-center justify-start">
           <input
             type="text"
             value={comment}
             onChange={(e) => setComment(e.target.value)}
             placeholder="Add your comment here..."
-            className="px-4 py-2 w-1/2 bg-slate-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400"
+            className="px-4 py-2 w-1/2 dark:bg-slate-800 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400"
           />
           <button
             onClick={handleComment}
-            className="rounded py-1 px-4 bg-green text-white transition-colors hover:bg-dark-frame-bg hover:text-green hover:border hover:border-green"
+            className="rounded py-1 px-4 bg-green text-white transition-colors dark:hover:bg-dark-frame-bg hover:text-green hover:border hover:border-green"
           >
             Comment
           </button>
@@ -118,9 +115,9 @@ const SingleBlogView = () => {
           {blog.comments.length > 0 ?
             (<>
               {blog.comments.map((comment) => (
-                <div key={comment.id} className="bg-slate-800 rounded-lg p-4 space-y-2">
+                <div key={comment.id} className="dark:bg-slate-800 bg-slate-400 rounded-lg p-4 space-y-2">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-slate-700 rounded-full overflow-hidden">
+                    <div className="w-10 h-10 bg-slate-300 dark:bg-slate-700 rounded-full overflow-hidden">
                       <img
                         src="/api/placeholder/40/40"
                         alt={comment.user.firstname}
@@ -135,7 +132,7 @@ const SingleBlogView = () => {
               
                   <p className="text-slate-300">{comment.content}</p>
               
-                  <div className="flex items-center gap-4 text-sm text-slate-400">
+                  <div className="flex items-center gap-4 text-sm dark:text-slate-400">
                     <button className="flex items-center gap-1">
                       <MessageCircle className="w-4 h-4" />
                       {comment.replies.length} Replies

@@ -63,14 +63,15 @@ const AllBlogs = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [addNewBlogModal, setAddNewBlogModal] = useState(false);
+  const [addingBlog, setAddingBlog] = useState(false);
   const [manyImaages, setManyImages] = useState(false);
   const [tags, setTags] = useState('');
   const [submitData, setSubmitData] = useState<SubmitData>({
     title: "",
     content: "",
-    tags: [""],
+    tags: [],
     coverImage:"",
-    images: [""],
+    images: [],
   });
   const [errors, setErrors] = useState({
     title: "",
@@ -217,7 +218,9 @@ const AllBlogs = () => {
       author: userId,
       tags: submitData.tags || []
     };
+    setAddingBlog(true);
     await dispatch(createBlogAction(obj));
+    setAddingBlog(false);
     removeModal();
     dispatch(getBlogsByAuthor(String(userId)));
   } catch (error) {
@@ -229,9 +232,9 @@ const AllBlogs = () => {
   
   
   return (
-    <div className="min-h-screen w-full bg-slate-900 text-white p-6">
+    <div className="min-h-screen bg-white w-full dark:bg-slate-900 dark:text-white p-6">
        {addNewBlogModal && (
-        <div className="fixed inset-0 mt-16 p-0 flex items-center justify-center bg-black bg-opacity-40">
+        <div className="fixed inset-0 mt-16 p-0 flex items-center justify-center bg-black bg-opacity-20 dark:bg-opacity-40">
           <div className="bg-white dark:bg-dark-bg w-11/12 md:w-3/5 lg:w-2/5 rounded-lg p-6">
             <div className="w-full flex mb-2 items-center justify-between"> 
             <h3 className="font-bold text-m dark:text-white ">
@@ -251,7 +254,7 @@ const AllBlogs = () => {
                   value={submitData.title}
                   maxLength={200}
                   onChange={handleInputChange}
-                  className="border bg-black rounded px-4 py-2"
+                  className="border focus:ring-2 focus:ring-white dark:bg-black rounded px-4 py-2"
                   placeholder="Enter Blog Title"
                 />
                 {errors.title && <span className="text-red-500 text-xs">{errors.title}</span>}
@@ -262,7 +265,7 @@ const AllBlogs = () => {
                   name="content"
                   value={submitData.content}
                   onChange={handleInputChange}
-                  className="border rounded bg-black px-4 py-2 h-24"
+                  className="border rounded focus:ring-2 focus:ring-white dark:bg-black px-4 py-2 h-24"
                   placeholder="Enter Blog Content"
                   maxLength={2000}
                 />
@@ -276,7 +279,7 @@ const AllBlogs = () => {
                   value={tags}
                   maxLength={100}
                   onChange={handleInputChange}
-                  className="border rounded bg-black px-4 py-2"
+                  className="border rounded focus:ring-2 focus:ring-white dark:bg-black px-4 py-2"
                   placeholder="Tags"
                 />
                 {errors.tags && <span className="text-red-500 text-xs">{errors.tags}</span>}
@@ -288,7 +291,7 @@ const AllBlogs = () => {
                   name="coverImage"
                   accept="image/*"
                   onChange={handleInputChange}
-                  className="border rounded bg-black px-4 py-2"
+                  className="border rounded focus:ring-2 focus:ring-white dark:bg-black px-4 py-2"
                 />
                 {errors.coverImage && <span className="text-red-500 text-xs">{errors.coverImage}</span>}
               </div>
@@ -301,7 +304,7 @@ const AllBlogs = () => {
                   maxLength={4}
                   accept="image/*"
                   onChange={handleInputChange}
-                  className="border rounded bg-black px-4 py-2"
+                  className="border rounded dark:bg-black px-4 py-2"
                   placeholder="Upload images"
                 />
                 {manyImaages && <span className="text-red-500 text-xs">Images should not exceed 4</span>}
@@ -310,10 +313,10 @@ const AllBlogs = () => {
 
              <button
                       type="submit"
-                      disabled={isUploading}
+                      disabled={isUploading||addingBlog}
                       className="w-1/3 rounded w-15 px-5 py-1 mt-10 bg-green text-white transition-colors hover:bg-dark-frame-bg hover:text-green hover:border hover:border-green"
                     >
-                     {isUploading && <Spinner/> } {isUploading ? "Submitting..." : "Submit"}
+                     {isUploading || addingBlog && <Spinner/> } {isUploading ||addingBlog ? "Submitting..." : "Submit"}
                   </button>
             </form>
           </div>
@@ -335,7 +338,7 @@ const AllBlogs = () => {
           <h1 className="text-2xl font-semibold">All Blogs</h1>
           {userId && role && role == 'applicant' &&
             <div className="w-full sm:w-auto">
-            <button disabled={isLoading} onClick={Open} className="flex items-center justify-center w-full sm:w-auto bg-primary dark:bg-[#56C870] rounded-md py-2 px-4 text-white font-medium cursor-pointer hover:opacity-90 transition-opacity" >
+              <button disabled={isLoading} onClick={Open} className={`flex items-center justify-center w-full sm:w-auto ${isLoading ? 'bg-emerald-300': 'bg-primary dark:bg-[#56C870]'}  rounded-md py-2 px-4 text-white font-medium cursor-pointer hover:opacity-90 transition-opacity`} >
                <icons.AiOutlinePlus className="mr-2" /> Blog
                 </button>
               </div>
@@ -351,7 +354,7 @@ const AllBlogs = () => {
               <div
                 key={blog.id}
                 onClick={() => handleBlogClick(blog.id)}
-                className="flex items-center gap-4 bg-slate-800 px-4 py-2 rounded-lg hover:bg-slate-700 transition-colors cursor-pointer group"
+                className="flex items-center gap-4  bg-slate-100 dark:bg-slate-800 px-4 hover:bg-slate-50 py-2 rounded-lg dark:hover:bg-slate-700 transition-colors cursor-pointer group"
               >
                 <div className="h-fit w-1/6 rounded-lg">
                   <img
@@ -364,17 +367,17 @@ const AllBlogs = () => {
                   <p className="text-lg font-medium break-words whitespace-normal overflow-wrap-break-word transition-colors">
                     {blog.title}
                   </p>
-                  <p className="text-slate-400 break break-words text-sm line-clamp-2">{blog.content}</p>              
+                  <p className="dark:text-slate-400 text-slate-800 break break-words text-sm line-clamp-2">{blog.content}</p>              
                 </div>
-                <div className="w-1/6 flex flex-col items-end text-sm text-slate-400">
+                <div className="w-1/6 flex flex-col items-end text-sm dar:text-slate-400">
                   <span>{`${blog.author.firstname} ${blog.author.lastname}`}</span>
                   <span>{new Date(Number(blog.created_at)).toLocaleString()}</span>
                 </div>
               </div>
             ))
           ) : (
-           <div className="flex flex-col items-center justify-center py-12 text-gray-500">
-  <div className="bg-gray-100 rounded-full p-6 mb-4 shadow-lg">
+           <div className="flex flex-col items-center justify-center py-12 dark:text-gray-500">
+  <div className="dark:bg-gray-100 rounded-full p-6 mb-4 shadow-lg">
     <svg
       xmlns="http://www.w3.org/2000/svg"
       className="h-12 w-12 text-gray-400"
@@ -390,8 +393,8 @@ const AllBlogs = () => {
       />
     </svg>
   </div>
-  <h2 className="text-2xl font-semibold text-gray-700 mb-2">No Blogs Available</h2>
-  <p className="text-gray-500 text-sm mb-6">
+  <h2 className="text-2xl font-semibold dark:text-gray-700 mb-2">No Blogs Available</h2>
+  <p className="dark:text-gray-500 text-sm mb-6">
     It looks like there are no blog posts yet. Check back soon for updates!
   </p>
 </div>
