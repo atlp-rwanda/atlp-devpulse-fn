@@ -103,6 +103,7 @@ function Navigation() {
       <Route path="/verifyEmail" element={<VerifyEmail />} />
       <Route path="/pageNotFound" element={<PageNotFound />} />
       <Route path="settings" element={<Settings />} />
+      <Route path="blogs/:id" element={<SingleBlogView />} />
       <Route
         path="/"
         element={
