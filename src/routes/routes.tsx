@@ -67,6 +67,7 @@ import SignupPage from "./../pages/SignupPage";
 import ApplicantStages from "./../pages/TraineApplicant/ApplicantStages";
 import AdminNotification from "../pages/AdminNotifications/AdminNotifications";
 import { MyApplication } from "../pages/ApplicationCycle/myApplication";
+import ApplyJobPost from "../pages/ApplyJobPost"
 
 import TraineeApply from "../pages/TraineeApply/TraineeApply";
 import TraineeAttribute from "../pages/TraineeApply/TraineeAttribute";
@@ -565,7 +566,15 @@ function Navigation() {
           }
         />
         <Route
-          path="interviewScheduler"
+          path="available-job/:id/apply/submit"
+          element={
+            <PrivateRoute allowedRoles={['applicant']}>
+              <ApplyJobPost />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="available-job/:id/apply/submit"
           element={
             <PrivateRoute allowedRoles={["applicant"]}>
               <ScheduleInterview />

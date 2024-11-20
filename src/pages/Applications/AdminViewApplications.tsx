@@ -5,15 +5,35 @@ import { Pagination } from "flowbite-react";
 import ApplicationTable from "../../components/application/ApplicationTable";
 import ApplicationFilter from "../../components/application/ApplicationFilter";
 import { ApplicationsSkeleton } from "../../skeletons/applicationsSkeleton";
+import axiosClient from '../../redux/actions/axiosconfig'
+import { toast } from "react-toastify";
+
+// interface Application {
+//   _id: string;
+//   firstName: string;
+//   lastName: string;
+//   email: string;
+//   gender: string;
+//   status: string;
+//   dateOfSubmission: string;
+// }
 interface Application {
-  _id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  gender: string;
-  status: string;
-  dateOfSubmission: string;
+  _id:string,
+  userId?: {
+    _id:string,
+    firstname: string,
+    lastname: string,
+    email: string,
+    gender: string,
+  },
+  jobId?:{
+    _id:string,
+    title:string
+  },
+  status:string,
+  createdAt: string
 }
+
 interface FilterAndSortOptions {
   applications: Application[];
   searchTerm: string;
@@ -33,19 +53,12 @@ const ApplicationList = () => {
   const [sortOrder, setSortOrder] = useState("desc");
   const [isLoading, setIsLoading] = useState(true);
 
+
   useEffect(() => {
-    const applicationsData = async () => {
-      setIsLoading(true);
-      const data = await fetchApplications();
-      if (data && !data.error && data.data && data.data.applications) {
-        setApplications(data.data.applications);
-      } else {
-        setApplications([]);
-      }
-      setIsLoading(false);
-    };
-    applicationsData();
-  }, []);
+    (async() => {
+      await getAllJobApplications()
+    })()
+  },[])
 
   useEffect(() => {
     const filtered = filterAndSortApplications({
@@ -70,6 +83,49 @@ const ApplicationList = () => {
   };
 
   const totalApplications = applications.length;
+
+  const getAllJobApplications = async() => {
+    const query = `query GetAllJobApplications {
+      getAllJobApplications {
+        _id
+        userId {
+          _id
+          email
+          gender
+          firstname
+          lastname
+        }
+        jobId {
+          _id
+          title
+        }
+        status
+        createdAt
+      }
+    }`
+
+    try {
+      setIsLoading(true)
+      const response = await axiosClient.post(
+        '/',
+        {
+          query: query,
+        },
+      );
+
+      setIsLoading(false)
+      
+      if(response.data.errors){
+          toast.error(response.data.errors[0].message)
+          return
+      }
+
+      setApplications(response.data.data.getAllJobApplications)
+    } catch (error) {
+      setIsLoading(false)
+      console.log(error)
+    }
+  }  
 
   return (
     <>
@@ -142,7 +198,7 @@ function filterAndSortApplications({
 
   if (searchTerm) {
     filtered = filtered.filter((app) =>
-      `${app.firstName} ${app.lastName} ${app.email}`
+      `${app.userId?.firstname} ${app.userId?.lastname} ${app.userId?.email} ${app.jobId?.title}`
         .toLowerCase()
         .includes(searchTerm.toLowerCase())
     );
@@ -153,10 +209,18 @@ function filterAndSortApplications({
   }
 
   return filtered.sort((a, b) => {
+    const getValue = (obj: any, path: string) =>
+      path.split('.').reduce((acc, key) => acc && acc[key], obj);
+
+    const aValue = getValue(a, sortBy);
+    const bValue = getValue(b, sortBy);
+
+    if (aValue === bValue) return 0;
+
     if (sortOrder === "asc") {
-      return a[sortBy] > b[sortBy] ? 1 : -1;
+      return aValue > bValue ? 1 : -1;
     } else {
-      return a[sortBy] < b[sortBy] ? 1 : -1;
+      return aValue < bValue ? 1 : -1;
     }
   });
 }

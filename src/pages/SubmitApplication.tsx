@@ -1,4 +1,4 @@
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import NavBar from "../components/sidebar/navHeader";
 import React, { useEffect, useState } from "react";
 import { fetchSingleJobPost } from "../redux/actions/fetchSingleJobPostAction";
@@ -6,6 +6,9 @@ import { connect, useDispatch } from "react-redux";
 import { showErrorToast, showSuccessToast } from "../utils/toast";
 import axios from "axios";
 import jwtDecode from "jwt-decode";
+import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+import axiosClient from '../redux/actions/axiosconfig'
 
 type Props = {};
 interface data {
@@ -21,6 +24,49 @@ const SubmitApplication: React.FC = (props: any) => {
   const { id } = useParams();
   const loggedUser:data | null = localStorage.getItem('access_token') ? jwtDecode(localStorage.getItem('access_token') as string) : null;
   const [loading, setLoading] = useState(false);
+  const [hasApplied, setHasApplied] = useState(false)
+  const navigate = useNavigate()
+
+  const checkIfUserApplied = async() => {
+    const query = `
+      query CheckIfUserApplied($input: CheckIfUserAppliedInput!) {
+        checkIfUserApplied(input: $input) {
+          status
+        }
+      }
+    `;
+
+    const variables = {
+      input: {
+        jobId: id
+      }  
+    };
+
+    try {
+        const response = await axiosClient.post(
+        '/',
+        {
+            query: query,
+            variables: variables,
+        },
+        );
+        
+        if(response.data.errors){
+            toast.error(response.data.errors[0].message)
+            return
+        }
+
+        setHasApplied(response.data.data.checkIfUserApplied.status)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  useEffect(() => {
+    (async() => {
+      await checkIfUserApplied()
+    })()
+  },[])
   
   useEffect(() => {
     dispatch(fetchSingleJobPost(id));
@@ -41,6 +87,12 @@ console.log(fetchSingleJobPostStates)
       return updateLink;
     }
   };
+
+  const handleClick = () => {
+    if(!hasApplied){
+      navigate(`/applicant/available-job/${id}/apply/submit`)
+    }
+  }
 
   return (
     <>
@@ -84,15 +136,14 @@ console.log(fetchSingleJobPostStates)
               {/* FORM */}
               <div className="flex justify-center w-full mb-8">
 
-                <a
-                  // href={`${fetchSingleJobPostStates.data.link}&entry.978913318=${loggedUser?.data?.userId}`}
-                  href={`${validateLink(fetchSingleJobPostStates.data.link)}`}
-                  target="_blank"
-                  className="bg-primary dark:bg-[#56C870] rounded-md py-2 px-4 
-                    text-white font-medium transition-opacity duration-200"
+                <button
+                  onClick={handleClick}
+                  disabled={hasApplied}
+                  className={`bg-primary dark:bg-[#56C870] rounded-md py-2 px-4 
+                    text-white font-medium transition-opacity duration-200 ${hasApplied ? 'cursor-not-allowed':'cursor-pointer'}`}
                 >
                   Apply here
-                </a>
+                </button>
               </div>
             </div>
           )}
