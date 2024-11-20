@@ -3,6 +3,9 @@ import { createBlog, updateBlog, deleteBlog } from "../actiontypes/blogTypes";
 import { toast } from "react-toastify";
 import creator from "./creator";
 import {
+  FETCH_BLOG_RELATED_ARTICLE_FAIL,
+  FETCH_BLOG_RELATED_ARTICLE_LOADING,
+  FETCH_BLOG_RELATED_ARTICLE_SUCCESS,
   FETCH_BLOGS_FAIL,
   FETCH_BLOGS_LOADING,
   FETCH_BLOGS_SUCCESS,
@@ -286,6 +289,42 @@ export const deleteBlogAction = (id: string) => async (dispatch: any) => {
   } catch (err: any) {
     dispatch({
       type: deleteBlog.DELETE_BLOG_FAIL,
+      error: err.message,
+    });
+    toast.error(err.message);
+  }
+};
+
+
+// Fetch related articles by blog ID
+export const getBlogRelatedArticles = (blogId: string) => async (dispatch: any) => {
+  dispatch({
+    type:  FETCH_BLOG_RELATED_ARTICLE_LOADING,
+  });
+
+  try {
+    const response = await axios.post("/", {
+     query: `query blogRelatedArticles($blogId: String!) {
+        blogRelatedArticles(blogId: $blogId) {
+          title
+          url
+          source
+          description
+          image
+          publishedAt
+        }
+      }`,
+      variables: { blogId },
+    });
+ 
+    const relatedArticles = response.data.data.blogRelatedArticles;
+    dispatch({
+      type:  FETCH_BLOG_RELATED_ARTICLE_SUCCESS,
+      payload: relatedArticles,
+    });
+  } catch (err: any) {
+      dispatch({
+      type:  FETCH_BLOG_RELATED_ARTICLE_FAIL,
       error: err.message,
     });
     toast.error(err.message);
