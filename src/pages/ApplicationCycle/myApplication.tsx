@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import { toast, ToastContainer } from "react-toastify";
+import { AiFillFilePdf } from "react-icons/ai"
 
 import {
     getApplicantCyclesApplications,
     getCyclesApplicationAttributes,
     getCyclesStages
 } from "../../redux/actions/applications";
+import { Link } from "react-router-dom";
 
 export const MyApplication = () => {
     const dispatch = useAppDispatch();
@@ -151,7 +153,60 @@ export const MyApplication = () => {
                             </ul>
                         </div>
                     </div>
-
+                    {(application?.coverLetterUrl || application?.resumeUrl || application?.idDocumentUrl) && (
+                        <div className="mb-6 p-4 border border-gray-300 rounded-lg bg-gray-100 dark:bg-gray-800 dark:border-gray-700">
+                            <h3 className="mb-4 text-lg font-semibold text-green-700 dark:text-[#56C870]">
+                                Supporting Documents
+                            </h3>
+                            <ul className="flex flex-col gap-4">
+                                {application?.idDocumentUrl && (
+                                    <li className="flex flex-col">
+                                        <strong className="text-gray-700 dark:text-gray-200">
+                                            ID Card
+                                        </strong>
+                                        <Link
+                                            to={application.idDocumentUrl}
+                                            target="_blank"
+                                            className="flex items-center gap-2 text-blue-600 dark:text-blue-400 hover:underline mt-1"
+                                        >
+                                            <AiFillFilePdf size={20} className="text-red-600" />
+                                            <span>View ID Card</span>
+                                        </Link>
+                                    </li>
+                                )}
+                                {application?.resumeUrl && (
+                                    <li className="flex flex-col">
+                                        <strong className="text-gray-700 dark:text-gray-200">
+                                            Resume
+                                        </strong>
+                                        <Link
+                                            to={application.resumeUrl}
+                                            target="_blank"
+                                            className="flex items-center gap-2 text-blue-600 dark:text-blue-400 hover:underline mt-1"
+                                        >
+                                            <AiFillFilePdf size={20} className="text-red-600" />
+                                            <span>View Resume</span>
+                                        </Link>
+                                    </li>
+                                )}
+                                {application?.coverLetterUrl && (
+                                    <li className="flex flex-col">
+                                        <strong className="text-gray-700 dark:text-gray-200">
+                                            Cover Letter
+                                        </strong>
+                                        <Link
+                                            to={application.coverLetterUrl}
+                                            target="_blank"
+                                            className="flex items-center gap-2 text-blue-600 dark:text-blue-400 hover:underline mt-1"
+                                        >
+                                            <AiFillFilePdf size={20} className="text-red-600" />
+                                            <span>View Cover Letter</span>
+                                        </Link>
+                                    </li>
+                                )}
+                            </ul>
+                        </div>
+                    )}
                     <section>
                         <h3 className="text-2xl font-bold text-primary dark:text-[#56C870] mb-4">Application Stages</h3>
                         <p className="mb-3">
@@ -219,7 +274,7 @@ export const MyApplication = () => {
                                                     &nbsp; ({formatDate(history.enteredAt)} - {formatDate(history.exitedAt)})
                                                 </strong>
                                             ))}
-                                        {stages.interview?.interviewScore && <p><b>Status:</b> {stages.interview.interviewScore}</p>}
+                                        {stages.interview?.interviewScore && <p><b>Score:</b> {stages.interview.interviewScore}</p>}
                                         {stages.interview?.status && <p><b>Status:</b> {stages.interview.status}</p>}
                                         {stages.interview?.comments && <p><b>Comments:</b> {stages.interview.comments}</p>}
                                         {stages.interview?.createdAt && <p><b>Date:</b> {formatDate(stages.interview.createdAt)}</p>}
