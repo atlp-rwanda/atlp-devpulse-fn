@@ -28,6 +28,8 @@ import LoadingSkeleton from "../../skeletons/loadingSkeleton";
 import { useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 import ScheduleTechnical from "../../components/Invitation/ScheduleTechnical";
+import axios from "axios";
+import { exportToExcel } from "../../utils/exports/exportToExcel";
 
 const ApplicantStages = (props: any) => {
   // New state for search input and search field
@@ -44,7 +46,7 @@ const ApplicantStages = (props: any) => {
   const [isMore, setIsMore] = useState("");
   const [loading, setLoading] = useState(true);
   const [loadingFilter, setLoadingFilter] = useState(true);
-  const [filterStages, setFilterStages] = useState("All");
+  const [filterStages, setFilterStages] = useState<string>("All");
   const [filteredTraines, setFilteredTraines] = useState([]);
 
   // LIST ALL TRAINEE
@@ -181,9 +183,35 @@ const ApplicantStages = (props: any) => {
   };
 
   const handleReload = async () => {
-    setIsMore("");
     await dispatch(fetchtraine(input));
     await dispatch(filterStage(filterStages));
+    setIsMore("");
+  };
+
+  const handleToExport = async (stage: string) => {
+    let data;
+    setIsOpen((prev) => !prev)
+    switch (stage) {
+      case "All":
+        data = filteredTrainees.filter(
+          (item: any) => item.applicationPhase === "Technical Assessment"
+        );
+  
+        // Call exportToExcel function
+        exportToExcel({ data, docName: 'All Technical Assessment Data' });
+        break;
+  
+      case "Technical Assessment":
+        // Use pre-filtered data (filterData)
+        data = filterData;
+  
+        // Call exportToExcel function
+        exportToExcel({ data, docName: 'Technical Assessment Stage Data' });
+        break;
+  
+      default:
+        console.log("Invalid stage");
+    }
   };
 
   return (
@@ -233,24 +261,77 @@ const ApplicantStages = (props: any) => {
             </div>
           </div>
         </div>
-        <div className={`flex gap-5 py-4 ${theme ? customTheme : darkTheme}`}>
-          {stages.map((stage) => (
+        <div className="flex justify-between items-center">
+          <div className={`flex gap-5 py-4 ${theme ? customTheme : darkTheme}`}>
+            {stages.map((stage) => (
+              <button
+                key={stage.value}
+                className={`text-sm rounded-md px-3 py-2 transition-colors duration-200 ${
+                  filterStages === stage.value
+                    ? "bg-[#0c6a0c] dark:bg-[#56C870] text-white" // Active stage style
+                    : "bg-gray-200 text-gray-800 hover:bg-blue-100" // Inactive stage style
+                }`}
+                onClick={() => {
+                  setFilterStages(stage.value);
+                  handleFilter(stage.value);
+                  setLoadingFilter(true);
+                }}
+              >
+                {stage.label}
+              </button>
+            ))}
+          </div>
+          <div className={`${filterStages === "All" || filterStages === "Technical Assessment" ? "block" : "hidden"}`}>
             <button
-              key={stage.value}
-              className={`text-sm rounded-md px-3 py-2 transition-colors duration-200 ${
-                filterStages === stage.value
-                  ? "bg-[#0c6a0c] dark:bg-[#56C870] text-white" // Active stage style
-                  : "bg-gray-200 text-gray-800 hover:bg-blue-100" // Inactive stage style
-              }`}
-              onClick={() => {
-                setFilterStages(stage.value);
-                handleFilter(stage.value);
-                setLoadingFilter(true);
-              }}
+              onClick={() => setIsOpen((prev) => !prev)}
+              id="dropdownActionButton"
+              data-dropdown-toggle="dropdownAction"
+              className="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+              type="button"
             >
-              {stage.label}
+              <span className="sr-only">Export button</span>
+              Export
+              <svg
+                className="w-2.5 h-2.5 ms-2.5"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 10 6"
+              >
+                <path
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="m1 1 4 4 4-4"
+                />
+              </svg>
             </button>
-          ))}
+            {isOpen && (
+              <div
+                id="dropdownAction"
+                className="z-50 absolute mt-2 right-3 bg-white divide-y divide-gray-100 rounded-lg shadow w-auto dark:bg-gray-700 dark:divide-gray-600"
+              >
+                <ul
+                  className="py-1 text-sm text-gray-700 dark:text-gray-200"
+                  aria-labelledby="dropdownActionButton"
+                >
+                  <li>
+                    <div
+                      className={`text-xs hover:bg-gray-100 text-gray-700  dark:hover:bg-gray-500 dark:text-white px-4 py-2`}
+                    >
+                      <button
+                        type="button"
+                        onClick={() => handleToExport(filterStages)}
+                      >
+                        Export to Excel
+                      </button>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            )}
+          </div>
         </div>
         <div className=" h-[55vh] overflow-y-scroll">
           <table className="w-full">
@@ -378,7 +459,7 @@ const ApplicantStages = (props: any) => {
                             <div
                               className={`${
                                 isMore === item._id ? "block" : "hidden"
-                              } absolute  bg-white dark:bg-dark-tertiary  dark:text-white text-base z-10 list-none divide-y divide-gray-100 rounded shadow my-4`}
+                              } absolute  bg-white dark:bg-dark-tertiary  dark:text-white text-base list-none divide-y divide-gray-100 rounded shadow my-4 z-[1]`}
                               id="dropdown"
                             >
                               <ul className="py-1" aria-labelledby="dropdown">
@@ -404,7 +485,7 @@ const ApplicantStages = (props: any) => {
                                 <li>
                                   <div
                                     className={`${
-                                      isMore === item._id && item.applicationPhase ===
+                                      item.applicationPhase ===
                                       "Technical Assessment"
                                         ? "block"
                                         : "hidden"
@@ -543,9 +624,15 @@ const ApplicantStages = (props: any) => {
                                     onClose={handleReload}
                                   />
                                 </div>
+                              </li>
+                              <li>
                                 <div
                                   className={`${
-                                    filterStages === "Technical Assessment"
+                                    filterStages === "Technical Assessment" &&
+                                    (item.status !== "Moved" ||
+                                      item.status !== "Admitted" ||
+                                      item.status !== "Rejected" ||
+                                      item.status !== "Passed")
                                       ? "block"
                                       : "hidden"
                                   }`}

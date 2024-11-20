@@ -12,7 +12,6 @@ import { useTheme } from "../../hooks/darkmode";
 
 
 const Pagination = ({ rowsChangeHandler,pageChangeHandler, totalRows, rowsPerPage }) => {
- console.log(totalRows)
   const noOfPages = Math.ceil(totalRows / rowsPerPage);
   const { theme, setTheme } = useTheme();
   const pagesArr = [...new Array(noOfPages)];

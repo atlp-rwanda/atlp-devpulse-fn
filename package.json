@@ -95,6 +95,7 @@
     "date-fns": "^2.29.3",
     "dayjs": "^1.11.6",
     "dotenv": "^16.0.3",
+    "exceljs": "^4.4.0",
     "express": "^4.21.0",
     "flowbite": "^1.8.1",
     "flowbite-react": "^0.6.4",
@@ -110,6 +111,7 @@
     "jquery": "^3.6.1",
     "jspdf": "^2.5.2",
     "jwt-decode": "^3.1.2",
+    "lucide-react": "^0.455.0",
     "mini-css-extract-plugin": "^2.6.1",
     "moment": "^2.29.4",
     "next-preload-headers": "^3.0.4",
@@ -145,6 +147,7 @@
     "subscriptions-transport-ws": "^0.11.0",
     "ts-jest": "^29.0.3",
     "with-click-outside": "^1.0.1",
+    "xlsx": "^0.18.5",
     "yup": "^1.2.0",
     "zod": "^3.22.2"
   },

@@ -19,16 +19,18 @@ const ScheduleTechnical: React.FC<props> = ({
   onClose,
 }) => {
   const dispatch = useAppDispatch();
-  const [isOpen, setIsOpen] = useState(false);
+  const [isModelOpen, setIsModelOpen] = useState(false);
   const [email, setEmail] = useState(traineeEmail);
   const [invitationLink, setInvitationLink] = useState("");
+  const [platForm, setPlatForm] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const handleOpenModel = () => {
-    setIsOpen(true);
+    setIsModelOpen(true);
   };
   const handleCloseModel = () => {
-    setIsOpen(false);
+    setIsModelOpen(false);
+    onClose();
   };
   const handleFormSubmit = async (event: any) => {
     event.preventDefault();
@@ -41,7 +43,7 @@ const ScheduleTechnical: React.FC<props> = ({
       return;
     }
     setIsLoading(true);
-    await dispatch(sendInvitations(applicantId, email, invitationLink)).then(
+    await dispatch(sendInvitations(applicantId, email, platForm, invitationLink)).then(
       () => {
         setError(null);
         onClose();
@@ -64,18 +66,16 @@ const ScheduleTechnical: React.FC<props> = ({
             : false
         }
         className={`px-4 py-2 w-full text-sm font-medium text-white ${
-          stage === "Rejected" || stage === "Admitted"
-            ? "bg-gray-400 cursor-not-allowed"
-            : status === "Moved"
+           status === "Moved"
             ? "bg-gray-400 cursor-not-allowed"
             : " bg-[#0c6a0c] hover:bg-[#367a4e] dark:bg-[#1bf84b8d] dark:hover:bg-emerald-700 dark:hover:text-gray-800 cursor-pointer"
         }  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500`}
       >
         {status === "Invited" ? "Resend" : "Invite"}
       </button>
-      {isOpen && (
-        <div className="fixed top-0 left-0 w-full h-screen bg-black bg-opacity-50 flex items-center justify-center blur-0 z-50">
-          <div className="relative flex items-center justify-center top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full h-full p-4">
+      {isModelOpen && (
+        <div className="fixed top-0 left-0 inset-0 w-full h-screen bg-black bg-opacity-50 flex items-center justify-center blur-0 z-[1000]">
+          <div className="relative flex items-center justify-center top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full h-full p-4 ">
             <form
               onSubmit={handleFormSubmit}
               className="relative border border-gray-300 rounded-lg p-4 bg-gray-500 dark:bg-gray-800 flex flex-col w-80 md:w-96"
@@ -97,10 +97,28 @@ const ScheduleTechnical: React.FC<props> = ({
                   type="email"
                   id="email"
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  placeholder="name@flowbite.com"
+                  placeholder="name@gmail.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  disabled
                   required
+                />
+              </div>
+              <div className="mb-5">
+                <label
+                  htmlFor="platform"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Platform
+                </label>
+                <input
+                  type="text"
+                  placeholder="https://anyone.google.com"
+                  id="text"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  required
+                  value={platForm}
+                  onChange={(e) => setPlatForm(e.target.value)}
                 />
               </div>
               <div className="mb-5">

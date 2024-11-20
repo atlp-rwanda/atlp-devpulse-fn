@@ -205,7 +205,7 @@ export const filterStage = (stage: string) => async (dispatch: any) => {
 };
 
 export const sendInvitations =
-  (applicantId: string, email: string, invitationLink: string) =>
+  (applicantId: string, email: string, platform:string, invitationLink: string) =>
   async (dispatch: any) => {
     dispatch({
       type: sendInvitation.SEND_INVITATION_STAGE_LOADING,
@@ -214,8 +214,8 @@ export const sendInvitations =
 
     try {
       const response = await axios.post("/", {
-        query: `mutation SendInvitation($applicantId: ID!, $email: String!, $invitationLink: String!) {
-                      sendInvitation(applicantId: $applicantId, email: $email, invitationLink: $invitationLink) {
+        query: `mutation SendInvitation($applicantId: ID!, $email: String!, $platform:String!, $invitationLink: String!) {
+                      sendInvitation(applicantId: $applicantId, email: $email, platform:$platform, invitationLink: $invitationLink) {
                          message
                          success
                        }
@@ -223,6 +223,7 @@ export const sendInvitations =
         variables:{
           applicantId: applicantId,
           email: email,
+          platform: platform,
           invitationLink: invitationLink,
         }
       });

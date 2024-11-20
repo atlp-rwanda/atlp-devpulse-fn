@@ -78,6 +78,10 @@ import ResolveTicketPage from "../pages/tickets/adminTicketResolve";
 import ReplyTicketPage from "../pages/tickets/applicantTicketReply";
 import CohortPage from "../pages/Cohort/Cohort";
 import CohortsDetailPage from "../pages/Cohort/CohortDetailPage";
+import AllBlogs from "../pages/Blogs/allBlogs";
+import SingleBlogView from "../pages/Blogs/singleBlog";
+
+
 function Navigation() {
   const roleName = localStorage.getItem("roleName");
   return (
@@ -321,6 +325,22 @@ function Navigation() {
           element={
             <PrivateRoute allowedRoles={["admin", "superAdmin"]}>
               <Programs />
+            </PrivateRoute>
+          }
+        />
+         <Route
+          path="blogs"
+          element={
+            <PrivateRoute allowedRoles={['admin','applicant','superAdmin']}>
+              <AllBlogs />
+            </PrivateRoute>
+          }
+        />
+          <Route
+          path="blogs/:id"
+          element={
+            <PrivateRoute allowedRoles={['admin','applicant','superAdmin']}>
+              <SingleBlogView />
             </PrivateRoute>
           }
         />
@@ -573,6 +593,22 @@ function Navigation() {
           element={
             <PrivateRoute allowedRoles={["applicant"]}>
               <ApplicantNotifications />
+            </PrivateRoute>
+          }
+        />
+         <Route
+          path="blogs"
+          element={
+            <PrivateRoute allowedRoles={['admin','applicant','superAdmin']}>
+              <AllBlogs />
+            </PrivateRoute>
+          }
+        />
+          <Route
+          path="blogs/:id"
+          element={
+            <PrivateRoute allowedRoles={['admin','applicant','superAdmin']}>
+              <SingleBlogView />
             </PrivateRoute>
           }
         />

@@ -77,6 +77,10 @@ module.exports = {
       margin: {
         '5px': '5.5px',
       },
+      zIndex: {
+        60: '60',
+        100: '100',
+      },
     },
     variants: {
       backgroundColor: ['active'],
