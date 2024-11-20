@@ -104,6 +104,8 @@ function Navigation() {
             <Navigate to="/admin" />
           ) : roleName === "Applicant" ? (
             <Navigate to="/applicant" />
+          ) : roleName === "trainee" ? (
+            <Navigate to="/trainee" />
           ) : (
             <Navigate to="/login" />
           )
@@ -336,18 +338,22 @@ function Navigation() {
             </PrivateRoute>
           }
         />
-         <Route
+        <Route
           path="blogs"
           element={
-            <PrivateRoute allowedRoles={['admin','applicant','superAdmin']}>
+            <PrivateRoute
+              allowedRoles={["admin", "applicant", "superAdmin", "trainee"]}
+            >
               <AllBlogs />
             </PrivateRoute>
           }
         />
-          <Route
+        <Route
           path="blogs/:id"
           element={
-            <PrivateRoute allowedRoles={['admin','applicant','superAdmin']}>
+            <PrivateRoute
+              allowedRoles={["admin", "applicant", "superAdmin", "trainee"]}
+            >
               <SingleBlogView />
             </PrivateRoute>
           }
@@ -435,48 +441,48 @@ function Navigation() {
         <Route
           path="tickets"
           element={
-            <PrivateRoute allowedRoles={['admin', 'superAdmin']}>
-              <AdminTicketPage/>
+            <PrivateRoute allowedRoles={["admin", "superAdmin"]}>
+              <AdminTicketPage />
             </PrivateRoute>
           }
         />
         <Route
           path="ticket/:id"
           element={
-            <PrivateRoute allowedRoles={['admin', 'superAdmin']}>
-              <SingleTicketDetails/>
+            <PrivateRoute allowedRoles={["admin", "superAdmin"]}>
+              <SingleTicketDetails />
             </PrivateRoute>
           }
         />
         <Route
           path="ticket/:id/resolve"
           element={
-            <PrivateRoute allowedRoles={['admin', 'superAdmin']}>
-              <ResolveTicketPage/>
+            <PrivateRoute allowedRoles={["admin", "superAdmin"]}>
+              <ResolveTicketPage />
             </PrivateRoute>
           }
         />
         <Route
           path="tickets"
           element={
-            <PrivateRoute allowedRoles={['admin', 'superAdmin']}>
-              <AdminTicketPage/>
+            <PrivateRoute allowedRoles={["admin", "superAdmin"]}>
+              <AdminTicketPage />
             </PrivateRoute>
           }
         />
         <Route
           path="ticket/:id"
           element={
-            <PrivateRoute allowedRoles={['admin', 'superAdmin']}>
-              <SingleTicketDetails/>
+            <PrivateRoute allowedRoles={["admin", "superAdmin"]}>
+              <SingleTicketDetails />
             </PrivateRoute>
           }
         />
         <Route
           path="ticket/:id/resolve"
           element={
-            <PrivateRoute allowedRoles={['admin', 'superAdmin']}>
-              <ResolveTicketPage/>
+            <PrivateRoute allowedRoles={["admin", "superAdmin"]}>
+              <ResolveTicketPage />
             </PrivateRoute>
           }
         />
@@ -494,7 +500,7 @@ function Navigation() {
       <Route
         path="/applicant"
         element={
-          <PrivateRoute allowedRoles={["applicant"]}>
+          <PrivateRoute allowedRoles={["applicant", "trainee"]}>
             <ApplicantLayout />
           </PrivateRoute>
         }
@@ -511,7 +517,7 @@ function Navigation() {
         <Route
           index
           element={
-            <PrivateRoute allowedRoles={["applicant"]}>
+            <PrivateRoute allowedRoles={["applicant", "trainee"]}>
               <ApplicantDashboard />
             </PrivateRoute>
           }
@@ -519,7 +525,7 @@ function Navigation() {
         <Route
           path="myApplications"
           element={
-            <PrivateRoute allowedRoles={["applicant"]}>
+            <PrivateRoute allowedRoles={["applicant", "trainee"]}>
               <ApplicantApplication />
             </PrivateRoute>
           }
@@ -527,7 +533,7 @@ function Navigation() {
         <Route
           path="myapplication"
           element={
-            <PrivateRoute allowedRoles={["applicant"]}>
+            <PrivateRoute allowedRoles={["applicant", "trainee"]}>
               <MyApplication />
             </PrivateRoute>
           }
@@ -535,7 +541,7 @@ function Navigation() {
         <Route
           path="settings"
           element={
-            <PrivateRoute allowedRoles={["applicant"]}>
+            <PrivateRoute allowedRoles={["applicant", "trainee"]}>
               <Settings />
             </PrivateRoute>
           }
@@ -543,7 +549,7 @@ function Navigation() {
         <Route
           path="available-jobs"
           element={
-            <PrivateRoute allowedRoles={["applicant"]}>
+            <PrivateRoute allowedRoles={["applicant", "trainee"]}>
               <ApplicantSeachJobPost />
             </PrivateRoute>
           }
@@ -559,7 +565,7 @@ function Navigation() {
         <Route
           path="available-job/:id/apply"
           element={
-            <PrivateRoute allowedRoles={["applicant"]}>
+            <PrivateRoute allowedRoles={["applicant", "trainee"]}>
               <SubmitApplication />
             </PrivateRoute>
           }
@@ -567,7 +573,7 @@ function Navigation() {
         <Route
           path="interviewScheduler"
           element={
-            <PrivateRoute allowedRoles={["applicant"]}>
+            <PrivateRoute allowedRoles={["applicant", "trainee"]}>
               <ScheduleInterview />
             </PrivateRoute>
           }
@@ -575,47 +581,51 @@ function Navigation() {
         <Route
           path="tickets"
           element={
-            <PrivateRoute allowedRoles={['applicant']}>
-              <TicketPage/>
+            <PrivateRoute allowedRoles={["applicant", "trainee"]}>
+              <TicketPage />
             </PrivateRoute>
           }
         />
         <Route
           path="ticket/:id"
           element={
-            <PrivateRoute allowedRoles={['applicant']}>
-              <SingleTicketDetails/>
+            <PrivateRoute allowedRoles={["applicant", "trainee"]}>
+              <SingleTicketDetails />
             </PrivateRoute>
           }
         />
         <Route
           path="ticket/:id/reply"
           element={
-            <PrivateRoute allowedRoles={['applicant']}>
-              <ReplyTicketPage/>
+            <PrivateRoute allowedRoles={["applicant", "trainee"]}>
+              <ReplyTicketPage />
             </PrivateRoute>
           }
         />
         <Route
           path="notifications"
           element={
-            <PrivateRoute allowedRoles={["applicant"]}>
+            <PrivateRoute allowedRoles={["applicant", "trainee"]}>
               <ApplicantNotifications />
             </PrivateRoute>
           }
         />
-         <Route
+        <Route
           path="blogs"
           element={
-            <PrivateRoute allowedRoles={['admin','applicant','superAdmin']}>
+            <PrivateRoute
+              allowedRoles={["admin", "applicant", "superAdmin", "trainee"]}
+            >
               <AllBlogs />
             </PrivateRoute>
           }
         />
-          <Route
+        <Route
           path="blogs/:id"
           element={
-            <PrivateRoute allowedRoles={['admin','applicant','superAdmin']}>
+            <PrivateRoute
+              allowedRoles={["admin", "applicant", "superAdmin", "trainee"]}
+            >
               <SingleBlogView />
             </PrivateRoute>
           }
@@ -623,7 +633,7 @@ function Navigation() {
         <Route
           path="update-profile"
           element={
-            <PrivateRoute allowedRoles={["applicant"]}>
+            <PrivateRoute allowedRoles={["applicant", "trainee"]}>
               <ProfileUpdate />
             </PrivateRoute>
           }
@@ -631,7 +641,7 @@ function Navigation() {
         <Route
           path="dashboard/profile"
           element={
-            <PrivateRoute allowedRoles={["applicant"]}>
+            <PrivateRoute allowedRoles={["applicant", "trainee"]}>
               <Profile />
             </PrivateRoute>
           }
@@ -639,7 +649,7 @@ function Navigation() {
         <Route
           path="available-jobs/trainee-apply"
           element={
-            <PrivateRoute allowedRoles={["applicant"]}>
+            <PrivateRoute allowedRoles={["applicant", "trainee"]}>
               <TraineeApply />
             </PrivateRoute>
           }
@@ -647,7 +657,7 @@ function Navigation() {
         <Route
           path="available-jobs/trainee-apply/trainee-success/:traineeId"
           element={
-            <PrivateRoute allowedRoles={["applicant"]}>
+            <PrivateRoute allowedRoles={["applicant", "trainee"]}>
               <TraineeSuccessPage />
             </PrivateRoute>
           }
@@ -655,7 +665,166 @@ function Navigation() {
         <Route
           path="available-jobs/trainee-apply/trainee-success/trainee-add-attributes/:traineeId?"
           element={
-            <PrivateRoute allowedRoles={["applicant"]}>
+            <PrivateRoute allowedRoles={["applicant", "trainee"]}>
+              <TraineeAttribute />
+            </PrivateRoute>
+          }
+        />
+      </Route>
+
+      <Route
+        path="/trainee"
+        element={
+          <PrivateRoute allowedRoles={["applicant", "trainee"]}>
+            <ApplicantLayout />
+          </PrivateRoute>
+        }
+      />
+      <Route path="/trainee" element={<ApplicantLayout />}>
+        <Route
+          index
+          element={
+            <PrivateRoute allowedRoles={["applicant", "trainee"]}>
+              <ApplicantDashboard />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="myApplications"
+          element={
+            <PrivateRoute allowedRoles={["applicant", "trainee"]}>
+              <ApplicantApplication />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="myapplication"
+          element={
+            <PrivateRoute allowedRoles={["applicant", "trainee"]}>
+              <MyApplication />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="settings"
+          element={
+            <PrivateRoute allowedRoles={["applicant", "trainee"]}>
+              <Settings />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="available-jobs"
+          element={
+            <PrivateRoute allowedRoles={["applicant", "trainee"]}>
+              <ApplicantSeachJobPost />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="available-job/:id/apply"
+          element={
+            <PrivateRoute allowedRoles={["applicant", "trainee"]}>
+              <SubmitApplication />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="interviewScheduler"
+          element={
+            <PrivateRoute allowedRoles={["applicant", "trainee"]}>
+              <ScheduleInterview />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="tickets"
+          element={
+            <PrivateRoute allowedRoles={["applicant", "trainee"]}>
+              <TicketPage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="ticket/:id"
+          element={
+            <PrivateRoute allowedRoles={["applicant", "trainee"]}>
+              <SingleTicketDetails />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="ticket/:id/reply"
+          element={
+            <PrivateRoute allowedRoles={["applicant", "trainee"]}>
+              <ReplyTicketPage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="notifications"
+          element={
+            <PrivateRoute allowedRoles={["applicant", "trainee"]}>
+              <ApplicantNotifications />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="blogs"
+          element={
+            <PrivateRoute
+              allowedRoles={["admin", "applicant", "superAdmin", "trainee"]}
+            >
+              <AllBlogs />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="blogs/:id"
+          element={
+            <PrivateRoute
+              allowedRoles={["admin", "applicant", "superAdmin", "trainee"]}
+            >
+              <SingleBlogView />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="update-profile"
+          element={
+            <PrivateRoute allowedRoles={["applicant", "trainee"]}>
+              <ProfileUpdate />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="dashboard/profile"
+          element={
+            <PrivateRoute allowedRoles={["applicant", "trainee"]}>
+              <Profile />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="available-jobs/trainee-apply"
+          element={
+            <PrivateRoute allowedRoles={["applicant", "trainee"]}>
+              <TraineeApply />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="available-jobs/trainee-apply/trainee-success/:traineeId"
+          element={
+            <PrivateRoute allowedRoles={["applicant", "trainee"]}>
+              <TraineeSuccessPage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="available-jobs/trainee-apply/trainee-success/trainee-add-attributes/:traineeId?"
+          element={
+            <PrivateRoute allowedRoles={["applicant", "trainee"]}>
               <TraineeAttribute />
             </PrivateRoute>
           }
@@ -666,7 +835,9 @@ function Navigation() {
       <Route
         path="*"
         element={
-          <PrivateRoute allowedRoles={["admin", "applicant", "superAdmin"]}>
+          <PrivateRoute
+            allowedRoles={["admin", "applicant", "superAdmin", "trainee"]}
+          >
             <PageNotFound />
           </PrivateRoute>
         }

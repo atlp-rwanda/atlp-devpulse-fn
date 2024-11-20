@@ -127,6 +127,42 @@ export const applicantSidebarItems = [
   },
 ];
 
+export const traineeSidebarItems = [
+  {
+    path: "/trainee",
+    icon: <Icon icon="fontisto:pie-chart-1"></Icon>,
+    title: "Dashboard",
+  },
+  {
+    path: "interviewScheduler",
+    icon: (
+      <Icon icon="material-symbols:interpreter-mode-outline-rounded"></Icon>
+    ),
+    title: "Schedule Interview",
+  },
+  {
+    path: "calendar",
+    icon: <Icon icon="ant-design:calendar-filled"></Icon>,
+    title: "Calendar",
+  },
+  {
+    path: "available-jobs",
+    icon: <Icon icon="ant-design:calendar-filled"></Icon>,
+    title: "Job Post ",
+  },
+  {
+    path: "tickets",
+    icon: <Icon icon="heroicons-outline:support"></Icon>,
+    title: "Tickets",
+  },
+
+  {
+    path: "blogs",
+    icon: <Icon icon="mdi:blogger" />,
+    title: "Blogs",
+  },
+];
+
 export const sidebarItems2 = [
   {
     path: "/documents",
