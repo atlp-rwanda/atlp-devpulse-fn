@@ -165,7 +165,7 @@ export const MyApplication = () => {
                                             ID Card
                                         </strong>
                                         <Link
-                                            to={application.idDocumentUrl}
+                                            to={`/view-external-document?fileUrl=${encodeURIComponent(application.idDocumentUrl)}&backUrl=${encodeURIComponent("/")}&title=${encodeURIComponent("ID Document")}`}
                                             target="_blank"
                                             className="flex items-center gap-2 text-blue-600 dark:text-blue-400 hover:underline mt-1"
                                         >
@@ -180,7 +180,7 @@ export const MyApplication = () => {
                                             Resume
                                         </strong>
                                         <Link
-                                            to={application.resumeUrl}
+                                            to={`/view-external-document?fileUrl=${encodeURIComponent(application.resumeUrl)}&backUrl=${encodeURIComponent("/")}&title=${encodeURIComponent("Resume Document")}`}
                                             target="_blank"
                                             className="flex items-center gap-2 text-blue-600 dark:text-blue-400 hover:underline mt-1"
                                         >
@@ -195,7 +195,7 @@ export const MyApplication = () => {
                                             Cover Letter
                                         </strong>
                                         <Link
-                                            to={application.coverLetterUrl}
+                                            to={`/view-external-document?fileUrl=${encodeURIComponent(application.coverLetterUrl)}&backUrl=${encodeURIComponent("/")}&title=${encodeURIComponent("Cover letter Document")}`}
                                             target="_blank"
                                             className="flex items-center gap-2 text-blue-600 dark:text-blue-400 hover:underline mt-1"
                                         >

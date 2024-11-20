@@ -27,7 +27,6 @@ const Applications = (props: any) => {
   const navigate = useNavigate();
 
   const { myApplications, currentApplication, loading } = props;
-  console.log("My Applications:", myApplications);
 
   const [moredrop, setmoredrop] = useState("");
   const [filter, setFilter] = useState("submitted");
