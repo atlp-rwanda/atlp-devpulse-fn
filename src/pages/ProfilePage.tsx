@@ -18,6 +18,7 @@ const ProfileUpdate: React.FC = () => {
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(true);
   const userData = useAppSelector((state: any) => state.updateUser?.data);
+
   const form = useForm<TuserSchema>({
     resolver: zodResolver(userSchema),
     defaultValues: {
@@ -28,6 +29,7 @@ const ProfileUpdate: React.FC = () => {
       code: "-",
       password: "-",
       picture: "-",
+      bio: "-",
     },
   });
   const { reset } = form;

@@ -21,6 +21,7 @@ const Profile = () => {
   const role = localStorage.getItem("roleName");
   const rolePrefix = role === "admin" || role === "superAdmin" ? "admin" : role;
   const userId = getUserIdFromToken();
+  const BACKEND_URL = process.env.BACKEND_URL
 
   useEffect(() => {
     if (userId) {
@@ -37,7 +38,7 @@ const Profile = () => {
             <div className="w-full absolute top-20 px-8">
               <span></span>
               <div className="flex justify-between flex-wrap mt-5 relative">
-                <img src={DEFAULT_IMAGE} alt="Preview" className="rounded-full w-32 h-32" />
+                <img src={DEFAULT_IMAGE} alt="preview" className="rounded-full w-32 h-32" />
               </div>
             </div>
             <div className="w-full absolute top-20 px-8">
@@ -74,7 +75,7 @@ const Profile = () => {
               <div className="bg-white  dark:bg-dark-bg shadow-lg rounded-md dark:text-white p-5 flex flex-col gap-2 flex-1">
                 <h2 className="font-semibold pb-2">Biography</h2>
                 <p>
-                {userData.biography || 'No biography provided'}
+                {userData?.bio || 'No bio provided'}
                 </p>
               </div>
             </div>
@@ -99,23 +100,23 @@ const Profile = () => {
                   <span className="font-bold">Joined:</span> {new Date(parseInt(userData.createdAt)).toLocaleDateString()}
                 </p>
                 <p>
-                  <span className="font-bold">Role:</span> {userData.role.roleName}
+                  <span className="font-bold">Role:</span> {userData.cohort ? 'Trainee' : userData.role.roleName}
                 </p>
-                <p>
-                  <span className="font-bold">Team:</span> N/A
-                </p>
+                {/* <p>
+                  <span className="font-bold">Program:</span> {userData.cohort.program || 'N/A'}
+                </p> */}
               </div>
               {role !== 'admin' && role !== 'superAdmin' && (
                 <div className="bg-white  dark:bg-dark-bg shadow-lg rounded-md dark:text-white p-5 flex flex-col gap-2 flex-1">
                 <h2 className="pb-4 text-green font-semibold">Management</h2>
                 <p>
-                  <span className="font-bold">Program:</span> {userData.cohort?.program || 'N/A'}
+                  <span className="font-bold">Cohort:</span> {userData.cohort?.title || 'N/A'}
                 </p>
                 <p>
                   <span className="font-bold">Current Stage:</span> {userData.cohort?.phase || userData.applicationPhase || 'N/A'}
                 </p>
                 <p>
-                  <span className="font-bold">Manager:</span>N/A
+                  <span className="font-bold">Manager:</span>{userData?.cohort?.manager || 'N/A'}
                 </p>
               </div>
               )}
