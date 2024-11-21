@@ -66,6 +66,8 @@ const LoginForm = () => {
         const role = localStorage.getItem("roleName") as string;
         if (role === "applicant") {
           navigate("/applicant");
+        } else if (role === "trainee") {
+          navigate("/trainee");
         } else if (role === "superAdmin") {
           navigate("/admin");
         } 

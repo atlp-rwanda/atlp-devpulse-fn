@@ -6,7 +6,12 @@ import { useEffect, useState } from 'react';
 
 export const destination = () =>{
   const roleName = localStorage.getItem("roleName");
-  const destin =  (roleName === "superAdmin" || roleName === "admin") ? "/admin" : "/applicant";
+  const destin =
+    roleName === "superAdmin" || roleName === "admin"
+      ? "/admin"
+      : roleName === "trainee"
+      ? "/trainee"
+      : "/applicant";
   return destin;
 }
 
