@@ -32,9 +32,9 @@ const Blogs: React.FC = () => {
   }, [selectedTag]);
 
   return (
-    <>
+    <section className="bg-white dark:bg-dark-bg ">
       <Header />
-      <div className="p-10 bg-gray-50 dark:bg-dark-bg mt-8">
+      <div className="p-10 bg-white dark:bg-dark-bg mt-8">
         <div className="mb-6">
           <h2 className="text-2xl font-bold dark:text-white">Blogs</h2>
           {selectedTag && (
@@ -71,9 +71,9 @@ const Blogs: React.FC = () => {
                   <div className="flex justify-between text-sm text-primary dark:text-white mb-4 items-center">
                     <div className="flex items-center gap-3">
                     <div className="flex flex-wrap items-center gap-3">
-          {/* <span className="font-semibold flex flex-row gap-2 items-center">
+          <span className="font-semibold flex flex-row gap-2 items-center">
             <FaUser size={20} className='dark:text-green' /> {blog.author.firstname}
-          </span> */}
+          </span>
           <span className="ml-2 flex flex-row gap-2 items-center">
              <span className="ml-2 flex flex-row gap-2 items-center">
              <FaCalendar size={20} className="dark:text-green" />
@@ -119,7 +119,7 @@ const Blogs: React.FC = () => {
           </div>
         )}
       </div>
-    </>
+    </section>
   );
 };
 

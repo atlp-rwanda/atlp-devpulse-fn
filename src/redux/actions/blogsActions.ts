@@ -1,19 +1,22 @@
 import axios from "./axiosconfig";
 import { toast } from "react-toastify";
 
+export interface Author {
+  id: string;
+  email: string;
+  firstname: string;
+  lastname: string;
+}
 export interface Blog {
   comments: number;
   likes: number;
   id: string;
   title: string;
   content: string;
-  author: {
-    firstname: string;
-    lastname: string;
-};
   coverImage: string;
   images?: string[];
   isHidden?: boolean;
+  author : Author;
   tags: string[];
   created_at: string;
   updated_at: string;
@@ -41,7 +44,12 @@ export const fetchAllBlogs = async (tag?: string): Promise<Blog[]> => {
                 id
               }
               isHidden
-          
+              author {
+                id
+                email
+                firstname
+                lastname
+              }
               tags
               created_at
               updated_at
@@ -58,7 +66,12 @@ export const fetchAllBlogs = async (tag?: string): Promise<Blog[]> => {
       return [];
     }
 
-    return response.data.data.getAllBlogs as Blog[];
+    const blogs = (response.data.data.getAllBlogs as Blog[]).filter(
+      (blog) => blog.author !== null
+    );
+
+    console.log("Fetched blogs:", blogs); 
+    return blogs;
   } catch (error: any) {
     console.error("Error fetching blogs:", error.response?.data || error.message);
     toast.error("Error connecting to the server");

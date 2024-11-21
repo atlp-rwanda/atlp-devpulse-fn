@@ -81,6 +81,7 @@ import CohortPage from "../pages/Cohort/Cohort";
 import CohortsDetailPage from "../pages/Cohort/CohortDetailPage";
 import AllBlogs from "../pages/Blogs/allBlogs";
 import SingleBlogView from "../pages/Blogs/singleBlog";
+import SingleBlogPage from "../pages/LandingPage/SingleBlogPage"
 import LandingPage from "../pages/LandingPage/LandingPage";
 import Blogs from "../pages/Blogs/Blogs"
 
@@ -93,17 +94,14 @@ function Navigation() {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/google" element={<GoogleSignup />} />
       <Route path="/blogs" element={<Blogs />} />
-      <Route path="/blogs" element={<Blogs />} />
-      <Route path="/google" element={ <GoogleSignup /> } />
       <Route path="/forget" element={<ForgotPasswordPage />} />
       <Route path="/reset-password" element={<ResetPasswordPage />} />
-      <Route path="/home" element={<LandingPage/>}/>
       <Route path="/home" element={<LandingPage/>}/>
       <Route path="/signup" element={<SignupPage />} />
       <Route path="/verifyEmail" element={<VerifyEmail />} />
       <Route path="/pageNotFound" element={<PageNotFound />} />
       <Route path="settings" element={<Settings />} />
-      <Route path="blogs/:id" element={<SingleBlogView />} />
+    <Route path="blogs/:id" element={<SingleBlogPage/>}/>
       <Route
         path="/"
         element={

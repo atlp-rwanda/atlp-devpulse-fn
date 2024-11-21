@@ -34,7 +34,7 @@ const AboutUs = () => {
       </div>
 
     
-      <div className="flex flex-wrap gap-6 items-center  justify-center">
+      <div className="flex flex-wrap gap-6 items-center px-10 ">
   <div className="flex flex-col p-6 shadow-md w-[320px] m-2 cursor-pointer bg-gray-200 dark:bg-gray-700 rounded-lg transition duration-300">
     <GrResources size={40} className='dark:text-white'/>
     <h3 className='dark:text-green text-xl font-semibold mb-2 text-primary'>Guidance</h3>
@@ -54,9 +54,9 @@ const AboutUs = () => {
     <GrDocumentPerformance size={35} className='dark:text-white ' />
     <h3 className='dark:text-green text-xl font-semibold mb-2 text-primary'>Tools and Resources</h3>
     <p className='text-black-600 dark:text-white'>
-    Access real-time tracking tools and resources designed to support your learning and professional growth. Our commitment to cutting-edge technology means you stay on top of your goals with ease and efficiency.
-    </p>
+    Access real-time tracking tools and resources designed to support your learning and professional growth. Our commitment to cutting-edge technology means you stay on top </p>
   </div>
+  
 </div>
 
     </div>

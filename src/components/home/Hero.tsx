@@ -27,9 +27,9 @@ const Hero = () => {
             </button>
           </>
         ) : (
-          <p className="text-base sm:text-lg md:text-xl mb-6 leading-relaxed">
-            Welcome back! Continue to track your progress and grow with DevPulse.
-          </p>
+          <><p className="text-base sm:text-lg md:text-xl mb-6 leading-relaxed">
+              Welcome back! Continue to track your progress and grow with <span className="text-primary dark:text-green">DevPulse</span>.
+            </p></>
         )}
       </div>
     </div>

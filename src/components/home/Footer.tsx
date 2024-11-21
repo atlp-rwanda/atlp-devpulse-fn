@@ -5,8 +5,8 @@ import { FaFacebookF, FaTwitter, FaLinkedinIn } from 'react-icons/fa';
 
 const Footer = () => {
   return (
-  <>
-    <div className=" dark:bg-dark-bg bg-white text-primary dark:text-white flex flex-wrap justify-around items-center  border-t">
+  <footer className='dark:bg-dark-bg bg-white text-primary dark:text-white pt-6'>
+    <div className=" dark:bg-dark-bg bg-white text-primary dark:text-white flex flex-wrap justify-around items-center  border-t pt-6">
       <div className="flex flex-col mb-4 md:mb-0 md:w-auto ">
        <Link to="/" className="flex items-center space-x-2">
           <img src={logo} alt="Logo" className="h-8 w-auto" />
@@ -38,17 +38,18 @@ const Footer = () => {
         <li><a href="#blogs" className="hover:text-green">→ Blogs</a></li>
       </ul>
 
-      <div className="flex flex-col  md:w-auto ">
+      <ul className="flex flex-col  text-primary dark:text-white   ">
         <h3 className="font-semibold text-lg mb-2">Contact</h3>
-        <p className="text-primary dark:text-white">Email: support@devpulse.com</p>
-        <p className="text-primary dark:text-white">Phone: +250 789 0000</p>
+        <li className="text-primary dark:text-white">Email: support@devpulse.com</li>
+        <li className="text-primary dark:text-white">Phone: +250 789 0000</li>
+        <li className="text-primary dark:text-white">Address: KGL Norresken </li>
         
-      </div>
+      </ul>
     </div>
-    <div className="w-full text-center  md:mt-0 bg-white dark:bg-dark-bg">
+    <div className="w-full text-center  mt-4 bg-white dark:bg-dark-bg">
         <p className="text-primary dark:text-white text-sm">&copy; {new Date().getFullYear()} DevPulse. All rights reserved.</p>
       </div>
-  </>
+  </footer>
   );
 };
 

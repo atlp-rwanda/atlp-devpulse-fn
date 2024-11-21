@@ -356,7 +356,7 @@ const AllBlogs = () => {
       <div className="max-w-6xl mt-2 mx-auto">
         <div className="mb-6 w-full flex items-center justify-between">
           <h1 className="text-2xl font-semibold">All Blogs</h1>
-          {userId && role && role == "applicant" || role == "trainee" && (
+          {userId && role && (role == "applicant" || role == "trainee") && (
             <div className="w-full sm:w-auto">
               <button
                 disabled={isLoading}

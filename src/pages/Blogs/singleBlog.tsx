@@ -46,7 +46,7 @@ const SingleBlogView = () => {
 
 
   return (
-    <div className="min-h-screen w-full pt-8 bg-white dark:bg-slate-900 text-black dark:text-white p-6">
+    <div className="min-h-screen w-full pt-8 bg-white dark:bg-dark-bg text-black dark:text-white p-6">
       {isLoading ||isLoadingRelatedArticles || !blog ?  (
         <SingleBlogSkeleton />
       ) : (
@@ -78,28 +78,6 @@ const SingleBlogView = () => {
                   </div>
                 </div>
               </div>
-              {topArticles && topArticles.length > 0 ? (
-              <div className='flex flex-col gap-2 ml-5'>
-                <h2>Related Articles</h2>
-              {topArticles.map((article, index) => (
-                  <div className="flex items-center gap-1  bg-slate-100 dark:bg-slate-800 px-2  hover:bg-slate-50 py-2 rounded-lg dark:hover:bg-slate-700 transition-colors cursor-pointer group" onClick={() =>  window.open(article.url, "_blank")}>
-                  <img
-                    src={article.image}
-                    alt={article.title}
-                    className="h-16 w-36 rounded-lg"
-                  />
-                  <h3 className="text-sm font-semibold mb-2">
-                  {article.title}
-                  </h3>
-                  <div className="text-sm text-gray-400">
-                    <span>Source: {article.source}</span>
-                  </div>
-                  </div>
-              ))}
-              </div>
-              ): (
-                <p>No related articles available</p>
-              )}
             </div>
             <div className="flex gap-4 flex-col w-full items-start">
               <p className="dark:text-slate-300 w-[80%] leading-relaxed">
@@ -149,6 +127,30 @@ const SingleBlogView = () => {
               )}
             </div>
           </div>
+          {topArticles && topArticles.length > 0 ? (
+              <div className='mt-10'>
+                <h1>Related Articles</h1>
+                <div className='flex flex-row gap-1'>
+                {topArticles.map((article, index) => (
+                  <div className="flex flex-col w-1/4  bg-slate-100 dark:bg-slate-800 px-2  hover:bg-slate-50 py-2 rounded-lg dark:hover:bg-slate-700 transition-colors cursor-pointer group" onClick={() =>  window.open(article.url, "_blank")}>
+                  <img
+                    src={article.image}
+                    alt={article.title}
+                    className="h-28 w-full rounded-lg object-cover"
+                  />
+                  <h3 className="text-sm font-semibold mb-2">
+                  {article.title}
+                  </h3>
+                  <div className="text-sm text-gray-400">
+                    <span>Source: {article.source}</span>
+                  </div>
+                  </div>
+              ))}
+              </div>
+              </div>
+              ): (
+                <p>No related articles available</p>
+              )}
           <div className="flex items-center gap-4">
             <button onClick={handleLike} className="flex items-center gap-2">
               <Heart
