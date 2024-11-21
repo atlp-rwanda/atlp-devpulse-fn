@@ -57,6 +57,7 @@ import fetchSearchDataReducer from "./fetchSearchDataReducer";
 import userUpdateReducer from "./getUser";
 import blogsReducer from "./blogsReducers";
 import singleBlogReducer from "./singleBlogReducer";
+import blogRelatedArticle from "./blogRelatedArticleReducer";
 
 const allReducers = combineReducers({
   counter: counterReducer,
@@ -111,6 +112,7 @@ const allReducers = combineReducers({
   updateUser: userUpdateReducer,
   blogs: blogsReducer,
   singleBlog: singleBlogReducer,
+  blogRelatedArticle: blogRelatedArticle
 });
 
 export type RootState = ReturnType<typeof allReducers>;
