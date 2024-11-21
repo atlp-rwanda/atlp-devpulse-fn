@@ -38,7 +38,7 @@ const Profile = () => {
             <div className="w-full absolute top-20 px-8">
               <span></span>
               <div className="flex justify-between flex-wrap mt-5 relative">
-                <img src={DEFAULT_IMAGE} alt="preview" className="rounded-full w-32 h-32" />
+                <img src={userData.picture || DEFAULT_IMAGE} alt="preview" className="rounded-full w-32 h-32" />
               </div>
             </div>
             <div className="w-full absolute top-20 px-8">
