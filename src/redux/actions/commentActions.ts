@@ -1,6 +1,7 @@
 import axios from "./axiosconfig";
 import { toast } from "react-toastify";
 import creator from "./creator";
+import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
 import {
   FETCH_COMMENTS_FAIL,
   FETCH_COMMENTS_LOADING,
@@ -14,7 +15,15 @@ import {
   UPDATE_COMMENT_FAIL,
   UPDATE_COMMENT_LOADING,
   UPDATE_COMMENT_SUCCESS,
+  COUNT_COMMENTS_LOADING,
+  COUNT_COMMENTS_SUCCESS,
+  COUNT_COMMENTS_FAIL,
 } from "../index";
+
+const client = new ApolloClient({
+  uri: "http://localhost:5000/graphql", 
+  cache: new InMemoryCache(),
+});
 
 export const getCommentsByBlogId = (id: string) => async (dispatch: any) => {
   dispatch({
@@ -25,31 +34,50 @@ export const getCommentsByBlogId = (id: string) => async (dispatch: any) => {
     const response = await axios.post("/", {
       query: `query GetCommentsByBlog($blog: ID!) {
         getCommentsByBlog(blog: $blog) {
-         id
-         content
-         blog {
           id
-          title  
+          content
+          blog {
+            id
+            title  
+          }
+          user {
+            id
+            firstname
+            lastname
+          }  
         }
-         user {
-           id
-           firstname
-           lastname
-        }  
-       }
       }`,
       variables: { blog: id },
     });
 
-    const commentsData = response.data.data.getCommentsByBlog;
-    console.log("commentsData", commentsData)
-    dispatch(creator(FETCH_COMMENTS_SUCCESS, commentsData));
+    const comments = response.data.data.getCommentsByBlog;
+    console.log("comments", comments);
+
+    dispatch({
+      type: FETCH_COMMENTS_SUCCESS,
+      payload: comments,
+    });
+
+    const commentCount = comments.length;
+    dispatch({
+      type: COUNT_COMMENTS_SUCCESS,
+      payload: commentCount,
+    });
   } catch (err: any) {
-    const errorMessage = err.response?.data?.errors?.[0]?.message || err.message || "Failed to fetch comments";
-    dispatch(creator(FETCH_COMMENTS_FAIL, errorMessage));
+    const errorMessage =
+      err.response?.data?.errors?.[0]?.message ||
+      err.message ||
+      "Failed to fetch comments";
+
+    dispatch({
+      type: FETCH_COMMENTS_FAIL,
+      payload: errorMessage,
+    });
+
     toast.error(errorMessage);
   }
 };
+
 
 export const createCommentAction = (blogId: string, content: string) => async (dispatch: any) => {
   const userId = localStorage.getItem('userId'); 
@@ -180,5 +208,97 @@ export const deleteCommentAction = (commentId: string) => async (dispatch: any) 
       error: errorMessage,
     });
     toast.error(errorMessage);
+  }
+};
+
+export const countCommentsByBlogId = (blogId: string) => async (dispatch: any) => {
+  dispatch({
+    type: COUNT_COMMENTS_LOADING,
+  });
+
+  try {
+    const response = await axios.post("/", {
+      query: `query CountCommentsByBlog($blog: ID!) {
+        countCommentsByBlog(blog: $blog)
+      }`,
+      variables: { blog: blogId },
+    });
+
+    const commentCount = response.data.data.countCommentsByBlog;
+
+    dispatch({
+      type: COUNT_COMMENTS_SUCCESS,
+      payload: { blogId, count: commentCount },
+    });
+
+    console.log("Comment Count:", commentCount);
+  } catch (err: any) {
+    const errorMessage =
+      err.response?.data?.errors?.[0]?.message || err.message || "Failed to count comments";
+
+    dispatch({
+      type: COUNT_COMMENTS_FAIL,
+      error: errorMessage,
+    });
+
+    toast.error(errorMessage);
+  }
+};
+
+export const getCommentLikes = (commentId: string) => async (dispatch: any) => {
+  const GET_COMMENT_LIKES = gql`
+    query GetCommentLikes($comment: ID!) {
+      getCommentLikes(comment: $comment) {
+        count
+        likes {
+          id
+          user {
+            firstname
+          }
+        }
+      }
+    }
+  `;
+
+  try {
+    const { data } = await client.query({
+      query: GET_COMMENT_LIKES,
+      variables: { comment: commentId },
+    });
+    dispatch({
+      type: "FETCH_COMMENT_LIKES_SUCCESS",
+      payload: { commentId, likes: data.getCommentLikes },
+    });
+  } catch (error: any) {
+    dispatch({
+      type: "FETCH_COMMENT_LIKES_FAIL",
+      payload: error.message || "An unknown error occurred.",
+    });
+  }
+};
+
+export const addCommentLike = (commentId: string, userId: string) => async (dispatch: any) => {
+  const ADD_COMMENT_LIKE = gql`
+    mutation AddCommentLike($user: ID!, $comment: ID!) {
+      addCommentLike(user: $user, comment: $comment) {
+        count  
+      }
+    }
+  `;
+
+  try {
+    const { data } = await client.mutate({
+      mutation: ADD_COMMENT_LIKE,
+      variables: { user: userId, comment: commentId },
+    });
+    dispatch({
+      type: "ADD_COMMENT_LIKE_SUCCESS",
+      payload: { commentId, likeCount: data.addCommentLike.count }, 
+    });
+  } catch (error: any) {
+    dispatch({
+      type: "ADD_COMMENT_LIKE_FAIL",
+      payload: error.message || "An unknown error occurred.",
+    });
   }
 };

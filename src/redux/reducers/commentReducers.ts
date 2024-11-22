@@ -1,121 +1,120 @@
 import {
-    FETCH_COMMENTS_LOADING,
-    FETCH_COMMENTS_SUCCESS,
-    FETCH_COMMENTS_FAIL,
-    CREATE_COMMENT_LOADING,
-    CREATE_COMMENT_SUCCESS,
-    CREATE_COMMENT_FAIL,
-    UPDATE_COMMENT_LOADING,
-    UPDATE_COMMENT_SUCCESS,
-    UPDATE_COMMENT_FAIL,
-    DELETE_COMMENT_LOADING,
-    DELETE_COMMENT_SUCCESS,
-    DELETE_COMMENT_FAIL,
-  } from "../index";
-  
-  interface Comment {
-    id: string;
-    content: string;
-    author: {
-      id: string;
-      email: string;
-      firstname: string;
-      lastname: string;
-    };
-    createdAt?: string;
-    updatedAt?: string;
-    [key: string]: any;
-  }
-  
-  interface CommentState {
-    isCommentLoading: boolean;
-    isLoaded: boolean;
-    errors: null | string;
-    comment_data: Comment[];
-  }
-  
-  const initialState: CommentState = {
-    isCommentLoading: false,
-    isLoaded: false,
-    errors: null,
-    comment_data: [],
-  };
-  
-  export default (
-    state = initialState,
-    { type, payload }: { type: string; payload: any }
-  ): CommentState => {
-    switch (type) {
-      case FETCH_COMMENTS_LOADING:
-      case CREATE_COMMENT_LOADING:
-      case UPDATE_COMMENT_LOADING:
-      case DELETE_COMMENT_LOADING:
-        return {
-          ...state,
-          isCommentLoading: true,
-        };
-  
-      case FETCH_COMMENTS_SUCCESS:
-        return {
-          ...state,
-          isCommentLoading: false,
-          isLoaded: true,
-          comment_data: payload,
-        };
-  
-      case CREATE_COMMENT_SUCCESS:
-        if (!payload || !payload.id) {
-          console.error("Invalid payload for CREATE_COMMENT_SUCCESS:", payload);
-          return state;
-        }
-  
-        const newComment = {
-          ...payload,
-          id: payload.id || payload._id, 
-          author: {
-            id: payload.author.id,
-          },
-        };
-  
-        return {
-          ...state,
-          isCommentLoading: false,
-          isLoaded: true,
-          comment_data: [...state.comment_data, newComment],
-        };
-  
-      case UPDATE_COMMENT_SUCCESS:
-        return {
-          ...state,
-          isCommentLoading: false,
-          isLoaded: true,
-          comment_data: state.comment_data.map((comment) =>
-            comment.id === payload.id ? { ...comment, ...payload } : comment
-          ),
-        };
-  
-      case DELETE_COMMENT_SUCCESS:
-        return {
-          ...state,
-          isCommentLoading: false,
-          isLoaded: true,
-          comment_data: state.comment_data.filter((comment) => comment.id !== payload.id),
-        };
-  
-      case FETCH_COMMENTS_FAIL:
-      case CREATE_COMMENT_FAIL:
-      case UPDATE_COMMENT_FAIL:
-      case DELETE_COMMENT_FAIL:
-        //console.error("Comment operation failed:", payload);
-        return {
-          ...state,
-          isCommentLoading: false,
-          isLoaded: false,
-          errors: payload,
-        };
-  
-      default:
+  FETCH_COMMENTS_LOADING,
+  FETCH_COMMENTS_SUCCESS,
+  FETCH_COMMENTS_FAIL,
+  CREATE_COMMENT_LOADING,
+  CREATE_COMMENT_SUCCESS,
+  CREATE_COMMENT_FAIL,
+  COUNT_COMMENTS_LOADING,
+  COUNT_COMMENTS_SUCCESS,
+  COUNT_COMMENTS_FAIL,
+} from '../index';
+
+interface User {
+  id: string;
+  firstname: string;
+  lastname: string;
+}
+
+interface Comment {
+  id: string;
+  content: string;
+  user: User;
+  createdAt?: string;
+  updatedAt?: string;
+  likesCount: number;
+}
+
+interface CommentState {
+  isCommentLoading: boolean;
+  isLoaded: boolean;
+  errors: null | string;
+  comment_data: Comment[];
+  commentCounts: { [blogId: string]: number };
+}
+
+const initialState: CommentState = {
+  isCommentLoading: false,
+  isLoaded: false,
+  errors: null,
+  comment_data: [],
+  commentCounts: {},
+};
+
+export default (
+  state = initialState,
+  { type, payload }: { type: string; payload: any }
+): CommentState => {
+  const normalizeComment = (comment: any): Comment => ({
+    id: comment.id || 'unknown',
+    content: comment.content || 'No content provided',
+    user: comment.user || {
+      id: '',
+      firstname: 'Anonymous',
+      lastname: 'User',
+    },
+    createdAt: comment.createdAt || new Date().toISOString(),
+    updatedAt: comment.updatedAt || new Date().toISOString(),
+    likesCount: comment.likesCount || 0,
+  });
+
+  switch (type) {
+    case FETCH_COMMENTS_LOADING:
+    case CREATE_COMMENT_LOADING:
+    case COUNT_COMMENTS_LOADING:
+      return { ...state, isCommentLoading: true };
+
+    case FETCH_COMMENTS_SUCCESS:
+      if (!Array.isArray(payload)) {
+        console.error('FETCH_COMMENTS_SUCCESS: Invalid payload', payload);
+        return { ...state, errors: 'Invalid data format' };
+      }
+      return {
+        ...state,
+        isCommentLoading: false,
+        isLoaded: true,
+        comment_data: payload.map(normalizeComment),
+      };
+
+    case CREATE_COMMENT_SUCCESS:
+      if (!payload || !payload.id) {
+        console.error('CREATE_COMMENT_SUCCESS: Missing id in payload', payload);
         return state;
-    }
-  };
-  
+      }
+      return {
+        ...state,
+        isCommentLoading: false,
+        isLoaded: true,
+        comment_data: [...state.comment_data, normalizeComment(payload)],
+      };
+
+    case COUNT_COMMENTS_SUCCESS:
+      if (!payload || !payload.blogId || typeof payload.count !== 'number') {
+        console.error('COUNT_COMMENTS_SUCCESS: Invalid payload', payload);
+        return state;
+      }
+      return {
+        ...state,
+        isCommentLoading: false,
+        commentCounts: {
+          ...state.commentCounts,
+          [payload.blogId]: payload.count,
+        },
+      };
+
+    case FETCH_COMMENTS_FAIL:
+    case CREATE_COMMENT_FAIL:
+        console.error(`${type}:`, payload); 
+        return {
+          ...state,
+          isCommentLoading: false,
+          errors: payload || 'An error occurred while creating the comment.',
+        };
+    case COUNT_COMMENTS_FAIL:
+      console.error(`${type}:`, payload);
+      return { ...state, isCommentLoading: false, errors: payload || 'Error occurred' };
+
+    default:
+      return state;
+  }
+};
