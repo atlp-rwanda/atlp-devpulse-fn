@@ -65,7 +65,8 @@ function NavBar() {
   const userDestination = destination();
   const access_token = localStorage.getItem("access_token");
   //@ts-ignore
-  const user = access_token ? jwtDecode(access_token).picture : profile;
+  const user = access_token  ? jwtDecode(access_token)?.profile || profile : profile;
+
   const roleName = localStorage.getItem("roleName");
   const [nav, setNav] = useState(false);
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
@@ -93,7 +94,7 @@ function NavBar() {
           handleShowProfileDropdown={handleShowProfileDropdown}
         />
       )}
-      <div className="flex items-center justify-between h-[70px] fixed z-50 top-0 border-b w-screen bg-white dark:bg-dark-bg">
+      <div className="flex items-center justify-between h-[70px] fixed z-50 top-0 border-b w-screen bg-white dark:bg-dark-bg sm:px-10">
         <div className="flex items-center">
           <span
             onClick={handleClick}

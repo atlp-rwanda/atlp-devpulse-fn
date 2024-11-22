@@ -89,7 +89,7 @@ const Blogs: React.FC = () => {
             <FaCommentDots size={20} className='dark:text-green' /> {blog.comments || 0}
           </span>
         </div>
-                    </div>
+                </div>
                   </div>
                   <h3 className="text-xl font-semibold mb-2">{blog.title}</h3>
                   <p className="mb-4 text-black-text dark:text-white overflow-hidden line-clamp-3">

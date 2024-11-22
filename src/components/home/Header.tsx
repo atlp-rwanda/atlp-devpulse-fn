@@ -9,6 +9,7 @@ import { useTheme } from "../../hooks/darkmode";
 import { useNotifications } from "../../utils/Notifications";
 import { useAdminNotifications } from "../../hooks/useAdminNotifications";
 const logo = require("../../assets/logo.svg").default;
+const LogoWhite: string = require("../../assets/logoWhite.svg").default;
 const profilePlaceholder = require("../../assets/avatar.png").default;
 
 const Header = () => {
@@ -20,7 +21,8 @@ const Header = () => {
   const accessToken = localStorage.getItem("access_token");
   const isLoggedIn = Boolean(accessToken);
   //@ts-ignore
-  const user = isLoggedIn ? jwtDecode(accessToken).picture : profilePlaceholder;
+  const user = isLoggedIn ? jwtDecode(accessToken)?.profile || profilePlaceholder : profilePlaceholder;
+
   const roleName = localStorage.getItem("roleName");
 
   const toggleNav = () => setIsNavOpen(!isNavOpen);
@@ -46,10 +48,24 @@ const Header = () => {
     <header className="w-full bg-white dark:bg-dark-bg fixed z-20 top-0 left-0 border-b border-gray-200 px-4 sm:px-10">
       <div className="max-w-screen-xl flex items-center justify-between mx-auto p-4">
 
-        <Link to="/" className="flex items-center space-x-2">
-          <img src={logo} alt="Logo" className="h-8 w-auto" />
-          <h1 className="text-lg font-bold font-lexend text-primary dark:text-green">PULSE</h1>
-        </Link>
+            <Link to="/" className="flex items-center">
+                {theme ? (
+                  <img
+                    className="cursor-pointer mx-2 fill-[blue]"
+                    src={logo}
+                    style={{ fill: '#333' }}
+                  />
+                ) : (
+                  <img
+                    className="cursor-pointer  mx-2"
+                    src={LogoWhite}
+                    alt="logoWhite"
+                  />
+                )}
+                <h1 className=" sm-text-1xl mr-12  font-bold font-lexend text-primary  md:hidden dark:text-green">
+                  PULSE
+                </h1>
+              </Link>
 
    
         <nav className="hidden sm:flex space-x-10">
@@ -108,7 +124,7 @@ const Header = () => {
 
 
       {isNavOpen && (
-        <div className="sm:hidden px-4 mt-2">
+        <div className="sm:hidden px-4 mt-2 h-full">
           <div className="flex items-center justify-between mb-4">
             <div onClick={handleToggleTheme} className="cursor-pointer">
               {theme ? <MoonIcon className="w-6 dark:text-white" /> : <SunIcon className="w-6 text-dark-text-fill" />}
@@ -123,8 +139,9 @@ const Header = () => {
             </ul>
           </nav>
 
-          {isLoggedIn && (
-            <div className="mt-4 flex flex-col items-center">
+         {isLoggedIn ? (
+            <>
+             
               <span className="flex items-center">
                 <AiOutlineBell
                   className="text-[25px] cursor-pointer dark:text-dark-text-fill"
@@ -136,7 +153,8 @@ const Header = () => {
                   </span>
                 )}
               </span>
-              
+
+          
               <span onClick={handleShowProfileDropdown}>
                 <img
                   src={user}
@@ -149,7 +167,11 @@ const Header = () => {
               {showProfileDropdown && (
                 <ProfileDropdown handleShowProfileDropdown={handleShowProfileDropdown} />
               )}
-            </div>
+            </>
+          ) : (
+            <Link to="/login" className="text-white dark:text-white">
+              Sign In
+            </Link>
           )}
         </div>
       )}
