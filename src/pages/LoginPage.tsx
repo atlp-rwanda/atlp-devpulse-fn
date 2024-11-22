@@ -57,7 +57,7 @@ const LoginPage = (props: any) => {
     <>
       <div className="flex items-center dark:bg-zinc-800 ">
         <div
-          className={`flex items-center justify-between h-[70px] fixed z-50 top-0 border-b border-gray-400 w-screen bg-gray-300 dark:bg-dark-bg`}
+          className={`flex items-center justify-between h-[70px] fixed z-50 top-0 border-b border-gray-400 w-screen bg-gray-300 dark:bg-dark-bg sm:px-10`}
         >
           <div className="flex items-center ">
             <span
@@ -99,8 +99,8 @@ const LoginPage = (props: any) => {
                 <SunIcon className="w-8 text-dark-text-fill" />
               )}
             </div>
-            <Link to={'/signup'}>
-              <span className="flex items-center font-bold text-primary dark:text-white">
+            <Link to={'/signup'} className="text-white dark:text-white bg-primary dark:bg-green rounded-md px-4 py-2 ">
+              <span className="flex items-center font-bold  dark:text-white">
                 SignUp
               </span>
             </Link>
