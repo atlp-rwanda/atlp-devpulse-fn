@@ -2,6 +2,12 @@ export const getStatusClass = (status: string): string => {
     switch (status) {
       case "submitted":
         return "bg-blue-500 text-white";
+      case "under-review":
+        return "bg-blue-500 text-white";  
+      case "accepted":
+        return "bg-teal-700 text-white";  
+      case "rejected":
+        return "bg-red-500 text-white";  
       case "Shortlisted":
         return "bg-teal-500 text-white";
       case "English assessment":
@@ -28,5 +34,4 @@ export const getStatusClass = (status: string): string => {
       default:
         return "bg-gray-300 text-black";
     }
-  };
-  
+  }; 

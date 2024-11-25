@@ -6,6 +6,7 @@ import {
   sidebarItems2,
   sidebarItems3,
   applicantSidebarItems,
+  traineeSidebarItems,
 } from "./sidebarItems";
 import "./navslide.css";
 import TokenExpirationHandler from "../../utils/tokenExpirationHandler";
@@ -25,6 +26,8 @@ const Sidebar = ({ expanded, setExpanded }) => {
   const items =
     roleName === "applicant"
       ? applicantSidebarItems
+      : roleName === "trainee"
+      ? traineeSidebarItems
       : [...sidebarItems1, ...sidebarItems2];
   const handleLogout = () => {
     localStorage.clear();
