@@ -71,7 +71,6 @@ export const addReactionAction = (blogId: string, type: string) => async (dispat
   } catch (err: any) {
     const errorMessage = err.response?.data?.errors?.[0]?.message || err.message || "Failed to add reaction.";
     dispatch(creator(addReaction.ADD_REACTION_FAIL, errorMessage));
-    toast.error(errorMessage);
   }
 };
 

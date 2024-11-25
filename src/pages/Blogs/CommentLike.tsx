@@ -1,62 +1,57 @@
-import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../redux/reducers';
-import { getCommentLikes, addCommentLike } from '../../redux/actions/commentActions';
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../redux/reducers";
+import { getCommentLikes } from "../../redux/actions/commentActions";
 
 interface CommentLikeProps {
   commentId: string;
-  blogId: string; 
+  currentUserId: string; 
 }
 
-const CommentLike: React.FC<CommentLikeProps> = ({ commentId, blogId }) => {
+const CommentLike: React.FC<CommentLikeProps> = ({ commentId, currentUserId }) => {
   const dispatch = useDispatch();
-  const [hasLiked, setHasLiked] = useState<boolean>(false);
+  const [isLiked, setIsLiked] = useState(false);
+  const [likesCount, setLikesCount] = useState<number>(0);
 
-  const { likes, isLikeLoading } = useSelector((state: RootState) => state.comments); 
-  const { currentUser } = useSelector((state: RootState) => state.user); 
-
-  useEffect(() => {
-    if (commentId) {
-      dispatch(getCommentLikes(commentId)); 
-    }
-  }, [dispatch, commentId]);
+  const { isLikeLoading } = useSelector((state: RootState) => ({
+    isLikeLoading: state.comments.isCommentLoading,
+  }));
 
   useEffect(() => {
-    const userLiked = likes.some((like: any) => like.user.id === currentUser.id);
-    setHasLiked(userLiked);
-  }, [likes, currentUser]);
+    const fetchLikes = async () => {
+      try {
+        const response = await dispatch(getCommentLikes(commentId));
+        if (response?.data?.getCommentLikes?.count >= 0) {
+          setLikesCount(response.data.getCommentLikes.count);
+          setIsLiked(response.data.getCommentLikes.userIds?.includes(currentUserId) || false);
+        }
+      } catch (error) {
+        console.error("Error fetching comment likes:", error);
+      }
+    };
 
-  const handleLikeClick = () => {
-    if (hasLiked) {
-      return;
-    }
-    dispatch(addCommentLike(commentId, currentUser.id)); 
-    setHasLiked(true); 
+    fetchLikes();
+  }, [dispatch, commentId, currentUserId]);
+
+  const handleToggleLike = () => {
+    setIsLiked((prevIsLiked) => {
+      const newIsLiked = !prevIsLiked;
+      setLikesCount((prevCount) => (newIsLiked ? prevCount + 1 : prevCount - 1));
+      return newIsLiked;
+    });
   };
 
   return (
     <div className="flex items-center gap-2">
       <button
-        onClick={handleLikeClick}
         disabled={isLikeLoading}
-        className={`${
-          hasLiked ? 'text-blue-500' : 'text-gray-500'
-        } flex items-center gap-1 px-2 py-1 rounded-md focus:outline-none`}
+        onClick={handleToggleLike}
+        className={`flex items-center gap-1 px-2 py-1 rounded-md focus:outline-none ${
+          isLiked ? "text-blue-500 bg-blue-100" : "text-gray-500"
+        }`}
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="w-5 h-5"
-          fill="currentColor"
-          viewBox="0 0 20 20"
-          aria-hidden="true"
-        >
-          <path
-            fillRule="evenodd"
-            d="M10 18s8-4.4 8-9.8c0-3.6-3-6.5-6.5-6.5-2.4 0-3.9 2.5-4 3.4-.1-.9-1.6-3.4-4-3.4-3.5 0-6.5 2.9-6.5 6.5C2 13.6 10 18 10 18z"
-            clipRule="evenodd"
-          />
-        </svg>
-        {likes.length} Likes
+        <span className="text-lg">{isLiked ? "👍" : "👍"}</span>
+        {likesCount} {likesCount === 1 ? "Like" : "Likes"}
       </button>
     </div>
   );
