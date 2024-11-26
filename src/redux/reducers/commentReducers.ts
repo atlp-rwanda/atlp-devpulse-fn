@@ -82,28 +82,27 @@ const handleSuccessState = (state: CommentState, updates: Partial<CommentState>)
 });
 
 const reducer = (state = initialState, action: { type: string; payload: any }): CommentState => {
+  let newState = state;
+
   if (action.type.endsWith('_LOADING')) {
-    return handleLoadingStates(state);
-  }
-
-  if (action.type.endsWith('_FAIL')) {
+    newState = handleLoadingStates(state);
+  } else if (action.type.endsWith('_FAIL')) {
     console.error(`${action.type}:`, action.payload);
-    return handleFailState(state, action.payload);
-  }
-
-  if (action.type.endsWith('_SUCCESS')) {
+    newState = handleFailState(state, action.payload);
+  } else if (action.type.endsWith('_SUCCESS')) {
     switch (action.type) {
       case FETCH_COMMENTS_SUCCESS:
-        return handleSuccessState(state, {
+        newState = handleSuccessState(state, {
           isLoaded: true,
           comment_data: Array.isArray(action.payload)
             ? action.payload.map(normalizeComment)
             : state.comment_data,
         });
+        break;
 
       case CREATE_COMMENT_SUCCESS:
         if (action.payload && action.payload.id) {
-          return handleSuccessState(state, {
+          newState = handleSuccessState(state, {
             isLoaded: true,
             comment_data: [...state.comment_data, normalizeComment(action.payload)],
           });
@@ -112,7 +111,7 @@ const reducer = (state = initialState, action: { type: string; payload: any }): 
 
       case COUNT_COMMENTS_SUCCESS:
         if (action.payload?.blogId && typeof action.payload.count === 'number') {
-          return handleSuccessState(state, {
+          newState = handleSuccessState(state, {
             commentCounts: {
               ...state.commentCounts,
               [action.payload.blogId]: action.payload.count,
@@ -124,7 +123,7 @@ const reducer = (state = initialState, action: { type: string; payload: any }): 
       case ADD_COMMENT_LIKE_SUCCESS:
       case GET_COMMENT_LIKES_SUCCESS:
         if (action.payload?.commentId && typeof action.payload.likesCount === 'number') {
-          return handleSuccessState(state, {
+          newState = handleSuccessState(state, {
             comment_data: state.comment_data.map((comment) =>
               comment.id === action.payload.commentId
                 ? { ...comment, likesCount: action.payload.likesCount }
@@ -148,7 +147,7 @@ const reducer = (state = initialState, action: { type: string; payload: any }): 
             return acc;
           }, {});
 
-          return handleSuccessState(state, {
+          newState = handleSuccessState(state, {
             repliesByCommentId: {
               ...state.repliesByCommentId,
               ...repliesByCommentId,
@@ -160,7 +159,7 @@ const reducer = (state = initialState, action: { type: string; payload: any }): 
       case ADD_REPLY_SUCCESS:
         const { commentId, reply } = action.payload || {};
         if (commentId && reply) {
-          return handleSuccessState(state, {
+          newState = handleSuccessState(state, {
             repliesByCommentId: {
               ...state.repliesByCommentId,
               [commentId]: [
@@ -181,7 +180,7 @@ const reducer = (state = initialState, action: { type: string; payload: any }): 
     }
   }
 
-  return state;
+  return newState;
 };
 
 export default reducer;
