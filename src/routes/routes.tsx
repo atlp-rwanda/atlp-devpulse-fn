@@ -84,6 +84,7 @@ import SingleBlogView from "../pages/Blogs/singleBlog";
 import SingleBlogPage from "../pages/LandingPage/SingleBlogPage"
 import LandingPage from "../pages/LandingPage/LandingPage";
 import Blogs from "../pages/Blogs/Blogs"
+import ViewExternalDocuments from "../pages/viewExternalDocuments";
 
 function Navigation() {
   const roleName = localStorage.getItem("roleName");
@@ -96,7 +97,10 @@ function Navigation() {
       <Route path="/blogs" element={<Blogs />} />
       <Route path="/forget" element={<ForgotPasswordPage />} />
       <Route path="/reset-password" element={<ResetPasswordPage />} />
-      <Route path="/home" element={<LandingPage/>}/>
+      <Route path="/home" element={<LandingPage/>}/>      <Route path="/view-external-document" element={
+          <ViewExternalDocuments />
+      }
+      />
       <Route path="/signup" element={<SignupPage />} />
       <Route path="/verifyEmail" element={<VerifyEmail />} />
       <Route path="/pageNotFound" element={<PageNotFound />} />
@@ -447,7 +451,7 @@ function Navigation() {
           path="tickets"
           element={
             <PrivateRoute allowedRoles={["admin", "superAdmin"]}>
-              <AdminTicketPage />
+              <AdminTicketPage  />
             </PrivateRoute>
           }
         />
@@ -455,7 +459,7 @@ function Navigation() {
           path="ticket/:id"
           element={
             <PrivateRoute allowedRoles={["admin", "superAdmin"]}>
-              <SingleTicketDetails />
+              <SingleTicketDetails  />
             </PrivateRoute>
           }
         />
@@ -463,7 +467,7 @@ function Navigation() {
           path="ticket/:id/resolve"
           element={
             <PrivateRoute allowedRoles={["admin", "superAdmin"]}>
-              <ResolveTicketPage />
+              <ResolveTicketPage  />
             </PrivateRoute>
           }
         />
@@ -471,7 +475,7 @@ function Navigation() {
           path="tickets"
           element={
             <PrivateRoute allowedRoles={["admin", "superAdmin"]}>
-              <AdminTicketPage />
+              <AdminTicketPage  />
             </PrivateRoute>
           }
         />
@@ -479,7 +483,7 @@ function Navigation() {
           path="ticket/:id"
           element={
             <PrivateRoute allowedRoles={["admin", "superAdmin"]}>
-              <SingleTicketDetails />
+              <SingleTicketDetails  />
             </PrivateRoute>
           }
         />
@@ -487,7 +491,7 @@ function Navigation() {
           path="ticket/:id/resolve"
           element={
             <PrivateRoute allowedRoles={["admin", "superAdmin"]}>
-              <ResolveTicketPage />
+              <ResolveTicketPage  />
             </PrivateRoute>
           }
         />
@@ -754,7 +758,7 @@ function Navigation() {
           path="tickets"
           element={
             <PrivateRoute allowedRoles={["applicant", "trainee"]}>
-              <TicketPage />
+              <TicketPage  />
             </PrivateRoute>
           }
         />
@@ -762,7 +766,7 @@ function Navigation() {
           path="ticket/:id"
           element={
             <PrivateRoute allowedRoles={["applicant", "trainee"]}>
-              <SingleTicketDetails />
+              <SingleTicketDetails  />
             </PrivateRoute>
           }
         />
@@ -770,7 +774,7 @@ function Navigation() {
           path="ticket/:id/reply"
           element={
             <PrivateRoute allowedRoles={["applicant", "trainee"]}>
-              <ReplyTicketPage />
+              <ReplyTicketPage  />
             </PrivateRoute>
           }
         />
