@@ -27,6 +27,7 @@ import { TableSkeleton } from "../../skeletons/applicantStageSkeleton";
 import LoadingSkeleton from "../../skeletons/loadingSkeleton";
 import { useParams } from "react-router-dom";
 import toast from "react-hot-toast";
+import { Link } from "react-router-dom";
 import ScheduleTechnical from "../../components/Invitation/ScheduleTechnical";
 import axios from "axios";
 import { exportToExcel } from "../../utils/exports/exportToExcel";
@@ -43,7 +44,7 @@ const ApplicantStages = (props: any) => {
   const [All, setAll] = useState(false);
   const { theme, setTheme } = useTheme();
   const [isOpen, setIsOpen] = useState(false);
-  const [isMore, setIsMore] = useState("");
+  const [isMore, setIsMore] = useState(null);
   const [loading, setLoading] = useState(true);
   const [loadingFilter, setLoadingFilter] = useState(true);
   const [filterStages, setFilterStages] = useState<string>("All");
@@ -128,7 +129,7 @@ const ApplicantStages = (props: any) => {
 
   const handleMoreOptions = (userId: any) => {
     if (!isMore) setIsMore(userId);
-    if (isMore) setIsMore("");
+    if (isMore) setIsMore(null);
   };
 
   const handleFilter = async (filterStages: string) => {
@@ -183,24 +184,15 @@ const ApplicantStages = (props: any) => {
   };
 
   const handleReload = async () => {
+    setIsMore(null);
     await dispatch(fetchtraine(input));
     await dispatch(filterStage(filterStages));
-    setIsMore("");
   };
 
   const handleToExport = async (stage: string) => {
     let data;
     setIsOpen((prev) => !prev)
     switch (stage) {
-      case "All":
-        data = filteredTrainees.filter(
-          (item: any) => item.applicationPhase === "Technical Assessment"
-        );
-  
-        // Call exportToExcel function
-        exportToExcel({ data, docName: 'All Technical Assessment Data' });
-        break;
-  
       case "Technical Assessment":
         // Use pre-filtered data (filterData)
         data = filterData;
@@ -210,7 +202,7 @@ const ApplicantStages = (props: any) => {
         break;
   
       default:
-        console.log("Invalid stage");
+        toast.error("Invalid stage");
     }
   };
 
@@ -281,7 +273,7 @@ const ApplicantStages = (props: any) => {
               </button>
             ))}
           </div>
-          <div className={`${filterStages === "All" || filterStages === "Technical Assessment" ? "block" : "hidden"}`}>
+          <div className={`${filterStages === "Technical Assessment" ? "block" : "hidden"}`}>
             <button
               onClick={() => setIsOpen((prev) => !prev)}
               id="dropdownActionButton"
@@ -362,14 +354,19 @@ const ApplicantStages = (props: any) => {
                     {"Comments"}
                   </th>
                 ) : (
-                  <th className="px-5 py-3 text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
-                    {"Stage"}
-                  </th>
+                  <>
+                    <th className="px-5 py-3 text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
+                      {"Stage"}
+                    </th>
+                    <th className="px-5 py-3 text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
+                      Documents
+                    </th>
+                  </>
                 )}
                 {filterStages === "Technical Assessment" ||
-                (filterStages === "Interview Assessment" &&
-                  filterData &&
-                  filterData.length > 0) ? (
+                  (filterStages === "Interview Assessment" &&
+                    filterData &&
+                    filterData.length > 0) ? (
                   <th className="px-5 py-3 text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
                     {"score"}
                   </th>
@@ -391,11 +388,10 @@ const ApplicantStages = (props: any) => {
                     item?.delete_at == false ? (
                       <tr
                         key={item._id}
-                        className={`${
-                          index % 2 === 0
-                            ? "bg-white dark:bg-dark-bg"
-                            : "bg-gray-50 dark:bg-dark-tertiary"
-                        } hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors duration-200`}
+                        className={`${index % 2 === 0
+                          ? "bg-white dark:bg-dark-bg"
+                          : "bg-gray-50 dark:bg-dark-tertiary"
+                          } hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors duration-200`}
                       >
                         <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-xs">
                           <div className="flex">
@@ -418,13 +414,12 @@ const ApplicantStages = (props: any) => {
                         <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-xs ">
                           <span
                             className={`inline-block text-center rounded-full px-1 py-2 min-w-20 max-w-16 whitespace-no-wrap
-                        ${
-                          item.applicationPhase === "Rejected"
-                            ? "bg-red-200 text-red-500 font-medium"
-                            : item.applicationPhase === "Admitted"
-                            ? "bg-[#0c6a0c] dark:bg-[#1bf84b8d] text-white"
-                            : "bg-gray-100 text-gray-800"
-                        }`}
+                        ${item.applicationPhase === "Rejected"
+                                ? "bg-red-200 text-red-500 font-medium"
+                                : item.applicationPhase === "Admitted"
+                                  ? "bg-[#0c6a0c] dark:bg-[#1bf84b8d] text-white"
+                                  : "bg-gray-100 text-gray-800"
+                              }`}
                           >
                             {item.status}
                           </span>
@@ -448,6 +443,39 @@ const ApplicantStages = (props: any) => {
                           </span>
                         </td>
                         <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-xs relative">
+                          <div className="flex flex-wrap gap-4">
+                            {item?.idDocumentUrl && (
+                              <Link
+                                to={`/view-external-document?fileUrl=${encodeURIComponent(item.idDocumentUrl)}&backUrl=${encodeURIComponent("/")}&title=${encodeURIComponent("ID Document")}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                title="Open ID Document"
+                                className="px-4 py-2 bg-blue-500 text-white rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+                              >
+                                ID
+                              </Link>
+                            )}
+                            {item?.resumeUrl && (
+                              <Link
+                                to={`/view-external-document?fileUrl=${encodeURIComponent(item.resumeUrl)}&backUrl=${encodeURIComponent("/")}&title=${encodeURIComponent("Resume Document")}`}
+                                target="_blank"
+                                className="px-4 py-2 bg-blue-500 text-white rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-green-400"
+                              >
+                                Resume
+                              </Link>
+                            )}
+                            {item?.coverLetterUrl && (
+                              <Link
+                                to={`/view-external-document?fileUrl=${encodeURIComponent(item.coverLetterUrl)}&backUrl=${encodeURIComponent("/")}&title=${encodeURIComponent("Cover letter Document")}`}
+                                target="_blank"
+                                className="px-4 py-2 bg-blue-500 text-white rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-red-400"
+                              >
+                                Cover letter
+                              </Link>
+                            )}
+                          </div>
+                        </td>
+                        <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-xs relative">
                           <div className=" flex justify-center">
                             <HiDotsVertical
                               className=" text-black dark:text-white text-3xl cursor-pointer"
@@ -465,20 +493,19 @@ const ApplicantStages = (props: any) => {
                               <ul className="py-1" aria-labelledby="dropdown">
                                 <li>
                                   <div
-                                    className={`${
-                                      isMore === item._id &&
+                                    className={`${isMore === item._id &&
                                       (item.applicationPhase ===
                                         "Interview Assessment" ||
                                         item.applicationPhase ===
-                                          "Technical Assessment")
-                                        ? "block"
-                                        : "hidden"
-                                    } block text-xs hover:bg-gray-100 text-gray-700  dark:hover:bg-gray-500 dark:text-white px-4 py-2`}
+                                        "Technical Assessment")
+                                      ? "block"
+                                      : "hidden"
+                                      } block text-xs hover:bg-gray-100 text-gray-700  dark:hover:bg-gray-500 dark:text-white px-4 py-2`}
                                   >
                                     <AddApplicantScore
                                       applicantId={item._id}
                                       stage={item.applicationPhase}
-                                      onClose={() => setIsMore("")}
+                                      onClose={() => setIsMore(null)}
                                     />
                                   </div>
                                 </li>
@@ -504,7 +531,7 @@ const ApplicantStages = (props: any) => {
                                   <NextStageModal
                                     applicantId={item._id}
                                     stage={item.applicationPhase}
-                                    onClose={() => setIsMore("")}
+                                    onClose={() => setIsMore(null)}
                                   />
                                 </li>
                                 <li>
@@ -514,7 +541,7 @@ const ApplicantStages = (props: any) => {
                                       item.firstName + " " + item.lastName
                                     }
                                     stage={item.applicationPhase}
-                                    onClose={() => setIsMore("")}
+                                    onClose={() => setIsMore(null)}
                                   />
                                 </li>
                               </ul>
@@ -528,11 +555,10 @@ const ApplicantStages = (props: any) => {
                   filterData?.map((item, index: number) => (
                     <tr
                       key={item._id}
-                      className={`${
-                        index % 2 === 0
-                          ? "bg-white dark:bg-dark-bg"
-                          : "bg-gray-50 dark:bg-dark-tertiary"
-                      } hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors duration-200`}
+                      className={`${index % 2 === 0
+                        ? "bg-white dark:bg-dark-bg"
+                        : "bg-gray-50 dark:bg-dark-tertiary"
+                        } hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors duration-200`}
                     >
                       <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-xs">
                         <div className="flex">
@@ -559,13 +585,12 @@ const ApplicantStages = (props: any) => {
                       <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-xs">
                         <span
                           className={`inline-block text-center px-1 py-2 min-w-20 max-w-16 rounded-full text-xs
-                        ${
-                          item.status === "Rejected"
-                            ? "bg-red-200 text-red-500 font-medium"
-                            : item.status === "Admitted"
-                            ? "bg-[#0c6a0c] dark:bg-[#1bf84b8d] text-white"
-                            : "bg-gray-100 text-gray-800"
-                        }`}
+                        ${item.status === "Rejected"
+                              ? "bg-red-200 text-red-500 font-medium"
+                              : item.status === "Admitted"
+                                ? "bg-[#0c6a0c] dark:bg-[#1bf84b8d] text-white"
+                                : "bg-gray-100 text-gray-800"
+                            }`}
                         >
                           {item.status}
                         </span>
@@ -579,7 +604,7 @@ const ApplicantStages = (props: any) => {
                         {handleTurnCutText(item.comments)}
                       </td>
                       {filterStages === "Technical Assessment" ||
-                      filterStages === "Interview Assessment" ? (
+                        filterStages === "Interview Assessment" ? (
                         <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-xs">
                           <span className="inline-block text-center px-1 py-2 min-w-20 max-w-16 bg-blue-100 text-blue-800 font-medium rounded-full">
                             {item.score === null ? "No Score" : item.score}
@@ -596,27 +621,24 @@ const ApplicantStages = (props: any) => {
                             }}
                           />
                           <div
-                            className={`${
-                              isMore === item.applicant._id ? "block" : "hidden"
-                            } absolute  bg-white dark:bg-dark-tertiary  dark:text-white text-base z-50 list-none divide-y divide-gray-100 rounded shadow my-4`}
+                            className={`${isMore === item.applicant._id ? "block" : "hidden"
+                              } absolute  bg-white dark:bg-dark-tertiary  dark:text-white text-base z-50 list-none divide-y divide-gray-100 rounded shadow my-4`}
                             id="dropdown"
                           >
                             <ul className="py-1" aria-labelledby="dropdown">
                               <li>
                                 <div
-                                  className={`${
-                                    filterStages === "Shortlisted" ||
+                                  className={`${filterStages === "Shortlisted" ||
                                     ((filterStages === "Technical Assessment" ||
                                       filterStages === "Interview Assessment" ||
                                       filterStages === "Admitted" ||
                                       filterStages === "Rejected") &&
                                       (item.status === "Moved" ||
                                         item.status === "Admitted" ||
-                                        item.status === "Rejected" ||
-                                        item.status === "Passed"))
-                                      ? "hidden"
-                                      : "block"
-                                  } text-xs hover:bg-gray-100 text-gray-700 dark:hover:bg-gray-500 dark:text-white px-4 py-2`}
+                                        item.status === "Rejected" || item.status === "Passed"))
+                                    ? "hidden"
+                                    : "block"
+                                    } text-xs hover:bg-gray-100 text-gray-700 dark:hover:bg-gray-500 dark:text-white px-4 py-2`}
                                 >
                                   <AddApplicantScore
                                     applicantId={item.applicant._id}
@@ -786,7 +808,7 @@ const ApplicantStages = (props: any) => {
             </div>
           </div>
         </div>
-      </div>
+      </div >
     </>
   );
 };

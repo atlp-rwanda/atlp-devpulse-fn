@@ -181,6 +181,8 @@ export const filterStage = (stage: string) => async (dispatch: any) => {
   status
   comments
   score
+  platform
+  invitationLink
   updatedAt
   createdAt
   }

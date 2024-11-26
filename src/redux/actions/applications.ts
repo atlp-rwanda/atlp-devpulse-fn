@@ -233,6 +233,9 @@ export const getApplicantCyclesApplications = async () => {
             createdAt
           }
           createdAt
+          coverLetterUrl
+          resumeUrl
+          idDocumentUrl
         }
       }
     `

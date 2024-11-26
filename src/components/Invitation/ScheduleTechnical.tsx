@@ -26,32 +26,33 @@ const ScheduleTechnical: React.FC<props> = ({
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const handleOpenModel = () => {
-    setIsModelOpen(true);
+    setIsModelOpen((prev)=> !prev);
   };
   const handleCloseModel = () => {
-    setIsModelOpen(false);
+    setIsModelOpen((prev)=> !prev);
     onClose();
   };
   const handleFormSubmit = async (event: any) => {
     event.preventDefault();
-    if (!email.trim()) {
-      setError("Email is required");
-      return;
-    }
-    if (!invitationLink.trim()) {
-      setError("Link is required");
+    if (!email.trim() || !invitationLink.trim()) {
+      setError("all field are required");
       return;
     }
     setIsLoading(true);
     await dispatch(sendInvitations(applicantId, email, platForm, invitationLink)).then(
       () => {
+        setIsLoading(false);
         setError(null);
         onClose();
+        setIsModelOpen((prev)=> !prev);
         setEmail("");
         setInvitationLink("");
-        setIsLoading(false);
+        setPlatForm("");
       }
-    );
+    ).catch((error:any) => {
+      setIsLoading(false);
+      setError(error.message);
+    });
   };
 
   return (
@@ -138,6 +139,9 @@ const ScheduleTechnical: React.FC<props> = ({
                   onChange={(e) => setInvitationLink(e.target.value)}
                 />
               </div>
+              {error && (
+                <div className="text-red-500 text-sm mb-2">{error}</div>
+              )}
               <button
                 type="submit"
                 className="text-white bg-[#0c6a0c] dark:bg-[#56C870] hover:bg-[#4ab862] focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"

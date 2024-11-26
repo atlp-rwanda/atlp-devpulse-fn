@@ -159,6 +159,9 @@ export const fetchtraine = ({ page, itemsPerPage, All }: any) => {
                     _id
                     delete_at
                     createdAt
+                    coverLetterUrl
+                    idDocumentUrl
+                    resumeUrl
                     cycle_id {
                         name
                     }
@@ -184,9 +187,8 @@ export const fetchtraine = ({ page, itemsPerPage, All }: any) => {
           }
         )
         .then((res) => {
-          console.log(res)
+          console.log("All traineessss", res)
           if (res.data.data) {
-            // toast.success("traine-applicants fetched successfully");
             dispatch({
               type: fetchtrainesss.fetchtraines_success,
               data: res.data.data.allTrainees,
