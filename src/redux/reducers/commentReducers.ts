@@ -57,23 +57,27 @@ const initialState: CommentState = {
   repliesByCommentId: {},
 };
 
-export default (
-  state = initialState,
-  action: { type: string; payload: any }
-): CommentState => {
-  const normalizeComment = (comment: any): Comment => ({
-    id: comment.id || 'unknown',
-    content: comment.content || 'No content provided',
-    user: comment.user || {
-      id: '',
-      firstname: 'Anonymous',
-      lastname: 'User',
-    },
-    createdAt: comment.createdAt || new Date().toISOString(),
-    updatedAt: comment.updatedAt || new Date().toISOString(),
-    likesCount: comment.likesCount || 0,
-  });
+const normalizeComment = (comment: any): Comment => ({
+  id: comment.id || 'unknown',
+  content: comment.content || 'No content provided',
+  user: comment.user || { id: '', firstname: 'Anonymous', lastname: 'User' },
+  createdAt: comment.createdAt || new Date().toISOString(),
+  updatedAt: comment.updatedAt || new Date().toISOString(),
+  likesCount: comment.likesCount || 0,
+});
 
+const handleLoadingStates = (state: CommentState): CommentState => ({
+  ...state,
+  isCommentLoading: true,
+});
+
+const handleFailState = (state: CommentState, error: string | null): CommentState => ({
+  ...state,
+  isCommentLoading: false,
+  errors: error || 'An error occurred while processing the request.',
+});
+
+const reducer = (state = initialState, action: { type: string; payload: any }): CommentState => {
   switch (action.type) {
     case FETCH_COMMENTS_LOADING:
     case CREATE_COMMENT_LOADING:
@@ -82,12 +86,12 @@ export default (
     case GET_COMMENT_LIKES_LOADING:
     case FETCH_REPLIES_LOADING:
     case ADD_REPLY_LOADING:
-      return { ...state, isCommentLoading: true };
+      return handleLoadingStates(state);
 
     case FETCH_COMMENTS_SUCCESS:
       if (!Array.isArray(action.payload)) {
         console.error('FETCH_COMMENTS_SUCCESS: Invalid payload', action.payload);
-        return { ...state, errors: 'Invalid data format' };
+        return handleFailState(state, 'Invalid data format');
       }
       return {
         ...state,
@@ -123,8 +127,9 @@ export default (
       };
 
     case ADD_COMMENT_LIKE_SUCCESS:
+    case GET_COMMENT_LIKES_SUCCESS:
       if (!action.payload || !action.payload.commentId || typeof action.payload.likesCount !== 'number') {
-        console.error('ADD_COMMENT_LIKE_SUCCESS: Invalid payload', action.payload);
+        console.error(`${action.type}: Invalid payload`, action.payload);
         return state;
       }
       return {
@@ -137,40 +142,22 @@ export default (
         ),
       };
 
-    case GET_COMMENT_LIKES_SUCCESS:
-      if (!action.payload || !action.payload.commentId || typeof action.payload.count !== 'number') {
-        console.error('GET_COMMENT_LIKES_SUCCESS: Invalid payload', action.payload);
-        return state;
-      }
-      return {
-        ...state,
-        isCommentLoading: false,
-        comment_data: state.comment_data.map((comment) =>
-          comment.id === action.payload.commentId
-            ? { ...comment, likesCount: action.payload.count }
-            : comment
-        ),
-      };
-
-    case FETCH_REPLIES_SUCCESS:
+    case FETCH_REPLIES_SUCCESS: {
       if (!action.payload || !Array.isArray(action.payload.replies)) {
         console.error('FETCH_REPLIES_SUCCESS: Invalid payload', action.payload);
-        return { ...state, errors: 'Invalid reply data format.' };
+        return handleFailState(state, 'Invalid reply data format.');
       }
       const repliesByCommentId = action.payload.replies.reduce((acc, reply) => {
-        const commentId = reply.comment; // Use `comment` field from reply object
-        if (!acc[commentId]) {
-          acc[commentId] = [];
-        }
+        const commentId = reply.comment;
+        if (!acc[commentId]) acc[commentId] = [];
         acc[commentId].push({
-          id: reply._id, // Use `_id` for unique identifier
+          id: reply._id,
           content: reply.content,
           user: reply.user,
-          createdAt: reply.created_at, // Map `created_at` to `createdAt`
+          createdAt: reply.created_at,
         });
         return acc;
       }, {});
-
       return {
         ...state,
         isCommentLoading: false,
@@ -179,27 +166,26 @@ export default (
           ...repliesByCommentId,
         },
       };
+    }
 
-      case ADD_REPLY_SUCCESS: {
-        const { commentId, reply } = action.payload;
-      
-        return {
-          ...state,
-          isCommentLoading: false,
-          repliesByCommentId: {
-            ...state.repliesByCommentId,
-            [commentId]: [
-              ...(state.repliesByCommentId[commentId] || []),
-              {
-                id: reply._id,
-                content: reply.content,
-                user: reply.user || { firstname: 'Anonymous', lastname: '' },
-              },
-            ],
-          },
-        };
-      }
-      
+    case ADD_REPLY_SUCCESS: {
+      const { commentId, reply } = action.payload;
+      return {
+        ...state,
+        isCommentLoading: false,
+        repliesByCommentId: {
+          ...state.repliesByCommentId,
+          [commentId]: [
+            ...(state.repliesByCommentId[commentId] || []),
+            {
+              id: reply._id,
+              content: reply.content,
+              user: reply.user || { firstname: 'Anonymous', lastname: '' },
+            },
+          ],
+        },
+      };
+    }
 
     case FETCH_REPLIES_FAIL:
     case ADD_REPLY_FAIL:
@@ -209,13 +195,11 @@ export default (
     case ADD_COMMENT_LIKE_FAIL:
     case GET_COMMENT_LIKES_FAIL:
       console.error(`${action.type}:`, action.payload);
-      return {
-        ...state,
-        isCommentLoading: false,
-        errors: action.payload || 'An error occurred while processing the request.',
-      };
+      return handleFailState(state, action.payload);
 
     default:
       return state;
   }
 };
+
+export default reducer;
