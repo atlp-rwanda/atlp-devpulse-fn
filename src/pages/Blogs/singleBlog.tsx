@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Heart, MessageCircle,User } from 'lucide-react';
 import { useAppDispatch,useAppSelector } from '../../hooks/hooks';
-import { getBlogById, getBlogRelatedArticles } from "../../redux/actions/blogActions";
+import { getBlogById, getBlogRelatedArticles, deleteBlogAction } from "../../redux/actions/blogActions";
 import { Spinner } from 'flowbite-react';
 import SingleBlogSkeleton from '../../skeletons/singleBlogSkeleton';
 import * as icons from "react-icons/ai";
@@ -43,6 +43,13 @@ const SingleBlogView = () => {
      if(id)
       dispatch(getBlogById(id));
   }, [dispatch]);
+
+  const handleDeleteBlog = async (id) => {
+    
+      await dispatch(deleteBlogAction(id));
+      window.location.href = "/blogs#/applicant/blogs";
+    
+  }
 
 
   return (
@@ -225,6 +232,15 @@ const SingleBlogView = () => {
                 <p className="text-left">No comments yet</p>
               </div>
             )}
+          </div>
+      
+          <div className='flex flex-col gap-2 mt-10'>
+            <h1 className='text-red-500 font-bold'>Danger Zone</h1>
+
+            <button className="flex gap-2 border border-red-500 px-4 py-2 rounded-lg w-fit text-red-500" onClick={() => handleDeleteBlog(blog.id)}>
+            <icons.AiFillDelete className="h-6 w-6 " />
+            Delete this blog
+            </button>
           </div>
         </div>
       )}
