@@ -283,17 +283,22 @@ export const deleteBlogAction = (id: string) => async (dispatch: any) => {
 
     dispatch({
       type: deleteBlog.DELETE_BLOG_SUCCESS,
-      message: "Blog deleted successfully",
+      payload: response.data, // Add relevant payload if needed
     });
-    toast.success("Blog deleted successfully!");
-  } catch (err: any) {
+
+    // Return a structured object so that the `result.type` check works
+    return { type: deleteBlog.DELETE_BLOG_SUCCESS, payload: response.data };
+  } catch (error: any) {
     dispatch({
       type: deleteBlog.DELETE_BLOG_FAIL,
-      error: err.message,
+      payload: error.message,
     });
-    toast.error(err.message);
+
+    // Return a structured object with the failure type
+    return { type: deleteBlog.DELETE_BLOG_FAIL, error: error.message };
   }
 };
+
 
 
 // Fetch related articles by blog ID
