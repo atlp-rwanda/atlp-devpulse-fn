@@ -91,95 +91,97 @@ const reducer = (state = initialState, action: { type: string; payload: any }): 
     return handleFailState(state, action.payload);
   }
 
-  switch (action.type) {
-    case FETCH_COMMENTS_SUCCESS:
-      if (!Array.isArray(action.payload)) {
-        console.error('FETCH_COMMENTS_SUCCESS: Invalid payload', action.payload);
-        return handleFailState(state, 'Invalid data format');
-      }
-      return handleSuccessState(state, {
-        isLoaded: true,
-        comment_data: action.payload.map(normalizeComment),
-      });
-
-    case CREATE_COMMENT_SUCCESS:
-      if (!action.payload || !action.payload.id) {
-        console.error('CREATE_COMMENT_SUCCESS: Missing id in payload', action.payload);
-        return state;
-      }
-      return handleSuccessState(state, {
-        isLoaded: true,
-        comment_data: [...state.comment_data, normalizeComment(action.payload)],
-      });
-
-    case COUNT_COMMENTS_SUCCESS:
-      if (!action.payload || !action.payload.blogId || typeof action.payload.count !== 'number') {
-        console.error('COUNT_COMMENTS_SUCCESS: Invalid payload', action.payload);
-        return state;
-      }
-      return handleSuccessState(state, {
-        commentCounts: {
-          ...state.commentCounts,
-          [action.payload.blogId]: action.payload.count,
-        },
-      });
-
-    case ADD_COMMENT_LIKE_SUCCESS:
-    case GET_COMMENT_LIKES_SUCCESS:
-      if (!action.payload || !action.payload.commentId || typeof action.payload.likesCount !== 'number') {
-        console.error(`${action.type}: Invalid payload`, action.payload);
-        return state;
-      }
-      return handleSuccessState(state, {
-        comment_data: state.comment_data.map((comment) =>
-          comment.id === action.payload.commentId
-            ? { ...comment, likesCount: action.payload.likesCount }
-            : comment
-        ),
-      });
-
-    case FETCH_REPLIES_SUCCESS:
-      if (!action.payload || !Array.isArray(action.payload.replies)) {
-        console.error('FETCH_REPLIES_SUCCESS: Invalid payload', action.payload);
-        return handleFailState(state, 'Invalid reply data format.');
-      }
-      const repliesByCommentId = action.payload.replies.reduce((acc, reply) => {
-        const commentId = reply.comment;
-        if (!acc[commentId]) acc[commentId] = [];
-        acc[commentId].push({
-          id: reply._id,
-          content: reply.content,
-          user: reply.user,
-          createdAt: reply.created_at,
+  if (action.type.endsWith('_SUCCESS')) {
+    switch (action.type) {
+      case FETCH_COMMENTS_SUCCESS:
+        return handleSuccessState(state, {
+          isLoaded: true,
+          comment_data: Array.isArray(action.payload)
+            ? action.payload.map(normalizeComment)
+            : state.comment_data,
         });
-        return acc;
-      }, {});
-      return handleSuccessState(state, {
-        repliesByCommentId: {
-          ...state.repliesByCommentId,
-          ...repliesByCommentId,
-        },
-      });
 
-    case ADD_REPLY_SUCCESS:
-      const { commentId, reply } = action.payload;
-      return handleSuccessState(state, {
-        repliesByCommentId: {
-          ...state.repliesByCommentId,
-          [commentId]: [
-            ...(state.repliesByCommentId[commentId] || []),
-            {
+      case CREATE_COMMENT_SUCCESS:
+        if (action.payload && action.payload.id) {
+          return handleSuccessState(state, {
+            isLoaded: true,
+            comment_data: [...state.comment_data, normalizeComment(action.payload)],
+          });
+        }
+        break;
+
+      case COUNT_COMMENTS_SUCCESS:
+        if (action.payload?.blogId && typeof action.payload.count === 'number') {
+          return handleSuccessState(state, {
+            commentCounts: {
+              ...state.commentCounts,
+              [action.payload.blogId]: action.payload.count,
+            },
+          });
+        }
+        break;
+
+      case ADD_COMMENT_LIKE_SUCCESS:
+      case GET_COMMENT_LIKES_SUCCESS:
+        if (action.payload?.commentId && typeof action.payload.likesCount === 'number') {
+          return handleSuccessState(state, {
+            comment_data: state.comment_data.map((comment) =>
+              comment.id === action.payload.commentId
+                ? { ...comment, likesCount: action.payload.likesCount }
+                : comment
+            ),
+          });
+        }
+        break;
+
+      case FETCH_REPLIES_SUCCESS:
+        if (Array.isArray(action.payload?.replies)) {
+          const repliesByCommentId = action.payload.replies.reduce((acc, reply) => {
+            const commentId = reply.comment;
+            acc[commentId] = acc[commentId] || [];
+            acc[commentId].push({
               id: reply._id,
               content: reply.content,
-              user: reply.user || { firstname: 'Anonymous', lastname: '' },
-            },
-          ],
-        },
-      });
+              user: reply.user,
+              createdAt: reply.created_at,
+            });
+            return acc;
+          }, {});
 
-    default:
-      return state;
+          return handleSuccessState(state, {
+            repliesByCommentId: {
+              ...state.repliesByCommentId,
+              ...repliesByCommentId,
+            },
+          });
+        }
+        break;
+
+      case ADD_REPLY_SUCCESS:
+        const { commentId, reply } = action.payload || {};
+        if (commentId && reply) {
+          return handleSuccessState(state, {
+            repliesByCommentId: {
+              ...state.repliesByCommentId,
+              [commentId]: [
+                ...(state.repliesByCommentId[commentId] || []),
+                {
+                  id: reply._id,
+                  content: reply.content,
+                  user: reply.user || { firstname: 'Anonymous', lastname: '' },
+                },
+              ],
+            },
+          });
+        }
+        break;
+
+      default:
+        break;
+    }
   }
+
+  return state;
 };
 
 export default reducer;
