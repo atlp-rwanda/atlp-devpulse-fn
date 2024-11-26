@@ -32,24 +32,16 @@ const ApplicationFilter: React.FC<ApplicationFilterProps> = ({
                     className="border dark:border-slate-400 p-[0.5rem] text-sm rounded-md dark:bg-dark-bg dark:text-white " >
                     <option value="All">All Status</option>
                     <option value="submitted">Submitted</option>
-                    <option value="Shortlisted">Shortlisted</option>
-                    <option value="English assessment">English Assessment</option>
-                    <option value="Technical assessment">Technical Assessment</option>
-                    <option value="Done Technical assessment">Done Technical Assessment</option>
-                    <option value="Invited for Home Challenge">Invited for Home Challenge</option>
-                    <option value="Done Home Challenge">Done Home Challenge</option>
-                    <option value="Invited for Interview">Invited for Interview</option>
-                    <option value="Accepted">Accepted</option>
-                    <option value="Reject">Rejected</option>
-                    <option value="Missed English assessment">Missed English Assessment</option>
-                    <option value="Missed Technical assessment">Missed Technical Assessment</option>
-                    <option value="Missed Interview">Missed Interview</option>
+                    <option value="under-review">Under Review</option>
+                    <option value="accepted">Accepted</option>
+                    <option value="rejected">Rejected</option>
                 </select>
 
                 <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} className="border text-sm dark:border-slate-400 p-[0.5rem] rounded-md dark:bg-dark-bg dark:text-white">
-                    <option value="dateOfSubmission">Date</option>
-                    <option value="firstName">First Name</option>
-                    <option value="lastName">Last Name</option>
+                    <option value="createdAt">Date</option>
+                    <option value="userId.firstname">First Name</option>
+                    <option value="userId.lastname">Last Name</option>
+                    <option value="jobId.title">Job Title</option>
                     <option value="status">Status</option>
                 </select>
                 <select value={sortOrder} onChange={(e) => setSortOrder(e.target.value)} className="border text-sm dark:border-slate-400 p-[0.5rem] rounded-md dark:bg-dark-bg dark:text-white">
