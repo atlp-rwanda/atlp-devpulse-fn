@@ -1,5 +1,5 @@
 import axios from "./axiosconfig";
-import { createBlog, updateBlog, deleteBlog } from "../actiontypes/blogTypes";
+import { createBlog, updateBlog, deleteBlog, hideBlog } from "../actiontypes/blogTypes";
 import { toast } from "react-toastify";
 import creator from "./creator";
 import {
@@ -56,7 +56,6 @@ export const getAllBlogs = (tag?: string) => async (dispatch: any) => {
     dispatch(creator(FETCH_BLOGS_SUCCESS, blogsData));
   } catch (err: any) {
     dispatch(creator(FETCH_BLOGS_FAIL, err));
-    dispatch(creator(FETCH_BLOGS_FAIL, err));
     toast.error(err.message);
   }
 };
@@ -81,7 +80,6 @@ export const getBlogsByAuthor = (authorId: string) => async (dispatch: any) => {
           comments {
             id
           }
-          isHidden
           author {
             id
             email
@@ -330,3 +328,31 @@ export const getBlogRelatedArticles = (blogId: string) => async (dispatch: any) 
     toast.error(err.message);
   }
 };
+export const hideBlogAction = (id: string) => async (dispatch: any) => {
+  dispatch({
+    type: hideBlog.HIDE_BLOG_LOADING
+  });
+
+  try{
+    const res = await axios.post("/", {
+      query: `mutation HidingBlog ($id: ID!){
+      hideBlog(id: $id){
+      id
+      isHidden
+      }
+      }`,
+      variables: { id },
+    });
+
+    const updatedBlog = res.data.data.hideBlog;
+
+    const successMessage = updatedBlog.isHidden ? "successfully hidden." : "successfully unhidden";
+
+    dispatch(creator(hideBlog.HIDE_BLOG_SUCCESS, updatedBlog));
+
+    toast.success(successMessage);
+  } catch (error: any) {
+    dispatch(creator(hideBlog.HIDE_BLOG_FAIL, error.message));
+    toast.error(error.message);
+  }
+}

@@ -5,6 +5,9 @@ import {
   FETCH_SINGLE_BLOG_SUCCESS,
   FETCH_USER_BLOGS_FAIL,
   FETCH_USER_BLOGS_SUCCESS,
+  HIDE_BLOG_SUCCESS,
+  HIDE_BLOG_FAIL,
+  HIDE_BLOG_LOADING
 } from "../index";
 
 const initialState = {
@@ -59,6 +62,26 @@ export default (state = initialState, { type, payload }: any) => {
         isLoaded: true,
         error: true,
       };
+
+      case HIDE_BLOG_LOADING:
+      return {
+        ...state,
+        isLoading: true,
+      };
+
+    case HIDE_BLOG_SUCCESS:
+      return { 
+        ...state, isLoading: false,
+        data: state.data.map((blog: any) => blog.id === payload.id ? { ...blog, isHidden: payload.isHidden } : blog 
+      ),
+     };
+    case HIDE_BLOG_FAIL:
+      return {
+        ...state,
+        isLoading: false,
+        error: payload,
+      };
+
 
     default:
       return state;
