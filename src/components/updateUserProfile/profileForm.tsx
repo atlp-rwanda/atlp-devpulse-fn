@@ -105,6 +105,19 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
         </div>
         <PasswordInput register={register} errors={errors} />
       </div>
+      <div className="flex-1 flex flex-col  min-w-[200px]">
+          <label htmlFor="" className="text-white">
+            Bio
+          </label>
+          <input
+            type="text"
+            {...register("bio")}
+            className="flex-1 pl-4 py-2 rounded-md border-[1px] border-dark-bg bg-transparent dark:text-white dark:border-white"
+          />
+          {errors.code && (
+            <p className="text-sm text-red-600">{errors.bio?.message}</p>
+          )}
+        </div>
 
       <div className="">
         <input

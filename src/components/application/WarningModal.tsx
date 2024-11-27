@@ -4,17 +4,25 @@ import React from 'react';
 interface WarningModalProps {
   isOpen: boolean;
   message: string;
-  onConfirm: () => void;
-  onCancel: () => void;
+  onConfirm: (e: React.MouseEvent) => void;  
+  onCancel: (e: React.MouseEvent) => void;
 }
 
 const WarningModal: React.FC<WarningModalProps> = ({ isOpen, message, onConfirm, onCancel }) => {
   if (!isOpen) return null; 
 
+  const handleModalClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+  };
+
   return (
-    <div className="fixed inset-0  flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
-      <div className="bg-white border dark:border-gray-500 dark:bg-dark-bg rounded-lg p-6">
-        <h3 className="text-lg font-semibold text-red-600">Warning: Irreversible Action</h3>
+    <div className="fixed inset-0  flex items-center justify-center bg-gray-800 bg-opacity-50 z-50"
+    onClick={onCancel}
+    >
+      <div className="bg-white border dark:border-gray-500 dark:bg-dark-bg rounded-lg p-6"
+      onClick={handleModalClick}
+      >
+        <h3 className="text-lg font-semibold text-red-600">WARNING</h3>
         <p className="mt-4 text-gray-700 dark:text-gray-300">
           {message}
         </p>
@@ -26,7 +34,7 @@ const WarningModal: React.FC<WarningModalProps> = ({ isOpen, message, onConfirm,
             Cancel
           </button>
           <button
-            className="px-4 py-2 bg-red-600 hover:bg-red-500 text-white rounded-md"
+            className="px-4 py-2 bg-green hover:opacity-90 text-white rounded-md"
             onClick={onConfirm}
           >
             Confirm
