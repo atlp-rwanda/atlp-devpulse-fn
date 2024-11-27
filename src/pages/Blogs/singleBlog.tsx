@@ -1,6 +1,6 @@
+
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-<<<<<<< HEAD
 import { Heart, MessageCircle,User } from 'lucide-react';
 import { useAppDispatch,useAppSelector } from '../../hooks/hooks';
 import { getBlogById, getBlogRelatedArticles, deleteBlogAction } from "../../redux/actions/blogActions";
@@ -9,6 +9,8 @@ import SingleBlogSkeleton from '../../skeletons/singleBlogSkeleton';
 import * as icons from "react-icons/ai";
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
+import BlogComment from './BlogComment'; 
+import BlogReaction from './BlogReactions';
 
 import { useNavigate } from 'react-router-dom';
 
@@ -26,27 +28,30 @@ const SingleBlogView = () => {
     setIsLiked(!isLiked);
     setLikes(isLiked ? likes - 1 : likes + 1);
   };
-=======
-import { Heart, User } from 'lucide-react';
-import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
-import { getBlogById } from '../../redux/actions/blogActions';
-import SingleBlogSkeleton from '../../skeletons/singleBlogSkeleton';
-import BlogComment from './BlogComment'; 
-import BlogReaction from './BlogReactions';
 
-const SingleBlogView = () => {
-  const { id } = useParams();
-  const dispatch = useAppDispatch();
->>>>>>> 23f0ee5 (Fix: added comments and reactions)
+  const {
+    blogRelatedArticles,isLoading: isLoadingRelatedArticles } = useAppSelector((state) => 
+    ({blogRelatedArticles: state.blogRelatedArticle.blogRelatedArticles,
+    isLoading: state.blogRelatedArticle.isLoading,}));
+    const topArticles = Array.isArray(blogRelatedArticles)? blogRelatedArticles.sort(() => Math.random() - 0.5).slice(0, 3): [];
+  useEffect(() => {
+    const blogId: any = id; 
+    dispatch(getBlogRelatedArticles(blogId))
+  }, [dispatch, id]); 
+  
+  const handleComment = (e) => {
+    e.preventDefault();
+    // Add comment logic here
+    setComment('');
+  };
 
-  const { data, isLoading } = useAppSelector((state) => ({
-    data: state.singleBlog.data,
-    isLoading: state.singleBlog.isLoading,
-  }));
-
+  const { data ,isLoading} = useAppSelector((state) => ({data:state.singleBlog.data,isLoading:state.singleBlog.isLoading}));
   const blog = data;
+  useEffect(() => {
+     if(id)
+      dispatch(getBlogById(id));
+  }, [dispatch]);
 
-<<<<<<< HEAD
  const handleDeleteBlog = async (id: string) => {
   try {
     const result = await dispatch(deleteBlogAction(id));
@@ -99,21 +104,12 @@ const SingleBlogView = () => {
         </div>
       )}
       {isLoading ||isLoadingRelatedArticles || !blog ?  (
-=======
-  useEffect(() => {
-    if (id) dispatch(getBlogById(id));
-  }, [id, dispatch]);
-
-  return (
-    <div className="min-h-screen w-full pt-8 bg-white dark:bg-slate-900 text-black dark:text-white p-6">
-      {isLoading || !blog ? (
->>>>>>> 23f0ee5 (Fix: added comments and reactions)
         <SingleBlogSkeleton />
       ) : (
-        <div className="min-h-screen w-full dark:text-white p-6">
+        <div className="min-h-screen w-ful dark:text-white p-6">
           <div className="flex my-4 flex-col items-end gap-0 w-full">
             <div className="mb-8 w-full gap-8 flex flex-row items-start justify-between">
-              <div className="w-2/5 flex items-center">
+              <div className="w-[55%] flex items-center">
                 <img
                   src={blog.coverImage}
                   alt={blog.author.firstname}
@@ -124,7 +120,7 @@ const SingleBlogView = () => {
                 <p className="text-sm mb-4 rounded-3xl w-fit py-1 px-4 bg-slate-300 dark:bg-slate-800">
                   On {new Date(Number(blog.created_at)).toLocaleString()}
                 </p>
-                <p className="text-2xl text-left break-words whitespace-normal overflow-wrap-break-word font-semibold">
+                <p className=" text-2xl text-left break-words whitespace-normal overflow-wrap-break-word font-semibold">
                   {blog.title}
                 </p>
                 <div className="mt-8 flex gap-4 items-center rounded-3xl w-fit py-1 px-4 bg-slate-300 dark:bg-slate-800 dark:text-white transition-colors">
@@ -132,28 +128,43 @@ const SingleBlogView = () => {
                   <div>
                     <p className="text-md text-left">{`${blog.author.firstname} ${blog.author.lastname}`}</p>
                     <span className="text-sm text-left">
-                      Joined on {new Date(Number(blog.author.createdAt)).toLocaleString()}{' '}
+                      Joined on{" "}
+                      {new Date(Number(blog.author.createdAt)).toLocaleString()}{" "}
                     </span>
                   </div>
                 </div>
               </div>
             </div>
             <div className="flex gap-4 flex-col w-full items-start">
-              <p className="dark:text-slate-300 w-[80%] leading-relaxed">{blog.content}</p>
+              <p className="dark:text-slate-300 w-[80%] leading-relaxed">
+                {blog.content}
+              </p>
               <div className="flex itmes-start gap-4 flex-row">
-                {blog.tags.length === 1 ? (
-                  <span className="text-sm bg-rose-800 px-3 rounded-md">{blog.tags[0]}</span>
-                ) : blog.tags.length === 2 ? (
+                {blog.tags.length == 1 ? (
+                  <span className="text-sm bg-rose-800 px-3 rounded-md">
+                    {blog.tags[0]}
+                  </span>
+                ) : blog.tags.length == 2 ? (
                   <div className="flex gap-2">
-                    <span className="text-sm bg-rose-800 px-3 rounded-md">{blog.tags[0]}</span>
-                    <span className="text-sm bg-emerald-800 px-3 rounded-md">{blog.tags[1]}</span>
+                    <span className="text-sm bg-rose-800 px-3 rounded-md">
+                      {blog.tags[0]}
+                    </span>
+                    <span className="text-sm bg-emerald-800 px-3 rounded-md">
+                      {blog.tags[1]}
+                    </span>
                   </div>
                 ) : (
                   blog.tags.length >= 3 && (
                     <div className="flex gap-2">
-                      <span className="text-sm bg-rose-800 px-3 rounded-md">{blog.tags[0]}</span>
-                      <span className="text-sm bg-emerald-800 px-3 rounded-md">{blog.tags[1]}</span>
-                      <span className="text-sm bg-blue-800 px-3 rounded-md">{blog.tags[2]}</span>
+                      <span className="text-sm bg-rose-800 px-3 rounded-md">
+                        {blog.tags[0]}
+                      </span>
+                      <span className="text-sm bg-emerald-800 px-3 rounded-md">
+                        {blog.tags[1]}
+                      </span>
+                      <span className="text-sm bg-blue-800 px-3 rounded-md">
+                        {blog.tags[2]}
+                      </span>
                     </div>
                   )
                 )}
@@ -172,29 +183,32 @@ const SingleBlogView = () => {
               )}
             </div>
           </div>
-
-<<<<<<< HEAD
-                    <p className="text-slate-300">{comment.content}</p>
-
-                    <div className="flex items-center gap-4 text-sm dark:text-slate-400">
-                      <button className="flex items-center gap-1">
-                        <MessageCircle className="w-4 h-4" />
-                        {comment.replies.length} Replies
-                      </button>
-                      <button className="flex items-center gap-1">
-                        <Heart className="w-4 h-4" />
-                        {comment.likes.length}
-                      </button>
-                    </div>
+          {id && <BlogReaction blogId={id} />}
+          {id && <BlogComment blogId={id} />}
+          {topArticles && topArticles.length > 0 ? (
+              <div className='mt-10'>
+                <h1>Related Articles</h1>
+                <div className='flex flex-row gap-1'>
+                {topArticles.map((article, index) => (
+                  <div className="flex flex-col w-1/4  bg-slate-100 dark:bg-slate-800 px-2  hover:bg-slate-50 py-2 rounded-lg dark:hover:bg-slate-700 transition-colors cursor-pointer group" onClick={() =>  window.open(article.url, "_blank")}>
+                  <img
+                    src={article.image}
+                    alt={article.title}
+                    className="h-28 w-full rounded-lg object-cover"
+                  />
+                  <h3 className="text-sm font-semibold mb-2">
+                  {article.title}
+                  </h3>
+                  <div className="text-sm text-gray-400">
+                    <span>Source: {article.source}</span>
                   </div>
-                ))}
-              </>
-            ) : (
-              <div>
-                <p className="text-left">No comments yet</p>
+                  </div>
+              ))}
               </div>
-            )}
-          </div>
+              </div>
+              ): (
+                <p>No related articles available</p>
+              )}
       
           <div className={`${userId === blog.author.id ? "" : "hidden"} flex flex-col gap-2 mt-10`}>
             <h1 className='text-red-500 font-bold'>Danger Zone</h1>
@@ -204,10 +218,6 @@ const SingleBlogView = () => {
             Delete this blog
             </button>
           </div>
-=======
-          {id && <BlogReaction blogId={id} />}
-          {id && <BlogComment blogId={id} />}
->>>>>>> 23f0ee5 (Fix: added comments and reactions)
         </div>
       )}
     </div>
