@@ -16,7 +16,7 @@ const RulesModal: React.FC = () => {
       {/* Modal overlay and content */}
       {isOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center flex-col items-center z-50">
-          <div className="bg-dark-frame-bg p-6 rounded-lg shadow-lg max-w-lg">
+          <div className="bg-gray-500 dark:bg-dark-frame-bg p-6 rounded-lg shadow-lg max-w-lg">
             <button
               onClick={() => setIsOpen(false)}
               className="text-gray-600 hover:text-gray-800 float-right font-bold text-xl"

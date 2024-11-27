@@ -141,14 +141,14 @@ export const ApplicantApplication = () => {
 
       {/* <DynamicTable headers={headers} data={applications} isLoading={loading} /> */}
 
-      <div className="w-[4/5] flex flex-col bg-gray-800 text-white mt-12">
-        <div className="bg-gray-700 w-full h-12 flex items-center justify-between px-4">
+      <div className="w-[4/5] flex flex-col bg-gray-500 dark:bg-gray-800 text-black dark:text-white mt-12">
+        <div className="bg-gray-400 dark:bg-gray-700 w-full h-12 flex items-center justify-between px-4">
           <h2 className="w-40">JOB TITLE</h2>
           <h2 className="w-40">DATE OF SUBMISSION</h2>
           <h2 className="w-32 max-w-32">STATUS</h2>         
         </div>
         {filteredApplications.map((application, i) => (
-          <div className={`w-full h-16 flex items-center justify-between px-4 ${i % 2 !== 0 && 'bg-gray-700'}`}>
+          <div className={`w-full h-16 flex items-center justify-between px-4 ${i % 2 !== 0 && 'bg-gray-400 dark:bg-gray-700'}`}>
             <h2 className="w-40 text-sm">{application.jobId?.title}</h2>
             <h2 className="w-40 text-sm">{application.createdAt}</h2>
             <div className="w-32 flex items-center justify-start">

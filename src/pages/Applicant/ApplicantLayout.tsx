@@ -6,7 +6,7 @@ const ApplicantLayout = () => {
   const [sidebarExpanded, setSidebarExpanded] = useState(true);
   return (
     <>
-      <div className=" h-screen">
+      <div className=" h-screen bg-white dark:bg-dark-frame-bg">
         <div className=" w-full h-[70px]">
           <Applicant />
         </div>
