@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../redux/reducers"; 
+import { RootState } from "../../redux/reducers";
 import {
   getReactionsByBlogId,
   addReactionAction,
-} from "../../redux/actions/reactionActions"; 
-
+  removeReactionAction,
+} from "../../redux/actions/reactionActions";
 
 interface Reaction {
-  [type: string]: number; 
+  [type: string]: number;
 }
 
 interface BlogReactionProps {
-  blogId: string; 
+  blogId: string;
 }
 
 const reactionTypes = [
@@ -25,13 +25,14 @@ const reactionTypes = [
 
 const BlogReaction: React.FC<BlogReactionProps> = ({ blogId }) => {
   const dispatch = useDispatch();
+  const [currentReaction, setCurrentReaction] = useState<string | null>(null); 
   const [showReactionsMenu, setShowReactionsMenu] = useState(false);
 
   const { reactions, isReactionLoading } = useSelector(
     (state: RootState) => state.reactions
   );
 
-  const typedReactions: Reaction = reactions; 
+  const typedReactions: Reaction = reactions;
 
   useEffect(() => {
     if (blogId) {
@@ -39,10 +40,19 @@ const BlogReaction: React.FC<BlogReactionProps> = ({ blogId }) => {
     }
   }, [dispatch, blogId]);
 
-  const handleAddReaction = (type: string) => {
-    dispatch(addReactionAction(blogId, type));
-    dispatch(getReactionsByBlogId(blogId)); 
-    setShowReactionsMenu(false); 
+  const handleAddReaction = async (type: string) => {
+    if (type === currentReaction) {
+      await dispatch(removeReactionAction(blogId));
+      setCurrentReaction(null);
+    } else {
+      if (currentReaction) {
+        await dispatch(removeReactionAction(blogId));
+      }
+      await dispatch(addReactionAction(blogId, type));
+      setCurrentReaction(type);
+    }
+    dispatch(getReactionsByBlogId(blogId));
+    setShowReactionsMenu(false);
   };
 
   const totalReactions = typedReactions
@@ -51,11 +61,7 @@ const BlogReaction: React.FC<BlogReactionProps> = ({ blogId }) => {
 
   useEffect(() => {
     console.log("Reactions:", typedReactions);
-    console.log("Total Reactions:", totalReactions); 
-
-    Object.entries(typedReactions).forEach(([type, count]) => {
-      console.log(`Reaction Type: ${type}, Count: ${count}`);
-    });
+    console.log("Total Reactions:", totalReactions);
   }, [typedReactions, totalReactions]);
 
   return (
@@ -79,7 +85,9 @@ const BlogReaction: React.FC<BlogReactionProps> = ({ blogId }) => {
           {reactionTypes.map(({ type, label, emoji }) => (
             <button
               key={type}
-              className="flex flex-col items-center hover:bg-gray-300 p-2 rounded-xl transition"
+              className={`flex flex-col items-center hover:bg-gray-300 p-2 rounded-xl transition ${
+                type === currentReaction ? "bg-blue-200" : ""
+              }`}
               onClick={() => handleAddReaction(type)}
             >
               <span className="text-2xl">{emoji}</span>
@@ -89,13 +97,13 @@ const BlogReaction: React.FC<BlogReactionProps> = ({ blogId }) => {
         </div>
       )}
 
-          <div className="mt-2 flex flex-wrap gap-2">
-            {reactionTypes.map(({ type, emoji }) => (
-            <div key={type} className="flex items-center gap-1">
-              <span>{emoji}</span>
-            </div>
-          ))}
-        </div>
+      <div className="mt-2 flex flex-wrap gap-2">
+        {reactionTypes.map(({ type, emoji }) => (
+          <div key={type} className="flex items-center gap-1">
+            <span>{emoji}</span>
+          </div>
+        ))}
+      </div>
 
       <div className="text-sm text-gray-400 mb-4">
         {isReactionLoading ? "Loading reactions..." : `${totalReactions} reactions`}
