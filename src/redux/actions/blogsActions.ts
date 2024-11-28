@@ -8,8 +8,9 @@ export interface Author {
   lastname: string;
 }
 export interface Blog {
-  comments: number;
-  likes: number;
+  comments: { id: string }[]; 
+  likes: { id: string }[];  
+  reactions: { id: string }[];  
   id: string;
   title: string;
   content: string;
@@ -40,6 +41,9 @@ export const fetchAllBlogs = async (tag?: string): Promise<Blog[]> => {
               likes {
                 id
               }
+              reactions {
+                id
+              }
               comments {
                 id
               }
@@ -62,7 +66,6 @@ export const fetchAllBlogs = async (tag?: string): Promise<Blog[]> => {
 
     if (response.data.errors) {
       console.error("GraphQL errors:", JSON.stringify(response.data.errors, null, 2));
-      toast.error("Error fetching blogs");
       return [];
     }
 
