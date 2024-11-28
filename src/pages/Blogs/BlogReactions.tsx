@@ -35,6 +35,11 @@ const BlogReaction: React.FC<BlogReactionProps> = ({ blogId }) => {
   const typedReactions: Reaction = reactions;
 
   useEffect(() => {
+    const storedReaction = localStorage.getItem(`reaction_${blogId}`);
+    if (storedReaction) {
+      setCurrentReaction(storedReaction);
+    }
+
     if (blogId) {
       dispatch(getReactionsByBlogId(blogId));
     }
@@ -44,13 +49,18 @@ const BlogReaction: React.FC<BlogReactionProps> = ({ blogId }) => {
     if (type === currentReaction) {
       await dispatch(removeReactionAction(blogId));
       setCurrentReaction(null);
+      localStorage.removeItem(`reaction_${blogId}`); 
     } else {
       if (currentReaction) {
         await dispatch(removeReactionAction(blogId));
+        localStorage.removeItem(`reaction_${blogId}`); 
       }
+
       await dispatch(addReactionAction(blogId, type));
       setCurrentReaction(type);
+      localStorage.setItem(`reaction_${blogId}`, type); 
     }
+
     dispatch(getReactionsByBlogId(blogId));
     setShowReactionsMenu(false);
   };
@@ -58,9 +68,6 @@ const BlogReaction: React.FC<BlogReactionProps> = ({ blogId }) => {
   const totalReactions = typedReactions
     ? Object.values(typedReactions).reduce((total, count) => total + count, 0)
     : 0;
-
-  useEffect(() => {
-  }, [typedReactions, totalReactions]);
 
   return (
     <div className="relative">
@@ -97,6 +104,18 @@ const BlogReaction: React.FC<BlogReactionProps> = ({ blogId }) => {
 
       <div className="text-sm text-gray-400 mb-4">
         {`${totalReactions} reactions`}
+      </div>
+
+      <div className="mb-4 flex items-center gap-2">
+        {reactionTypes.map(({ type, emoji }) => {
+          const count = typedReactions[type] || 0;
+          return (
+            <div key={type} className="flex items-center gap-1 text-gray-600">
+              <span className="text-xl">{emoji}</span>
+              <span>{count}</span>
+            </div>
+          );
+        })}
       </div>
     </div>
   );
