@@ -12,8 +12,9 @@ import { toast } from 'react-toastify';
   lastname: string;
 }
  interface Blog {
-  comments: number;
-  likes: number;
+  reactions: { id: string }[]; 
+  comments: { id: string }[]; 
+  likes: { id: string }[];  
   id: string;
   title: string;
   content: string;
@@ -43,10 +44,10 @@ const BlogCard = ({ blog }: { blog: Blog }) => (
               : "Unknown Date"}
           </span>
           <span className="flex flex-row gap-1 items-center">
-            <CiHeart size={20} className="dark:text-green" /> {blog.likes || 0}
+            <CiHeart size={20} className="dark:text-green" /> {blog.reactions.length || 0}
           </span>
           <span className="flex flex-row gap-1 items-center">
-            <FaCommentDots size={20} className="dark:text-green" /> {blog.comments || 0}
+            <FaCommentDots size={20} className="dark:text-green" /> {blog.comments.length || 0}
           </span>
         </div>
       </div>
