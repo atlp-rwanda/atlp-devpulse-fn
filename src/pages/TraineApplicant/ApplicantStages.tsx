@@ -25,12 +25,13 @@ import AddApplicantScore from "../../components/form/addApplicantScore";
 import { filterStage } from "../../redux/actions/applicationStage";
 import { TableSkeleton } from "../../skeletons/applicantStageSkeleton";
 import LoadingSkeleton from "../../skeletons/loadingSkeleton";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
 import ScheduleTechnical from "../../components/Invitation/ScheduleTechnical";
 import axios from "axios";
 import { exportToExcel } from "../../utils/exports/exportToExcel";
+import DocumentSelector from "../../components/DocumentPreviewButton";
 
 const ApplicantStages = (props: any) => {
   // New state for search input and search field
@@ -188,6 +189,10 @@ const ApplicantStages = (props: any) => {
     await dispatch(fetchtraine(input));
     await dispatch(filterStage(filterStages));
   };
+  const handleDocumentOnClick = (idDocumentUrl: string) => {
+    const url = `#/view-external-document?fileUrl=${encodeURIComponent(idDocumentUrl)}&backUrl=${encodeURIComponent("/")}&title=${encodeURIComponent("ID Document")}`;
+    window.open(url, "_blank");
+  };
 
   const handleToExport = async (stage: string) => {
     let data;
@@ -196,11 +201,11 @@ const ApplicantStages = (props: any) => {
       case "Technical Assessment":
         // Use pre-filtered data (filterData)
         data = filterData;
-  
+
         // Call exportToExcel function
         exportToExcel({ data, docName: 'Technical_Assessment_Stage_Data' });
         break;
-  
+
       default:
         toast.error("Invalid stage");
     }
@@ -258,11 +263,10 @@ const ApplicantStages = (props: any) => {
             {stages.map((stage) => (
               <button
                 key={stage.value}
-                className={`text-sm rounded-md px-3 py-2 transition-colors duration-200 ${
-                  filterStages === stage.value
-                    ? "bg-[#0c6a0c] dark:bg-[#56C870] text-white" // Active stage style
-                    : "bg-gray-200 text-gray-800 hover:bg-blue-100" // Inactive stage style
-                }`}
+                className={`text-sm rounded-md px-3 py-2 transition-colors duration-200 ${filterStages === stage.value
+                  ? "bg-[#0c6a0c] dark:bg-[#56C870] text-white" // Active stage style
+                  : "bg-gray-200 text-gray-800 hover:bg-blue-100" // Inactive stage style
+                  }`}
                 onClick={() => {
                   setFilterStages(stage.value);
                   handleFilter(stage.value);
@@ -347,9 +351,9 @@ const ApplicantStages = (props: any) => {
                   </th>
                 }
                 {filterStages &&
-                filterStages !== "All" &&
-                filterData &&
-                filterData.length > 0 ? (
+                  filterStages !== "All" &&
+                  filterData &&
+                  filterData.length > 0 ? (
                   <th className="px-5 py-3 text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
                     {"Comments"}
                   </th>
@@ -359,7 +363,7 @@ const ApplicantStages = (props: any) => {
                       {"Stage"}
                     </th>
                     <th className="px-5 py-3 text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
-                      Documents
+                      Attachments
                     </th>
                   </>
                 )}
@@ -431,48 +435,26 @@ const ApplicantStages = (props: any) => {
                         </td>
                         <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-xs">
                           <span
-                            className={`${
-                              item.applicationPhase === "Rejected"
-                                ? "bg-red-200 text-red-500 font-medium"
-                                : item.applicationPhase === "Admitted"
+                            className={`${item.applicationPhase === "Rejected"
+                              ? "bg-red-200 text-red-500 font-medium"
+                              : item.applicationPhase === "Admitted"
                                 ? "bg-[#0c6a0c] dark:bg-[#1bf84b8d] text-white"
                                 : "bg-blue-100 text-blue-800"
-                            } inline-block px-2 py-2 text-center font-medium rounded-full`}
+                              } inline-block px-2 py-2 text-center font-medium rounded-full`}
                           >
                             {getStageText(item.applicationPhase)}
                           </span>
                         </td>
                         <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-xs relative">
                           <div className="flex flex-wrap gap-4">
-                            {item?.idDocumentUrl && (
-                              <Link
-                                to={`/view-external-document?fileUrl=${encodeURIComponent(item.idDocumentUrl)}&backUrl=${encodeURIComponent("/")}&title=${encodeURIComponent("ID Document")}`}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                title="Open ID Document"
-                                className="px-4 py-2 bg-blue-500 text-white rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-                              >
-                                ID
-                              </Link>
-                            )}
-                            {item?.resumeUrl && (
-                              <Link
-                                to={`/view-external-document?fileUrl=${encodeURIComponent(item.resumeUrl)}&backUrl=${encodeURIComponent("/")}&title=${encodeURIComponent("Resume Document")}`}
-                                target="_blank"
-                                className="px-4 py-2 bg-blue-500 text-white rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-green-400"
-                              >
-                                Resume
-                              </Link>
-                            )}
-                            {item?.coverLetterUrl && (
-                              <Link
-                                to={`/view-external-document?fileUrl=${encodeURIComponent(item.coverLetterUrl)}&backUrl=${encodeURIComponent("/")}&title=${encodeURIComponent("Cover letter Document")}`}
-                                target="_blank"
-                                className="px-4 py-2 bg-blue-500 text-white rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-red-400"
-                              >
-                                Cover letter
-                              </Link>
-                            )}
+                            <DocumentSelector
+                              item={{
+                                idDocumentUrl: item?.idDocumentUrl,
+                                resumeUrl: item?.resumeUrl,
+                                coverLetterUrl: item?.coverLetterUrl,
+                              }}
+                            />
+
                           </div>
                         </td>
                         <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-xs relative">
@@ -485,9 +467,8 @@ const ApplicantStages = (props: any) => {
                               }}
                             />
                             <div
-                              className={`${
-                                isMore === item._id ? "block" : "hidden"
-                              } absolute  bg-white dark:bg-dark-tertiary  dark:text-white text-base list-none divide-y divide-gray-100 rounded shadow my-4 z-[1]`}
+                              className={`${isMore === item._id ? "block" : "hidden"
+                                } absolute  bg-white dark:bg-dark-tertiary  dark:text-white text-base list-none divide-y divide-gray-100 rounded shadow my-4 z-[1]`}
                               id="dropdown"
                             >
                               <ul className="py-1" aria-labelledby="dropdown">
@@ -511,12 +492,11 @@ const ApplicantStages = (props: any) => {
                                 </li>
                                 <li>
                                   <div
-                                    className={`${
-                                      item.applicationPhase ===
+                                    className={`${item.applicationPhase ===
                                       "Technical Assessment"
-                                        ? "block"
-                                        : "hidden"
-                                    }`}
+                                      ? "block"
+                                      : "hidden"
+                                      }`}
                                   >
                                     <ScheduleTechnical
                                       applicantId={item._id}
@@ -649,15 +629,14 @@ const ApplicantStages = (props: any) => {
                               </li>
                               <li>
                                 <div
-                                  className={`${
-                                    filterStages === "Technical Assessment" &&
+                                  className={`${filterStages === "Technical Assessment" &&
                                     (item.status !== "Moved" ||
                                       item.status !== "Admitted" ||
                                       item.status !== "Rejected" ||
                                       item.status !== "Passed")
-                                      ? "block"
-                                      : "hidden"
-                                  }`}
+                                    ? "block"
+                                    : "hidden"
+                                    }`}
                                 >
                                   <ScheduleTechnical
                                     traineeEmail={item.applicant.email}
