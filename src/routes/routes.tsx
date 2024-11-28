@@ -146,7 +146,7 @@ function Navigation() {
           }
         />
         <Route
-          path="dashboard/profile"
+          path="profile"
           element={
             <PrivateRoute allowedRoles={["admin", "superAdmin"]}>
               <Profile />
@@ -162,7 +162,7 @@ function Navigation() {
           }
         />
         <Route
-          path="dashboard/profile"
+          path="profile"
           element={
             <PrivateRoute allowedRoles={["admin", "superAdmin"]}>
               <Profile />
@@ -656,7 +656,7 @@ function Navigation() {
           }
         />
         <Route
-          path="dashboard/profile"
+          path="profile"
           element={
             <PrivateRoute allowedRoles={["applicant", "trainee"]}>
               <Profile />
@@ -815,7 +815,7 @@ function Navigation() {
           }
         />
         <Route
-          path="dashboard/profile"
+          path="profile"
           element={
             <PrivateRoute allowedRoles={["applicant", "trainee"]}>
               <Profile />

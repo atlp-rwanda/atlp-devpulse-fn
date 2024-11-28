@@ -21,7 +21,7 @@ const AdminLayout = () => {
               setExpanded={setSidebarExpanded}
             />
           </div>
-          <main className="flex-1 flex w-full justify-center items-center dark:bg-dark-frame-bg">
+          <main className="flex-1 flex w-full justify-center items-center bg-light-bg dark:bg-dark-frame-bg">
             <Outlet />
           </main>
         </div>

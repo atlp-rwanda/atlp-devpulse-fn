@@ -70,6 +70,23 @@ export const getSingleUser = (userId: string) => async (dispatch: any) => {
             telephone
             code
             picture
+            createdAt
+            role {
+              roleName
+            }
+            bio
+            cohort {
+              id
+              cycle
+              end
+              phase
+              program
+              title
+              start
+              manager
+            
+            }
+            applicationPhase
           }
         }
       `,
@@ -96,6 +113,7 @@ export const update_User =
       code,
       telephone,
       picture,
+      bio
     },
   }: any) =>
   async (dispatch: any) => {
@@ -116,6 +134,7 @@ export const update_User =
             code,
             telephone,
             picture,
+            bio
           },
         },
       });

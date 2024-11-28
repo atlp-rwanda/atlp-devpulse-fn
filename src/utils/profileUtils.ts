@@ -33,10 +33,10 @@ export const updateUser = async (
         originalData[key as keyof TuserSchema]
     );
 
-    if (!hasChanges) {
-      toast.info("No changes detected");
-      return false;
-    }
+    // if (!hasChanges) {
+    //   toast.info("No changes detected");
+    //   return false;
+    // }
     await dispatch(update_User({ id: userId, editUserInput: updateData }));
     toast.success("User updated successfully");
     dispatch(getSingleUser(userId));
