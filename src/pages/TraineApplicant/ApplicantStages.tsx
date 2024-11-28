@@ -198,7 +198,7 @@ const ApplicantStages = (props: any) => {
         data = filterData;
   
         // Call exportToExcel function
-        exportToExcel({ data, docName: 'Technical Assessment Stage Data' });
+        exportToExcel({ data, docName: 'Technical_Assessment_Stage_Data' });
         break;
   
       default:
