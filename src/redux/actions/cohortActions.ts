@@ -99,6 +99,7 @@ export const getCohort = (getCohortId: any) => async (dispatch: any) => {
     });
     const cohortData = await response.data.data.getCohort;
     dispatch(creator(GET_TRAINEE_COHORT, cohortData));
+    return cohortData.length;
   } catch (error) {
     if (error) {
       return console.log(error);

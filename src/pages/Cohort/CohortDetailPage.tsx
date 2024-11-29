@@ -8,6 +8,7 @@ import { getCohort, getAllTraineeApplicants, acceptTrainee } from "../../redux/a
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import { useParams } from "react-router-dom";
 import { Spinner } from "flowbite-react";
+import { CohortDetailSkeleton } from "../../skeletons/singleCohortSketon";
 
 const CohortsDetailPage = () => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -69,9 +70,9 @@ const CohortsDetailPage = () => {
 
   const traineesWithoutCohort = trainees?.filter((trainee) => !trainee.cohort);
 
-  if (isLoading) {
-    return <Spinner className="mt-96" />;
-  }
+  if (!traineeCohort || isLoading) {
+  return <CohortDetailSkeleton />;
+}
 
   const trainee = traineeCohort?.trainees || [];
 

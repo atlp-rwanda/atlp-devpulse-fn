@@ -60,8 +60,8 @@ const UpdateCohortModal = ({ open, onClose, cohortData }) => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="rounded-lg w-[30%] p-6 relative bg-white dark:bg-dark-frame-bg">
-        <div className="flex justify-between items-center mb-6">
+      <div className="max-h-full text-sm rounded-lg w-[30%] p-6 relative bg-white dark:bg-dark-frame-bg">
+        <div className="flex justify-between items-center mb-3">
           <h2 className="text-black text-xl font-semibold dark:text-white">
             UPDATE COHORT
           </h2>
@@ -73,16 +73,18 @@ const UpdateCohortModal = ({ open, onClose, cohortData }) => {
           </button>
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-1">
+          <label className="inline-block pt-2 pl-1">Name</label>
           <input
             type="text"
-            placeholder="Name"
-            className="w-full p-3 rounded bg-transparent border border-gray-600 placeholder:text-black  focus:outline-none dark:placeholder:text-white"
+            placeholder="Enter cohort name"
+            className="w-full p-2 rounded bg-transparent border border-gray-600 placeholder:text-black  focus:outline-none dark:placeholder:text-white"
             {...register("title")}
           />
+          <label className="inline-block pt-2 pl-1">Application cycle</label>
 
           <select
-            className="w-full  p-3 rounded bg-transparent border border-gray-600 text-black focus:outline-none dark:text-white"
+            className="w-full  p-2 rounded bg-transparent border border-gray-600 text-black focus:outline-none dark:text-white"
             {...register("cycle")}
           >
             <option value="" className="bg-gray-200 dark:bg-[#1e2124]">
@@ -98,9 +100,9 @@ const UpdateCohortModal = ({ open, onClose, cohortData }) => {
               </option>
             ))}
           </select>
-
+          <label className="inline-block pt-2 pl-1">Program</label>
           <select
-            className="w-full  p-3 rounded bg-transparent border border-gray-600 text-black focus:outline-none dark:text-white"
+            className="w-full  p-2 rounded bg-transparent border border-gray-600 text-black focus:outline-none dark:text-white"
             {...register("program")}
           >
             <option value="" className="bg-gray-200 dark:bg-[#1e2124]">
@@ -116,9 +118,9 @@ const UpdateCohortModal = ({ open, onClose, cohortData }) => {
               </option>
             ))}
           </select>
-
+          <label className="inline-block pt-2 pl-1">Phase</label>
           <select
-            className="w-full  p-3 rounded bg-transparent border border-gray-600 text-black focus:outline-none dark:text-white"
+            className="w-full  p-2 rounded bg-transparent border border-gray-600 text-black focus:outline-none dark:text-white"
             {...register("phase")}
           >
             <option value="" className="bg-gray-200 dark:bg-[#1e2124]">
@@ -143,22 +145,22 @@ const UpdateCohortModal = ({ open, onClose, cohortData }) => {
               Apprenticeship
             </option>
           </select>
-
+          <label className="inline-block pt-2 pl-1">Starting Date</label>
           <input
             type="date"
-            className="w-full  p-3 rounded bg-transparent border border-gray-600 text-black focus:outline-none dark:text-white"
+            className="w-full  p-2 rounded bg-transparent border border-gray-600 text-black focus:outline-none dark:text-white"
             {...register("start")}
           />
-
+          <label className="inline-block pt-2 pl-1">Ending Date</label>
           <input
             type="date"
-            className="w-full  p-3 rounded bg-transparent border border-gray-600 text-black focus:outline-none dark:text-white"
+            className="w-full  p-2 rounded bg-transparent border border-gray-600 text-black focus:outline-none dark:text-white"
             {...register("end")}
           />
 
           <button
             type="submit"
-            className="w-full p-3 flex justify-center items-center bg-[#56C870] text-white rounded font-medium hover:bg-green-600 transition-colors"
+            className="w-full p-2 flex justify-center items-center bg-[#56C870] text-white rounded font-medium hover:bg-green-600 transition-colors"
           >
             {isSubmitting ? (
               <ThreeDots height="20" width="30" color="#ffffff" />
