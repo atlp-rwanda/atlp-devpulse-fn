@@ -96,11 +96,14 @@ const BlogComment: React.FC<BlogCommentProps> = ({ blogId }) => {
                 <div>
                   <h3 className="font-semibold">{`${comment.user.firstname} ${comment.user.lastname}`}</h3>
                   <p className="text-sm text-gray-400">
-                    {new Date(comment.createdAt).toLocaleDateString("en-GB", {
-                      weekday: 'long',
-                      year: 'numeric',
-                      month: '2-digit',
-                      day: '2-digit',
+                  {new Date(comment.createdAt).toLocaleString("en-US", {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    hour12: true, 
                     }).replace(/\//g, "-")}
                   </p>
                 </div>

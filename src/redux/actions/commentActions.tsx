@@ -69,8 +69,6 @@ export const getCommentsByBlogId = (id: string) => async (dispatch: any) => {
       type: FETCH_COMMENTS_FAIL,
       payload: errorMessage,
     });
-
-    toast.error(errorMessage);
   }
 };
 
@@ -78,7 +76,6 @@ export const createCommentAction = (blogId: string, content: string) => async (d
   const userId = localStorage.getItem('userId'); 
 
   if (!userId) {
-    toast.error("User not logged in.");
     return;
   }
 
@@ -119,7 +116,6 @@ export const createCommentAction = (blogId: string, content: string) => async (d
       type: CREATE_COMMENT_SUCCESS,
       payload: createdComment,
     });
-    toast.success("Comment created successfully!");
   } catch (err: any) {
     const errorMessage =
       err.response?.data?.errors?.[0]?.message || err.message || "Failed to create comment";
@@ -127,7 +123,6 @@ export const createCommentAction = (blogId: string, content: string) => async (d
       type: CREATE_COMMENT_FAIL,
       error: errorMessage,
     });
-    toast.error(errorMessage);
   }
 };
 
@@ -165,14 +160,12 @@ export const updateCommentAction = (commentId: string, updateFields: any) => asy
       type: UPDATE_COMMENT_SUCCESS,
       payload: updatedComment,
     });
-    toast.success("Comment updated successfully!");
   } catch (err: any) {
     const errorMessage = err.response?.data?.errors?.[0]?.message || err.message || "Failed to update comment";
     dispatch({
       type: UPDATE_COMMENT_FAIL,
       error: errorMessage,
     });
-    toast.error(errorMessage);
   }
 };
 
@@ -193,14 +186,12 @@ export const deleteCommentAction = (commentId: string) => async (dispatch: any) 
       type: DELETE_COMMENT_SUCCESS,
       payload: commentId, 
     });
-    toast.success("Comment deleted successfully!");
   } catch (err: any) {
     const errorMessage = err.response?.data?.errors?.[0]?.message || err.message || "Failed to delete comment";
     dispatch({
       type: DELETE_COMMENT_FAIL,
       error: errorMessage,
     });
-    toast.error(errorMessage);
   }
 };
 
@@ -233,7 +224,6 @@ export const countCommentsByBlogId = (blogId: string) => async (dispatch: any) =
       error: errorMessage,
     });
 
-    toast.error(errorMessage);
   }
 };
 
@@ -280,7 +270,6 @@ export const addReplyToComment = (content: string, commentId: string) => async (
   const userId = localStorage.getItem("userId");
 
   if (!userId) {
-    toast.error("User not logged in.");
     return;
   }
 
@@ -306,7 +295,6 @@ export const addReplyToComment = (content: string, commentId: string) => async (
       type: ADD_REPLY_SUCCESS,
       payload: { commentId, reply: newReply },
     });
-    toast.success("Reply added successfully!");
   } catch (err: any) {
     const errorMessage =
       err.response?.data?.errors?.[0]?.message || err.message || "Failed to add reply";
@@ -315,6 +303,5 @@ export const addReplyToComment = (content: string, commentId: string) => async (
       type: ADD_REPLY_FAIL,
       error: errorMessage,
     });
-    toast.error(errorMessage);
   }
 };

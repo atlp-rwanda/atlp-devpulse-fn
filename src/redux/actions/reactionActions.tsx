@@ -34,7 +34,6 @@ export const getReactionsByBlogId = (blogId: string) => async (dispatch: any) =>
     dispatch(creator(fetchReactions.FETCH_REACTIONS_SUCCESS, reactionCounts));
   } catch (err: any) {
     dispatch(creator(fetchReactions.FETCH_REACTIONS_FAILURE, err.message));
-    toast.error("Failed to fetch reactions.");
   }
 };
 
@@ -42,7 +41,6 @@ export const addReactionAction = (blogId: string, type: string) => async (dispat
   const userId = localStorage.getItem("userId");
 
   if (!userId) {
-    toast.error("User not logged in.");
     return;
   }
 
@@ -73,10 +71,8 @@ export const addReactionAction = (blogId: string, type: string) => async (dispat
 
     const reaction = response?.data?.data?.addReaction;
     dispatch(creator(addReaction.ADD_REACTION_SUCCESS, reaction));
-    toast.success("Reaction added successfully!");
   } catch (err: any) {
     dispatch(creator(addReaction.ADD_REACTION_FAIL, err.message));
-    toast.error("Failed to add reaction.");
   }
 };
 
@@ -84,7 +80,6 @@ export const removeReactionAction = (blogId: string) => async (dispatch: any) =>
   const userId = localStorage.getItem("userId");
 
   if (!userId) {
-    toast.error("User not logged in.");
     return;
   }
 
@@ -103,9 +98,7 @@ export const removeReactionAction = (blogId: string) => async (dispatch: any) =>
     });
 
     dispatch(creator(removeReaction.REMOVE_REACTION_SUCCESS, { userId, blogId }));
-    toast.success("Reaction removed successfully!");
   } catch (err: any) {
     dispatch(creator(removeReaction.REMOVE_REACTION_FAIL, err.message));
-    toast.error("Failed to remove reaction.");
   }
 };
