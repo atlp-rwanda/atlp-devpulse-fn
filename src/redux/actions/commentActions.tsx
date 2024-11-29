@@ -69,6 +69,11 @@ export const getCommentsByBlogId = (id: string) => async (dispatch: any) => {
       type: FETCH_COMMENTS_FAIL,
       payload: errorMessage,
     });
+<<<<<<< HEAD
+=======
+
+    toast.error(errorMessage);
+>>>>>>> 3c47b86d6acf665a349558f7c7db9de56fe795ca
   }
 };
 
@@ -76,6 +81,10 @@ export const createCommentAction = (blogId: string, content: string) => async (d
   const userId = localStorage.getItem('userId'); 
 
   if (!userId) {
+<<<<<<< HEAD
+=======
+    toast.error("User not logged in.");
+>>>>>>> 3c47b86d6acf665a349558f7c7db9de56fe795ca
     return;
   }
 
@@ -116,6 +125,10 @@ export const createCommentAction = (blogId: string, content: string) => async (d
       type: CREATE_COMMENT_SUCCESS,
       payload: createdComment,
     });
+<<<<<<< HEAD
+=======
+    toast.success("Comment created successfully!");
+>>>>>>> 3c47b86d6acf665a349558f7c7db9de56fe795ca
   } catch (err: any) {
     const errorMessage =
       err.response?.data?.errors?.[0]?.message || err.message || "Failed to create comment";
@@ -123,6 +136,10 @@ export const createCommentAction = (blogId: string, content: string) => async (d
       type: CREATE_COMMENT_FAIL,
       error: errorMessage,
     });
+<<<<<<< HEAD
+=======
+    toast.error(errorMessage);
+>>>>>>> 3c47b86d6acf665a349558f7c7db9de56fe795ca
   }
 };
 
@@ -160,12 +177,20 @@ export const updateCommentAction = (commentId: string, updateFields: any) => asy
       type: UPDATE_COMMENT_SUCCESS,
       payload: updatedComment,
     });
+<<<<<<< HEAD
+=======
+    toast.success("Comment updated successfully!");
+>>>>>>> 3c47b86d6acf665a349558f7c7db9de56fe795ca
   } catch (err: any) {
     const errorMessage = err.response?.data?.errors?.[0]?.message || err.message || "Failed to update comment";
     dispatch({
       type: UPDATE_COMMENT_FAIL,
       error: errorMessage,
     });
+<<<<<<< HEAD
+=======
+    toast.error(errorMessage);
+>>>>>>> 3c47b86d6acf665a349558f7c7db9de56fe795ca
   }
 };
 
@@ -186,12 +211,20 @@ export const deleteCommentAction = (commentId: string) => async (dispatch: any) 
       type: DELETE_COMMENT_SUCCESS,
       payload: commentId, 
     });
+<<<<<<< HEAD
+=======
+    toast.success("Comment deleted successfully!");
+>>>>>>> 3c47b86d6acf665a349558f7c7db9de56fe795ca
   } catch (err: any) {
     const errorMessage = err.response?.data?.errors?.[0]?.message || err.message || "Failed to delete comment";
     dispatch({
       type: DELETE_COMMENT_FAIL,
       error: errorMessage,
     });
+<<<<<<< HEAD
+=======
+    toast.error(errorMessage);
+>>>>>>> 3c47b86d6acf665a349558f7c7db9de56fe795ca
   }
 };
 
@@ -224,6 +257,10 @@ export const countCommentsByBlogId = (blogId: string) => async (dispatch: any) =
       error: errorMessage,
     });
 
+<<<<<<< HEAD
+=======
+    toast.error(errorMessage);
+>>>>>>> 3c47b86d6acf665a349558f7c7db9de56fe795ca
   }
 };
 
@@ -270,6 +307,10 @@ export const addReplyToComment = (content: string, commentId: string) => async (
   const userId = localStorage.getItem("userId");
 
   if (!userId) {
+<<<<<<< HEAD
+=======
+    toast.error("User not logged in.");
+>>>>>>> 3c47b86d6acf665a349558f7c7db9de56fe795ca
     return;
   }
 
@@ -295,6 +336,10 @@ export const addReplyToComment = (content: string, commentId: string) => async (
       type: ADD_REPLY_SUCCESS,
       payload: { commentId, reply: newReply },
     });
+<<<<<<< HEAD
+=======
+    toast.success("Reply added successfully!");
+>>>>>>> 3c47b86d6acf665a349558f7c7db9de56fe795ca
   } catch (err: any) {
     const errorMessage =
       err.response?.data?.errors?.[0]?.message || err.message || "Failed to add reply";
@@ -303,5 +348,9 @@ export const addReplyToComment = (content: string, commentId: string) => async (
       type: ADD_REPLY_FAIL,
       error: errorMessage,
     });
+<<<<<<< HEAD
+=======
+    toast.error(errorMessage);
+>>>>>>> 3c47b86d6acf665a349558f7c7db9de56fe795ca
   }
 };
