@@ -10,7 +10,7 @@ import { useNotifications } from "../../utils/Notifications";
 import { useAdminNotifications } from "../../hooks/useAdminNotifications";
 const logo = require("../../assets/logo.svg").default;
 const LogoWhite: string = require("../../assets/logoWhite.svg").default;
-const profilePlaceholder = require("../../assets/avatar.png").default;
+const profilePlaceholder = require("../../assets/default-image.jpg").default;
 
 const Header = () => {
   const [isNavOpen, setIsNavOpen] = useState(false);
@@ -21,7 +21,7 @@ const Header = () => {
   const accessToken = localStorage.getItem("access_token");
   const isLoggedIn = Boolean(accessToken);
   //@ts-ignore
-  const user = isLoggedIn ? jwtDecode(accessToken)?.profile || profilePlaceholder : profilePlaceholder;
+  const user = isLoggedIn ? jwtDecode(accessToken)?.data.picture || profilePlaceholder : profilePlaceholder;
 
   const roleName = localStorage.getItem("roleName");
 

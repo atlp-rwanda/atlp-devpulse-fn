@@ -34,30 +34,30 @@ const AboutUs = () => {
       </div>
 
     
-      <div className="flex flex-wrap gap-6 items-center px-10 ">
-  <div className="flex flex-col p-6 shadow-md w-[320px] m-2 cursor-pointer bg-gray-200 dark:bg-gray-700 rounded-lg transition duration-300">
-    <GrResources size={40} className='dark:text-white'/>
-    <h3 className='dark:text-green text-xl font-semibold mb-2 text-primary'>Guidance</h3>
-    <p className='text-black-600 dark:text-white'>
-      Get expert guidance every step of the way. From applying to tracking your progress, 
-      our team is here to help you succeed and reach your full potential.
+      <div className="flex flex-wrap justify-center gap-4 p-4">
+  <div className="flex flex-col p-6 shadow-md w-[320px] sm:w-[350px] md:w-[400px] lg:w-[400px] m-2 cursor-pointer bg-gray-200 dark:bg-gray-700 rounded-lg transition duration-300">
+    <GrResources size={40} className="dark:text-white" />
+    <h3 className="dark:text-green text-xl font-semibold mb-2 text-primary">Guidance</h3>
+    <p className="text-black-600 dark:text-white">
+      Get expert guidance every step of the way. From applying to tracking your progress, our team is here to help you succeed and reach your full potential.
     </p>
   </div>
-  <div className="flex flex-col p-6 shadow-md w-[320px] m-2 cursor-pointer bg-gray-200 dark:bg-gray-700 rounded-lg transition duration-300">
-    <FaUsers size={40} className='dark:text-white' />
-    <h3 className='dark:text-green text-xl font-semibold mb-2 text-primary'>Community</h3>
-    <p className='text-black-600 dark:text-white'>
-    Connect with a community of like-minded tech enthusiasts, where you can share insights, ask questions, and build valuable relationships with peers and mentors.
+  <div className="flex flex-col p-6 shadow-md w-[320px] sm:w-[350px] md:w-[400px] lg:w-[400px] m-2 cursor-pointer bg-gray-200 dark:bg-gray-700 rounded-lg transition duration-300">
+    <FaUsers size={40} className="dark:text-white" />
+    <h3 className="dark:text-green text-xl font-semibold mb-2 text-primary">Community</h3>
+    <p className="text-black-600 dark:text-white">
+      Connect with a community of like-minded tech enthusiasts, where you can share insights, ask questions, and build valuable relationships with peers and mentors.
     </p>
   </div>
-  <div className="flex flex-col p-6 shadow-md w-[320px] m-2 cursor-pointer bg-gray-200 dark:bg-gray-700 rounded-lg transition duration-300">
-    <GrDocumentPerformance size={35} className='dark:text-white ' />
-    <h3 className='dark:text-green text-xl font-semibold mb-2 text-primary'>Tools and Resources</h3>
-    <p className='text-black-600 dark:text-white'>
-    Access real-time tracking tools and resources designed to support your learning and professional growth. Our commitment to cutting-edge technology means you stay on top </p>
+  <div className="flex flex-col p-6 shadow-md w-[320px] sm:w-[350px] md:w-[400px] lg:w-[400px] m-2 cursor-pointer bg-gray-200 dark:bg-gray-700 rounded-lg transition duration-300">
+    <GrDocumentPerformance size={35} className="dark:text-white" />
+    <h3 className="dark:text-green text-xl font-semibold mb-2 text-primary">Tools and Resources</h3>
+    <p className="text-black-600 dark:text-white">
+      Access real-time tracking tools and resources designed to support your learning and professional growth. Our commitment to cutting-edge technology means you stay on top.
+    </p>
   </div>
-  
 </div>
+
 
     </div>
   )

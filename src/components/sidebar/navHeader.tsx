@@ -12,7 +12,7 @@ import jwtDecode from "jwt-decode";
 import { useNotifications } from "../../utils/Notifications";
 import { useAdminNotifications } from "../../hooks/useAdminNotifications";
 const logo: string = require("../../assets/logo.svg").default;
-const profile: string = require("../../assets/avatar.png").default;
+const profile: string = require("../../assets/default-image.jpg").default;
 const LogoWhite: string = require("../../assets/logoWhite.svg").default;
 import {destination} from '../../utils/utils'
 import SearchBar from "../../components/SearchBar";
@@ -85,7 +85,7 @@ function NavBar() {
   const userDestination = destination();
   const access_token = localStorage.getItem("access_token");
   //@ts-ignore
-  const user = access_token  ? jwtDecode(access_token)?.profile || profile : profile;
+  const user = access_token  ? jwtDecode(access_token)?.picture || profile : profile;
 
   const roleName = localStorage.getItem("roleName");
   const [nav, setNav] = useState(false);
