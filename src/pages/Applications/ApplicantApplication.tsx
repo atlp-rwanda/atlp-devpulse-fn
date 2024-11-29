@@ -93,7 +93,7 @@ export const ApplicantApplication = () => {
             to="/applicant/available-jobs/trainee-apply"
             className="flex bg-primary dark:bg-[#56C870] rounded-md py-2 mt-2 px-4 text-white font-medium cursor-pointer"
           >
-            Become trainee
+            Apply to become a trainee
           </Link>
           <Link
             to="/applicant/myapplication"

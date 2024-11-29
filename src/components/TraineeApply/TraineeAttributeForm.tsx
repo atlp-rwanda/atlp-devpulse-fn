@@ -91,10 +91,10 @@ const TraineeAttributeForm = ({ traineeId }) => {
     <div className={`min-h-screen w-full flex flex-col ${
       isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-800'
     }`}>
-      <div className="flex-grow flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8">
+      <div className="flex-grow flex flex-col items-center justify-center p-4 sm:p-6 lg:p-8">
         <h3 className={`text-3xl font-semibold mb-8 text-center ${
           isDarkMode ? 'text-white' : 'text-gray-800'
-        }`}>Fill the form for more information</h3>
+        }`}>Provide additional information to proceed </h3>
         <div className="w-full max-w-4xl">
           {page === 1 ? (
             <TraineeFormPage1

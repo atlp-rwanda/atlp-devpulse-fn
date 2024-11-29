@@ -84,7 +84,7 @@ const TraineeApplicationForm: React.FC = () => {
         </div>
       ) : (
         <div className={getContainerClassName(isDarkMode)}>
-          <h2 className={getTitleClassName(isDarkMode)}>Trainee Application</h2>
+          <h2 className={getTitleClassName(isDarkMode)}>Apply to become a trainee</h2>
           <form onSubmit={handleSubmit} className="space-y-4 pt-5">
             <div className="flex">
               <div className="flex-1 p-4">

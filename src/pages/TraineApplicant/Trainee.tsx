@@ -255,7 +255,7 @@ const AddTrainee = (props: any) => {
                         className="inline-flex items-center justify-center bg-primary dark:bg-[#56C870] rounded-md py-2 px-3 sm:px-4 text-white font-medium cursor-pointer text-sm sm:text-base whitespace-nowrap"
                       >
                         <icons.AiOutlinePlus className="mr-1.5 text-lg flex-shrink-0" />
-                        <span className="truncate">Trainee-applicant</span>
+                        <span className="truncate">Trainee</span>
                       </button>
                       <Select
                         menuPlacement="auto"

@@ -42,7 +42,7 @@ export const sidebarItems1 = [
   {
     path: "Trainee-applicants",
     icon: <Icon icon="ic:round-people"></Icon>,
-    title: "Trainees-Applicants",
+    title: "Trainees",
   },
   // {
   //   path: "Applicant-Stages",
