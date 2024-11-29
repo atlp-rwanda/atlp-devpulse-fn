@@ -28,6 +28,7 @@ const NextStageModal: React.FC<props> = ({ applicantId, stage,status, onClose })
     } else {
     const nextStage = handleNextStage(currentStage);
     await dispatch(AdvanceToNextStage(applicantId, nextStage, comments));
+    setComments("")
     setError("")
     }
   };
