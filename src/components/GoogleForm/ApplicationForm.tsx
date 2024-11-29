@@ -5,8 +5,6 @@ import { AiOutlinePlus } from 'react-icons/ai';
 
 const ApplicationForm = () => {
   const handleSave = (selectedAppForm: string, selectedAppPost: string) => {
-    console.log('Selected Application Form:', selectedAppForm);
-    console.log('Selected Application Post:', selectedAppPost);
   };
 
   return (

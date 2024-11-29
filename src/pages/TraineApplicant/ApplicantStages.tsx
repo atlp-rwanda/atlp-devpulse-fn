@@ -28,6 +28,9 @@ import LoadingSkeleton from "../../skeletons/loadingSkeleton";
 import { useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
+import ScheduleTechnical from "../../components/Invitation/ScheduleTechnical";
+import axios from "axios";
+import { exportToExcel } from "../../utils/exports/exportToExcel";
 
 const ApplicantStages = (props: any) => {
   // New state for search input and search field
@@ -41,10 +44,10 @@ const ApplicantStages = (props: any) => {
   const [All, setAll] = useState(false);
   const { theme, setTheme } = useTheme();
   const [isOpen, setIsOpen] = useState(false);
-  const [isMore, setIsMore] = useState("");
+  const [isMore, setIsMore] = useState(null);
   const [loading, setLoading] = useState(true);
   const [loadingFilter, setLoadingFilter] = useState(true);
-  const [filterStages, setFilterStages] = useState("All");
+  const [filterStages, setFilterStages] = useState<string>("All");
   const [filteredTraines, setFilteredTraines] = useState([]);
 
   // LIST ALL TRAINEE
@@ -99,7 +102,6 @@ const ApplicantStages = (props: any) => {
     itemsPerPage,
     nextStageData,
     nextStageSuccess,
-
   ]);
 
   const getStageText = (stage: string) => {
@@ -127,7 +129,7 @@ const ApplicantStages = (props: any) => {
 
   const handleMoreOptions = (userId: any) => {
     if (!isMore) setIsMore(userId);
-    if (isMore) setIsMore("");
+    if (isMore) setIsMore(null);
   };
 
   const handleFilter = async (filterStages: string) => {
@@ -154,10 +156,10 @@ const ApplicantStages = (props: any) => {
   useEffect(() => {
     const timeOut = setTimeout(() => {
       if (filteredTrainees && filterStages === "All") {
-        setLoadingFilter(false)
+        setLoadingFilter(false);
       }
-    }, 2000)
-    return () => clearTimeout(timeOut)
+    }, 2000);
+    return () => clearTimeout(timeOut);
   }, [filteredTrainees]);
 
   const stages = [
@@ -182,8 +184,26 @@ const ApplicantStages = (props: any) => {
   };
 
   const handleReload = async () => {
-    setIsMore("");
+    setIsMore(null);
+    await dispatch(fetchtraine(input));
     await dispatch(filterStage(filterStages));
+  };
+
+  const handleToExport = async (stage: string) => {
+    let data;
+    setIsOpen((prev) => !prev)
+    switch (stage) {
+      case "Technical Assessment":
+        // Use pre-filtered data (filterData)
+        data = filterData;
+  
+        // Call exportToExcel function
+        exportToExcel({ data, docName: 'Technical_Assessment_Stage_Data' });
+        break;
+  
+      default:
+        toast.error("Invalid stage");
+    }
   };
 
   return (
@@ -233,23 +253,77 @@ const ApplicantStages = (props: any) => {
             </div>
           </div>
         </div>
-        <div className={`flex gap-5 py-4 ${theme ? customTheme : darkTheme}`}>
-          {stages.map((stage) => (
-            <button
-              key={stage.value}
-              className={`text-sm rounded-md px-3 py-2 transition-colors duration-200 ${filterStages === stage.value
-                ? "bg-[#0c6a0c] dark:bg-[#56C870] text-white" // Active stage style
-                : "bg-gray-200 text-gray-800 hover:bg-blue-100" // Inactive stage style
+        <div className="flex justify-between items-center">
+          <div className={`flex gap-5 py-4 ${theme ? customTheme : darkTheme}`}>
+            {stages.map((stage) => (
+              <button
+                key={stage.value}
+                className={`text-sm rounded-md px-3 py-2 transition-colors duration-200 ${
+                  filterStages === stage.value
+                    ? "bg-[#0c6a0c] dark:bg-[#56C870] text-white" // Active stage style
+                    : "bg-gray-200 text-gray-800 hover:bg-blue-100" // Inactive stage style
                 }`}
-              onClick={() => {
-                setFilterStages(stage.value);
-                handleFilter(stage.value);
-                setLoadingFilter(true);
-              }}
+                onClick={() => {
+                  setFilterStages(stage.value);
+                  handleFilter(stage.value);
+                  setLoadingFilter(true);
+                }}
+              >
+                {stage.label}
+              </button>
+            ))}
+          </div>
+          <div className={`${filterStages === "Technical Assessment" ? "block" : "hidden"}`}>
+            <button
+              onClick={() => setIsOpen((prev) => !prev)}
+              id="dropdownActionButton"
+              data-dropdown-toggle="dropdownAction"
+              className="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+              type="button"
             >
-              {stage.label}
+              <span className="sr-only">Export button</span>
+              Export
+              <svg
+                className="w-2.5 h-2.5 ms-2.5"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 10 6"
+              >
+                <path
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="m1 1 4 4 4-4"
+                />
+              </svg>
             </button>
-          ))}
+            {isOpen && (
+              <div
+                id="dropdownAction"
+                className="z-50 absolute mt-2 right-3 bg-white divide-y divide-gray-100 rounded-lg shadow w-auto dark:bg-gray-700 dark:divide-gray-600"
+              >
+                <ul
+                  className="py-1 text-sm text-gray-700 dark:text-gray-200"
+                  aria-labelledby="dropdownActionButton"
+                >
+                  <li>
+                    <div
+                      className={`text-xs hover:bg-gray-100 text-gray-700  dark:hover:bg-gray-500 dark:text-white px-4 py-2`}
+                    >
+                      <button
+                        type="button"
+                        onClick={() => handleToExport(filterStages)}
+                      >
+                        Export to Excel
+                      </button>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            )}
+          </div>
         </div>
         <div className=" h-[55vh] overflow-y-scroll">
           <table className="w-full">
@@ -272,7 +346,10 @@ const ApplicantStages = (props: any) => {
                     {"Last Update"}
                   </th>
                 }
-                {filterStages && filterStages !== "All" && filterData && filterData.length > 0 ? (
+                {filterStages &&
+                filterStages !== "All" &&
+                filterData &&
+                filterData.length > 0 ? (
                   <th className="px-5 py-3 text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
                     {"Comments"}
                   </th>
@@ -300,9 +377,12 @@ const ApplicantStages = (props: any) => {
               </tr>
             </thead>
             {loading || loadingFilter ? (
-              <LoadingSkeleton rows={5} filterStages={(filterStages === "All" || filterStages)} />
+              <LoadingSkeleton
+                rows={5}
+                filterStages={filterStages === "All" || filterStages}
+              />
             ) : (
-              <tbody className="overflow-y-auto">
+              <tbody className="overflow-auto scrollbar-hidden">
                 {filterStages === "All" && filteredTrainees?.length > 0 ? (
                   filteredTrainees.map((item: any, index: number) =>
                     item?.delete_at == false ? (
@@ -316,7 +396,9 @@ const ApplicantStages = (props: any) => {
                         <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-xs">
                           <div className="flex">
                             <p className="text-gray-900 dark:text-white whitespace-no-wrap">
-                              {item.firstName.toUpperCase() + " " + item.lastName}
+                              {item.firstName.toUpperCase() +
+                                " " +
+                                item.lastName}
                             </p>
                           </div>
                         </td>
@@ -348,10 +430,15 @@ const ApplicantStages = (props: any) => {
                           </span>
                         </td>
                         <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-xs">
-                          <span className={`${item.applicationPhase === "Rejected"
-                            ? "bg-red-200 text-red-500 font-medium"
-                            : item.applicationPhase === "Admitted"
-                              ? "bg-[#0c6a0c] dark:bg-[#1bf84b8d] text-white" : "bg-blue-100 text-blue-800"} inline-block px-2 py-2 text-center font-medium rounded-full`}>
+                          <span
+                            className={`${
+                              item.applicationPhase === "Rejected"
+                                ? "bg-red-200 text-red-500 font-medium"
+                                : item.applicationPhase === "Admitted"
+                                ? "bg-[#0c6a0c] dark:bg-[#1bf84b8d] text-white"
+                                : "bg-blue-100 text-blue-800"
+                            } inline-block px-2 py-2 text-center font-medium rounded-full`}
+                          >
                             {getStageText(item.applicationPhase)}
                           </span>
                         </td>
@@ -398,8 +485,9 @@ const ApplicantStages = (props: any) => {
                               }}
                             />
                             <div
-                              className={`${isMore === item._id ? "block" : "hidden"
-                                } absolute  bg-white dark:bg-dark-tertiary  dark:text-white text-base z-10 list-none divide-y divide-gray-100 rounded shadow my-4`}
+                              className={`${
+                                isMore === item._id ? "block" : "hidden"
+                              } absolute  bg-white dark:bg-dark-tertiary  dark:text-white text-base list-none divide-y divide-gray-100 rounded shadow my-4 z-[1]`}
                               id="dropdown"
                             >
                               <ul className="py-1" aria-labelledby="dropdown">
@@ -417,7 +505,25 @@ const ApplicantStages = (props: any) => {
                                     <AddApplicantScore
                                       applicantId={item._id}
                                       stage={item.applicationPhase}
-                                      onClose={() => setIsMore("")}
+                                      onClose={() => setIsMore(null)}
+                                    />
+                                  </div>
+                                </li>
+                                <li>
+                                  <div
+                                    className={`${
+                                      item.applicationPhase ===
+                                      "Technical Assessment"
+                                        ? "block"
+                                        : "hidden"
+                                    }`}
+                                  >
+                                    <ScheduleTechnical
+                                      applicantId={item._id}
+                                      traineeEmail={item.email}
+                                      onClose={handleReload}
+                                      stage={item.applicationPhase}
+                                      status={item.status}
                                     />
                                   </div>
                                 </li>
@@ -425,7 +531,7 @@ const ApplicantStages = (props: any) => {
                                   <NextStageModal
                                     applicantId={item._id}
                                     stage={item.applicationPhase}
-                                    onClose={() => setIsMore("")}
+                                    onClose={() => setIsMore(null)}
                                   />
                                 </li>
                                 <li>
@@ -435,7 +541,7 @@ const ApplicantStages = (props: any) => {
                                       item.firstName + " " + item.lastName
                                     }
                                     stage={item.applicationPhase}
-                                    onClose={() => setIsMore("")}
+                                    onClose={() => setIsMore(null)}
                                   />
                                 </li>
                               </ul>
@@ -524,10 +630,9 @@ const ApplicantStages = (props: any) => {
                                 <div
                                   className={`${filterStages === "Shortlisted" ||
                                     ((filterStages === "Technical Assessment" ||
-                                      filterStages ===
-                                      "Interview Assessment" || filterStages ===
-                                      "Admitted" || filterStages ===
-                                      "Rejected") &&
+                                      filterStages === "Interview Assessment" ||
+                                      filterStages === "Admitted" ||
+                                      filterStages === "Rejected") &&
                                       (item.status === "Moved" ||
                                         item.status === "Admitted" ||
                                         item.status === "Rejected" || item.status === "Passed"))
@@ -539,6 +644,27 @@ const ApplicantStages = (props: any) => {
                                     applicantId={item.applicant._id}
                                     stage={item.applicant.applicationPhase}
                                     onClose={handleReload}
+                                  />
+                                </div>
+                              </li>
+                              <li>
+                                <div
+                                  className={`${
+                                    filterStages === "Technical Assessment" &&
+                                    (item.status !== "Moved" ||
+                                      item.status !== "Admitted" ||
+                                      item.status !== "Rejected" ||
+                                      item.status !== "Passed")
+                                      ? "block"
+                                      : "hidden"
+                                  }`}
+                                >
+                                  <ScheduleTechnical
+                                    traineeEmail={item.applicant.email}
+                                    applicantId={item.applicant._id}
+                                    stage={item.applicant.applicationPhase}
+                                    onClose={handleReload}
+                                    status={item.status}
                                   />
                                 </div>
                               </li>

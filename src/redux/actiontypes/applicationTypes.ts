@@ -39,6 +39,12 @@ export enum filterByStage {
   FILTER_STAGE_SUCCESS = "FILTER_STAGE_SUCCESS",
   FILTER_STAGE_FAIL = "FILTER_STAGE_FAIL",
 }
+
+export enum sendInvitation {
+  SEND_INVITATION_STAGE_LOADING = "SEND_INVITATION_STAGE_LOADING",
+  SEND_INVITATION_STAGE_SUCCESS = "SEND_INVITATION_STAGE_SUCCESS",
+  SEND_INVITATION_STAGE_FAIL = "SEND_INVITATION_STAGE_FAIL",
+}
 interface actionPending {
   type: fetchMyApplications.FETCH_MYAPPLICATIONS_LOADING;
 }
@@ -137,6 +143,19 @@ interface filterByStageActionSuccess{
   data: any;
 }
 
+interface sendInvitationActionFail{
+  type: sendInvitation.SEND_INVITATION_STAGE_FAIL;
+  message: any;
+}
+
+interface sendInvitationActionPending{
+  type: sendInvitation.SEND_INVITATION_STAGE_LOADING;
+}
+interface sendInvitationActionSuccess{
+  type: sendInvitation.SEND_INVITATION_STAGE_SUCCESS;
+  message: string;
+  data: any;
+}
 interface addStageMarkActionFail{
   type: addStageMark.ADD_STAGE_MARK_FAIL;
   message: any;
@@ -164,3 +183,6 @@ export type Action =
   | filterByStageActionPending
   | filterByStageActionFail
   | filterByStageActionSuccess
+  | sendInvitationActionPending
+  | sendInvitationActionFail
+  | sendInvitationActionSuccess
