@@ -18,6 +18,8 @@ import {
 } from "../../redux/actions/filterJobPost";
 import _ from "lodash"; // lodash for debounce
 import { debounce } from "lodash";
+import axiosClient from '../../redux/actions/axiosconfig'
+
 const ApplicantSeachJobPost = (props: any) => {
   const { theme } = useTheme();
 
@@ -57,6 +59,7 @@ const ApplicantSeachJobPost = (props: any) => {
   const [enteredWord, setEnteredWord] = useState("");
   const [filterAttribute, setFilterAttribute] = useState("");
   const [enteredsubmitWord, setenteredsubmitWord] = useState("");
+  const [jobStatus, setJobStatus] = useState<{[key:string]: boolean} | null>(null)
   const input = {
     page: page + 1,
     itemsPerPage: itemsPerPage,
@@ -132,6 +135,60 @@ const ApplicantSeachJobPost = (props: any) => {
   }, [jobs, allfilteredjobPosts, page, itemsPerPage]);
 
   // console.log("JOB POST DATA =>>>>>: ", fetchJobPost);
+
+  const checkIfUserApplied = async(id:string) => {
+    const query = `
+      query CheckIfUserApplied($input: CheckIfUserAppliedInput!) {
+        checkIfUserApplied(input: $input) {
+          status
+        }
+      }
+    `;
+    
+
+    const variables = {
+      input: {
+        jobId: id
+      }  
+    };
+
+    try {
+        const response = await axiosClient.post(
+        '/',
+        {
+            query: query,
+            variables: variables,
+        },
+        );
+        
+        if(response.data.errors){
+            toast.error(response.data.errors[0].message)
+            return
+        }
+
+        return response.data.data.checkIfUserApplied.status
+    } catch (error) {
+      console.log(error)
+      return false
+    }
+  }
+
+  useEffect(() => {
+    (async() => {
+      for(const job of allfilteredjobPosts.data){
+        const res = await checkIfUserApplied(job.id)
+        setJobStatus(prevJobStatus => ({
+          ...prevJobStatus, 
+          [job.id]: res
+        }));
+      }
+    })()
+  },[allfilteredjobPosts])
+
+  useEffect(() => {
+    console.log('AAAAAAAAAAAAAAAAAAAAAAAAAA', jobStatus)
+  },[jobStatus])
+
 
   return (
     <>
@@ -267,11 +324,13 @@ const ApplicantSeachJobPost = (props: any) => {
                                     <td>
                                       <div className="flex flex-row gap-2 mt-2 justify-center">
                                         <Link
-                                          to={`/applicant/available-job/${item.id}/apply`}
+                                          to={`/applicant/available-job/${item.id}/apply?applied=${jobStatus && jobStatus[item.id]}`}
                                           replace
                                         >
                                           <button className="flex bg-primary dark:bg-[#56C870] rounded-md py-2 px-4 text-white font-medium cursor-pointer">
-                                            Apply
+                                            {
+                                              jobStatus && jobStatus[item.id] ? 'View Details' : 'Apply'
+                                            }
                                           </button>
                                         </Link>
                                       </div>
@@ -296,6 +355,7 @@ const ApplicantSeachJobPost = (props: any) => {
                             Job POST
                           </label>
                           {allfilteredjobPosts?.data &&
+                            jobStatus &&
                             allfilteredjobPosts?.data.length > 0 ? (
                             allfilteredjobPosts?.data?.map((item: any) => (
                               <div

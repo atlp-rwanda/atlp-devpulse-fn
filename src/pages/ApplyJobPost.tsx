@@ -119,11 +119,10 @@ const ApplyJobPost:React.FC = () => {
     const [resumeLoading, setResumeLoading] = useState(false)
     const [loading, setLoading] = useState(false)
     const {id} = useParams()
+    const [wordCount, setWordCount] = useState(0)
     const navigate = useNavigate()
 
     
-
-
     const handleSubmit = async(data) => {
         const mutation = `
             mutation CreateNewJobApplication($input: JobApplicationInput!) {
@@ -222,7 +221,9 @@ const ApplyJobPost:React.FC = () => {
             }
         },
         onUpdate: ({ editor }) => {
-          formik.setFieldValue('essay', editor.getHTML(), true)
+          const words = editor.getHTML().trim()  
+          setWordCount(words.split(' ').length)
+          formik.setFieldValue('essay', words, true)
         },
         onBlur: () => {
             formik.handleBlur('essay')
@@ -239,7 +240,7 @@ const ApplyJobPost:React.FC = () => {
                         <ToolBar editor={editor}/> 
                         <EditorContent editor={editor} />  
                     </div>
-                    {/* <textarea className='w-full h-40 rounded-md border border-white bg-transparent' {...formik.getFieldProps('essay')}></textarea> */}
+                    <div className='text-sm'><span className={`${wordCount > 200 || wordCount === 0 ? 'text-red-500': 'text-green'}`}>{wordCount}</span> / 200 words</div>
                     {formik.touched.essay && formik.errors.essay && <div className='text-sm text-red-500'>{formik.errors.essay}</div>}
                 </div>
                 <div className='flex flex-col gap-4'>
@@ -250,7 +251,7 @@ const ApplyJobPost:React.FC = () => {
                     </div>
                     {formik.touched.resume && formik.errors.resume && <div className='text-sm text-red-500'>{formik.errors.resume}</div>}
                 </div>
-                <button disabled={loading} className={`bg-green flex items-center justify-center self-center rounded-md w-28 h-10 mt-4 ${loading ? 'cursor-not-allowed':'cursor-pointer'}`}>{loading ? <Circles height={20} width={20} color='white'/> : 'Submit'}</button>  
+                <button disabled={loading} className={`${formik.isValid && formik.dirty ? 'bg-green cursor-pointer': 'bg-green opacity-70 cursor-not-allowed'}  flex items-center justify-center self-center rounded-md w-28 h-10 mt-4`}>{loading ? <Circles height={20} width={20} color='white'/> : 'Submit'}</button>  
             </form>
         </div>
     )
