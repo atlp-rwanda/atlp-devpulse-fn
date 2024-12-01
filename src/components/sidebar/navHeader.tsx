@@ -99,7 +99,7 @@ function NavBar() {
   const handleShowNotification = () => {
     const notificationPath = roleName === "superAdmin"  || roleName === "admin" ? "/admin/notifications" : "/applicant/notifications";
     navigate(notificationPath);
-      window.location.reload();
+      // window.location.reload();
   };
   const handleShowProfileDropdown = () =>
     setShowProfileDropdown(!showProfileDropdown);

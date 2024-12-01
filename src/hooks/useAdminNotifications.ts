@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { initializeAdminPusher, unsubscribeAdminPusher } from "../utils/adminNotifications/pusher";
+import { toastOptions } from "../utils/toast";
+import { toast } from "react-toastify";
 
 interface Notification {
     _id: string;
@@ -9,10 +11,11 @@ interface Notification {
 }
 export const useAdminNotifications = () => {
     const [notifications, setNotifications] = useState<Notification[]>([]);
-
+    
     useEffect(() => {
         const handleNewNotification = (notification: Notification) => {
             setNotifications((prev) => [...prev, notification]);
+            toast.info(`New notification: ${notification.message}`, toastOptions);
         };
 
         const channel = initializeAdminPusher(handleNewNotification);

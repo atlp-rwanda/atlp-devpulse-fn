@@ -1,6 +1,7 @@
 import React, { useState} from "react";
 import { toast, ToastContainer } from "react-toastify";
 import * as icons from "react-icons/ai";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 const CreateTicketModal = ({ isOpen, onClose, onSubmit }) => {
     const [ticket, setTicket] = useState({
@@ -93,7 +94,11 @@ const CreateTicketModal = ({ isOpen, onClose, onSubmit }) => {
                       className="flex bg-primary dark:bg-[#56C870] rounded-md py-2 px-4 text-white font-medium cursor-pointer"
                       disabled={isSubmitting}
                     >
-                      Submit
+                      {isSubmitting ? (
+                        <AiOutlineLoading3Quarters className="animate-spin text-xl" />
+                      ) : (
+                        "Submit"
+                      )}
                     </button>
                     <button
                       type="button"
