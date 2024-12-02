@@ -57,6 +57,7 @@ export const registerSchema: ZodType<formData> = z.object({
   acceptTerms: z.boolean().refine((value) => value === true, {
     message: "accept",
   }),
+  bio: z.string().optional(),
 });
 export type RolePermission = {
   Name: string;
@@ -103,6 +104,7 @@ export const googleDataSchema: ZodType<googleFormData> = z.object({
         message: "gender is required",
       }
     ),
+    bio: z.string().optional(),
 
 });
 

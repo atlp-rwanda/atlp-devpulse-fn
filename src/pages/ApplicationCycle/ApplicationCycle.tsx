@@ -190,7 +190,7 @@ const ApplicationCycle = (props: any) => {
   const { pageIndex, pageSize } = state;
 
   const handleNavigate = (link: string) => {
-    navigate(`applicant-stages/${link}`);
+    navigate(`application-stages/${link}`);
   };
 
   return (
