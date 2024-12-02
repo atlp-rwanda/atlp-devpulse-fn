@@ -42,6 +42,7 @@ import {
   FetchApplicantStageReducer,
   AddApplicantScoreReducer,
   advanceToNextStageReducer,
+  updateInterviewStatusReducer,
   filterApplicantByStageReducer,
   sendInvitationReducer,
 } from "./applicationReducer";
@@ -125,6 +126,7 @@ const allReducers = combineReducers({
   traineePerformance: performanceReducer,
   loggedUser: getLoggedUserReducer,
   nextStage: advanceToNextStageReducer,
+  interviewStatus: updateInterviewStatusReducer,
   fetchApplicantStage: FetchApplicantStageReducer,
   AddedApplicantScore: AddApplicantScoreReducer,
   filterApplicantByStage: filterApplicantByStageReducer,

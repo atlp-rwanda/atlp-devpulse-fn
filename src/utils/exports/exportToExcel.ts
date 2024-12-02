@@ -91,3 +91,66 @@ export const exportToExcel = ({
 
   toast.success(`Excel file created: ${fileName}`);
 };
+
+export const exportInterviewDataToExcel = ({
+  interviewData,
+  docName = "Interview Stage Lists",
+}: {
+  interviewData: any[];
+  docName?: string;
+}): void => {
+  const validData = interviewData
+    .filter((item) => item)
+    .map((item, index) => {
+      const { email, firstName, lastName } = item.applicant || item;
+
+      // Get interview status
+      const interviewStatus =
+        item.technicalInterviews && item.technicalInterviews[0]?.status
+          ? item.technicalInterviews[0].status
+          : item.status;
+
+      const meetingPlatform =
+        item.technicalInterviews &&
+        item.technicalInterviews[0]?.meetingPlatform;
+
+      return {
+        Count: index + 1,
+        EMAIL: email,
+        "FIRST NAME": firstName,
+        "LAST NAME": lastName,
+        STATUS: interviewStatus,
+        "MEETING PLATFORM": meetingPlatform || "N/A",
+      };
+    })
+    .filter(
+      (row) => row.EMAIL && row["FIRST NAME"] && row["LAST NAME"] && row.STATUS
+    );
+
+  if (validData.length === 0) {
+    console.warn("No valid data to export!");
+    return;
+  }
+
+  const worksheet = XLSX.utils.json_to_sheet(validData);
+
+  const headerRow = Object.keys(validData[0]);
+
+  headerRow.forEach((header, index) => {
+    const cellAddress = XLSX.utils.encode_cell({ r: 0, c: index });
+    if (!worksheet[cellAddress]) return;
+    worksheet[cellAddress].s = {
+      fill: { fgColor: { rgb: "FFFF00" } },
+      font: { bold: true, color: { rgb: "000000" } },
+      alignment: { horizontal: "center", vertical: "center" },
+    };
+  });
+
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+
+  const fileName = `${docName}.xlsx`;
+  XLSX.writeFile(workbook, fileName);
+
+  console.log(`Excel file created: ${fileName}`);
+};

@@ -30,8 +30,12 @@ import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
 import ScheduleTechnical from "../../components/Invitation/ScheduleTechnical";
 import axios from "axios";
-import { exportToExcel } from "../../utils/exports/exportToExcel";
 import DocumentSelector from "../../components/DocumentPreviewButton";
+import {
+  exportInterviewDataToExcel,
+  exportToExcel,
+} from "../../utils/exports/exportToExcel";
+import ScheduleInterview from "../../components/Invitation/ScheduleInterview";
 
 const ApplicantStages = (props: any) => {
   // New state for search input and search field
@@ -87,6 +91,8 @@ const ApplicantStages = (props: any) => {
     const filtered = traine.filter(
       (trainee) => trainee?.cycle_id?.name === decodedString
     );
+    console.log("FILTERED TRAINEES =>>>>>>:", traine);
+
     setFilteredTraines(filtered);
   }, [traines, cycleName]);
 
@@ -192,8 +198,26 @@ const ApplicantStages = (props: any) => {
 
   const handleToExport = async (stage: string) => {
     let data;
+    let interviewData;
     setIsOpen((prev) => !prev);
     switch (stage) {
+      case "All":
+        data = filteredTrainees.filter(
+          (item: any) => item.applicationPhase === "Technical Assessment"
+        );
+
+        interviewData = filteredTrainees.filter(
+          (item: any) => item.applicationPhase === "Interview Assessment"
+        );
+
+        // Call exportToExcel function
+        exportToExcel({ data, docName: "All Technical Assessment Data" });
+        exportInterviewDataToExcel({
+          interviewData,
+          docName: "All Interview Assessment Data",
+        });
+        break;
+
       case "Technical Assessment":
         // Use pre-filtered data (filterData)
         data = filterData;
@@ -202,9 +226,33 @@ const ApplicantStages = (props: any) => {
         exportToExcel({ data, docName: "Technical_Assessment_Stage_Data" });
         break;
 
+      case "Interview Assessment":
+        interviewData = filterData;
+
+        exportInterviewDataToExcel({
+          interviewData,
+          docName: "Interview Assessment Stage Data",
+        });
+        break;
+
       default:
         toast.error("Invalid stage");
     }
+  };
+
+  const getStatusText = (item: any) => {
+    if (item.applicationPhase === "Interview Assessment") {
+      if (item.technicalInterviews && item.technicalInterviews.length > 0) {
+        return item.technicalInterviews[0].status;
+      }
+      return item.status;
+    }
+
+    if (item.technicalInterviews && item.technicalInterviews.length > 0) {
+      return item.technicalInterviews[0].status;
+    }
+
+    return item.status;
   };
 
   return (
@@ -297,9 +345,9 @@ const ApplicantStages = (props: any) => {
               >
                 <path
                   stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
                   d="m1 1 4 4 4-4"
                 />
               </svg>
@@ -428,7 +476,8 @@ const ApplicantStages = (props: any) => {
                             : "bg-gray-100 text-gray-800"
                         }`}
                           >
-                            {item.status}
+                            {getStatusText(item)}
+                            {/* {item.status} */}
                           </span>
                         </td>
                         <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-xs">
@@ -447,6 +496,7 @@ const ApplicantStages = (props: any) => {
                             } inline-block px-2 py-2 text-center font-medium rounded-full`}
                           >
                             {getStageText(item.applicationPhase)}
+                            {/* {getStatusText(item)} */}
                           </span>
                         </td>
                         <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-xs relative">
@@ -516,18 +566,19 @@ const ApplicantStages = (props: any) => {
                                 <li>
                                   <div
                                     className={`${
-                                      isMore === item._id &&
                                       item.applicationPhase ===
-                                        "Technical Assessment"
+                                      "Interview Assessment"
                                         ? "block"
                                         : "hidden"
                                     }`}
                                   >
-                                    <ScheduleTechnical
+                                    <ScheduleInterview
                                       applicantId={item._id}
-                                      traineeEmail={item.email}
                                       onClose={handleReload}
                                       stage={item.applicationPhase}
+                                      technicalInterviews={
+                                        item.technicalInterviews || []
+                                      }
                                       status={item.status}
                                     />
                                   </div>
@@ -599,7 +650,8 @@ const ApplicantStages = (props: any) => {
                             : "bg-gray-100 text-gray-800"
                         }`}
                         >
-                          {item.status}
+                          {/* {item.status} */}
+                          {getStatusText(item)}
                         </span>
                       </td>
                       <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-xs">
@@ -689,6 +741,29 @@ const ApplicantStages = (props: any) => {
                                     applicantId={item.applicant._id}
                                     stage={item.applicant.applicationPhase}
                                     onClose={handleReload}
+                                    status={item.status}
+                                  />
+                                </div>
+                              </li>
+                              <li>
+                                <div
+                                  className={`${
+                                    filterStages === "Interview Assessment" &&
+                                    item.status !== "Moved" &&
+                                    item.status !== "Admitted" &&
+                                    item.status !== "Rejected" &&
+                                    item.status !== "Passed"
+                                      ? "block"
+                                      : "hidden"
+                                  }`}
+                                >
+                                  <ScheduleInterview
+                                    applicantId={item.applicant._id}
+                                    stage={item.applicant.applicationPhase}
+                                    onClose={handleReload}
+                                    technicalInterviews={
+                                      item.technicalInterviews || []
+                                    }
                                     status={item.status}
                                   />
                                 </div>
