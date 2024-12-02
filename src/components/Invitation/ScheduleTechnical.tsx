@@ -45,9 +45,9 @@ const ScheduleTechnical: React.FC<props> = ({
         setError(null);
         onClose();
         setIsModelOpen((prev)=> !prev);
-        setEmail("");
-        setInvitationLink("");
-        setPlatForm("");
+        // setEmail("");
+        // setInvitationLink("");
+        // setPlatForm("");
       }
     ).catch((error:any) => {
       setIsLoading(false);
