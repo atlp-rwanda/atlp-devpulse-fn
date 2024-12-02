@@ -119,7 +119,7 @@ export const exportInterviewDataToExcel = ({
         EMAIL: email,
         "FIRST NAME": firstName,
         "LAST NAME": lastName,
-        STATUS: interviewStatus,
+        STATUS: interviewStatus || "N/A",
         "MEETING PLATFORM": meetingPlatform || "N/A",
       };
     })

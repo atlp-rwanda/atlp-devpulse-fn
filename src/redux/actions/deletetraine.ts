@@ -174,6 +174,7 @@ export const fetchtraine = ({ page, itemsPerPage, All }: any) => {
                         status
                         scheduledDate
                         createdAt
+                        updatedAt
                         coordinatorId {
                             _id
                             firstname

@@ -1,15 +1,15 @@
-import { useEffect, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
-import { toast, ToastContainer } from 'react-toastify';
-import { AiFillFilePdf } from 'react-icons/ai';
+import { useEffect, useState } from "react";
+import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
+import { toast, ToastContainer } from "react-toastify";
+import { AiFillFilePdf } from "react-icons/ai";
 
 import {
   getApplicantCyclesApplications,
   getCyclesApplicationAttributes,
   getCyclesStages,
-} from '../../redux/actions/applications';
-import { Link } from 'react-router-dom';
-import ViewExternalDocumentsModal from '../../pages/viewExternalDocuments';
+} from "../../redux/actions/applications";
+import { Link } from "react-router-dom";
+import ViewExternalDocumentsModal from "../../pages/viewExternalDocuments";
 
 export const MyApplication = () => {
   const dispatch = useAppDispatch();
@@ -18,7 +18,7 @@ export const MyApplication = () => {
   const [attributes, setAttributes] = useState<any>(null);
   const [stages, setStages] = useState<any>(null);
   const [show, setShow] = useState(false);
-  const [fileUrl, setFileUrl] = useState('');
+  const [fileUrl, setFileUrl] = useState("");
   const viewExternalDocumentsModal = (url: any) => {
     setFileUrl(url);
     setShow(true);
@@ -32,12 +32,12 @@ export const MyApplication = () => {
         const response = await getApplicantCyclesApplications();
         if (response?.data?.getTraineeCyclesApplications) {
           setApplication(response.data.getTraineeCyclesApplications);
-          console.log('Appl', response.data.getTraineeCyclesApplications);
+          console.log("Appl", response.data.getTraineeCyclesApplications);
         } else {
-          throw new Error('No applications found');
+          throw new Error("No applications found");
         }
       } catch (error) {
-        toast.error('No applications found!');
+        toast.error("No applications found!");
       } finally {
         setIsLoading(false);
       }
@@ -63,7 +63,7 @@ export const MyApplication = () => {
             }
           }
         } catch (error) {
-          toast.error('Something went wrong while fetching details!');
+          toast.error("Something went wrong while fetching details!");
         } finally {
           setIsLoading(false);
         }
@@ -75,13 +75,13 @@ export const MyApplication = () => {
 
   const formatDate = (timestamp) => {
     const date = new Date(Number(timestamp));
-    console.log('DDD', date);
-    if (isNaN(date.getTime())) return '';
+    console.log("DDD", date);
+    if (isNaN(date.getTime())) return "";
 
-    return new Intl.DateTimeFormat('en-US', {
-      day: '2-digit',
-      month: 'short',
-      year: 'numeric',
+    return new Intl.DateTimeFormat("en-US", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
     }).format(date);
   };
 
@@ -90,7 +90,7 @@ export const MyApplication = () => {
       <>
         <div
           className="animate-pulse space-y-4 p-6 bg-gray-100 dark:bg-[#1E293B] min-h-screen min-w-screen"
-          style={{ width: '70%' }}
+          style={{ width: "70%" }}
         >
           <div className="h-10 w-2/3 bg-gray-300 dark:bg-gray-700 rounded"></div>
           <div className="space-y-2">
@@ -101,7 +101,7 @@ export const MyApplication = () => {
         </div>
         <div
           className="animate-pulse space-y-4 p-6 bg-gray-100 dark:bg-[#1E293B] min-h-screen min-w-screen"
-          style={{ width: '70%' }}
+          style={{ width: "70%" }}
         >
           <div className="h-10 w-2/3 bg-gray-300 dark:bg-gray-700 rounded"></div>
           <div className="space-y-2">
@@ -127,14 +127,14 @@ export const MyApplication = () => {
       </div>
     );
   }
-  console.log('APPJJA', application);
+  console.log("APPJJA", application);
 
   return (
     <>
       <ToastContainer />
       <div
         className="py-8 px-6 min-h-screen min-w-screen bg-gray-100 dark:bg-[#1E293B] text-gray-900 dark:text-white"
-        style={{ width: '70%' }}
+        style={{ width: "70%" }}
       >
         <h2 className="pl-5 text-3xl font-extrabold text-primary dark:text-[#56C870] sm:text-4xl mb-6">
           My Application
@@ -163,19 +163,19 @@ export const MyApplication = () => {
                 )}
                 {application?.cycle_id?.name && (
                   <li>
-                    <strong>Application Cycle:</strong>{' '}
+                    <strong>Application Cycle:</strong>{" "}
                     {application.cycle_id.name}
                   </li>
                 )}
                 {application?.cycle_id?.createdAt && (
                   <li>
-                    <strong>Published date:</strong>{' '}
+                    <strong>Published date:</strong>{" "}
                     {formatDate(application.cycle_id.createdAt)}
                   </li>
                 )}
                 {application?.createdAt && (
                   <li>
-                    <strong>Application date:</strong>{' '}
+                    <strong>Application date:</strong>{" "}
                     {formatDate(application.createdAt)}
                   </li>
                 )}
@@ -276,11 +276,11 @@ export const MyApplication = () => {
             </h3>
             <p className="mb-3">
               <strong>Current Stage:</strong>
-              {application?.applicationPhase === 'Rejected' ? (
+              {application?.applicationPhase === "Rejected" ? (
                 <span className="text-red-500"> Rejected</span>
               ) : (
                 <span className="text-green-500">
-                  {' '}
+                  {" "}
                   {application?.applicationPhase}
                 </span>
               )}
@@ -308,7 +308,7 @@ export const MyApplication = () => {
 
                     {stages.dismissed?.stageDismissedFrom && (
                       <p>
-                        <strong>Stage dismissed from:</strong>{' '}
+                        <strong>Stage dismissed from:</strong>{" "}
                         {stages.dismissed.stageDismissedFrom}
                       </p>
                     )}
@@ -321,7 +321,7 @@ export const MyApplication = () => {
 
                     {stages.dismissed?.createdAt && (
                       <p>
-                        <strong>Date:</strong>{' '}
+                        <strong>Date:</strong>{" "}
                         {formatDate(stages.dismissed.createdAt)}
                       </p>
                     )}
@@ -332,10 +332,10 @@ export const MyApplication = () => {
                   <li className="">
                     <strong>Admitted</strong>
                     {stages?.allStages?.history
-                      .filter((history: any) => history.stage === 'Admitted')
+                      .filter((history: any) => history.stage === "Admitted")
                       .map((history: any, index: any) => (
                         <strong key={index}>
-                          &nbsp; ({formatDate(history.enteredAt)} -{' '}
+                          &nbsp; ({formatDate(history.enteredAt)} -{" "}
                           {formatDate(history.exitedAt)})
                         </strong>
                       ))}
@@ -367,11 +367,11 @@ export const MyApplication = () => {
                     {stages?.allStages?.history
                       .filter(
                         (history: any) =>
-                          history.stage === 'Technical Assessment'
+                          history.stage === "Technical Assessment"
                       )
                       .map((history: any, index: any) => (
                         <strong key={index}>
-                          &nbsp; ({formatDate(history.enteredAt)} -{' '}
+                          &nbsp; ({formatDate(history.enteredAt)} -{" "}
                           {formatDate(history.exitedAt)})
                         </strong>
                       ))}
@@ -403,11 +403,11 @@ export const MyApplication = () => {
                     {stages?.allStages?.history
                       .filter(
                         (history: any) =>
-                          history.stage === 'Technical Assessment'
+                          history.stage === "Technical Assessment"
                       )
                       .map((history: any, index: any) => (
                         <strong key={index}>
-                          &nbsp; ({formatDate(history.enteredAt)} -{' '}
+                          &nbsp; ({formatDate(history.enteredAt)} -{" "}
                           {formatDate(history.exitedAt)})
                         </strong>
                       ))}
@@ -437,10 +437,10 @@ export const MyApplication = () => {
                   <li>
                     <strong>Shortlist</strong>
                     {stages?.allStages?.history
-                      .filter((history: any) => history.stage === 'Shortlisted')
+                      .filter((history: any) => history.stage === "Shortlisted")
                       .map((history: any, index: any) => (
                         <strong key={index}>
-                          &nbsp; ({formatDate(history.enteredAt)} -{' '}
+                          &nbsp; ({formatDate(history.enteredAt)} -{" "}
                           {formatDate(history.exitedAt)})
                         </strong>
                       ))}

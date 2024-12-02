@@ -186,27 +186,27 @@ export const filterStage = (stage: string) => async (dispatch: any) => {
       meetingPlatform
       status
       scheduledDate
+      createdAt
+      updatedAt
       coordinatorId {
         firstname
         lastname
       }
     }
     status
-  }
-  status
-  comments
-  score
-  platform
-  invitationLink
-  updatedAt
-  createdAt
-  }
-}`,
+    comments
+    score
+    platform
+    invitationLink
+    updatedAt
+    createdAt
+    }
+  }`,
       variables: {
         stage: stage,
       },
     });
-    if (response.data.data !== undefined || response.data.data !== null) {
+    if (response.data?.data?.getApplicantsByStage) {
       dispatch({
         type: filterByStage.FILTER_STAGE_SUCCESS,
         data: response.data.data.getApplicantsByStage,
@@ -249,7 +249,10 @@ export const sendInvitations =
           invitationLink: invitationLink,
         },
       });
-      if (response.data.data !== undefined || response.data.data !== null) {
+
+      const invitationResponse = response.data?.data?.sendInvitation;
+
+      if (invitationResponse) {
         dispatch({
           type: sendInvitation.SEND_INVITATION_STAGE_SUCCESS,
           data: response.data.data.sendInvitation,
@@ -327,65 +330,6 @@ export const sendInterviewInvitations =
       console.error(error);
     }
   };
-
-// export const updateInterviewStatuses =
-//   (interviewId: string, status: string) => async (dispatch: any) => {
-//     console.log("ATTEMPTING TO UPDATE THE INTERVEIW STATUS:", {
-//       interviewId,
-//       status,
-//       type: typeof interviewId,
-//     });
-
-//     dispatch({
-//       type: updateInterviewStatus.UPDATE_INTERVIEW_STATUS_LOADING,
-//       message: "loading",
-//     });
-
-//     try {
-//       const response = await axios.post("/", {
-//         query: `mutation UpdateInterviewStatus($input: UpdateInterviewStatusInput!) {
-//   updateInterviewStatus(input: $input) {
-//     success
-//     message
-//   }
-// }`,
-//         variables: {
-//           interviewId,
-//           status,
-//         },
-//       });
-
-//       console.log("FULL RESPONSE =>>>>>:", response.data);
-
-//       if (response.data?.data?.updateInterviewStatus) {
-//         dispatch({
-//           type: updateInterviewStatus.UPDATE_INTERVIEW_STATUS_SUCCESS,
-//           data: response.data.data.updateInterviewStatus,
-//         });
-//         toast.success(response.data.data.updateInterviewStatus.message);
-//       } else if (response.data.errors) {
-//         const errorMessage = response.data.errors[0].message;
-//         dispatch({
-//           type: updateInterviewStatus.UPDATE_INTERVIEW_STATUS_FAIL,
-//           error: errorMessage,
-//         });
-//         toast.error(errorMessage);
-//       } else {
-//         dispatch({
-//           type: updateInterviewStatus.UPDATE_INTERVIEW_STATUS_FAIL,
-//           error: "No data returned from the server",
-//         });
-//         toast.error("Failed to update interview status");
-//       }
-//     } catch (error) {
-//       dispatch({
-//         type: updateInterviewStatus.UPDATE_INTERVIEW_STATUS_FAIL,
-//         error: "No data returned from the server",
-//       });
-//       console.error(error);
-//       toast.error("Failed to schedule interview");
-//     }
-//   };
 
 export const updateInterviewStatuses =
   (interviewId: string, status: string) => async (dispatch: any) => {
