@@ -87,7 +87,6 @@ const RecentForms = () => {
         });
         const data = response.data?.data?.getAllApplications ?? [];
         setApplications(data);
-        console.log(response);
         setLoading(false);
       } catch (error) {
         console.error('Error fetching applications:', error);

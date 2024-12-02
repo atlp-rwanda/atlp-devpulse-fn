@@ -67,7 +67,7 @@ interface PersonalInfoSectionProps {
           <div>
             <input 
               type="radio" 
-              name="study" 
+              name="isStudent" 
               value="no"
               checked={formData.isStudent === "no"}
               onChange={handleInputChange}

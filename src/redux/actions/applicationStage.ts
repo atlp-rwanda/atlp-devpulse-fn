@@ -4,6 +4,7 @@ import {
   advanceToNextStage,
   filterByStage,
   getApplicantStage,
+  sendInvitation,
 } from "../actiontypes/applicationTypes";
 import toast from "react-hot-toast";
 import { message } from "antd";
@@ -180,6 +181,8 @@ export const filterStage = (stage: string) => async (dispatch: any) => {
   status
   comments
   score
+  platform
+  invitationLink
   updatedAt
   createdAt
   }
@@ -188,11 +191,11 @@ export const filterStage = (stage: string) => async (dispatch: any) => {
         stage: stage,
       },
     });
-    if(response.data.data !== undefined || response.data.data !== null){
+    if (response.data.data !== undefined || response.data.data !== null) {
       dispatch({
-        type:filterByStage.FILTER_STAGE_SUCCESS,
-        data:response.data.data.getApplicantsByStage
-      })
+        type: filterByStage.FILTER_STAGE_SUCCESS,
+        data: response.data.data.getApplicantsByStage,
+      });
     }
   } catch (error) {
     dispatch({
@@ -202,3 +205,42 @@ export const filterStage = (stage: string) => async (dispatch: any) => {
     console.error(error);
   }
 };
+
+export const sendInvitations =
+  (applicantId: string, email: string, platform:string, invitationLink: string) =>
+  async (dispatch: any) => {
+    dispatch({
+      type: sendInvitation.SEND_INVITATION_STAGE_LOADING,
+      message: "loading",
+    });
+
+    try {
+      const response = await axios.post("/", {
+        query: `mutation SendInvitation($applicantId: ID!, $email: String!, $platform:String!, $invitationLink: String!) {
+                      sendInvitation(applicantId: $applicantId, email: $email, platform:$platform, invitationLink: $invitationLink) {
+                         message
+                         success
+                       }
+                      }`,
+        variables:{
+          applicantId: applicantId,
+          email: email,
+          platform: platform,
+          invitationLink: invitationLink,
+        }
+      });
+      if (response.data.data !== undefined || response.data.data !== null) {
+        dispatch({
+          type: sendInvitation.SEND_INVITATION_STAGE_SUCCESS,
+          data: response.data.data.sendInvitation,
+        });
+        toast.success(response.data.data.sendInvitation.message);
+      }
+    } catch (error) {
+      dispatch({
+        type: sendInvitation.SEND_INVITATION_STAGE_FAIL,
+        error,
+      });
+      console.error(error);
+    }
+  };

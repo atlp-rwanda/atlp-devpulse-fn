@@ -46,7 +46,7 @@ import Jobs from "../pages/JobPost/job";
 import SingleJobPostDetails from "../pages/JobPost/viewSingleJob";
 import SharedPosts from "../pages/sharedPosts";
 import { ApplicantApplication } from "../pages/Applications/ApplicantApplication";
-import ScheduleInterview from "../pages/ScheduleInterview";
+// import ScheduleInterview from "../pages/Schedules";
 import SubmitApplication from "../pages/SubmitApplication";
 import GradingSystemPage from "../pages/GradingSystemPage";
 import ListApplications from "./../pages/Applications/AdminViewApplications";
@@ -211,17 +211,9 @@ function Navigation() {
         />
 
         <Route
-          path="cycles/applicant-stages/:cycleName"
+          path="cycles/application-stages/:cycleName"
           element={
             <PrivateRoute allowedRoles={["admin", "superAdmin"]}>
-              <ApplicantStages />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="Applicant-Stages"
-          element={
-            <PrivateRoute allowedRoles={["Admin", "superAdmin"]}>
               <ApplicantStages />
             </PrivateRoute>
           }
@@ -588,14 +580,6 @@ function Navigation() {
           }
         />
         <Route
-          path="available-job/:id/apply/submit"
-          element={
-            <PrivateRoute allowedRoles={["applicant", "trainee"]}>
-              <ScheduleInterview />
-            </PrivateRoute>
-          }
-        />
-        <Route
           path="tickets"
           element={
             <PrivateRoute allowedRoles={["applicant", "trainee"]}>
@@ -743,14 +727,6 @@ function Navigation() {
           element={
             <PrivateRoute allowedRoles={["applicant", "trainee"]}>
               <SubmitApplication />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="interviewScheduler"
-          element={
-            <PrivateRoute allowedRoles={["applicant", "trainee"]}>
-              <ScheduleInterview />
             </PrivateRoute>
           }
         />

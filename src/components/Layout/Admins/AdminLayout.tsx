@@ -8,7 +8,7 @@ const AdminLayout = () => {
 
   return (
     <>
-      <div className=" h-screen dark:bg-dark-frame-bg">
+      <div className=" h-screen">
         <div className=" w-full h-[70px]">
           <AdminHeader />
         </div>
