@@ -42,7 +42,7 @@ function ApplicantNotifications() {
     if (!notification.read) {
       await markAsRead(notification.id);
     }
-
+    
     if (notification.eventType === "ticket") {
       navigate(`/applicant/ticket/${notification.eventId}`);
     } else if (notification.eventType === "applicationUpdate"){
