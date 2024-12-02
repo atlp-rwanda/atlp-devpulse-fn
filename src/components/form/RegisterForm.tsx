@@ -104,7 +104,7 @@ function SignupForm() {
       const parsedData = registerSchema.parse(data);
       const response = await axios.post(`${process.env.BACKEND_URL}`, {
         query: `
-          mutation CreateUser($userInput: UserInput_Logged) {
+          mutation ($userInput: UserInput_Logged) {
             createUser_Logged(userInput: $userInput) {
               country
               email
@@ -132,12 +132,13 @@ function SignupForm() {
             gender: parsedData.gender,
             email: parsedData.email,
             password: parsedData.password,
-            telephone: `${parsedData.countryCode} ${parsedData.phoneNumber}`,
+            telephone: `${parsedData.countryCode} ${parsedData.phoneNumber}`
           },
         },
       });
       if (response.data.errors) {
         const error = response.data.errors[0].message;
+        // console.log(error);
         if (
           error.includes("E11000 duplicate key error collection") &&
           error.includes("email_1 dup key")
