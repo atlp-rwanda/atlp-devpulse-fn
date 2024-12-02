@@ -3,18 +3,24 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Heart, MessageCircle,User } from 'lucide-react';
 import { useAppDispatch,useAppSelector } from '../../hooks/hooks';
-import { getBlogById, getBlogRelatedArticles } from "../../redux/actions/blogActions";
+import { getBlogById, getBlogRelatedArticles, deleteBlogAction } from "../../redux/actions/blogActions";
 import { Spinner } from 'flowbite-react';
 import SingleBlogSkeleton from '../../skeletons/singleBlogSkeleton';
 import * as icons from "react-icons/ai";
 import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
+
+import { useNavigate } from 'react-router-dom';
 
 const SingleBlogView = () => {
   const { id } = useParams();
   const [comment, setComment] = useState('');
   const [likes, setLikes] = useState(20);
   const [isLiked, setIsLiked] = useState(false);
+  const userId = localStorage.getItem('userId');
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const [deleteBlogModal,setDeleteBlogModal] = useState(false)
   
   const handleLike = () => {
     setIsLiked(!isLiked);
@@ -44,9 +50,57 @@ const SingleBlogView = () => {
       dispatch(getBlogById(id));
   }, [dispatch]);
 
+ const handleDeleteBlog = async (id: string) => {
+  try {
+    const result = await dispatch(deleteBlogAction(id));
+
+    // Check the result's type for success or failure
+    if (result.type === "DELETE_BLOG_SUCCESS") {
+      toast.success("Blog deleted");
+      navigate(-1); // Go back to the previous page
+    } else {
+      toast.error("Failed to delete blog! Try again");
+    }
+  } catch (error: any) {
+    // This block is now for unexpected errors
+    toast.error(error.message || "Unexpected error! Try again");
+  }
+};
+
+
+  const openDeleteModal = () => {
+    setDeleteBlogModal(true)
+  }
+
+  const closeDeleteModal = () => {
+    setDeleteBlogModal(false)
+  }
 
   return (
-    <div className="min-h-screen w-full pt-8 bg-white dark:bg-slate-900 text-black dark:text-white p-6">
+    <div className="min-h-screen w-full pt-8 bg-white dark:bg-dark-bg text-black dark:text-white p-6">
+       {deleteBlogModal && (
+        <div className="fixed inset-0 mt-16 p-0 flex items-center justify-center bg-black bg-opacity-20 dark:bg-opacity-40">
+          <div className="bg-white dark:bg-dark-bg w-11/12 md:w-3/5 lg:w-2/5 rounded-lg p-6">
+            <div className="w-full flex mb-2 items-center justify-between">
+              <div>
+                <h3 className="font-bold text-m dark:text-white ">
+                  Delete Blog
+                </h3>
+                <p>This action cannot be undone</p>
+              </div>
+              <icons.AiOutlineClose
+                className="float-right text-2xl cursor-pointer"
+                onClick={() => closeDeleteModal()}
+              />
+
+            </div>
+               <button className="flex mt-5 gap-2 border border-red-500 px-4 py-2 rounded-lg w-fit text-red-500" onClick={() => handleDeleteBlog(blog.id)}>
+            <icons.AiFillDelete className="h-6 w-6 " />
+            Delete this blog
+            </button>
+          </div>
+        </div>
+      )}
       {isLoading ||isLoadingRelatedArticles || !blog ?  (
         <SingleBlogSkeleton />
       ) : (
@@ -78,28 +132,6 @@ const SingleBlogView = () => {
                   </div>
                 </div>
               </div>
-              {topArticles && topArticles.length > 0 ? (
-              <div className='flex flex-col gap-2 ml-5'>
-                <h2>Related Articles</h2>
-              {topArticles.map((article, index) => (
-                  <div className="flex items-center gap-1  bg-slate-100 dark:bg-slate-800 px-2  hover:bg-slate-50 py-2 rounded-lg dark:hover:bg-slate-700 transition-colors cursor-pointer group" onClick={() =>  window.open(article.url, "_blank")}>
-                  <img
-                    src={article.image}
-                    alt={article.title}
-                    className="h-16 w-36 rounded-lg"
-                  />
-                  <h3 className="text-sm font-semibold mb-2">
-                  {article.title}
-                  </h3>
-                  <div className="text-sm text-gray-400">
-                    <span>Source: {article.source}</span>
-                  </div>
-                  </div>
-              ))}
-              </div>
-              ): (
-                <p>No related articles available</p>
-              )}
             </div>
             <div className="flex gap-4 flex-col w-full items-start">
               <p className="dark:text-slate-300 w-[80%] leading-relaxed">
@@ -149,6 +181,30 @@ const SingleBlogView = () => {
               )}
             </div>
           </div>
+          {topArticles && topArticles.length > 0 ? (
+              <div className='mt-10'>
+                <h1>Related Articles</h1>
+                <div className='flex flex-row gap-1'>
+                {topArticles.map((article, index) => (
+                  <div className="flex flex-col w-1/4  bg-slate-100 dark:bg-slate-800 px-2  hover:bg-slate-50 py-2 rounded-lg dark:hover:bg-slate-700 transition-colors cursor-pointer group" onClick={() =>  window.open(article.url, "_blank")}>
+                  <img
+                    src={article.image}
+                    alt={article.title}
+                    className="h-28 w-full rounded-lg object-cover"
+                  />
+                  <h3 className="text-sm font-semibold mb-2">
+                  {article.title}
+                  </h3>
+                  <div className="text-sm text-gray-400">
+                    <span>Source: {article.source}</span>
+                  </div>
+                  </div>
+              ))}
+              </div>
+              </div>
+              ): (
+                <p>No related articles available</p>
+              )}
           <div className="flex items-center gap-4">
             <button onClick={handleLike} className="flex items-center gap-2">
               <Heart
@@ -223,6 +279,15 @@ const SingleBlogView = () => {
                 <p className="text-left">No comments yet</p>
               </div>
             )}
+          </div>
+      
+          <div className={`${userId === blog.author.id ? "" : "hidden"} flex flex-col gap-2 mt-10`}>
+            <h1 className='text-red-500 font-bold'>Danger Zone</h1>
+
+            <button className={`flex gap-2 border border-red-500 px-4 py-2 rounded-lg w-fit text-red-500 `} onClick={() => openDeleteModal() }>
+            <icons.AiFillDelete className="h-6 w-6 " />
+            Delete this blog
+            </button>
           </div>
         </div>
       )}

@@ -43,6 +43,7 @@ import {
   AddApplicantScoreReducer,
   advanceToNextStageReducer,
   filterApplicantByStageReducer,
+  sendInvitationReducer
 } from "./applicationReducer";
 import filterTicketReducer from "./filterTicketReducer";
 
@@ -112,7 +113,8 @@ const allReducers = combineReducers({
   updateUser: userUpdateReducer,
   blogs: blogsReducer,
   singleBlog: singleBlogReducer,
-  blogRelatedArticle: blogRelatedArticle
+  blogRelatedArticle: blogRelatedArticle,
+  sendInvitation: sendInvitationReducer,
 });
 
 export type RootState = ReturnType<typeof allReducers>;

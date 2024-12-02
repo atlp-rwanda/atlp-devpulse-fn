@@ -31,15 +31,31 @@ const useFormState = (initialState: FormData) => {
     setFormData(prevData => ({ ...prevData, [name]: value }));
     setFormErrors(prev => ({ ...prev, [name]: '' }));
   };
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, files } = e.target;
+    if (files && files.length > 0) {
+      const file = files[0]; 
+      setFormData(prevData => ({ ...prevData, [name]: file }));
+      setFormErrors(prev => ({ ...prev, [name]: '' })); 
+    }
+  };
 
-  return { formData, setFormData, formErrors, setFormErrors, handleInputChange };
+
+  return {
+    formData,
+    setFormData,
+    formErrors,
+    setFormErrors,
+    handleInputChange,
+    handleFileChange
+  };
 };
 
 // Custom hook to manage submission state
 const useSubmissionState = () => {
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  
+
   return { submitError, setSubmitError, isSubmitting, setIsSubmitting };
 };
 
@@ -47,7 +63,7 @@ const useSubmissionState = () => {
 const useUserData = (setFormData: (fn: (prev: FormData) => FormData) => void) => {
   const dispatch = useDispatch<AppDispatch>();
   const isMounted = useRef(true);
-  
+
   const { loggedUser, loggedUserLoading } = useSelector((state: RootState) => ({
     loggedUser: state.loggedUser.user,
     loggedUserLoading: state.loggedUser.loading,
@@ -85,14 +101,14 @@ const useFormSubmission = (
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!validateForm()) return;
+    // if (!validateForm()) return;
 
     setSubmitError(null);
     setIsSubmitting(true);
 
     try {
       const result: any = await dispatch(createTrainee(formData));
-      
+
       if (result?.data?.createNewTraineeApplicant?._id) {
         const traineeId = result.data.createNewTraineeApplicant._id;
         navigate(`/applicant/available-jobs/trainee-apply/trainee-success/${traineeId}`, {
@@ -113,7 +129,7 @@ const useFormSubmission = (
 
       const errorMessage = getErrorMessage(error);
       setSubmitError(errorMessage);
-      
+
       if (errorMessage.toLowerCase().includes('cycle')) {
         setFormErrors(prev => ({
           ...prev,
@@ -133,7 +149,7 @@ const useFormSubmission = (
 // Main hook that composes all the functionality
 export const useTraineeFormLogic = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { formData, setFormData, formErrors, setFormErrors, handleInputChange } = useFormState(initialFormData);
+  const { formData, setFormData, formErrors, setFormErrors, handleInputChange,handleFileChange } = useFormState(initialFormData);
   const { errors, validateForm } = useFormValidation(formData);
   const { loggedUserLoading, isMounted } = useUserData(setFormData);
   const { handleSubmit, submitError, isSubmitting } = useFormSubmission(
@@ -161,6 +177,7 @@ export const useTraineeFormLogic = () => {
     cyclesLoading,
     handleInputChange,
     handleSubmit,
+    handleFileChange,
     isLoading: loggedUserLoading,
   };
 };

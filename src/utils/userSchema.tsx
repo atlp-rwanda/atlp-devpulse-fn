@@ -21,6 +21,7 @@ export const userSchema = z.object({
     .optional()
     .or(z.literal("")),
   picture: z.string().optional(),
+  bio: z.string().optional()
 });
 
 export type TuserSchema = z.infer<typeof userSchema>;

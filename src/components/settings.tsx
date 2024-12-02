@@ -2,12 +2,13 @@ import React, { useState, useEffect } from "react";
 import { useTheme } from "../hooks/darkmode";
 import ToggleSwitch from "./ToggleSwitch";
 import DropdownButton from "./DropdownButton"; 
+import { useNavigate } from "react-router";
 
 const Dropdown = ({ isOpen, handleChange, items, theme }) => {
   if (!isOpen) return null;
 
   return (
-    <div className={`absolute mt-2 right-0 ${theme ? 'bg-gray-200' : 'bg-gray-800'} border rounded-md shadow-lg`}>
+    <div className={`absolute mt-2 right-0 ${theme ? 'bg-gray-200' : 'bg-gray-800 border-gray-600'} rounded-md shadow-lg`}>
       <ul className={`text-sm ${theme ? "text-black" : "text-white"}`}>
         {items.map((item) => (
           <li
@@ -56,6 +57,8 @@ const handleThemeLabel = (theme: boolean) =>
 
 const SettingsPage: React.FC = () => {
   const { theme, setTheme } = useTheme();
+  const navigate = useNavigate();
+  const role = localStorage.getItem('roleName');
 
   const ThemeSettings = () => {
     const { isOpen, toggle, close } = useDropdown();
@@ -106,7 +109,7 @@ const SettingsPage: React.FC = () => {
   const AccountSettings = () => (
     <Section title="My Account" theme={theme}>
       <div className="flex justify-between items-center">
-        <p className="opacity-70 text-xs">Edit profile, export account data, …</p> <button className="text-sm">Change settings</button>
+        <p className="opacity-70 text-xs">Edit profile, export account data, …</p> <button className="text-sm" onClick={() => role === 'applicant' ? navigate('/applicant/update-profile') : navigate('/admin/update-profile')}>Update Profile</button>
       </div>
     </Section>
   );

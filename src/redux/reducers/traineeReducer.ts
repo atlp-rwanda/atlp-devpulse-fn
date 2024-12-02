@@ -66,7 +66,6 @@ interface TraineeAttribute {
   birth_date?: string;
   address?: string;
   phone?: string;
-  study?: boolean;
   education_level?: string;
   currentEducationLevel?: string;
   nationality?: string;

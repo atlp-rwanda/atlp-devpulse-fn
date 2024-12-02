@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Sidebar from "./sidebar";
 import { SunIcon } from "@heroicons/react/outline";
@@ -16,6 +16,14 @@ const profile: string = require("../../assets/avatar.png").default;
 const LogoWhite: string = require("../../assets/logoWhite.svg").default;
 import {destination} from '../../utils/utils'
 import SearchBar from "../../components/SearchBar";
+import { useAppSelector, useAppDispatch } from "../../hooks/hooks";
+import {
+  fetchUser,
+  updateUser,
+  getUserIdFromToken,
+} from "../../utils/profileUtils";
+
+const DEFAULT_IMAGE: string = require("../../assets/default-image.jpg").default;
 
 const placeholderImage = profile;
 
@@ -50,25 +58,39 @@ const NotificationBell = ({ unreadCount, handleShowNotification }) => (
   </span>
 );
 
-const ProfileSection = ({ user, onImageError, handleShowProfileDropdown }) => (
+const ProfileSection = ({ user, onImageError, handleShowProfileDropdown }) => {
+  const dispatch = useAppDispatch();
+  const userData = useAppSelector((state: any) => state.updateUser?.data);
+  const userId = getUserIdFromToken();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (userId) {
+      fetchUser(userId, dispatch, setLoading);
+    }
+  }, [userId, dispatch]);
+
+  return(
   <span onClick={handleShowProfileDropdown}>
     <img
-      src={user}
+      src={userData?.picture || DEFAULT_IMAGE}
       alt="profile"
       onError={onImageError}
-      className="w-[30px] cursor-pointer mx-2 rounded"
+      className="w-[32px] h-[32px] cursor-pointer mx-2 rounded"
     />
   </span>
-);
+)};
 
 function NavBar() {
   const userDestination = destination();
   const access_token = localStorage.getItem("access_token");
   //@ts-ignore
-  const user = access_token ? jwtDecode(access_token).picture : profile;
+  const user = access_token  ? jwtDecode(access_token)?.profile || profile : profile;
+
   const roleName = localStorage.getItem("roleName");
   const [nav, setNav] = useState(false);
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
+  
 
   const { theme, setTheme } = useTheme();
   const handleToggleTheme = () => setTheme(!theme);
@@ -93,7 +115,7 @@ function NavBar() {
           handleShowProfileDropdown={handleShowProfileDropdown}
         />
       )}
-      <div className="flex items-center justify-between h-[70px] fixed z-50 top-0 border-b w-screen bg-white dark:bg-dark-bg">
+      <div className="flex items-center justify-between h-[70px] fixed z-50 top-0 border-b w-screen bg-white dark:bg-dark-bg sm:px-10">
         <div className="flex items-center">
           <span
             onClick={handleClick}
@@ -110,7 +132,7 @@ function NavBar() {
           </span>
           
           <span>
-            <Link to={userDestination} className="flex items-center">
+            <Link to="/" className="flex items-center">
               {theme ? (
                 <img className="cursor-pointer mx-2 fill-[blue]" src={logo} />
               ) : (

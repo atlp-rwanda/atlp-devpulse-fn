@@ -49,7 +49,6 @@ const UpdateCohortModal = ({ open, onClose, cohortData }) => {
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     try {
       await dispatch(updateCohort(cohortData.id, data));
-      console.log(data);
       toast.success("Cohort updated successfully");
       dispatch(getAllCohorts());
       onClose();

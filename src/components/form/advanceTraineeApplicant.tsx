@@ -57,7 +57,7 @@ const NextStageModal: React.FC<props> = ({ applicantId, stage,status, onClose })
       <button
         onClick={() => setIsOpen(true)}
         disabled = {stage === "Rejected" || stage === "Admitted" ? true : status === "Moved" ? true : false}
-        className={`px-4 py-2 text-sm font-medium text-white ${stage === "Rejected" || stage === "Admitted" ? "bg-gray-400 cursor-not-allowed" :  status === "Moved"? "bg-gray-400 cursor-not-allowed" : " bg-[#0c6a0c] hover:bg-[#367a4e] dark:bg-green dark:hover:bg-emerald-200 cursor-pointer"}  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500`}
+        className={`px-4 py-2 text-sm font-medium text-white ${stage === "Rejected" || stage === "Admitted" ? "bg-gray-400 cursor-not-allowed" :  status === "Moved"? "bg-gray-400 cursor-not-allowed" : " bg-[#0c6a0c] hover:bg-[#367a4e] dark:bg-green dark:hover:bg-emerald-700 cursor-pointer"}  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500`}
       >
         Advance
       </button>

@@ -9,6 +9,7 @@ import { handleBlogImageUpload } from "../../utils/imageUploadUtil";
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import AllBlogsSkeleton from "../../skeletons/allBlogsSkeleton";
 import SingleBlogSkeleton from "skeletons/singleBlogSkeleton";
+import HideUnhideButton from "../../components/hideBlog"
 
  interface Comment {
     _id: String
@@ -81,12 +82,13 @@ const AllBlogs = () => {
     images: [""],
   });
   const [isUploading, setIsUploading] = useState(false);
-   
+  const [blogs, setBlogs] = useState<Blog[]>([]);
+
   const userId = localStorage.getItem('userId');
   const role = localStorage.getItem('roleName');
   
   const { data ,isLoading} = useAppSelector((state) => ({data:state.blogs.data,isLoading:state.blogs.isLoading}));
-  const blogs = data;
+
    useEffect(() => {
     if (role == "applicant" || role == "trainee") {
       dispatch(getBlogsByAuthor(String(userId)));
@@ -95,7 +97,10 @@ const AllBlogs = () => {
     }
   }, [dispatch]);
 
-
+  useEffect(() => {
+    setBlogs(data);
+  }, [data]);
+  
   const handleBlogClick = (blogId: string) => {
     navigate(`${blogId}`);
   };
@@ -356,7 +361,7 @@ const AllBlogs = () => {
       <div className="max-w-6xl mt-2 mx-auto">
         <div className="mb-6 w-full flex items-center justify-between">
           <h1 className="text-2xl font-semibold">All Blogs</h1>
-          {userId && role && role == "applicant" || role == "trainee" && (
+          {userId && role && (role == "applicant" || role == "trainee") && (
             <div className="w-full sm:w-auto">
               <button
                 disabled={isLoading}
@@ -402,6 +407,12 @@ const AllBlogs = () => {
                     {new Date(Number(blog.created_at)).toLocaleString()}
                   </span>
                 </div>
+                {role === "admin" || role === "superAdmin" ? (
+                  <HideUnhideButton
+                    blogId={blog.id}
+                    isHidden={blog.isHidden}
+                  />
+                ) : null}
               </div>
             ))
           ) : (

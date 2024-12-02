@@ -1,5 +1,7 @@
 const { green } = require('@mui/material/colors');
 
+const plugin = require("tailwindcss/plugin");
+
 module.exports = {
   content: ['./src/**/*.{ts,tsx}', './index.html'],
   darkMode: 'class',
@@ -75,11 +77,29 @@ module.exports = {
       margin: {
         '5px': '5.5px',
       },
+      zIndex: {
+        60: '60',
+        100: '100',
+      },
     },
     variants: {
       backgroundColor: ['active'],
       textColor: ['active'],
     },
-    plugins: [],
+    plugins: [
+      require('flowbite/plugin'),
+      plugin(({ addUtilities }) => {
+        addUtilities({
+          /* Chrome, Safari, and Opera */
+          ".scrollbar-hidden::-webkit-scrollbar": {
+            display: "none",
+          },
+          ".scrollbar-hidden": {
+            "scrollbar-width": "none", /* Firefox */
+            "-ms-overflow-style": "none", /* IE and Edge */
+          },
+        });
+      }),
+    ],
   },
 };
