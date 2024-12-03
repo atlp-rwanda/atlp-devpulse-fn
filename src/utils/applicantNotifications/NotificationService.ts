@@ -15,6 +15,8 @@ export const fetchNotifications = async (
                   message
                   read
                   createdAt
+                  eventType
+                  eventId
                 }
               }`,
             variables: { userId },
