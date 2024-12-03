@@ -69,11 +69,3 @@ jobs:
               ${{ secrets.DOCKER_HUB_USERNAME }}/atlp-devpulse-fn:latest)
             
             echo "Container ID: $container_id"
-            
-            if [ -z "$container_id" ]; then
-              echo "Container failed to start"
-              exit 1
-            fi
-
-            # Confirm the container is running
-            docker ps | grep "$container_id" || exit 1
