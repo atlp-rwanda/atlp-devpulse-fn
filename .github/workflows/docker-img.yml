@@ -1,25 +1,37 @@
 name: Login to Digital Ocean and create a directory
 
 on:
-  pull_request:
+  push:
     branches:
       - develop
 
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
+    env:
+      BACKEND_URL: ${{ secrets.BACKEND_URL }}
+      CLIENT_ID: ${{ secrets.CLIENT_ID }}
+      PUSHER_KEY: ${{ secrets.PUSHER_KEY }}
+      PUSHER_CLUSTER: ${{ secrets.PUSHER_CLUSTER }}
+      REACT_APP_CLOUDINARY_UPLOAD_PRESET: ${{ secrets.REACT_APP_CLOUDINARY_UPLOAD_PRESET }}
+      REACT_APP_CLOUDINARY_NAME: ${{ secrets.REACT_APP_CLOUDINARY_NAME }}
     steps:
-      - name: Login to docker
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Login to Docker Hub
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_PASSWORD }}
-      - name: Build and Push docker image
+
+      - name: Build and Push Docker Image
         uses: docker/build-push-action@v4
         with:
           push: true
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/atlp-devpulse-fn:latest
-      - name: Login to DO
+
+      - name: Login to Digital Ocean Server
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.DO_HOST }}
@@ -27,6 +39,33 @@ jobs:
           key: ${{ secrets.DO_KEY }}
           port: ${{ secrets.DO_PORT }}
           script: |
-            docker pull devpulse/atlp-devpulse-fn:latest
-            docker ps | grep 4010 | cut -f1 -d' ' | xargs docker stop
-            docker run -p 4010:81 -d --add-host=devpulse-backend:161.35.150.208 devpulse/atlp-devpulse-fn:latest
+            set -e  # Exit on errors
+            set -x  # Debugging enabled
+            
+            # Create .env file with required environment variables
+            cat <<EOF > .env
+            BACKEND_URL=${{ secrets.BACKEND_URL }}
+            CLIENT_ID=${{ secrets.CLIENT_ID }}
+            PUSHER_KEY=${{ secrets.PUSHER_KEY }}
+            PUSHER_CLUSTER=${{ secrets.PUSHER_CLUSTER }}
+            REACT_APP_CLOUDINARY_UPLOAD_PRESET=${{ secrets.REACT_APP_CLOUDINARY_UPLOAD_PRESET }}
+            REACT_APP_CLOUDINARY_NAME=${{ secrets.REACT_APP_CLOUDINARY_NAME }}
+            EOF
+
+            # Pull the latest Docker image
+            docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/atlp-devpulse-fn:latest
+
+            # Stop and remove any existing container on port 4008
+            existing_container=$(docker ps -q --filter "publish=4008")
+            if [ -n "$existing_container" ]; then
+              docker stop "$existing_container"
+              docker rm "$existing_container"
+            fi
+
+            # Run the new container
+            container_id=$(docker run -d \
+              -p 4008:5000 \
+              --env-file .env \
+              ${{ secrets.DOCKER_HUB_USERNAME }}/atlp-devpulse-fn:latest)
+            
+            echo "Container ID: $container_id"
