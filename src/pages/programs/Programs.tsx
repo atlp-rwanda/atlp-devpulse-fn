@@ -27,6 +27,8 @@ const Programs = (props: any) => {
   const navigate = useNavigate();
   const { createProgramStates, fetchProgramStates, deleteProgramStates } =
     props;
+
+  console.log("Propps:",props)
   const { theme, setTheme } = useTheme();
   const { allfilteredPrograms,count } = props;
   const [addNewProgramModal, setAddNewProgramModal] = useState(false);
