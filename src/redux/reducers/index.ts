@@ -63,10 +63,10 @@ import blogRelatedArticle from "./blogRelatedArticleReducer";
 
 import createDocsReducer from './createDocReducer';
 import fetchDocsReducer from './fetchDocsReducer';
-// import fetchSingleDocsReducer from './fetchSingleDocsReducer';
+import fetchSingleDocsReducer from './fetchSingleDocsReducer';
 import deleteDocsReducer from './deleteDocsReducer';
 import updateDocsReducer from './updateDocsReducer';
-
+import fetchDocsByRole from './fetchDocsByRole';
 
 
 const allReducers = combineReducers({
@@ -102,7 +102,7 @@ const allReducers = combineReducers({
 
   createDocs: createDocsReducer,
   fetchDocs: fetchDocsReducer,
-  // fetchSingleDocs: fetchSingleDocsReducer,
+  fetchSingleDocs: fetchSingleDocsReducer,
   deleteDocs: deleteDocsReducer,
   updateDocs: updateDocsReducer,
 
@@ -133,6 +133,8 @@ const allReducers = combineReducers({
   singleBlog: singleBlogReducer,
   blogRelatedArticle: blogRelatedArticle,
   sendInvitation: sendInvitationReducer,
+  fetchDocsByRole:fetchDocsByRole
+  
 });
 
 export type RootState = ReturnType<typeof allReducers>;

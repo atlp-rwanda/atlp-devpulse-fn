@@ -18,6 +18,7 @@ export const updateDocAction = (docsData: any) => {
         _id,
         title,
         description,
+        role
       } = docsData;
 
       const response = await axios({
@@ -30,6 +31,7 @@ export const updateDocAction = (docsData: any) => {
                 id
                 title
                 description
+                role
               }
             }
           `,
@@ -38,13 +40,14 @@ export const updateDocAction = (docsData: any) => {
             docFields: {
               title,
               description,
+              role
             },
           },
         },
       });
 
       if (response.data.data !== null) {
-        toast.success("Program updated");
+        toast.success("Documentation updated");
         dispatch({
           type: updateDocsType.UPDATE_Docs_SUCCESS,
           message: response.data.data,

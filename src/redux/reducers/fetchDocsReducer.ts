@@ -15,7 +15,7 @@ import {
     loading: false,
     success: false,
     error: null,
-    data: null,
+    data: [],
     count: 0,
   };
   
@@ -52,7 +52,7 @@ import {
           ...state,
           loading: false,
           //@ts-ignore
-          data: state.data.filter((item) => item._id !== action.data._id),
+          data: state.data.filter((item) => item.id !== action.data.id),
         };
   
       case fetchDocsType.Docs_ADDED:
@@ -60,12 +60,13 @@ import {
         //@ts-ignore
         let existingItem = state.data.find(
           //@ts-ignore
-          (item) => item._id === action.data._id
+          (item) => item.id === action.data.id
         );
   
         //@ts-ignore
         let newItem = !existingItem && action.data;
         //@ts-ignore
+
   
         return {
           ...state,

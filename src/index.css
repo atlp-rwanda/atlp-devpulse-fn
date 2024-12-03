@@ -16,6 +16,34 @@ body {
 body.light-mode {
   background: #ffffff;
 }
+/* Default toolbar icon styles for light mode */
+.ql-toolbar .ql-stroke,
+.ql-toolbar .ql-fill {
+  @apply fill-black stroke-black; /* Icons default to black in light mode */
+}
+
+/* Toolbar icon styles for dark mode */
+.dark .ql-toolbar .ql-stroke,
+.dark .ql-toolbar .ql-fill {
+  @apply fill-[#262E3D] stroke-neutral-300; /* Icons change to white in dark mode */
+}
+.ql-toolbar .ql-picker-options {
+  @apply bg-white text-black shadow-md border border-gray-300; /* Light mode dropdown */
+}
+
+.dark .ql-toolbar .ql-picker-options {
+  @apply bg-gray-800 text-white shadow-lg border border-gray-600;
+}
+.ql-toolbar .ql-picker,
+.ql-toolbar .ql-picker-label {
+  @apply text-black; 
+}
+
+.dark .ql-toolbar .ql-picker,
+.dark .ql-toolbar .ql-picker-label {
+  @apply text-white; /* Text color for dark mode */
+}
+
 
 /* Other existing CSS rules for input and label styles */
 

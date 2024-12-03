@@ -12,7 +12,7 @@ export enum fetchDocsType {
   }
   interface actionSuccess {
     type: fetchDocsType.FETCH_Docs_SUCCESS;
-    data: string;
+    data: any;
   }
   
   interface actionFail {
@@ -22,17 +22,17 @@ export enum fetchDocsType {
   
   interface actionRefresh {
     type: fetchDocsType.Docs_REMOVED;
-    data: string;
+    data: any;
   }
   
   interface actionRenew {
     type: fetchDocsType.Docs_ADDED;
-    data: string;
+    data: any;
   }
   
   interface actionUpdate {
     type: fetchDocsType.Docs_EDITED;
-    data: string;
+    data: any;
   }
   
   export type ActionFetch =

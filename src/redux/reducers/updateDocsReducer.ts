@@ -1,4 +1,4 @@
-import { Action, updateProgramType } from "../actiontypes/updateProgramTypes";
+import { Action, updateDocsType } from "../actiontypes/updateDocTypes";
 
 interface State {
   success: boolean;
@@ -19,20 +19,20 @@ const updateDocsReducer = (
   action: Action
 ): State => {
   switch (action.type) {
-    case updateProgramType.UPDATE_PROGRAM_LOADING:
+    case updateDocsType.UPDATE_Docs_LOADING:
       return {
         loading: true,
         success: false,
         error: null,
         message: null,
       };
-    case updateProgramType.UPDATE_PROGRAM_SUCCESS:
+    case updateDocsType.UPDATE_Docs_SUCCESS:
       return {
         ...state,
         loading: false,
         message: action.message,
       };
-    case updateProgramType.UPDATE_PROGRAM_FAIL:
+    case updateDocsType.UPDATE_Docs_FAIL:
       return {
         ...state,
         loading: false,

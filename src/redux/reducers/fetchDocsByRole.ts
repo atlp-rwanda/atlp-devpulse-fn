@@ -1,4 +1,4 @@
-import { GET_ALL_FILTERED_TRAINEES } from "..";
+import { GET_DOCS_BY_ROLE} from "..";
 
 const initialState = {
   loading: false,
@@ -8,7 +8,7 @@ const initialState = {
 
 export default (state = initialState, { type, payload }: any) => {
   switch (type) {
-    case GET_ALL_FILTERED_TRAINEES:
+    case GET_DOCS_BY_ROLE:
       return {
         ...state,
         loading: false,

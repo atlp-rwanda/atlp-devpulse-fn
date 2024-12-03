@@ -20,6 +20,7 @@ import {
         const {
           title,
           description,
+          role
         } = docsData;
   
         const response = await axios({
@@ -32,6 +33,7 @@ import {
                 id
                 title
                 description
+                role
               }
             }
           `,
@@ -39,6 +41,7 @@ import {
                 docFields: {
                 title,
                 description,
+                role,
               },
             },
           },

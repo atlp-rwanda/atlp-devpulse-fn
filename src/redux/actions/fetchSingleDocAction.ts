@@ -6,7 +6,7 @@ import {
   Action,
 } from "../actiontypes/fetchSingleDocActionTypes";
 
-export const fetchSingleProgram = (id: any) => {
+export const fetchSingleDocs = (id: any) => {
   return async (dispatch: Dispatch<Action>) => {
     try {
       const response = await axios({
@@ -19,11 +19,12 @@ export const fetchSingleProgram = (id: any) => {
                 id
                 title
                 description
+                role
               }
             }
           `,
           variables: {
-            id,
+            getDocId:id,
           },
         },
       });

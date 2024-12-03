@@ -1,35 +1,26 @@
-import React, { useCallback, useEffect, useState } from "react";
-import NavBar from "../../components/sidebar/navHeader";
+import { useEffect, useState } from "react";
 import * as icons from "react-icons/ai";
 import { connect } from "react-redux";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
+import "react-quill/dist/quill.bubble.css";
 import { createDocsAction } from "../../redux/actions/createDocsAction";
-import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
-import programSchema from "../../validation/programSchema";
+import { useAppDispatch } from "../../hooks/hooks";
 import { Link, useNavigate } from "react-router-dom";
 import { HiDotsVertical } from "react-icons/hi";
 import * as AiIcons from "react-icons/ai";
 import { ProgramSkeleton } from "../../skeletons/programSkeleton";
-import {
-  getAllFilteredPrograms,
-  getAllprograms} from "../../redux/actions/filterProgramActions";
-
-import { getAllDocs } from "../../redux/actions/documentationActions";
+import { AiOutlineExpand, AiOutlineCompress } from "react-icons/ai";
 import Select from "react-select";
-import {
-  DOTS,
-  useCustomPagination,
-} from "../../components/Pagination/useCustomPagination";
 import { fetchDocs } from "../../redux/actions/fetchDocsAction";
 import { deleteDocsAction } from "../../redux/actions/deleteDocsAction";
 import { toast, ToastContainer } from "react-toastify";
 import { useTheme } from "../../hooks/darkmode";
-import {debounce} from "lodash"
 
 const Documents = (props: any) => {
   const navigate = useNavigate();
   const { createDocStates, fetchDocsStates, deleteDocsStates } =
     props;
-  console.log("My props",props)
   const { theme, setTheme } = useTheme();
   const { allDocs } = props;
   const [addNewProgramModal, setAddNewProgramModal] = useState(false);
@@ -41,6 +32,8 @@ const Documents = (props: any) => {
   const [submitData, setSubmitData] = useState({
     title: "",
     description: "",
+    role: "",
+
   });
   const [actionsList, setActionsList] = useState(null);
 
@@ -53,7 +46,24 @@ const Documents = (props: any) => {
   const [errors, setErrors] = useState({
     title: "",
     description: "",
+    role:"",
   });
+
+  useEffect(() => {
+    dispatch(fetchDocs());
+  }, [dispatch]);
+
+
+  const [isMaximized, setIsMaximized] = useState(false); 
+
+  const toggleEditorSize = () => {
+    setIsMaximized((prev) => !prev); 
+  };
+
+  const toogleActions = (id: any) => {
+    setActionsList((prevState) => (!prevState ? id : null));
+  };
+  
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
@@ -69,7 +79,10 @@ const Documents = (props: any) => {
     setEnteredWord(searchTerm); 
   };
 
-
+  const stripHTMLTags = (html) => {
+    // This will remove HTML tags from the string and return plain text
+    return new DOMParser().parseFromString(html, 'text/html').body.textContent || "";
+  };
 
   const customTheme = (theme: any) => {
     return {
@@ -106,6 +119,8 @@ const Documents = (props: any) => {
         e.target.name === "description"
           ? e.target.value
           : prevState.description,
+      role: e.target.name === "role" ? e.target.value : prevState.role,
+
     }));
   };
 
@@ -119,11 +134,13 @@ const Documents = (props: any) => {
     setSubmitData({
       title: "",
       description: "",
+      role: "",
     });
 
     setErrors({
       title: "",
       description: "",
+      role: "",
     });
 
     setEntries([]);
@@ -160,20 +177,30 @@ const Documents = (props: any) => {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
+    const newErrors: any = {};
+  if (!submitData.title.trim()) newErrors.title = "Title is required";
+  if (!submitData.description.trim()) newErrors.description = "Description is required";
+  if (!submitData.role) newErrors.role = "Role selection is required";
+
+  setErrors(newErrors);
+
+  if (Object.keys(newErrors).length === 0) {
     try {
-      setSubmitData((prevState) => ({ ...prevState, requirements: entries }));
+      setSubmitData((prevState) => ({ ...prevState}));
 
       const obj = {
         title: submitData.title,
         description: submitData.description,
+        role: submitData.role,
       };
-      if (validateForm(submitData, programSchema)) {
+      
         await dispatch(createDocsAction(obj));
         removeModal();
-      }
+      
     } catch (error) {
       console.log(error);
     }
+  }
   };
 
   
@@ -183,7 +210,7 @@ const Documents = (props: any) => {
 
   const handleDelete = (id: any) => {
     try {
-      props.deleteProgramAction({ id });
+      props.deleteDocsAction(id );
     } catch (error) {
       console.log(error);
     }
@@ -205,7 +232,7 @@ const Documents = (props: any) => {
         }`}
       >
         <div className="bg-white dark:bg-dark-bg w-full max-h-[500px]  overflow-auto md_:w-[65%] md-sm:w-[95%] rounded-lg p-4 pb-8">
-          <div className="card-title w-full flex flex-wrap justify-center items-center">
+          <div className="card-title relative w-full flex flex-wrap justify-center items-center">
             <h3 className="font-bold text-sm dark:text-white text-center w-11/12 ">
               <icons.AiOutlineClose
                 className="float-right text-3xl cursor-pointer"
@@ -219,7 +246,7 @@ const Documents = (props: any) => {
                 onSubmit={handleSubmit}
                 className="flex flex-col md_:flex-row  space-y-7 md_:space-x-7 md_:space-y-0"
               >
-                <div className="flex flex-col w-full md_:w-[300px] space-y-3">
+                <div className="flex flex-col w-full md_:w-[100%] space-y-3">
                   <div className="flex flex-col justify-center items-start space-y-2">
                     <label className="font-bold text-black-text dark:text-white text-left">
                       Documentation Title
@@ -227,7 +254,7 @@ const Documents = (props: any) => {
                     <input
                       type="text"
                       name="title"
-                      className="dark:bg-dark-tertiary bg-slate-300 text-black dark:text-white border border-white py-2 px-5 rounded outline-none font-sans text-md w-full"
+                      className="dark:bg-dark-tertiary bg-slate-300 text-black dark:text-white border border-white py-2 px-5 rounded outline-none font-sans text-md w-[90%]"
                       placeholder={"Documentation title"}
                       value={submitData.title}
                       onChange={handleInputChange}
@@ -238,23 +265,106 @@ const Documents = (props: any) => {
                       </span>
                     )}
                   </div>
-                  <div className="flex flex-col justify-center items-start space-y-2">
-                    <label className="font-bold text-black-text dark:text-white text-left">
-                    Documentation Description
-                    </label>
-                    <textarea
-                      name="description"
-                      className=" dark:bg-dark-tertiary bg-slate-300 text-black dark:text-white resize-none h-36 py-2 px-5 rounded outline-none font-sans text-md w-full"
-                      placeholder={"Documentation Description"}
-                      value={submitData.description}
-                      onChange={handleInputChange}
-                    />
-                    {errors.description && (
-                      <span className="text-xs text-red-500">
-                        {errors.description}
-                      </span>
-                    )}
-                  </div>
+                  <div
+          className={`flex flex-col md_:h-72  space-y-2 transition-all duration-300 ${
+            isMaximized
+              ? "absolute md_:w-[100%] left-0 h-[calc(100%-100px)] p-5"
+              : "w-[90%] max-w-md"
+          } bg-white dark:bg-[#262E3D] rounded-lg`}
+        >
+          <div className="flex justify-between items-center">
+            <label
+              htmlFor="description"
+              className="font-bold text-black-text dark:text-white"
+            >
+              Documentation Description
+            </label>
+            <button
+              onClick={toggleEditorSize}
+              className="text-lg p-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+            >
+              {isMaximized ? <AiOutlineCompress /> : <AiOutlineExpand />}
+            </button>
+          </div>
+          <ReactQuill
+            id="description"
+            theme="snow"
+            value={submitData.description}
+            onChange={(value) =>
+              setSubmitData((prevState) => ({
+                ...prevState,
+                description: value,
+              }))
+            }
+            modules={{
+              toolbar: [
+                [{ header: [1, 2, 3, false] }],
+                [{ font: [] }],
+                [{ size: [] }],
+                ["bold", "italic", "underline", "strike"],
+                [{ color: [] }, { background: [] }],
+                [{ list: "ordered" }, { list: "bullet" }],
+                [{ indent: "-1" }, { indent: "+1" }],
+                [{ align: [] }],
+                ["link", "image", "video"],
+                ["clean"],
+              ],
+            }}
+            formats={[
+              "header",
+              "font",
+              "size",
+              "bold",
+              "italic",
+              "underline",
+              "strike",
+              "color",
+              "background",
+              "list",
+              "bullet",
+              "indent",
+              "align",
+              "link",
+              "image",
+              "video",
+            ]}
+            className={`${
+              isMaximized ? "h-[calc(100%-50px)]" : "h-32"
+            } dark:bg-[#262E3D] dark:text-white bg-white text-black rounded-md w-full`}
+            placeholder="Enter your documentation description here..."
+          />
+          {errors.description && (
+             <span
+             className={`text-xs text-red-500 ${
+               isMaximized ? "absolute -bottom-20" : "relative"
+             }`}
+           >
+             {errors.description}
+           </span>
+          )}
+        </div>
+    <div className="flex flex-col justify-center items-start space-y-2">
+      <label className="font-bold text-black-text dark:text-white text-left">
+        Select Role
+      </label>
+      <select
+        name="role"
+        className="dark:bg-dark-tertiary bg-slate-300 text-black dark:text-white border border-white py-2 px-5 rounded outline-none font-sans text-md w-[90%]"
+        value={submitData.role}
+        onChange={handleInputChange}
+      >
+        <option value="" disabled>
+          Select a role
+        </option>
+        <option value="applicant">Applicant</option>
+        <option value="admin">Admin</option>
+        <option value="super_admin">Super Admin</option>
+      </select>
+      {errors.role && (
+        <span className="text-xs text-red-500">{errors.role}</span>
+      )}
+    </div>
+
                  
                   <button
                       type="submit"
@@ -285,22 +395,7 @@ const Documents = (props: any) => {
                       <icons.AiOutlinePlus className="mr-2" /> Documentation
                     </button>
                   </div>
-                  <div className="w-full sm:w-40">
-                    <Select
-                      className="w-full text-sm rounded-md dark:text-ltb"
-                      options={[
-                        { value: "title", label: "Program Name" },
-                        { value: "mainObjective", label: "Main Objective" },
-                        { value: "modeOfExecution", label: "Mode Of Execution" },
-                        { value: "description", label: "Program Description" },
-                        { value: "duration", label: "Duration" },
-                        { value: "", label: "Select by" },
-                      ]}
-                      defaultValue={{ value: "", label: "Select by" }}
-                      onChange={(e) => setFilterAttribute(`${e?.value}`)}
-                      theme={theme ? customTheme : darkTheme}
-                    />
-                  </div>
+                 
                   <div className="w-full sm:w-auto flex-grow">
                     <div className="relative">
                       <input
@@ -337,6 +432,10 @@ const Documents = (props: any) => {
                                   {"Description"}
                                 </th>
 
+                                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left text-xs font-semibold text-gray-600 dark:text-white uppercase md:table-cell tracking-wider">
+                                  {"Allowed Role"}
+                                </th>
+
                                 
                                 {/* <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
                                 {"Requirements"}
@@ -347,11 +446,11 @@ const Documents = (props: any) => {
                               </tr>
                             </thead>
                             <tbody className="overflow-y-auto">
-                              {allDocs.data ? (
+                              {allDocs ? (
                                 allDocs.data.map((item: any) => (
                                   <tr
                                     className="dark:hover:bg-slate-700 hover:bg-slate-300 transition-colors"
-                                    key={item._id}
+                                    key={item.id}
                                   >
                                     <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
                                       <div className="flex">
@@ -366,7 +465,22 @@ const Documents = (props: any) => {
                                       <div className="flex items-center">
                                         <div className="">
                                           <p className="text-gray-900 text-center dark:text-white whitespace-no-wrap">
-                                            {item.mainObjective}
+                                             <p
+                              className="text-gray-900 text-center dark:text-white whitespace-no-wrap"
+                            >
+                              {stripHTMLTags(item.description).slice(0,30)}...
+
+                            </p>
+                                          </p>
+                                        </div>
+                                      </div>
+                                    </td>
+
+                                    <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
+                                      <div className="flex items-center">
+                                        <div className="">
+                                          <p className="text-gray-900 text-center dark:text-white whitespace-no-wrap">
+                                            {item.role}
                                           </p>
                                         </div>
                                       </div>
@@ -375,13 +489,16 @@ const Documents = (props: any) => {
                                     
                                     <td>
                                       <div>
-                                        <HiDotsVertical
+                                      <HiDotsVertical
                                           size={16}
-                                          
-                                          className="text-black dark:text-white text-3xl ml-6 font-size-6 cursor-pointer"
+                                          onClick={(e: any) => {
+                                            e.preventDefault();
+                                            toogleActions(item.id);
+                                          }}
+                                          className="text-black dark:text-white text-3xl ml-6 font-size-6 cursor-pointer flex justify-center items-center"
                                         />
                                         <div
-                                          className={`${actionsList === item._id
+                                          className={`${actionsList === item.id
                                               ? "block"
                                               : "hidden"
                                             } absolute  bg-white dark:bg-dark-tertiary  dark:text-white text-base z-50 list-none divide-y divide-gray-100 rounded shadow my-4`}
@@ -393,7 +510,7 @@ const Documents = (props: any) => {
                                           >
                                             <li>
                                               <Link
-                                                to={`/admin/documents/${item._id}/edit`}
+                                                to={`/admin/documents/${item.id}/edit`}
                                                 className="text-sm hover:bg-gray-100 text-gray-700 dark:hover:bg-gray-500 dark:text-white  block px-4 py-2"
                                               >
                                                 Edit
@@ -401,7 +518,7 @@ const Documents = (props: any) => {
                                             </li>
                                             <li>
                                               <Link
-                                                to={`/admin/documents/${item._id}`}
+                                                to={`/admin/documents/${item.id}`}
                                                 className="text-sm hover:bg-gray-100 text-gray-700  dark:text-white   dark:hover:bg-gray-500 block px-4 py-2"
                                               >
                                                 View
@@ -411,7 +528,7 @@ const Documents = (props: any) => {
                                               <Link
                                                 to={`#`}
                                                 onClick={() =>
-                                                  handleDelete(item._id)
+                                                  handleDelete(item.id)
                                                 }
                                                 className="text-sm hover:bg-gray-100 text-gray-700  dark:hover:bg-gray-500 dark:text-white  block px-4 py-2"
                                               >
@@ -443,7 +560,7 @@ const Documents = (props: any) => {
                           {allDocs.data &&
                             allDocs.data.map((item: any) => (
                               <div
-                                key={item._id}
+                                key={item.id}
                                 className="flex flex-col w-full gap-2 border border-solid border-transparent border-t-black dark:border-t-white border-t-4 rounded-t-sm"
                               >
                                 <div className="flex flex-col w-full mt-3">
@@ -459,7 +576,20 @@ const Documents = (props: any) => {
                                     Description
                                   </label>
                                   <label className="text-left text-black-text dark:text-white text-base font-normal">
-                                    {item.mainObjective}
+                                     <p
+                              className="text-gray-900 dark:text-white whitespace-no-wrap"
+                            >
+                              {stripHTMLTags(item.description).slice(0,30)}...
+                              </p>
+                                  </label>
+                                </div>
+
+                                <div className="flex flex-col w-full">
+                                  <label className="text-left text-gray-400 text-sm">
+                                    Role
+                                  </label>
+                                  <label className="text-left text-black-text dark:text-white text-base font-normal">
+                                    {item.role}
                                   </label>
                                 </div>
                                 
@@ -470,13 +600,13 @@ const Documents = (props: any) => {
                                   </label>
                                   <div className="flex flex-row gap-2 mt-2">
                                     <Link
-                                      to={`/admin/documents/${item._id}/edit`}
+                                      to={`/admin/documents/${item.id}/edit`}
                                       className="text-white bg-yellow-500 border border-solid border-yellow-500 rounded-md px-2 text-xs"
                                     >
                                       Edit
                                     </Link>
                                     <Link
-                                      to={`/admin/documents/${item._id}`}
+                                      to={`/admin/documents/${item.id}`}
                                       className="text-white bg-green border border-solid border-green rounded-md px-2 text-xs"
                                     >
                                       View
@@ -484,7 +614,7 @@ const Documents = (props: any) => {
                                     <Link
                                       to={"#"}
                                       className="text-white bg-red-700 border border-solid border-red-700 rounded-md px-2 text-xs"
-                                      onClick={() => handleDelete(item._id)}
+                                      onClick={() => handleDelete(item.id)}
                                     >
                                       Delete
                                     </Link>
@@ -575,7 +705,6 @@ const mapState = (state: any) => ({
 
 export default connect(mapState, {
   fetchDocs,
-  createDocsAction ,
+  createDocsAction,
   deleteDocsAction,
-  getAllDocs: getAllDocs,
 })(Documents);

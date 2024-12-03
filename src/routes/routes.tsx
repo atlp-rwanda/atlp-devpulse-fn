@@ -259,7 +259,7 @@ function Navigation() {
           }
         />
         <Route
-          path="documents/:id"
+          path="documents/:docId"
           element={
             <PrivateRoute allowedRoles={["admin", "superAdmin"]}>
               <SingleDocumentationDetails />

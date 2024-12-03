@@ -1,34 +1,27 @@
-import React, { useCallback, useEffect, useState } from "react";
-import NavBar from "../../components/sidebar/navHeader";
+import { useEffect, useState } from "react";
 import * as icons from "react-icons/ai";
 import { connect } from "react-redux";
-import { createProgramAction } from "../../redux/actions/createProgramAction";
-import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
-import programSchema from "../../validation/programSchema";
+import { createDocsAction } from "../../redux/actions/createDocsAction";
+import { useAppDispatch } from "../../hooks/hooks";
 import { Link, useNavigate } from "react-router-dom";
 import { HiDotsVertical } from "react-icons/hi";
 import * as AiIcons from "react-icons/ai";
 import { ProgramSkeleton } from "../../skeletons/programSkeleton";
-import {
-  getAllFilteredPrograms,
-  getAllprograms} from "../../redux/actions/filterProgramActions";
+
 import Select from "react-select";
-import {
-  DOTS,
-  useCustomPagination,
-} from "../../components/Pagination/useCustomPagination";
-import { fetchPrograms } from "../../redux/actions/fetchProgramsAction";
-import { deleteProgramAction } from "../../redux/actions/deleteProgramAction";
+import { fetchDocs } from "../../redux/actions/fetchDocsAction";
+import { deleteDocsAction } from "../../redux/actions/deleteDocsAction";
 import { toast, ToastContainer } from "react-toastify";
 import { useTheme } from "../../hooks/darkmode";
-import {debounce} from "lodash"
+import { getDocsByRole } from "../../redux/actions/fetchDocsAction";
 
-const ApplicantDocuments = (props: any) => {
+const Documents = (props: any) => {
   const navigate = useNavigate();
-  const { createProgramStates, fetchProgramStates, deleteProgramStates } =
+  const { createDocStates, fetchDocsStates, deleteDocsStates,getDocsByRole
+  } =
     props;
   const { theme, setTheme } = useTheme();
-  const { allfilteredPrograms,count } = props;
+  const { allDocs} = props;
   const [addNewProgramModal, setAddNewProgramModal] = useState(false);
   const [entries, setEntries] = useState<Array<string>>([]);
   const [filterAttribute, setFilterAttribute] = useState("");
@@ -38,11 +31,10 @@ const ApplicantDocuments = (props: any) => {
   const [submitData, setSubmitData] = useState({
     title: "",
     description: "",
-    mainObjective: "",
-    requirements: [""],
-    modeOfExecution: "",
-    duration: "",
+    role: "",
+
   });
+  const role=localStorage.getItem("roleName")
   const [actionsList, setActionsList] = useState(null);
 
   const dispatch = useAppDispatch();
@@ -54,11 +46,17 @@ const ApplicantDocuments = (props: any) => {
   const [errors, setErrors] = useState({
     title: "",
     description: "",
-    mainObjective: "",
-    modeOfExecution: "",
-    requirements: "",
-    duration: "",
+    role:"",
   });
+
+  useEffect(() => {
+    props.getDocsByRole(role);
+    dispatch(fetchDocs())
+  }, [dispatch]);
+
+  const toogleActions = (id: any) => {
+    setActionsList((prevState) => (!prevState ? id : null));
+  };
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
@@ -74,21 +72,10 @@ const ApplicantDocuments = (props: any) => {
     setEnteredWord(searchTerm); 
   };
 
-
-  const debouncedSearch = useCallback(
-    debounce(() => {
-      props.getAllFilteredPrograms(input2);
-    }, 300), 
-    [enteredWord, filterAttribute, page, itemsPerPage]
-  );
-
-  useEffect(() => {
-    debouncedSearch();
-
-    return () => {
-      debouncedSearch.cancel();
-    };
-  }, [debouncedSearch]);
+  const stripHTMLTags = (html) => {
+    // This will remove HTML tags from the string and return plain text
+    return new DOMParser().parseFromString(html, 'text/html').body.textContent || "";
+  };
 
   const customTheme = (theme: any) => {
     return {
@@ -125,17 +112,8 @@ const ApplicantDocuments = (props: any) => {
         e.target.name === "description"
           ? e.target.value
           : prevState.description,
-      mainObjective:
-        e.target.name === "mainObjective"
-          ? e.target.value
-          : prevState.mainObjective,
-      requirements: prevState.requirements,
-      modeOfExecution:
-        e.target.name === "modeOfExecution"
-          ? e.target.value
-          : prevState.modeOfExecution,
-      duration:
-        e.target.name === "duration" ? e.target.value : prevState.duration,
+      role: e.target.name === "role" ? e.target.value : prevState.role,
+
     }));
   };
 
@@ -149,19 +127,13 @@ const ApplicantDocuments = (props: any) => {
     setSubmitData({
       title: "",
       description: "",
-      mainObjective: "",
-      requirements: [""],
-      modeOfExecution: "",
-      duration: "",
+      role: "",
     });
 
     setErrors({
       title: "",
       description: "",
-      mainObjective: "",
-      requirements: "",
-      modeOfExecution: "",
-      duration: "",
+      role: "",
     });
 
     setEntries([]);
@@ -198,64 +170,46 @@ const ApplicantDocuments = (props: any) => {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
+    const newErrors: any = {};
+  if (!submitData.title.trim()) newErrors.title = "Title is required";
+  if (!submitData.description.trim()) newErrors.description = "Description is required";
+  if (!submitData.role) newErrors.role = "Role selection is required";
+
+  setErrors(newErrors);
+
+  if (Object.keys(newErrors).length === 0) {
     try {
-      setSubmitData((prevState) => ({ ...prevState, requirements: entries }));
+      setSubmitData((prevState) => ({ ...prevState}));
 
       const obj = {
         title: submitData.title,
         description: submitData.description,
-        mainObjective: submitData.mainObjective,
-        requirements: entries,
-        modeOfExecution: submitData.modeOfExecution,
-        duration: submitData.duration,
+        role: submitData.role,
       };
-      if (validateForm(submitData, programSchema)) {
-        await dispatch(createProgramAction(obj));
+      
+        await dispatch(createDocsAction(obj));
         removeModal();
-      }
+      
     } catch (error) {
       console.log(error);
     }
-  };
-
-  const paginationRange = useCustomPagination({
-    totalPageCount: Math.ceil(allfilteredPrograms?.data?.length / itemsPerPage),
-    currentPage: page,
-  });
-  const input = {
-    page: page + 1,
-    pageSize: itemsPerPage,
-  };
-
-  const input2={
-    page: page + 1,
-    itemsPerPage: itemsPerPage,
-    All: All,
-    filterAttribute:filterAttribute,
-    wordEntered: enteredWord,
   }
-
-  useEffect(() => {
-    props.getAllFilteredPrograms(input2);
-  }, [enteredWord, filterAttribute]);
-  const toogleActions = (id: any) => {
-    setActionsList((prevState) => (!prevState ? id : null));
   };
+
+  
+  
+
+
 
   const handleDelete = (id: any) => {
     try {
-      props.deleteProgramAction({ id });
+      props.deleteDocsAction(id );
     } catch (error) {
       console.log(error);
     }
   };
 
-  useEffect(() => {
-    const { data, error } = props.fetchPrograms(input);
-
-  }, [page, itemsPerPage]);
-
-  const isLoading = fetchProgramStates.loading;
+  const isLoading = fetchDocsStates.loading;
 
   if (isLoading) {
     return <ProgramSkeleton />
@@ -264,8 +218,7 @@ const ApplicantDocuments = (props: any) => {
   return (
     <>
       <ToastContainer />
-      {/* Create New Document */}
-     
+   
       <div className="flex flex-col w-[100%]">
         <div className="flex flex-row">
           <div className="w-full">
@@ -275,22 +228,7 @@ const ApplicantDocuments = (props: any) => {
                   <div className="w-full sm:w-auto">
                     
                   </div>
-                  <div className="w-full sm:w-40">
-                    <Select
-                      className="w-full text-sm rounded-md dark:text-ltb"
-                      options={[
-                        { value: "title", label: "Program Name" },
-                        { value: "mainObjective", label: "Main Objective" },
-                        { value: "modeOfExecution", label: "Mode Of Execution" },
-                        { value: "description", label: "Program Description" },
-                        { value: "duration", label: "Duration" },
-                        { value: "", label: "Select by" },
-                      ]}
-                      defaultValue={{ value: "", label: "Select by" }}
-                      onChange={(e) => setFilterAttribute(`${e?.value}`)}
-                      theme={theme ? customTheme : darkTheme}
-                    />
-                  </div>
+                 
                   <div className="w-full sm:w-auto flex-grow">
                     <div className="relative">
                       <input
@@ -328,6 +266,8 @@ const ApplicantDocuments = (props: any) => {
                                 </th>
 
                                 
+
+                                
                                 {/* <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 dark:bg-dark-tertiary  text-left text-xs font-semibold text-gray-600 dark:text-white uppercase tracking-wider">
                                 {"Requirements"}
                               </th> */}
@@ -337,11 +277,11 @@ const ApplicantDocuments = (props: any) => {
                               </tr>
                             </thead>
                             <tbody className="overflow-y-auto">
-                              {allfilteredPrograms.data ? (
-                                allfilteredPrograms.data.map((item: any) => (
+                              {allDocs ? (
+                                allDocs.data.filter((item: any) => item.role === 'applicant').map((item: any) => (
                                   <tr
                                     className="dark:hover:bg-slate-700 hover:bg-slate-300 transition-colors"
-                                    key={item._id}
+                                    key={item.id}
                                   >
                                     <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
                                       <div className="flex">
@@ -353,20 +293,22 @@ const ApplicantDocuments = (props: any) => {
                                       </div>
                                     </td>
                                     <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm">
-                                      <div className="flex items-center">
+                                      <div className="flex">
                                         <div className="">
-                                          <p className="text-gray-900 text-center dark:text-white whitespace-no-wrap">
-                                            {item.mainObjective}
-                                          </p>
+                                        <p
+                              className="text-gray-900 dark:text-white whitespace-no-wrap"
+                            >
+                              {stripHTMLTags(item.description).slice(0,30)}...
+                              </p>
                                         </div>
                                       </div>
                                     </td>
 
                                     
-                                    <td>
-                                      <div className="flex flex-row gap-2 mt-2 justify-center">
+                                    <td className="px-5 py-5 border-b border-gray-200 dark:border-dark-tertiary text-sm text-center">
+                                    <div className="flex justify-center items-center">
                                         <Link
-                                          to={`/applicant/documents/${item._id}`}
+                                          to={`/applicant/documents/${item.id}`}
                                           replace
                                         >
                                           <button className="flex bg-primary dark:bg-[#56C870] rounded-md py-2 px-4 text-white font-medium cursor-pointer">
@@ -393,10 +335,9 @@ const ApplicantDocuments = (props: any) => {
                           <label className="text-left text-black-text dark:text-white text-lg font-bold">
                           Documentations
                           </label>
-                          {allfilteredPrograms.data &&
-                            allfilteredPrograms.data.map((item: any) => (
+                          {allDocs.data.filter((item: any) => item.role === 'applicant').map((item: any) => (
                               <div
-                                key={item._id}
+                                key={item.id}
                                 className="flex flex-col w-full gap-2 border border-solid border-transparent border-t-black dark:border-t-white border-t-4 rounded-t-sm"
                               >
                                 <div className="flex flex-col w-full mt-3">
@@ -412,9 +353,16 @@ const ApplicantDocuments = (props: any) => {
                                     Description
                                   </label>
                                   <label className="text-left text-black-text dark:text-white text-base font-normal">
-                                    {item.mainObjective}
+                                  <p
+                              className="text-gray-900 dark:text-white whitespace-no-wrap"
+                            >
+                              {stripHTMLTags(item.description).slice(0,30)}...
+
+                            </p>
                                   </label>
                                 </div>
+
+                                
                                 
                                 
                                 <div className="flex flex-col w-full">
@@ -423,7 +371,7 @@ const ApplicantDocuments = (props: any) => {
                                   </label>
                                   <div className="flex flex-row gap-2 mt-2">
                                         <Link
-                                          to={`/applicant/documents/${item._id}`}
+                                          to={`/applicant/documents/${item.id}`}
                                           replace
                                         >
                                           <button className="flex bg-primary dark:bg-[#56C870] rounded-md py-2 px-4 text-white font-medium cursor-pointer">
@@ -437,7 +385,7 @@ const ApplicantDocuments = (props: any) => {
                         </div>
                       </div>
                     </div>
-                    {allfilteredPrograms.data && (
+                    {allDocs.data && (
                       <div className="py-3 flex items-center text-center justify-center pt-10">
                         <div className="pb-1">
                           <label htmlFor="" className="dark:text-zinc-100">
@@ -481,43 +429,7 @@ const ApplicantDocuments = (props: any) => {
                             >
                               <AiIcons.AiOutlineLeft />
                             </button>
-                            {paginationRange?.map((pageNumber, idx) => {
-                              if (pageNumber === DOTS) {
-                                return (
-                                  <div
-                                    key={idx}
-                                    className="dark:text-zinc-100 md:hidden"
-                                  >
-                                    ...
-                                  </div>
-                                );
-                              }
-
-                              if (pageNumber - 1 === page) {
-                                return (
-                                  <button
-                                    key={idx}
-                                    className={`border-solid border-[1px] cursor-pointer border-[#a8a8a8] bg-[#fff] min-w-[35px] h-[38px]  active:bg-[#333] active:text-[#fff]-500 rounded-[2px] md:hidden
-                        ${page && "bg-[#d6dfdf] text-black"} 
-                        ${page === 0 && "bg-[#d6dfdf] text-black"} 
-                          `}
-                                    onClick={() => setPage(pageNumber - 1)}
-                                  >
-                                    {pageNumber}
-                                  </button>
-                                );
-                              }
-
-                              return (
-                                <button
-                                  key={idx}
-                                  className={`border-solid border-[1px]  cursor-pointer border-[#a8a8a8] bg-[#fff] min-w-[35px] h-[38px]  active:bg-[#333] active:text-[#fff]-500 rounded-[2px] md:hidden`}
-                                  onClick={() => setPage(pageNumber - 1)}
-                                >
-                                  {pageNumber}
-                                </button>
-                              );
-                            })}
+                          
                             <button
                               className=" border-solid border-[1px]  border-[#a8a8a8] py-0 px-[10px] text-[#333] rounded-r-[5px] h-[38px]  disabled:bg-[#E7E7E7] disabled:text-[#a8a8a8] dark:disabled:bg-[#485970] dark:text-zinc-100"
                               onClick={() => setPage(page + 1)}
@@ -544,18 +456,17 @@ const ApplicantDocuments = (props: any) => {
 };
 
 const mapState = (state: any) => ({
-  createProgramStates: state.createProgram,
-  fetchProgramStates: state.fetchPrograms,
-  deleteProgramStates: state.deleteProgram,
-  allfilteredPrograms: state.filterProgram,
+  createDocStates: state.createDocs,
+  fetchDocsStates: state.fetchDocs,
+  deleteDocStates: state.deleteDocs,
+  allDocs: state.fetchDocs,
+  MyDocs:state.fetchDocsByRole,
   errors: state.errors,
-  count: state.count,
 });
 
 export default connect(mapState, {
-  fetchPrograms,
-  createProgramAction,
-  deleteProgramAction,
-  getAllFilteredPrograms: getAllFilteredPrograms,
-  getAllprograms: getAllprograms,
-})(ApplicantDocuments);
+  fetchDocs,
+  createDocsAction,
+  deleteDocsAction,
+  getDocsByRole:getDocsByRole
+})(Documents);
