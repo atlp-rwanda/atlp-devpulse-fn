@@ -1,7 +1,7 @@
 name: Login to Digital Ocean and create a directory
 
 on:
-  push:
+  pull_request:
     branches:
       - develop
 
@@ -38,9 +38,8 @@ jobs:
           username: ${{ secrets.DO_USERNAME }}
           key: ${{ secrets.DO_KEY }}
           port: ${{ secrets.DO_PORT }}
+          envs: BACKEND_URL
           script: |
-            set -e  # Exit on errors
-            set -x  # Debugging enabled
             
             # Create .env file with required environment variables
             cat <<EOF > .env
@@ -64,7 +63,7 @@ jobs:
 
             # Run the new container
             container_id=$(docker run -d \
-              -p 4008:5000 \
+              -p 4008:81 \
               --env-file .env \
               ${{ secrets.DOCKER_HUB_USERNAME }}/atlp-devpulse-fn:latest)
             
