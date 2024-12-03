@@ -138,6 +138,7 @@ const allReducers = combineReducers({
   fetchDocsByRole:fetchDocsByRole,
   comments: commentReducer,
   reactions: reactionReducer,
+
 });
 
 export type RootState = ReturnType<typeof allReducers>;
