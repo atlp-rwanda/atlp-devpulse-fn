@@ -84,7 +84,6 @@ import SingleBlogView from "../pages/Blogs/singleBlog";
 import SingleBlogPage from "../pages/LandingPage/SingleBlogPage"
 import LandingPage from "../pages/LandingPage/LandingPage";
 import Blogs from "../pages/Blogs/Blogs"
-import ViewExternalDocuments from "../pages/viewExternalDocuments";
 import Documents from "../pages/documents/documents";
 import UpdateDocumentation from "../pages/documents/updateDocumentation";
 import SingleDocumentationDetails from "../pages/documents/singleDocumentation";
@@ -101,10 +100,7 @@ function Navigation() {
       <Route path="/blogs" element={<Blogs />} />
       <Route path="/forget" element={<ForgotPasswordPage />} />
       <Route path="/reset-password" element={<ResetPasswordPage />} />
-      <Route path="/home" element={<LandingPage/>}/>      <Route path="/view-external-document" element={
-          <ViewExternalDocuments />
-      }
-      />
+      <Route path="/home" element={<LandingPage/>}/>      
       <Route path="/signup" element={<SignupPage />} />
       <Route path="/verifyEmail" element={<VerifyEmail />} />
       <Route path="/pageNotFound" element={<PageNotFound />} />
