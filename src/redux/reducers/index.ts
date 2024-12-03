@@ -59,6 +59,8 @@ import userUpdateReducer from "./getUser";
 import blogsReducer from "./blogsReducers";
 import singleBlogReducer from "./singleBlogReducer";
 import blogRelatedArticle from "./blogRelatedArticleReducer";
+import commentReducer from "./commentReducers";
+import reactionReducer from "./reactionReducers";
 
 
 import createDocsReducer from './createDocReducer';
@@ -133,8 +135,9 @@ const allReducers = combineReducers({
   singleBlog: singleBlogReducer,
   blogRelatedArticle: blogRelatedArticle,
   sendInvitation: sendInvitationReducer,
-  fetchDocsByRole:fetchDocsByRole
-  
+  fetchDocsByRole:fetchDocsByRole,
+  comments: commentReducer,
+  reactions: reactionReducer,
 });
 
 export type RootState = ReturnType<typeof allReducers>;
