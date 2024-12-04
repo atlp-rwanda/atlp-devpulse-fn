@@ -44,13 +44,13 @@ function ProfileDropdown({
                   >
                     <>{t("Preferences")}</>
                   </Link>
-                  {/* <Link
+                  <Link
                     onClick={handleShowProfileDropdown}
                     to={destination()}
                     className="font-semibold text-gray-600 dark:text-black  px-4 py-2 pb-4 hover:bg-gray-600 hover:text-gray-200 dark:hover:bg-gray-300 dark:hover:text-gray-900"
                   >
                     <>{t("Dashboard")}</>
-                  </Link> */}
+                  </Link>
                 </div>
               </div>
             </div>

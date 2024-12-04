@@ -183,8 +183,36 @@ const SingleBlogView = () => {
               )}
             </div>
           </div>
-          {id && <BlogReaction blogId={id} />}
-          {id && <BlogComment blogId={id} />}
+          {
+            userId ? (
+              <>
+              {id && <BlogReaction blogId={id} />}
+              {id && <BlogComment blogId={id} />}
+              </>
+            ):(
+              <div className="py-4">
+              <p className="text-sm dark:text-slate-300">
+                Please{" "}
+                <a
+                  href="/"
+                  className="text-green  hover:text-green-700"
+                >
+                  log in
+                </a>{" "}
+                or{" "}
+                <a
+                  href="/"
+                  className="text-green  hover:text-green-700"
+                >
+                  create an account
+                </a>{" "}
+                to like or comment.
+              </p>
+            </div>
+        
+            )
+          }
+        
           {topArticles && topArticles.length > 0 ? (
               <div className='mt-10'>
                 <h1>Related Articles</h1>

@@ -57,62 +57,71 @@ const Blogs: React.FC = () => {
          </div>
        </div>
         ) : blogs.length > 0 ? (
-          <><div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-1 gap-6 px-10">
+          <>
+          <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-1 gap-6 px-10">
               {blogs.map((blog) => (
-                <div
-                  key={blog.id}
-                  className="bg-gray-200 dark:bg-dark-frame-bg dark:text-white text-primary shadow-lg rounded-lg cursor-pointer hover:shadow-xl transition duration-300"
-                >
-                  <img
-                    src={blog.coverImage}
-                    alt={blog.title}
-                    className="w-full h-40 object-cover mb-4" />
-                  <div className="p-3">
-                    <div className="flex justify-between text-sm text-primary dark:text-white mb-4 items-center">
-                      <div className="flex items-center gap-3">
-                        <div className="flex flex-wrap items-center gap-3">
-                          <span className="font-semibold flex flex-row gap-2 items-center">
-                            <FaUser size={20} className='dark:text-green' /> {blog.author.firstname}
-                          </span>
-                          <span className="ml-2 flex flex-row gap-2 items-center">
-                            <span className="ml-2 flex flex-row gap-2 items-center">
-                              <FaCalendar size={20} className="dark:text-green" />
-                              {blog.created_at
-                                ? new Date(Number(blog.created_at)).toLocaleDateString()
-                                : "Unknown Date"}
-                            </span>
-                          </span>
-                          <span className='flex flex-row gap-1 items-center'>
-                            <CiHeart size={20} className='dark:text-green' /> {blog.reactions.length || 0}
-                          </span>
-                          <span className='flex flex-row gap-1 items-center'>
-                            <FaCommentDots size={20} className='dark:text-green' /> {blog.comments.length || 0}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                    <h3 className="text-xl font-semibold mb-2">{blog.title}</h3>
-                    <p className="mb-4 text-black-text dark:text-white overflow-hidden line-clamp-3">
-                      {blog.content.substring(0, 150)}...
-                    </p>
-                    <div className="flex flex-wrap gap-2 mt-3">
-                      {blog.tags.map((tag) => (
-                        <span
-                          key={tag}
-                          onClick={() => setSelectedTag(tag)}
-                          className="bg-green-100 text-green-700 text-xs px-2 py-1 rounded cursor-pointer hover:bg-green-200"
-                        >
-                          #{tag}
-                        </span>
-                      ))}
-                    </div>
-                    <Link to={`/blogs/${blog.id}`} className="text-green hover:underline">
-                      Read More →
-                    </Link>
-                  </div>
-                </div>
+               <div
+               key={blog.id}
+               className="bg-gray-200 dark:bg-dark-frame-bg dark:text-white text-primary shadow-lg rounded-lg cursor-pointer hover:shadow-xl transition duration-300"
+             >
+               <Link to={`/blogs/${blog.id}`}>
+                 <img
+                   src={blog.coverImage}
+                   alt={blog.title}
+                   className="w-full h-40 object-cover mb-4"
+                 />
+                 </Link>
+                 <div className="p-3">
+                   <div className="flex justify-between text-sm text-primary dark:text-white mb-4 items-center">
+                     <div className="flex items-center gap-3">
+                     <Link to={`/blogs/${blog.id}`}>
+                       <div className="flex flex-wrap items-center gap-3">
+                         <span className="font-semibold flex flex-row gap-2 items-center">
+                           <FaUser size={20} className="dark:text-green" /> {blog.author.firstname}
+                         </span>
+                         <span className="ml-2 flex flex-row gap-2 items-center">
+                           <FaCalendar size={20} className="dark:text-green" />
+                           {blog.created_at
+                             ? new Date(Number(blog.created_at)).toLocaleDateString()
+                             : "Unknown Date"}
+                         </span>
+                         <span className="flex flex-row gap-1 items-center">
+                           <CiHeart size={20} className="dark:text-green" /> {blog.reactions.length || 0}
+                         </span>
+                         <span className="flex flex-row gap-1 items-center">
+                           <FaCommentDots size={20} className="dark:text-green" /> {blog.comments.length || 0}
+                         </span>
+                       </div>
+                      </Link>
+                     </div>
+                   </div>
+                   <Link to={`/blogs/${blog.id}`}>
+                   <h3 className="text-xl font-semibold mb-2">{blog.title}</h3>
+                   <p className="mb-4 text-black-text dark:text-white overflow-hidden line-clamp-3">
+                     {blog.content.substring(0, 150)}...
+                   </p>
+                   </Link>
+                   <div className="flex flex-wrap gap-2 mt-3">
+                     {blog.tags.map((tag) => (
+                       <span
+                         key={tag}
+                         onClick={(e) => {
+                           setSelectedTag(tag); 
+                         }}
+                         className="bg-green-100 text-green-700 text-xs px-2 py-1 rounded cursor-pointer hover:bg-green-200"
+                       >
+                         #{tag}
+                       </span>
+                     ))}
+                   </div>
+                 </div>
+               
+             </div>
+             
               ))}
-            </div><Footer /></>
+            </div>
+        
+            </>
         ) : (
           <div className="flex flex-col justify-center items-center h-screen text-center dark:bg-dark-bg bg-white px-6">
         <svg
@@ -127,6 +136,7 @@ const Blogs: React.FC = () => {
       </div>
         )}
       </div>
+      <Footer />
     </section>
   );
 };

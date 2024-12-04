@@ -5,6 +5,8 @@ import { Link } from 'react-router-dom';
 import { fetchAllBlogs } from '../../redux/actions/blogsActions';
 import { toast } from 'react-toastify';
 
+
+
  interface Author {
   id: string;
   email: string;
@@ -28,10 +30,14 @@ import { toast } from 'react-toastify';
 }
 
 
+
 const BlogCard = ({ blog }: { blog: Blog }) => (
-  <div key={blog.id} className="bg-gray-200 dark:bg-dark-frame-bg dark:text-white text-primary shadow-lg rounded-lg cursor-pointer hover:shadow-xl transition duration-300">
+  <div key={blog.id} className="bg-gray-200 dark:bg-dark-frame-bg dark:text-white text-primary shadow-lg rounded-lg cursor-pointer hover:shadow-xl transition duration-300" >
+    <Link to={`/blogs/${blog.id}`}>
     <img src={blog.coverImage} alt={blog.title} className="w-full h-40 object-cover mb-4" />
+    </Link>
     <div className="p-3">
+    <Link to={`/blogs/${blog.id}`}>
       <div className="flex justify-between text-sm mb-4 items-center">
         <div className="flex flex-wrap items-center gap-3">
         <span className="font-semibold flex flex-row gap-2 items-center">
@@ -51,14 +57,13 @@ const BlogCard = ({ blog }: { blog: Blog }) => (
           </span>
         </div>
       </div>
-
+      </Link>
+      <Link to={`/blogs/${blog.id}`}>
       <h3 className="text-xl font-semibold mb-2">{blog.title}</h3>
       <p className="mb-4 text-black-text dark:text-white overflow-hidden line-clamp-3">
         {blog.content}
       </p>
-      <Link to={`/blogs/${blog.id}`} className="text-green hover:underline">
-        Read More →
-      </Link>
+      </Link> 
     </div>
   </div>
 );
