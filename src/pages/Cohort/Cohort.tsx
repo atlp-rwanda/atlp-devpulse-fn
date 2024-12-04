@@ -15,6 +15,8 @@ import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import UpdateCohortModal from "../../components/Cohort/updateCohortmodal";
 import { Spinner } from "flowbite-react";
+import { CohortSkeleton } from "../../skeletons/cohortSkeleton";
+
 
 const CohortsPage = () => {
   const [anchorEl, setAnchorEl] = useState({});
@@ -89,8 +91,8 @@ const CohortsPage = () => {
       setCurrentPage(newPage);
     }
   };
-  if (isLoading) {
-    return <Spinner className="mt-96" />;
+  if (isLoading || !data) {
+    return <CohortSkeleton />;
   }
 
   return (
