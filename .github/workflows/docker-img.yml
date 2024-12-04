@@ -38,7 +38,7 @@ jobs:
           username: ${{ secrets.DO_USERNAME }}
           key: ${{ secrets.DO_KEY }}
           port: ${{ secrets.DO_PORT }}
-          envs: BACKEND_URL
+          envs: BACKEND_URL, PUSHER_KEY, PUSHER_CLUSTER, REACT_APP_CLOUDINARY_UPLOAD_PRESET, REACT_APP_CLOUDINARY_NAME, CLIENT_ID
           script: |
             
             # Create .env file with required environment variables
