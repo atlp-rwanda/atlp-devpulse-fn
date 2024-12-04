@@ -2,9 +2,6 @@
 FROM node:22-alpine AS builder
 WORKDIR /app
 
-# Add the backend application in environment variables
-ENV BACKEND_URL=https://atlp-devpulse-bn.onrender.com
-
 # Copy package.json and package-lock.json
 COPY package*.json ./
 
