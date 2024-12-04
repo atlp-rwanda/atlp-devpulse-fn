@@ -125,6 +125,7 @@
     "pusher": "^5.2.0",
     "pusher-js": "^8.4.0-rc2",
     "quill": "^2.0.2",
+    "react-csv": "^2.2.2",
     "react-datepicker": "^4.8.0",
     "react-hook-form": "^7.45.4",
     "react-hot-toast": "^2.4.1",
