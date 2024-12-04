@@ -15,6 +15,7 @@ jobs:
       PUSHER_CLUSTER: ${{ secrets.PUSHER_CLUSTER }}
       REACT_APP_CLOUDINARY_UPLOAD_PRESET: ${{ secrets.REACT_APP_CLOUDINARY_UPLOAD_PRESET }}
       REACT_APP_CLOUDINARY_NAME: ${{ secrets.REACT_APP_CLOUDINARY_NAME }}
+      SECRET_KEY: ${{ secrets.SECRET_KEY }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -38,7 +39,7 @@ jobs:
           username: ${{ secrets.DO_USERNAME }}
           key: ${{ secrets.DO_KEY }}
           port: ${{ secrets.DO_PORT }}
-          envs: BACKEND_URL, PUSHER_KEY, PUSHER_CLUSTER, REACT_APP_CLOUDINARY_UPLOAD_PRESET, REACT_APP_CLOUDINARY_NAME, CLIENT_ID
+          envs: BACKEND_URL, PUSHER_KEY, PUSHER_CLUSTER, REACT_APP_CLOUDINARY_UPLOAD_PRESET, REACT_APP_CLOUDINARY_NAME, CLIENT_ID, SECRET_KEY
           script: |
             
             # Create .env file with required environment variables
@@ -49,6 +50,7 @@ jobs:
             PUSHER_CLUSTER=${{ secrets.PUSHER_CLUSTER }}
             REACT_APP_CLOUDINARY_UPLOAD_PRESET=${{ secrets.REACT_APP_CLOUDINARY_UPLOAD_PRESET }}
             REACT_APP_CLOUDINARY_NAME=${{ secrets.REACT_APP_CLOUDINARY_NAME }}
+            SECRET_KEY=${{ secrets.SECRET_KEY }}
             EOF
 
             # Pull the latest Docker image
