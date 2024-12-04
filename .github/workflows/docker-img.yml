@@ -54,8 +54,8 @@ jobs:
             # Pull the latest Docker image
             docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/atlp-devpulse-fn:latest
 
-            # Stop and remove any existing container on port 4008
-            existing_container=$(docker ps -q --filter "publish=4008")
+            # Stop and remove any existing container on port 4010
+            existing_container=$(docker ps -q --filter "publish=4010")
             if [ -n "$existing_container" ]; then
               docker stop "$existing_container"
               docker rm "$existing_container"
@@ -63,7 +63,7 @@ jobs:
 
             # Run the new container
             container_id=$(docker run -d \
-              -p 4008:81 \
+              -p 4010:81 \
               --env-file .env \
               ${{ secrets.DOCKER_HUB_USERNAME }}/atlp-devpulse-fn:latest)
             
