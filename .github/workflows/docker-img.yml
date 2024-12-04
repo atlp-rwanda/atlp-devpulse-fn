@@ -38,9 +38,8 @@ jobs:
           username: ${{ secrets.DO_USERNAME }}
           key: ${{ secrets.DO_KEY }}
           port: ${{ secrets.DO_PORT }}
+          envs: BACKEND_URL, PUSHER_KEY, PUSHER_CLUSTER, REACT_APP_CLOUDINARY_UPLOAD_PRESET, REACT_APP_CLOUDINARY_NAME, CLIENT_ID, JWT_SECRET
           script: |
-            set -e  # Exit on errors
-            set -x  # Debugging enabled
             
             # Create .env file with required environment variables
             cat <<EOF > .env
@@ -50,13 +49,14 @@ jobs:
             PUSHER_CLUSTER=${{ secrets.PUSHER_CLUSTER }}
             REACT_APP_CLOUDINARY_UPLOAD_PRESET=${{ secrets.REACT_APP_CLOUDINARY_UPLOAD_PRESET }}
             REACT_APP_CLOUDINARY_NAME=${{ secrets.REACT_APP_CLOUDINARY_NAME }}
+            JWT_SECRET=${{ secrets.JWT_SECRET }}
             EOF
 
             # Pull the latest Docker image
             docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/atlp-devpulse-fn:latest
 
-            # Stop and remove any existing container on port 4008
-            existing_container=$(docker ps -q --filter "publish=4008")
+            # Stop and remove any existing container on port 4010
+            existing_container=$(docker ps -q --filter "publish=4010")
             if [ -n "$existing_container" ]; then
               docker stop "$existing_container"
               docker rm "$existing_container"
@@ -64,7 +64,7 @@ jobs:
 
             # Run the new container
             container_id=$(docker run -d \
-              -p 4008:5000 \
+              -p 4010:81 \
               --env-file .env \
               ${{ secrets.DOCKER_HUB_USERNAME }}/atlp-devpulse-fn:latest)
             
