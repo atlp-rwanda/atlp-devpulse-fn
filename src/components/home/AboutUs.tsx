@@ -21,7 +21,7 @@ const AboutUs = () => {
 
 
       <div className="flex flex-col lg:flex-row items-center  mb-10 px-10 gap-7 space-x-7">
-        <img src={image} alt="Andela Engineers" className="w-[500px] h-auto rounded-lg shadow-md mb-6 lg:mb-0" />
+        <img src={image} alt="Andela Engineers" className="w-[500px] h-auto rounded-lg shadow-md mb-6 lg:mb-0" loading="lazy"/>
         
         <div className='max-w-2xl px-10'>
           <h1 className='text-3xl sm:text-4xl md:text-5xl font-bold mb-4 leading-tight dark:text-white'>

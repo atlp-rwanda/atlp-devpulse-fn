@@ -34,7 +34,7 @@ import { toast } from 'react-toastify';
 const BlogCard = ({ blog }: { blog: Blog }) => (
   <div key={blog.id} className="bg-gray-200 dark:bg-dark-frame-bg dark:text-white text-primary shadow-lg rounded-lg cursor-pointer hover:shadow-xl transition duration-300" >
     <Link to={`/blogs/${blog.id}`}>
-    <img src={blog.coverImage} alt={blog.title} className="w-full h-40 object-cover mb-4" />
+    <img src={blog.coverImage} alt={blog.title} className="w-full h-40 object-cover mb-4" loading="lazy"/>
     </Link>
     <div className="p-3">
     <Link to={`/blogs/${blog.id}`}>
