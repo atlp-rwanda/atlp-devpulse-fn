@@ -1,7 +1,7 @@
 import React, { useState} from "react";
 import { toast, ToastContainer } from "react-toastify";
 import * as icons from "react-icons/ai";
-import { ThreeDots } from "react-loader-spinner";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 const CreateTicketModal = ({ isOpen, onClose, onSubmit }) => {
     const [ticket, setTicket] = useState({
@@ -19,7 +19,7 @@ const CreateTicketModal = ({ isOpen, onClose, onSubmit }) => {
       try {
         setIsSubmitting(true);
         await onSubmit(ticket);
-        // toast.success("Ticket submitted successfully");
+        toast.success("Ticket submitted successfully");
         handleClose();
       } catch (error: any) {
         const errorMessage =
@@ -98,7 +98,7 @@ const CreateTicketModal = ({ isOpen, onClose, onSubmit }) => {
                       disabled={isSubmitting}
                     >
                       {isSubmitting ? (
-                        <ThreeDots height="20" width="30" color="#ffffff" />
+                        <AiOutlineLoading3Quarters className="animate-spin text-xl" />
                       ) : (
                         "Submit"
                       )}

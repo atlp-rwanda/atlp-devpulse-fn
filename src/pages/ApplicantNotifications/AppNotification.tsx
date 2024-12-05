@@ -1,18 +1,30 @@
 import React, { useState } from "react";
 import { IoMdMailOpen, IoMdMailUnread } from "react-icons/io";
 import { useNotifications } from "../../utils/Notifications";
+import { useNavigate } from "react-router";
 
 interface Notification {
   id: string;
   message: string;
+  eventType: string;
+  eventId: string;
   read: boolean;
   createdAt: string;
+}
+
+interface ModalProps {
+  title: string;
+  children: React.ReactNode;
+  onClose: () => void;
 }
 
 function ApplicantNotifications() {
   const [activeTab, setActiveTab] = useState("All");
   const [sortOrder, setSortOrder] = useState<"new" | "old">("new");
   const [searchQuery, setSearchQuery] = useState("");
+  const navigate = useNavigate();
+
+
 
   const { notifications, markAsRead, markAsUnread, unreadCount } =
     useNotifications();
@@ -24,6 +36,19 @@ function ApplicantNotifications() {
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setSearchQuery(e.target.value);
+
+  const handleNotificationClick = async (notification: Notification, ) => {
+    
+    if (!notification.read) {
+      await markAsRead(notification.id);
+    }
+    
+    if (notification.eventType === "ticket") {
+      navigate(`/applicant/ticket/${notification.eventId}`);
+    } else if (notification.eventType === "applicationUpdate"){
+      navigate(`/applicant/myapplication`);
+    }
+  };
 
   const filteredNotifications = filterNotifications(
     notifications,
@@ -49,6 +74,7 @@ function ApplicantNotifications() {
       <NotificationList
         notifications={sortedNotifications}
         onToggleRead={handleToggleRead}
+        onNotificationClick={handleNotificationClick}
         formatDate={formatDate}
       />
     </div>
@@ -150,10 +176,12 @@ const Header = ({
 const NotificationList = ({
   notifications,
   onToggleRead,
+  onNotificationClick,
   formatDate,
 }: {
   notifications: Notification[];
-  onToggleRead: (notification: Notification) => void;
+    onToggleRead: (notification: Notification) => void;
+    onNotificationClick: (notification: Notification) => void;
   formatDate: (dateString: string) => string;
 }) => (
   <div className="flex-1 p-4 overflow-y-auto">
@@ -165,7 +193,10 @@ const NotificationList = ({
             notification.read
               ? "bg-gray-800"
               : "bg-gray-800 border border-white text-white"
-          }`}
+            }`}
+          style={{ cursor: "pointer" }}
+          onClick={() => onNotificationClick(notification)}
+
         >
           <div className="flex items-center space-x-4">
             <div className={notification.read ? "text-gray-400" : "text-white"}>
@@ -177,7 +208,10 @@ const NotificationList = ({
               {formatDate(notification.createdAt) || "Date not available"}
             </div>
             <button
-              onClick={() => onToggleRead(notification)}
+              onClick={(e) => {
+                e.stopPropagation();
+                onToggleRead(notification);
+              }}
               className="text-blue-500"
             >
               {notification.read ? (

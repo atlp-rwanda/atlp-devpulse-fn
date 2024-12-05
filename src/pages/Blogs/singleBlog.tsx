@@ -9,6 +9,8 @@ import SingleBlogSkeleton from '../../skeletons/singleBlogSkeleton';
 import * as icons from "react-icons/ai";
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
+import BlogComment from './BlogComment'; 
+import BlogReaction from './BlogReactions';
 
 import { useNavigate } from 'react-router-dom';
 
@@ -181,6 +183,36 @@ const SingleBlogView = () => {
               )}
             </div>
           </div>
+          {
+            userId ? (
+              <>
+              {id && <BlogReaction blogId={id} />}
+              {id && <BlogComment blogId={id} />}
+              </>
+            ):(
+              <div className="py-4">
+              <p className="text-sm dark:text-slate-300">
+                Please{" "}
+                <a
+                  href="/"
+                  className="text-green  hover:text-green-700"
+                >
+                  log in
+                </a>{" "}
+                or{" "}
+                <a
+                  href="/"
+                  className="text-green  hover:text-green-700"
+                >
+                  create an account
+                </a>{" "}
+                to like or comment.
+              </p>
+            </div>
+        
+            )
+          }
+        
           {topArticles && topArticles.length > 0 ? (
               <div className='mt-10'>
                 <h1>Related Articles</h1>
@@ -205,81 +237,6 @@ const SingleBlogView = () => {
               ): (
                 <p>No related articles available</p>
               )}
-          <div className="flex items-center gap-4">
-            <button onClick={handleLike} className="flex items-center gap-2">
-              <Heart
-                className={`w-6 h-6 ${
-                  isLiked ? "fill-green-400 text-green-400" : "dark:text-white"
-                }`}
-              />
-              <span>{blog.likes.length}</span>
-            </button>
-          </div>
-          <div className="flex flex-row my-2 gap-4 w-full items-center justify-start">
-            <input
-              type="text"
-              value={comment}
-              onChange={(e) => setComment(e.target.value)}
-              placeholder="Add your comment here..."
-              className="px-4 py-2 w-1/2 dark:bg-slate-800 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400"
-            />
-            <button
-              onClick={handleComment}
-              className="rounded py-1 px-4 bg-green text-white transition-colors dark:hover:bg-dark-frame-bg hover:text-green hover:border hover:border-green"
-            >
-              Comment
-            </button>
-          </div>
-          <div className="space-y-4">
-            <h2 className="text-xl font-semibold">
-              {blog.comments.length} Comments
-            </h2>
-            {blog.comments.length > 0 ? (
-              <>
-                {blog.comments.map((comment) => (
-                  <div
-                    key={comment.id}
-                    className="dark:bg-slate-800 bg-slate-400 rounded-lg p-4 space-y-2"
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-slate-300 dark:bg-slate-700 rounded-full overflow-hidden">
-                        <img
-                          src="/api/placeholder/40/40"
-                          alt={comment.user.firstname}
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                      <div>
-                        <h3 className="font-medium">
-                          {comment.user.firstname}
-                        </h3>
-                        <p className="text-sm text-slate-400">
-                          {comment.created_at}
-                        </p>
-                      </div>
-                    </div>
-
-                    <p className="text-slate-300">{comment.content}</p>
-
-                    <div className="flex items-center gap-4 text-sm dark:text-slate-400">
-                      <button className="flex items-center gap-1">
-                        <MessageCircle className="w-4 h-4" />
-                        {comment.replies.length} Replies
-                      </button>
-                      <button className="flex items-center gap-1">
-                        <Heart className="w-4 h-4" />
-                        {comment.likes.length}
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </>
-            ) : (
-              <div>
-                <p className="text-left">No comments yet</p>
-              </div>
-            )}
-          </div>
       
           <div className={`${userId === blog.author.id ? "" : "hidden"} flex flex-col gap-2 mt-10`}>
             <h1 className='text-red-500 font-bold'>Danger Zone</h1>

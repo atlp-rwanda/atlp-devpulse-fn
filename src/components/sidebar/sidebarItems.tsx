@@ -42,8 +42,13 @@ export const sidebarItems1 = [
   {
     path: "Trainee-applicants",
     icon: <Icon icon="ic:round-people"></Icon>,
-    title: "Trainees-Applicants",
+    title: "Trainees",
   },
+  // {
+  //   path: "Applicant-Stages",
+  //   icon: <Icon icon="ic:round-people"></Icon>,
+  //   title: "Applicant-Stages",
+  // },
   {
     path: "cohort",
     icon: <Icon icon="fa6-solid:graduation-cap"></Icon>,
@@ -69,6 +74,12 @@ export const sidebarItems1 = [
     icon: <Icon icon="heroicons-outline:support"></Icon>,
     title: "Tickets",
   },
+  {
+    path: "documents",
+    icon: <Icon icon="heroicons:document-20-solid"></Icon>,
+    title: "Docs",
+  },
+  
   // {
   //   path: "Trash",
   //   icon: <Icon icon="fa-solid:trash"></Icon>,
@@ -114,7 +125,11 @@ export const applicantSidebarItems = [
     icon: <Icon icon="heroicons-outline:support"></Icon>,
     title: "Tickets",
   },
-
+  {
+    path: "documents",
+    icon: <Icon icon="heroicons:document-20-solid"></Icon>,
+    title: "Docs",
+  },
   {
     path: "blogs",
     icon: <Icon icon="mdi:blogger" />,
@@ -150,7 +165,11 @@ export const traineeSidebarItems = [
     icon: <Icon icon="heroicons-outline:support"></Icon>,
     title: "Tickets",
   },
-
+  {
+    path: "documents",
+    icon: <Icon icon="heroicons:document-20-solid"></Icon>,
+    title: "Docs",
+  },
   {
     path: "blogs",
     icon: <Icon icon="mdi:blogger" />,
@@ -158,12 +177,9 @@ export const traineeSidebarItems = [
   },
 ];
 
+
+
 export const sidebarItems2 = [
-  {
-    path: "/documents",
-    icon: <Icon icon="heroicons:document-20-solid"></Icon>,
-    title: "Docs",
-  },
   {
     path: "Trash",
     icon: <Icon icon="fa-solid:trash"></Icon>,

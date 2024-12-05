@@ -99,6 +99,7 @@ export const getCohort = (getCohortId: any) => async (dispatch: any) => {
     });
     const cohortData = await response.data.data.getCohort;
     dispatch(creator(GET_TRAINEE_COHORT, cohortData));
+    return cohortData.length;
   } catch (error) {
     if (error) {
       return console.log(error);
@@ -238,15 +239,22 @@ export const getAllTraineeApplicants = () => async (dispatch: any) => {
               _id
               email
               cohort
+              applicationPhase
             }
           }
         `
       }
     });
     const traineeApplicants = await response.data.data.getAllTraineeApplicant;
-    dispatch(creator(GET_ALL_TRAINEES, traineeApplicants));
+    const admittedTrainees = traineeApplicants?.filter((trainee: any) => trainee?.applicationPhase === "Admitted");
+    if (admittedTrainees.length === 0) {
+      return { error: 'No trainees found' };
+    } else {
+      dispatch(creator(GET_ALL_TRAINEES, admittedTrainees));
+      return { data: admittedTrainees };
+    }
   } catch (error) {
-    console.error('Error fetching trainee applicants:', error);
+    toast.error("Error fetching trainee applicants");
   }
 };
 

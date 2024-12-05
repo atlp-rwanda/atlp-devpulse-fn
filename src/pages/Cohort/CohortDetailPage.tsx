@@ -8,6 +8,8 @@ import { getCohort, getAllTraineeApplicants, acceptTrainee } from "../../redux/a
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import { useParams } from "react-router-dom";
 import { Spinner } from "flowbite-react";
+import { CohortDetailSkeleton } from "../../skeletons/singleCohortSketon";
+import { toast } from "react-toastify";
 
 const CohortsDetailPage = () => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -37,10 +39,14 @@ const CohortsDetailPage = () => {
   const handleAddTraineeModal = async () => {
     setLoading(true);
     try {
-      await dispatch(getAllTraineeApplicants());
-      setAddTrainee(true);
+      const result = await dispatch(getAllTraineeApplicants());
+      if (result.error) {
+        toast.error(result.error);
+      } else {
+        setAddTrainee(true);
+      }
     } catch (error) {
-      console.error("Error adding trainee:", error);
+      toast.error("Error adding trainee");
     } finally {
       setLoading(false);
     }
@@ -69,9 +75,9 @@ const CohortsDetailPage = () => {
 
   const traineesWithoutCohort = trainees?.filter((trainee) => !trainee.cohort);
 
-  if (isLoading) {
-    return <Spinner className="mt-96" />;
-  }
+  if (!traineeCohort || isLoading) {
+  return <CohortDetailSkeleton />;
+}
 
   const trainee = traineeCohort?.trainees || [];
 

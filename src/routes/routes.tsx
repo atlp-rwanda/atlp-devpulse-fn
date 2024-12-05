@@ -84,7 +84,10 @@ import SingleBlogView from "../pages/Blogs/singleBlog";
 import SingleBlogPage from "../pages/LandingPage/SingleBlogPage"
 import LandingPage from "../pages/LandingPage/LandingPage";
 import Blogs from "../pages/Blogs/Blogs"
-import ViewExternalDocuments from "../pages/viewExternalDocuments";
+import Documents from "../pages/documents/documents";
+import UpdateDocumentation from "../pages/documents/updateDocumentation";
+import SingleDocumentationDetails from "../pages/documents/singleDocumentation";
+import ApplicantDocuments from "../pages/documents/applicantDocuments";
 
 function Navigation() {
   const roleName = localStorage.getItem("roleName");
@@ -97,10 +100,7 @@ function Navigation() {
       <Route path="/blogs" element={<Blogs />} />
       <Route path="/forget" element={<ForgotPasswordPage />} />
       <Route path="/reset-password" element={<ResetPasswordPage />} />
-      <Route path="/home" element={<LandingPage/>}/>      <Route path="/view-external-document" element={
-          <ViewExternalDocuments />
-      }
-      />
+      <Route path="/home" element={<LandingPage/>}/>      
       <Route path="/signup" element={<SignupPage />} />
       <Route path="/verifyEmail" element={<VerifyEmail />} />
       <Route path="/pageNotFound" element={<PageNotFound />} />
@@ -242,6 +242,38 @@ function Navigation() {
             </PrivateRoute>
           }
         />
+
+
+{/* Documentation routes */}
+
+         <Route
+          path="documents"
+          element={
+            <PrivateRoute allowedRoles={["admin", "superAdmin"]}>
+              <Documents />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="documents/:docId"
+          element={
+            <PrivateRoute allowedRoles={["admin", "superAdmin"]}>
+              <SingleDocumentationDetails />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="documents/:docId/edit"
+          element={
+            <PrivateRoute allowedRoles={["admin", "superAdmin"]}>
+              <UpdateDocumentation />
+            </PrivateRoute>
+          }
+        />
+        
+
+
+
         <Route
           path="trash"
           element={
@@ -339,6 +371,8 @@ function Navigation() {
             </PrivateRoute>
           }
         />
+
+
         <Route
           path="blogs"
           element={
@@ -603,6 +637,26 @@ function Navigation() {
             </PrivateRoute>
           }
         />
+
+
+         <Route
+          path="documents"
+          element={
+            <PrivateRoute allowedRoles={['applicant']}>
+              <ApplicantDocuments />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="documents/:docId"
+          element={
+            <PrivateRoute allowedRoles={['applicant']}>
+              <SingleDocumentationDetails />
+            </PrivateRoute>
+          }
+        />
+
+
         <Route
           path="notifications"
           element={

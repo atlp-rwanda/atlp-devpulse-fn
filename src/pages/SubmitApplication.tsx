@@ -6,7 +6,7 @@ import { connect, useDispatch } from "react-redux";
 import { showErrorToast, showSuccessToast } from "../utils/toast";
 import axios from "axios";
 import jwtDecode from "jwt-decode";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import axiosClient from '../redux/actions/axiosconfig'
 
@@ -22,51 +22,12 @@ const SubmitApplication: React.FC = (props: any) => {
   const { fetchSingleJobPostStates } = props;
   const dispatch = useDispatch();
   const { id } = useParams();
+  const [searchParams, setSearchParams] = useSearchParams()
+  const applied = searchParams.get('applied') === 'true'
   const loggedUser:data | null = localStorage.getItem('access_token') ? jwtDecode(localStorage.getItem('access_token') as string) : null;
   const [loading, setLoading] = useState(false);
   const [hasApplied, setHasApplied] = useState(false)
   const navigate = useNavigate()
-
-  const checkIfUserApplied = async() => {
-    const query = `
-      query CheckIfUserApplied($input: CheckIfUserAppliedInput!) {
-        checkIfUserApplied(input: $input) {
-          status
-        }
-      }
-    `;
-
-    const variables = {
-      input: {
-        jobId: id
-      }  
-    };
-
-    try {
-        const response = await axiosClient.post(
-        '/',
-        {
-            query: query,
-            variables: variables,
-        },
-        );
-        
-        if(response.data.errors){
-            toast.error(response.data.errors[0].message)
-            return
-        }
-
-        setHasApplied(response.data.data.checkIfUserApplied.status)
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-  useEffect(() => {
-    (async() => {
-      await checkIfUserApplied()
-    })()
-  },[])
   
   useEffect(() => {
     dispatch(fetchSingleJobPost(id));
@@ -134,17 +95,17 @@ console.log(fetchSingleJobPostStates)
               </div>
 
               {/* FORM */}
-              <div className="flex justify-center w-full mb-8">
+              {!applied && <div className="flex justify-center w-full mb-8">
 
                 <button
                   onClick={handleClick}
-                  disabled={hasApplied}
+                  disabled={applied}
                   className={`bg-primary dark:bg-[#56C870] rounded-md py-2 px-4 
                     text-white font-medium transition-opacity duration-200 ${hasApplied ? 'cursor-not-allowed':'cursor-pointer'}`}
                 >
                   Apply here
                 </button>
-              </div>
+              </div>}
             </div>
           )}
         </div>

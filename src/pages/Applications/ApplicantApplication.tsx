@@ -93,7 +93,7 @@ export const ApplicantApplication = () => {
             to="/applicant/available-jobs/trainee-apply"
             className="flex bg-primary dark:bg-[#56C870] rounded-md py-2 mt-2 px-4 text-white font-medium cursor-pointer"
           >
-            Become trainee
+            Apply to become a trainee
           </Link>
           <Link
             to="/applicant/myapplication"
@@ -104,7 +104,6 @@ export const ApplicantApplication = () => {
           <select className="sm:text-sm w-full sm:w-40 lg:w-32 h-10 rounded-bt-rd dark:bg-[#293647] dark:text-ltb" onChange={(e) => setStatus(e.target.value)}>
             <option value='All'>Sort by Status</option>
             <option value="All">All</option>
-            <option value="submitted">Submitted</option>
             <option value="under-review">Under Review</option>
             <option value="accepted">Accepted</option>
             <option value="rejected">Rejected</option>

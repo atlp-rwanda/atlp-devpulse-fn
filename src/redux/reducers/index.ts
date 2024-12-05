@@ -59,6 +59,17 @@ import userUpdateReducer from "./getUser";
 import blogsReducer from "./blogsReducers";
 import singleBlogReducer from "./singleBlogReducer";
 import blogRelatedArticle from "./blogRelatedArticleReducer";
+import commentReducer from "./commentReducers";
+import reactionReducer from "./reactionReducers";
+
+
+import createDocsReducer from './createDocReducer';
+import fetchDocsReducer from './fetchDocsReducer';
+import fetchSingleDocsReducer from './fetchSingleDocsReducer';
+import deleteDocsReducer from './deleteDocsReducer';
+import updateDocsReducer from './updateDocsReducer';
+import fetchDocsByRole from './fetchDocsByRole';
+
 
 const allReducers = combineReducers({
   counter: counterReducer,
@@ -89,6 +100,15 @@ const allReducers = combineReducers({
   fetchSingleProgram: fetchSingleProgramReducer,
   deleteProgram: deleteProgramReducer,
   updateProgram: updateProgramReducer,
+
+
+  createDocs: createDocsReducer,
+  fetchDocs: fetchDocsReducer,
+  fetchSingleDocs: fetchSingleDocsReducer,
+  deleteDocs: deleteDocsReducer,
+  updateDocs: updateDocsReducer,
+
+
   fetchJobPost: fetchJobPostReducer,
   fetchSingleJobPost: fetchSingleJobPostReducer,
   createJobPost: createJobPostReducer,
@@ -115,6 +135,10 @@ const allReducers = combineReducers({
   singleBlog: singleBlogReducer,
   blogRelatedArticle: blogRelatedArticle,
   sendInvitation: sendInvitationReducer,
+  fetchDocsByRole:fetchDocsByRole,
+  comments: commentReducer,
+  reactions: reactionReducer,
+
 });
 
 export type RootState = ReturnType<typeof allReducers>;

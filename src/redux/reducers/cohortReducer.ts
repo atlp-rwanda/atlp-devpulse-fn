@@ -27,16 +27,13 @@ export default (state = initialState, { type, payload }: any) => {
         ...state,
         isLoading: false,
         data: payload,
-        errors: null,
       };
 
     case GET_TRAINEE_COHORT:
       return {
         ...state,
         isLoading: false,
-        isLoaded: true,
-        traineeCohort: payload,
-        errors: null,
+        traineeCohort: payload
       };
     case CREATE_COHORT_SUCCESS:
       return {
@@ -48,12 +45,14 @@ export default (state = initialState, { type, payload }: any) => {
       return {
         ...state,
         isLoading: false,
+        isLoaded: true,
         errors: payload,
       };
     case GET_ALL_TRAINEES:
       return {
         ...state,
         isLoading: false,
+        isLoaded: true,
         trainees: payload,
       };
     case ADD_TRAINEE_IN_COHORT:
