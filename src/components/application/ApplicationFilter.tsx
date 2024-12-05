@@ -31,7 +31,6 @@ const ApplicationFilter: React.FC<ApplicationFilterProps> = ({
                 <select value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)}
                     className="border dark:border-slate-400 p-[0.5rem] text-sm rounded-md dark:bg-dark-bg dark:text-white " >
                     <option value="All">All Status</option>
-                    <option value="submitted">Submitted</option>
                     <option value="under-review">Under Review</option>
                     <option value="accepted">Accepted</option>
                     <option value="rejected">Rejected</option>
