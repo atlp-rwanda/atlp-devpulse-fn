@@ -51,6 +51,7 @@ const ReplyTicketPage = (props: any) => {
     e.preventDefault();
     if (ticketId && applicantReply.trim()) {
       try {
+        setIsSubmitting(true);
         await dispatch(updateTicket(
             ticketId,
             applicantReply
@@ -58,7 +59,7 @@ const ReplyTicketPage = (props: any) => {
         setApplicantReply("");
         await dispatch(GetTicket(ticketId));
         // toast.success("Ticket Updated Successfully");
-        setIsSubmitting(true);
+        
       } catch (error) {
         toast.error("Failed to update ticket")
         console.error("Failed to update ticket:", error);
@@ -145,8 +146,8 @@ const ReplyTicketPage = (props: any) => {
                       />
                       <button
                         type="submit"
-                        className="px-4 py-2 bg-button-color dark:bg-green text-white rounded-lg "
                         disabled={isSubmitting}
+                        className="px-4 py-2 bg-button-color dark:bg-green text-white rounded-lg "
                       >
                         {isSubmitting ? (
                         <ThreeDots height="20" width="30" color="#ffffff" />

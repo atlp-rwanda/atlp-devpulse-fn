@@ -48,11 +48,12 @@ const ResolveTicketPage = (props: any) => {
     e.preventDefault();
     if (ticketId && adminReply.trim()) {
       try {
+        setIsSubmitting(true);
         await dispatch(resolveTicket(ticketId, adminReply));
         setAdminReply("");
         await dispatch(GetTicket(ticketId));
-        toast.success("Ticket Resolved Successfully");
-        setIsSubmitting(true);
+        // toast.success("Ticket Resolved Successfully");
+        
       } catch (error) {
         toast.error("Failed to resolve ticket")
         console.error("Failed to resolve ticket:", error);
