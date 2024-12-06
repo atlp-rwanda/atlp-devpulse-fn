@@ -60,9 +60,8 @@ const BlogCard = ({ blog }: { blog: Blog }) => (
       </Link>
       <Link to={`/blogs/${blog.id}`}>
       <h3 className="text-xl font-semibold mb-2">{blog.title}</h3>
-      <p className="mb-4 text-black-text dark:text-white overflow-hidden line-clamp-3">
-        {blog.content}
-      </p>
+      <div className="mb-4 text-black-text dark:text-white overflow-hidden line-clamp-3" dangerouslySetInnerHTML={{ __html: `${blog.content.substring(0, 150)}...`}}>
+      </div>
       </Link> 
     </div>
   </div>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,ChangeEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { getAllBlogs, getBlogsByAuthor } from "../../redux/actions/blogActions";
 import { createBlogAction } from "../../redux/actions/blogActions";
@@ -9,6 +9,9 @@ import { handleBlogImageUpload } from "../../utils/imageUploadUtil";
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import AllBlogsSkeleton from "../../skeletons/allBlogsSkeleton";
 import SingleBlogSkeleton from "skeletons/singleBlogSkeleton";
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+import { AiOutlineClose } from 'react-icons/ai';
 import HideUnhideButton from "../../components/hideBlog"
 
  interface Comment {
@@ -67,6 +70,7 @@ const AllBlogs = () => {
   const [addingBlog, setAddingBlog] = useState(false);
   const [manyImaages, setManyImages] = useState(false);
   const [tags, setTags] = useState('');
+  const [content, setContent] = useState('');
   const [submitData, setSubmitData] = useState<SubmitData>({
     title: "",
     content: "",
@@ -226,20 +230,62 @@ const AllBlogs = () => {
     await dispatch(createBlogAction(obj));
     setAddingBlog(false);
     removeModal();
-    dispatch(getBlogsByAuthor(String(userId)));
+
+    if (role == "applicant" || role == "trainee") {
+      dispatch(getBlogsByAuthor(String(userId)));
+    } else {
+      dispatch(getAllBlogs());
+    }
+    
   } catch (error) {
     console.log(error);
   } finally {
     setIsUploading(false);
   }
  };
+
+ const modules = {
+  toolbar: [
+    [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+    ['bold', 'italic', 'underline', 'strike'],
+    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+    ['link'],
+    [{ 'align': [] }],
+    [{ 'color': [] }, { 'background': [] }],
+    ['clean']
+  ]
+};
+
+const formats = [
+  'header',
+  'bold', 'italic', 'underline', 'strike',
+  'list', 'bullet',
+  'link', 'image',
+  'align',
+  'color', 'background'
+];
+
+const handleContentChange = (value: string) => {
+  setContent(value);
+  
+  // Simulate an event object to match the expected input of handleInputChange
+  const syntheticEvent = {
+    target: {
+      name: 'content',
+      value: value
+    }
+  } as ChangeEvent<HTMLTextAreaElement>;
+
+  handleInputChange(syntheticEvent);
+};
+
   
   
   return (
     <div className="min-h-screen bg-white w-full dark:bg-slate-900 dark:text-white p-6">
       {addNewBlogModal && (
         <div className="fixed inset-0 mt-16 p-0 flex items-center justify-center bg-black bg-opacity-20 dark:bg-opacity-40">
-          <div className="bg-white dark:bg-dark-bg w-11/12 md:w-3/5 lg:w-2/5 rounded-lg p-6">
+          <div className="bg-white dark:bg-dark-bg w-11/12 md:w-3/5 lg:w-2/5 rounded-lg p-6 max-h-[600px] overflow-y-scroll">
             <div className="w-full flex mb-2 items-center justify-between">
               <h3 className="font-bold text-m dark:text-white ">
                 CREATE A NEW BLOG
@@ -267,13 +313,14 @@ const AllBlogs = () => {
               </div>
               <div className="flex flex-col">
                 <label className="font-semibold text-sm">Blog Content</label>
-                <textarea
-                  name="content"
-                  value={submitData.content}
-                  onChange={handleInputChange}
-                  className="border rounded focus:ring-2 focus:ring-white dark:bg-black px-4 py-2 h-24"
+                <ReactQuill
+                  value={content}
+                  onChange={handleContentChange}
+                  modules={modules}
+                  formats={formats}
+                  theme="snow"
+                  className="border rounded dark:bg-black"
                   placeholder="Enter Blog Content"
-                  maxLength={2000}
                 />
                 {errors.content && (
                   <span className="text-red-500 text-xs">{errors.content}</span>
@@ -361,19 +408,18 @@ const AllBlogs = () => {
       <div className="max-w-6xl mt-2 mx-auto">
         <div className="mb-6 w-full flex items-center justify-between">
           <h1 className="text-2xl font-semibold">All Blogs</h1>
-          {userId && role && (role == "applicant" || role == "trainee") && (
-            <div className="w-full sm:w-auto">
-              <button
-                disabled={isLoading}
-                onClick={Open}
-                className={`flex items-center justify-center w-full sm:w-auto ${
-                  isLoading ? "bg-emerald-300" : "bg-primary dark:bg-[#56C870]"
-                }  rounded-md py-2 px-4 text-white font-medium cursor-pointer hover:opacity-90 transition-opacity`}
-              >
-                <icons.AiOutlinePlus className="mr-2" /> Blog
-              </button>
-            </div>
-          )}
+
+          <div className="w-full sm:w-auto">
+            <button
+              disabled={isLoading}
+              onClick={Open}
+              className={`flex items-center justify-center w-full sm:w-auto ${
+                isLoading ? "bg-emerald-300" : "bg-primary dark:bg-[#56C870]"
+              }  rounded-md py-2 px-4 text-white font-medium cursor-pointer hover:opacity-90 transition-opacity`}
+            >
+              <icons.AiOutlinePlus className="mr-2" /> Blog
+            </button>
+          </div>
         </div>
 
         <div className="space-y-4">
@@ -397,9 +443,10 @@ const AllBlogs = () => {
                   <p className="text-lg font-medium break-words whitespace-normal overflow-wrap-break-word transition-colors">
                     {blog.title}
                   </p>
-                  <p className="dark:text-slate-400 text-slate-800 break break-words text-sm line-clamp-2">
-                    {blog.content}
-                  </p>
+                  <div
+                    className="dark:text-slate-400 text-slate-800 break break-words text-sm line-clamp-2"
+                    dangerouslySetInnerHTML={{ __html: blog.content }}
+                  ></div>
                 </div>
                 <div className="w-1/6 flex flex-col items-end text-sm dar:text-slate-400">
                   <span>{`${blog.author.firstname} ${blog.author.lastname}`}</span>
@@ -408,10 +455,7 @@ const AllBlogs = () => {
                   </span>
                 </div>
                 {role === "admin" || role === "superAdmin" ? (
-                  <HideUnhideButton
-                    blogId={blog.id}
-                    isHidden={blog.isHidden}
-                  />
+                  <HideUnhideButton blogId={blog.id} isHidden={blog.isHidden} />
                 ) : null}
               </div>
             ))
