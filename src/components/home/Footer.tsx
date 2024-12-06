@@ -9,7 +9,7 @@ const Footer = () => {
     <div className=" dark:bg-dark-bg bg-white text-primary dark:text-white flex flex-wrap justify-around items-center  border-t pt-6">
       <div className="flex flex-col mb-4 md:mb-0 md:w-auto ">
        <Link to="/" className="flex items-center space-x-2">
-          <img src={logo} alt="Logo" className="h-8 w-auto" />
+          <img src={logo} alt="Logo" className="h-8 w-auto" loading='lazy'/>
           <h1 className="text-lg font-bold font-lexend text-primary dark:text-green">
             PULSE
           </h1>

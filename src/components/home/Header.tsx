@@ -54,6 +54,7 @@ const Header = () => {
                     className="cursor-pointer mx-2 fill-[blue]"
                     src={logo}
                     style={{ fill: '#333' }}
+                    loading="lazy"
                   />
                 ) : (
                   <img
