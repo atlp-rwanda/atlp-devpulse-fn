@@ -222,33 +222,59 @@ export const updateBlogAction =
 
     try {
       const response = await axios.post("/", {
-        query: `mutation UpdateBlog($id: ID!, $updateFields: BlogInput) {
-        updateBlog(id: $id, ...$updateFields) {
-          id
-          title
-          content
-          coverImage
-          images
-          likes {
-            id
+        query: `
+          mutation UpdateBlog(
+            $id: ID!, 
+            $title: String, 
+            $content: String, 
+            $images: [String], 
+            $coverImage: String, 
+            $tags: [String], 
+            $isHidden: Boolean
+          ) {
+            updateBlog(
+              id: $id, 
+              title: $title, 
+              content: $content, 
+              images: $images, 
+              coverImage: $coverImage, 
+              tags: $tags, 
+              isHidden: $isHidden
+            ) {
+              id
+              title
+              content
+              coverImage
+              images
+              likes {
+                id
+              }
+              comments {
+                id
+              }
+              isHidden
+              author {
+                id
+                firstname
+                lastname
+                email
+                createdAt
+              }
+              tags
+              created_at
+              updated_at
+            }
           }
-          comments {
-            id
-          }
-          isHidden
-          author {
-            id
-            firstname
-            lastname
-            email
-            createdAt
-          }
-          tags
-          created_at
-          updated_at
-        }
-      }`,
-        variables: { id, ...updateFields },
+        `,
+        variables: {
+          id,
+          title: updateFields.title,
+          content: updateFields.content,
+          images: updateFields.images,
+          coverImage: updateFields.coverImage,
+          tags: updateFields.tags,
+          isHidden: updateFields.isHidden,
+        },
       });
 
       dispatch({
@@ -261,9 +287,10 @@ export const updateBlogAction =
         type: updateBlog.UPDATE_BLOG_FAIL,
         error: err.message,
       });
-      toast.error(err.message);
+      toast.error(err.message || "Failed to update the blog");
     }
   };
+
 
 // Delete a blog
 export const deleteBlogAction = (id: string) => async (dispatch: any) => {
