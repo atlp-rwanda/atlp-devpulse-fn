@@ -63,14 +63,17 @@ const CreateTicketModal = ({ isOpen, onClose, onSubmit }) => {
                       type="text"
                       value={ticket.title}
                       onChange={(e) =>
-                        setTicket((prev) => ({ ...prev, title: e.target.value }))
+                        setTicket((prev) => ({
+                          ...prev,
+                          title: e.target.value,
+                        }))
                       }
                       className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-white dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                       placeholder="Enter the subject of your ticket"
                       required
                     />
                   </div>
-  
+
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
                       Description <span className="text-red-500">*</span>
@@ -88,7 +91,7 @@ const CreateTicketModal = ({ isOpen, onClose, onSubmit }) => {
                       required
                     />
                   </div>
-  
+
                   <div className="flex space-x-4">
                     <button
                       className="flex bg-primary dark:bg-[#56C870] rounded-md py-2 px-4 text-white font-medium cursor-pointer"
