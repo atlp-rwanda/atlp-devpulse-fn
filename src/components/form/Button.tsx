@@ -9,7 +9,7 @@ interface ButtonProps {
   className?: string;
   role?: string;
   label?: string;
-  children?: ReactNode;
+  children?: any;
 }
 
 const Button: React.FC<ButtonProps> = ({
