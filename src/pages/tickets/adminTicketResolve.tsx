@@ -6,6 +6,7 @@ import { GetTicket, resolveTicket } from "../../redux/actions/ticketActions";
 import { useDispatch, useSelector } from "react-redux";
 import { connect } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
+import { ThreeDots } from "react-loader-spinner";
 
 const ResolveTicketPage = (props: any) => {
   const dispatch = useDispatch();
@@ -13,6 +14,7 @@ const ResolveTicketPage = (props: any) => {
   const [ticketId, setTicketId] = useState(params.id);
   const [adminReply, setAdminReply] = useState("");
   const ticketData = useSelector((state: any) => state.tickets?.currentTicket);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const getAllReplies = () => {
     if (!ticketData) return [];
@@ -46,13 +48,17 @@ const ResolveTicketPage = (props: any) => {
     e.preventDefault();
     if (ticketId && adminReply.trim()) {
       try {
+        setIsSubmitting(true);
         await dispatch(resolveTicket(ticketId, adminReply));
         setAdminReply("");
         await dispatch(GetTicket(ticketId));
-        toast.success("Ticket Resolved Successfully");
+        // toast.success("Ticket Resolved Successfully");
+        
       } catch (error) {
         toast.error("Failed to resolve ticket")
         console.error("Failed to resolve ticket:", error);
+      } finally{
+        setIsSubmitting(false);
       }
     }
   };
@@ -135,10 +141,14 @@ const ResolveTicketPage = (props: any) => {
                       />
                       <button
                         type="submit"
-                        disabled={!adminReply.trim()}
+                        disabled={isSubmitting}
                         className="px-4 py-2 bg-button-color dark:bg-green text-white rounded-lg "
                       >
-                        Submit Response
+                        {isSubmitting ? (
+                        <ThreeDots height="20" width="30" color="#ffffff" />
+                      ) : (
+                        "Submit Response"
+                      )}
                       </button>
                     </div>
                   </form>

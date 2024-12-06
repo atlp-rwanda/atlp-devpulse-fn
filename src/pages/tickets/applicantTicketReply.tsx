@@ -6,6 +6,8 @@ import { GetTicket, updateTicket } from "../../redux/actions/ticketActions";
 import { useDispatch, useSelector } from "react-redux";
 import { connect } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
+import { ThreeDots } from "react-loader-spinner";
+
 
 const ReplyTicketPage = (props: any) => {
   const dispatch = useDispatch();
@@ -13,6 +15,7 @@ const ReplyTicketPage = (props: any) => {
   const [ticketId, setTicketId] = useState(params.id);
   const [applicantReply, setApplicantReply] = useState("");
   const ticketData = useSelector((state: any) => state.tickets?.currentTicket);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const getAllReplies = () => {
     if (!ticketData) return [];
@@ -48,6 +51,7 @@ const ReplyTicketPage = (props: any) => {
     e.preventDefault();
     if (ticketId && applicantReply.trim()) {
       try {
+        setIsSubmitting(true);
         await dispatch(updateTicket(
             ticketId,
             applicantReply
@@ -55,9 +59,12 @@ const ReplyTicketPage = (props: any) => {
         setApplicantReply("");
         await dispatch(GetTicket(ticketId));
         // toast.success("Ticket Updated Successfully");
+        
       } catch (error) {
         toast.error("Failed to update ticket")
         console.error("Failed to update ticket:", error);
+      } finally{
+        setIsSubmitting(false);
       }
     }
   };
@@ -139,10 +146,14 @@ const ReplyTicketPage = (props: any) => {
                       />
                       <button
                         type="submit"
-                        disabled={!applicantReply.trim()}
+                        disabled={isSubmitting}
                         className="px-4 py-2 bg-button-color dark:bg-green text-white rounded-lg "
                       >
-                        Submit Response
+                        {isSubmitting ? (
+                        <ThreeDots height="20" width="30" color="#ffffff" />
+                      ) : (
+                        "Submit Response"
+                      )}
                       </button>
                     </div>
                   </form>
