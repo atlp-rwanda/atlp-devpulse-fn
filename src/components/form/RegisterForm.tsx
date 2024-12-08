@@ -171,24 +171,31 @@ function SignupForm() {
   };
   return (
     <>
-
-      <div className="flex items-center  justify-center mx-auto  bg-white dark:bg-[#374151] h-screen">
-
+      <div className="relative flex items-center  justify-center mx-auto  bg-white dark:bg-[#374151] h-screen">
         {isAnError && (
-          <Toasty message={isAnError} type="error" onClose={() => setError(null)} />
+          <div className="absolute top-10 z-50">
+            <Toasty
+              message={isAnError}
+              type="error"
+              onClose={() => setError(null)}
+            />
+          </div>
         )}
         {isSuccess ? (
           <div className="bg-[#1F2A37] w-[30vw]  flex h-[70vh] flex-col items-center justify-center rounded-sm sm:w-5/6 lg:w-[45vw]">
             <div
-              className={`rounded-full flex items-center justify-center  ${isAnError ? "bg-white" : "bg-green"
-                } p-4 mx-auto mb-4`}
+              className={`rounded-full flex items-center justify-center  ${
+                isAnError ? "bg-white" : "bg-green"
+              } p-4 mx-auto mb-4`}
             >
               <AiOutlineCheck className="text-white text-4xl" />
             </div>
             <div className="text-[#afb1b4] text-lg mb-4 font-inter">
               <p>Account created, Check your email to verify your account !</p>
             </div>
-            <Link to="/login" ><Button label="Continue" className="w-[80px]" /></Link>
+            <Link to="/login">
+              <Button label="Continue" className="w-[80px]" />
+            </Link>
           </div>
         ) : (
           <form
@@ -245,9 +252,15 @@ function SignupForm() {
                   className=" absolute right-4 top-4"
                 >
                   {showPassword[0] ? (
-                    <FontAwesomeIcon icon={faEye} className="text-black dark:text-white" />
+                    <FontAwesomeIcon
+                      icon={faEye}
+                      className="text-black dark:text-white"
+                    />
                   ) : (
-                    <FontAwesomeIcon icon={faEyeSlash} className="text-black dark:text-white" />
+                    <FontAwesomeIcon
+                      icon={faEyeSlash}
+                      className="text-black dark:text-white"
+                    />
                   )}
                 </div>
               </div>
@@ -264,66 +277,78 @@ function SignupForm() {
                   className=" absolute right-4 top-4"
                 >
                   {showPassword[1] ? (
-                    <FontAwesomeIcon icon={faEye} className="text-black dark:text-white" />
+                    <FontAwesomeIcon
+                      icon={faEye}
+                      className="text-black dark:text-white"
+                    />
                   ) : (
-                    <FontAwesomeIcon icon={faEyeSlash} className="text-black dark:text-white" />
+                    <FontAwesomeIcon
+                      icon={faEyeSlash}
+                      className="text-black dark:text-white"
+                    />
                   )}
                 </div>
               </div>
               <div className="flex items-center w-[25vw] gap-10   sm:w-5/6 lg:w-[25vw] justify-between">
                 <div className="w-[50%]">
-                <InputField
-                  placeholder="Country"
-                  list="countries"
-                  className="w-full rounded-md px-2 py-3 border border-white placeholder:text-gray-400 text-black dark:text-white sm:text-[12px] outline-none autofill:bg-transparent autofill:text-white  bg-gray-100 dark:bg-[#1F2A37]"
-                  {...register("country", {
-                  onChange: (e) => handleCountryChange(e),
-                   })} 
-                  error={errors?.country}
+                  <InputField
+                    placeholder="Country"
+                    list="countries"
+                    className="w-full rounded-md px-2 py-3 border border-white placeholder:text-gray-400 text-black dark:text-white sm:text-[12px] outline-none autofill:bg-transparent autofill:text-white  bg-gray-100 dark:bg-[#1F2A37]"
+                    {...register("country", {
+                      onChange: (e) => handleCountryChange(e),
+                    })}
+                    error={errors?.country}
                   />
                   <datalist id="countries">
-                  {filteredCountries.map((country) => (
-                   <option key={country.code} value={country.name} />
-                  ))}
+                    {filteredCountries.map((country) => (
+                      <option key={country.code} value={country.name} />
+                    ))}
                   </datalist>
-
                 </div>
                 <div className="relative w-full">
-      <select
-        {...register("gender")}
-        className="w-full rounded-md px-2 py-2 border border-white 
+                  <select
+                    {...register("gender")}
+                    className="w-full rounded-md px-2 py-2 border border-white 
                  placeholder:text-gray-400 text-white sm:text-[12px] 
                  outline-none bg-[#1F2A37] appearance-none"
-      >
-        <option value="" disabled selected>Gender</option>
-        <option value="female">female</option>
-        <option value="male">male</option>
-        <option value="other">other</option>
-      </select>
-      
-      {/* Dropdown arrow */}
-      <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
-        <svg 
-          className="w-4 h-4 text-white"
-          fill="none" 
-          stroke="currentColor" 
-          viewBox="0 0 24 24"
-        >
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-        </svg>
-      </div>
-    </div>
+                  >
+                    <option value="" disabled selected>
+                      Gender
+                    </option>
+                    <option value="female">female</option>
+                    <option value="male">male</option>
+                    <option value="other">other</option>
+                  </select>
+
+                  {/* Dropdown arrow */}
+                  <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                    <svg
+                      className="w-4 h-4 text-white"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M19 9l-7 7-7-7"
+                      />
+                    </svg>
+                  </div>
+                </div>
               </div>
 
               <div className="flex items-center w-[25vw] sm:w-5/6 lg:w-[25vw]  justify-between">
                 <div className="w-[20%] ">
-                <InputField
-                  placeholder="Country Code"
-                  type="text"
-                  className="w-full rounded-md px-2 py-3 border border-white placeholder:text-gray-400 text-black dark:text-white sm:text-[12px] outline-none autofill:bg-transparent autofill:text-white  bg-gray-100 dark:bg-[#1F2A37]"
-                  {...register("countryCode")}
-                  error={errors?.countryCode}
-                />
+                  <InputField
+                    placeholder="Country Code"
+                    type="text"
+                    className="w-full rounded-md px-2 py-3 border border-white placeholder:text-gray-400 text-black dark:text-white sm:text-[12px] outline-none autofill:bg-transparent autofill:text-white  bg-gray-100 dark:bg-[#1F2A37]"
+                    {...register("countryCode")}
+                    error={errors?.countryCode}
+                  />
                 </div>
                 <div className=" w-[65%]">
                   <InputField
@@ -380,7 +405,11 @@ function SignupForm() {
                   </Button>
                 </>
               ) : (
-                <Button type="submit" label="Signup" className="my-1  mb-4 sm:w-full w-5/6 " />
+                <Button
+                  type="submit"
+                  label="Signup"
+                  className="my-1  mb-4 sm:w-full w-5/6 "
+                />
               )}
             </div>
           </form>

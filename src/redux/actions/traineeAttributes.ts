@@ -61,10 +61,10 @@ export const createTraineeAttribute = (attributeData: any) => async (dispatch: A
     const { data } = response.data;
     if (data?.createTraineeAttribute) {
       dispatch({ type: CREATE_TRAINEE_ATTRIBUTE_SUCCESS, payload: data.createTraineeAttribute });
-      toast.success("Trainee created successfully.");
+      toast.success("Application Submited successfully.");
       return { success: true, data: data.createTraineeAttribute && data.createTraineeAttribute._id};
     } else {
-      throw new Error("Failed to create trainee attributes: Unexpected response structure");
+      throw new Error("Failed to create applicant attributes: Unexpected response structure");
     }
   } catch (error: any) {
     handleCreateAttributeError(error, dispatch);

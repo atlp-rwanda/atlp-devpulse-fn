@@ -43,7 +43,7 @@ Button.propTypes = {
   className: PropTypes.string,
   role: PropTypes.string,
   label: PropTypes.string,
-  children: PropTypes.oneOfType([PropTypes.node, PropTypes.string]),
+  children: PropTypes.any,
 };
 
 Button.defaultProps = {
