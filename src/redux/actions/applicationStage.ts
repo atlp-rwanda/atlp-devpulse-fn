@@ -4,6 +4,8 @@ import {
   advanceToNextStage,
   filterByStage,
   getApplicantStage,
+  sendInterviewInvitation,
+  updateInterviewStatus,
   sendInvitation,
 } from "../actiontypes/applicationTypes";
 import toast from "react-hot-toast";
@@ -169,29 +171,42 @@ export const filterStage = (stage: string) => async (dispatch: any) => {
   try {
     const response = await axios.post("/", {
       query: `query GetApplicantsByStage($stage: String!) {
-  getApplicantsByStage(stage: $stage) {
-  applicant {
-    _id
-    applicationPhase
-    email
-    firstName
-    lastName
+    getApplicantsByStage(stage: $stage) {
+    applicant {
+      _id
+      applicationPhase
+      email
+      firstName
+      lastName
+      status
+    }
+    technicalInterviews {
+      _id
+      meetingLink
+      meetingPlatform
+      status
+      scheduledDate
+      createdAt
+      updatedAt
+      coordinatorId {
+        firstname
+        lastname
+      }
+    }
     status
-  }
-  status
-  comments
-  score
-  platform
-  invitationLink
-  updatedAt
-  createdAt
-  }
-}`,
+    comments
+    score
+    platform
+    invitationLink
+    updatedAt
+    createdAt
+    }
+  }`,
       variables: {
         stage: stage,
       },
     });
-    if (response.data.data !== undefined || response.data.data !== null) {
+    if (response.data?.data?.getApplicantsByStage) {
       dispatch({
         type: filterByStage.FILTER_STAGE_SUCCESS,
         data: response.data.data.getApplicantsByStage,
@@ -207,7 +222,12 @@ export const filterStage = (stage: string) => async (dispatch: any) => {
 };
 
 export const sendInvitations =
-  (applicantId: string, email: string, platform:string, invitationLink: string) =>
+  (
+    applicantId: string,
+    email: string,
+    platform: string,
+    invitationLink: string
+  ) =>
   async (dispatch: any) => {
     dispatch({
       type: sendInvitation.SEND_INVITATION_STAGE_LOADING,
@@ -222,14 +242,17 @@ export const sendInvitations =
                          success
                        }
                       }`,
-        variables:{
+        variables: {
           applicantId: applicantId,
           email: email,
           platform: platform,
           invitationLink: invitationLink,
-        }
+        },
       });
-      if (response.data.data !== undefined || response.data.data !== null) {
+
+      const invitationResponse = response.data?.data?.sendInvitation;
+
+      if (invitationResponse) {
         dispatch({
           type: sendInvitation.SEND_INVITATION_STAGE_SUCCESS,
           data: response.data.data.sendInvitation,
@@ -242,5 +265,113 @@ export const sendInvitations =
         error,
       });
       console.error(error);
+    }
+  };
+export const sendInterviewInvitations =
+  (
+    applicantId: string,
+    coordinatorId: string,
+    meetingLink: string,
+    scheduledDate: string,
+    meetingPlatform: string
+  ) =>
+  async (dispatch: any) => {
+    dispatch({
+      type: sendInterviewInvitation.SEND_INTERVIEW_INVITATION_STAGE_LOADING,
+      message: "loading",
+    });
+
+    try {
+      const response = await axios.post("/", {
+        query: `mutation ScheduleTechnicalInterview($input: ScheduleInterviewInput!) {
+  scheduleTechnicalInterview(input: $input) {
+    success
+    message
+  }
+}`,
+        variables: {
+          input: {
+            applicantId,
+            coordinatorId,
+            meetingLink,
+            scheduledDate,
+            meetingPlatform,
+          },
+        },
+      });
+
+      console.log("Full response:", response.data);
+
+      if (response.data?.data?.scheduleTechnicalInterview) {
+        dispatch({
+          type: sendInterviewInvitation.SEND_INTERVIEW_INVITATION_STAGE_SUCCESS,
+          data: response.data.data.scheduleTechnicalInterview,
+        });
+        toast.success(response.data.data.scheduleTechnicalInterview.message);
+      } else if (response.data.errors) {
+        const errorMessage = response.data.errors[0].message;
+        dispatch({
+          type: sendInterviewInvitation.SEND_INTERVIEW_INVITATION_STAGE_FAIL,
+          error: errorMessage,
+        });
+        toast.error(errorMessage);
+      } else {
+        dispatch({
+          type: sendInterviewInvitation.SEND_INTERVIEW_INVITATION_STAGE_FAIL,
+          error: "No data returned from the server",
+        });
+        toast.error("Failed to schedule interview");
+      }
+    } catch (error) {
+      dispatch({
+        type: sendInterviewInvitation.SEND_INTERVIEW_INVITATION_STAGE_FAIL,
+        error,
+      });
+      console.error(error);
+    }
+  };
+
+export const updateInterviewStatuses =
+  (interviewId: string, status: string) => async (dispatch: any) => {
+    dispatch({
+      type: updateInterviewStatus.UPDATE_INTERVIEW_STATUS_LOADING,
+      message: "loading",
+    });
+
+    try {
+      const response = await axios.post("/", {
+        query: `mutation UpdateInterviewStatus($interviewId: ID!, $status: String!) {
+          updateInterviewStatus(interviewId: $interviewId, status: $status) {
+            success
+            message
+          }
+        }`,
+        variables: {
+          interviewId,
+          status,
+        },
+      });
+
+      if (response.data?.data?.updateInterviewStatus) {
+        dispatch({
+          type: updateInterviewStatus.UPDATE_INTERVIEW_STATUS_SUCCESS,
+          data: response.data.data.updateInterviewStatus,
+        });
+        toast.success(response.data.data.updateInterviewStatus.message);
+      } else if (response.data.errors) {
+        const errorMessage = response.data.errors[0].message;
+        dispatch({
+          type: updateInterviewStatus.UPDATE_INTERVIEW_STATUS_FAIL,
+          error: errorMessage,
+        });
+        toast.error(errorMessage);
+      }
+    } catch (error) {
+      dispatch({
+        type: updateInterviewStatus.UPDATE_INTERVIEW_STATUS_FAIL,
+        error: "Failed to update interview status",
+      });
+      console.error(error);
+      toast.error("Failed to update interview status");
     }
   };
