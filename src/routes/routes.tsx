@@ -67,7 +67,7 @@ import SignupPage from "./../pages/SignupPage";
 import ApplicantStages from "./../pages/TraineApplicant/ApplicantStages";
 import AdminNotification from "../pages/AdminNotifications/AdminNotifications";
 import { MyApplication } from "../pages/ApplicationCycle/myApplication";
-import ApplyJobPost from "../pages/ApplyJobPost";
+import ApplyJobPost from "../pages/ApplyJobPost"
 
 import TraineeApply from "../pages/TraineeApply/TraineeApply";
 import TraineeAttribute from "../pages/TraineeApply/TraineeAttribute";
@@ -81,9 +81,9 @@ import CohortPage from "../pages/Cohort/Cohort";
 import CohortsDetailPage from "../pages/Cohort/CohortDetailPage";
 import AllBlogs from "../pages/Blogs/allBlogs";
 import SingleBlogView from "../pages/Blogs/singleBlog";
-import SingleBlogPage from "../pages/LandingPage/SingleBlogPage";
+import SingleBlogPage from "../pages/LandingPage/SingleBlogPage"
 import LandingPage from "../pages/LandingPage/LandingPage";
-import Blogs from "../pages/Blogs/Blogs";
+import Blogs from "../pages/Blogs/Blogs"
 import Documents from "../pages/documents/documents";
 import UpdateDocumentation from "../pages/documents/updateDocumentation";
 import SingleDocumentationDetails from "../pages/documents/singleDocumentation";
@@ -100,12 +100,12 @@ function Navigation() {
       <Route path="/blogs" element={<Blogs />} />
       <Route path="/forget" element={<ForgotPasswordPage />} />
       <Route path="/reset-password" element={<ResetPasswordPage />} />
-      <Route path="/home" element={<LandingPage />} />
+      <Route path="/home" element={<LandingPage/>}/>      
       <Route path="/signup" element={<SignupPage />} />
       <Route path="/verifyEmail" element={<VerifyEmail />} />
       <Route path="/pageNotFound" element={<PageNotFound />} />
       <Route path="settings" element={<Settings />} />
-      <Route path="blogs/:id" element={<SingleBlogPage />} />
+    <Route path="blogs/:id" element={<SingleBlogPage/>}/>
       <Route
         path="/"
         element={
@@ -243,9 +243,10 @@ function Navigation() {
           }
         />
 
-        {/* Documentation routes */}
 
-        <Route
+{/* Documentation routes */}
+
+         <Route
           path="documents"
           element={
             <PrivateRoute allowedRoles={["admin", "superAdmin"]}>
@@ -269,6 +270,9 @@ function Navigation() {
             </PrivateRoute>
           }
         />
+        
+
+
 
         <Route
           path="trash"
@@ -367,6 +371,7 @@ function Navigation() {
             </PrivateRoute>
           }
         />
+
 
         <Route
           path="blogs"
@@ -472,7 +477,7 @@ function Navigation() {
           path="tickets"
           element={
             <PrivateRoute allowedRoles={["admin", "superAdmin"]}>
-              <AdminTicketPage />
+              <AdminTicketPage  />
             </PrivateRoute>
           }
         />
@@ -480,7 +485,7 @@ function Navigation() {
           path="ticket/:id"
           element={
             <PrivateRoute allowedRoles={["admin", "superAdmin"]}>
-              <SingleTicketDetails />
+              <SingleTicketDetails  />
             </PrivateRoute>
           }
         />
@@ -488,7 +493,7 @@ function Navigation() {
           path="ticket/:id/resolve"
           element={
             <PrivateRoute allowedRoles={["admin", "superAdmin"]}>
-              <ResolveTicketPage />
+              <ResolveTicketPage  />
             </PrivateRoute>
           }
         />
@@ -496,7 +501,7 @@ function Navigation() {
           path="tickets"
           element={
             <PrivateRoute allowedRoles={["admin", "superAdmin"]}>
-              <AdminTicketPage />
+              <AdminTicketPage  />
             </PrivateRoute>
           }
         />
@@ -504,7 +509,7 @@ function Navigation() {
           path="ticket/:id"
           element={
             <PrivateRoute allowedRoles={["admin", "superAdmin"]}>
-              <SingleTicketDetails />
+              <SingleTicketDetails  />
             </PrivateRoute>
           }
         />
@@ -512,7 +517,7 @@ function Navigation() {
           path="ticket/:id/resolve"
           element={
             <PrivateRoute allowedRoles={["admin", "superAdmin"]}>
-              <ResolveTicketPage />
+              <ResolveTicketPage  />
             </PrivateRoute>
           }
         />
@@ -525,6 +530,7 @@ function Navigation() {
           }
         />
       </Route>
+
       {/* Applicant Routes (Protected) */}
       <Route
         path="/applicant"
@@ -602,7 +608,7 @@ function Navigation() {
         <Route
           path="available-job/:id/apply/submit"
           element={
-            <PrivateRoute allowedRoles={["applicant"]}>
+            <PrivateRoute allowedRoles={['applicant']}>
               <ApplyJobPost />
             </PrivateRoute>
           }
@@ -632,10 +638,11 @@ function Navigation() {
           }
         />
 
-        <Route
+
+         <Route
           path="documents"
           element={
-            <PrivateRoute allowedRoles={["applicant"]}>
+            <PrivateRoute allowedRoles={['applicant']}>
               <ApplicantDocuments />
             </PrivateRoute>
           }
@@ -643,11 +650,12 @@ function Navigation() {
         <Route
           path="documents/:docId"
           element={
-            <PrivateRoute allowedRoles={["applicant"]}>
+            <PrivateRoute allowedRoles={['applicant']}>
               <SingleDocumentationDetails />
             </PrivateRoute>
           }
         />
+
 
         <Route
           path="notifications"
@@ -718,6 +726,7 @@ function Navigation() {
           }
         />
       </Route>
+
       <Route
         path="/trainee"
         element={
@@ -779,7 +788,7 @@ function Navigation() {
           path="tickets"
           element={
             <PrivateRoute allowedRoles={["applicant", "trainee"]}>
-              <TicketPage />
+              <TicketPage  />
             </PrivateRoute>
           }
         />
@@ -787,7 +796,7 @@ function Navigation() {
           path="ticket/:id"
           element={
             <PrivateRoute allowedRoles={["applicant", "trainee"]}>
-              <SingleTicketDetails />
+              <SingleTicketDetails  />
             </PrivateRoute>
           }
         />
@@ -795,7 +804,7 @@ function Navigation() {
           path="ticket/:id/reply"
           element={
             <PrivateRoute allowedRoles={["applicant", "trainee"]}>
-              <ReplyTicketPage />
+              <ReplyTicketPage  />
             </PrivateRoute>
           }
         />
@@ -868,6 +877,7 @@ function Navigation() {
           }
         />
       </Route>
+
       {/* Catch-All Route */}
       <Route
         path="*"

@@ -1,16 +1,15 @@
-import { toast } from "react-toastify";
+import { toast } from 'react-toastify';
 import {
   Action,
   fetchMyApplications,
   deleteOwnApplication,
   fetchSingleOwnApplication,
   advanceToNextStage,
-  updateInterviewStatus,
   getApplicantStage,
   addStageMark,
   filterByStage,
-  sendInvitation,
-} from "../actiontypes/applicationTypes";
+  sendInvitation
+} from '../actiontypes/applicationTypes';
 
 interface State {
   success: boolean;
@@ -34,10 +33,10 @@ const initial = {
   error: false,
   message: null,
   data: null,
-};
+}
 export const applicationsReducer = (
   state: State = initialState,
-  action: Action
+  action: Action,
 ): State => {
   switch (action.type) {
     case fetchMyApplications.FETCH_MYAPPLICATIONS_LOADING:
@@ -67,7 +66,7 @@ export const applicationsReducer = (
 
     case deleteOwnApplication.DELETE_APPLICATION_SUCCESS:
       if (!action.data.id) {
-        toast.error("Application has already been withdrawn");
+        toast.error('Application has already been withdrawn');
       }
       return {
         // remove the application from the state
@@ -75,7 +74,7 @@ export const applicationsReducer = (
         loading: false,
         data: {
           applications: state.data.applications.filter(
-            (application: any) => application._id !== action.data.id
+            (application: any) => application._id !== action.data.id,
           ),
         },
       };
@@ -85,7 +84,7 @@ export const applicationsReducer = (
 };
 export const singleApplicationReducer = (
   state: State = initialState,
-  action: Action
+  action: Action,
 ): State => {
   switch (action.type) {
     case fetchSingleOwnApplication.FETCH_SINGLE_APPLICATION_LOADING:
@@ -117,10 +116,7 @@ export const singleApplicationReducer = (
   }
 };
 
-export const FetchApplicantStageReducer = (
-  state: State = initial,
-  action: Action
-) => {
+export const FetchApplicantStageReducer = (state:State = initial, action:Action) => {
   switch (action.type) {
     case getApplicantStage.GET_APPLICANT_STAGE_LOADING:
       return {
@@ -147,12 +143,9 @@ export const FetchApplicantStageReducer = (
     default:
       return state;
   }
-};
+}
 
-export const advanceToNextStageReducer = (
-  state: State = initial,
-  action: Action
-) => {
+export const advanceToNextStageReducer = (state:State = initial, action:Action) => {
   switch (action.type) {
     case advanceToNextStage.ADVANCE_TO_NEXT_STAGE_LOADING:
       return {
@@ -174,7 +167,7 @@ export const advanceToNextStageReducer = (
       return {
         loading: false,
         error: true,
-        success: false,
+        success:false,
         message: action.message,
         data: null,
       };
@@ -182,12 +175,9 @@ export const advanceToNextStageReducer = (
     default:
       return state;
   }
-};
+}
 
-export const AddApplicantScoreReducer = (
-  state: State = initial,
-  action: Action
-) => {
+export const AddApplicantScoreReducer = (state:State = initial, action:Action) => {
   switch (action.type) {
     case addStageMark.ADD_STAGE_MARK_LOADING:
       return {
@@ -214,12 +204,9 @@ export const AddApplicantScoreReducer = (
     default:
       return state;
   }
-};
+}
 
-export const filterApplicantByStageReducer = (
-  state: State = initial,
-  action: Action
-) => {
+export const filterApplicantByStageReducer = (state:State = initial, action:Action) => {
   switch (action.type) {
     case filterByStage.FILTER_STAGE_LOADING:
       return {
@@ -246,12 +233,9 @@ export const filterApplicantByStageReducer = (
     default:
       return state;
   }
-};
+}
 
-export const sendInvitationReducer = (
-  state: State = initial,
-  action: Action
-) => {
+export const sendInvitationReducer = (state:State = initial, action:Action) => {
   switch (action.type) {
     case sendInvitation.SEND_INVITATION_STAGE_LOADING:
       return {
@@ -278,36 +262,4 @@ export const sendInvitationReducer = (
     default:
       return state;
   }
-};
-
-export const updateInterviewStatusReducer = (
-  state: State = initial,
-  action: Action
-) => {
-  switch (action.type) {
-    case updateInterviewStatus.UPDATE_INTERVIEW_STATUS_LOADING:
-      return {
-        loading: true,
-        success: false,
-        error: null,
-        message: null,
-        data: null,
-      };
-    case updateInterviewStatus.UPDATE_INTERVIEW_STATUS_SUCCESS:
-      return {
-        loading: false,
-        success: true,
-        message: action.message,
-        data: action.data,
-      };
-    case updateInterviewStatus.UPDATE_INTERVIEW_STATUS_FAIL:
-      return {
-        loading: false,
-        message: action.message,
-        data: null,
-      };
-
-    default:
-      return state;
-  }
-};
+}

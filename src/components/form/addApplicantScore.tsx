@@ -8,19 +8,16 @@ import {
   darkTheme,
 } from "../../pages/FilterTeainee/FilterTrainee";
 import { useTheme } from "../../hooks/darkmode";
-
 interface scoreProps {
   applicantId: string;
   stage: string;
   onClose: () => void;
-  technicalInterviews?: any[];
 }
 
-const AddApplicantScore: React.FC<scoreProps> = ({
+const addApplicantScore: React.FC<scoreProps> = ({
   applicantId,
   stage,
   onClose,
-  technicalInterviews = [],
 }) => {
   const dispatch = useAppDispatch();
   const { data, loading, success, error } = useAppSelector(
@@ -30,19 +27,10 @@ const AddApplicantScore: React.FC<scoreProps> = ({
   const [isModelOpen, setIsModelOpen] = useState(false);
   const [isError, setIsError] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
-  const { theme } = useTheme();
-  const [isValid, setIsValid] = useState<string>("");
+  const { theme, setTheme } = useTheme();
+  const [isValid, setIsValid] = useState<string>("")
 
   const handleOpen = () => {
-    // Check if interview is completed before opening
-    if (stage === "Interview Assessment" && technicalInterviews.length > 0) {
-      const lastInterview = technicalInterviews[0];
-      if (lastInterview.status !== "Completed") {
-        toast.error("Cannot add score. Interview is not completed.");
-        return;
-      }
-    }
-
     setIsModelOpen(true);
     setIsError(false);
     setErrorMsg(null);
@@ -56,24 +44,12 @@ const AddApplicantScore: React.FC<scoreProps> = ({
     setErrorMsg(null);
     onClose();
   };
-
   const handleAddMarks = async () => {
-    // Additional check before adding marks
-    if (stage === "Interview Assessment" && technicalInterviews.length > 0) {
-      const lastInterview = technicalInterviews[0];
-      if (lastInterview.status !== "Completed") {
-        setErrorMsg("Cannot add score. Interview is not completed.");
-        setIsError(true);
-        return;
-      }
-    }
-
     if (!score) {
       setErrorMsg("Score is required");
       setIsError(true);
       return;
     }
-
     await dispatch(addMarks(applicantId, stage, score));
     if (success && data?.success) {
       toast.success(data?.message);
@@ -91,18 +67,17 @@ const AddApplicantScore: React.FC<scoreProps> = ({
       handleClose();
     }
   }, [success]);
-
   const handleScoreChange = (e) => {
     const input = e.target.value;
 
-    if (e.target.value === "") {
+    if (e.target.value === '') {
       setScore(null);
       setIsValid("");
       return;
     }
     if (/^0\d/.test(input)) {
-      setIsValid("Score cannot have leading zeros");
-      return;
+      setIsValid('Score cannot have leading zeros');
+      return
     }
     const value = Number(input);
 
@@ -110,31 +85,13 @@ const AddApplicantScore: React.FC<scoreProps> = ({
       setScore(value);
       setIsValid("");
     } else {
-      setIsValid("Score must be between 1 and 100");
+      setIsValid('Score must be between 1 and 100');
     }
-
-    toast.success("Score added successfully");
   };
-
-  // Determine if score button should be disabled
-  const isScoreButtonDisabled = () => {
-    if (stage === "Interview Assessment" && technicalInterviews.length > 0) {
-      const lastInterview = technicalInterviews[0];
-      return lastInterview.status !== "Completed";
-    }
-    return false;
-  };
-
   return (
     <>
       <div>
-        <button
-          className={`cursor-pointer ${
-            isScoreButtonDisabled() ? "text-gray-400 cursor-not-allowed" : ""
-          }`}
-          onClick={handleOpen}
-          disabled={isScoreButtonDisabled()}
-        >
+        <button className="cursor-pointer" onClick={handleOpen}>
           Add score
         </button>
         {isModelOpen && (
@@ -200,4 +157,4 @@ const AddApplicantScore: React.FC<scoreProps> = ({
   );
 };
 
-export default AddApplicantScore;
+export default addApplicantScore;

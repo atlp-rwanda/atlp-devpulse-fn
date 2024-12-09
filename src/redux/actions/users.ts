@@ -9,10 +9,12 @@ import {
 } from "..";
 import creator from "./creator";
 
-export const getAllMembers = () => async (dispatch: any) => {
-  try {
-    const data = await axios.post("/", {
-      query: `
+
+export const getAllMembers=() => async (dispatch: any) => {
+
+   try {
+     const data = await axios.post("/",
+           { query: `
              query getMembers {
                 getUsers_Logged {
                   firstname
@@ -37,19 +39,22 @@ export const getAllMembers = () => async (dispatch: any) => {
                   telephone
                 }
               }
-            `,
-    });
+            `
+        }
+    );
     dispatch({
       type: fetchUser.fetchMembers,
-      data: data.data,
+      data: data.data
+      ,
     });
-
+    
     return data.data;
-  } catch (err) {
+} catch (err){
     console.log(err);
     return err;
-  }
-};
+    
+}
+}
 export const getSingleUser = (userId: string) => async (dispatch: any) => {
   try {
     const { data } = await axios.post("/", {
@@ -142,10 +147,11 @@ export const update_User =
     }
   };
 
-export const assignMemberRoles = async (userId, roleId) => {
+export const assignMemberRoles= async (userId, roleId)  => {
+
   try {
-    const data = await axios.post("/", {
-      query: `
+    const data = await axios.post("/",
+          { query: `
           mutation Mutation( $assignRoleToUserId2: ID!, $roleId: ID!) {
             assignRoleToUser(ID: $assignRoleToUserId2, roleID: $roleId) {
               role {
@@ -165,24 +171,30 @@ export const assignMemberRoles = async (userId, roleId) => {
             }
           }
           
-           `,
-      variables: {
-        assignRoleToUserId2: userId,
-        roleId,
-      },
-    });
+           `
+           ,
+       variables: {
+          assignRoleToUserId2: userId,
+          roleId
+       }
+       }
+   );
+  
+   return data.data;
+   
+} catch (err){
+   console.log(err);
+   return err;
+   
+}
+}
 
-    return data.data;
-  } catch (err) {
-    console.log(err);
-    return err;
-  }
-};
-
-export const getUserbyFilter = async (filter) => {
-  try {
-    const data = await axios.post("/", {
-      query: `
+export const getUserbyFilter= async (filter) => {
+  
+  try{
+    const data = await axios.post("/",
+      {
+        query: `
           query GetByFilter($filter: UserFilterInput!) {
             getByFilter(filter: $filter) {
               id
@@ -201,18 +213,18 @@ export const getUserbyFilter = async (filter) => {
           }
 
         `,
-      variables: {
-        filter: {
-          ...filter,
-        },
-      },
-    });
-    return data.data;
-  } catch (err) {
-    console.log(err);
-    return err;
-  }
-};
+        variables: {
+          filter: {
+            ...filter
+          }
+        }
+      });
+      return data.data;
+    } catch (err){
+      console.log(err);
+      return err;
+    }
+}
 
 export const updateUserSelf = async (id: string, data: object) => {
   const query = `
@@ -225,7 +237,7 @@ export const updateUserSelf = async (id: string, data: object) => {
     id,
     editUserInput: { ...data },
   };
-
+  
   try {
     const response = await axios.post("/", {
       query,
@@ -243,7 +255,6 @@ export const getAllCoordinators = () => async (dispatch: any) => {
       query: `
         query getMembers {
           getUsers_Logged {
-            id
             firstname
             lastname
             email
@@ -267,8 +278,8 @@ export const getAllCoordinators = () => async (dispatch: any) => {
       data: coordinators,
     });
 
-    return coordinators;
+    return coordinators.length;
   } catch (err) {
-    return 0;
+    return 0; 
   }
 };

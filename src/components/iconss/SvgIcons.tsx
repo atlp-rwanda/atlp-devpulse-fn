@@ -58,16 +58,16 @@ export const CohortIcon = () => (
     <path
       d="M1 25H68.5V0H1V75H23.5V0"
       stroke="#4ECB71"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
     />
     <path
       d="M1 50H46V0"
       stroke="#4ECB71"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
     />
   </svg>
 );

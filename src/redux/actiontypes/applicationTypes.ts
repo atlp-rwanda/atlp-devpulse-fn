@@ -1,41 +1,37 @@
 export enum fetchMyApplications {
-  FETCH_MYAPPLICATIONS_LOADING = "FETCH_MY_APPLICATIONS_LOADING",
-  FETCH_MYAPPLICATIONS_SUCCESS = "FETCH_MY_APPLICATIONS_SUCCESS",
-  FETCH_MYAPPLICATIONS_FAIL = "FETCH_MY_APPLICATIONS_FAIL",
-  APPLICATION_DELETED_SUCCESS = "APPLICATION_DELETED_SUCCESS",
+  FETCH_MYAPPLICATIONS_LOADING = 'FETCH_MY_APPLICATIONS_LOADING',
+  FETCH_MYAPPLICATIONS_SUCCESS = 'FETCH_MY_APPLICATIONS_SUCCESS',
+  FETCH_MYAPPLICATIONS_FAIL = 'FETCH_MY_APPLICATIONS_FAIL',
+  APPLICATION_DELETED_SUCCESS = 'APPLICATION_DELETED_SUCCESS',
 }
 export enum deleteOwnApplication {
-  DELETE_APPLICATION_LOADING = "DELETE_APPLICATION_LOADING",
-  DELETE_APPLICATION_SUCCESS = "DELETE_APPLICATION_SUCCESS",
-  DELETE_APPLICATION_FAIL = "DELETE_APPLICATION_FAIL",
+  DELETE_APPLICATION_LOADING = 'DELETE_APPLICATION_LOADING',
+  DELETE_APPLICATION_SUCCESS = 'DELETE_APPLICATION_SUCCESS',
+  DELETE_APPLICATION_FAIL = 'DELETE_APPLICATION_FAIL',
 }
 export enum fetchSingleOwnApplication {
-  FETCH_SINGLE_APPLICATION_LOADING = "FETCH_SINGLE_APPLICATION_LOADING",
-  FETCH_SINGLE_APPLICATION_SUCCESS = "FETCH_SINGLE_APPLICATION_SUCCESS",
-  FETCH_SINGLE_APPLICATION_FAIL = "FETCH_SINGLE_APPLICATION_FAIL",
+  FETCH_SINGLE_APPLICATION_LOADING = 'FETCH_SINGLE_APPLICATION_LOADING',
+  FETCH_SINGLE_APPLICATION_SUCCESS = 'FETCH_SINGLE_APPLICATION_SUCCESS',
+  FETCH_SINGLE_APPLICATION_FAIL = 'FETCH_SINGLE_APPLICATION_FAIL',
 }
 
 export enum advanceToNextStage {
-  ADVANCE_TO_NEXT_STAGE_LOADING = "ADVANCE_TO_NEXT_STAGE_LOADING",
-  ADVANCE_TO_NEXT_STAGE_SUCCESS = "ADVANCE_TO_NEXT_STAGE_SUCCESS",
-  ADVANCE_TO_NEXT_STAGE_FAIL = "ADVANCE_TO_NEXT_STAGE_FAIL",
-}
-export enum updateInterviewStatus {
-  UPDATE_INTERVIEW_STATUS_LOADING = "UPDATE_INTERVIEW_STATUS_LOADING",
-  UPDATE_INTERVIEW_STATUS_SUCCESS = "UPDATE_INTERVIEW_STATUS_SUCCESS",
-  UPDATE_INTERVIEW_STATUS_FAIL = "UPDATE_INTERVIEW_STATUS_FAIL",
+  ADVANCE_TO_NEXT_STAGE_LOADING = 'ADVANCE_TO_NEXT_STAGE_LOADING',
+  ADVANCE_TO_NEXT_STAGE_SUCCESS = 'ADVANCE_TO_NEXT_STAGE_SUCCESS',
+  ADVANCE_TO_NEXT_STAGE_FAIL = 'ADVANCE_TO_NEXT_STAGE_FAIL',
 }
 
 export enum getApplicantStage {
-  GET_APPLICANT_STAGE_LOADING = "GET_APPLICANT_STAGE_LOADING",
-  GET_APPLICANT_STAGE_SUCCESS = "GET_APPLICANT_STAGE_SUCCESS",
-  GET_APPLICANT_STAGE_FAIL = "GET_APPLICANT_STAGE_FAIL",
+  GET_APPLICANT_STAGE_LOADING = 'GET_APPLICANT_STAGE_LOADING',
+  GET_APPLICANT_STAGE_SUCCESS = 'GET_APPLICANT_STAGE_SUCCESS',
+  GET_APPLICANT_STAGE_FAIL = 'GET_APPLICANT_STAGE_FAIL',
 }
 
 export enum addStageMark {
   ADD_STAGE_MARK_LOADING = "ADD_STAGE_MARK_LOADING",
   ADD_STAGE_MARK_SUCCESS = "ADD_STAGE_MARK_SUCCESS",
   ADD_STAGE_MARK_FAIL = "ADD_STAGE_MARK_FAIL",
+
 }
 
 export enum filterByStage {
@@ -48,11 +44,6 @@ export enum sendInvitation {
   SEND_INVITATION_STAGE_LOADING = "SEND_INVITATION_STAGE_LOADING",
   SEND_INVITATION_STAGE_SUCCESS = "SEND_INVITATION_STAGE_SUCCESS",
   SEND_INVITATION_STAGE_FAIL = "SEND_INVITATION_STAGE_FAIL",
-}
-export enum sendInterviewInvitation {
-  SEND_INTERVIEW_INVITATION_STAGE_LOADING = "SEND_INTERVIEW_INVITATION_STAGE_LOADING",
-  SEND_INTERVIEW_INVITATION_STAGE_SUCCESS = "SEND_INTERVIEW_INVITATION_STAGE_SUCCESS",
-  SEND_INTERVIEW_INVITATION_STAGE_FAIL = "SEND_INTERVIEW_INVITATION_STAGE_FAIL",
 }
 interface actionPending {
   type: fetchMyApplications.FETCH_MYAPPLICATIONS_LOADING;
@@ -115,84 +106,57 @@ interface advanceToNextStageActionFail {
   message: any;
 }
 
-interface updateInterviewStatusActionPending {
-  type: updateInterviewStatus.UPDATE_INTERVIEW_STATUS_LOADING;
-}
-interface updateInterviewStatusActionSuccess {
-  type: updateInterviewStatus.UPDATE_INTERVIEW_STATUS_SUCCESS;
-  message: string;
-  data: any;
-}
-
-interface updateInterviewStatusActionFail {
-  type: updateInterviewStatus.UPDATE_INTERVIEW_STATUS_FAIL;
-  message: any;
-}
-
-interface getApplicantStageActionPending {
+interface getApplicantStageActionPending{
   type: getApplicantStage.GET_APPLICANT_STAGE_LOADING;
 }
-interface getApplicantStageActionSuccess {
+interface getApplicantStageActionSuccess{
   type: getApplicantStage.GET_APPLICANT_STAGE_SUCCESS;
   message: string;
   data: any;
 }
 
-interface getApplicantStageActionFail {
+interface getApplicantStageActionFail{
   type: getApplicantStage.GET_APPLICANT_STAGE_FAIL;
   error: any;
 }
 
-interface addStageMarkActionPending {
+interface addStageMarkActionPending{
   type: addStageMark.ADD_STAGE_MARK_LOADING;
 }
-interface addStageMarkActionSuccess {
+interface addStageMarkActionSuccess{
   type: addStageMark.ADD_STAGE_MARK_SUCCESS;
   message: string;
   data: any;
 }
 
-interface filterByStageActionFail {
+interface filterByStageActionFail{
   type: filterByStage.FILTER_STAGE_FAIL;
   message: any;
 }
 
-interface filterByStageActionPending {
+interface filterByStageActionPending{
   type: filterByStage.FILTER_STAGE_LOADING;
 }
-interface filterByStageActionSuccess {
+interface filterByStageActionSuccess{
   type: filterByStage.FILTER_STAGE_SUCCESS;
   message: string;
   data: any;
 }
 
-interface sendInvitationActionFail {
+interface sendInvitationActionFail{
   type: sendInvitation.SEND_INVITATION_STAGE_FAIL;
   message: any;
 }
 
-interface sendInvitationActionPending {
+interface sendInvitationActionPending{
   type: sendInvitation.SEND_INVITATION_STAGE_LOADING;
 }
-interface sendInvitationActionSuccess {
+interface sendInvitationActionSuccess{
   type: sendInvitation.SEND_INVITATION_STAGE_SUCCESS;
   message: string;
   data: any;
 }
-interface sendInterviewInvitationActionFail {
-  type: sendInterviewInvitation.SEND_INTERVIEW_INVITATION_STAGE_FAIL;
-  message: any;
-}
-
-interface sendInterviewInvitationActionPending {
-  type: sendInterviewInvitation.SEND_INTERVIEW_INVITATION_STAGE_LOADING;
-}
-interface sendInterviewInvitationActionSuccess {
-  type: sendInterviewInvitation.SEND_INTERVIEW_INVITATION_STAGE_SUCCESS;
-  message: string;
-  data: any;
-}
-interface addStageMarkActionFail {
+interface addStageMarkActionFail{
   type: addStageMark.ADD_STAGE_MARK_FAIL;
   message: any;
 }
@@ -210,9 +174,6 @@ export type Action =
   | advanceToNextStageActionPending
   | advanceToNextStageActionFail
   | advanceToNextStageActionSuccess
-  | updateInterviewStatusActionPending
-  | updateInterviewStatusActionFail
-  | updateInterviewStatusActionSuccess
   | getApplicantStageActionPending
   | getApplicantStageActionFail
   | getApplicantStageActionSuccess
@@ -225,6 +186,3 @@ export type Action =
   | sendInvitationActionPending
   | sendInvitationActionFail
   | sendInvitationActionSuccess
-  | sendInterviewInvitationActionPending
-  | sendInterviewInvitationActionFail
-  | sendInterviewInvitationActionSuccess;
