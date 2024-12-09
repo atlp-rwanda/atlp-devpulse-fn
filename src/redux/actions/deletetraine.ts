@@ -164,23 +164,6 @@ export const fetchtraine = ({ page, itemsPerPage, All }: any) => {
                     resumeUrl
                     cycle_id {
                         name
-                        startDate
-                        endDate
-                    }
-                    technicalInterviews {
-                        _id
-                        meetingLink
-                        meetingPlatform
-                        status
-                        scheduledDate
-                        createdAt
-                        updatedAt
-                        coordinatorId {
-                            _id
-                            firstname
-                            lastname
-                            email
-                      }
                     }
                     }
                     itemsPerPage
@@ -204,7 +187,7 @@ export const fetchtraine = ({ page, itemsPerPage, All }: any) => {
           }
         )
         .then((res) => {
-          console.log("All traineessss", res);
+          console.log("All traineessss", res)
           if (res.data.data) {
             dispatch({
               type: fetchtrainesss.fetchtraines_success,
